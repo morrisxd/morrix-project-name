@@ -1,0 +1,3 @@
+EXAMPLE_SRC=main.c
+SIU_IMAGE=siu_image.c
+
