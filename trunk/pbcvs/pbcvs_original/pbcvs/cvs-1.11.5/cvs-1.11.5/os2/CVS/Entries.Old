@@ -1,0 +1,26 @@
+/.cvsignore/1.1/Mon Dec 27 10:11:23 2004//
+/ChangeLog/1.1/Mon Dec 27 10:11:23 2004//
+/Makefile/1.1/Mon Dec 27 10:11:24 2004//
+/Makefile.in/1.1/Mon Dec 27 10:11:24 2004//
+/README/1.1/Mon Dec 27 10:11:25 2004//
+/config.h/1.1/Mon Dec 27 10:11:24 2004//
+/dirent.c/1.1/Mon Dec 27 10:11:24 2004//
+/dirent.h/1.1/Mon Dec 27 10:11:24 2004//
+/filesubr.c/1.1/Mon Dec 27 10:11:24 2004//
+/getpass.c/1.1/Mon Dec 27 10:11:24 2004//
+/mkdir.c/1.1/Mon Dec 27 10:11:24 2004//
+/os2inc.h/1.1/Mon Dec 27 10:11:24 2004//
+/popen.c/1.1/Mon Dec 27 10:11:25 2004//
+/popen.h/1.1/Mon Dec 27 10:11:25 2004//
+/porttcp.c/1.1/Mon Dec 27 10:11:25 2004//
+/pwd.c/1.1/Mon Dec 27 10:11:25 2004//
+/pwd.h/1.1/Mon Dec 27 10:11:25 2004//
+/rcmd.c/1.1/Mon Dec 27 10:11:25 2004//
+/rcmd.h/1.1/Mon Dec 27 10:11:25 2004//
+/run.c/1.1/Mon Dec 27 10:11:25 2004//
+/stripslash.c/1.1/Mon Dec 27 10:11:26 2004//
+/tcpip.h/1.1/Mon Dec 27 10:11:26 2004//
+/test-makefile/1.1/Mon Dec 27 10:11:26 2004//
+/waitpid.c/1.1/Mon Dec 27 10:11:26 2004//
+/watcom.mak/1.1/Mon Dec 27 10:11:26 2004//
+D

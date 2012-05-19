@@ -1,0 +1,58 @@
+D/contrib////
+D/diff////
+D/doc////
+D/emx////
+D/lib////
+D/man////
+D/os2////
+D/src////
+D/tools////
+D/vms////
+D/windows-NT////
+D/zlib////
+/.#mkinstalldirs.1.1/1.1/Mon Dec 27 10:39:53 2004//T1.1
+/.cvsignore/1.1/Mon Dec 27 09:54:09 2004//T1.1
+/AUTHORS/1.1/Mon Dec 27 09:54:10 2004//T1.1
+/BUGS/1.1/Mon Dec 27 09:54:10 2004//T1.1
+/COPYING/1.1/Mon Dec 27 09:54:11 2004//T1.1
+/COPYING.LIB/1.1/Mon Dec 27 09:54:11 2004/-kb/T1.1
+/ChangeLog/1.1/Mon Dec 27 09:54:10 2004//T1.1
+/ChangeLog.zoo/1.1/Mon Dec 27 09:54:10 2004//T1.1
+/DEVEL-CVS/1.1/Mon Dec 27 09:54:12 2004//T1.1
+/FAQ/1.1/Mon Dec 27 09:54:13 2004//T1.1
+/HACKING/1.1/Mon Dec 27 09:54:13 2004//T1.1
+/INSTALL/1.1/Mon Dec 27 09:54:13 2004//T1.1
+/MINOR-BUGS/1.1/Mon Dec 27 09:54:14 2004//T1.1
+/Makefile/1.1/Mon Dec 27 10:25:03 2004//T1.1
+/Makefile.am/1.1/Mon Dec 27 09:54:13 2004//T1.1
+/Makefile.in/1.1/Mon Dec 27 09:54:13 2004//T1.1
+/NEWS/1.1/Mon Dec 27 09:54:14 2004//T1.1
+/PROJECTS/1.1/Mon Dec 27 09:54:14 2004//T1.1
+/README/1.1/Mon Dec 27 09:54:15 2004//T1.1
+/README.VMS/1.1/Mon Dec 27 09:54:15 2004//T1.1
+/TESTS/1.1/Mon Dec 27 09:54:15 2004//T1.1
+/TODO/1.1/Mon Dec 27 09:54:15 2004//T1.1
+/acinclude.m4/1.1/Mon Dec 27 09:54:09 2004//T1.1
+/aclocal.m4/1.1/Mon Dec 27 09:54:09 2004//T1.1
+/build.com/1.1/Mon Dec 27 09:54:10 2004//T1.1
+/compile/1.1/Mon Dec 27 09:54:10 2004//T1.1
+/config.h/1.1/Mon Dec 27 10:25:03 2004//T1.1
+/config.h.in/1.1/Mon Dec 27 09:54:11 2004//T1.1
+/config.log/1.1/Mon Dec 27 10:25:03 2004//T1.1
+/config.status/1.1/Mon Dec 27 10:25:03 2004//T1.1
+/configure/1.1/Mon Dec 27 09:54:11 2004//T1.1
+/configure.in/1.1/Mon Dec 27 09:54:11 2004//T1.1
+/cvs-format.el/1.1/Mon Dec 27 09:54:11 2004//T1.1
+/cvs.spec/1.1/Mon Dec 27 10:25:03 2004//T1.1
+/cvs.spec.in/1.1/Mon Dec 27 09:54:12 2004//T1.1
+/cvsnt.dsp/1.1/Mon Dec 27 09:54:12 2004//T1.1
+/cvsnt.dsw/1.1/Mon Dec 27 09:54:12 2004//T1.1
+/cvsnt.mak/1.1/Mon Dec 27 09:54:12 2004//T1.1
+/depcomp/1.1/Mon Dec 27 09:54:12 2004//T1.1
+/install-sh/1.1/Mon Dec 27 09:54:13 2004//T1.1
+/mdate-sh/1.1/Mon Dec 27 09:54:14 2004//T1.1
+/missing/1.1/Mon Dec 27 09:54:14 2004//T1.1
+/mkinstalldirs/1.1/Mon Dec 27 09:54:14 2004//T1.1
+/noautomake.sh/1.1/Mon Dec 27 09:54:14 2004//T1.1
+/stamp-h1/1.1/Mon Dec 27 10:25:03 2004//T1.1
+/tags/1.1/Mon Dec 27 10:25:03 2004//T1.1
