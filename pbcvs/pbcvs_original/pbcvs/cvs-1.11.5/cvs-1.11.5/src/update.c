@@ -364,6 +364,14 @@ update (argc, argv)
 	return 0;
     }
 #endif
+	/*
+ 	 * Added by ikoo
+	 * recently
+	 */
+	if (NULL != tag)
+	{
+		ACTION ("showtag", tag);
+	} /* end of add */
 
     if (tag != NULL)
 	tag_check_valid (tag, argc, argv, local, aflag, "");

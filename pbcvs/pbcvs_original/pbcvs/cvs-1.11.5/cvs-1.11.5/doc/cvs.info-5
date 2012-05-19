@@ -942,9 +942,9 @@ you undo the effect!
      and `Rel' (for released).  By default, the state of a new revision
      is set to `Exp' when it is created.  The state is visible in the
      output from CVS LOG (*note log::), and in the `$Log: cvs.info-5,v $
-     output from CVS LOG (*note log::), and in the `Revision 1.1  2004/12/27 10:09:51  wydeng
+     output from CVS LOG (*note log::), and in the `Revision 1.2  2004/12/27 10:28:21  wydeng
      output from CVS LOG (*note log::), and in the `-i "Doc_269"
-     output from CVS LOG (*note log::), and in the `Rebuild PB-CVS source tree
+     output from CVS LOG (*note log::), and in the `v2
      output from CVS LOG (*note log::), and in the `' and
      `$State: Exp $' keywords (*note Keyword substitution::).  Note that CVS
      uses the `dead' state for its own purposes; to take a file to or

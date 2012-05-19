@@ -28,6 +28,14 @@
 #include "savecwd.h"
 #include "fileattr.h"
 
+/*
+ * add by wydeng@photonicbridges.com/ikoo
+ */
+#include "defs.h"
+static char mrid[TMPBUFLEN];
+/* by ikoo */
+
+
 static int add_directory PROTO ((struct file_info *finfo));
 static int build_entry PROTO((char *repository, char *user, char *options,
 		        char *message, List * entries, char *tag));
@@ -92,6 +100,65 @@ add (argc, argv)
 
     if (argc <= 0)
 	usage (add_usage);
+
+    /*
+     * added by ikoo for testing -m{-i} optarg 
+     * fix me: something to do with cvstmp handling is not perfect.
+     * 
+     */
+/*****
+    {	
+	char cvstmp[TMPBUFLEN];
+	char saved_message[TMPBUFLEN];
+	int err = 0;
+
+	unsigned long loglen = 0;
+
+	strcpy (saved_message, message);
+	memset (mrid, 0, TMPBUFLEN);
+
+    	sprintf(cvstmp, "[PB]Error MRID or User Name. Please check"\
+	    " your MR or User Name in CVS");
+    	if (saved_message[0] != '-') 
+    	{
+	    error (1, 0, "[PB]Need mrid. Usage:{-i\"{mrid}\"......]}.");
+	    return -2;
+    	}
+    	if (saved_message[1]!= 'i')
+    	{
+	    error (1, 0, "[PB]Need mrid. Usage:{-i\"{mrid}\"......]}.");
+	    return -2;
+    	}
+    	loglen = strlen (saved_message);
+    	if (2 > checkquote (saved_message))
+    	{
+	    error (1, 0, "[PB]Need mrid. Usage:{-i\"{mrid}\"......]}.");
+	    return -3;
+    	}
+
+
+        getmrid (saved_message, mrid);
+        sprintf(cvstmp, "[PB]Error MRID[%s] or User Name. Please check"\
+	    " your MR or User Name in CVS", mrid);
+	
+	err = querymrid (getcaller(), mrid);
+    	if(1 == err)
+    	{
+	    sprintf(cvstmp, "Error MR[%s] Status. Check if the input"\
+		" MR is in assigned or deferred status.", mrid);
+	    error (1, 0, cvstmp);
+    	}else if (0 == err){
+	    sprintf(cvstmp, "MRID[%s] valid.", mrid);
+	    error (0, 0, cvstmp);
+    	}else{ // err < 0 means net error  
+	    error (1, 0, "!!!Communication with MR webserver error!!!");
+	}
+	
+    } // end of added by ikoo 
+*****/
+
+
+
 
     cvsroot_len = strlen (current_parsed_root->directory);
 

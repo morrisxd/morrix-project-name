@@ -58,6 +58,7 @@ struct frame_and_entries {
     List *entries;
 };
 
+/* #include "utils.inc" */
 
 /* Start a recursive command.
 
@@ -112,6 +113,12 @@ start_recursion (fileproc, filesdoneproc, direntproc, dirleaveproc, callerdat,
 #endif
     List *files_by_dir = NULL;
     struct recursion_frame frame;
+    int lcount = 0;
+
+    if(1)
+    {
+    	if (update_preload) error (0, 0, update_preload);
+    }
 
     frame.fileproc = fileproc;
     frame.filesdoneproc = filesdoneproc;
@@ -125,6 +132,10 @@ start_recursion (fileproc, filesdoneproc, direntproc, dirleaveproc, callerdat,
     frame.dosrcs = dosrcs;
 
     expand_wild (argc, argv, &argc, &argv);
+    /*
+     * for (lcount = 0; lcount < argc; lcount ++)
+     *	error (0, 0, argv[lcount]);
+     */
 
     if (update_preload == NULL)
 	update_dir = xstrdup ("");
@@ -258,8 +269,12 @@ start_recursion (fileproc, filesdoneproc, direntproc, dirleaveproc, callerdat,
 	    char *comp;
 	    char *file_to_try;
 
-	    /* Now break out argv[i] into directory part (DIR) and file part (COMP).
-		   DIR and COMP will each point to a newly malloc'd string.  */
+	    /* 
+	     * Now break out argv[i] into 
+	     * 		directory part (DIR) and file part (COMP).
+	     * DIR and COMP will each point to a newly malloc'd string.  
+	     */
+
 	    dir = xstrdup (argv[i]);
 	    comp = last_component (dir);
 	    if (comp == dir)
@@ -348,6 +363,7 @@ start_recursion (fileproc, filesdoneproc, direntproc, dirleaveproc, callerdat,
     dellist(&files_by_dir);
 
     /* then do_recursion on the dirlist. */
+	// showlist(dirlist);
     if (dirlist != NULL)
     {
     do_the_work:
@@ -624,7 +640,6 @@ do_recursion (frame)
 	    error (1, errno, "could not get working directory");
     }
     srepository = repository;		/* remember what to free */
-
     fileattr_startdir (repository);
 
     /*
@@ -795,8 +810,18 @@ do_file_proc (p, closure)
     struct frame_and_file *frfile = (struct frame_and_file *)closure;
     struct file_info *finfo = frfile->finfo;
     int ret;
+	char tmp[2048];
 
     finfo->file = p->key;
+    if(0)
+    {
+    /*
+     * add by ikoo
+     */
+    sprintf(tmp, "p->key=%s", p->key);
+    error (0, 0, tmp);
+    }
+
     finfo->fullname = xmalloc (strlen (finfo->file)
 			       + strlen (finfo->update_dir)
 			       + 2);

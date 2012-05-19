@@ -480,7 +480,7 @@ main (argc, argv)
        opterr to 0 for avoiding error messages about invalid options.
        */
     opterr = 0;
-
+fprintf (stdin, program_path);
     while ((c = getopt_long
             (argc, argv, short_options, long_options, &option_index))
            != EOF)
