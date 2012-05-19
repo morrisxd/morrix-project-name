@@ -1,0 +1,547 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/darren@hiebert.com/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.0.1	//
+ACLOCAL	Makefile	/^ACLOCAL = ${SHELL} \/home\/wydeng\/cvs_project\/cvs-1.11.5\/missing --run aclocal-1.6$/;"	m
+ACLOCAL_M4	Makefile	/^ACLOCAL_M4 = $(top_srcdir)\/aclocal.m4$/;"	m
+AMTAR	Makefile	/^AMTAR = ${SHELL} \/home\/wydeng\/cvs_project\/cvs-1.11.5\/missing --run tar$/;"	m
+AUTH_CLIENT_SUPPORT	config.h	6;"	d
+AUTH_SERVER_SUPPORT	config.h	9;"	d
+AUTOCONF	Makefile	/^AUTOCONF = ${SHELL} \/home\/wydeng\/cvs_project\/cvs-1.11.5\/missing --run autoconf$/;"	m
+AUTOHEADER	Makefile	/^AUTOHEADER = ${SHELL} \/home\/wydeng\/cvs_project\/cvs-1.11.5\/missing --run autoheader$/;"	m
+AUTOMAKE	Makefile	/^AUTOMAKE = ${SHELL} \/home\/wydeng\/cvs_project\/cvs-1.11.5\/missing --run automake-1.6$/;"	m
+AWK	Makefile	/^AWK = gawk$/;"	m
+BSC32	cvsnt.mak	/^BSC32=bscmake.exe$/;"	m
+BSC32_FLAGS	cvsnt.mak	/^BSC32_FLAGS=\/nologo \/o"$(OUTDIR)\/cvsnt.bsc" $/;"	m
+BSC32_SBRS	cvsnt.mak	/^BSC32_SBRS=$/;"	m
+CC	Makefile	/^CC = gcc$/;"	m
+CDPATH	Makefile	/^am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd$/;"	m
+CFG	cvsnt.mak	/^!MESSAGE NMAKE \/f "cvsnt.mak" CFG="cvsnt - Win32 Debug"$/;"	m
+CFG	cvsnt.mak	/^CFG=cvsnt - Win32 Debug$/;"	m
+CLIENT_SUPPORT	config.h	12;"	d
+CONFIG_CLEAN_FILES	Makefile	/^CONFIG_CLEAN_FILES = cvs.spec emx\/Makefile os2\/Makefile zlib\/Makefile$/;"	m
+CONFIG_HEADER	Makefile	/^CONFIG_HEADER = config.h$/;"	m
+CPP	cvsnt.mak	/^CPP=cl.exe$/;"	m
+CPP_OBJS	cvsnt.mak	/^CPP_OBJS=.\\WinDebug\/$/;"	m
+CPP_OBJS	cvsnt.mak	/^CPP_OBJS=.\\WinRel\/$/;"	m
+CPP_PROJ	cvsnt.mak	/^CPP_PROJ=\/nologo \/ML \/W3 \/GX \/Ob1 \/I "windows-NT" \/I "lib" \/I "src" \/I "zlib"\\$/;"	m
+CPP_PROJ	cvsnt.mak	/^CPP_PROJ=\/nologo \/MLd \/W3 \/Gm \/GX \/Zi \/Ob1 \/I "windows-NT" \/I "lib" \/I "src" \/I\\$/;"	m
+CPP_SBRS	cvsnt.mak	/^CPP_SBRS=$/;"	m
+CSH	Makefile	/^CSH = \/bin\/csh$/;"	m
+CVS_ADMIN_GROUP	config.h	24;"	d
+CVS_BADROOT	config.h	33;"	d
+DEPDIR	Makefile	/^DEPDIR = .deps$/;"	m
+DEP_CPP_ADD_C	cvsnt.mak	/^DEP_CPP_ADD_C=\\$/;"	m
+DEP_CPP_ADLER	cvsnt.mak	/^DEP_CPP_ADLER=\\$/;"	m
+DEP_CPP_ADMIN	cvsnt.mak	/^DEP_CPP_ADMIN=\\$/;"	m
+DEP_CPP_ANALY	cvsnt.mak	/^DEP_CPP_ANALY=\\$/;"	m
+DEP_CPP_ANNOTATE_C	cvsnt.mak	/^DEP_CPP_ANNOTATE_C=\\$/;"	m
+DEP_CPP_ARGMA	cvsnt.mak	/^DEP_CPP_ARGMA=\\$/;"	m
+DEP_CPP_BUFFE	cvsnt.mak	/^DEP_CPP_BUFFE=\\$/;"	m
+DEP_CPP_CHECK	cvsnt.mak	/^DEP_CPP_CHECK=\\$/;"	m
+DEP_CPP_CHECKI	cvsnt.mak	/^DEP_CPP_CHECKI=\\$/;"	m
+DEP_CPP_CLASS	cvsnt.mak	/^DEP_CPP_CLASS=\\$/;"	m
+DEP_CPP_CLIEN	cvsnt.mak	/^DEP_CPP_CLIEN=\\$/;"	m
+DEP_CPP_CMPBU	cvsnt.mak	/^DEP_CPP_CMPBU=\\$/;"	m
+DEP_CPP_COMMI	cvsnt.mak	/^DEP_CPP_COMMI=\\$/;"	m
+DEP_CPP_COMPR	cvsnt.mak	/^DEP_CPP_COMPR=\\$/;"	m
+DEP_CPP_CONTE	cvsnt.mak	/^DEP_CPP_CONTE=\\$/;"	m
+DEP_CPP_CRC32	cvsnt.mak	/^DEP_CPP_CRC32=\\$/;"	m
+DEP_CPP_CREAT	cvsnt.mak	/^DEP_CPP_CREAT=\\$/;"	m
+DEP_CPP_CVSRC	cvsnt.mak	/^DEP_CPP_CVSRC=\\$/;"	m
+DEP_CPP_DEFLA	cvsnt.mak	/^DEP_CPP_DEFLA=\\$/;"	m
+DEP_CPP_DIFF3	cvsnt.mak	/^DEP_CPP_DIFF3=\\$/;"	m
+DEP_CPP_DIFF_	cvsnt.mak	/^DEP_CPP_DIFF_=\\$/;"	m
+DEP_CPP_DIR_C	cvsnt.mak	/^DEP_CPP_DIR_C=\\$/;"	m
+DEP_CPP_EDIT_	cvsnt.mak	/^DEP_CPP_EDIT_=\\$/;"	m
+DEP_CPP_ED_Cb8	cvsnt.mak	/^DEP_CPP_ED_Cb8=\\$/;"	m
+DEP_CPP_ENTRI	cvsnt.mak	/^DEP_CPP_ENTRI=\\$/;"	m
+DEP_CPP_ERROR	cvsnt.mak	/^DEP_CPP_ERROR=\\$/;"	m
+DEP_CPP_EXPAN	cvsnt.mak	/^DEP_CPP_EXPAN=\\$/;"	m
+DEP_CPP_FILEA	cvsnt.mak	/^DEP_CPP_FILEA=\\$/;"	m
+DEP_CPP_FILES	cvsnt.mak	/^DEP_CPP_FILES=\\$/;"	m
+DEP_CPP_FIND_	cvsnt.mak	/^DEP_CPP_FIND_=\\$/;"	m
+DEP_CPP_FNCAS	cvsnt.mak	/^DEP_CPP_FNCAS=\\$/;"	m
+DEP_CPP_FNMAT	cvsnt.mak	/^DEP_CPP_FNMAT=\\$/;"	m
+DEP_CPP_GETDA	cvsnt.mak	/^DEP_CPP_GETDA=\\$/;"	m
+DEP_CPP_GETLI	cvsnt.mak	/^DEP_CPP_GETLI=\\$/;"	m
+DEP_CPP_GETOP	cvsnt.mak	/^DEP_CPP_GETOP=\\$/;"	m
+DEP_CPP_GETOPT	cvsnt.mak	/^DEP_CPP_GETOPT=\\$/;"	m
+DEP_CPP_GZIO_	cvsnt.mak	/^DEP_CPP_GZIO_=\\$/;"	m
+DEP_CPP_HASH_	cvsnt.mak	/^DEP_CPP_HASH_=\\$/;"	m
+DEP_CPP_HISTO	cvsnt.mak	/^DEP_CPP_HISTO=\\$/;"	m
+DEP_CPP_IFDEF	cvsnt.mak	/^DEP_CPP_IFDEF=\\$/;"	m
+DEP_CPP_IGNOR	cvsnt.mak	/^DEP_CPP_IGNOR=\\$/;"	m
+DEP_CPP_IMPOR	cvsnt.mak	/^DEP_CPP_IMPOR=\\$/;"	m
+DEP_CPP_INFBL	cvsnt.mak	/^DEP_CPP_INFBL=\\$/;"	m
+DEP_CPP_INFCO	cvsnt.mak	/^DEP_CPP_INFCO=\\$/;"	m
+DEP_CPP_INFFA	cvsnt.mak	/^DEP_CPP_INFFA=\\$/;"	m
+DEP_CPP_INFLA	cvsnt.mak	/^DEP_CPP_INFLA=\\$/;"	m
+DEP_CPP_INFTR	cvsnt.mak	/^DEP_CPP_INFTR=\\$/;"	m
+DEP_CPP_INFUT	cvsnt.mak	/^DEP_CPP_INFUT=\\$/;"	m
+DEP_CPP_IO_Cbc	cvsnt.mak	/^DEP_CPP_IO_Cbc=\\$/;"	m
+DEP_CPP_LOCK_	cvsnt.mak	/^DEP_CPP_LOCK_=\\$/;"	m
+DEP_CPP_LOGIN	cvsnt.mak	/^DEP_CPP_LOGIN=\\$/;"	m
+DEP_CPP_LOGMS	cvsnt.mak	/^DEP_CPP_LOGMS=\\$/;"	m
+DEP_CPP_LOG_C	cvsnt.mak	/^DEP_CPP_LOG_C=\\$/;"	m
+DEP_CPP_MAIN_	cvsnt.mak	/^DEP_CPP_MAIN_=\\$/;"	m
+DEP_CPP_MD5_C	cvsnt.mak	/^DEP_CPP_MD5_C=\\$/;"	m
+DEP_CPP_MKDIR	cvsnt.mak	/^DEP_CPP_MKDIR=\\$/;"	m
+DEP_CPP_MKMOD	cvsnt.mak	/^DEP_CPP_MKMOD=\\$/;"	m
+DEP_CPP_MODUL	cvsnt.mak	/^DEP_CPP_MODUL=\\$/;"	m
+DEP_CPP_MYNDB	cvsnt.mak	/^DEP_CPP_MYNDB=\\$/;"	m
+DEP_CPP_NDIR_	cvsnt.mak	/^DEP_CPP_NDIR_=\\$/;"	m
+DEP_CPP_NORMA	cvsnt.mak	/^DEP_CPP_NORMA=\\$/;"	m
+DEP_CPP_NO_DI	cvsnt.mak	/^DEP_CPP_NO_DI=\\$/;"	m
+DEP_CPP_PARSE	cvsnt.mak	/^DEP_CPP_PARSE=\\$/;"	m
+DEP_CPP_PATCH	cvsnt.mak	/^DEP_CPP_PATCH=\\$/;"	m
+DEP_CPP_PWD_C	cvsnt.mak	/^DEP_CPP_PWD_C=\\$/;"	m
+DEP_CPP_RCMD_	cvsnt.mak	/^DEP_CPP_RCMD_=\\$/;"	m
+DEP_CPP_RCSCM	cvsnt.mak	/^DEP_CPP_RCSCM=\\$/;"	m
+DEP_CPP_RCS_C	cvsnt.mak	/^DEP_CPP_RCS_C=\\$/;"	m
+DEP_CPP_RECUR	cvsnt.mak	/^DEP_CPP_RECUR=\\$/;"	m
+DEP_CPP_REGEX	cvsnt.mak	/^DEP_CPP_REGEX=\\$/;"	m
+DEP_CPP_RELEA	cvsnt.mak	/^DEP_CPP_RELEA=\\$/;"	m
+DEP_CPP_REMOV	cvsnt.mak	/^DEP_CPP_REMOV=\\$/;"	m
+DEP_CPP_REPOS	cvsnt.mak	/^DEP_CPP_REPOS=\\$/;"	m
+DEP_CPP_ROOT_	cvsnt.mak	/^DEP_CPP_ROOT_=\\$/;"	m
+DEP_CPP_RUN_C	cvsnt.mak	/^DEP_CPP_RUN_C=\\$/;"	m
+DEP_CPP_SAVEC	cvsnt.mak	/^DEP_CPP_SAVEC=\\$/;"	m
+DEP_CPP_SCRAM	cvsnt.mak	/^DEP_CPP_SCRAM=\\$/;"	m
+DEP_CPP_SERVE	cvsnt.mak	/^DEP_CPP_SERVE=\\$/;"	m
+DEP_CPP_SIDE_	cvsnt.mak	/^DEP_CPP_SIDE_=\\$/;"	m
+DEP_CPP_SIGHA	cvsnt.mak	/^DEP_CPP_SIGHA=\\$/;"	m
+DEP_CPP_START	cvsnt.mak	/^DEP_CPP_START=\\$/;"	m
+DEP_CPP_STATU	cvsnt.mak	/^DEP_CPP_STATU=\\$/;"	m
+DEP_CPP_SUBR_	cvsnt.mak	/^DEP_CPP_SUBR_=\\$/;"	m
+DEP_CPP_TAG_C	cvsnt.mak	/^DEP_CPP_TAG_C=\\$/;"	m
+DEP_CPP_TREES	cvsnt.mak	/^DEP_CPP_TREES=\\$/;"	m
+DEP_CPP_UNCOM	cvsnt.mak	/^DEP_CPP_UNCOM=\\$/;"	m
+DEP_CPP_UPDAT	cvsnt.mak	/^DEP_CPP_UPDAT=\\$/;"	m
+DEP_CPP_UTIL_	cvsnt.mak	/^DEP_CPP_UTIL_=\\$/;"	m
+DEP_CPP_VALLO	cvsnt.mak	/^DEP_CPP_VALLO=\\$/;"	m
+DEP_CPP_VERSI	cvsnt.mak	/^DEP_CPP_VERSI=\\$/;"	m
+DEP_CPP_VERS_	cvsnt.mak	/^DEP_CPP_VERS_=\\$/;"	m
+DEP_CPP_WAITP	cvsnt.mak	/^DEP_CPP_WAITP=\\$/;"	m
+DEP_CPP_WATCH	cvsnt.mak	/^DEP_CPP_WATCH=\\$/;"	m
+DEP_CPP_WIN32	cvsnt.mak	/^DEP_CPP_WIN32=\\$/;"	m
+DEP_CPP_WRAPP	cvsnt.mak	/^DEP_CPP_WRAPP=\\$/;"	m
+DEP_CPP_XGETW	cvsnt.mak	/^DEP_CPP_XGETW=\\$/;"	m
+DEP_CPP_YESNO	cvsnt.mak	/^DEP_CPP_YESNO=\\$/;"	m
+DEP_CPP_ZLIB_	cvsnt.mak	/^DEP_CPP_ZLIB_=\\$/;"	m
+DEP_CPP_ZUTIL	cvsnt.mak	/^DEP_CPP_ZUTIL=\\$/;"	m
+DISTFILES	Makefile	/^DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)$/;"	m
+DIST_COMMON	Makefile	/^DIST_COMMON = README AUTHORS COPYING COPYING.LIB ChangeLog INSTALL \\$/;"	m
+DIST_SOURCES	Makefile	/^DIST_SOURCES =$/;"	m
+DIST_SUBDIRS	Makefile	/^DIST_SUBDIRS = $(SUBDIRS)$/;"	m
+EDITOR	Makefile	/^EDITOR = vi$/;"	m
+EDITOR_DFLT	config.h	40;"	d
+ETAGS	Makefile	/^ETAGS = etags$/;"	m
+ETAGSFLAGS	Makefile	/^ETAGSFLAGS =$/;"	m
+EXEEXT	Makefile	/^EXEEXT = $/;"	m
+EXTRA_DIST	Makefile	/^EXTRA_DIST = \\$/;"	m
+GSS_C_NT_HOSTBASED_SERVICE	config.h	57;"	d
+GZIP	Makefile	/^	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).tar.gz$/;"	m
+GZIP	Makefile	/^	GZIP=$(GZIP_ENV) gunzip -c $(distdir).tar.gz | $(AMTAR) xf -$/;"	m
+GZIP_ENV	Makefile	/^GZIP_ENV = --best$/;"	m
+HAVE_CONNECT	config.h	60;"	d
+HAVE_CRYPT	config.h	63;"	d
+HAVE_DIRENT_H	config.h	70;"	d
+HAVE_DUP2	config.h	73;"	d
+HAVE_ERRNO_H	config.h	76;"	d
+HAVE_FCHDIR	config.h	79;"	d
+HAVE_FCHMOD	config.h	82;"	d
+HAVE_FCNTL_H	config.h	85;"	d
+HAVE_FNMATCH	config.h	88;"	d
+HAVE_FNMATCH_H	config.h	91;"	d
+HAVE_FORK	config.h	94;"	d
+HAVE_FSYNC	config.h	97;"	d
+HAVE_FTIME	config.h	100;"	d
+HAVE_FTRUNCATE	config.h	103;"	d
+HAVE_GETEUID	config.h	106;"	d
+HAVE_GETGROUPS	config.h	109;"	d
+HAVE_GETHOSTNAME	config.h	112;"	d
+HAVE_GETOPT	config.h	115;"	d
+HAVE_GETPAGESIZE	config.h	118;"	d
+HAVE_GETSPNAM	config.h	124;"	d
+HAVE_GETTIMEOFDAY	config.h	127;"	d
+HAVE_GSSAPI	config.h	130;"	d
+HAVE_GSSAPI_GSSAPI_GENERIC_H	config.h	133;"	d
+HAVE_GSSAPI_GSSAPI_H	config.h	136;"	d
+HAVE_INITGROUPS	config.h	142;"	d
+HAVE_INTTYPES_H	config.h	145;"	d
+HAVE_KRB5_H	config.h	154;"	d
+HAVE_LIBNSL	config.h	160;"	d
+HAVE_LIMITS_H	config.h	163;"	d
+HAVE_LONG_FILE_NAMES	config.h	172;"	d
+HAVE_MEMCHR	config.h	175;"	d
+HAVE_MEMMOVE	config.h	178;"	d
+HAVE_MEMORY_H	config.h	181;"	d
+HAVE_MKDIR	config.h	184;"	d
+HAVE_MKNOD	config.h	187;"	d
+HAVE_MKSTEMP	config.h	190;"	d
+HAVE_MKTEMP	config.h	193;"	d
+HAVE_MMAP	config.h	196;"	d
+HAVE_NANOSLEEP	config.h	199;"	d
+HAVE_PUTENV	config.h	208;"	d
+HAVE_READLINK	config.h	211;"	d
+HAVE_REGCOMP	config.h	214;"	d
+HAVE_REGERROR	config.h	217;"	d
+HAVE_REGEXEC	config.h	220;"	d
+HAVE_REGFREE	config.h	223;"	d
+HAVE_RENAME	config.h	226;"	d
+HAVE_SIGACTION	config.h	235;"	d
+HAVE_SIGBLOCK	config.h	238;"	d
+HAVE_SIGPROCMASK	config.h	241;"	d
+HAVE_SIGSETMASK	config.h	244;"	d
+HAVE_SIGVEC	config.h	247;"	d
+HAVE_STDINT_H	config.h	250;"	d
+HAVE_STDLIB_H	config.h	253;"	d
+HAVE_STRCHR	config.h	256;"	d
+HAVE_STRERROR	config.h	259;"	d
+HAVE_STRINGS_H	config.h	262;"	d
+HAVE_STRING_H	config.h	265;"	d
+HAVE_STRSTR	config.h	268;"	d
+HAVE_STRTOUL	config.h	271;"	d
+HAVE_STRUCT_STAT_ST_BLKSIZE	config.h	274;"	d
+HAVE_STRUCT_STAT_ST_RDEV	config.h	277;"	d
+HAVE_SYSLOG_H	config.h	280;"	d
+HAVE_SYS_FILE_H	config.h	290;"	d
+HAVE_SYS_PARAM_H	config.h	297;"	d
+HAVE_SYS_RESOURCE_H	config.h	300;"	d
+HAVE_SYS_SELECT_H	config.h	303;"	d
+HAVE_SYS_STAT_H	config.h	306;"	d
+HAVE_SYS_TIMEB_H	config.h	309;"	d
+HAVE_SYS_TIME_H	config.h	312;"	d
+HAVE_SYS_TYPES_H	config.h	315;"	d
+HAVE_SYS_WAIT_H	config.h	318;"	d
+HAVE_TEMPNAM	config.h	321;"	d
+HAVE_TIMEZONE	config.h	324;"	d
+HAVE_TZSET	config.h	327;"	d
+HAVE_UNISTD_H	config.h	330;"	d
+HAVE_UTIME_H	config.h	336;"	d
+HAVE_UTIME_NULL	config.h	339;"	d
+HAVE_VALLOC	config.h	342;"	d
+HAVE_VFORK	config.h	345;"	d
+HAVE_VPRINTF	config.h	351;"	d
+HAVE_WAIT3	config.h	354;"	d
+HAVE_WAITPID	config.h	357;"	d
+HAVE_WORKING_FORK	config.h	360;"	d
+HAVE_WORKING_VFORK	config.h	363;"	d
+INSTALL	Makefile	/^INSTALL = \/usr\/bin\/install -c$/;"	m
+INSTALL_DATA	Makefile	/^INSTALL_DATA = ${INSTALL} -m 644$/;"	m
+INSTALL_HEADER	Makefile	/^INSTALL_HEADER = $(INSTALL_DATA)$/;"	m
+INSTALL_PROGRAM	Makefile	/^	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \\$/;"	m
+INSTALL_PROGRAM	Makefile	/^INSTALL_PROGRAM = ${INSTALL}$/;"	m
+INSTALL_PROGRAM_ENV	Makefile	/^	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install$/;"	m
+INSTALL_SCRIPT	Makefile	/^INSTALL_SCRIPT = ${INSTALL}$/;"	m
+INSTALL_STRIP_FLAG	Makefile	/^	  INSTALL_STRIP_FLAG=-s \\$/;"	m
+INSTALL_STRIP_PROGRAM	Makefile	/^INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s$/;"	m
+INTDIR	cvsnt.mak	/^INTDIR=.\\WinDebug$/;"	m
+INTDIR	cvsnt.mak	/^INTDIR=.\\WinRel$/;"	m
+INTDIR_DIFF	cvsnt.mak	/^INTDIR_DIFF=$(INTDIR)\/2$/;"	m
+INTDIR_SRC	cvsnt.mak	/^INTDIR_SRC=$(INTDIR)\/1$/;"	m
+KRB4	Makefile	/^KRB4 = \/usr\/kerberos$/;"	m
+LINK32	cvsnt.mak	/^LINK32=link.exe$/;"	m
+LINK32_FLAGS	cvsnt.mak	/^LINK32_FLAGS=wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib\\$/;"	m
+LINK32_OBJS	cvsnt.mak	/^LINK32_OBJS= \\$/;"	m
+LN_S	Makefile	/^LN_S = ln -s$/;"	m
+MY_NDBM	config.h	369;"	d
+NODEP_CPP_ADD_C	cvsnt.mak	/^NODEP_CPP_ADD_C=\\$/;"	m
+NODEP_CPP_ADMIN	cvsnt.mak	/^NODEP_CPP_ADMIN=\\$/;"	m
+NODEP_CPP_ANNOTATE_C	cvsnt.mak	/^NODEP_CPP_ANNOTATE_C=\\$/;"	m
+NODEP_CPP_BUFFE	cvsnt.mak	/^NODEP_CPP_BUFFE=\\$/;"	m
+NODEP_CPP_CHECK	cvsnt.mak	/^NODEP_CPP_CHECK=\\$/;"	m
+NODEP_CPP_CHECKI	cvsnt.mak	/^NODEP_CPP_CHECKI=\\$/;"	m
+NODEP_CPP_CLASS	cvsnt.mak	/^NODEP_CPP_CLASS=\\$/;"	m
+NODEP_CPP_CLIEN	cvsnt.mak	/^NODEP_CPP_CLIEN=\\$/;"	m
+NODEP_CPP_COMMI	cvsnt.mak	/^NODEP_CPP_COMMI=\\$/;"	m
+NODEP_CPP_CREAT	cvsnt.mak	/^NODEP_CPP_CREAT=\\$/;"	m
+NODEP_CPP_CVSRC	cvsnt.mak	/^NODEP_CPP_CVSRC=\\$/;"	m
+NODEP_CPP_DIFF_	cvsnt.mak	/^NODEP_CPP_DIFF_=\\$/;"	m
+NODEP_CPP_EDIT_	cvsnt.mak	/^NODEP_CPP_EDIT_=\\$/;"	m
+NODEP_CPP_ENTRI	cvsnt.mak	/^NODEP_CPP_ENTRI=\\$/;"	m
+NODEP_CPP_ERROR	cvsnt.mak	/^NODEP_CPP_ERROR=\\$/;"	m
+NODEP_CPP_EXPAN	cvsnt.mak	/^NODEP_CPP_EXPAN=\\$/;"	m
+NODEP_CPP_FILEA	cvsnt.mak	/^NODEP_CPP_FILEA=\\$/;"	m
+NODEP_CPP_FILES	cvsnt.mak	/^NODEP_CPP_FILES=\\$/;"	m
+NODEP_CPP_FIND_	cvsnt.mak	/^NODEP_CPP_FIND_=\\$/;"	m
+NODEP_CPP_FNCAS	cvsnt.mak	/^NODEP_CPP_FNCAS=\\$/;"	m
+NODEP_CPP_FNMAT	cvsnt.mak	/^NODEP_CPP_FNMAT=\\$/;"	m
+NODEP_CPP_HASH_	cvsnt.mak	/^NODEP_CPP_HASH_=\\$/;"	m
+NODEP_CPP_HISTO	cvsnt.mak	/^NODEP_CPP_HISTO=\\$/;"	m
+NODEP_CPP_IGNOR	cvsnt.mak	/^NODEP_CPP_IGNOR=\\$/;"	m
+NODEP_CPP_IMPOR	cvsnt.mak	/^NODEP_CPP_IMPOR=\\$/;"	m
+NODEP_CPP_LOCK_	cvsnt.mak	/^NODEP_CPP_LOCK_=\\$/;"	m
+NODEP_CPP_LOGIN	cvsnt.mak	/^NODEP_CPP_LOGIN=\\$/;"	m
+NODEP_CPP_LOGMS	cvsnt.mak	/^NODEP_CPP_LOGMS=\\$/;"	m
+NODEP_CPP_LOG_C	cvsnt.mak	/^NODEP_CPP_LOG_C=\\$/;"	m
+NODEP_CPP_MAIN_	cvsnt.mak	/^NODEP_CPP_MAIN_=\\$/;"	m
+NODEP_CPP_MKDIR	cvsnt.mak	/^NODEP_CPP_MKDIR=\\$/;"	m
+NODEP_CPP_MKMOD	cvsnt.mak	/^NODEP_CPP_MKMOD=\\$/;"	m
+NODEP_CPP_MODUL	cvsnt.mak	/^NODEP_CPP_MODUL=\\$/;"	m
+NODEP_CPP_MYNDB	cvsnt.mak	/^NODEP_CPP_MYNDB=\\$/;"	m
+NODEP_CPP_NO_DI	cvsnt.mak	/^NODEP_CPP_NO_DI=\\$/;"	m
+NODEP_CPP_PARSE	cvsnt.mak	/^NODEP_CPP_PARSE=\\$/;"	m
+NODEP_CPP_PATCH	cvsnt.mak	/^NODEP_CPP_PATCH=\\$/;"	m
+NODEP_CPP_RCMD_	cvsnt.mak	/^NODEP_CPP_RCMD_=\\$/;"	m
+NODEP_CPP_RCSCM	cvsnt.mak	/^NODEP_CPP_RCSCM=\\$/;"	m
+NODEP_CPP_RCS_C	cvsnt.mak	/^NODEP_CPP_RCS_C=\\$/;"	m
+NODEP_CPP_RECUR	cvsnt.mak	/^NODEP_CPP_RECUR=\\$/;"	m
+NODEP_CPP_REGEX	cvsnt.mak	/^NODEP_CPP_REGEX=\\$/;"	m
+NODEP_CPP_RELEA	cvsnt.mak	/^NODEP_CPP_RELEA=\\$/;"	m
+NODEP_CPP_REMOV	cvsnt.mak	/^NODEP_CPP_REMOV=\\$/;"	m
+NODEP_CPP_REPOS	cvsnt.mak	/^NODEP_CPP_REPOS=\\$/;"	m
+NODEP_CPP_ROOT_	cvsnt.mak	/^NODEP_CPP_ROOT_=\\$/;"	m
+NODEP_CPP_RUN_C	cvsnt.mak	/^NODEP_CPP_RUN_C=\\$/;"	m
+NODEP_CPP_SCRAM	cvsnt.mak	/^NODEP_CPP_SCRAM=\\$/;"	m
+NODEP_CPP_SERVE	cvsnt.mak	/^NODEP_CPP_SERVE=\\$/;"	m
+NODEP_CPP_SIGHA	cvsnt.mak	/^NODEP_CPP_SIGHA=\\$/;"	m
+NODEP_CPP_START	cvsnt.mak	/^NODEP_CPP_START=\\$/;"	m
+NODEP_CPP_STATU	cvsnt.mak	/^NODEP_CPP_STATU=\\$/;"	m
+NODEP_CPP_SUBR_	cvsnt.mak	/^NODEP_CPP_SUBR_=\\$/;"	m
+NODEP_CPP_TAG_C	cvsnt.mak	/^NODEP_CPP_TAG_C=\\$/;"	m
+NODEP_CPP_UPDAT	cvsnt.mak	/^NODEP_CPP_UPDAT=\\$/;"	m
+NODEP_CPP_VALLO	cvsnt.mak	/^NODEP_CPP_VALLO=\\$/;"	m
+NODEP_CPP_VERSI	cvsnt.mak	/^NODEP_CPP_VERSI=\\$/;"	m
+NODEP_CPP_VERS_	cvsnt.mak	/^NODEP_CPP_VERS_=\\$/;"	m
+NODEP_CPP_WATCH	cvsnt.mak	/^NODEP_CPP_WATCH=\\$/;"	m
+NODEP_CPP_WIN32	cvsnt.mak	/^NODEP_CPP_WIN32=\\$/;"	m
+NODEP_CPP_WRAPP	cvsnt.mak	/^NODEP_CPP_WRAPP=\\$/;"	m
+NODEP_CPP_XGETW	cvsnt.mak	/^NODEP_CPP_XGETW=\\$/;"	m
+NODEP_CPP_ZLIB_	cvsnt.mak	/^NODEP_CPP_ZLIB_=\\$/;"	m
+NORMAL_INSTALL	Makefile	/^NORMAL_INSTALL = :$/;"	m
+NORMAL_UNINSTALL	Makefile	/^NORMAL_UNINSTALL = :$/;"	m
+NULL	cvsnt.mak	/^NULL=$/;"	m
+NULL	cvsnt.mak	/^NULL=nul$/;"	m
+OBJEXT	Makefile	/^OBJEXT = o$/;"	m
+OUTDIR	cvsnt.mak	/^OUTDIR=.\\WinDebug$/;"	m
+OUTDIR	cvsnt.mak	/^OUTDIR=.\\WinRel$/;"	m
+PACKAGE	Makefile	/^PACKAGE = cvs$/;"	m
+PACKAGE_BUGREPORT	config.h	375;"	d
+PACKAGE_NAME	config.h	378;"	d
+PACKAGE_STRING	config.h	381;"	d
+PACKAGE_TARNAME	config.h	384;"	d
+PACKAGE_VERSION	config.h	387;"	d
+PATH_SEPARATOR	Makefile	/^PATH_SEPARATOR = :$/;"	m
+PERL	Makefile	/^PERL = \/usr\/bin\/perl$/;"	m
+POST_INSTALL	Makefile	/^POST_INSTALL = :$/;"	m
+POST_UNINSTALL	Makefile	/^POST_UNINSTALL = :$/;"	m
+PR	Makefile	/^PR = \/usr\/bin\/pr$/;"	m
+PRE_INSTALL	Makefile	/^PRE_INSTALL = :$/;"	m
+PRE_UNINSTALL	Makefile	/^PRE_UNINSTALL = :$/;"	m
+PR_PROGRAM	config.h	390;"	d
+PS2PDF	Makefile	/^PS2PDF = \/usr\/bin\/ps2pdf$/;"	m
+RANLIB	Makefile	/^RANLIB = ranlib$/;"	m
+RECURSIVE_TARGETS	Makefile	/^RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \\$/;"	m
+REGEX_MALLOC	config.h	393;"	d
+RETSIGTYPE	config.h	396;"	d
+ROFF	Makefile	/^ROFF = \/usr\/bin\/groff$/;"	m
+RSC	cvsnt.mak	/^RSC=rc.exe$/;"	m
+SERVER_FLOWCONTROL	config.h	407;"	d
+SERVER_HI_WATER	config.h	411;"	d
+SERVER_LO_WATER	config.h	415;"	d
+SERVER_SUPPORT	config.h	419;"	d
+SHELL	Makefile	/^SHELL = \/bin\/sh$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\ChangeLog"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\filesubr.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\mkdir.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\ndir.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\pwd.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\rcmd.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\run.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\sockerror.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\startserver.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\stripslash.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\waitpid.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=".\\windows-NT\\win32.c"$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\analyze.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\cmpbuf.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\context.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\diff.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\diff3.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\dir.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\ed.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\ifdef.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\io.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\normal.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\side.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\util.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\diff\\version.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\argmatch.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\fncase.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\fnmatch.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\fnmatch.h.in$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\getdate.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\getline.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\getopt.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\getopt1.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\md5.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\regex.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\savecwd.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\sighandle.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\valloc.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\xgetwd.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\lib\\yesno.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\ChangeLog$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\add.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\admin.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\annotate.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\buffer.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\checkin.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\checkout.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\classify.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\client.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\commit.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\create_adm.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\cvsrc.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\diff.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\edit.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\entries.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\error.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\expand_path.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\fileattr.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\find_names.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\hash.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\history.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\ignore.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\import.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\lock.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\log.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\login.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\logmsg.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\main.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\mkmodules.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\modules.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\myndbm.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\no_diff.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\parseinfo.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\patch.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\rcs.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\rcscmds.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\recurse.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\release.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\remove.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\repos.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\root.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\scramble.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\server.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\status.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\subr.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\tag.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\update.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\vers_ts.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\version.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\watch.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\wrapper.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\src\\zlib.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\adler32.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\compress.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\crc32.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\deflate.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\gzio.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\infblock.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\infcodes.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\inffast.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\inflate.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\inftrees.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\infutil.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\trees.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\uncompr.c$/;"	m
+SOURCE	cvsnt.mak	/^SOURCE=.\\zlib\\zutil.c$/;"	m
+STDC_HEADERS	config.h	425;"	d
+STRIP	Makefile	/^STRIP = $/;"	m
+STRIPPROG	Makefile	/^	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install$/;"	m
+SUBDIRS	Makefile	/^SUBDIRS = $(USOURCE_SUBDIRS) man doc contrib tools \\$/;"	m
+TEXI2DVI	Makefile	/^TEXI2DVI = \/usr\/bin\/texi2dvi$/;"	m
+TIME_WITH_SYS_TIME	config.h	428;"	d
+TMPDIR_DFLT	config.h	434;"	d
+UMASK_DFLT	config.h	442;"	d
+USOURCE_SUBDIRS	Makefile	/^USOURCE_SUBDIRS = lib zlib diff src$/;"	m
+VERSION	Makefile	/^VERSION = 1.11.5$/;"	m
+YACC	Makefile	/^YACC = bison -y$/;"	m
+_REGEX_RE_COMP	config.h	469;"	d
+__dn_expand	configure	/^__dn_expand ();$/;"	f
+am__CONFIG_DISTCLEAN_FILES	Makefile	/^am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \\$/;"	m
+am__cd	Makefile	/^am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd$/;"	m
+am__include	Makefile	/^am__include = include$/;"	m
+am__quote	Makefile	/^am__quote = $/;"	m
+am__remove_distdir	Makefile	/^am__remove_distdir = \\$/;"	m
+amf	Makefile	/^	@set fnord $$MAKEFLAGS; amf=$$2; \\$/;"	m
+bindir	Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
+com_err	configure	/^com_err ();$/;"	f
+compile	configure	/^compile ();$/;"	f
+connect	configure	/^connect ();$/;"	f
+crypt	configure	/^crypt ();$/;"	f
+datadir	Makefile	/^datadir = ${prefix}\/share$/;"	m
+dc_install_base	Makefile	/^	dc_install_base=`$(am__cd) $(distdir)\/=inst && pwd` \\$/;"	m
+des_set_odd_parity	configure	/^des_set_odd_parity ();$/;"	f
+dir	Makefile	/^	    dir="\/$$dir"; \\$/;"	m
+dir	Makefile	/^	    dir=''; \\$/;"	m
+dir	Makefile	/^	  dir=`echo "$$file" | sed -e 's,\/[^\/]*$$,,'`; \\$/;"	m
+distcleancheck_listfiles	Makefile	/^distcleancheck_listfiles = find . -type f -print$/;"	m
+distdir	Makefile	/^	        distdir=..\/$(distdir)\/$$subdir \\$/;"	m
+distdir	Makefile	/^distdir = $(PACKAGE)-$(VERSION)$/;"	m
+dot_seen	Makefile	/^	    dot_seen=yes; \\$/;"	m
+dot_seen	Makefile	/^	dot_seen=no; \\$/;"	m
+exec_prefix	Makefile	/^exec_prefix = ${prefix}$/;"	m
+fail	Makefile	/^	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \\$/;"	m
+gethostbyname	configure	/^gethostbyname ();$/;"	f
+getspnam	configure	/^getspnam ();$/;"	f
+gss_import_name	configure	/^gss_import_name ();$/;"	f
+help	noautomake.sh	/^help()$/;"	f
+here	Makefile	/^	here=`$(am__cd) $(top_builddir) && pwd` \\$/;"	m
+here	Makefile	/^	here=`pwd`; \\$/;"	m
+includedir	Makefile	/^includedir = ${prefix}\/include$/;"	m
+includeopt	Makefile	/^includeopt =  -I\/usr\/kerberos\/include$/;"	m
+infodir	Makefile	/^infodir = ${prefix}\/info$/;"	m
+initialize_asn1_error_table_r	configure	/^initialize_asn1_error_table_r ();$/;"	f
+install_sh	Makefile	/^install_sh = \/home\/wydeng\/cvs_project\/cvs-1.11.5\/install-sh$/;"	m
+install_sh_DATA	Makefile	/^install_sh_DATA = $(install_sh) -c -m 644$/;"	m
+install_sh_PROGRAM	Makefile	/^install_sh_PROGRAM = $(install_sh) -c$/;"	m
+install_sh_SCRIPT	Makefile	/^install_sh_SCRIPT = $(install_sh) -c$/;"	m
+krb5_free_context	configure	/^krb5_free_context ();$/;"	f
+libdir	Makefile	/^libdir = ${exec_prefix}\/lib$/;"	m
+libexecdir	Makefile	/^libexecdir = ${exec_prefix}\/libexec$/;"	m
+list	Makefile	/^	  *) list='$(SUBDIRS)' ;; \\$/;"	m
+list	Makefile	/^	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \\$/;"	m
+list	Makefile	/^	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \\$/;"	m
+list	Makefile	/^	list='$(SOURCES) $(HEADERS) config.h.in $(LISP) $(TAGS_FILES)'; \\$/;"	m
+list	Makefile	/^	list='$(SUBDIRS)'; for subdir in $$list; do \\$/;"	m
+local_target	Makefile	/^	    local_target="$$target"; \\$/;"	m
+local_target	Makefile	/^	    local_target="$$target-am"; \\$/;"	m
+localstatedir	Makefile	/^localstatedir = ${prefix}\/var$/;"	m
+mandir	Makefile	/^mandir = ${prefix}\/man$/;"	m
+mkinstalldirs	Makefile	/^mkinstalldirs = $(SHELL) $(top_srcdir)\/mkinstalldirs$/;"	m
+oldincludedir	Makefile	/^oldincludedir = \/usr\/include$/;"	m
+open	configure	/^open ();$/;"	f
+opendir	configure	/^opendir ();$/;"	f
+pkgdatadir	Makefile	/^pkgdatadir = $(datadir)\/cvs$/;"	m
+pkgincludedir	Makefile	/^pkgincludedir = $(includedir)\/cvs$/;"	m
+pkglibdir	Makefile	/^pkglibdir = $(libdir)\/cvs$/;"	m
+prefix	Makefile	/^prefix = \/usr$/;"	m
+printf	configure	/^printf ();$/;"	f
+rev	Makefile	/^	    rev="$$subdir $$rev"; \\$/;"	m
+rev	Makefile	/^	rev="$$rev ."; \\$/;"	m
+rev	Makefile	/^	rev=''; for subdir in $$list; do \\$/;"	m
+roken_gethostbyaddr	configure	/^roken_gethostbyaddr ();$/;"	f
+sbindir	Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
+sharedstatedir	Makefile	/^sharedstatedir = ${prefix}\/com$/;"	m
+sparc_address_test	configure	/^  sparc_address_test ();$/;"	f
+srcdir	Makefile	/^srcdir = .$/;"	m
+strerror	configure	/^strerror ();$/;"	f
+subdir	Makefile	/^subdir = .$/;"	m
+sysconfdir	Makefile	/^sysconfdir = ${prefix}\/etc$/;"	m
+tags	Makefile	/^	    test -f $$subdir\/TAGS && tags="$$tags -i $$here\/$$subdir\/TAGS"; \\$/;"	m
+tags	Makefile	/^	tags=; \\$/;"	m
+target	Makefile	/^	target=`echo $@ | sed s\/-recursive\/\/`; \\$/;"	m
+top_builddir	Makefile	/^top_builddir = .$/;"	m
+top_distdir	Makefile	/^	        top_distdir="$(top_distdir)" \\$/;"	m
+top_distdir	Makefile	/^top_distdir = .$/;"	m
+top_srcdir	Makefile	/^top_srcdir = .$/;"	m
+transform	Makefile	/^transform = s,x,x,$/;"	m
+unique	Makefile	/^	unique=`for i in $$list; do \\$/;"	m
+usage	noautomake.sh	/^usage()$/;"	f
+valid_enctype	configure	/^valid_enctype ();$/;"	f

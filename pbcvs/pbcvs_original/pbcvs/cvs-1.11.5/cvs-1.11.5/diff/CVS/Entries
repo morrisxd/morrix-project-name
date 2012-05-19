@@ -1,0 +1,25 @@
+D/.deps////
+/ChangeLog/1.1/Mon Dec 27 10:09:18 2004//T1.1
+/Makefile/1.1/Mon Dec 27 10:26:35 2004//T1.1
+/Makefile.am/1.1/Mon Dec 27 10:09:20 2004//T1.1
+/Makefile.in/1.1/Mon Dec 27 10:09:20 2004//T1.1
+/analyze.c/1.1/Mon Dec 27 10:09:18 2004//T1.1
+/build_diff.com/1.1/Mon Dec 27 10:09:18 2004//T1.1
+/cmpbuf.c/1.1/Mon Dec 27 10:09:18 2004//T1.1
+/cmpbuf.h/1.1/Mon Dec 27 10:09:18 2004//T1.1
+/context.c/1.1/Mon Dec 27 10:09:18 2004//T1.1
+/diagmeet.note/1.1/Mon Dec 27 10:09:19 2004//T1.1
+/diff.c/1.1/Mon Dec 27 10:09:19 2004//T1.1
+/diff.h/1.1/Mon Dec 27 10:09:19 2004//T1.1
+/diff3.c/1.1/Mon Dec 27 10:09:19 2004//T1.1
+/diffrun.h/1.1/Mon Dec 27 10:09:19 2004//T1.1
+/dir.c/1.1/Mon Dec 27 10:09:19 2004//T1.1
+/ed.c/1.1/Mon Dec 27 10:09:20 2004//T1.1
+/ifdef.c/1.1/Mon Dec 27 10:09:20 2004//T1.1
+/io.c/1.1/Mon Dec 27 10:09:20 2004//T1.1
+/libdiff.dsp/1.1/Mon Dec 27 10:09:20 2004//T1.1
+/normal.c/1.1/Mon Dec 27 10:09:20 2004//T1.1
+/side.c/1.1/Mon Dec 27 10:09:21 2004//T1.1
+/system.h/1.1/Mon Dec 27 10:09:21 2004//T1.1
+/util.c/1.1/Mon Dec 27 10:09:21 2004//T1.1
+/version.c/1.1/Mon Dec 27 10:09:21 2004//T1.1
