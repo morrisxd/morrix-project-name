@@ -21,6 +21,10 @@
 #include "fileattr.h"
 #include "hardlink.h"
 
+#include "defs.h"
+#include "pc.h"
+
+
 static Dtype check_direntproc PROTO ((void *callerdat, char *dir,
 				      char *repos, char *update_dir,
 				      List *entries));
@@ -69,6 +73,7 @@ struct master_lists
     List *cilist;			/* list with commit_info structs */
 };
 
+char mrid[256];
 static int force_ci = 0;
 static int got_message;
 static int run_module_prog = 1;
@@ -81,6 +86,12 @@ static List *mulist;
 static List *saved_ulist;
 static char *saved_message;
 static time_t last_register_time;
+
+char *
+cm_get_sm (void)
+{
+	return saved_message;
+}
 
 static const char *const commit_usage[] =
 {
@@ -326,6 +337,73 @@ copy_ulist (node, data)
 }
 #endif /* CLIENT_SUPPORT */
 
+
+#include "utils.h"
+
+int showargs (argc, argv)
+int argc;
+char **argv;
+{
+	int i=0;
+	char * rep;
+	char lbuf[2048];
+
+	rep = Name_Repository (NULL, NULL);
+
+	ACTION ("REP", rep);
+	ACTION ("caller", getcaller ());
+	ACTION ("name root", Name_Root (NULL, NULL));
+	ACTION ("current_parsed_root->original",current_parsed_root->original);
+	ACTION ("current_parsed_root->directory",current_parsed_root->directory);
+	ACTION ("working dir", xgetwd ());
+
+	while (i++ < argc-1)	
+	{
+		sprintf (lbuf, "combined path=%s/%s", rep, argv[i]);
+		ACTION ("commit args", lbuf);
+	}
+
+	return 0;
+}
+
+/******************************************
+ **/
+/* #include "pc.inc" */
+#include "pc.h"
+
+int getmrid (msg, mrid)
+char *msg;
+char *mrid;
+{
+	char *b, *e;
+
+	b = index (msg, '\"') +1 ;
+	e = rindex (msg, '\"');
+	strncpy (mrid, b, e-b);
+	mrid[e-b] = '\0';
+
+	return 0;
+}
+
+int checkquote (logmsg)
+char *logmsg;
+{
+	unsigned long len = strlen (logmsg);
+	unsigned long i = 0;
+	int quotecount=0;
+	char *p;
+
+	p = logmsg;	
+	while (i < len)
+	{
+		if (p[i] == '\"')
+			quotecount ++;
+		i ++;
+	}
+
+	return (quotecount);
+}
+
 int
 commit (argc, argv)
     int argc;
@@ -335,8 +413,15 @@ commit (argc, argv)
     int err = 0;
     int local = 0;
 
+    int count = 0;	/* added by ikoo */
+    char filenames[4096];
+
     if (argc == -1)
 	usage (commit_usage);
+
+	/* added by ikoo for analysising some parameter only */
+	if (isdebug())
+		showargs (argc, argv);
 
 #ifdef CVS_BADROOT
     /*
@@ -414,6 +499,14 @@ commit (argc, argv)
 		break;
 	}
     }
+
+    /* PB_MR_CHECK(NULL); */
+    if (0 > pb_mrchk (NULL))
+    {
+	    return -4;
+    }
+
+
     argc -= optind;
     argv += optind;
 
@@ -438,7 +531,6 @@ commit (argc, argv)
 
 	get_file (logfile, logfile, "r", &saved_message, &size, &len);
     }
-
 #ifdef CLIENT_SUPPORT
     if (current_parsed_root->isremote)
     {
@@ -474,6 +566,14 @@ commit (argc, argv)
 	       what is in the CVSROOT/cvsignore file).  */
 	    dellist (&find_args.ulist);
 	    return 0;
+	}
+
+	/* added by ikoo : show find result here */
+	if (isdebug())
+	{
+	    ACTION ("READY TO SHOW FIND_ARGS", "");
+	    for (count = 0; count < argc -1; count ++)
+		ACTION ("find_args", find_args.argv[count]);
 	}
 
 	/* Now we keep track of which files we actually are going to
@@ -608,8 +708,10 @@ commit (argc, argv)
     }
 #endif
 
-    if (saved_tag != NULL)
+    if (saved_tag != NULL){
 	tag_check_valid (saved_tag, argc, argv, local, aflag, "");
+	error (0, 0, saved_tag);
+	}
 
     /* XXX - this is not the perfect check for this */
     if (argc <= 0)
@@ -659,7 +761,20 @@ commit (argc, argv)
 			       commit_direntproc, commit_dirleaveproc, NULL,
 			       argc, argv, local, W_LOCAL, aflag, CVS_LOCK_NONE,
 			       (char *) NULL, 1);
+    {
+/*
+	Node *p;
+	List * cilist;
+	struct commit_info *ci;
 
+	p = findnode (mulist, "");
+	cilist = ((struct master_lists *)p->data)->cilist;
+	p = findnode (cilist, argv[3]);
+	ci = (struct commit_info *)p->data;
+	// ACTION ("tag", ci->tag);
+	// ci->tag;
+*/
+    }
     /*
      * Unlock all the dirs and clean up
      */
@@ -1176,6 +1291,21 @@ check_filesdoneproc (callerdat, err, repos, update_dir, entries)
     return (err);
 }
 
+int showfileinfo(ci, finfo)
+struct commit_info *ci;
+struct file_info *finfo;
+{
+	if (finfo) error (0, 0, finfo->fullname);
+	if (finfo) error (0, 0, finfo->repository);
+	if (ci)
+	{
+	 	if (ci->rev) error (0, 0, ci->rev);
+	 	if (ci->tag) error (0, 0, ci->tag);
+	}
+
+	return 0;
+}
+
 /*
  * Do the work of committing a file
  */
@@ -1192,6 +1322,7 @@ commit_fileproc (callerdat, finfo)
     int err = 0;
     List *ulist, *cilist;
     struct commit_info *ci;
+    char tmp[1024];
 
     /* Keep track of whether write_dirtag is a branch tag.
        Note that if it is a branch tag in some files and a nonbranch tag
@@ -1201,6 +1332,7 @@ commit_fileproc (callerdat, finfo)
 	&& finfo->rcs != NULL)
     {
 	char *rev = RCS_getversion (finfo->rcs, write_dirtag, NULL, 1, NULL);
+
 	if (rev != NULL
 	    && !RCS_nodeisbranch (finfo->rcs, write_dirtag))
 	    write_dirnonbranch = 1;
@@ -1208,6 +1340,7 @@ commit_fileproc (callerdat, finfo)
 	    free (rev);
     }
 
+	
     if (finfo->update_dir[0] == '\0')
 	p = findnode (mulist, ".");
     else
@@ -1245,6 +1378,7 @@ commit_fileproc (callerdat, finfo)
 	return (0);
 
     ci = (struct commit_info *) p->data;
+    // ACTION ("ci->tag", ci->tag);
     if (ci->status == T_MODIFIED)
     {
 	if (finfo->rcs == NULL)
@@ -1393,6 +1527,25 @@ out:
 		(void) classify_file_internal (finfo, &vers);
 		li = (struct logfile_info *) p->data;
 		li->rev_new = xstrdup (vers->vn_rcs);
+		{
+			char tmp[1024];
+			/* ACTION ("li->rev_new", li->rev_new); */
+			strcpy (tmp, finfo->repository);
+			strcat (tmp, "/");
+			strcat (tmp, finfo->fullname);
+			ACTION ("finfo->repository", finfo->repository);
+			ACTION ("finfo->fullname", finfo->fullname);
+			/*
+			 * add by wydeng/ikoo
+			 */
+			insertmr2 (finfo->fullname,
+				finfo->repository,
+				mrid, 
+				"nocomment",
+				"2003-03-17",
+				li->rev_new,
+				ci->tag);
+		}
 		freevers_ts (&vers);
 	    }
 	}
@@ -1400,6 +1553,7 @@ out:
     if (SIG_inCrSect ())
 	SIG_endCrSect ();
 
+    showfileinfo (ci, finfo);
     return (err);
 }
 

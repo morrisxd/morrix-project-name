@@ -20,6 +20,14 @@
 #include "savecwd.h"
 #include <assert.h>
 
+/*
+ * add by wydeng@photonicbridges.com/ikoo
+ */
+#include "defs.h"
+static char mrid[TMPBUFLEN];
+/* by ikoo */
+
+
 static char *get_comment PROTO((char *user));
 static int add_rev PROTO((char *message, RCSNode *rcs, char *vfile,
 			  char *vers));
@@ -57,6 +65,8 @@ static const char *const import_usage[] =
     NULL
 };
 
+char g_rep[TMPBUFLEN];
+
 int
 import (argc, argv)
     int argc;
@@ -69,6 +79,12 @@ import (argc, argv)
     List *ulist;
     Node *p;
     struct logfile_info *li;
+
+
+    /* added by wydeng@photonicbridges.com/ikoo */
+    char saved_message[TMPBUFLEN];
+    memset (g_rep, 0, TMPBUFLEN);
+    /* added */
 
     if (argc == -1)
 	usage (import_usage);
@@ -143,6 +159,20 @@ import (argc, argv)
     if (argc < 3)
 	usage (import_usage);
 
+    if(message) error (0,0,message);
+    for (i=0;i<argc;i++) error(0,0,argv[i]);
+
+    /*
+     * "strcpy (saved_message, message);" this is important!!!
+     * 'coz variable saved_message is used inside macro PB_MR_CHECK()
+     */
+    strcpy (saved_message, message);
+    /* PB_MR_CHECK(NULL); */
+    if (0 > pb_mrchk (NULL))
+    {
+	    return -9;
+    }
+
 #ifdef SERVER_SUPPORT
     /* This is for handling the Checkin-time request.  It might seem a
        bit odd to enable the use_file_modtime code even in the case
@@ -191,7 +221,6 @@ import (argc, argv)
 	error (1, 0, "directory %s not relative within the repository",
 	       argv[0]);
     }
-
     /*
      * Consistency checks on the specified vendor branch.  It must be
      * composed of only numbers and dots ('.').  Also, for now we only
@@ -380,6 +409,7 @@ import (argc, argv)
     li->tag = xstrdup (vbranch);
     li->rev_old = li->rev_new = NULL;
     p->data = (char *) li;
+
     (void) addnode (ulist, p);
     Update_Logfile (repository, message, logfp, ulist);
     dellist (&ulist);
@@ -397,7 +427,6 @@ import (argc, argv)
     free (repository);
     free (vbranch);
     free (vhead);
-
     return (err);
 }
 
@@ -531,6 +560,7 @@ process_import_file (message, vfile, vtag, targc, targv)
 {
     char *rcs;
     int inattic = 0;
+    int i;
 
     rcs = xmalloc (strlen (repository) + strlen (vfile) + sizeof (RCSEXT)
 		   + 5);
@@ -592,6 +622,15 @@ process_import_file (message, vfile, vtag, targc, targv)
 	    if (free_opt != NULL)
 		free (free_opt);
 	    free (rcs);
+	    /*
+	     * On success, notify our MR system.---wydeng
+	     */
+	    {
+		ACTION ("VFILE", vfile);
+		ACTION ("repository", repository);
+	    	insertmr2 (vfile, repository, mrid, "nocomment", \
+			"2003-03-17", "1.0", NULL); 
+	    }
 	    return retval;
 	}
 	free (attic_name);

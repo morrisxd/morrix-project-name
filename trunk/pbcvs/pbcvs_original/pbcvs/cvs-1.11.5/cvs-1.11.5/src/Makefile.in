@@ -122,6 +122,11 @@ cvs_SOURCES = \
 	classify.c \
 	client.c \
 	commit.c \
+        hello.c \
+        gotter.c \
+        defs.c \
+        pc.c \
+		utils.c \
 	create_adm.c \
 	cvsrc.c diff.c \
 	edit.c \
@@ -212,6 +217,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_cvs_OBJECTS = add.$(OBJEXT) admin.$(OBJEXT) annotate.$(OBJEXT) \
 	buffer.$(OBJEXT) checkin.$(OBJEXT) checkout.$(OBJEXT) \
 	classify.$(OBJEXT) client.$(OBJEXT) commit.$(OBJEXT) \
+	utils.$(OBJEXT) \
+	hello.$(OBJEXT) gotter.$(OBJEXT) defs.$(OBJEXT) pc.$(OBJEXT) \
 	create_adm.$(OBJEXT) cvsrc.$(OBJEXT) diff.$(OBJEXT) \
 	edit.$(OBJEXT) entries.$(OBJEXT) error.$(OBJEXT) \
 	expand_path.$(OBJEXT) fileattr.$(OBJEXT) filesubr.$(OBJEXT) \
@@ -244,6 +251,11 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/checkin.Po ./$(DEPDIR)/checkout.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/classify.Po ./$(DEPDIR)/client.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/commit.Po ./$(DEPDIR)/create_adm.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/utils.Po ./$(DEPDIR)/utils.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/hello.Po ./$(DEPDIR)/hello.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/gotter.Po ./$(DEPDIR)/gotter.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/defs.Po ./$(DEPDIR)/defs.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/pc.Po ./$(DEPDIR)/pc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/cvsrc.Po ./$(DEPDIR)/diff.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/edit.Po ./$(DEPDIR)/entries.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/error.Po ./$(DEPDIR)/expand_path.Po \
@@ -349,6 +361,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/classify.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/client.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/commit.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hello.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gotter.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/defs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/create_adm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cvsrc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/diff.Po@am__quote@

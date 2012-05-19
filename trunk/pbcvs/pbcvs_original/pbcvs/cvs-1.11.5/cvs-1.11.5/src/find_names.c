@@ -190,6 +190,7 @@ Find_Directories (repository, which, entries)
 
 	if (tmpentries != NULL)
 	    sdtp = (struct stickydirtag *) tmpentries->list->data;
+	// showlist (tmpentries);
 
 	/* If we do have an entries list, then if sdtp is NULL, or if
            sdtp->subdirs is nonzero, all subdirectory information is

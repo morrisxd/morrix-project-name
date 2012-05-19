@@ -36,6 +36,11 @@ cvs_SOURCES = \
 	classify.c \
 	client.c \
 	commit.c \
+       hello.c \
+       gotter.c \
+       defs.c \
+       pc.c \
+		utils.c \
 	create_adm.c \
 	cvsrc.c diff.c \
 	edit.c \

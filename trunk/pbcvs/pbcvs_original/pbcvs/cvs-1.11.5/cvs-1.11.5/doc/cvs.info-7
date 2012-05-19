@@ -281,9 +281,9 @@ run the `cvs --help' command, or see *Note Index::.
 
    Keyword expansion modes (*note Substitution modes::):
 
-     -kkv  $Id: cvs.info-7,v 1.1 2004/12/27 10:09:52 wydeng Exp $
-     -kkvl $Id: cvs.info-7,v 1.1 2004/12/27 10:09:52 wydeng Exp $
-     -kk   $Id: cvs.info-7,v 1.1 2004/12/27 10:09:52 wydeng Exp $
+     -kkv  $Id: cvs.info-7,v 1.2 2004/12/27 10:28:21 wydeng Exp $
+     -kkvl $Id: cvs.info-7,v 1.2 2004/12/27 10:28:21 wydeng Exp $
+     -kk   $Id: cvs.info-7,v 1.2 2004/12/27 10:28:21 wydeng Exp $
      -kv   file1,v 1.1 1993/12/09 03:21:13 joe Exp
      -ko   no expansion
      -kb   no expansion, file is binary
@@ -291,19 +291,19 @@ run the `cvs --help' command, or see *Note Index::.
    Keywords (*note Keyword list::):
 
      $Author: wydeng $
-     $Date: 2004/12/27 10:09:52 $
-     $Header: /myrepo/pbcvs/cvs-1.11.5/cvs-1.11.5/doc/cvs.info-7,v 1.1 2004/12/27 10:09:52 wydeng Exp $
-     $Id: cvs.info-7,v 1.1 2004/12/27 10:09:52 wydeng Exp $
+     $Date: 2004/12/27 10:28:21 $
+     $Header: /myrepo/pbcvs/cvs-1.11.5/cvs-1.11.5/doc/cvs.info-7,v 1.2 2004/12/27 10:28:21 wydeng Exp $
+     $Id: cvs.info-7,v 1.2 2004/12/27 10:28:21 wydeng Exp $
      $Locker:  $
      $Name:  $
      $RCSfile: cvs.info-7,v $
-     $Revision: 1.1 $
+     $Revision: 1.2 $
      $Source: C:/myrepo/pbcvs/cvs-1.11.5/cvs-1.11.5/doc/cvs.info-7,v $
      $State: Exp $
      $Log: cvs.info-7,v $
-     Revision 1.1  2004/12/27 10:09:52  wydeng
+     Revision 1.2  2004/12/27 10:28:21  wydeng
      -i "Doc_269"
-     Rebuild PB-CVS source tree
+     v2
 
      Revision 1.1  1993/12/09 03:30:17  joe
      Initial revision
