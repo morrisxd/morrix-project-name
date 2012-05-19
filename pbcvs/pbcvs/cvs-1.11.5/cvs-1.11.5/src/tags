@@ -1,0 +1,1703 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/darren@hiebert.com/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.0.1	//
+ALLOC_COUNT	buffer.c	106;"	d	file:
+ALL_REC_TYPES	history.c	211;"	d	file:
+AUTH_CLIENT_SUPPORT	scramble.c	25;"	d	file:
+AddEntryNode	entries.c	/^AddEntryNode (list, entdata)$/;"	f	file:
+BASE_DEREGISTER	entries.c	/^    BASE_DEREGISTER$/;"	e	enum:base_walk	file:
+BASE_GET	entries.c	/^    BASE_GET,$/;"	e	enum:base_walk	file:
+BASE_REGISTER	entries.c	/^    BASE_REGISTER,$/;"	e	enum:base_walk	file:
+BINARY	update.c	1801;"	d	file:
+BUFMAX	gotter.c	18;"	d	file:
+BUFMAX	pc.c	20;"	d	file:
+BUFSIZE	client.c	4236;"	d	file:
+CANNOTCONNECT	gotter.c	15;"	d	file:
+CANNOTCONNECT	pc.c	17;"	d	file:
+CANNOTSOCKET	gotter.c	17;"	d	file:
+CANNOTSOCKET	pc.c	19;"	d	file:
+CHECK_CALLER	defs.c	46;"	d	file:
+CMP_BUF_SIZE	rcs.c	5634;"	d	file:
+CVSMODULE_OPTS	modules.c	33;"	d	file:
+CVSMODULE_SPEC	modules.c	36;"	d	file:
+CVSMSG	defs.c	/^typedef struct CVSMSG {$/;"	s	file:
+CVSMSG	defs.c	/^} CVSMSG;$/;"	t	file:
+CVSRC_FILENAME	cvsrc.c	18;"	d	file:
+CVSROOTADM	defs.c	43;"	d	file:
+CVSROOTADM_ALLOW	defs.c	17;"	d	file:
+CVSROOTADM_CHECK	defs.c	18;"	d	file:
+CVS_PASSWORD_FILE	login.c	33;"	d	file:
+CVS_Username	server.c	/^char *CVS_Username = NULL;$/;"	v
+CVSroot_cmdline	root.c	/^char *CVSroot_cmdline;$/;"	v
+Checkin	checkin.c	/^Checkin (type, finfo, rcs, rev, tag, options, message)$/;"	f
+Classify_File	classify.c	/^Classify_File (finfo, tag, date, options, force_tag_match, aflag, versp,$/;"	f
+Create_Admin	create_adm.c	/^Create_Admin (dir, update_dir, repository, tag, date, nonbranch, warn,$/;"	f
+Create_Root	root.c	/^Create_Root (dir, rootdir)$/;"	f
+CurDir	main.c	/^char *CurDir;$/;"	v
+DBLKSIZ	mkmodules.c	13;"	d	file:
+DIFF_ADDED	diff.c	/^    DIFF_ADDED,$/;"	e	enum:diff_file	file:
+DIFF_DIFFERENT	diff.c	/^    DIFF_DIFFERENT,$/;"	e	enum:diff_file	file:
+DIFF_ERROR	diff.c	/^    DIFF_ERROR,$/;"	e	enum:diff_file	file:
+DIFF_REMOVED	diff.c	/^    DIFF_REMOVED,$/;"	e	enum:diff_file	file:
+DIFF_SAME	diff.c	/^    DIFF_SAME$/;"	e	enum:diff_file	file:
+EIO	buffer.c	18;"	d	file:
+EIO	zlib.c	30;"	d	file:
+Editor	main.c	/^char *Editor = EDITOR_DFLT;$/;"	v
+Entnode_Create	entries.c	/^Entnode_Create(type, user, vn, ts, options, tag, date, ts_conflict)$/;"	f	file:
+Entnode_Destroy	entries.c	/^Entnode_Destroy (ent)$/;"	f	file:
+Entries_Close	entries.c	/^Entries_Close(list)$/;"	f
+Entries_Open	entries.c	/^Entries_Open (aflag, update_dir)$/;"	f
+Entries_delproc	entries.c	/^Entries_delproc (node)$/;"	f	file:
+FILE_INCREMENT	history.c	213;"	d	file:
+Find_Directories	find_names.c	/^Find_Directories (repository, which, entries)$/;"	f
+Find_Names	find_names.c	/^Find_Names (repository, which, aflag, optentries)$/;"	f
+GETPASS	login.c	16;"	d	file:
+GETPASS	login.c	18;"	d	file:
+GROW	cvsrc.c	22;"	d	file:
+HREC_INCREMENT	history.c	215;"	d	file:
+IGN_GROW	ignore.c	40;"	d	file:
+KEYWORD_AUTHOR	rcs.c	/^    KEYWORD_AUTHOR = 0,$/;"	e	enum:keyword	file:
+KEYWORD_DATE	rcs.c	/^    KEYWORD_DATE,$/;"	e	enum:keyword	file:
+KEYWORD_HEADER	rcs.c	/^    KEYWORD_HEADER,$/;"	e	enum:keyword	file:
+KEYWORD_ID	rcs.c	/^    KEYWORD_ID,$/;"	e	enum:keyword	file:
+KEYWORD_INIT	rcs.c	3468;"	d	file:
+KEYWORD_LOCKER	rcs.c	/^    KEYWORD_LOCKER,$/;"	e	enum:keyword	file:
+KEYWORD_LOG	rcs.c	/^    KEYWORD_LOG,$/;"	e	enum:keyword	file:
+KEYWORD_NAME	rcs.c	/^    KEYWORD_NAME,$/;"	e	enum:keyword	file:
+KEYWORD_RCSFILE	rcs.c	/^    KEYWORD_RCSFILE,$/;"	e	enum:keyword	file:
+KEYWORD_REVISION	rcs.c	/^    KEYWORD_REVISION,$/;"	e	enum:keyword	file:
+KEYWORD_SOURCE	rcs.c	/^    KEYWORD_SOURCE,$/;"	e	enum:keyword	file:
+KEYWORD_STATE	rcs.c	/^    KEYWORD_STATE$/;"	e	enum:keyword	file:
+KFLAG_B	rcs.c	/^enum kflag { KFLAG_KV = 0, KFLAG_KVL, KFLAG_K, KFLAG_V, KFLAG_O, KFLAG_B };$/;"	e	enum:kflag	file:
+KFLAG_K	rcs.c	/^enum kflag { KFLAG_KV = 0, KFLAG_KVL, KFLAG_K, KFLAG_V, KFLAG_O, KFLAG_B };$/;"	e	enum:kflag	file:
+KFLAG_KV	rcs.c	/^enum kflag { KFLAG_KV = 0, KFLAG_KVL, KFLAG_K, KFLAG_V, KFLAG_O, KFLAG_B };$/;"	e	enum:kflag	file:
+KFLAG_KVL	rcs.c	/^enum kflag { KFLAG_KV = 0, KFLAG_KVL, KFLAG_K, KFLAG_V, KFLAG_O, KFLAG_B };$/;"	e	enum:kflag	file:
+KFLAG_O	rcs.c	/^enum kflag { KFLAG_KV = 0, KFLAG_KVL, KFLAG_K, KFLAG_V, KFLAG_O, KFLAG_B };$/;"	e	enum:kflag	file:
+KFLAG_V	rcs.c	/^enum kflag { KFLAG_KV = 0, KFLAG_KVL, KFLAG_K, KFLAG_V, KFLAG_O, KFLAG_B };$/;"	e	enum:kflag	file:
+LARGEST_FWRITE	rcs.c	4518;"	d	file:
+LOG_DAEMON	server.c	64;"	d	file:
+L_ERROR	lock.c	120;"	d	file:
+L_LOCKED	lock.c	121;"	d	file:
+L_OK	lock.c	119;"	d	file:
+Lock_Cleanup	lock.c	/^Lock_Cleanup ()$/;"	f
+MAP_FAILED	rcs.c	23;"	d	file:
+MAXHOSTNAMELEN	main.c	32;"	d	file:
+MAXHOSTNAMELEN	server.c	5915;"	d	file:
+MAXMSGLEN	defs.c	24;"	d	file:
+MAX_INCR	subr.c	92;"	d	file:
+MIN_INCR	subr.c	91;"	d	file:
+MODULE_INCREMENT	history.c	214;"	d	file:
+MRD_NONE	gotter.c	16;"	d	file:
+MRD_NONE	pc.c	18;"	d	file:
+Make_Date	main.c	/^Make_Date (rawdate)$/;"	f
+NEXT_BAR	history.c	987;"	d	file:
+Name_Repository	repos.c	/^Name_Repository (dir, update_dir)$/;"	f
+Name_Root	root.c	/^Name_Root (dir, update_dir)$/;"	f
+No_Difference	no_diff.c	/^No_Difference (finfo, vers)$/;"	f
+O_ACCMODE	myndbm.c	22;"	d	file:
+O_NONBLOCK	server.c	85;"	d	file:
+PACKET_SLOP	buffer.c	1497;"	d	file:
+PBCVSALLOW	defs.c	15;"	d	file:
+PBCVSCHECK	defs.c	16;"	d	file:
+PBCVSDENY	defs.c	14;"	d	file:
+PB_MR_CHECK	defs.c	/^int PB_MR_CHECK (void *debug)$/;"	f
+ParseTag	entries.c	/^ParseTag (tagp, datep, nonbranchp)$/;"	f
+Parse_Info	parseinfo.c	/^Parse_Info (infofile, repository, callproc, all)$/;"	f
+Pserver_Repos	server.c	/^static char *Pserver_Repos = NULL;$/;"	v	file:
+RAWID	defs.c	32;"	d	file:
+RCSBUF_BUFSIZE	rcs.c	978;"	d	file:
+RCS_abandon	rcs.c	/^RCS_abandon (rcs)$/;"	f
+RCS_addaccess	rcs.c	/^RCS_addaccess (rcs, user)$/;"	f
+RCS_addbranch	rcs.c	/^RCS_addbranch (rcs, branch)$/;"	f	file:
+RCS_branch_head	rcs.c	/^RCS_branch_head (rcs, rev)$/;"	f
+RCS_check_kflag	rcs.c	/^RCS_check_kflag (arg)$/;"	f
+RCS_check_tag	rcs.c	/^RCS_check_tag (tag)$/;"	f
+RCS_checkin	rcs.c	/^RCS_checkin (rcs, workfile, message, rev, flags)$/;"	f
+RCS_checkout	rcs.c	/^RCS_checkout (rcs, workfile, rev, nametag, options, sout, pfn, callerdat)$/;"	f
+RCS_cmp_file	rcs.c	/^RCS_cmp_file (rcs, rev, options, filename)$/;"	f
+RCS_copydeltas	rcs.c	/^RCS_copydeltas (rcs, fin, rcsbufin, fout, newdtext, insertpt)$/;"	f	file:
+RCS_datecmp	rcs.c	/^RCS_datecmp (date1, date2)$/;"	f
+RCS_delaccess	rcs.c	/^RCS_delaccess (rcs, user)$/;"	f
+RCS_delete_revs	rcs.c	/^RCS_delete_revs (rcs, tag1, tag2, inclusive)$/;"	f
+RCS_deltag	rcs.c	/^RCS_deltag (rcs, tag)$/;"	f
+RCS_deltas	rcs.c	/^RCS_deltas (rcs, fp, rcsbuf, version, op, text, len, log, loglen)$/;"	f
+RCS_exec_rcsdiff	rcscmds.c	/^RCS_exec_rcsdiff (rcsfile, opts, options, rev1, rev2, label1, label2, workfile)$/;"	f
+RCS_exist_rev	rcs.c	/^RCS_exist_rev (rcs, rev)$/;"	f
+RCS_exist_tag	rcs.c	/^RCS_exist_tag (rcs, tag)$/;"	f
+RCS_findlock_or_tip	rcs.c	/^RCS_findlock_or_tip (rcs)$/;"	f	file:
+RCS_fully_parse	rcs.c	/^RCS_fully_parse (rcs)$/;"	f
+RCS_getaccess	rcs.c	/^RCS_getaccess (rcs)$/;"	f
+RCS_getbranch	rcs.c	/^RCS_getbranch (rcs, tag, force_tag_match)$/;"	f
+RCS_getbranchpoint	rcs.c	/^RCS_getbranchpoint (rcs, target)$/;"	f	file:
+RCS_getdate	rcs.c	/^RCS_getdate (rcs, date, force_tag_match)$/;"	f
+RCS_getdatebranch	rcs.c	/^RCS_getdatebranch (rcs, date, branch)$/;"	f	file:
+RCS_getdeltatext	rcs.c	/^RCS_getdeltatext (rcs, fp, rcsbuf)$/;"	f	file:
+RCS_getexpand	rcs.c	/^RCS_getexpand (rcs)$/;"	f
+RCS_getlocks	rcs.c	/^RCS_getlocks (rcs)$/;"	f
+RCS_getrevtime	rcs.c	/^RCS_getrevtime (rcs, rev, date, fudge)$/;"	f
+RCS_gettag	rcs.c	/^RCS_gettag (rcs, symtag, force_tag_match, simple_tag)$/;"	f
+RCS_getversion	rcs.c	/^RCS_getversion (rcs, tag, date, force_tag_match, simple_tag)$/;"	f
+RCS_head	rcs.c	/^RCS_head (rcs)$/;"	f
+RCS_isbranch	rcs.c	/^RCS_isbranch (rcs, rev)$/;"	f
+RCS_isdead	rcs.c	/^RCS_isdead (rcs, tag)$/;"	f
+RCS_lock	rcs.c	/^RCS_lock (rcs, rev, lock_quiet)$/;"	f
+RCS_magicrev	rcs.c	/^RCS_magicrev (rcs, rev)$/;"	f
+RCS_merge	rcscmds.c	/^RCS_merge(rcs, path, workfile, options, rev1, rev2)$/;"	f
+RCS_nodeisbranch	rcs.c	/^RCS_nodeisbranch (rcs, rev)$/;"	f
+RCS_output_diff_options	rcscmds.c	/^RCS_output_diff_options (opts, rev1, rev2, workfile)$/;"	f	file:
+RCS_parse	rcs.c	/^RCS_parse (file, repos)$/;"	f
+RCS_parsercsfile	rcs.c	/^RCS_parsercsfile (rcsfile)$/;"	f
+RCS_parsercsfile_i	rcs.c	/^RCS_parsercsfile_i (fp, rcsfile)$/;"	f	file:
+RCS_putadmin	rcs.c	/^RCS_putadmin (rcs, fp)$/;"	f	file:
+RCS_putdesc	rcs.c	/^RCS_putdesc (rcs, fp)$/;"	f	file:
+RCS_putdtree	rcs.c	/^RCS_putdtree (rcs, rev, fp)$/;"	f	file:
+RCS_reparsercsfile	rcs.c	/^RCS_reparsercsfile (rdata, pfp, rcsbufp)$/;"	f
+RCS_rewrite	rcs.c	/^RCS_rewrite (rcs, newdtext, insertpt)$/;"	f
+RCS_setattic	rcs.c	/^RCS_setattic (rcs, toattic)$/;"	f
+RCS_setbranch	rcs.c	/^RCS_setbranch (rcs, rev)$/;"	f
+RCS_setexpand	rcs.c	/^RCS_setexpand (rcs, expand)$/;"	f
+RCS_settag	rcs.c	/^RCS_settag (rcs, tag, rev)$/;"	f
+RCS_symbols	rcs.c	/^RCS_symbols(rcs)$/;"	f
+RCS_tag2rev	rcs.c	/^RCS_tag2rev (rcs, tag)$/;"	f
+RCS_unlock	rcs.c	/^RCS_unlock (rcs, rev, unlock_quiet)$/;"	f
+RCS_valid_rev	rcs.c	/^RCS_valid_rev (rev)$/;"	f
+RCS_whatbranch	rcs.c	/^RCS_whatbranch (rcs, rev)$/;"	f
+READTIMEOUT	defs.c	35;"	d	file:
+REQ_LINE	server.c	4733;"	d	file:
+REQ_LINE	server.c	4735;"	d	file:
+REQ_LINE	server.c	4817;"	d	file:
+RSP_LINE	client.c	3371;"	d	file:
+RSP_LINE	client.c	3373;"	d	file:
+RSP_LINE	client.c	3427;"	d	file:
+Reader_Lock	lock.c	/^Reader_Lock (xrepository)$/;"	f
+Register	entries.c	/^Register (list, fname, vn, ts, options, tag, date, ts_conflict)$/;"	f
+RereadLogAfterVerify	logmsg.c	/^int RereadLogAfterVerify = LOGMSG_REREAD_ALWAYS;$/;"	v
+SADDR	gotter.c	/^typedef struct sockaddr * SADDR;$/;"	t	file:
+SADDR	pc.c	/^typedef struct sockaddr * SADDR;$/;"	t	file:
+SERVERIP	defs.c	33;"	d	file:
+SERVERPORT	defs.c	34;"	d	file:
+SERVER_HI_WATER	server.c	2292;"	d	file:
+SERVER_LO_WATER	server.c	2296;"	d	file:
+SOCKET	gotter.c	/^typedef int SOCKET;$/;"	t	file:
+SOCKET	pc.c	/^typedef int SOCKET;$/;"	t	file:
+SOCK_ERRNO	client.c	45;"	d	file:
+SOCK_STRERROR	client.c	52;"	d	file:
+STAT_BLOCKSIZE	history.c	1035;"	d	file:
+STAT_BLOCKSIZE	history.c	1037;"	d	file:
+STREQ	rcs.c	134;"	d	file:
+Sanitize_Repository_Name	repos.c	/^Sanitize_Repository_Name (repository)$/;"	f
+Scratch_Entry	entries.c	/^Scratch_Entry (list, fname)$/;"	f
+Short_Repository	repos.c	/^Short_Repository (repository)$/;"	f
+Status	modules.c	/^static int Status;		        \/* Nonzero if the user is$/;"	v	file:
+Subdir_Deregister	entries.c	/^Subdir_Deregister (entries, parent, dir)$/;"	f
+Subdir_Register	entries.c	/^Subdir_Register (entries, parent, dir)$/;"	f
+Subdirs_Known	entries.c	/^Subdirs_Known (entries)$/;"	f
+TEMPMSGKEY	defs.c	20;"	d	file:
+TEMPSEMKEY	defs.c	21;"	d	file:
+TEMPSHMKEY	defs.c	22;"	d	file:
+TMPBUFLEN	defs.c	39;"	d	file:
+Tmpdir	main.c	/^char *Tmpdir = TMPDIR_DFLT;$/;"	v
+UPDATE_ENTRIES_CHECKIN	client.c	/^      UPDATE_ENTRIES_CHECKIN,$/;"	e	enum:update_entries_data::<anonymous>	file:
+UPDATE_ENTRIES_EXISTING	client.c	/^	UPDATE_ENTRIES_EXISTING,$/;"	e	enum:update_entries_data::<anonymous>	file:
+UPDATE_ENTRIES_EXISTING_OR_NEW	client.c	/^	UPDATE_ENTRIES_EXISTING_OR_NEW$/;"	e	enum:update_entries_data::<anonymous>	file:
+UPDATE_ENTRIES_NEW	client.c	/^	UPDATE_ENTRIES_NEW,$/;"	e	enum:update_entries_data::<anonymous>	file:
+UPDATE_ENTRIES_PATCH	client.c	/^      UPDATE_ENTRIES_PATCH,$/;"	e	enum:update_entries_data::<anonymous>	file:
+UPDATE_ENTRIES_RCS_DIFF	client.c	/^      UPDATE_ENTRIES_RCS_DIFF$/;"	e	enum:update_entries_data::<anonymous>	file:
+UPDATE_ENTRIES_UPDATE	client.c	/^      UPDATE_ENTRIES_UPDATE,$/;"	e	enum:update_entries_data::<anonymous>	file:
+USER_INCREMENT	history.c	212;"	d	file:
+Update_Logfile	logmsg.c	/^Update_Logfile (repository, xmessage, xlogfp, xchanges)$/;"	f
+VA_START	error.c	31;"	d	file:
+VA_START	error.c	34;"	d	file:
+Version_TS	vers_ts.c	/^Version_TS (finfo, options, tag, date, force_tag_match, set_time)$/;"	f
+WRAPPER_GROW	wrapper.c	76;"	d	file:
+WRITETIMEOUT	defs.c	36;"	d	file:
+WSAGetLastError	gotter.c	/^int WSAGetLastError ()$/;"	f
+WSAGetLastError	pc.c	/^static int WSAGetLastError ()$/;"	f	file:
+WrapperEntry	wrapper.c	/^} WrapperEntry;$/;"	t	file:
+WriteTag	entries.c	/^WriteTag (dir, tag, date, nonbranch, update_dir, repository)$/;"	f
+Writer_Lock	lock.c	/^Writer_Lock (list)$/;"	f	file:
+_T	gotter.c	19;"	d	file:
+_T	pc.c	21;"	d	file:
+__CVSMR_DEBUG__	defs.c	38;"	d	file:
+ac	admin.c	/^    int ac;$/;"	m	struct:admin_data	file:
+accept_hrec	history.c	/^accept_hrec (lr, hr)$/;"	f	file:
+add	add.c	/^add (argc, argv)$/;"	f
+add_directory	add.c	/^add_directory (finfo)$/;"	f	file:
+add_entries_proc	find_names.c	/^add_entries_proc (node, closure)$/;"	f	file:
+add_log	import.c	/^add_log (ch, fname)$/;"	f	file:
+add_prune_candidate	client.c	/^add_prune_candidate (dir)$/;"	f	file:
+add_rcs_file	import.c	/^add_rcs_file (message, rcs, user, add_vhead, key_opt,$/;"	f
+add_rev	import.c	/^add_rev (message, rcs, vfile, vers)$/;"	f	file:
+add_subdir_proc	find_names.c	/^add_subdir_proc (p, closure)$/;"	f	file:
+add_tags	import.c	/^add_tags (rcs, vfile, vtag, targc, targv)$/;"	f	file:
+add_usage	add.c	/^static const char *const add_usage[] =$/;"	v	file:
+addfile	recurse.c	/^addfile (listp, dir, file)$/;"	f	file:
+addlist	recurse.c	/^addlist (listp, key)$/;"	f	file:
+addnode	hash.c	/^addnode (list, p)$/;"	f
+addnode_at_front	hash.c	/^addnode_at_front (list, p)$/;"	f
+addremove_fileproc	watch.c	/^addremove_fileproc (callerdat, finfo)$/;"	f	file:
+addremove_filesdoneproc	watch.c	/^addremove_filesdoneproc (callerdat, err, repository, update_dir, entries)$/;"	f	file:
+admin	admin.c	/^admin (argc, argv)$/;"	f
+admin_data	admin.c	/^struct admin_data$/;"	s	file:
+admin_dirproc	admin.c	/^admin_dirproc (callerdat, dir, repos, update_dir, entries)$/;"	f	file:
+admin_file	mkmodules.c	/^struct admin_file {$/;"	s	file:
+admin_fileproc	admin.c	/^admin_fileproc (callerdat, finfo)$/;"	f	file:
+admin_usage	admin.c	/^static const char *const admin_usage[] =$/;"	v	file:
+aflag	checkout.c	/^static int aflag;$/;"	v	file:
+aflag	commit.c	/^static int aflag;$/;"	v	file:
+aflag	recurse.c	/^    int aflag;$/;"	m	struct:recursion_frame	file:
+aflag	update.c	/^static int aflag = 0;$/;"	v	file:
+all_users	history.c	/^static short all_users;$/;"	v	file:
+alloc_pending	server.c	/^alloc_pending (size)$/;"	f	file:
+allocate_buffer_datas	buffer.c	/^allocate_buffer_datas ()$/;"	f	file:
+an_entry	server.c	/^struct an_entry {$/;"	s	file:
+annotate	annotate.c	/^annotate (argc, argv)$/;"	f
+annotate_fileproc	annotate.c	/^annotate_fileproc (callerdat, finfo)$/;"	f	file:
+annotate_usage	annotate.c	/^static const char *const annotate_usage[] =$/;"	v	file:
+apply_rcs_changes	rcs.c	/^apply_rcs_changes (lines, diffbuf, difflen, name, addvers, delvers)$/;"	f	file:
+arg_add	admin.c	/^arg_add (dat, opt, arg)$/;"	f	file:
+arg_should_not_be_sent_to_server	client.c	/^arg_should_not_be_sent_to_server (arg)$/;"	f	file:
+argc	commit.c	/^    int argc;$/;"	m	struct:find_data	file:
+argument_count	server.c	/^static int argument_count;$/;"	v	file:
+argument_vector	server.c	/^static char **argument_vector;$/;"	v	file:
+argument_vector_size	server.c	/^static int argument_vector_size;$/;"	v	file:
+argv	commit.c	/^    char **argv;$/;"	m	struct:find_data	file:
+at_string	rcs.c	/^    int at_string;$/;"	m	struct:rcsbuffer	file:
+attic_too	tag.c	/^static int attic_too;			\/* remove tag from Attic files *\/$/;"	v	file:
+attr	main.c	/^    unsigned long attr;		\/* Attributes. *\/$/;"	m	struct:cmd	file:
+attr_read_attempted	fileattr.c	/^static int attr_read_attempted;$/;"	v	file:
+attrlist	fileattr.c	/^static List *attrlist;$/;"	v	file:
+attrs_modified	fileattr.c	/^static int attrs_modified;$/;"	v	file:
+auth_server	client.c	/^auth_server (root, lto_server, lfrom_server, verify_only, do_gssapi, hostinfo)$/;"	f	file:
+authorlist	log.c	/^    List *authorlist;$/;"	m	struct:log_data	file:
+av	admin.c	/^    char **av;$/;"	m	struct:admin_data	file:
+av_alloc	admin.c	/^    int av_alloc;$/;"	m	struct:admin_data	file:
+backto	history.c	/^static char *backto;$/;"	v	file:
+backup_file	subr.c	/^backup_file (filename, suffix)$/;"	f
+backup_modified	client.c	/^    int backup_modified;$/;"	m	struct:send_data	file:
+base_deregister	entries.c	/^base_deregister (finfo)$/;"	f
+base_get	entries.c	/^base_get (finfo)$/;"	f
+base_register	entries.c	/^base_register (finfo, rev)$/;"	f
+base_walk	entries.c	/^base_walk (code, finfo, rev)$/;"	f	file:
+base_walk	entries.c	/^enum base_walk {$/;"	g	file:
+block	server.c	/^    C_Block block;$/;"	m	struct:krb_encrypt_data	file:
+block_read	filesubr.c	/^block_read (fd, buf, nchars)$/;"	f	file:
+blocking	server.c	/^    int blocking;$/;"	m	struct:fd_buffer	file:
+blocking_error	server.c	91;"	d	file:
+blocking_error	server.c	93;"	d	file:
+branch	admin.c	/^    char *branch;$/;"	m	struct:admin_data	file:
+branch_mode	tag.c	/^static int branch_mode;			\/* make an automagic "branch" tag *\/$/;"	v	file:
+branchhead	log.c	/^    int branchhead;$/;"	m	struct:option_revlist	file:
+buf	buffer.c	/^    struct buffer *buf;$/;"	m	struct:packetizing_buffer	file:
+buf	client.c	/^    struct buffer *buf;$/;"	m	struct:log_buffer	file:
+buf	zlib.c	/^    struct buffer *buf;$/;"	m	struct:compress_buffer	file:
+buf_append_buffer	buffer.c	/^buf_append_buffer (to, from)$/;"	f
+buf_append_char	buffer.c	/^buf_append_char (buf, ch)$/;"	f
+buf_append_data	buffer.c	/^buf_append_data (buf, data, last)$/;"	f
+buf_chain_length	buffer.c	/^buf_chain_length (buf)$/;"	f
+buf_copy_counted	buffer.c	/^buf_copy_counted (outbuf, inbuf, special)$/;"	f
+buf_copy_lines	buffer.c	/^buf_copy_lines (outbuf, inbuf, command)$/;"	f
+buf_count_mem	buffer.c	/^buf_count_mem (buf)$/;"	f
+buf_default_memory_error	buffer.c	/^buf_default_memory_error (buf)$/;"	f	file:
+buf_empty_p	buffer.c	/^buf_empty_p (buf)$/;"	f
+buf_flush	buffer.c	/^buf_flush (buf, block)$/;"	f
+buf_free	buffer.c	/^buf_free (buf)$/;"	f
+buf_from_net	server.c	/^static struct buffer *buf_from_net;$/;"	v	file:
+buf_initialize	buffer.c	/^buf_initialize (input, output, flush, block, shutdown, memory, closure)$/;"	f
+buf_input_data	buffer.c	/^buf_input_data (buf, countp)$/;"	f
+buf_length	buffer.c	/^buf_length (buf)$/;"	f
+buf_nonio_initialize	buffer.c	/^buf_nonio_initialize (memory)$/;"	f
+buf_output	buffer.c	/^buf_output (buf, data, len)$/;"	f
+buf_output0	buffer.c	/^buf_output0 (buf, string)$/;"	f
+buf_read_data	buffer.c	/^buf_read_data (buf, want, retdata, got)$/;"	f
+buf_read_file	buffer.c	/^buf_read_file (f, size, retp, lastp)$/;"	f
+buf_read_file_to_eof	buffer.c	/^buf_read_file_to_eof (f, retp, lastp)$/;"	f
+buf_read_line	buffer.c	/^buf_read_line (buf, line, lenp)$/;"	f
+buf_send_counted	buffer.c	/^buf_send_counted (buf)$/;"	f
+buf_send_output	buffer.c	/^buf_send_output (buf)$/;"	f
+buf_send_special_count	buffer.c	/^buf_send_special_count (buf, count)$/;"	f
+buf_shutdown	buffer.c	/^buf_shutdown (buf)$/;"	f
+buf_to_net	server.c	/^static struct buffer *buf_to_net;$/;"	v	file:
+build_dirs	client.c	/^    int build_dirs;$/;"	m	struct:send_data	file:
+build_dirs_and_chdir	checkout.c	/^build_dirs_and_chdir (dirs, sticky)$/;"	f	file:
+build_entry	add.c	/^build_entry (repository, user, options, message, entries, tag)$/;"	f	file:
+build_one_dir	checkout.c	/^build_one_dir (repository, dirpath, sticky)$/;"	f	file:
+buildinsertpara	pc.c	/^void buildinsertpara (filename, pathname, mrid, comment, lmtime)$/;"	f
+buildinsertpara2	pc.c	/^void buildinsertpara2 (filename, pathname, mrid, comment, lmtime, rev, tag)$/;"	f
+buildquerypara	pc.c	/^void buildquerypara (username, mrid)$/;"	f
+buildupdatepara	pc.c	/^void buildupdatepara (mrid, pathname, tag, branch)$/;"	f
+cached_rcs	rcs.c	/^static RCSNode *cached_rcs;$/;"	v	file:
+cached_rcsbuf	rcs.c	/^static struct rcsbuffer cached_rcsbuf;$/;"	v	file:
+call_diff	rcscmds.c	/^call_diff (out)$/;"	f	file:
+call_diff3	rcscmds.c	/^call_diff3 (out)$/;"	f	file:
+call_diff_add_arg	rcscmds.c	/^call_diff_add_arg (s)$/;"	f	file:
+call_diff_arg	rcscmds.c	/^call_diff_arg (s)$/;"	f	file:
+call_diff_argc	rcscmds.c	/^static int call_diff_argc;$/;"	v	file:
+call_diff_argc_allocated	rcscmds.c	/^static int call_diff_argc_allocated;$/;"	v	file:
+call_diff_argv	rcscmds.c	/^static char **call_diff_argv;$/;"	v	file:
+call_diff_error	rcscmds.c	/^call_diff_error (format, a1, a2)$/;"	f	file:
+call_diff_file_callbacks	rcscmds.c	/^static struct diff_callbacks call_diff_file_callbacks =$/;"	v	file:
+call_diff_flush_output	rcscmds.c	/^call_diff_flush_output ()$/;"	f	file:
+call_diff_setup	rcscmds.c	/^call_diff_setup (prog)$/;"	f	file:
+call_diff_stdout_callbacks	rcscmds.c	/^static struct diff_callbacks call_diff_stdout_callbacks =$/;"	v	file:
+call_diff_write_output	rcscmds.c	/^call_diff_write_output (text, len)$/;"	f	file:
+call_diff_write_stdout	rcscmds.c	/^call_diff_write_stdout (text)$/;"	f	file:
+call_in_directory	client.c	/^call_in_directory (pathname, func, data)$/;"	f	file:
+callerdat	recurse.c	/^    void *callerdat;$/;"	m	struct:recursion_frame	file:
+cat_module	modules.c	/^cat_module (status)$/;"	f
+change_mode	client.c	/^change_mode (filename, mode_string, respect_umask)$/;"	f
+changes	logmsg.c	/^static List *changes;$/;"	v	file:
+check_command_legal_p	server.c	/^check_command_legal_p (cmd_name)$/;"	f	file:
+check_direntproc	commit.c	/^check_direntproc (callerdat, dir, repos, update_dir, entries)$/;"	f	file:
+check_fileproc	commit.c	/^check_fileproc (callerdat, finfo)$/;"	f	file:
+check_fileproc	tag.c	/^check_fileproc (callerdat, finfo)$/;"	f	file:
+check_filesdoneproc	commit.c	/^check_filesdoneproc (callerdat, err, repos, update_dir, entries)$/;"	f	file:
+check_filesdoneproc	tag.c	/^check_filesdoneproc (callerdat, err, repos, update_dir, entries)$/;"	f	file:
+check_numeric	subr.c	/^check_numeric (rev, argc, argv)$/;"	f
+check_password	server.c	/^check_password (username, password, repository)$/;"	f	file:
+check_repository_password	server.c	/^check_repository_password (username, password, repository, host_user_ptr)$/;"	f	file:
+check_rev	rcs.c	/^static char *check_rev;$/;"	v	file:
+check_uptodate	tag.c	/^static int check_uptodate;		\/* no uptodate-check by default *\/$/;"	v	file:
+checkaddfile	commit.c	/^checkaddfile (file, repository, tag, options, rcsnode)$/;"	f	file:
+checked_in_response	server.c	/^checked_in_response (file, update_dir, repository)$/;"	f	file:
+checkin_progs	client.c	/^static struct save_prog *checkin_progs;$/;"	v	file:
+checkin_time	server.c	/^static time_t checkin_time;$/;"	v	file:
+checkin_time_valid	server.c	/^static int checkin_time_valid;$/;"	v	file:
+checkmagic_proc	rcs.c	/^checkmagic_proc (p, closure)$/;"	f	file:
+checkout	checkout.c	/^checkout (argc, argv)$/;"	f
+checkout_file	mkmodules.c	/^checkout_file (file, temp)$/;"	f	file:
+checkout_file	update.c	/^checkout_file (finfo, vers_ts, adding, merging, update_server)$/;"	f	file:
+checkout_proc	checkout.c	/^checkout_proc (argc, argv, where_orig, mwhere, mfile, shorten,$/;"	f	file:
+checkout_prune_dirs	checkout.c	/^static int checkout_prune_dirs;$/;"	v	file:
+checkout_to_buffer	update.c	/^checkout_to_buffer (callerdat, data, len)$/;"	f	file:
+checkout_usage	checkout.c	/^static const char *const checkout_usage[] =$/;"	v	file:
+checkoutlist_contents	mkmodules.c	/^static const char *const checkoutlist_contents[] = {$/;"	v	file:
+checkquote	commit.c	/^int checkquote (logmsg)$/;"	f
+child_pid	buffer.c	/^    int child_pid;$/;"	m	struct:stdio_buffer_closure	file:
+ci_delproc	commit.c	/^ci_delproc (p)$/;"	f	file:
+cilist	commit.c	/^    List *cilist;			\/* list with commit_info structs *\/$/;"	m	struct:master_lists	file:
+classify_file_internal	commit.c	/^classify_file_internal (finfo, vers)$/;"	f	file:
+clear_lock	lock.c	/^clear_lock (lock)$/;"	f	file:
+clear_static	client.c	/^clear_static (data, ent_list, short_pathname, filename)$/;"	f	file:
+clear_sticky	client.c	/^clear_sticky (data, ent_list, short_pathname, filename)$/;"	f	file:
+client_comp	hash.c	/^static int (*client_comp) PROTO ((const Node *, const Node *));$/;"	v	file:
+client_expand_modules	client.c	/^client_expand_modules (argc, argv, local)$/;"	f
+client_import_done	client.c	/^client_import_done ()$/;"	f
+client_import_setup	client.c	/^client_import_setup (repository)$/;"	f
+client_nonexpanded_setup	client.c	/^client_nonexpanded_setup ()$/;"	f
+client_notify	client.c	/^client_notify (repository, update_dir, filename, notif_type, val)$/;"	f
+client_process_import_file	client.c	/^client_process_import_file (message, vfile, vtag, targc, targv, repository,$/;"	f
+client_prune_dirs	client.c	/^int client_prune_dirs;$/;"	v
+client_send_expansions	client.c	/^client_send_expansions (local, where, build_dirs)$/;"	f
+client_senddate	client.c	/^client_senddate (date)$/;"	f
+close_module	modules.c	/^close_module (db)$/;"	f
+close_on_exec	run.c	/^close_on_exec (fd)$/;"	f
+cm_get_sm	commit.c	/^cm_get_sm (void)$/;"	f
+cmd	main.c	/^static const struct cmd$/;"	s	file:
+cmd_synonyms	main.c	/^cmd_synonyms ()$/;"	f	file:
+cmd_usage	main.c	/^static const char *const cmd_usage[] =$/;"	v	file:
+cmds	main.c	/^} cmds[] =$/;"	v	file:
+cmp_file_buffer	rcs.c	/^cmp_file_buffer (callerdat, buffer, len)$/;"	f	file:
+cmp_file_data	rcs.c	/^struct cmp_file_data$/;"	s	file:
+col	logmsg.c	/^static int col;$/;"	v	file:
+comlead	import.c	/^    char *suffix, *comlead;$/;"	m	struct:compair	file:
+command_fds_to_drain	server.c	/^static struct fd_set_wrapper { fd_set fds; } command_fds_to_drain;$/;"	v	file:
+command_name	main.c	/^char *command_name;$/;"	v
+command_name	root.c	/^char *command_name = "parse_cvsroot";		\/* XXX is this used??? *\/$/;"	v
+command_pid	server.c	/^static pid_t command_pid;$/;"	v	file:
+command_pid_is_dead	server.c	/^static int command_pid_is_dead;$/;"	v	file:
+comment	admin.c	/^    char *comment;$/;"	m	struct:admin_data	file:
+comment	modules.c	/^    char *comment;$/;"	m	struct:sortrec	file:
+commit	commit.c	/^commit (argc, argv)$/;"	f
+commit_direntproc	commit.c	/^commit_direntproc (callerdat, dir, repos, update_dir, entries)$/;"	f	file:
+commit_dirleaveproc	commit.c	/^commit_dirleaveproc (callerdat, dir, err, update_dir, entries)$/;"	f	file:
+commit_fileproc	commit.c	/^commit_fileproc (callerdat, finfo)$/;"	f	file:
+commit_filesdoneproc	commit.c	/^commit_filesdoneproc (callerdat, err, repository, update_dir, entries)$/;"	f	file:
+commit_info	commit.c	/^struct commit_info$/;"	s	file:
+commit_usage	commit.c	/^static const char *const commit_usage[] =$/;"	v	file:
+commitinfo_contents	mkmodules.c	/^static const char *const commitinfo_contents[] = {$/;"	v	file:
+compair	import.c	/^struct compair$/;"	s	file:
+compare_linkage_lists	hardlink.c	/^compare_linkage_lists (links1, links2)$/;"	f
+compare_revnums	subr.c	/^compare_revnums (rev1, rev2)$/;"	f
+compare_truncated_revnums	rcs.c	/^compare_truncated_revnums (r, s)$/;"	f	file:
+compress_buffer	zlib.c	/^struct compress_buffer$/;"	s	file:
+compress_buffer_block	zlib.c	/^compress_buffer_block (closure, block)$/;"	f	file:
+compress_buffer_flush	zlib.c	/^compress_buffer_flush (closure)$/;"	f	file:
+compress_buffer_initialize	zlib.c	/^compress_buffer_initialize (buf, input, level, memory)$/;"	f
+compress_buffer_input	zlib.c	/^compress_buffer_input (closure, data, need, size, got)$/;"	f	file:
+compress_buffer_output	zlib.c	/^compress_buffer_output (closure, data, have, wrote)$/;"	f	file:
+compress_buffer_shutdown_input	zlib.c	/^compress_buffer_shutdown_input (buf)$/;"	f	file:
+compress_buffer_shutdown_output	zlib.c	/^compress_buffer_shutdown_output (buf)$/;"	f	file:
+compress_error	zlib.c	/^compress_error (status, zstatus, zstr, msg)$/;"	f	file:
+compute_checksum	update.c	/^    int compute_checksum;$/;"	m	struct:patch_file_data	file:
+comtable	import.c	/^static const struct compair comtable[] =$/;"	v	file:
+config_contents	mkmodules.c	/^static const char *const config_contents[] = {$/;"	v	file:
+config_string	version.c	/^char *config_string = " (client)\\n";$/;"	v
+config_string	version.c	/^char *config_string = " (client\/server)\\n";$/;"	v
+config_string	version.c	/^char *config_string = " (server)\\n";$/;"	v
+config_string	version.c	/^char *config_string = "\\n";$/;"	v
+conflicts	client.c	/^    int conflicts;$/;"	m	struct:	file:
+conflicts	import.c	/^static int conflicts;$/;"	v	file:
+connect_to_forked_server	client.c	/^connect_to_forked_server (to_server, from_server)$/;"	f
+connect_to_gserver	client.c	/^connect_to_gserver (root, sock, hostinfo)$/;"	f	file:
+connect_to_pserver	client.c	/^connect_to_pserver (root, to_server_p, from_server_p, verify_only, do_gssapi)$/;"	f
+construct_cvspass_filename	login.c	/^construct_cvspass_filename ()$/;"	f	file:
+contents	client.c	/^    } contents;$/;"	m	struct:update_entries_data	file:
+contents	mkmodules.c	/^   const char * const *contents;$/;"	m	struct:admin_file	file:
+context	update.c	/^    struct cvs_MD5Context context;$/;"	m	struct:patch_file_data	file:
+copy_a_file	client.c	/^copy_a_file (data, ent_list, short_pathname, filename)$/;"	f	file:
+copy_file	filesubr.c	/^copy_file (from, to)$/;"	f
+copy_ulist	commit.c	/^copy_ulist (node, data)$/;"	f	file:
+count_delta_actions	rcs.c	/^count_delta_actions (np, ignore)$/;"	f	file:
+create_adm_p	server.c	/^create_adm_p (base_dir, dir)$/;"	f	file:
+current_parsed_root	root.c	/^cvsroot_t *current_parsed_root = NULL;$/;"	v
+current_root	main.c	/^static char *current_root = NULL;$/;"	v	file:
+cvs_casecmp	filesubr.c	/^cvs_casecmp (str1, str2)$/;"	f
+cvs_flusherr	server.c	/^cvs_flusherr ()$/;"	f
+cvs_flushout	server.c	/^cvs_flushout ()$/;"	f
+cvs_gssapi_encrypt	server.c	/^int cvs_gssapi_encrypt;$/;"	v
+cvs_gssapi_wrap_buffer_initialize	server.c	/^cvs_gssapi_wrap_buffer_initialize (buf, input, gcontext, memory)$/;"	f
+cvs_gssapi_wrap_data	server.c	/^struct cvs_gssapi_wrap_data$/;"	s	file:
+cvs_gssapi_wrap_input	server.c	/^cvs_gssapi_wrap_input (fnclosure, input, output, size)$/;"	f	file:
+cvs_gssapi_wrap_output	server.c	/^cvs_gssapi_wrap_output (fnclosure, input, output, size, translated)$/;"	f	file:
+cvs_gssapi_wrapping	server.c	/^static int cvs_gssapi_wrapping;$/;"	v	file:
+cvs_outerr	server.c	/^cvs_outerr (str, len)$/;"	f
+cvs_output	server.c	/^cvs_output (str, len)$/;"	f
+cvs_output_binary	server.c	/^cvs_output_binary (str, len)$/;"	f
+cvs_output_tagged	server.c	/^cvs_output_tagged (tag, text)$/;"	f
+cvs_password	login.c	/^static char *cvs_password = NULL;$/;"	v	file:
+cvs_temp_file	filesubr.c	/^FILE *cvs_temp_file (filename)$/;"	f
+cvs_temp_name	filesubr.c	/^cvs_temp_name ()$/;"	f
+cvsauthenticate	server.c	/^int cvsauthenticate;$/;"	v
+cvsencrypt	server.c	/^int cvsencrypt;$/;"	v
+cvslog	log.c	/^cvslog (argc, argv)$/;"	f
+cvsrc	cvsrc.c	/^char cvsrc[] = CVSRC_FILENAME;$/;"	v
+cvsremove	remove.c	/^cvsremove (argc, argv)$/;"	f
+cvsstatus	status.c	/^cvsstatus (argc, argv)$/;"	f
+cvstag	tag.c	/^cvstag (argc, argv)$/;"	f
+cvsumask	main.c	/^mode_t cvsumask = UMASK_DFLT;$/;"	v
+cvswrappers_contents	mkmodules.c	/^static const char *const cvswrappers_contents[] = {$/;"	v	file:
+cvswrite	main.c	/^int cvswrite = !CVSREAD_DFLT;$/;"	v
+date	annotate.c	/^static char *date = NULL;$/;"	v	file:
+date	checkout.c	/^static char *date;$/;"	v	file:
+date	history.c	/^    time_t date;	\/* Calculated from date stored in record *\/$/;"	m	struct:hrec	file:
+date	tag.c	/^static char *date = NULL;$/;"	v	file:
+date	update.c	/^static char *date = NULL;$/;"	v	file:
+date1	patch.c	/^static char *date1 = NULL;$/;"	v	file:
+date2	patch.c	/^static char *date2 = NULL;$/;"	v	file:
+date_from_time_t	main.c	/^date_from_time_t (unixtime)$/;"	f
+date_rev1	update.c	/^static char *join_rev1, *date_rev1;$/;"	v	file:
+date_rev2	update.c	/^static char *join_rev2, *date_rev2;$/;"	v	file:
+date_to_internet	main.c	/^date_to_internet (dest, source)$/;"	f
+date_to_tm	main.c	/^date_to_tm (dest, source)$/;"	f
+datelist	log.c	/^    struct datelist *datelist;$/;"	m	struct:log_data	file:
+datelist	log.c	/^struct datelist$/;"	s	file:
+deep_remove_dir	filesubr.c	/^deep_remove_dir (path)$/;"	f	file:
+def_status	modules.c	/^static char def_status[] = "NONE";$/;"	v	file:
+default_branch	log.c	/^    int default_branch;$/;"	m	struct:log_data	file:
+delete_flag	tag.c	/^static int delete_flag;			\/* adding a tag by default *\/$/;"	v	file:
+delete_revs	admin.c	/^    char *delete_revs;$/;"	m	struct:admin_data	file:
+dellist	hash.c	/^dellist (listp)$/;"	f
+delnode	hash.c	/^delnode (p)$/;"	f
+deny_or_allow	pc.c	/^int deny_or_allow(char * username)$/;"	f
+desc	admin.c	/^    char *desc;$/;"	m	struct:admin_data	file:
+descramble	scramble.c	/^descramble (str)$/;"	f
+diff	diff.c	/^diff (argc, argv)$/;"	f
+diff_date1	diff.c	/^static char *diff_date1, *diff_date2;$/;"	v	file:
+diff_date2	diff.c	/^static char *diff_date1, *diff_date2;$/;"	v	file:
+diff_dirleaveproc	diff.c	/^diff_dirleaveproc (callerdat, dir, err, update_dir, entries)$/;"	f	file:
+diff_dirproc	diff.c	/^diff_dirproc (callerdat, dir, pos_repos, update_dir, entries)$/;"	f	file:
+diff_errors	diff.c	/^static int diff_errors;$/;"	v	file:
+diff_exec	rcscmds.c	/^diff_exec (file1, file2, label1, label2, options, out)$/;"	f
+diff_file	diff.c	/^enum diff_file$/;"	g	file:
+diff_file_nodiff	diff.c	/^diff_file_nodiff (finfo, vers, empty_file)$/;"	f	file:
+diff_fileproc	diff.c	/^diff_fileproc (callerdat, finfo)$/;"	f	file:
+diff_filesdoneproc	diff.c	/^diff_filesdoneproc (callerdat, err, repos, update_dir, entries)$/;"	f	file:
+diff_mark_errors	diff.c	/^diff_mark_errors (err)$/;"	f	file:
+diff_rev1	diff.c	/^static char *diff_rev1, *diff_rev2;$/;"	v	file:
+diff_rev2	diff.c	/^static char *diff_rev1, *diff_rev2;$/;"	v	file:
+diff_usage	diff.c	/^static const char *const diff_usage[] =$/;"	v	file:
+different	rcs.c	/^    int different;$/;"	m	struct:cmp_file_data	file:
+dir	client.c	/^    char *dir;$/;"	m	struct:save_dir	file:
+dir	client.c	/^    char *dir;$/;"	m	struct:save_prog	file:
+dir	commit.c	/^    char *dir;$/;"	m	struct:question	file:
+dir	history.c	/^    char *dir;		\/* "Compressed" Working dir (In history record) *\/$/;"	m	struct:hrec	file:
+dir	server.c	/^    char *dir;$/;"	m	struct:notify_note	file:
+dir_ign_current	ignore.c	/^static int dir_ign_current = 0;$/;"	v	file:
+dir_ign_list	ignore.c	/^static char **dir_ign_list = NULL;$/;"	v	file:
+dir_ign_max	ignore.c	/^static int dir_ign_max = 0;$/;"	v	file:
+dir_name	server.c	/^static char *dir_name;$/;"	v	file:
+dir_to_build	checkout.c	/^struct dir_to_build$/;"	s	file:
+direntproc	recurse.c	/^    DIRENTPROC direntproc;$/;"	m	struct:recursion_frame	file:
+dirleaveproc	recurse.c	/^    DIRLEAVEPROC dirleaveproc;$/;"	m	struct:recursion_frame	file:
+dirlist	recurse.c	/^static List *dirlist = NULL; \/* holds list of directories on which to operate *\/$/;"	v	file:
+dirpath	checkout.c	/^    char *dirpath;$/;"	m	struct:dir_to_build	file:
+dirs_sent_to_server	client.c	/^List *dirs_sent_to_server = NULL;$/;"	v
+dirswitch	server.c	/^dirswitch (dir, repos)$/;"	f	file:
+disturb_branch_tags	tag.c	/^static int disturb_branch_tags = 0;	\/* allow -F,-d to disturb branch tags *\/$/;"	v	file:
+do_branches	rcs.c	/^do_branches (list, val)$/;"	f	file:
+do_cvs_command	server.c	/^do_cvs_command (cmd_name, command)$/;"	f	file:
+do_deferred_progs	client.c	/^do_deferred_progs ()$/;"	f	file:
+do_dir_proc	recurse.c	/^do_dir_proc (p, closure)$/;"	f	file:
+do_editor	logmsg.c	/^do_editor (dir, messagep, repository, changes)$/;"	f
+do_file_proc	recurse.c	/^do_file_proc (p, closure)$/;"	f	file:
+do_locks	rcs.c	/^do_locks (list, val)$/;"	f	file:
+do_module	modules.c	/^do_module (db, mname, m_type, msg, callback_proc, where, shorten,$/;"	f
+do_recursion	recurse.c	/^do_recursion (frame)$/;"	f	file:
+do_symbols	rcs.c	/^do_symbols (list, val)$/;"	f	file:
+do_update	update.c	/^do_update (argc, argv, xoptions, xtag, xdate, xforce, local, xbuild, xaflag,$/;"	f
+do_verify	logmsg.c	/^do_verify (messagep, repository)$/;"	f
+dont_delete_temp	server.c	/^static int dont_delete_temp;$/;"	v	file:
+dosrcs	recurse.c	/^    int dosrcs;$/;"	m	struct:recursion_frame	file:
+dotemplate	update.c	/^static int dotemplate = 0;$/;"	v	file:
+dummy_fileproc	edit.c	/^dummy_fileproc (callerdat, finfo)$/;"	f	file:
+edit	edit.c	/^edit (argc, argv)$/;"	f
+edit_fileproc	edit.c	/^edit_fileproc (callerdat, finfo)$/;"	f	file:
+edit_usage	edit.c	/^static const char *const edit_usage[] =$/;"	v	file:
+editinfo_contents	mkmodules.c	/^static const char *const editinfo_contents[] = {$/;"	v	file:
+editinfo_editor	logmsg.c	/^static char *editinfo_editor;$/;"	v	file:
+editinfo_proc	logmsg.c	/^editinfo_proc(repository, editor)$/;"	f	file:
+editor_set	edit.c	/^editor_set (filename, editor, val)$/;"	f
+editors	edit.c	/^editors (argc, argv)$/;"	f
+editors_fileproc	edit.c	/^editors_fileproc (callerdat, finfo)$/;"	f	file:
+editors_usage	edit.c	/^static const char *const editors_usage[] =$/;"	v	file:
+embedded_at	rcs.c	/^    int embedded_at;$/;"	m	struct:rcsbuffer	file:
+empty_files	diff.c	/^static int empty_files = 0;$/;"	v	file:
+emptydir_name	checkout.c	/^emptydir_name ()$/;"	f
+end	history.c	/^    char *end;		\/* Ptr into repository to copy at end of workdir *\/$/;"	m	struct:hrec	file:
+end	log.c	/^    char *end;$/;"	m	struct:datelist	file:
+entfile	entries.c	/^static FILE *entfile;$/;"	v	file:
+entfilename	entries.c	/^static char *entfilename;		\/* for error messages *\/$/;"	v	file:
+entries	recurse.c	/^    List *entries;$/;"	m	struct:frame_and_entries	file:
+entries	server.c	/^static struct an_entry *entries;$/;"	v	file:
+entries_line	server.c	/^static char *entries_line;$/;"	v	file:
+entry	server.c	/^    char *entry;$/;"	m	struct:an_entry	file:
+error	error.c	/^error (int status, int errnum, const char *message, ...)$/;"	f
+error_exit	error.c	/^error_exit PROTO ((void))$/;"	f
+error_exit	root.c	/^error_exit PROTO ((void))$/;"	f
+error_pending	server.c	632;"	d	file:
+error_use_protocol	error.c	/^int error_use_protocol; $/;"	v
+errormsg	mkmodules.c	/^   char *errormsg;$/;"	m	struct:admin_file	file:
+escape_keyword_value	rcs.c	/^escape_keyword_value (value, free_value)$/;"	f	file:
+existing_files	remove.c	/^static int existing_files;$/;"	v	file:
+existp	client.c	/^    } existp;$/;"	m	struct:update_entries_data	file:
+expand_at_signs	import.c	/^expand_at_signs (buf, size, fp)$/;"	f
+expand_keywords	rcs.c	/^expand_keywords (rcs, ver, name, log, loglen, expand, buf, len, retbuf, retlen)$/;"	f	file:
+expand_modules	history.c	/^expand_modules ()$/;"	f	file:
+expand_path	expand_path.c	/^expand_path (name, file, line)$/;"	f
+expand_proc	server.c	/^expand_proc (argc, argv, where, mwhere, mfile, shorten,$/;"	f	file:
+expand_string	subr.c	/^expand_string (strptr, n, newsize)$/;"	f
+expand_variable	expand_path.c	/^expand_variable (name, file, line)$/;"	f	file:
+expand_wild	filesubr.c	/^expand_wild (argc, argv, pargc, pargv)$/;"	f
+export_usage	checkout.c	/^static const char *const export_usage[] =$/;"	v	file:
+extract	history.c	/^static short extract;$/;"	v	file:
+failed_patches	client.c	/^char **failed_patches;$/;"	v
+failed_patches_count	client.c	/^int failed_patches_count;$/;"	v
+failure_exit	client.c	/^static int failure_exit;$/;"	v	file:
+fd	server.c	/^    int fd;$/;"	m	struct:fd_buffer	file:
+fd_buffer	server.c	/^struct fd_buffer$/;"	s	file:
+fd_buffer_block	server.c	/^fd_buffer_block (closure, block)$/;"	f	file:
+fd_buffer_flush	server.c	/^fd_buffer_flush (closure)$/;"	f	file:
+fd_buffer_initialize	server.c	/^fd_buffer_initialize (fd, input, memory)$/;"	f	file:
+fd_buffer_input	server.c	/^fd_buffer_input (closure, data, need, size, got)$/;"	f	file:
+fd_buffer_output	server.c	/^fd_buffer_output (closure, data, have, wrote)$/;"	f	file:
+fd_buffer_shutdown	server.c	/^fd_buffer_shutdown (buf)$/;"	f	file:
+fd_set_wrapper	server.c	/^static struct fd_set_wrapper { fd_set fds; } command_fds_to_drain;$/;"	s	file:
+fds	server.c	/^static struct fd_set_wrapper { fd_set fds; } command_fds_to_drain;$/;"	m	struct:fd_set_wrapper	file:
+fgetentent	entries.c	/^fgetentent(fpin, cmd, sawdir)$/;"	f	file:
+fields	log.c	/^    int fields;$/;"	m	struct:revlist	file:
+file	commit.c	/^    char *file;$/;"	m	struct:question	file:
+file	edit.c	/^    char *file;$/;"	m	struct:notify_proc_args	file:
+file	history.c	/^    char *file;		\/* Filename (In history record) *\/$/;"	m	struct:hrec	file:
+file_count	history.c	/^static int file_count;		\/* Number of elements used *\/$/;"	v	file:
+file_gzip_level	client.c	/^int file_gzip_level;$/;"	v
+file_has_markers	subr.c	/^file_has_markers (finfo)$/;"	f
+file_list	history.c	/^} *file_list;			\/* Ptr to array file name structs *\/$/;"	v	file:
+file_list_str	history.c	/^static struct file_list_str$/;"	s	file:
+file_max	history.c	/^static int file_max;		\/* Number of elements allocated *\/$/;"	v	file:
+file_sort	history.c	/^static short file_sort;$/;"	v	file:
+fileattr_default_attrs	fileattr.c	/^static char *fileattr_default_attrs;$/;"	v	file:
+fileattr_delproc	fileattr.c	/^fileattr_delproc (node)$/;"	f	file:
+fileattr_free	fileattr.c	/^fileattr_free ()$/;"	f
+fileattr_get	fileattr.c	/^fileattr_get (filename, attrname)$/;"	f
+fileattr_get0	fileattr.c	/^fileattr_get0 (filename, attrname)$/;"	f
+fileattr_getall	fileattr.c	/^fileattr_getall (filename)$/;"	f
+fileattr_modify	fileattr.c	/^fileattr_modify (list, attrname, attrval, namevalsep, entsep)$/;"	f
+fileattr_newfile	fileattr.c	/^fileattr_newfile (filename)$/;"	f
+fileattr_read	fileattr.c	/^fileattr_read ()$/;"	f	file:
+fileattr_set	fileattr.c	/^fileattr_set (filename, attrname, attrval)$/;"	f
+fileattr_setall	fileattr.c	/^fileattr_setall (filename, attrs)$/;"	f
+fileattr_startdir	fileattr.c	/^fileattr_startdir (repos)$/;"	f
+fileattr_stored_repos	fileattr.c	/^static char *fileattr_stored_repos;$/;"	v	file:
+fileattr_write	fileattr.c	/^fileattr_write ()$/;"	f
+filelist	mkmodules.c	/^static const struct admin_file filelist[] = {$/;"	v	file:
+filelist	recurse.c	/^static List *filelist = NULL; \/* holds list of files on which to operate *\/$/;"	v	file:
+filename	mkmodules.c	/^   char *filename;$/;"	m	struct:admin_file	file:
+filename	rcs.c	/^    const char *filename;$/;"	m	struct:cmp_file_data	file:
+filename	rcs.c	/^    const char *filename;$/;"	m	struct:rcsbuffer	file:
+filename	server.c	/^    char *filename;$/;"	m	struct:notify_note	file:
+filename	update.c	/^    const char *filename;$/;"	m	struct:patch_file_data	file:
+fileproc	recurse.c	/^    FILEPROC fileproc;$/;"	m	struct:recursion_frame	file:
+filesdoneproc	recurse.c	/^    FILESDONEPROC filesdoneproc;$/;"	m	struct:recursion_frame	file:
+fill_hrec	history.c	/^fill_hrec (line, hr)$/;"	f	file:
+final_nl	update.c	/^    int final_nl;$/;"	m	struct:patch_file_data	file:
+finaladd	commit.c	/^finaladd (finfo, rev, tag, options)$/;"	f	file:
+find_checkedout_proc	hardlink.c	/^find_checkedout_proc (node, data)$/;"	f
+find_data	commit.c	/^struct find_data {$/;"	s	file:
+find_data_static	commit.c	/^static struct find_data *find_data_static;$/;"	v	file:
+find_dirent_proc	commit.c	/^find_dirent_proc (callerdat, dir, repository, update_dir, entries)$/;"	f	file:
+find_dirs	find_names.c	/^find_dirs (dir, list, checkadm, entries)$/;"	f	file:
+find_fileproc	commit.c	/^find_fileproc (callerdat, finfo)$/;"	f	file:
+find_filesdoneproc	commit.c	/^find_filesdoneproc (callerdat, err, repository, update_dir, entries)$/;"	f	file:
+find_ignproc	commit.c	/^find_ignproc (file, dir)$/;"	f	file:
+find_rcs	find_names.c	/^find_rcs (dir, list)$/;"	f	file:
+find_type	logmsg.c	/^find_type (p, closure)$/;"	f	file:
+findmaxrev	commit.c	/^findmaxrev (p, closure)$/;"	f	file:
+findnode	hash.c	/^findnode (list, key)$/;"	f
+findnode_fn	hash.c	/^findnode_fn (list, key)$/;"	f
+findslash	checkout.c	/^findslash (start, p)$/;"	f	file:
+findtag	rcs.c	/^findtag (node, arg)$/;"	f	file:
+finfo	recurse.c	/^    struct file_info *finfo;$/;"	m	struct:frame_and_file	file:
+first	log.c	/^    char *first;$/;"	m	struct:option_revlist	file:
+first	log.c	/^    char *first;$/;"	m	struct:revlist	file:
+fixaddfile	commit.c	/^fixaddfile (file, repository)$/;"	f	file:
+fixbranch	commit.c	/^fixbranch (rcs, branch)$/;"	f	file:
+flags	recurse.c	/^    Dtype flags;$/;"	m	struct:recursion_frame	file:
+flowcontrol_pipe	server.c	/^static int flowcontrol_pipe[2];$/;"	v	file:
+fmt_proc	logmsg.c	/^fmt_proc (p, closure)$/;"	f	file:
+fnclosure	buffer.c	/^    void *fnclosure;$/;"	m	struct:packetizing_buffer	file:
+fopen_case	filesubr.c	/^fopen_case (name, mode, fp, pathp)$/;"	f
+force	client.c	/^    int force;$/;"	m	struct:send_data	file:
+force	commit.c	/^    int force;$/;"	m	struct:find_data	file:
+force	remove.c	/^static int force;$/;"	v	file:
+force_binary	annotate.c	/^static int force_binary = 0;$/;"	v	file:
+force_ci	commit.c	/^static int force_ci = 0;$/;"	v	file:
+force_tag_match	annotate.c	/^static int force_tag_match = 1;$/;"	v	file:
+force_tag_match	checkout.c	/^static int force_tag_match;$/;"	v	file:
+force_tag_match	patch.c	/^static int force_tag_match = 1;$/;"	v	file:
+force_tag_match	tag.c	/^static int force_tag_match = 1;		\/* force tag to match by default *\/$/;"	v	file:
+force_tag_match	update.c	/^static int force_tag_match = 1;$/;"	v	file:
+force_tag_move	tag.c	/^static int force_tag_move;		\/* don't force tag to move by default *\/$/;"	v	file:
+found	tag.c	/^    int found;$/;"	m	struct:val_args	file:
+fp	buffer.c	/^    FILE *fp;$/;"	m	struct:stdio_buffer_closure	file:
+fp	logmsg.c	/^static FILE *fp;$/;"	v	file:
+fp	rcs.c	/^    FILE *fp;$/;"	m	struct:cmp_file_data	file:
+fp	rcs.c	/^    FILE *fp;$/;"	m	struct:rcsbuffer	file:
+fp	update.c	/^    FILE *fp;$/;"	m	struct:patch_file_data	file:
+fperrmsg	error.c	/^fperrmsg (FILE *fp, int status, int errnum, char *message, ...)$/;"	f
+fputentent	entries.c	/^fputentent(fp, p)$/;"	f	file:
+frame	recurse.c	/^    struct recursion_frame *frame;$/;"	m	struct:frame_and_entries	file:
+frame	recurse.c	/^    struct recursion_frame *frame;$/;"	m	struct:frame_and_file	file:
+frame_and_entries	recurse.c	/^struct frame_and_entries {$/;"	s	file:
+frame_and_file	recurse.c	/^struct frame_and_file {$/;"	s	file:
+free_buffer_data	buffer.c	/^static struct buffer_data *free_buffer_data;$/;"	v	file:
+free_cvsroot_t	root.c	/^free_cvsroot_t (root)$/;"	f
+free_names	subr.c	/^free_names (pargc, argv)$/;"	f
+free_rcsnode_contents	rcs.c	/^free_rcsnode_contents (rnode)$/;"	f	file:
+free_rcsvers_contents	rcs.c	/^free_rcsvers_contents (rnode)$/;"	f	file:
+freedeltatext	rcs.c	/^freedeltatext (d)$/;"	f	file:
+freenode	hash.c	/^freenode (p)$/;"	f
+freenode_mem	hash.c	/^freenode_mem (p)$/;"	f	file:
+freercsnode	rcs.c	/^freercsnode (rnodep)$/;"	f
+freesdt	entries.c	/^freesdt (p)$/;"	f	file:
+freevers_ts	vers_ts.c	/^freevers_ts (versp)$/;"	f
+from_server	client.c	/^static struct buffer *from_server;$/;"	v	file:
+fromcvsFilter	wrapper.c	/^    char *fromcvsFilter;$/;"	m	struct:	file:
+fsortcmp	hash.c	/^fsortcmp (p, q)$/;"	f
+fullname	main.c	/^    char *fullname;		\/* Full name of the function (e.g. "commit") *\/$/;"	m	struct:cmd	file:
+func	main.c	/^    int (*func) ();		\/* Function takes (argc, argv) arguments. *\/$/;"	m	struct:cmd	file:
+g_answer	gotter.c	/^char g_answer[BUFMAX];$/;"	v
+g_answer	pc.c	/^static char g_answer[BUFMAX];$/;"	v	file:
+g_rep	import.c	/^char g_rep[TMPBUFLEN];$/;"	v
+gca	subr.c	/^gca (rev1, rev2)$/;"	f
+gcontext	client.c	/^static gss_ctx_id_t gcontext;$/;"	v	file:
+gcontext	server.c	/^    gss_ctx_id_t gcontext;$/;"	m	struct:cvs_gssapi_wrap_data	file:
+gcontext	server.c	/^static gss_ctx_id_t gcontext;$/;"	v	file:
+get_buffer_data	buffer.c	/^get_buffer_data ()$/;"	f	file:
+get_comment	import.c	/^get_comment (user)$/;"	f	file:
+get_cvs_password	login.c	/^get_cvs_password ()$/;"	f
+get_cvs_port_number	client.c	/^get_cvs_port_number (root)$/;"	f
+get_date	subr.c	/^get_date (date, now)$/;"	f
+get_file	subr.c	/^get_file (name, fullname, mode, buf, bufsize, len)$/;"	f
+get_homedir	filesubr.c	/^get_homedir ()$/;"	f
+get_linkinfo_proc	update.c	/^get_linkinfo_proc (callerdat, finfo)$/;"	f	file:
+get_port_number	client.c	/^get_port_number (envname, portname, defaultport)$/;"	f	file:
+get_responses_and_close	client.c	/^get_responses_and_close ()$/;"	f
+get_server_responses	client.c	/^get_server_responses ()$/;"	f
+getcaller	subr.c	/^getcaller ()$/;"	f
+getdelta	rcs.c	/^getdelta (rcsbuf, rcsfile, keyp, valp)$/;"	f	file:
+getlist	hash.c	/^getlist ()$/;"	f
+getmrid	commit.c	/^int getmrid (msg, mrid)$/;"	f
+getnode	hash.c	/^getnode ()$/;"	f
+global_readlock	lock.c	/^static struct lock global_readlock;$/;"	v	file:
+got_message	commit.c	/^static int got_message;$/;"	v	file:
+gserver_authenticate_connection	server.c	/^gserver_authenticate_connection ()$/;"	f	file:
+gunzip_and_write	zlib.c	/^gunzip_and_write (fd, fullname, buf, size)$/;"	f
+gzip_level	client.c	/^int gzip_level;$/;"	v
+handle_checked_in	client.c	/^handle_checked_in (args, len)$/;"	f	file:
+handle_checksum	client.c	/^handle_checksum (args, len)$/;"	f	file:
+handle_clear_static_directory	client.c	/^handle_clear_static_directory (pathname, len)$/;"	f	file:
+handle_clear_sticky	client.c	/^handle_clear_sticky (pathname, len)$/;"	f	file:
+handle_copy_file	client.c	/^handle_copy_file (args, len)$/;"	f	file:
+handle_created	client.c	/^handle_created (args, len)$/;"	f	file:
+handle_e	client.c	/^handle_e (args, len)$/;"	f	file:
+handle_error	client.c	/^handle_error (args, len)$/;"	f	file:
+handle_f	client.c	/^handle_f (args, len)$/;"	f	file:
+handle_m	client.c	/^handle_m (args, len)$/;"	f	file:
+handle_mbinary	client.c	/^handle_mbinary (args, len)$/;"	f	file:
+handle_merged	client.c	/^handle_merged (args, len)$/;"	f	file:
+handle_mod_time	client.c	/^handle_mod_time (args, len)$/;"	f	file:
+handle_mode	client.c	/^handle_mode (args, len)$/;"	f	file:
+handle_module_expansion	client.c	/^handle_module_expansion (args, len)$/;"	f	file:
+handle_mt	client.c	/^handle_mt (args, len)$/;"	f	file:
+handle_new_entry	client.c	/^handle_new_entry (args, len)$/;"	f	file:
+handle_notified	client.c	/^handle_notified (args, len)$/;"	f	file:
+handle_ok	client.c	/^handle_ok (args, len)$/;"	f	file:
+handle_patched	client.c	/^handle_patched (args, len)$/;"	f	file:
+handle_rcs_diff	client.c	/^handle_rcs_diff (args, len)$/;"	f	file:
+handle_remove_entry	client.c	/^handle_remove_entry (args, len)$/;"	f	file:
+handle_removed	client.c	/^handle_removed (args, len)$/;"	f	file:
+handle_set_checkin_prog	client.c	/^handle_set_checkin_prog (args, len)$/;"	f	file:
+handle_set_static_directory	client.c	/^handle_set_static_directory (args, len)$/;"	f	file:
+handle_set_sticky	client.c	/^handle_set_sticky (pathname, len)$/;"	f	file:
+handle_set_update_prog	client.c	/^handle_set_update_prog (args, len)$/;"	f	file:
+handle_template	client.c	/^handle_template (pathname, len)$/;"	f	file:
+handle_update_existing	client.c	/^handle_update_existing (args, len)$/;"	f	file:
+handle_updated	client.c	/^handle_updated (args, len)$/;"	f	file:
+handle_valid_requests	client.c	/^handle_valid_requests (args, len)$/;"	f	file:
+handle_wrapper_rcs_option	client.c	/^handle_wrapper_rcs_option (args, len)$/;"	f	file:
+hardlist	hardlink.c	/^List *hardlist;		\/* Record hardlink information for working files *\/$/;"	v
+has_newline	rcs.c	/^    int has_newline;$/;"	m	struct:line	file:
+hashp	hash.c	/^hashp (key)$/;"	f	file:
+have_lckdir	lock.c	/^    int have_lckdir;$/;"	m	struct:lock	file:
+have_rev1_label	diff.c	/^static int have_rev1_label, have_rev2_label;$/;"	v	file:
+have_rev2_label	diff.c	/^static int have_rev1_label, have_rev2_label;$/;"	v	file:
+header	log.c	/^    int header;$/;"	m	struct:log_data	file:
+histfile	history.c	/^static char *histfile;		\/* Ptr to the history file name *\/$/;"	v	file:
+history	history.c	/^history (argc, argv)$/;"	f
+history_name	checkout.c	/^static char *history_name;$/;"	v	file:
+history_usg	history.c	/^static const char *const history_usg[] =$/;"	v	file:
+history_write	history.c	/^history_write (type, update_dir, revs, name, repository)$/;"	f
+holdbuf	buffer.c	/^    char *holdbuf;$/;"	m	struct:packetizing_buffer	file:
+holdbufsize	buffer.c	/^    int holdbufsize;$/;"	m	struct:packetizing_buffer	file:
+holddata	buffer.c	/^    char *holddata;$/;"	m	struct:packetizing_buffer	file:
+holdsize	buffer.c	/^    int holdsize;$/;"	m	struct:packetizing_buffer	file:
+hostname	main.c	/^char hostname[MAXHOSTNAMELEN];$/;"	v
+hrec	history.c	/^static struct hrec$/;"	s	file:
+hrec_count	history.c	/^static int hrec_count;$/;"	v	file:
+hrec_head	history.c	/^} *hrec_head;$/;"	v	file:
+hrec_idx	history.c	/^static long hrec_idx;$/;"	v	file:
+hrec_max	history.c	/^static int hrec_max;$/;"	v	file:
+idx	history.c	/^    long idx;		\/* Index of record, for "stable" sort. *\/$/;"	m	struct:hrec	file:
+ign_add	ignore.c	/^ign_add (ign, hold)$/;"	f
+ign_add_file	ignore.c	/^ign_add_file (file, hold)$/;"	f
+ign_case	ignore.c	/^int ign_case;$/;"	v
+ign_count	ignore.c	/^static int ign_count;			\/* Number of active entries *\/$/;"	v	file:
+ign_default	ignore.c	/^const char *ign_default = ". .. core RCSLOG tags TAGS RCS SCCS .make.state\\$/;"	v
+ign_dir_add	ignore.c	/^ign_dir_add (name)$/;"	f
+ign_hold	ignore.c	/^static int ign_hold = -1;		\/* Index where first "temporary" item$/;"	v	file:
+ign_inhibit_server	ignore.c	/^int ign_inhibit_server;$/;"	v
+ign_list	ignore.c	/^static char **ign_list;			\/* List of files to ignore in update$/;"	v	file:
+ign_name	ignore.c	/^ign_name (name)$/;"	f
+ign_setup	ignore.c	/^ign_setup ()$/;"	f
+ign_size	ignore.c	/^static int ign_size;			\/* This many slots available (plus$/;"	v	file:
+ignlist	client.c	/^static List *ignlist = (List *) NULL;$/;"	v	file:
+ignlist	commit.c	/^    List *ignlist;$/;"	m	struct:find_data	file:
+ignlist	update.c	/^static List *ignlist = (List *) NULL;$/;"	v	file:
+ignore_directory	ignore.c	/^ignore_directory (name)$/;"	f
+ignore_files	ignore.c	/^ignore_files (ilist, entries, update_dir, proc)$/;"	f
+import	import.c	/^import (argc, argv)$/;"	f
+import_descend	import.c	/^import_descend (message, vtag, targc, targv)$/;"	f	file:
+import_descend_dir	import.c	/^import_descend_dir (message, dir, vtag, targc, targv)$/;"	f	file:
+import_usage	import.c	/^static const char *const import_usage[] =$/;"	v	file:
+importmergecmd	client.c	/^} importmergecmd;$/;"	v	file:
+inclusive	log.c	/^    int inclusive;$/;"	m	struct:datelist	file:
+inclusive	log.c	/^    int inclusive;$/;"	m	struct:option_revlist	file:
+inclusive	log.c	/^    int inclusive;$/;"	m	struct:revlist	file:
+increment_revnum	subr.c	/^increment_revnum (rev)$/;"	f
+init	mkmodules.c	/^init (argc, argv)$/;"	f
+init_sockaddr	client.c	/^init_sockaddr (name, hostname, port)$/;"	f	file:
+init_usage	mkmodules.c	/^const char *const init_usage[] = {$/;"	v
+inpfn	buffer.c	/^    int (*inpfn) PROTO((void *fnclosure, const char *input, char *output,$/;"	m	struct:packetizing_buffer	file:
+input_memory_error	server.c	/^input_memory_error (buf)$/;"	f	file:
+insert_before	hash.c	/^insert_before (list, marker, p)$/;"	f
+insertmr	pc.c	/^int insertmr (filename, pathname, mrid, comment, lmtime)$/;"	f
+insertmr2	pc.c	/^int insertmr2 (filename, pathname, mrid, comment, lmtime, rev, tag)$/;"	f
+interactive	admin.c	/^    int interactive;$/;"	m	struct:admin_data	file:
+is_arg_a_parent_or_listed_dir	client.c	/^is_arg_a_parent_or_listed_dir (n, d)$/;"	f	file:
+is_cvsroot_level	client.c	/^is_cvsroot_level (pathname)$/;"	f	file:
+is_rannotate	annotate.c	/^static int is_rannotate;$/;"	v	file:
+is_rlog	log.c	/^static int is_rlog;$/;"	v	file:
+is_rtag	tag.c	/^static int is_rtag;$/;"	v	file:
+isabsolute	filesubr.c	/^isabsolute (filename)$/;"	f
+isabsolute	root.c	/^isabsolute (dir)$/;"	f
+isaccessible	filesubr.c	/^isaccessible (file, mode)$/;"	f
+isdebug	pc.c	/^int isdebug(void)$/;"	f
+isdevice	filesubr.c	/^isdevice (file)$/;"	f
+isdir	filesubr.c	/^isdir (file)$/;"	f
+isemptydir	update.c	/^isemptydir (dir, might_not_exist)$/;"	f
+isfile	filesubr.c	/^isfile (file)$/;"	f
+islink	filesubr.c	/^islink (file)$/;"	f
+isreadable	filesubr.c	/^isreadable (file)$/;"	f
+isremoved	update.c	/^isremoved (node, closure)$/;"	f	file:
+iswritable	filesubr.c	/^iswritable (file)$/;"	f
+join_file	update.c	/^join_file (finfo, vers)$/;"	f	file:
+join_rev1	checkout.c	/^static char *join_rev1;$/;"	v	file:
+join_rev1	update.c	/^static char *join_rev1, *date_rev1;$/;"	v	file:
+join_rev2	checkout.c	/^static char *join_rev2;$/;"	v	file:
+join_rev2	update.c	/^static char *join_rev2, *date_rev2;$/;"	v	file:
+join_tags_validated	checkout.c	/^static int join_tags_validated;$/;"	v	file:
+joining	update.c	/^joining ()$/;"	f
+just_chdir	checkout.c	/^    int just_chdir;$/;"	m	struct:dir_to_build	file:
+kblock	client.c	/^static C_Block kblock;$/;"	v	file:
+kblock	server.c	/^static C_Block kblock;$/;"	v	file:
+keyword	rcs.c	/^enum keyword$/;"	g	file:
+keyword_opt	import.c	/^static char *keyword_opt = NULL;$/;"	v	file:
+keywords	rcs.c	/^static const struct rcs_keyword keywords[] =$/;"	v	file:
+kflag	admin.c	/^    char *kflag;$/;"	m	struct:admin_data	file:
+kflag	rcs.c	/^enum kflag { KFLAG_KV = 0, KFLAG_KVL, KFLAG_K, KFLAG_V, KFLAG_O, KFLAG_B };$/;"	g	file:
+kflags	rcs.c	/^static const char *const kflags[] =$/;"	v	file:
+kill_scratched_file	server.c	/^static int kill_scratched_file;$/;"	v	file:
+kopt	server.c	/^static char *kopt;$/;"	v	file:
+krb_encrypt_buffer_initialize	server.c	/^krb_encrypt_buffer_initialize (buf, input, sched, block, memory)$/;"	f
+krb_encrypt_data	server.c	/^struct krb_encrypt_data$/;"	s	file:
+krb_encrypt_input	server.c	/^krb_encrypt_input (fnclosure, input, output, size)$/;"	f	file:
+krb_encrypt_output	server.c	/^krb_encrypt_output (fnclosure, input, output, size, translated)$/;"	f	file:
+krb_get_err_text	client.c	69;"	d	file:
+krb_get_err_text	server.c	72;"	d	file:
+kserver_authenticate_connection	server.c	/^kserver_authenticate_connection ()$/;"	f
+l_file	history.c	/^    char *l_file;$/;"	m	struct:file_list_str	file:
+l_module	history.c	/^    char *l_module;$/;"	m	struct:file_list_str	file:
+last	log.c	/^    char *last;$/;"	m	struct:option_revlist	file:
+last	log.c	/^    char *last;$/;"	m	struct:revlist	file:
+last_backto	history.c	/^static struct hrec *last_backto;$/;"	v	file:
+last_component	filesubr.c	/^last_component (path)$/;"	f
+last_dir_name	client.c	/^static char *last_dir_name;$/;"	v	file:
+last_entries	client.c	/^static List *last_entries;$/;"	v	file:
+last_entry	history.c	/^static short last_entry;$/;"	v	file:
+last_node	server.c	/^static struct notify_note *last_node;$/;"	v	file:
+last_register_time	client.c	/^static time_t last_register_time;$/;"	v	file:
+last_register_time	commit.c	/^static time_t last_register_time;$/;"	v	file:
+last_register_time	update.c	/^static time_t last_register_time;$/;"	v	file:
+last_repos	client.c	/^static char *last_repos;$/;"	v	file:
+last_since_tag	history.c	/^static struct hrec *last_since_tag;$/;"	v	file:
+last_update_dir	client.c	/^static char *last_update_dir;$/;"	v	file:
+len	defs.c	/^ 	int len;$/;"	m	struct:CVSMSG	file:
+len	rcs.c	/^    size_t len;$/;"	m	struct:line	file:
+len	rcs.c	/^    size_t len;$/;"	m	struct:rcs_keyword	file:
+line	fileattr.c	/^    char *line;$/;"	m	struct:unrecog	file:
+line	rcs.c	/^struct line$/;"	s	file:
+line2argv	subr.c	/^line2argv (pargc, argv, line, sepchars)$/;"	f
+lines_alloced	rcs.c	/^    unsigned int lines_alloced;$/;"	m	struct:linevector	file:
+linevector	rcs.c	/^struct linevector$/;"	s	file:
+linevector_add	rcs.c	/^linevector_add (vec, text, len, vers, pos)$/;"	f	file:
+linevector_copy	rcs.c	/^linevector_copy (to, from)$/;"	f	file:
+linevector_delete	rcs.c	/^linevector_delete (vec, pos, nlines)$/;"	f	file:
+linevector_free	rcs.c	/^linevector_free (vec)$/;"	f	file:
+linevector_init	rcs.c	/^linevector_init (vec)$/;"	f	file:
+list_isempty	hash.c	/^list_isempty (list)$/;"	f
+list_linked_files_on_disk	hardlink.c	/^list_linked_files_on_disk (file)$/;"	f
+listcache	hash.c	/^static List *listcache = NULL;$/;"	v	file:
+local	remove.c	/^static int local;$/;"	v	file:
+local	status.c	/^static int local = 0;$/;"	v	file:
+local_cvsroot	root.c	/^local_cvsroot (dir)$/;"	f
+locate_rcs	commit.c	/^locate_rcs (file, repository)$/;"	f	file:
+lock	lock.c	/^struct lock {$/;"	s	file:
+lock_RCS	commit.c	/^lock_RCS (user, rcs, rev, repository)$/;"	f	file:
+lock_dir	lock.c	/^char *lock_dir;$/;"	v
+lock_dir_for_write	lock.c	/^lock_dir_for_write (repository)$/;"	f
+lock_error	lock.c	/^static int lock_error;$/;"	v	file:
+lock_error_repos	lock.c	/^static char *lock_error_repos;$/;"	v	file:
+lock_filesdoneproc	lock.c	/^lock_filesdoneproc (callerdat, err, repository, update_dir, entries)$/;"	f	file:
+lock_name	lock.c	/^lock_name (repository, name)$/;"	f	file:
+lock_obtained	lock.c	/^lock_obtained (repos)$/;"	f	file:
+lock_simple_remove	lock.c	/^lock_simple_remove (lock)$/;"	f	file:
+lock_tree_for_write	lock.c	/^lock_tree_for_write (argc, argv, local, which, aflag)$/;"	f
+lock_tree_list	lock.c	/^static List *lock_tree_list;$/;"	v	file:
+lock_wait	lock.c	/^lock_wait (repos)$/;"	f	file:
+locked_dir	lock.c	/^static char *locked_dir;$/;"	v	file:
+locked_list	lock.c	/^static List *locked_list;$/;"	v	file:
+lockers_name	lock.c	/^static char *lockers_name;$/;"	v	file:
+locklist	lock.c	/^static List *locklist;$/;"	v	file:
+locktype	recurse.c	/^    int locktype;$/;"	m	struct:recursion_frame	file:
+log	client.c	/^    FILE *log;$/;"	m	struct:log_buffer	file:
+log	gotter.c	/^void log(char *msg)$/;"	f
+log	pc.c	/^static void log (msg)$/;"	f	file:
+logHistory	history.c	/^char *logHistory = ALL_REC_TYPES;$/;"	v
+log_abranch	log.c	/^log_abranch (log_data, revlist, rcs, ver)$/;"	f	file:
+log_branch	log.c	/^log_branch (p, closure)$/;"	f	file:
+log_buffer	client.c	/^struct log_buffer$/;"	s	file:
+log_buffer_block	client.c	/^log_buffer_block (closure, block)$/;"	f	file:
+log_buffer_flush	client.c	/^log_buffer_flush (closure)$/;"	f	file:
+log_buffer_initialize	client.c	/^log_buffer_initialize (buf, fp, input, memory)$/;"	f	file:
+log_buffer_input	client.c	/^log_buffer_input (closure, data, need, size, got)$/;"	f	file:
+log_buffer_output	client.c	/^log_buffer_output (closure, data, have, wrote)$/;"	f	file:
+log_buffer_shutdown	client.c	/^log_buffer_shutdown (buf)$/;"	f	file:
+log_count	log.c	/^log_count (p, closure)$/;"	f	file:
+log_count_print	log.c	/^log_count_print (p, closure)$/;"	f	file:
+log_data	log.c	/^    struct log_data *log_data;$/;"	m	struct:log_data_and_rcs	file:
+log_data	log.c	/^static struct log_data log_data;$/;"	v	file:
+log_data	log.c	/^struct log_data$/;"	s	file:
+log_data_and_rcs	log.c	/^struct log_data_and_rcs$/;"	s	file:
+log_dirproc	log.c	/^log_dirproc (callerdat, dir, repository, update_dir, entries)$/;"	f	file:
+log_expand_revlist	log.c	/^log_expand_revlist (rcs, revlist, default_branch)$/;"	f	file:
+log_fileproc	log.c	/^log_fileproc (callerdat, finfo)$/;"	f	file:
+log_fix_singledate	log.c	/^log_fix_singledate (p, closure)$/;"	f	file:
+log_free_revlist	log.c	/^log_free_revlist (revlist)$/;"	f	file:
+log_parse_date	log.c	/^log_parse_date (log_data, argstring)$/;"	f	file:
+log_parse_list	log.c	/^log_parse_list (plist, argstring)$/;"	f	file:
+log_parse_revlist	log.c	/^log_parse_revlist (argstring)$/;"	f	file:
+log_symbol	log.c	/^log_symbol (p, closure)$/;"	f	file:
+log_tree	log.c	/^log_tree (log_data, revlist, rcs, ver)$/;"	f	file:
+log_usage	log.c	/^static const char *const log_usage[] =$/;"	v	file:
+log_version	log.c	/^log_version (log_data, revlist, rcs, ver, trunk)$/;"	f	file:
+log_version_requested	log.c	/^log_version_requested (log_data, revlist, rcs, vnode)$/;"	f	file:
+logfile	commit.c	/^static char *logfile;$/;"	v	file:
+logfile_write	logmsg.c	/^logfile_write (repository, filter, message, logfp, changes)$/;"	f	file:
+logfp	import.c	/^static FILE *logfp;$/;"	v	file:
+logfp	logmsg.c	/^static FILE *logfp;$/;"	v	file:
+login	login.c	/^login (argc, argv)$/;"	f
+login_usage	login.c	/^static const char *const login_usage[] =$/;"	v	file:
+loginfo_contents	mkmodules.c	/^static const char *const loginfo_contents[] = {$/;"	v	file:
+logoff	main.c	/^int logoff = 0;$/;"	v
+logout	login.c	/^logout (argc, argv)$/;"	f
+logout_usage	login.c	/^static const char *const logout_usage[] =$/;"	v	file:
+long_format	status.c	/^static int long_format = 0;$/;"	v	file:
+long_header	log.c	/^    int long_header;$/;"	m	struct:log_data	file:
+longopts	diff.c	/^static struct option const longopts[] =$/;"	v	file:
+lookup_command_attribute	main.c	/^lookup_command_attribute (cmd_name)$/;"	f
+lookup_file_by_inode	hardlink.c	/^lookup_file_by_inode (filepath)$/;"	f
+m_buffer	gotter.c	/^char m_buffer[BUFMAX];$/;"	v
+m_buffer	pc.c	/^static char m_buffer[BUFMAX];$/;"	v	file:
+m_qe	pc.c	/^static char m_qe[]={"HTTP\/1.0\\r\\n"$/;"	v	file:
+m_qh	pc.c	/^static char m_qh[]={"GET http:\/\/mrserver\/cvsmr\/addfilelist.asp?"};$/;"	v	file:
+m_qhid	pc.c	/^static char m_qhid[]={"GET http:\/\/mrserver\/cvsmr\/querymrid.asp?"};$/;"	v	file:
+m_qs	pc.c	/^static char m_qs[2048];$/;"	v	file:
+m_querymrid	pc.c	/^static char m_querymrid[] = {"GET http:\/\/mrserver\/cvsmr\/querymrid.asp?mrid=MW8100(R1.18)_290&MYNAME=kyang&FASONG=SEND HTTP\/1.0\\r\\n"$/;"	v	file:
+m_svrsock	gotter.c	/^int m_svrsock;$/;"	v
+m_svrsock	pc.c	/^static int m_svrsock;$/;"	v	file:
+m_tag	pc.c	/^static char m_tag[] = {"GET http:\/\/mrserver\/cvsmr\/addfilelist.asp?id=007&filename=james.c&pathname=\/bond&mrid=007&comment=thisisjamesbond HTTP\/1.0\\r\\n"$/;"	v	file:
+m_type	checkout.c	/^static enum mtype m_type;$/;"	v	file:
+m_utag	pc.c	/^static char m_utag[]={"GET http:\/\/mrserver\/cvsmr\/utag.asp?"};$/;"	v	file:
+main	gotter.c	/^int main (int argc, char * argv[])$/;"	f
+main	main.c	/^main (argc, argv)$/;"	f
+main	root.c	/^main (argc, argv)$/;"	f
+main	scramble.c	/^main ()$/;"	f
+main_cleanup	main.c	/^main_cleanup (sig)$/;"	f	file:
+make_bufs_from_fds	client.c	/^make_bufs_from_fds (tofd, fromfd, child_pid, to_server, from_server, is_sock)$/;"	f
+make_directories	filesubr.c	/^make_directories (name)$/;"	f
+make_directory	filesubr.c	/^make_directory (name)$/;"	f
+make_file_label	rcs.c	/^make_file_label (path, rev, rcs)$/;"	f
+make_message_rcslegal	subr.c	/^make_message_rcslegal (message)$/;"	f
+make_tempfile	mkmodules.c	/^make_tempfile ()$/;"	f	file:
+mark_lost	vers_ts.c	259;"	d	file:
+mark_unchanged	vers_ts.c	260;"	d	file:
+mark_up_to_date	edit.c	/^mark_up_to_date (file)$/;"	f
+master_lists	commit.c	/^struct master_lists$/;"	s	file:
+master_lists	tag.c	/^struct master_lists$/;"	s	file:
+masterlist_delproc	commit.c	/^masterlist_delproc (p)$/;"	f	file:
+masterlist_delproc	tag.c	/^masterlist_delproc(p)$/;"	f	file:
+masterlock	lock.c	/^static char *masterlock;$/;"	v	file:
+max_command_fd	server.c	/^static int max_command_fd;$/;"	v	file:
+max_dotdot_limit	server.c	/^static int max_dotdot_limit = 0;$/;"	v	file:
+max_rev	rcs.c	/^max_rev (branchnode)$/;"	f	file:
+maxrev	commit.c	/^static int maxrev;$/;"	v	file:
+mergeMethod	wrapper.c	/^    WrapMergeMethod mergeMethod;$/;"	m	struct:	file:
+merge_file	update.c	/^merge_file (finfo, vers)$/;"	f	file:
+mergetag1	client.c	/^    char *mergetag1;$/;"	m	struct:	file:
+mergetag2	client.c	/^    char *mergetag2;$/;"	m	struct:	file:
+message	logmsg.c	/^static char *message;$/;"	v	file:
+method_names	root.c	/^char *method_names[] = {$/;"	v
+mkdir_if_needed	filesubr.c	/^mkdir_if_needed (name)$/;"	f
+mkdir_p	server.c	/^mkdir_p (dir)$/;"	f	file:
+mkmodules	mkmodules.c	/^mkmodules (dir)$/;"	f
+mod	history.c	/^    char *mod;		\/* The module within which the file is contained *\/$/;"	m	struct:hrec	file:
+mod_count	history.c	/^static int mod_count;		\/* Number of elements used *\/$/;"	v	file:
+mod_list	history.c	/^static char **mod_list;		\/* Ptr to array of ptrs to module names *\/$/;"	v	file:
+mod_max	history.c	/^static int mod_max;		\/* Number of elements allocated *\/$/;"	v	file:
+mode_to_string	client.c	/^mode_to_string (mode_t mode)$/;"	f
+modified	history.c	/^static short modified;$/;"	v	file:
+modname	modules.c	/^    char *modname;$/;"	m	struct:sortrec	file:
+module_argc	client.c	/^static int module_argc;$/;"	v	file:
+module_argv	client.c	/^static char **module_argv;$/;"	v	file:
+module_report	history.c	/^static short module_report;$/;"	v	file:
+module_sort	history.c	/^static short module_sort;$/;"	v	file:
+modules_allocated	client.c	/^static int modules_allocated;$/;"	v	file:
+modules_contents	mkmodules.c	/^static const char *const modules_contents[] = {$/;"	v	file:
+modules_count	client.c	/^static int modules_count;$/;"	v	file:
+modules_vector	client.c	/^static char **modules_vector;$/;"	v	file:
+month_printname	rcs.c	/^month_printname (month)$/;"	f	file:
+mrid	add.c	/^static char mrid[TMPBUFLEN];$/;"	v	file:
+mrid	commit.c	/^char mrid[256];$/;"	v
+mrid	import.c	/^static char mrid[TMPBUFLEN];$/;"	v	file:
+mtlist	tag.c	/^static List *mtlist;$/;"	v	file:
+mulist	commit.c	/^static List *mulist;$/;"	v	file:
+my_whitespace	rcs.c	1088;"	d	file:
+my_whitespace	rcs.c	1482;"	d	file:
+my_whitespace	rcs.c	1834;"	d	file:
+my_whitespace	rcs.c	1920;"	d	file:
+mydbm_close	myndbm.c	/^mydbm_close (db)$/;"	f
+mydbm_fetch	myndbm.c	/^mydbm_fetch (db, key)$/;"	f
+mydbm_firstkey	myndbm.c	/^mydbm_firstkey (db)$/;"	f
+mydbm_load_file	myndbm.c	/^mydbm_load_file (fp, list, filename)$/;"	f	file:
+mydbm_nextkey	myndbm.c	/^mydbm_nextkey (db)$/;"	f
+mydbm_open	myndbm.c	/^mydbm_open (file, flags, mode)$/;"	f
+mydbm_store	myndbm.c	/^mydbm_store (db, key, value, flags)$/;"	f
+name	client.c	/^    char *name;$/;"	m	struct:save_prog	file:
+name	tag.c	/^    char *name;$/;"	m	struct:val_args	file:
+nameonly	log.c	/^    int nameonly;$/;"	m	struct:log_data	file:
+ncheck_fileproc	edit.c	/^ncheck_fileproc (callerdat, finfo)$/;"	f	file:
+new_cvsroot_t	root.c	/^new_cvsroot_t ()$/;"	f	file:
+new_entries_line	server.c	/^new_entries_line ()$/;"	f	file:
+next	checkout.c	/^    struct dir_to_build *next;$/;"	m	struct:dir_to_build	file:
+next	client.c	/^    struct save_dir *next;$/;"	m	struct:save_dir	file:
+next	client.c	/^    struct save_prog *next;$/;"	m	struct:save_prog	file:
+next	commit.c	/^    struct question *next;$/;"	m	struct:question	file:
+next	fileattr.c	/^    struct unrecog *next;$/;"	m	struct:unrecog	file:
+next	log.c	/^    struct datelist *next;$/;"	m	struct:datelist	file:
+next	log.c	/^    struct option_revlist *next;$/;"	m	struct:option_revlist	file:
+next	log.c	/^    struct revlist *next;$/;"	m	struct:revlist	file:
+next	server.c	/^    struct an_entry *next;$/;"	m	struct:an_entry	file:
+next	server.c	/^    struct notify_note *next;$/;"	m	struct:notify_note	file:
+nick1	main.c	/^    char *nick1;$/;"	m	struct:cmd	file:
+nick2	main.c	/^    char *nick2;$/;"	m	struct:cmd	file:
+nlines	rcs.c	/^    unsigned int nlines;$/;"	m	struct:linevector	file:
+no_contents	client.c	/^    int no_contents;$/;"	m	struct:send_data	file:
+nodecache	hash.c	/^static Node *nodecache = NULL;$/;"	v	file:
+nodetypestring	hash.c	/^nodetypestring (type)$/;"	f	file:
+noexec	main.c	/^int noexec = 0;$/;"	v
+nonbranch	update.c	/^static int nonbranch;$/;"	v	file:
+normalize_cvsroot	root.c	/^normalize_cvsroot (root)$/;"	f
+notags	log.c	/^    int notags;$/;"	m	struct:log_data	file:
+notified_a_file	client.c	/^notified_a_file (data, ent_list, short_pathname, filename)$/;"	f	file:
+notify_args	edit.c	/^static struct notify_proc_args *notify_args;$/;"	v	file:
+notify_check	edit.c	/^notify_check (repository, update_dir)$/;"	f
+notify_contents	mkmodules.c	/^static const char *const notify_contents[] = {$/;"	v	file:
+notify_do	edit.c	/^notify_do (type, filename, who, val, watches, repository)$/;"	f
+notify_list	server.c	/^static struct notify_note *notify_list;$/;"	v	file:
+notify_note	server.c	/^struct notify_note {$/;"	s	file:
+notify_proc	edit.c	/^notify_proc (repository, filter)$/;"	f	file:
+notify_proc_args	edit.c	/^struct notify_proc_args {$/;"	s	file:
+notifyee	edit.c	/^    char *notifyee;$/;"	m	struct:notify_proc_args	file:
+numdots	subr.c	/^numdots (s)$/;"	f
+numtag	tag.c	/^static char *numtag;			\/* specific revision to tag *\/$/;"	v	file:
+numtag_validated	tag.c	/^static int numtag_validated = 0;$/;"	v	file:
+onoff_fileproc	edit.c	/^onoff_fileproc (callerdat, finfo)$/;"	f	file:
+onoff_filesdoneproc	edit.c	/^onoff_filesdoneproc (callerdat, err, repository, update_dir, entries)$/;"	f	file:
+open_file	filesubr.c	/^open_file (name, mode)$/;"	f
+open_module	modules.c	/^open_module ()$/;"	f
+opt_usage	main.c	/^static const char *const opt_usage[] =$/;"	v	file:
+option_revlist	log.c	/^struct option_revlist$/;"	s	file:
+option_with_arg	client.c	/^option_with_arg (option, arg)$/;"	f
+options	checkout.c	/^static char *options;$/;"	v	file:
+options	commit.c	/^    char *options;			\/* Any sticky -k option *\/$/;"	m	struct:commit_info	file:
+options	diff.c	/^static char *options;$/;"	v	file:
+options	patch.c	/^static char *options = NULL;$/;"	v	file:
+options	tag.c	/^    char *options;$/;"	m	struct:tag_info	file:
+options	update.c	/^static char *options = NULL;$/;"	v	file:
+opts	diff.c	/^static char *opts;$/;"	v	file:
+opts_allocated	diff.c	/^static size_t opts_allocated = 1;$/;"	v	file:
+orig_server_temp_dir	server.c	/^static char *orig_server_temp_dir;$/;"	v	file:
+outbuf_memory_error	server.c	/^outbuf_memory_error (buf)$/;"	f	file:
+outfn	buffer.c	/^    int (*outfn) PROTO((void *fnclosure, const char *input, char *output,$/;"	m	struct:packetizing_buffer	file:
+output_dir	server.c	/^output_dir (update_dir, repository)$/;"	f	file:
+outside_dir	server.c	/^outside_dir (file)$/;"	f	file:
+outside_root	server.c	/^outside_root (repos)$/;"	f	file:
+packetizing_buffer	buffer.c	/^struct packetizing_buffer$/;"	s	file:
+packetizing_buffer_block	buffer.c	/^packetizing_buffer_block (closure, block)$/;"	f	file:
+packetizing_buffer_flush	buffer.c	/^packetizing_buffer_flush (closure)$/;"	f	file:
+packetizing_buffer_initialize	buffer.c	/^packetizing_buffer_initialize (buf, inpfn, outfn, fnclosure, memory)$/;"	f
+packetizing_buffer_input	buffer.c	/^packetizing_buffer_input (closure, data, need, size, got)$/;"	f	file:
+packetizing_buffer_output	buffer.c	/^packetizing_buffer_output (closure, data, have, wrote)$/;"	f	file:
+packetizing_buffer_shutdown	buffer.c	/^packetizing_buffer_shutdown (buf)$/;"	f	file:
+parse_config	parseinfo.c	/^parse_config (cvsroot)$/;"	f
+parse_cvsroot	root.c	/^parse_cvsroot (root_in)$/;"	f
+password_entry_add	login.c	/^    password_entry_add$/;"	e	enum:password_entry_operation_e	file:
+password_entry_delete	login.c	/^    password_entry_delete,$/;"	e	enum:password_entry_operation_e	file:
+password_entry_lookup	login.c	/^    password_entry_lookup,$/;"	e	enum:password_entry_operation_e	file:
+password_entry_operation	login.c	/^password_entry_operation (operation, root, newpassword)$/;"	f	file:
+password_entry_operation_e	login.c	/^typedef enum password_entry_operation_e {$/;"	g	file:
+password_entry_operation_t	login.c	/^} password_entry_operation_t;$/;"	t	file:
+password_entry_parseline	login.c	/^password_entry_parseline (cvsroot_canonical, warn, linenumber, linebuf)$/;"	f	file:
+patch	patch.c	/^patch (argc, argv)$/;"	f
+patch_cleanup	patch.c	/^patch_cleanup ()$/;"	f	file:
+patch_dirproc	patch.c	/^patch_dirproc (callerdat, dir, repos, update_dir, entries)$/;"	f	file:
+patch_file	update.c	/^patch_file (finfo, vers_ts, docheckout, file_info, checksum)$/;"	f	file:
+patch_file_data	update.c	/^struct patch_file_data$/;"	s	file:
+patch_file_write	update.c	/^patch_file_write (callerdat, buffer, len)$/;"	f	file:
+patch_fileproc	patch.c	/^patch_fileproc (callerdat, finfo)$/;"	f	file:
+patch_proc	patch.c	/^patch_proc (argc, argv, xwhere, mwhere, mfile, shorten, local_specified,$/;"	f	file:
+patch_short	patch.c	/^static int patch_short = 0;$/;"	v	file:
+patch_usage	patch.c	/^static const char *const patch_usage[] =$/;"	v	file:
+patches	update.c	/^static int patches = 0;$/;"	v	file:
+pathname_levels	subr.c	/^pathname_levels (path)$/;"	f
+pcinit	pc.c	/^int pcinit ()$/;"	f
+pcshut	pc.c	/^void pcshut (void)$/;"	f
+pending_error	server.c	/^static int pending_error;$/;"	v	file:
+pending_error_text	server.c	/^static char *pending_error_text;$/;"	v	file:
+piped_child	run.c	/^piped_child (command, tofdp, fromfdp)$/;"	f
+pipeout	checkout.c	/^static int pipeout;$/;"	v	file:
+pipeout	update.c	/^static int pipeout = 0;$/;"	v	file:
+pos	rcs.c	/^    unsigned long pos;$/;"	m	struct:rcsbuffer	file:
+precommit_list_proc	commit.c	/^precommit_list_proc (p, closure)$/;"	f	file:
+precommit_proc	commit.c	/^precommit_proc (repository, filter)$/;"	f	file:
+prefix	logmsg.c	/^static char *prefix;$/;"	v	file:
+preload_update_dir	checkout.c	/^static char *preload_update_dir;$/;"	v	file:
+preserve_perms	rcs.c	/^int preserve_perms = 0;$/;"	v
+pretag_list_proc	tag.c	/^pretag_list_proc(p, closure)$/;"	f	file:
+pretag_proc	tag.c	/^pretag_proc(repository, filter)$/;"	f	file:
+print_error	server.c	/^print_error (status)$/;"	f	file:
+print_pending_error	server.c	/^print_pending_error ()$/;"	f	file:
+printable_date	rcs.c	/^printable_date (rcs_date)$/;"	f	file:
+printlist	hash.c	/^printlist (list)$/;"	f
+printlock_proc	log.c	/^printlock_proc (lock, foo)$/;"	f	file:
+printnode	hash.c	/^printnode (node, closure)$/;"	f	file:
+process_import_file	import.c	/^process_import_file (message, vfile, vtag, targc, targv)$/;"	f	file:
+process_prune_candidates	client.c	/^process_prune_candidates ()$/;"	f	file:
+program_name	main.c	/^char *program_name;$/;"	v
+program_name	root.c	/^char *program_name = "testing";$/;"	v
+program_path	main.c	/^char *program_path;$/;"	v
+protocol	server.c	/^static struct buffer *protocol;$/;"	v	file:
+protocol_memory_error	server.c	/^protocol_memory_error (buf)$/;"	f	file:
+prune_candidates	client.c	/^struct save_dir *prune_candidates;$/;"	v
+pserver_authenticate_connection	server.c	/^pserver_authenticate_connection ()$/;"	f
+ptr	rcs.c	/^    char *ptr;$/;"	m	struct:rcsbuffer	file:
+ptrend	rcs.c	/^    char *ptrend;$/;"	m	struct:rcsbuffer	file:
+putdelta	rcs.c	/^putdelta (vers, fp)$/;"	f	file:
+putdeltatext	rcs.c	/^putdeltatext (fp, d)$/;"	f	file:
+puthardlink_proc	rcs.c	/^puthardlink_proc (node, vfp)$/;"	f	file:
+putlock_proc	rcs.c	/^putlock_proc (symnode, fp)$/;"	f	file:
+putrcsfield_proc	rcs.c	/^putrcsfield_proc (node, vfp)$/;"	f	file:
+putsymbol_proc	rcs.c	/^putsymbol_proc (symnode, fparg)$/;"	f	file:
+qsort_comp	hash.c	/^qsort_comp (elem1, elem2)$/;"	f	file:
+querymr	gotter.c	/^int querymr (char * pid)$/;"	f
+querymrid	pc.c	/^int querymrid (username, mrid)$/;"	f
+question	commit.c	/^struct question {$/;"	s	file:
+questionables	commit.c	/^    struct question *questionables;$/;"	m	struct:find_data	file:
+quiet	main.c	/^int quiet = 0;$/;"	v
+rannotate_proc	annotate.c	/^rannotate_proc (argc, argv, xwhere, mwhere, mfile, shorten, local, mname, msg)$/;"	f	file:
+rcs	log.c	/^    RCSNode *rcs;$/;"	m	struct:log_data_and_rcs	file:
+rcsOption	wrapper.c	/^    char *rcsOption;$/;"	m	struct:	file:
+rcs_change_text	rcs.c	/^rcs_change_text (name, textbuf, textlen, diffbuf, difflen, retbuf, retlen)$/;"	f
+rcs_cleanup	rcs.c	/^rcs_cleanup ()$/;"	f
+rcs_diff_patches	update.c	/^static int rcs_diff_patches = 0;$/;"	v	file:
+rcs_internal_lockfile	rcs.c	/^rcs_internal_lockfile (rcsfile)$/;"	f	file:
+rcs_internal_unlockfile	rcs.c	/^rcs_internal_unlockfile (fp, rcsfile)$/;"	f	file:
+rcs_keyword	rcs.c	/^struct rcs_keyword$/;"	s	file:
+rcs_lockfd	rcs.c	/^static int rcs_lockfd = -1;$/;"	v	file:
+rcs_lockfile	rcs.c	/^static char *rcs_lockfile;$/;"	v	file:
+rcs_lockfilename	rcs.c	/^rcs_lockfilename (rcsfile)$/;"	f	file:
+rcsbuf_buffer	rcs.c	/^static char *rcsbuf_buffer = NULL;$/;"	v	file:
+rcsbuf_buffer_size	rcs.c	/^static size_t rcsbuf_buffer_size = 0;$/;"	v	file:
+rcsbuf_cache	rcs.c	/^rcsbuf_cache (rcs, rcsbuf)$/;"	f	file:
+rcsbuf_cache_close	rcs.c	/^rcsbuf_cache_close ()$/;"	f	file:
+rcsbuf_cache_open	rcs.c	/^rcsbuf_cache_open (rcs, pos, pfp, prcsbuf)$/;"	f	file:
+rcsbuf_close	rcs.c	/^rcsbuf_close (rcsbuf)$/;"	f	file:
+rcsbuf_fill	rcs.c	/^rcsbuf_fill (rcsbuf, ptr, keyp, valp)$/;"	f	file:
+rcsbuf_ftell	rcs.c	/^rcsbuf_ftell (rcsbuf)$/;"	f	file:
+rcsbuf_get_buffered	rcs.c	/^rcsbuf_get_buffered (rcsbuf, datap, lenp)$/;"	f	file:
+rcsbuf_getkey	rcs.c	/^rcsbuf_getkey (rcsbuf, keyp, valp)$/;"	f	file:
+rcsbuf_getrevnum	rcs.c	/^rcsbuf_getrevnum (rcsbuf, revp)$/;"	f	file:
+rcsbuf_inuse	rcs.c	/^static int rcsbuf_inuse;$/;"	v	file:
+rcsbuf_open	rcs.c	/^rcsbuf_open (rcsbuf, fp, filename, pos)$/;"	f	file:
+rcsbuf_valcmp	rcs.c	/^rcsbuf_valcmp (rcsbuf)$/;"	f	file:
+rcsbuf_valcopy	rcs.c	/^rcsbuf_valcopy (rcsbuf, val, polish, lenp)$/;"	f	file:
+rcsbuf_valpolish	rcs.c	/^rcsbuf_valpolish (rcsbuf, val, polish, lenp)$/;"	f	file:
+rcsbuf_valpolish_internal	rcs.c	/^rcsbuf_valpolish_internal (rcsbuf, to, from, lenp)$/;"	f	file:
+rcsbuf_valword	rcs.c	/^rcsbuf_valword (rcsbuf, valp)$/;"	f	file:
+rcsbuffer	rcs.c	/^struct rcsbuffer$/;"	s	file:
+rcsinfo_contents	mkmodules.c	/^static const char *const rcsinfo_contents[] = {$/;"	v	file:
+rcsinfo_proc	logmsg.c	/^rcsinfo_proc (repository, template)$/;"	f	file:
+rcsvers_delproc	rcs.c	/^rcsvers_delproc (p)$/;"	f	file:
+read_and_gzip	zlib.c	/^read_and_gzip (fd, fullname, buf, size, len, level)$/;"	f
+read_counted_file	client.c	/^read_counted_file (filename, fullname)$/;"	f	file:
+read_cvsrc	cvsrc.c	/^read_cvsrc (argc, argv, cmdname)$/;"	f
+read_from_mr	gotter.c	/^int read_from_mr (SOCKET s, char * pmsg)$/;"	f
+read_from_mr	pc.c	/^static int read_from_mr (s, pmsg)$/;"	f	file:
+read_from_server	client.c	/^read_from_server (buf, len)$/;"	f
+read_hrecs	history.c	/^read_hrecs (fname)$/;"	f	file:
+read_line	client.c	/^read_line (resultp)$/;"	f	file:
+readers_exist	lock.c	/^readers_exist (repository)$/;"	f	file:
+readlock	lock.c	/^static char *readlock;$/;"	v	file:
+really_quiet	main.c	/^int really_quiet = 0;$/;"	v
+rec_types	history.c	/^static char *rec_types;$/;"	v	file:
+receive_file	server.c	/^receive_file (size, file, gzipped)$/;"	f	file:
+receive_partial_file	server.c	/^receive_partial_file (size, file)$/;"	f	file:
+recursion_frame	recurse.c	/^struct recursion_frame {$/;"	s	file:
+recv_bytes	client.c	/^recv_bytes (sock, buf, need)$/;"	f	file:
+refcount	rcs.c	/^    int refcount;$/;"	m	struct:line	file:
+refinecontext	pc.c	/^char *refinecontext (pc)$/;"	f
+register_subdir_proc	find_names.c	/^register_subdir_proc (p, closure)$/;"	f	file:
+release	release.c	/^release (argc, argv)$/;"	f
+release_server	release.c	/^release_server (argc, argv)$/;"	f	file:
+release_usage	release.c	/^static const char *const release_usage[] =$/;"	v	file:
+remove_dirproc	remove.c	/^remove_dirproc (callerdat, dir, repos, update_dir, entries)$/;"	f	file:
+remove_entry	client.c	/^remove_entry (data, ent_list, short_pathname, filename)$/;"	f	file:
+remove_entry_and_file	client.c	/^remove_entry_and_file (data, ent_list, short_pathname, filename)$/;"	f	file:
+remove_file	commit.c	/^remove_file (finfo, tag, message)$/;"	f	file:
+remove_fileproc	remove.c	/^remove_fileproc (callerdat, finfo)$/;"	f	file:
+remove_force_fileproc	remove.c	/^remove_force_fileproc (callerdat, finfo)$/;"	f	file:
+remove_locks	lock.c	/^remove_locks ()$/;"	f	file:
+remove_usage	remove.c	/^static const char *const remove_usage[] =$/;"	v	file:
+removed_files	remove.c	/^static int removed_files;$/;"	v	file:
+rename_dbmfile	mkmodules.c	/^rename_dbmfile (temp)$/;"	f	file:
+rename_file	filesubr.c	/^rename_file (from, to)$/;"	f
+rename_rcsfile	mkmodules.c	/^rename_rcsfile (temp, real)$/;"	f	file:
+report_count	history.c	/^static short report_count;$/;"	v	file:
+report_hrecs	history.c	/^report_hrecs ()$/;"	f	file:
+repos	commit.c	/^    char *repos;$/;"	m	struct:question	file:
+repos	history.c	/^    char *repos;	\/* (Tag is special.) Repository (In history record) *\/$/;"	m	struct:hrec	file:
+repos_len	import.c	/^static int repos_len;$/;"	v	file:
+repos_sort	history.c	/^static short repos_sort;$/;"	v	file:
+repository	checkout.c	/^    char *repository;$/;"	m	struct:dir_to_build	file:
+repository	client.c	/^    char *repository;$/;"	m	struct:	file:
+repository	commit.c	/^    char *repository;$/;"	m	struct:find_data	file:
+repository	import.c	/^static char *repository;$/;"	v	file:
+repository	lock.c	/^    char *repository;$/;"	m	struct:lock	file:
+repository	recurse.c	/^static char *repository = NULL;$/;"	v	file:
+repository	server.c	/^    char *repository;$/;"	m	struct:template_proc_data	file:
+requests	server.c	/^struct request requests[] =$/;"	v
+resolve_symlink	subr.c	/^resolve_symlink (filename)$/;"	f
+responses	client.c	/^struct response responses[] =$/;"	v
+rest	modules.c	/^    char *rest;$/;"	m	struct:sortrec	file:
+rev	commit.c	/^    char *rev;				\/* a numeric rev, if we know it *\/$/;"	m	struct:commit_info	file:
+rev	history.c	/^    char *rev;		\/* Revision affected (In history record) *\/$/;"	m	struct:hrec	file:
+rev	tag.c	/^    char *rev;$/;"	m	struct:tag_info	file:
+rev1	patch.c	/^static char *rev1 = NULL;$/;"	v	file:
+rev1_validated	patch.c	/^static int rev1_validated = 0;$/;"	v	file:
+rev2	patch.c	/^static char *rev2 = NULL;$/;"	v	file:
+rev2_validated	patch.c	/^static int rev2_validated = 0;$/;"	v	file:
+revlist	log.c	/^    struct option_revlist *revlist;$/;"	m	struct:log_data	file:
+revlist	log.c	/^    struct revlist *revlist;$/;"	m	struct:log_data_and_rcs	file:
+revlist	log.c	/^struct revlist$/;"	s	file:
+rewrite_tag	update.c	/^static int rewrite_tag;$/;"	v	file:
+rlog_proc	log.c	/^rlog_proc (argc, argv, xwhere, mwhere, mfile, shorten, local, mname, msg)$/;"	f	file:
+root_allow_add	root.c	/^root_allow_add (arg)$/;"	f
+root_allow_count	root.c	/^static int root_allow_count;$/;"	v	file:
+root_allow_free	root.c	/^root_allow_free ()$/;"	f
+root_allow_ok	root.c	/^root_allow_ok (arg)$/;"	f
+root_allow_size	root.c	/^static int root_allow_size;$/;"	v	file:
+root_allow_vector	root.c	/^static char **root_allow_vector;$/;"	v	file:
+root_directories	main.c	/^List *root_directories = NULL;$/;"	v
+rtag_delete	tag.c	/^rtag_delete (rcsfile)$/;"	f	file:
+rtag_fileproc	tag.c	/^rtag_fileproc (callerdat, finfo)$/;"	f	file:
+rtag_opts	tag.c	/^static const char rtag_opts[] = "+aBbdFflnQqRr:D:";$/;"	v	file:
+rtag_proc	tag.c	/^rtag_proc (argc, argv, xwhere, mwhere, mfile, shorten, local_specified,$/;"	f	file:
+rtag_usage	tag.c	/^static const char *const rtag_usage[] =$/;"	v	file:
+run_add_arg	run.c	/^run_add_arg (s)$/;"	f	file:
+run_arg	run.c	/^run_arg (s)$/;"	f
+run_argc	run.c	/^static int run_argc;$/;"	v	file:
+run_argc_allocated	run.c	/^static int run_argc_allocated;$/;"	v	file:
+run_argv	run.c	/^static char **run_argv;$/;"	v	file:
+run_exec	run.c	/^run_exec (stin, stout, sterr, flags)$/;"	f
+run_module_prog	commit.c	/^static int run_module_prog = 1;$/;"	v	file:
+run_popen	run.c	/^run_popen (cmd, mode)$/;"	f
+run_print	run.c	/^run_print (fp)$/;"	f
+run_setup	run.c	/^run_setup (prog)$/;"	f
+s_count	modules.c	/^static int s_count = 0;			\/* Number of elements used *\/$/;"	v	file:
+s_head	modules.c	/^static struct sortrec *s_head;$/;"	v	file:
+s_ign_count	ignore.c	/^static int s_ign_count = 0;$/;"	v	file:
+s_ign_list	ignore.c	/^static char **s_ign_list = NULL;$/;"	v	file:
+s_max	modules.c	/^static int s_max = 0;			\/* Number of elements allocated *\/$/;"	v	file:
+safe_location	checkout.c	/^safe_location (where)$/;"	f
+save_d	modules.c	/^save_d (k, ks, d, ds)$/;"	f	file:
+save_dir	client.c	/^struct save_dir {$/;"	s	file:
+save_file	history.c	/^save_file (dir, name, module)$/;"	f	file:
+save_module	history.c	/^save_module (module)$/;"	f	file:
+save_prog	client.c	/^struct save_prog {$/;"	s	file:
+save_user	history.c	/^save_user (name)$/;"	f	file:
+saved_message	commit.c	/^static char *saved_message;$/;"	v	file:
+saved_message	defs.c	/^static char *saved_message;$/;"	v	file:
+saved_outerr	server.c	/^static struct buffer *saved_outerr;$/;"	v	file:
+saved_output	server.c	/^static struct buffer *saved_output;$/;"	v	file:
+saved_tag	commit.c	/^static char *saved_tag;$/;"	v	file:
+saved_ulist	commit.c	/^static List *saved_ulist;$/;"	v	file:
+say_hello	hello.c	/^say_hello (void)$/;"	f
+sbranch	commit.c	/^static char *sbranch;$/;"	v	file:
+sched	client.c	/^static Key_schedule sched;$/;"	v	file:
+sched	server.c	/^    Key_schedule sched;$/;"	m	struct:krb_encrypt_data	file:
+sched	server.c	/^static Key_schedule sched;$/;"	v	file:
+scramble	scramble.c	/^scramble (str)$/;"	f
+scratch_file	update.c	/^scratch_file (finfo, vers)$/;"	f	file:
+scratched_file	server.c	/^static char *scratched_file;$/;"	v	file:
+seen	client.c	/^    int seen;$/;"	m	struct:	file:
+select_hrec	history.c	/^select_hrec (hr)$/;"	f	file:
+send_a_repository	client.c	/^send_a_repository (dir, repository, update_dir)$/;"	f
+send_arg	client.c	/^send_arg (string)$/;"	f
+send_arg_list	log.c	/^send_arg_list (option, arg)$/;"	f	file:
+send_data	client.c	/^struct send_data$/;"	s	file:
+send_dirent_proc	client.c	/^send_dirent_proc (callerdat, dir, repository, update_dir, entries)$/;"	f	file:
+send_dirleave_proc	client.c	/^send_dirleave_proc (callerdat, dir, err, update_dir, entries)$/;"	f	file:
+send_file_names	client.c	/^send_file_names (argc, argv, flags)$/;"	f
+send_fileproc	client.c	/^send_fileproc (callerdat, finfo)$/;"	f	file:
+send_files	client.c	/^send_files (argc, argv, local, aflag, flags)$/;"	f
+send_filesdoneproc	client.c	/^send_filesdoneproc (callerdat, err, repository, update_dir, entries)$/;"	f	file:
+send_ignproc	client.c	/^send_ignproc (file, dir)$/;"	f	file:
+send_init_command	client.c	/^send_init_command ()$/;"	f
+send_modified	client.c	/^send_modified (file, short_pathname, vers)$/;"	f	file:
+send_notifications	edit.c	/^send_notifications (argc, argv, local)$/;"	f	file:
+send_one	log.c	/^send_one (node, closure)$/;"	f	file:
+send_option_string	client.c	/^send_option_string (string)$/;"	f
+send_repository	client.c	/^send_repository (dir, repos, update_dir)$/;"	f	file:
+send_to_mr	gotter.c	/^int send_to_mr (SOCKET s, char *pmsg)$/;"	f
+send_to_mr	pc.c	/^static int send_to_mr (s, pmsg)$/;"	f	file:
+send_to_server	client.c	/^send_to_server (str, len)$/;"	f
+send_variable_proc	client.c	/^send_variable_proc (node, closure)$/;"	f	file:
+serve_add	server.c	/^serve_add (arg)$/;"	f	file:
+serve_admin	server.c	/^serve_admin (arg)$/;"	f	file:
+serve_annotate	server.c	/^serve_annotate (arg)$/;"	f	file:
+serve_argument	server.c	/^serve_argument (arg)$/;"	f	file:
+serve_argumentx	server.c	/^serve_argumentx (arg)$/;"	f	file:
+serve_case	server.c	/^serve_case (arg)$/;"	f	file:
+serve_checkin_prog	server.c	/^serve_checkin_prog (arg)$/;"	f	file:
+serve_checkin_time	server.c	/^serve_checkin_time (arg)$/;"	f	file:
+serve_ci	server.c	/^serve_ci (arg)$/;"	f	file:
+serve_co	server.c	/^serve_co (arg)$/;"	f	file:
+serve_diff	server.c	/^serve_diff (arg)$/;"	f	file:
+serve_directory	server.c	/^serve_directory (arg)$/;"	f	file:
+serve_editors	server.c	/^serve_editors (arg)$/;"	f	file:
+serve_enable_unchanged	server.c	/^serve_enable_unchanged (arg)$/;"	f	file:
+serve_entry	server.c	/^serve_entry (arg)$/;"	f	file:
+serve_expand_modules	server.c	/^serve_expand_modules (arg)$/;"	f	file:
+serve_export	server.c	/^serve_export (arg)$/;"	f	file:
+serve_global_option	server.c	/^serve_global_option (arg)$/;"	f	file:
+serve_gssapi_authenticate	server.c	/^serve_gssapi_authenticate (arg)$/;"	f	file:
+serve_gssapi_encrypt	server.c	/^serve_gssapi_encrypt (arg)$/;"	f	file:
+serve_gzip_contents	server.c	/^serve_gzip_contents (arg)$/;"	f	file:
+serve_gzip_stream	server.c	/^serve_gzip_stream (arg)$/;"	f	file:
+serve_history	server.c	/^serve_history (arg)$/;"	f	file:
+serve_ignore	server.c	/^serve_ignore (arg)$/;"	f	file:
+serve_import	server.c	/^serve_import (arg)$/;"	f	file:
+serve_init	server.c	/^serve_init (arg)$/;"	f	file:
+serve_is_modified	server.c	/^serve_is_modified (arg)$/;"	f	file:
+serve_kerberos_encrypt	server.c	/^serve_kerberos_encrypt (arg)$/;"	f	file:
+serve_kopt	server.c	/^serve_kopt (arg)$/;"	f	file:
+serve_log	server.c	/^serve_log (arg)$/;"	f	file:
+serve_max_dotdot	server.c	/^serve_max_dotdot (arg)$/;"	f	file:
+serve_modified	server.c	/^serve_modified (arg)$/;"	f	file:
+serve_noop	server.c	/^serve_noop (arg)$/;"	f	file:
+serve_notify	server.c	/^serve_notify (arg)$/;"	f	file:
+serve_questionable	server.c	/^serve_questionable (arg)$/;"	f	file:
+serve_rannotate	server.c	/^serve_rannotate (arg)$/;"	f	file:
+serve_rdiff	server.c	/^serve_rdiff (arg)$/;"	f	file:
+serve_release	server.c	/^serve_release (arg)$/;"	f	file:
+serve_remove	server.c	/^serve_remove (arg)$/;"	f	file:
+serve_repository	server.c	/^serve_repository (arg)$/;"	f	file:
+serve_rlog	server.c	/^serve_rlog (arg)$/;"	f	file:
+serve_root	server.c	/^serve_root (arg)$/;"	f	file:
+serve_rtag	server.c	/^serve_rtag (arg)$/;"	f	file:
+serve_set	server.c	/^serve_set (arg)$/;"	f	file:
+serve_static_directory	server.c	/^serve_static_directory (arg)$/;"	f	file:
+serve_status	server.c	/^serve_status (arg)$/;"	f	file:
+serve_sticky	server.c	/^serve_sticky (arg)$/;"	f	file:
+serve_tag	server.c	/^serve_tag (arg)$/;"	f	file:
+serve_unchanged	server.c	/^serve_unchanged (arg)$/;"	f	file:
+serve_update	server.c	/^serve_update (arg)$/;"	f	file:
+serve_update_prog	server.c	/^serve_update_prog (arg)$/;"	f	file:
+serve_valid_requests	server.c	/^serve_valid_requests (arg)$/;"	f	file:
+serve_valid_responses	server.c	/^serve_valid_responses (arg)$/;"	f	file:
+serve_version	server.c	/^serve_version (arg)$/;"	f	file:
+serve_watch_add	server.c	/^serve_watch_add (arg)$/;"	f	file:
+serve_watch_off	server.c	/^serve_watch_off (arg)$/;"	f	file:
+serve_watch_on	server.c	/^serve_watch_on (arg)$/;"	f	file:
+serve_watch_remove	server.c	/^serve_watch_remove (arg)$/;"	f	file:
+serve_watchers	server.c	/^serve_watchers (arg)$/;"	f	file:
+serve_wrapper_sendme_rcs_options	server.c	/^serve_wrapper_sendme_rcs_options (arg)$/;"	f	file:
+server	server.c	/^server (argc, argv)$/;"	f
+server_active	server.c	/^int server_active = 0;$/;"	v
+server_checked_in	server.c	/^server_checked_in (file, update_dir, repository)$/;"	f
+server_cleanup	server.c	/^server_cleanup (sig)$/;"	f
+server_clear_entstat	server.c	/^server_clear_entstat (update_dir, repository)$/;"	f
+server_copy_file	server.c	/^server_copy_file (file, update_dir, repository, newfile)$/;"	f
+server_dir	server.c	/^char *server_dir = NULL;$/;"	v
+server_modtime	server.c	/^server_modtime (finfo, vers_ts)$/;"	f
+server_notify	server.c	/^server_notify ()$/;"	f	file:
+server_pathname_check	server.c	/^server_pathname_check (path)$/;"	f
+server_pause_check	server.c	/^server_pause_check()$/;"	f
+server_prog	server.c	/^server_prog (dir, name, which)$/;"	f
+server_register	server.c	/^server_register (name, version, timestamp, options, tag, date, conflict)$/;"	f
+server_scratch	server.c	/^server_scratch (fname)$/;"	f
+server_scratch_entry_only	server.c	/^server_scratch_entry_only ()$/;"	f
+server_set_entstat	server.c	/^server_set_entstat (update_dir, repository)$/;"	f
+server_set_sticky	server.c	/^server_set_sticky (update_dir, repository, tag, date, nonbranch)$/;"	f
+server_started	client.c	/^int server_started = 0;$/;"	v
+server_temp_dir	server.c	/^static char *server_temp_dir;$/;"	v	file:
+server_template	server.c	/^server_template (update_dir, repository)$/;"	f
+server_update_entries	server.c	/^server_update_entries (file, update_dir, repository, updated)$/;"	f
+server_updated	server.c	/^server_updated ($/;"	f
+server_use_rcs_diff	server.c	/^server_use_rcs_diff ()$/;"	f
+server_write_entries	server.c	/^server_write_entries ()$/;"	f	file:
+set_block	buffer.c	/^set_block (buf)$/;"	f
+set_lock	lock.c	/^set_lock (lock, will_wait)$/;"	f	file:
+set_lockers_name	lock.c	/^set_lockers_name (statp)$/;"	f	file:
+set_nonblock	buffer.c	/^set_nonblock (buf)$/;"	f
+set_nonblock_fd	server.c	/^set_nonblock_fd (fd)$/;"	f	file:
+set_nonstrict	admin.c	/^    int set_nonstrict;$/;"	m	struct:admin_data	file:
+set_root_directory	main.c	/^set_root_directory (p, ignored)$/;"	f	file:
+set_static	client.c	/^set_static (data, ent_list, short_pathname, filename)$/;"	f	file:
+set_sticky	client.c	/^set_sticky (data, ent_list, short_pathname, filename)$/;"	f	file:
+set_strict	admin.c	/^    int set_strict;$/;"	m	struct:admin_data	file:
+set_writelock_proc	lock.c	/^set_writelock_proc (p, closure)$/;"	f	file:
+setting_default	edit.c	/^static int setting_default;$/;"	v	file:
+setting_tcommit	edit.c	/^static int setting_tcommit;$/;"	v	file:
+setting_tedit	edit.c	/^static int setting_tedit;$/;"	v	file:
+setting_tunedit	edit.c	/^static int setting_tunedit;$/;"	v	file:
+setup_tmpfile	logmsg.c	/^setup_tmpfile (xfp, xprefix, changes)$/;"	f	file:
+shell_escape	subr.c	/^shell_escape(buf, str)$/;"	f
+shifts	scramble.c	/^shifts[] = {$/;"	v	file:
+showargs	commit.c	/^int showargs (argc, argv)$/;"	f
+showfileinfo	commit.c	/^int showfileinfo(ci, finfo)$/;"	f
+since_date	history.c	/^static char * since_date;$/;"	v	file:
+since_rev	history.c	/^static char *since_rev;$/;"	v	file:
+since_tag	history.c	/^static char *since_tag;$/;"	v	file:
+singledatelist	log.c	/^    struct datelist *singledatelist;$/;"	m	struct:log_data	file:
+sleep_past	subr.c	/^sleep_past (desttime)$/;"	f
+socket	client.c	/^    int socket;$/;"	m	struct:socket_buffer	file:
+socket_buffer	client.c	/^struct socket_buffer$/;"	s	file:
+socket_buffer_flush	client.c	/^socket_buffer_flush (closure)$/;"	f	file:
+socket_buffer_initialize	client.c	/^socket_buffer_initialize (socket, input, memory)$/;"	f	file:
+socket_buffer_input	client.c	/^socket_buffer_input (closure, data, need, size, got)$/;"	f	file:
+socket_buffer_output	client.c	/^socket_buffer_output (closure, data, have, wrote)$/;"	f	file:
+socket_buffer_shutdown	client.c	/^socket_buffer_shutdown (buf)$/;"	f	file:
+sort_order	history.c	/^sort_order (l, r)$/;"	f	file:
+sort_order	modules.c	/^sort_order (l, r)$/;"	f	file:
+sortlist	hash.c	/^sortlist (list, comp)$/;"	f
+sortrec	modules.c	/^struct sortrec$/;"	s	file:
+spacetab	rcs.c	/^static const char spacetab[] = {$/;"	v	file:
+special_file_mismatch	update.c	/^special_file_mismatch (finfo, rev1, rev2)$/;"	f
+start	log.c	/^    char *start;$/;"	m	struct:datelist	file:
+start_recursion	recurse.c	/^start_recursion (fileproc, filesdoneproc, direntproc, dirleaveproc, callerdat,$/;"	f
+start_rsh_server	client.c	/^start_rsh_server (root, to_server, from_server)$/;"	f	file:
+start_server	client.c	/^start_server ()$/;"	f
+start_tcp_server	client.c	/^start_tcp_server (root, to_server, from_server)$/;"	f
+statelist	log.c	/^    List *statelist;$/;"	m	struct:log_data	file:
+status	commit.c	/^    Ctype status;			\/* as returned from Classify_File() *\/$/;"	m	struct:commit_info	file:
+status	modules.c	/^    char *status;$/;"	m	struct:sortrec	file:
+status	tag.c	/^    Ctype status;$/;"	m	struct:tag_info	file:
+status_dirproc	status.c	/^status_dirproc (callerdat, dir, repos, update_dir, entries)$/;"	f	file:
+status_fileproc	status.c	/^status_fileproc (callerdat, finfo)$/;"	f	file:
+status_usage	status.c	/^static const char *const status_usage[] =$/;"	v	file:
+stdio_buffer_closure	buffer.c	/^struct stdio_buffer_closure$/;"	s	file:
+stdio_buffer_flush	buffer.c	/^stdio_buffer_flush (closure)$/;"	f	file:
+stdio_buffer_get_file	buffer.c	/^stdio_buffer_get_file (buf)$/;"	f
+stdio_buffer_initialize	buffer.c	/^stdio_buffer_initialize (fp, child_pid, input, memory)$/;"	f
+stdio_buffer_input	buffer.c	/^stdio_buffer_input (closure, data, need, size, got)$/;"	f	file:
+stdio_buffer_output	buffer.c	/^stdio_buffer_output (closure, data, have, wrote)$/;"	f	file:
+stdio_buffer_shutdown	buffer.c	/^stdio_buffer_shutdown (buf)$/;"	f	file:
+sticky_ck	classify.c	/^sticky_ck (finfo, aflag, vers)$/;"	f	file:
+stored_checksum	client.c	/^static unsigned char stored_checksum[16];$/;"	v	file:
+stored_checksum_valid	client.c	/^static int stored_checksum_valid;$/;"	v	file:
+stored_mode	client.c	/^static char *stored_mode;$/;"	v	file:
+stored_modtime	client.c	/^static time_t stored_modtime;$/;"	v	file:
+stored_modtime_valid	client.c	/^static int stored_modtime_valid;$/;"	v	file:
+str_list	logmsg.c	/^static char *str_list;$/;"	v	file:
+str_list_format	logmsg.c	/^static char *str_list_format;	\/* The format for str_list's contents. *\/$/;"	v	file:
+strcat_filename_onto_homedir	filesubr.c	/^strcat_filename_onto_homedir (dir, file)$/;"	f
+string	rcs.c	/^    const char *string;$/;"	m	struct:rcs_keyword	file:
+strip_trailing_newlines	subr.c	/^strip_trailing_newlines (str)$/;"	f
+subdir_record	entries.c	/^subdir_record (cmd, parent, dir)$/;"	f	file:
+suffix	import.c	/^    char *suffix, *comlead;$/;"	m	struct:compair	file:
+sup_header	log.c	/^    int sup_header;$/;"	m	struct:log_data	file:
+supported_request	client.c	/^supported_request (name)$/;"	f
+supported_response	server.c	/^supported_response (name)$/;"	f	file:
+switch_to_user	server.c	/^switch_to_user (username)$/;"	f	file:
+symtag	tag.c	/^static char *symtag;			\/* tag to add or delete *\/$/;"	v	file:
+system_auth	server.c	/^int system_auth = 1;$/;"	v
+tag	annotate.c	/^static char *tag = NULL;$/;"	v	file:
+tag	checkout.c	/^static char *tag;$/;"	v	file:
+tag	commit.c	/^    char *tag;				\/* any sticky tag, or -r option *\/$/;"	m	struct:commit_info	file:
+tag	logmsg.c	/^static char *tag;$/;"	v	file:
+tag	tag.c	/^    char *tag;$/;"	m	struct:tag_info	file:
+tag	update.c	/^static char *tag = NULL;$/;"	v	file:
+tag_check_valid	tag.c	/^tag_check_valid (name, argc, argv, local, aflag, repository)$/;"	f
+tag_check_valid_join	tag.c	/^tag_check_valid_join (join_tag, argc, argv, local, aflag, repository)$/;"	f
+tag_delproc	tag.c	/^tag_delproc(p)$/;"	f	file:
+tag_dirproc	tag.c	/^tag_dirproc (callerdat, dir, repos, update_dir, entries)$/;"	f	file:
+tag_fileproc	tag.c	/^tag_fileproc (callerdat, finfo)$/;"	f	file:
+tag_info	tag.c	/^struct tag_info$/;"	s	file:
+tag_list_proc	status.c	/^tag_list_proc (p, closure)$/;"	f	file:
+tag_opts	tag.c	/^static const char tag_opts[] = "+BbcdFflQqRr:D:";$/;"	v	file:
+tag_report	history.c	/^static short tag_report;$/;"	v	file:
+tag_update_dir	update.c	/^static char *tag_update_dir;$/;"	v	file:
+tag_usage	tag.c	/^static const char *const tag_usage[] =$/;"	v	file:
+tag_validated	annotate.c	/^static int tag_validated;$/;"	v	file:
+tag_validated	checkout.c	/^static int tag_validated;$/;"	v	file:
+taginfo_contents	mkmodules.c	/^static const char *const taginfo_contents[] = {$/;"	v	file:
+template	client.c	/^template (data, ent_list, short_pathname, filename)$/;"	f	file:
+template_proc	server.c	/^template_proc (repository, template)$/;"	f	file:
+template_proc_data	server.c	/^struct template_proc_data$/;"	s	file:
+text	defs.c	/^ 	char text[512];$/;"	m	struct:CVSMSG	file:
+text	rcs.c	/^    char *text;$/;"	m	struct:line	file:
+the_args	watch.c	/^static struct addremove_args the_args;$/;"	v	file:
+time_stamp	vers_ts.c	/^time_stamp (file)$/;"	f
+time_stamp_server	vers_ts.c	/^time_stamp_server (file, vers_ts, entdata)$/;"	f	file:
+timestamp	client.c	/^    char *timestamp;$/;"	m	struct:update_entries_data	file:
+title_proc	logmsg.c	/^title_proc (p, closure)$/;"	f	file:
+tlist	tag.c	/^    List *tlist;$/;"	m	struct:master_lists	file:
+tlist	tag.c	/^static List *tlist;$/;"	v	file:
+tm_to_internet	main.c	/^tm_to_internet (dest, source)$/;"	f
+tmpfile1	patch.c	/^static char *tmpfile1 = NULL;$/;"	v	file:
+tmpfile2	patch.c	/^static char *tmpfile2 = NULL;$/;"	v	file:
+tmpfile3	patch.c	/^static char *tmpfile3 = NULL;$/;"	v	file:
+to_server	client.c	/^static struct buffer *to_server;$/;"	v	file:
+tocvsFilter	wrapper.c	/^    char *tocvsFilter;$/;"	m	struct:	file:
+top_level_admin	main.c	/^int top_level_admin = 0;$/;"	v
+toplevel_repos	client.c	/^static char *toplevel_repos = NULL;$/;"	v	file:
+toplevel_wd	client.c	/^char *toplevel_wd;$/;"	v
+toptwo_diffs	patch.c	/^static int toptwo_diffs = 0;$/;"	v	file:
+toss_local_changes	update.c	/^static int toss_local_changes = 0;$/;"	v	file:
+tpd	server.c	/^static struct template_proc_data *tpd;$/;"	v	file:
+trace	main.c	/^int trace = 0;$/;"	v
+translate_symtag	rcs.c	/^translate_symtag (rcs, tag)$/;"	f	file:
+translated	buffer.c	/^    int translated;$/;"	m	struct:packetizing_buffer	file:
+truncate_revnum	rcs.c	/^truncate_revnum (r)$/;"	f	file:
+truncate_revnum_in_place	rcs.c	/^truncate_revnum_in_place (r)$/;"	f	file:
+try_read_from_server	client.c	/^try_read_from_server (buf, len)$/;"	f	file:
+turning_on	edit.c	/^static int turning_on;$/;"	v	file:
+type	defs.c	/^ 	long type;$/;"	m	struct:CVSMSG	file:
+type	edit.c	/^    char *type;$/;"	m	struct:notify_proc_args	file:
+type	history.c	/^    char *type;		\/* Type of record (In history record) *\/$/;"	m	struct:hrec	file:
+type	logmsg.c	/^static Ctype type;$/;"	v	file:
+type	server.c	/^    char *type;$/;"	m	struct:notify_note	file:
+tz_local	history.c	/^static short tz_local;$/;"	v	file:
+tz_name	history.c	/^static char *tz_name = "+0000";$/;"	v	file:
+tz_seconds_east_of_GMT	history.c	/^static time_t tz_seconds_east_of_GMT;$/;"	v	file:
+ulist	commit.c	/^    List *ulist;			\/* list for Update_Logfile *\/$/;"	m	struct:master_lists	file:
+ulist	commit.c	/^    List *ulist;$/;"	m	struct:find_data	file:
+unedit	edit.c	/^unedit (argc, argv)$/;"	f
+unedit_fileproc	edit.c	/^unedit_fileproc (callerdat, finfo)$/;"	f	file:
+unedit_usage	edit.c	/^static const char *const unedit_usage[] =$/;"	v	file:
+unidiff	patch.c	/^static int unidiff = 0;$/;"	v	file:
+unlink_file	filesubr.c	/^unlink_file (f)$/;"	f
+unlink_file_dir	filesubr.c	/^unlink_file_dir (f)$/;"	f
+unlock_proc	lock.c	/^unlock_proc (p, closure)$/;"	f	file:
+unlockrcs	commit.c	/^unlockrcs (rcs)$/;"	f	file:
+unrecog	fileattr.c	/^struct unrecog {$/;"	s	file:
+unrecog_head	fileattr.c	/^static struct unrecog *unrecog_head;$/;"	v	file:
+unroll_files_proc	recurse.c	/^unroll_files_proc (p, closure)$/;"	f	file:
+update	update.c	/^update (argc, argv)$/;"	f
+update_build_dirs	update.c	/^static int update_build_dirs = 0;$/;"	v	file:
+update_delproc	commit.c	/^update_delproc (p)$/;"	f
+update_dir	recurse.c	/^static char *update_dir;$/;"	v	file:
+update_dir	server.c	/^    char *update_dir;$/;"	m	struct:template_proc_data	file:
+update_dirent_proc	update.c	/^update_dirent_proc (callerdat, dir, repository, update_dir, entries)$/;"	f	file:
+update_dirleave_proc	update.c	/^update_dirleave_proc (callerdat, dir, err, update_dir, entries)$/;"	f	file:
+update_entries	client.c	/^update_entries (data_arg, ent_list, short_pathname, filename)$/;"	f	file:
+update_entries_data	client.c	/^struct update_entries_data$/;"	s	file:
+update_fileproc	update.c	/^update_fileproc (callerdat, finfo)$/;"	f	file:
+update_filesdone_proc	update.c	/^update_filesdone_proc (callerdat, err, repository, update_dir, entries)$/;"	f	file:
+update_hardlink_info	hardlink.c	/^update_hardlink_info (file)$/;"	f
+update_ignproc	update.c	/^update_ignproc (file, dir)$/;"	f	file:
+update_logfile_proc	logmsg.c	/^update_logfile_proc (repository, filter)$/;"	f	file:
+update_progs	client.c	/^static struct save_prog *update_progs;$/;"	v	file:
+update_prune_dirs	update.c	/^static int update_prune_dirs = 0;$/;"	v	file:
+update_rcs_file	import.c	/^update_rcs_file (message, vfile, vtag, targc, targv, inattic)$/;"	f	file:
+update_usage	update.c	/^static const char *const update_usage[] =$/;"	v	file:
+updated_fname	client.c	/^static char *updated_fname;$/;"	v	file:
+updated_seen	client.c	/^static int updated_seen;$/;"	v	file:
+updatetag	pc.c	/^int updatetag (mrid, pathname, tag, branch)$/;"	f
+usage	main.c	/^usage (cpp)$/;"	f
+use_cvsrc	main.c	/^int use_cvsrc = 1;$/;"	v
+use_editor	main.c	/^int use_editor = 1;$/;"	v
+use_file_modtime	import.c	/^static int use_file_modtime;$/;"	v	file:
+use_rev1	diff.c	/^static char *use_rev1, *use_rev2;$/;"	v	file:
+use_rev2	diff.c	/^static char *use_rev1, *use_rev2;$/;"	v	file:
+user	history.c	/^    char *user;		\/* Username (In history record) *\/$/;"	m	struct:hrec	file:
+user_count	history.c	/^static int user_count;		\/* Number of elements used *\/$/;"	v	file:
+user_file_rev	diff.c	/^static char *user_file_rev;$/;"	v	file:
+user_list	history.c	/^static char **user_list;	\/* Ptr to array of ptrs to user names *\/$/;"	v	file:
+user_max	history.c	/^static int user_max;		\/* Number of elements allocated *\/$/;"	v	file:
+user_sort	history.c	/^static short user_sort;$/;"	v	file:
+usg	main.c	/^static const char *const usg[] =$/;"	v	file:
+v_checkout	history.c	/^static short v_checkout;$/;"	v	file:
+va_alist	error.c	40;"	d	file:
+va_alist	error.c	43;"	d	file:
+va_dcl	error.c	41;"	d	file:
+va_dcl	error.c	44;"	d	file:
+val	server.c	/^    char *val;$/;"	m	struct:notify_note	file:
+val_args	tag.c	/^struct val_args {$/;"	s	file:
+val_direntproc	tag.c	/^val_direntproc (callerdat, dir, repository, update_dir, entries)$/;"	f	file:
+val_fileproc	tag.c	/^val_fileproc (callerdat, finfo)$/;"	f	file:
+variable_delproc	expand_path.c	/^variable_delproc (node)$/;"	f	file:
+variable_list	expand_path.c	/^List *variable_list = NULL;$/;"	v
+variable_set	expand_path.c	/^variable_set (nameval)$/;"	f
+vbranch	import.c	/^static char *vbranch;$/;"	v	file:
+vector	rcs.c	/^    struct line **vector;$/;"	m	struct:linevector	file:
+verifymsg_contents	mkmodules.c	/^static const char *const verifymsg_contents[] = {$/;"	v	file:
+verifymsg_proc	logmsg.c	/^verifymsg_proc (repository, script)$/;"	f	file:
+verifymsg_script	logmsg.c	/^static char *verifymsg_script;$/;"	v	file:
+vers	rcs.c	/^    RCSVers *vers;$/;"	m	struct:line	file:
+version	version.c	/^version (argc, argv)$/;"	f
+version_compare	log.c	/^version_compare (v1, v2, len)$/;"	f	file:
+version_usage	version.c	/^static const char *const version_usage[] =$/;"	v	file:
+vhead	import.c	/^static char *vhead;$/;"	v	file:
+vlen	rcs.c	/^    size_t vlen;$/;"	m	struct:rcsbuffer	file:
+wait_sig	server.c	/^static void wait_sig (sig)$/;"	f	file:
+walklist	hash.c	/^walklist (list, proc, closure)$/;"	f
+watch	watch.c	/^watch (argc, argv)$/;"	f
+watch_add	watch.c	/^watch_add (argc, argv)$/;"	f
+watch_addremove	watch.c	/^watch_addremove (argc, argv)$/;"	f	file:
+watch_modify_watchers	watch.c	/^watch_modify_watchers (file, what)$/;"	f
+watch_off	edit.c	/^watch_off (argc, argv)$/;"	f
+watch_on	edit.c	/^watch_on (argc, argv)$/;"	f
+watch_onoff	edit.c	/^watch_onoff (argc, argv)$/;"	f	file:
+watch_remove	watch.c	/^watch_remove (argc, argv)$/;"	f
+watch_usage	watch.c	/^const char *const watch_usage[] =$/;"	v
+watchers	watch.c	/^watchers (argc, argv)$/;"	f
+watchers_fileproc	watch.c	/^watchers_fileproc (callerdat, finfo)$/;"	f	file:
+watchers_usage	watch.c	/^static const char *const watchers_usage[] =$/;"	v	file:
+watches	server.c	/^    char *watches;$/;"	m	struct:notify_note	file:
+which	recurse.c	/^    int which;$/;"	m	struct:recursion_frame	file:
+whitespace	rcs.c	163;"	d	file:
+who	edit.c	/^    char *who;$/;"	m	struct:notify_proc_args	file:
+wildCard	wrapper.c	/^    char *wildCard;$/;"	m	struct:	file:
+within	history.c	/^within (find, string)$/;"	f	file:
+working	history.c	/^static short working;$/;"	v	file:
+working_dir	hardlink.c	/^char *working_dir;	\/* The top-level working directory, used for$/;"	v
+wrap_add	wrapper.c	/^wrap_add (line, isTemp)$/;"	f
+wrap_add_entry	wrapper.c	/^wrap_add_entry(e, temp)$/;"	f
+wrap_add_file	wrapper.c	/^wrap_add_file (file, temp)$/;"	f
+wrap_count	wrapper.c	/^static int wrap_count=0;$/;"	v	file:
+wrap_free_entry	wrapper.c	/^wrap_free_entry(e)$/;"	f
+wrap_free_entry_internal	wrapper.c	/^wrap_free_entry_internal(e)$/;"	f
+wrap_fromcvs_process_file	wrapper.c	/^wrap_fromcvs_process_file(fileName)$/;"	f
+wrap_kill	wrapper.c	/^wrap_kill()$/;"	f
+wrap_kill_temp	wrapper.c	/^wrap_kill_temp()$/;"	f
+wrap_list	wrapper.c	/^static WrapperEntry **wrap_list=NULL;$/;"	v	file:
+wrap_matching_entry	wrapper.c	/^wrap_matching_entry (name)$/;"	f	file:
+wrap_merge_is_copy	wrapper.c	/^wrap_merge_is_copy (fileName)$/;"	f
+wrap_name_has	wrapper.c	/^wrap_name_has (name,has)$/;"	f
+wrap_rcsoption	wrapper.c	/^wrap_rcsoption (filename, asflag)$/;"	f
+wrap_restore_saved	wrapper.c	/^wrap_restore_saved()$/;"	f
+wrap_saved_count	wrapper.c	/^static int wrap_saved_count=0;$/;"	v	file:
+wrap_saved_list	wrapper.c	/^static WrapperEntry **wrap_saved_list=NULL;$/;"	v	file:
+wrap_saved_tempcount	wrapper.c	/^static int wrap_saved_tempcount=0;$/;"	v	file:
+wrap_send	wrapper.c	/^wrap_send ()$/;"	f
+wrap_setup	wrapper.c	/^void wrap_setup()$/;"	f
+wrap_size	wrapper.c	/^static int wrap_size=0;$/;"	v	file:
+wrap_tempcount	wrapper.c	/^static int wrap_tempcount=0;$/;"	v	file:
+wrap_tocvs_process_file	wrapper.c	/^wrap_tocvs_process_file(fileName)$/;"	f
+wrap_unparse_rcs_options	wrapper.c	/^wrap_unparse_rcs_options (line, first_call_p)$/;"	f
+write_dbmfile	mkmodules.c	/^write_dbmfile (temp)$/;"	f	file:
+write_dirnonbranch	commit.c	/^static int write_dirnonbranch;$/;"	v	file:
+write_dirtag	commit.c	/^static char *write_dirtag;$/;"	v	file:
+write_ent_proc	entries.c	/^write_ent_proc (node, closure)$/;"	f	file:
+write_entries	entries.c	/^write_entries (list)$/;"	f	file:
+write_item	myndbm.c	/^write_item (node, data)$/;"	f	file:
+write_letter	update.c	/^write_letter (finfo, letter)$/;"	f	file:
+write_lock	lock.c	/^write_lock (lock)$/;"	f	file:
+writeattr_proc	fileattr.c	/^writeattr_proc (node, data)$/;"	f	file:
+writelock	lock.c	/^static char *writelock;$/;"	v	file:
+xchmod	filesubr.c	/^xchmod (fname, writable)$/;"	f
+xcmp	filesubr.c	/^xcmp (file1, file2)$/;"	f
+xmalloc	scramble.c	26;"	d	file:
+xmalloc	subr.c	/^xmalloc (bytes)$/;"	f
+xrcsnode	status.c	/^static RCSNode *xrcsnode;$/;"	v	file:
+xreadlink	filesubr.c	/^xreadlink (link)$/;"	f
+xrealloc	subr.c	/^xrealloc (ptr, bytes)$/;"	f
+xrealloc_and_strcat	subr.c	/^xrealloc_and_strcat (str, lenp, src)$/;"	f
+xstrdup	subr.c	/^xstrdup (str)$/;"	f
+zstr	zlib.c	/^    z_stream zstr;$/;"	m	struct:compress_buffer	file:
