@@ -1,0 +1,12 @@
+/.cvsignore///1104142214/
+/ChangeLog///1104142214/
+/Makefile///1104142214/
+/Makefile.in///1104142214/
+/README///1104142215/
+/config.h///1104142214/
+/filesubr.c///1104142214/
+/rcmd.h///1104142214/
+/savecwd.c///1104142215/
+/startserver.c///1104142215/
+/stripslash.c///1104142215/
+/system.c///1104142215/
