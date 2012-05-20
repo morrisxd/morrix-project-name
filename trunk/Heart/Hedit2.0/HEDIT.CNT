@@ -1,0 +1,9 @@
+:Base hedit.hlp>main
+:Title HEdit
+1 Ordering Information
+2 Credit Cards=IDH_credit_cards
+2 Check=IDH_check
+2 Charge to a CompuServe account=IDH_charge_to_a_compuserve_account
+2 Internet=IDH_internet
+1 Support
+2 HEdit support=IDH_hedit_support
