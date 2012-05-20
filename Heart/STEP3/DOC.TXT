@@ -1,0 +1,13 @@
+OpenFile        MACRO   _filename_open_reg, _file_handler_open
+***** _filename_open_ren != ax *****
+CreateFile      MACRO   _file_name_create, _file_handler_create
+ReadFile        MACRO   _file_handler_read, _file_buffer_read, _num
+WriteFile       MACRO   _file_handler_write, _file_buffer_write, _num
+CloseFile       MACRO   _file_handler_close
+ShowMSG         MACRO   _msg            ; _msg should be defined in DS
+                        _msg = memory variable name
+MoveSTR         MACRO   _target_reg, _src_reg, _num
+                        _src_reg != SI,_target_reg != DI,_num != cx
+CopyBody        MACRO   _destfile_handler, _srcfile_handler
+SeekFile        MACRO   _file_handler_seek,_file_offset_seek,_method
+           

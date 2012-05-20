@@ -1,0 +1,28 @@
+_data           SEGMENT
+_greeting       DB      'ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿',0dh,0ah
+                DB      '³  Can you see what I see? Can you feel what I feel?  ³ ',0dh,0ah
+                DB      'ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ',0dh,0ah,'$'
+_fitfilename    DB      '*.$$$',00h
+_filename       DB      12 DUP('A'),0dh,0ah,'$'
+_tempFile       DB      '00000000.000',00h
+_data           ENDS
+
+_data           SEGMENT
+_searcherr      DB      'No file found.',0dh,0ah,'$'
+_fopenerr       DB      'File open error.',0dh,0ah,'$'
+_freaderr       DB      'File read error.',0dh,0ah,'$'
+_filenotexeerr  DB      'File not exe.',0dh,0ah,'$'
+_fcreateerr     DB      'File create error.',0dh,0ah,'$'
+_writeerror     DB      'File write error.',0dh,0ah,'$'
+_filecloseerr   DB      'File close error.',0dh,0ah,'$'
+_data           ENDS
+
+_data           SEGMENT
+                DB      'HEAD'
+_exHeader       exehead <,,,,,,,,,,,,,>       
+_Old_SP         DW      0
+_SegmentPSP     DW      0
+_Handler_Source DW      0
+_Handler_Temp   DW      0
+_Buffer         DB      1024 dup (0)
+_data           ENDS

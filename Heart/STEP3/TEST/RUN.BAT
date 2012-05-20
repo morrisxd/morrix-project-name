@@ -1,0 +1,2 @@
+heart.exe
+copy $$$$$$$$.$$$ $.exe
