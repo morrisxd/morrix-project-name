@@ -1,0 +1,17 @@
+
+Microsoft (R) EXE File Header Utility  Version 2.01    
+Copyright (C) Microsoft Corp 1985-1990.  All rights reserved.
+
+.EXE size (bytes)         1e122
+Magic number:             5a4d
+Bytes on last page:       005f
+Pages in file:            00f2
+Relocations:              045b
+Paragraphs in header:     02c0
+Extra paragraphs needed:  09d8
+Extra paragraphs wanted:  09d8
+Initial stack location:   1e1d:7000
+Word checksum:            0000
+Entry point:              1b45:000f
+Relocation table address: 001e
+Memory needed:            149K
