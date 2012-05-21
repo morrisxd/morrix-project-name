@@ -1,0 +1,13 @@
+#
+# xxx.l and xxx.o MUST have the idential 'xxx' filename, and the same, 
+# xxx.y and xxx.o MUST have the idential 'xxx' filename.
+
+
+
+YFLAGS	=	-d
+OBJS = cl.o c.o symtab.o
+cl:	$(OBJS)
+	cc $(OBJS) -ll -o cl
+clean:
+	rm -f *.o y.tab.h cl *.core *.BAK
+

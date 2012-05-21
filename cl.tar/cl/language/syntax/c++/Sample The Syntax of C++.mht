@@ -1,0 +1,1302 @@
+From: <Saved by Windows Internet Explorer 8>
+Subject: Sample: The Syntax of C++
+Date: Fri, 10 Apr 2009 23:39:25 +0800
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.csci.csusb.edu/dick/samples/c++.syntax.html
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.3790.4325
+
+=EF=BB=BF<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Sample: The Syntax of C++</TITLE>
+<META content=3D"text/html; charset=3Dutf-8" http-equiv=3DContent-Type>
+<STYLE type=3Dtext/css>BODY {
+	FONT-FAMILY: serif
+}
+H1 {
+	FONT-FAMILY: sans-serif
+}
+H2 {
+	FONT-FAMILY: sans-serif
+}
+H3 {
+	FONT-FAMILY: sans-serif
+}
+H4 {
+	FONT-FAMILY: sans-serif
+}
+CODE {
+	FONT-FAMILY: monospace
+}
+PRE {
+	FONT-FAMILY: monospace
+}
+TT {
+	FONT-FAMILY: monospace
+}
+HR {
+	COLOR: black
+}
+A {
+	FONT-WEIGHT: bolder
+}
+.InlineFormula {
+	FONT-STYLE: italic
+}
+.Formula {
+	FONT-STYLE: italic; PADDING-LEFT: 10px
+}
+.Let {
+	BORDER-BOTTOM: thin solid; BORDER-LEFT: thin solid; PADDING-BOTTOM: =
+10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; BORDER-TOP: thin solid; =
+BORDER-RIGHT: thin solid; PADDING-TOP: 10px
+}
+.Net {
+	BORDER-BOTTOM: red thin solid; BORDER-LEFT: red thin solid; =
+PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; =
+BORDER-TOP: red thin solid; BORDER-RIGHT: red thin solid; PADDING-TOP: =
+10px
+}
+.Case {
+	BORDER-BOTTOM: blue thin solid; BORDER-LEFT: blue thin solid; =
+PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; =
+BORDER-TOP: blue thin solid; BORDER-RIGHT: blue thin solid; PADDING-TOP: =
+10px
+}
+</STYLE>
+
+<META name=3DGENERATOR content=3D"MSHTML 8.00.6001.18702"></HEAD>
+<BODY aLink=3D#ff0000 link=3D#0000ff bgColor=3D#e0ffe0 text=3D#000000 =
+vLink=3D#8000af>
+<FORM method=3Dget =
+action=3Dhttp://www.csci.csusb.edu/dick/samples/lookup.php>[<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Main =
+Content">Skip=20
+Navigation</A>] [<A href=3D"http://www.csusb.edu/">CSUSB</A>] / [<A=20
+href=3D"http://nsci.csusb.edu/">CNS</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/">Comp Sci Dept</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/dick/">R J Botting</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/index.html">Samples</A>] =
+/ <A=20
+name=3Dtop_of_page>c++.syntax </A><BR>[<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/">Index</A>] [<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Contents">=
+Contents</A>]=20
+[<A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.txt">Source=20
+Text</A>] [<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/about.html">About</A>] =
+[<A=20
+href=3D"http://www.csci.csusb.edu/dick/maths/intro_characters.html">Notat=
+ion</A>]=20
+[<A=20
+href=3D"http://www.csci.csusb.edu/dick/maths/intro_copyright.html">Copyri=
+ght</A>]=20
+[<A href=3D"http://www.csci.csusb.edu/dick/samples/comment.html"=20
+target=3DSendEMail>Comment/Contact</A>] [Search <INPUT size=3D10 =
+name=3Dsearch> <INPUT=20
+value=3Dc++.syntax.mth type=3Dhidden name=3Dfrom> <INPUT value=3DGo =
+type=3Dsubmit>]=20
+<BR>Tue Sep 18 15:25:35 PDT 2007 </FORM>
+<HR>
+<A name=3DContents>
+<H3>Contents</H3></A>
+<UL class=3DContents>
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#The =
+Syntax of C++">The=20
+  Syntax of C++</A>=20
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#See =
+Also">: See=20
+  Also</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Note">:=20
+  Note</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Lexemes">:=
+=20
+  Lexemes</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Declaratio=
+ns">:=20
+  Declarations</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Operators =
+and Variables">:=20
+  Operators and Variables</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Expression=
+s">:=20
+  Expressions</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Declarator=
+s">:=20
+  Declarators</A>=20
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Class =
+Declarations">:=20
+  Class Declarations</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Statements=
+">:=20
+  Statements</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Templates"=
+>:=20
+  Templates</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Namespaces=
+:">:=20
+  Namespaces:</A> </LI></UL><A name=3D"Main Content">
+<HR>
+</A>
+<OL><A name=3D"The Syntax of C++">
+  <H1>The Syntax of C++</H1></A>
+  <OL class=3DSection>
+    <P>.Road_works_ahead This page defines the form of C++ described in =
+the=20
+    Annotated C++ Manual of Ellis and Stroustroup. It is not unlike the =
+C++=20
+    implemented by most compilers. However, C++ is still evolving and =
+the=20
+    ANSI/ISO standard version of C++ will be significantly different to =
+the=20
+    origonal <SPAN class=3DInlineFormula>C with classes</SPAN> defined =
+by=20
+    Stroustroup.=20
+    <P>For uptodate syntax try the syntax for the draft ANSI/ISO <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>++=
+=20
+    standard: [<A =
+href=3D"http://csci.csusb.edu/dick/c++std/syntax.html">=20
+    syntax.html </A>] and [<A=20
+    href=3D"http://csci.csusb.edu/dick/c++std/cd2/gram.html"> gram.html =
+</A>]=20
+    <P><A name=3D"See Also">
+    <H2>See Also</H2></A>
+    <HR>
+
+    <OL class=3DBox>[<A=20
+      href=3D"http://www.csci.csusb.edu/dick/samples/c++.glossary.html"> =
+
+      c++.glossary.html </A>]=20
+      <P>[<A =
+href=3D"http://www.csci.csusb.edu/dick/samples/comp.text.ASCII.html">=20
+      comp.text.ASCII.html </A>]=20
+      <P>[<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/objects.glossary.html">=20
+      objects.glossary.html </A>]=20
+      <P>[<A =
+href=3D"http://www.csci.csusb.edu/dick/samples/math.syntax.html">=20
+      math.syntax.html </A>] </P></OL>
+    <HR>
+    The idea of C++ was to include most of <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A> =
+as a=20
+    subset. The following lines formalize this intention:=20
+    <LI><A name=3DC>C</A>::documentation=3D<SPAN=20
+    =
+class=3DInlineFormula>http://www.csci.csusb.edu/dick/samples/c.syntax.htm=
+l</SPAN>,=20
+    [<A href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html">=20
+    c.syntax.html </A>]=20
+    <P><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>. =
+
+
+    <P><A name=3DNote>
+    <H2>Note</H2></A>
+    <OL class=3DSection>The Standard is no longer guaranteeing upward=20
+      compatabilty between C and C++. Many good ANSI standard C programs =
+are now=20
+      longer standard (or even compilable) C++. [<A=20
+      href=3D"http://www.csci.csusb.edu/dick/c++std/">=20
+      http://www.csci.csusb.edu/dick/c++std/ </A>] </OL>
+    <P>. . . . . . . . . ( end of section <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Note">Note=
+</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Contents">=
+&lt;&lt;</A>Contents=20
+    | End<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#__End">&gt=
+;&gt;</A>=20
+
+    <P>The above means that this file does not have to repeat any of the =
+
+    definition in <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A> =
+when=20
+    the same name is used for different syntaxes in <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A> =
+and <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>++=
+ and=20
+    it is necesary to refer to the <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A> =
+form=20
+    in this grammar then it is written like this example: </P>
+    <LI><SPAN class=3DFormula><A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>.<=
+A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#comment">c=
+omment</A></SPAN>=20
+
+    <P>Otherwise the old name can be used as if had been included above. =
+
+    <P>The <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>++=
+=20
+    version is written without a prefix and defined in this file. For =
+example <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>++=
+ uses=20
+    both the old <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A> =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#comment">c=
+omment</A>=20
+    and a new one: </P>
+    <LI><A name=3Dcomment>comment</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>.<=
+A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#comment">c=
+omment</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#inline_com=
+ment">inline_comment</A>.=20
+
+    <LI><A name=3Dinline_comment>inline_comment</A>::=3D"//" =
+#(non(eoln))eoln,=20
+    <P><A name=3DLexemes>
+    <H2>Lexemes</H2></A>
+    <P></P>
+    <LI><A name=3Dpre_processor_tokens>pre_processor_tokens</A>::=3D [<A =
+
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.glossary.html#preproce=
+ssor_token">=20
+    preprocessor_token in c++.glossary </A>]=20
+    <LI><A name=3Dkeyword>keyword</A>::=3D [<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.glossary.html#keyword"=
+>=20
+    keyword in c++.glossary </A>]=20
+    <LI><A name=3Dpunctuation>punctuation</A>::=3D [<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.glossary.html#punctuat=
+ion">=20
+    punctuation in c++.glossary </A>]=20
+    <LI><A name=3Doperators>operators</A>::=3D [<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.glossary.html#operator=
+s">=20
+    operators in c++.glossary </A>]=20
+    <LI><A name=3Didentifier>identifier</A>::=3D [<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.glossary.html#identifi=
+er">=20
+    identifier in c++.glossary </A>]=20
+    <P><A name=3DDeclarations>
+    <H2>Declarations</H2></A>
+    <LI><A name=3Ddeclaration>declaration</A>::=3D O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n_specifiers">declaration_specifiers</A>=20
+    ) O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+_list">declarator_list</A>=20
+    ) | function_declaration | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#linkage_sp=
+ecification">linkage_specification</A>,=20
+
+    <P></P>
+    <LI><A name=3Ddeclaration_specifiers>declaration_specifiers</A>::=3D =
+N(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n_specifier">declaration_specifier</A>)=20
+    ,=20
+    <P></P>
+    <LI><A name=3Ddeclaration_specifier>declaration_specifier</A>::=3D =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#storage_cl=
+ass_specifier">storage_class_specifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_speci=
+fier">type_specifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#function_s=
+pecifier">function_specifier</A>=20
+    | "friend" | "typedef",=20
+    <P></P>
+    <LI><A =
+name=3Dstorage_class_specifier>storage_class_specifier</A>::=3D "auto" | =
+
+    "register" | "static" | "extern",=20
+    <P></P>
+    <LI><A name=3Dfunction_specifier>function_specifier</A>::=3D =
+"inline" |=20
+    "virtual",=20
+    <P></P>
+    <LI><A name=3Dtype_specifier>type_specifier</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#simple_typ=
+e_name">simple_type_name</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#class_spec=
+ifier">class_specifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#enumeratio=
+n_specifier">enumeration_specifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#elaborated=
+_type_specifier">elaborated_type_specifier</A>=20
+    | "const" | "volatile",=20
+    <P></P>
+    <LI><A name=3Dsimple_type_name>simple_type_name</A>::=3D class_name =
+| "typedef"=20
+    name | "char" | "short" | "int" | "long" | "signed" | "unsigned" | =
+"float" |=20
+    "double" | "void",=20
+    <P></P>
+    <LI><A =
+name=3Delaborated_type_specifier>elaborated_type_specifier</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#class_key"=
+>class_key</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#class_key"=
+>class_key</A>=20
+    class_name | "enum" enumeration_name,=20
+    <P></P>
+    <LI><A name=3Dclass_key>class_key</A>::=3D "class" | "struct" | "<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#union">uni=
+on</A>",=20
+
+    <P></P>
+    <LI><A name=3Denumeration_specifier>enumeration_specifier</A>::=3D=20
+    C.enumeration_specifier,=20
+    <P><BR></P>
+    <LI>|-<SPAN =
+class=3DFormula>C.enumeration_specifier=3Denumeration_identifier |=20
+    "enum" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    "{"enumeration_list"}",</SPAN>=20
+    <P></P>
+    <LI><A name=3Dlinkage_specification>linkage_specification</A>::=3D =
+"extern"=20
+    string "{" O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n_list">declaration_list</A>=20
+    ) "}" | "extern" string_declaration,=20
+    <P></P>
+    <LI><A name=3Ddeclaration_list>declaration_list</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n">declaration</A>=20
+    #(";" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n">declaration</A>),=20
+
+    <P></P>
+    <LI><A name=3Dclass_specifier>class_specifier</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#class_head=
+">class_head</A>=20
+    "{" O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_lis=
+t">member_list</A>=20
+    ) "}",=20
+    <LI><A name=3Dclass_head>class_head</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#class_key"=
+>class_key</A>=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    ) O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#base_speci=
+fier">base_specifier</A>=20
+    ) | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#class_key"=
+>class_key</A>=20
+    class_name O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#base_speci=
+fication">base_specification</A>=20
+    ),=20
+    <P></P>
+    <LI><A name=3Dmember_list>member_list</A>::=3D #( O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#access_spe=
+cifier">access_specifier</A>=20
+    colon ) #<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_dec=
+laration">member_declaration</A>=20
+    ),=20
+    <P></P>
+    <LI><A name=3Dmember_declaration>member_declaration</A>::=3D O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n_specifiers">declaration_specifiers</A>)=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_dec=
+larator_list">member_declarator_list</A>=20
+    ) ";" | function_definition O(";") | qualified_name ";",=20
+    <LI><A name=3Dtype_description>type_description</A>::=3D class | =
+struct | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#union">uni=
+on</A>,=20
+
+    <P></P>
+    <LI><A name=3Dsimple_class>simple_class</A>::=3D"class" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    "{" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#private_pa=
+rt">private_part</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#explicit_a=
+ccess_part">explicit_access_part</A>"}",=20
+
+    <LI><A name=3Dstructure>structure</A>::=3Dstruct,=20
+    <LI><A name=3Dsimple_struct>simple_struct</A>::=3D"struct" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    "{" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#public_par=
+t">public_part</A>=20
+    "private:" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#explicit_a=
+ccess_part">explicit_access_part</A>=20
+    "}"=20
+    <LI><A name=3Dunion>union</A>::=3D"<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#union">uni=
+on</A>"=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>)=20
+    "{" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#public_par=
+t">public_part</A>=20
+    "}",=20
+    <LI><A name=3Dexplicit_access_part>explicit_access_part</A>::=3D =
+"private" colon=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#private_pa=
+rt">private_part</A>=20
+    | "public" colon <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#public_par=
+t">public_part</A>=20
+    | "protected" colon <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#protected_=
+part">protected_part</A>,=20
+
+    <LI><A name=3Dprivate_part>private_part</A>::=3D#<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_dec=
+laration">member_declaration</A>,=20
+
+    <LI><A name=3Dpublic_part>public_part</A>::=3D#<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_dec=
+laration">member_declaration</A>,=20
+
+    <LI><A name=3Dprotected_part>protected_part</A>::=3D#<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_dec=
+laration">member_declaration</A>.=20
+
+    <P>
+    <P></P>
+    <LI><A name=3Dmember_declarator_list>member_declarator_list</A>::=3D =
+List( <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_dec=
+larator">member_declarator</A>),=20
+
+    <P></P>
+    <LI><A name=3Dmember_declarator>member_declarator</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+">declarator</A>=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#pure_speci=
+fier">pure_specifier</A>=20
+    ) | O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    ) colon constant_expression,=20
+    <P></P>
+    <LI><A name=3Dpure_specifier>pure_specifier</A>::=3D "=3D" "0",=20
+    <P></P>
+    <LI><A name=3Dbase_specification>base_specification</A>::=3D colon =
+List(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#base_speci=
+fier">base_specifier</A>),=20
+
+    <P></P>
+    <LI><A name=3Dbase_specifier>base_specifier</A>::=3D class_name | =
+"virtual" O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#access_spe=
+cifier">access_specifier</A>=20
+    ) class_name | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#access_spe=
+cifier">access_specifier</A>=20
+    O("virtual" ) class_name,=20
+    <P></P>
+    <LI><A name=3Daccess_specifier>access_specifier</A>::=3D "private" | =
+"protected"=20
+    | "public",=20
+    <P></P>
+    <LI><A =
+name=3Dconversion_function_name>conversion_function_name</A>::=3D "<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#operator">=
+operator</A>"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#conversion=
+_type_name">conversion_type_name</A>,=20
+
+    <P></P>
+    <LI><A =
+name=3Dconstructor_declarations>constructor_declarations</A>::=3D ...=20
+    <P></P>
+    <LI><A =
+name=3Ddestructor_declarations>destructor_declarations</A>::=3D ...=20
+    <P></P>
+    <LI><A =
+name=3Dconstructor_initializer>constructor_initializer</A>::=3D colon <A =
+
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#memory_ini=
+tializer_list">memory_initializer_list</A>,=20
+
+    <P></P>
+    <LI><A =
+name=3Dmemory_initializer_list>memory_initializer_list</A>::=3D List( <A =
+
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#memory_ini=
+tializer">memory_initializer</A>),=20
+
+    <P></P>
+    <LI><A name=3Dmemory_initializer>memory_initializer</A>::=3D =
+class_name "("=20
+    O(argument_list ) ")" | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    "(" O(argument_list ) ")",=20
+    <P><A name=3D"Operators and Variables">
+    <H2>Operators and Variables</H2></A>
+    <LI><A name=3Doperator_function_name>operator_function_name</A>::=3D =
+"<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#operator">=
+operator</A>"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#operator">=
+operator</A>,=20
+
+    <P></P>
+    <LI><A =
+name=3Dscope_resolution_operator>scope_resolution_operator</A>::lexeme=3D=
+=20
+    "<A name=3D::>::</A>".=20
+    <LI><A =
+name=3Ddouble_colon>double_colon</A>::=3Dscope_resolution_operator.=20
+    <LI><A name=3DDC>DC</A>::abbreviation=3Ddouble_colon.=20
+    <LI><A name=3Dvariable>variable</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>.<=
+A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#variable">=
+variable</A>=20
+    | class_name <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#DC">DC</A>=
+=20
+    static_data_member.=20
+    <P>
+    <P><A name=3DExpressions>
+    <H2>Expressions</H2></A>
+    <LI><A name=3Dexpression>expression</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>.e=
+xpression=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#multiplica=
+tive_expression">multiplicative_expression</A>.=20
+
+    <P></P>
+    <LI><A =
+name=3Dmultiplicative_expression>multiplicative_expression</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#pm_express=
+ion">pm_expression</A>=20
+    #(multiplicative_operator <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#pm_express=
+ion">pm_expression</A>).=20
+
+    <P></P>
+    <LI><A name=3Dpm_expression>pm_expression</A>::=3Dcast_expression =
+#(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#cast_opera=
+tor">cast_operator</A>=20
+    cast_expression).=20
+    <P></P>
+    <LI><A name=3Dcast_operator>cast_operator</A>::=3D ".*" | "-&gt;*".=20
+    <P></P>
+    <LI><A name=3Dunary_expression>unary_expression</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>.<=
+A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#unary_expr=
+ession">unary_expression</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#allocation=
+_expression">allocation_expression</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#deallocati=
+on_expression">deallocation_expression</A>.=20
+
+    <P>
+    <P></P>
+    <LI><A name=3Dallocation_expression>allocation_expression</A>::=3D =
+O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#DC">DC</A>=
+)=20
+    "new" O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#placement"=
+>placement</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#new_type_n=
+ame">new_type_name</A>=20
+    O(new_initializer) | O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#DC">DC</A>=
+)=20
+    "new" O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#placement"=
+>placement</A>)=20
+    (<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_name"=
+>type_name</A>)=20
+    O(new_initializer)=20
+    <LI><A =
+name=3Ddeallocation_expression>deallocation_expression</A>::=3D O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#DC">DC</A>=
+)=20
+    "delete" O("[]") cast_expression.=20
+    <P></P>
+    <LI><A name=3Dplacement>placement</A>::=3D"(" expression_list ")".=20
+    <P></P>
+    <LI><A name=3Dnew_type_name>new_type_name</A>::=3D N(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_speci=
+fier">type_specifier</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#new_declar=
+ator">new_declarator</A>.=20
+
+    <LI><A name=3Dnew_declarator>new_declarator</A>::=3D =
+O(complete_class_name <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#DC">DC</A>=
+ )"*"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#const_or_v=
+olatile">const_or_volatile</A>)=20
+    new_delarator | O(new-<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+">declarator</A>)=20
+    "[" expression "]".=20
+    <P></P>
+    <LI><A name=3Dasm_declaration>asm_declaration</A>::=3D "asm" "{" =
+string_literal=20
+    "}" ";" .=20
+    <P><A name=3DDeclarators>
+    <H2>Declarators</H2></A>
+    <LI><A name=3Ddeclarator_list>declarator_list</A>::=3DList(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+">declarator</A>=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#initialize=
+r">initializer</A>)).=20
+
+    <P></P>
+    <LI><A name=3Ddeclarator>declarator</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#dname">dna=
+me</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#ptr_operat=
+or">ptr_operator</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+">declarator</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+">declarator</A>=20
+    ( "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#argument_d=
+eclaration_list">argument_declaration_list</A>")"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#const_or_v=
+olatile">const_or_volatile</A>=20
+    | "[" O(constant_expression)"]" | "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+">declarator</A>=20
+    ")".=20
+    <P></P>
+    <LI><A name=3Dptr_operator>ptr_operator</A>::=3D ("*" | "&amp;"|=20
+    complete_class_name <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#DC">DC</A>=
+ "*")=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#const_or_v=
+olatile">const_or_volatile</A>.=20
+
+    <P></P>
+    <LI><A name=3Dconst_or_volatile>const_or_volatile</A>::=3D "const" | =
+
+    O("volatile").=20
+    <P></P>
+    <LI><A name=3Ddname>dname</A>::=3D name| O("~") class_name | =
+typedef_name |=20
+    qualified_type_name.=20
+    <P></P>
+    <LI><A name=3Dtype_name>type_name</A>::=3D N(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_speci=
+fier">type_specifier</A>)=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#abstract_d=
+eclarator">abstract_declarator</A>).=20
+
+    <P></P>
+    <LI><A name=3Dabstract_declarator>abstract_declarator</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#ptr_operat=
+or">ptr_operator</A>=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#abstract_d=
+eclarator">abstract_declarator</A>)|=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#abstract_d=
+eclarator">abstract_declarator</A>)=20
+    ( "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#argument_d=
+eclaration_list">argument_declaration_list</A>")"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#const_or_v=
+olatile">const_or_volatile</A>=20
+    | "[" O(constant_expression)"]" | "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#abstract_d=
+eclarator">abstract_declarator</A>=20
+    ")".=20
+    <P></P>
+    <LI><A=20
+    =
+name=3Dargument_declaration_list>argument_declaration_list</A>::=3DO(arg_=
+declaration_list)=20
+    (O("...") | O( "," "...") ).=20
+    <P></P>
+    <LI><A=20
+    =
+name=3Darg_decalration_list>arg_decalration_list</A>::=3DList(argument_de=
+claration).=20
+
+    <P></P>
+    <LI><A name=3Darg_decalarion>arg_decalarion</A>::=3D decl_specifiers =
+( <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+">declarator</A>=20
+    O("=3D" expression) | O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#abstract_d=
+eclarator">abstract_declarator</A>)O("=3D"=20
+    expression)).=20
+    <P></P>
+    <LI><A name=3Dfct_body>fct_body</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#compound_s=
+tatement">compound_statement</A>.=20
+
+    <P></P>
+    <LI><A name=3Dinitializer>initializer</A>::=3D "=3D" ( =
+assignemnt_expression | "{"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#initialize=
+r_list">initializer_list</A>=20
+    O(comma) "}") "(" expression_list ")".=20
+    <P></P>
+    <LI><A name=3Dinitializer_list>initializer_list</A>::=3D=20
+    List(assignment_expression) | "{" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#initialize=
+r_list">initializer_list</A>=20
+    O(comma) "}".=20
+    <P>
+    <P><A name=3D"Class Declarations">
+    <H2>Class Declarations</H2></A><A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#class_spec=
+ifier">class_specifier</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#class_head=
+">class_head</A>=20
+    "{" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_lis=
+t">member_list</A>=20
+    "}".=20
+    <P><A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_dec=
+laration">member_declaration</A>::=3D=20
+    qualified_name ";" | function_definition O(";") | O(decl_specifiers) =
+
+    O(List(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#member_dec=
+larator">member_declarator</A>)).=20
+
+    <P></P>
+    <LI><A name=3Dbase_spec>base_spec</A>::=3D colon List(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#base_speci=
+fier">base_specifier</A>).=20
+
+    <P></P>
+    <LI><A name=3Dconversion_type_name>conversion_type_name</A>::=3DN(<A =
+
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_speci=
+fier">type_specifier</A>)=20
+    O(ptr-<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#operator">=
+operator</A>).=20
+
+    <LI><A name=3Dtype_specifier_list>type_specifier_list</A>::=3DN(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_speci=
+fier">type_specifier</A>).=20
+
+    <P></P>
+    <LI><A name=3Dctor>ctor</A>::=3Dconstructor.=20
+    <LI><A name=3Dmem>mem</A>::=3Dmember.=20
+    <LI><A name=3Dctor_initializer>ctor_initializer</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#constructo=
+r_initializer">constructor_initializer</A>::=3Dcolon=20
+    member_initializer_list.=20
+    <LI><A=20
+    =
+name=3Dmem_initializer_list>mem_initializer_list</A>::=3Dmember_initializ=
+er_list::=3DList(member_initializer).=20
+
+    <LI><A=20
+    =
+name=3Dmem_initializer>mem_initializer</A>::=3Dmember_initializer::=3D(co=
+mplete_class_name=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>)=20
+    "(" O(List(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#expression=
+">expression</A>))=20
+    ")".=20
+    <P></P>
+    <LI><A name=3Doperator>operator</A>::lexeme=3D "<A =
+name=3Dnew>new</A>" | "delete"=20
+    | "+" | "-" | "*" | "/" | "%" | "^" | "&amp;" | "~" | "!" | "=3D" | =
+"&lt;" |=20
+    "&gt;" | "+=3D" | "-=3D" | "*=3D" | "/=3D" | "%=3D" | "^=3D" | =
+"|=3D" | "&lt;&lt;" |=20
+    "&gt;&gt;" | "&lt;&lt;=3D" | "&gt;&gt;=3D" | "=3D=3D" | "++" | "--" =
+| "," | "-&gt;*"=20
+    | "!=3D" | "&lt;=3D" | "&gt;=3D" |"-&gt;" | "()" | "[]" .=20
+    <P>
+    <P><A name=3DStatements>
+    <H2>Statements</H2></A>
+    <P></P>
+    <LI><A name=3Dstatement>statement</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>.<=
+A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#statement"=
+>statement</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n_statement">declaration_statement</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#try_block"=
+>try_block</A>.=20
+
+    <LI><A name=3Dif_statement>if_statement</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#C">C</A>.i=
+f_statement.=20
+
+    <P>
+    <P></P>
+    <LI><A name=3Dcompound_statement>compound_statement</A>::=3D"{" #<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#statement"=
+>statement</A>=20
+    "}".=20
+    <P></P>
+    <LI><A name=3Dblock>block</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#compound_s=
+tatement">compound_statement</A>=20
+    &amp; <SPAN class=3DInlineFormula>with at least one <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n">declaration</A>=20
+    statemnt</SPAN>.=20
+    <P></P>
+    <LI><A name=3Ddeclaration_statement>declaration_statement</A>::=3D =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n">declaration</A>.=20
+
+    <P></P>
+    <LI><A name=3Dfor_init_statement>for_init_statement</A>::=3D=20
+    expression_statement | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n_statement">declaration_statement</A>.=20
+
+    <P></P>
+    <LI><A =
+name=3Diteration_statement>iteration_statement</A>::=3D"while" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#expression=
+">expression</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#statement"=
+>statement</A>=20
+    | "do" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#statement"=
+>statement</A>=20
+    "while" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#expression=
+">expression</A>=20
+    ")" ";" | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#for_statem=
+ent">for_statement</A>.=20
+
+    <P></P>
+    <LI><A name=3Dfor_statement>for_statement</A>::=3D"for" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#for_init_s=
+tatement">for_init_statement</A>=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#expression=
+">expression</A>)=20
+    ";" O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#expression=
+">expression</A>)=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#statement"=
+>statement</A>.=20
+    -- thanks to Ben Evans for pointing out a typographical error here.=20
+    <P><A name=3DTemplates>
+    <H2>Templates</H2></A>
+    <LI><A name=3Dtemplate_declaration>template_declaration</A>::=3D =
+"template"=20
+    "&lt;" List(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#template_a=
+rgument">template_argument</A>)=20
+    "&gt;" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n">declaration</A>.=20
+
+    <P></P>
+    <LI><A name=3Dtemplate_argument>template_argument</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_argum=
+ent">type_argument</A>=20
+    | argument_deeclaration.=20
+    <P></P>
+    <LI><A name=3Dtype_argument>type_argument</A>::=3D"class" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>.=20
+
+    <P></P>
+    <LI><A name=3Dtemplate_clase_name>template_clase_name</A>::=3D =
+template_name=20
+    "&lt;" List(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#template_a=
+rg">template_arg</A>)=20
+    "&gt;".=20
+    <P></P>
+    <LI><A name=3Dtemplate_arg>template_arg</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#expression=
+">expression</A>|=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_name"=
+>type_name</A>.=20
+
+    <P>.Exception Handling=20
+    <P></P>
+    <LI><A name=3Dtry_block>try_block</A>::=3D "try" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#compound_s=
+tatement">compound_statement</A>=20
+    #<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#handler">h=
+andler</A>.=20
+
+    <P></P>
+    <LI><A name=3Dhandler>handler</A>::=3D "catch" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#exception_=
+declaration">exception_declaration</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#compound_s=
+tatement">compound_statement</A>.=20
+
+    <P></P>
+    <LI><A name=3Dexception_declaration>exception_declaration</A>::=3D =
+"..." | N(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#type_speci=
+fier">type_specifier</A>)=20
+    O(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declarator=
+">declarator</A>=20
+    | abstarct_declarator).=20
+    <P></P>
+    <LI><A name=3Dthrow_expression>throw_expression</A>::=3D "throw"=20
+    O(assignment_expression).=20
+    <P></P>
+    <LI><A =
+name=3Dexception_specification>exception_specification</A>::=3D "throw"=20
+    "(" List(type) ")".=20
+    <P>... <A name=3DNamespaces:>
+    =
+<H2>Namespaces:</H2></A><CITE>//ftp.std.com/AW/strousetroup2e/iso.ps</CIT=
+E>=20
+    A mechanism, called namespaces, was introduced for controlling the =
+scope of=20
+    otherwise global names.=20
+    <P>The grammar for the namespace constructs is: </P>
+    <LI><A =
+name=3Dnamespace_definition>namespace_definition</A>::=3D"namespace" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    "{" O( <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#declaratio=
+n_list">declaration_list</A>)=20
+    "}".=20
+    <P></P>
+    <LI><A =
+name=3Dnamespace_alias_definition>namespace_alias_definition</A>::=3D=20
+    "namespace" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    "=3D" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#namespace_=
+name">namespace_name</A>=20
+    ";".=20
+    <P></P>
+    <LI><A name=3Dusing_declaration>using_declaration</A>::=3D "using" =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#namespace_=
+name">namespace_name</A>=20
+    "::" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    ";".=20
+    <P></P>
+    <LI><A name=3Dusing_directive>using_directive</A>::=3D "using" =
+"namespace" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#namespace_=
+name">namespace_name</A>=20
+    ";".=20
+    <P></P>
+    <LI><A name=3Dnamespace_name>namespace_name</A>::=3D O("::") #( <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    "::" ) <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>.=20
+
+    <P>An <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    in a <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#namespace_=
+name">namespace_name</A>=20
+    must have been specified to refer to a namespace by being the <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#identifier=
+">identifier</A>=20
+    in a <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#namespace_=
+definition">namespace_definition</A>=20
+    or a <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#namespace_=
+alias_definition">namespace_alias_definition</A>.=20
+
+    <P></P></LI></OL>
+  <P>. . . . . . . . . ( end of section <A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#The =
+Syntax of C++">The=20
+  Syntax of C++</A>) <A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#Contents">=
+&lt;&lt;</A>Contents=20
+  | End<A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#__End">&gt=
+;&gt;</A>=20
+  </P></OL><A name=3D__End>
+<H3>End</H3></A></BODY></HTML>
