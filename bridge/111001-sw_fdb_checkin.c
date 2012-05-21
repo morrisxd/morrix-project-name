@@ -605,6 +605,11 @@ WP_iw_agg_bridging br_agg_gbe[1] =
    {
       /*tag*/ 2,
       /*txfunc*/ 0,
+#if 0
+      // wp_iw.h
+      // line: 03001
+#define input_bport	iw_port
+#endif
       /*input_bport*/0,
       /*rfcs*/WP_IW_RFCS_ENABLE,
       /*l2_header_insert_mode;*/WP_IW_L2H_INSERT_DISABLE,
@@ -3877,7 +3882,7 @@ static void WPE_PortsCreate(WP_handle iw_sys, WP_handle *iwport, WP_U32 max_mac_
    WP_status status;
      
    iwhost_bport_config->flow_agg = default_agg;
-   bport_host = WP_IwPortCreate(iw_sys, &iwhost_bport_config[0]);
+   bport_host = WP_IwPortCreate(iw_sys, &iwhost_bport_config[0]);// direct map
    terminate_on_error(bport_host," WP_IwPortCreate()",__LINE__);
 
    br_agg_gbe->input_bport = bport_host;
@@ -3890,7 +3895,7 @@ static void WPE_PortsCreate(WP_handle iw_sys, WP_handle *iwport, WP_U32 max_mac_
    bport_conf.tag = 0;
    bport_conf.max_mac_addresses = max_mac_addresses;
    
-   *iwport = WP_IwPortCreate(iw_sys, &bport_conf);
+   *iwport = WP_IwPortCreate(iw_sys, &bport_conf);// direct map
    terminate_on_error(*iwport, "WP_IwPortCreate ",__LINE__);
 }
 
@@ -4923,8 +4928,8 @@ static void WPE_CreateDlPceInterface(WP_handle iw_sys)
    WP_handle pce_if_handle;
    WP_status status;
 
-   WPE_CreateDlPceFilters();
-   WPE_CreateDlPceFilterSets();
+   WPE_CreateDlPceFilters();	// create PCE_filter[A,B,C,D,E_forwareding/leaning] here
+   WPE_CreateDlPceFilterSets();	// create dl_filter_set[a,c,d,e] here
 
    pce_if_params.mode = WP_PCE_IW_PORT_CONNECTION_ENABLED;
    pce_if_params.parser_start_type = WP_PCE_PARSER_START_TYPE_ETHERNET;
