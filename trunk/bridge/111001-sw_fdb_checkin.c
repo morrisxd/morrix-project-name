@@ -2655,8 +2655,23 @@ void CLI_CreateTest(void)
    status = WPU_DebugEventGroupLoad(WP_WINPATH(DEFAULT_WPID),-1,"IWGP_LOCKS");
    terminate_on_error(status, "WPU_DebugEventGroupLoad",__LINE__);
 
+
+
+/*---------------------------------------*\
+	morris
+		: gbe1_rx_ch_handle/gbe1_tx_ch_handle
+		: rx_host_handle
+\*---------------------------------------*/
    WPE_ChannelsCreate();
 
+
+
+
+
+/*---------------------------------------*\
+	morris
+		: default_agg
+\*---------------------------------------*/
    br_agg_gbe->txfunc = rx_host_handle;
    default_agg =  WP_IwFlowAggregationCreate(WP_WINPATH(DEFAULT_WPID),
                                              WP_IW_VLAN_AWARE_BRIDGING_MODE,
@@ -2672,10 +2687,25 @@ void CLI_CreateTest(void)
       terminate_on_error(flow_agg[i], "WP_IwFlowAggregationCreate()",__LINE__);
    }
    
+/*---------------------------------------*\
+	morris
+		: IW system
+\*---------------------------------------*/
    /* Create Generic IW system */
    dl_general_iwsys_bridge = WP_IwSystemCreate(WP_WINPATH(DEFAULT_WPID), WP_IW_VLAN_AWARE_BRIDGING_MODE, &iw_sys_bridging[0]);
    terminate_on_error(dl_general_iwsys_bridge, "WP_IwSystemCreate",__LINE__);
 
+
+
+
+
+/*---------------------------------------*\
+	morris
+	IW port create
+		: h_iw_output_port
+		: h_iw_output_port_b
+		: h_iw_port_next_round
+\*---------------------------------------*/
    /* create output IW Ports */
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_output_port, 300);
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_output_port_b, 300);
@@ -2683,6 +2713,25 @@ void CLI_CreateTest(void)
    /* Create next round IW port */
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_port_next_round, 300);
 
+
+
+
+
+/*---------------------------------------*\
+	total 12 IW systems
+		dl_iwsys_bridge[0]
+		dl_iwsys_bridge[1]
+		dl_iwsys_bridge[2]
+		dl_iwsys_bridge[3]
+		dl_iwsys_bridge[4]
+		dl_iwsys_bridge[5]
+		dl_iwsys_bridge[6]
+		dl_iwsys_bridge[7]
+		dl_iwsys_bridge[8]
+		dl_iwsys_bridge[9]
+		dl_iwsys_bridge[10]
+		dl_iwsys_bridge[11]
+\*---------------------------------------*/
    /* Create IW systems */
    for(i=0; i<NUM_OF_INPUT_PORT_PER_FILTER_SET; i++)
    {
@@ -2690,13 +2739,41 @@ void CLI_CreateTest(void)
       terminate_on_error(dl_iwsys_bridge[i], "WP_IwSystemCreate",__LINE__);
    }
    
+
+
+
+
+/*---------------------------------------*\
+	total = 5 * 12 = 60
+		: h_iw_port_gbe[0]
+		: h_iw_port_gbe[1]
+		: h_iw_port_gbe[2]
+		: h_iw_port_gbe[3]
+		: h_iw_port_gbe[4]
+		: h_iw_port_gbe[5]
+		: h_iw_port_gbe[6]
+		: h_iw_port_gbe[7]
+		: h_iw_port_gbe[8]
+		: h_iw_port_gbe[9]
+			...
+			...
+			...
+		: h_iw_port_gbe[59]
+\*---------------------------------------*/
    /* create Input IW Ports */
-   for(i=0; i<(FILTER_SET_COUNT * NUM_OF_INPUT_PORT_PER_FILTER_SET); i++)
+   for(i=0; i<(FILTER_SET_COUNT/*5*/ * NUM_OF_INPUT_PORT_PER_FILTER_SET/*12*/); i++)
    {
       max_mac_addresses = NUM_OF_RULES_PER_FILTER_SET;
       WPE_PortsCreate(dl_iwsys_bridge[(i%2)], &h_iw_port_gbe[i], max_mac_addresses);
    }
 
+
+
+
+/*---------------------------------------*\
+	1 iw system:
+			h_iw_port_general
+\*---------------------------------------*/
    /* Create General IW port */
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_port_general, 300);
    WPE_DlRxBindingCreate(dl_general_iwsys_bridge);
@@ -3266,6 +3343,13 @@ static void WPE_LayerTwoSystemCreate(void)
    qn_iw->adjunct_pool = pool_2048;
    qniw = WP_QNodeCreate(WP_WINPATH(DEFAULT_WPID),WP_QNODE_IWQ| WP_QNODE_OPT_FMU, qn_iw);
    terminate_on_error(qniw, "WP_QNodeCreate() qniw",__LINE__);
+
+
+/*---------------------------------------*\
+	port & devices create
+	port/devie: 		
+		iwp1/devhost, gbe_port1/gbe_dev1
+\*---------------------------------------*/
 
    /* Create an IW Host port */
    iwp1 = WP_PortCreate(WP_WINPATH(DEFAULT_WPID), WP_PORT_IW_HOST, NULL);
