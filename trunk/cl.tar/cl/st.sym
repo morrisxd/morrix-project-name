@@ -1,0 +1,59 @@
+Variable Name  Location  Domain         Line Numbers
+-------------- --------  -------------- ------------
+           (n)      +13          (funA)         +130 
+           (n)      +25       (funcAAA)         +126         +126 
+           (n)      +21    (block_test)         +116         +116 
+           (n)      +17           (foo)          +65 
+       (pm_us)      +15                          +23 
+          (f1)       +6                          +10 
+           (p)      +23           (bar)         +110 
+         (foo)       +7      (findProc)          +58 
+  (block_test)      +14                         +116 
+    (tablePtr)      +44      (findProc)          +44          +44 
+         (USI)      +15            (f1)          +10          +10 
+       (arra2)      +17           (foo)          +61          +61          +61 
+           (f)      +19           (bar)         +107         +107 
+           (f)      +15                          +36          +41 
+           (f)      +46            (f1)          +10          +10 
+       (myusi)       +9                           +8 
+     (g_array)      +11      (findProc)          +56          +56 
+         (us1)      +12                          +24 
+      (g_sigh)      +10                         +104 
+         (ppp)       +8      (findProc)          +48 
+         (us2)      +12                          +28 
+          (id)      +15           (foo)          +58          +58 
+           (i)      +21    (block_test)         +119 
+           (i)      +13           (bar)         +109 
+           (i)      +13           (foo)          +62 
+           (i)      +13                          +35          +40 
+          (ch)      +37            (f1)          +10          +10 
+         (age)      +17          (funA)         +128         +128 
+         (age)      +32                          +27          +27 
+     (funcAAA)      +18                         +126 
+           (j)      +13           (foo)          +63 
+     (ppppppp)      +16                          +18 
+         (bar)      +10                         +107 
+           (k)      +13           (foo)          +64 
+        (page)      +10                           +3 
+          (u8)       +8                          +31 
+    (findProc)      +15                          +44 
+        (funA)       +8       (funcAAA)         +128 
+           (l)      +13           (foo)          +65 
+         (key)      +62      (findProc)          +44          +44 
+       (local)      +17           (foo)          +60          +60 
+        (name)      +30          (funA)         +128         +128 
+          (u9)       +9                          +32 
+        (name)      +28            (f1)          +10          +10 
+           (m)      +15           (foo)          +65 
+
+Typedef  Name  Location  Domain         Line Numbers
+-------------- --------  -------------- ------------
+     (FUNCPTR)      +21                          +26 
+      (pencil)      +18                          +17 
+       (UINT8)      +27                          +30 
+         (myp)       +4                          +42 
+         (USI)      +30                           +5 
+    (FUNCPTR2)      +22                          +27 
+        (mypp)      +17      (findProc)          +47 
+     (pencil2)      +20                          +21 
+    (ushort_t)      +35                           +6 
