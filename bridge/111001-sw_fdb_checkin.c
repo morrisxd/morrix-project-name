@@ -2670,7 +2670,7 @@ void CLI_CreateTest(void)
 
 /*---------------------------------------*\
 	morris
-		: default_agg
+		: default_agg	==> rx_host_handle
 \*---------------------------------------*/
    br_agg_gbe->txfunc = rx_host_handle;
    default_agg =  WP_IwFlowAggregationCreate(WP_WINPATH(DEFAULT_WPID),
@@ -2678,8 +2678,16 @@ void CLI_CreateTest(void)
                                              &br_agg_gbe[0]);
    terminate_on_error(default_agg, "WP_IwFlowAggregationCreate()",__LINE__);
 
+/*---------------------------------------*\
+ * 	morris
+ * 		:flow_agg[0]	==>
+ * 		:flow_agg[1]	==>
+ * 		:flow_agg[2]	==> rx_host_handle
+ * 		:flow_agg[3]	==>
+ * 		:flow_agg[4]	==>
+\*---------------------------------------*/
    br_agg_gbe->txfunc = rx_host_handle;
-   for (i=0; i<FLOW_AGG_COUNT; i++)
+   for (i=0; i<FLOW_AGG_COUNT/*5*/; i++)
    {
       flow_agg[i] =  WP_IwFlowAggregationCreate(WP_WINPATH(DEFAULT_WPID),
                                                 WP_IW_VLAN_AWARE_BRIDGING_MODE,
@@ -2690,6 +2698,7 @@ void CLI_CreateTest(void)
 /*---------------------------------------*\
 	morris
 		: IW system
+		dl_general_iwsys_bridge
 \*---------------------------------------*/
    /* Create Generic IW system */
    dl_general_iwsys_bridge = WP_IwSystemCreate(WP_WINPATH(DEFAULT_WPID), WP_IW_VLAN_AWARE_BRIDGING_MODE, &iw_sys_bridging[0]);
@@ -2702,9 +2711,9 @@ void CLI_CreateTest(void)
 /*---------------------------------------*\
 	morris
 	IW port create
-		: h_iw_output_port
-		: h_iw_output_port_b
-		: h_iw_port_next_round
+		: h_iw_output_port	<==>
+		: h_iw_output_port_b	<==> dl_general_iwsys_bridge
+		: h_iw_port_next_round	<==>
 \*---------------------------------------*/
    /* create output IW Ports */
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_output_port, 300);
@@ -2735,18 +2744,18 @@ void CLI_CreateTest(void)
 
 /*---------------------------------------*\
 	total = 5 * 2 = 10
-		: h_iw_port_gbe[0]
-		: h_iw_port_gbe[2]
+		: h_iw_port_gbe[0]	===> 
+		: h_iw_port_gbe[2]	===> 
 		: h_iw_port_gbe[4] 	===> dl_iwsys_bridge[0]
-		: h_iw_port_gbe[6]
-		: h_iw_port_gbe[8]
+		: h_iw_port_gbe[6]	===> 
+		: h_iw_port_gbe[8]	===> 
 
 
-		: h_iw_port_gbe[1]
-		: h_iw_port_gbe[3]
+		: h_iw_port_gbe[1]	===> 
+		: h_iw_port_gbe[3]	===> 
 		: h_iw_port_gbe[5]	===> dl_iwsys_bridge[1]
-		: h_iw_port_gbe[7]
-		: h_iw_port_gbe[9]
+		: h_iw_port_gbe[7]	===> 
+		: h_iw_port_gbe[9]	===> 
 \*---------------------------------------*/
    /* create Input IW Ports */
    for(i=0; i<(FILTER_SET_COUNT/*5*/ * NUM_OF_INPUT_PORT_PER_FILTER_SET/*2*/); i++)
@@ -2759,8 +2768,7 @@ void CLI_CreateTest(void)
 
 
 /*---------------------------------------*\
-	1 iw system:
-			h_iw_port_general
+	h_iw_port_general <==> dl_general_iwsys_bridge
 \*---------------------------------------*/
    /* Create General IW port */
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_port_general, 300);
