@@ -5,19 +5,20 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.6	//
 API_DIR	makefile	/^API_DIR = $(WDDI_DIR)$(WDDI_SOURCES)\/api$/;"	m
-APP_HOST_BUFFER_SIZE	111001-sw_fdb_checkin.c	194;"	d	file:
-APP_HOST_BUFFER_SIZE	111002-sw_fdb_system_test.c	312;"	d	file:
+APP_HOST_BUFFER_SIZE	111001-sw_fdb_checkin.c	195;"	d	file:
+APP_HOST_BUFFER_SIZE	111002-sw_fdb_system_test.c	313;"	d	file:
 BIN_DIR	makefile	/^BIN_DIR = $(TEST_DIR)\/bin$/;"	m
 BOARD_DIR	makefile	/^BOARD_DIR = $(WDDI_DIR)\/board\/$(WPI_BOARD)_$(HW_DEVICE)$/;"	m
 BOARD_LIB	makefile	/^BOARD_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_board.a$/;"	m
-BUFFER_BANK	111001-sw_fdb_checkin.c	176;"	d	file:
-BUFFER_BANK	111001-sw_fdb_checkin.c	180;"	d	file:
-BUFFER_BANK	111002-sw_fdb_system_test.c	286;"	d	file:
-BUFFER_BANK	111002-sw_fdb_system_test.c	289;"	d	file:
-BUFFER_BUS	111001-sw_fdb_checkin.c	175;"	d	file:
-BUFFER_BUS	111001-sw_fdb_checkin.c	179;"	d	file:
-BUFFER_BUS	111002-sw_fdb_system_test.c	285;"	d	file:
-BUFFER_BUS	111002-sw_fdb_system_test.c	288;"	d	file:
+BOARD_WDS_COMMON_DIR	makefile	/^BOARD_WDS_COMMON_DIR = $(WDDI_DIR)\/board\/wds_common$/;"	m
+BUFFER_BANK	111001-sw_fdb_checkin.c	177;"	d	file:
+BUFFER_BANK	111001-sw_fdb_checkin.c	181;"	d	file:
+BUFFER_BANK	111002-sw_fdb_system_test.c	287;"	d	file:
+BUFFER_BANK	111002-sw_fdb_system_test.c	290;"	d	file:
+BUFFER_BUS	111001-sw_fdb_checkin.c	176;"	d	file:
+BUFFER_BUS	111001-sw_fdb_checkin.c	180;"	d	file:
+BUFFER_BUS	111002-sw_fdb_system_test.c	286;"	d	file:
+BUFFER_BUS	111002-sw_fdb_system_test.c	289;"	d	file:
 CLI_CheckFwdFilterStatistics	111001-sw_fdb_checkin.c	/^void CLI_CheckFwdFilterStatistics(WP_U32 expected_default_fa_count,$/;"	f
 CLI_CheckLearningEvents	111001-sw_fdb_checkin.c	/^void CLI_CheckLearningEvents(WP_U32 expected_edp, WP_U32 expected_learnt_count, WP_U32 err_line)$/;"	f
 CLI_CheckStatisticsMatched	111001-sw_fdb_checkin.c	/^void CLI_CheckStatisticsMatched(WP_U32 excpected_class_fa_count, $/;"	f
@@ -54,11 +55,13 @@ CLI_StatMenu	111002-sw_fdb_system_test.c	/^void CLI_StatMenu(void)$/;"	f
 Checked	111001-sw_fdb_checkin.c	/^WP_U32 Checked = WP_FALSE;$/;"	v
 DEBUG	111001-sw_fdb_checkin.c	57;"	d	file:
 DEBUG	111002-sw_fdb_system_test.c	61;"	d	file:
+DEFAULT_WPID	111001-sw_fdb_checkin.c	58;"	d	file:
+DEFAULT_WPID	111002-sw_fdb_system_test.c	62;"	d	file:
 DEFINE_WEB	makefile	/^DEFINE_WEB = -DWEB$/;"	m
 DPS_IMAGE_NAME	makefile	/^DPS_IMAGE_NAME  = wpi_dps_image_backhaul$/;"	m
 DPS_IMAGE_OBJ	makefile	/^DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/$(DPS_IMAGE_NAME).o$/;"	m
-ENET_PORT	111001-sw_fdb_checkin.c	177;"	d	file:
-ENET_PORT	111001-sw_fdb_checkin.c	181;"	d	file:
+ENET_PORT	111001-sw_fdb_checkin.c	178;"	d	file:
+ENET_PORT	111001-sw_fdb_checkin.c	182;"	d	file:
 FALSE	wt_sw_fdb_misc.h	2;"	d
 FILTER_SET_A	111001-sw_fdb_checkin.c	/^   FILTER_SET_A = 0,$/;"	e	enum:filter_sets	file:
 FILTER_SET_A	111002-sw_fdb_system_test.c	/^   FILTER_SET_A = 0,$/;"	e	enum:filter_sets	file:
@@ -113,31 +116,31 @@ FLOW_AGG_COUNT	111001-sw_fdb_checkin.c	/^   FLOW_AGG_COUNT,$/;"	e	enum:flow_aggs
 FLOW_AGG_COUNT	111002-sw_fdb_system_test.c	/^   FLOW_AGG_COUNT,$/;"	e	enum:flow_aggs	file:
 F_MyAppIndicateEventIwgpLearning	111002-sw_fdb_system_test.c	/^static void F_MyAppIndicateEventIwgpLearning(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
 HW_DEVICE	makefile	/^HW_DEVICE       = winpath3$/;"	m
-INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \\$/;"	m
-IW_SYS_MAX_BPORTS	111001-sw_fdb_checkin.c	138;"	d	file:
-IW_SYS_MAX_BPORTS	111002-sw_fdb_system_test.c	252;"	d	file:
+INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(BOARD_WDS_COMMON_DIR) -I$(WINUTIL_DIR) \\$/;"	m
+IW_SYS_MAX_BPORTS	111001-sw_fdb_checkin.c	139;"	d	file:
+IW_SYS_MAX_BPORTS	111002-sw_fdb_system_test.c	253;"	d	file:
 LDFLAGS2	makefile	/^LDFLAGS2	= -lpthread$/;"	m
-LEARNING_QUEUE_SIZE	111001-sw_fdb_checkin.c	137;"	d	file:
-LEARNING_QUEUE_SIZE	111002-sw_fdb_system_test.c	251;"	d	file:
-MAX_DATA_LENGTH	111001-sw_fdb_checkin.c	193;"	d	file:
-MAX_DATA_LENGTH	111002-sw_fdb_system_test.c	311;"	d	file:
-MAX_FLOW_AGG	111001-sw_fdb_checkin.c	146;"	d	file:
-MAX_FLOW_AGG	111002-sw_fdb_system_test.c	260;"	d	file:
-MAX_IW_POLICERS	111001-sw_fdb_checkin.c	145;"	d	file:
-MAX_IW_POLICERS	111002-sw_fdb_system_test.c	259;"	d	file:
-MAX_IW_PROGRAMMABLE_FILTERS	111001-sw_fdb_checkin.c	148;"	d	file:
-MAX_IW_PROGRAMMABLE_FILTERS	111002-sw_fdb_system_test.c	262;"	d	file:
-MAX_NUM_OF_CHANNELS	111001-sw_fdb_checkin.c	151;"	d	file:
-MAX_NUM_OF_CHANNELS	111002-sw_fdb_system_test.c	265;"	d	file:
-NUM_OF_FLOWS	111001-sw_fdb_checkin.c	155;"	d	file:
-NUM_OF_INPUT_PORT_PER_FILTER_SET	111001-sw_fdb_checkin.c	154;"	d	file:
-NUM_OF_INPUT_PORT_PER_FILTER_SET	111002-sw_fdb_system_test.c	267;"	d	file:
-NUM_OF_PCE_FILTERS	111001-sw_fdb_checkin.c	135;"	d	file:
-NUM_OF_PCE_FILTERS	111002-sw_fdb_system_test.c	249;"	d	file:
-NUM_OF_PECS	111002-sw_fdb_system_test.c	146;"	d	file:
-NUM_OF_PECS_GLOBAL_INFO	111002-sw_fdb_system_test.c	147;"	d	file:
-NUM_OF_REQUIRED_LEARNING_RULES	111002-sw_fdb_system_test.c	292;"	d	file:
-NUM_OF_RULES_PER_FILTER_SET	111001-sw_fdb_checkin.c	153;"	d	file:
+LEARNING_QUEUE_SIZE	111001-sw_fdb_checkin.c	138;"	d	file:
+LEARNING_QUEUE_SIZE	111002-sw_fdb_system_test.c	252;"	d	file:
+MAX_DATA_LENGTH	111001-sw_fdb_checkin.c	194;"	d	file:
+MAX_DATA_LENGTH	111002-sw_fdb_system_test.c	312;"	d	file:
+MAX_FLOW_AGG	111001-sw_fdb_checkin.c	147;"	d	file:
+MAX_FLOW_AGG	111002-sw_fdb_system_test.c	261;"	d	file:
+MAX_IW_POLICERS	111001-sw_fdb_checkin.c	146;"	d	file:
+MAX_IW_POLICERS	111002-sw_fdb_system_test.c	260;"	d	file:
+MAX_IW_PROGRAMMABLE_FILTERS	111001-sw_fdb_checkin.c	149;"	d	file:
+MAX_IW_PROGRAMMABLE_FILTERS	111002-sw_fdb_system_test.c	263;"	d	file:
+MAX_NUM_OF_CHANNELS	111001-sw_fdb_checkin.c	152;"	d	file:
+MAX_NUM_OF_CHANNELS	111002-sw_fdb_system_test.c	266;"	d	file:
+NUM_OF_FLOWS	111001-sw_fdb_checkin.c	156;"	d	file:
+NUM_OF_INPUT_PORT_PER_FILTER_SET	111001-sw_fdb_checkin.c	155;"	d	file:
+NUM_OF_INPUT_PORT_PER_FILTER_SET	111002-sw_fdb_system_test.c	268;"	d	file:
+NUM_OF_PCE_FILTERS	111001-sw_fdb_checkin.c	136;"	d	file:
+NUM_OF_PCE_FILTERS	111002-sw_fdb_system_test.c	250;"	d	file:
+NUM_OF_PECS	111002-sw_fdb_system_test.c	147;"	d	file:
+NUM_OF_PECS_GLOBAL_INFO	111002-sw_fdb_system_test.c	148;"	d	file:
+NUM_OF_REQUIRED_LEARNING_RULES	111002-sw_fdb_system_test.c	293;"	d	file:
+NUM_OF_RULES_PER_FILTER_SET	111001-sw_fdb_checkin.c	154;"	d	file:
 OBJ_DIR	makefile	/^OBJ_DIR = $(TEST_DIR)\/bin$/;"	m
 PCE_dummy_rule_handle	111001-sw_fdb_checkin.c	/^WP_handle PCE_dummy_rule_handle[1000];$/;"	v
 PCE_dummy_rule_handle	111002-sw_fdb_system_test.c	/^WP_handle PCE_dummy_rule_handle[32000];$/;"	v
@@ -147,9 +150,8 @@ PCE_rule_handle	111001-sw_fdb_checkin.c	/^WP_handle PCE_rule_handle[256*1024];$/
 PCE_rule_handle	111002-sw_fdb_system_test.c	/^WP_handle PCE_rule_handle[300*1024];$/;"	v
 PHY_BOARD_LIB_DIR	makefile	/^PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)\/$(WPI_BOARD)\/lib$/;"	m
 PHY_DIR	makefile	/^PHY_DIR = $(WDDI_DIR)\/phy$/;"	m
-PHY_LIB	makefile	/^PHY_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_phy.a$/;"	m
-POOL_LIMIT	111001-sw_fdb_checkin.c	147;"	d	file:
-POOL_LIMIT	111002-sw_fdb_system_test.c	261;"	d	file:
+POOL_LIMIT	111001-sw_fdb_checkin.c	148;"	d	file:
+POOL_LIMIT	111002-sw_fdb_system_test.c	262;"	d	file:
 PacketDataUnitSetup	111001-sw_fdb_checkin.c	/^void PacketDataUnitSetup(WP_data_unit *data_unit,$/;"	f
 PrepareExpectedData	111001-sw_fdb_checkin.c	/^void PrepareExpectedData(WP_U8 *expected_data,$/;"	f
 QNCallback	111001-sw_fdb_checkin.c	/^WP_S32 QNCallback(WP_S32 status) {$/;"	f
@@ -193,11 +195,10 @@ Traffic_Table	111001-sw_fdb_checkin.c	/^static WP_U32 Traffic_Table[FILTER_SET_C
 UFE4_EVENTS_OBJ	makefile	/^UFE4_EVENTS_OBJ = $(WPI_UFE4_OBJ)\/wufei_events.o$/;"	m
 UFE4_FPGA_DIR	makefile	/^UFE4_FPGA_DIR = $(WPX_UFE_DIR)\/fpga\/ufe4$/;"	m
 UFE_API_DIR	makefile	/^UFE_API_DIR = $(WPX_UFE_DIR)\/api$/;"	m
-UFE_DIR	makefile	/^UFE_DIR = $(WDDI_DIR)\/phy\/wpx_ufe$/;"	m
-UFE_FRAMER_DIR	makefile	/^UFE_FRAMER_DIR = $(UFE_DIR)\/wpx_frmr\/flexmux$/;"	m
-UFE_FRAMER_INC	makefile	/^UFE_FRAMER_INC = -I$(UFE_FRMR_DIR)\/flexmux -I$(UFE_FRMR_DIR) -I$(UFE_FRMR_FLEXMUX_DIR) -I$(UFE_FRMR_FLEXMUX_DIR)\/common\/inc -I$(UFE_FRMR_FLEXMUX_DIR)\/library\/00_api_layer\/inc -I$(UFE_FRMR_FLEXMUX_DIR)\/library\/04_low_level_comms_layer\/inc$/;"	m
+UFE_DIR	makefile	/^UFE_DIR = $(WPI_WDDS_DIR)\/ufe$/;"	m
+UFE_FRAMER_DIR	makefile	/^UFE_FRAMER_DIR = $(WPX_UFE_DIR)\/wpx_frmr\/device_driver$/;"	m
+UFE_FRAMER_INC	makefile	/^UFE_FRAMER_INC = -I$(UFE_FRAMER_DIR) -I$(UFE_FRAMER_DIR)\/library\/00_api_layer\/inc -I$(UFE_FRAMER_DIR)\/library\/04_low_level_comms_layer\/inc -I$(UFE_FRAMER_DIR)\/common\/inc$/;"	m
 UFE_FRAMER_LIB	makefile	/^UFE_FRAMER_LIB = $(UFE_LIB_DIR)\/wpx_phy_ufe_framer.a$/;"	m
-UFE_FRMR_DIR	makefile	/^UFE_FRMR_DIR = $(WPX_UFE_DIR)\/wpx_frmr$/;"	m
 UFE_FRMR_FLEXMUX_DIR	makefile	/^UFE_FRMR_FLEXMUX_DIR = $(UFE_FRMR_DIR)\/device_driver$/;"	m
 UFE_INC	makefile	/^UFE_INC = -I$(UFE_API_DIR) -I$(UFE4_FPGA_DIR)$/;"	m
 UFE_LIB	makefile	/^UFE_LIB = $(UFE_LIB_DIR)\/wpx_ufe.a$/;"	m
@@ -300,7 +301,7 @@ WPI_TEST_CHECK_RESULT	wt_sw_fdb_misc.h	5;"	d
 WPI_T_DIR	makefile	/^WPI_T_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
 WPI_UFE4_DIR	makefile	/^WPI_UFE4_DIR = $(WPI_HTB_DIR)\/$(UFE_TYPE)$/;"	m
 WPI_UFE4_OBJ	makefile	/^WPI_UFE4_OBJ = $(WPI_UFE4_DIR)\/obj$/;"	m
-WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..\/..$/;"	m
+WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..\/..\/..$/;"	m
 WPT_CompatibleFaGetFwPacketsCount	111001-sw_fdb_checkin.c	/^WP_U32 WPT_CompatibleFaGetFwPacketsCount(WP_handle agg)$/;"	f
 WPT_CompatibleFaGetFwPacketsCount	111002-sw_fdb_system_test.c	/^WP_U32 WPT_CompatibleFaGetFwPacketsCount(WP_handle agg)$/;"	f
 WPT_CompatibleFlowStatistics	111001-sw_fdb_checkin.c	/^void WPT_CompatibleFlowStatistics( WP_handle agg)$/;"	f
@@ -322,7 +323,7 @@ WPT_LocalDisplayDeviceStats	111002-sw_fdb_system_test.c	/^WP_U32 WPT_LocalDispla
 WPT_LocalDisplayXgiDeviceStats	111002-sw_fdb_system_test.c	/^WP_U32 WPT_LocalDisplayXgiDeviceStats(WP_handle enet_handle)$/;"	f
 WPT_StatField	111001-sw_fdb_checkin.c	/^} WPT_StatField;$/;"	t	typeref:union:StatField	file:
 WPT_StatField	111002-sw_fdb_system_test.c	/^} WPT_StatField;$/;"	t	typeref:union:StatField	file:
-WPX_UFE_DIR	makefile	/^WPX_UFE_DIR = $(PHY_DIR)\/wpx_ufe$/;"	m
+WPX_UFE_DIR	makefile	/^WPX_UFE_DIR = $(WPI_WDDS_DIR)\/ufe$/;"	m
 WP_AppLog	111001-sw_fdb_checkin.c	/^void WP_AppLog (WP_CHAR *s)$/;"	f
 WP_AppLog	111002-sw_fdb_system_test.c	/^void WP_AppLog (WP_CHAR *s)$/;"	f
 WP_BOARD_NAME	makefile	/^WP_BOARD_NAME=WP_BOARD_WDS3$/;"	m
@@ -334,16 +335,16 @@ WTI_TranslateHexToAscii	111001-sw_fdb_checkin.c	/^void WTI_TranslateHexToAscii(W
 WT_CheckFilterSetModify	111001-sw_fdb_checkin.c	/^static void WT_CheckFilterSetModify(void)$/;"	f	file:
 WT_DeleteLearntRules	111002-sw_fdb_system_test.c	/^void WT_DeleteLearntRules(void)$/;"	f
 WT_FORWARDING_ONLY	111002-sw_fdb_system_test.c	/^   WT_FORWARDING_ONLY = 0,$/;"	e	enum:__anon2	file:
-WT_IPV4_HEADER_SIZE	111001-sw_fdb_checkin.c	140;"	d	file:
-WT_IPV4_HEADER_SIZE	111002-sw_fdb_system_test.c	254;"	d	file:
-WT_L4_HEADER_SIZE	111001-sw_fdb_checkin.c	141;"	d	file:
-WT_L4_HEADER_SIZE	111002-sw_fdb_system_test.c	255;"	d	file:
+WT_IPV4_HEADER_SIZE	111001-sw_fdb_checkin.c	141;"	d	file:
+WT_IPV4_HEADER_SIZE	111002-sw_fdb_system_test.c	255;"	d	file:
+WT_L4_HEADER_SIZE	111001-sw_fdb_checkin.c	142;"	d	file:
+WT_L4_HEADER_SIZE	111002-sw_fdb_system_test.c	256;"	d	file:
 WT_LEARNING_AND_FORWARDING	111002-sw_fdb_system_test.c	/^   WT_LEARNING_AND_FORWARDING,$/;"	e	enum:__anon2	file:
 WT_LEARNING_ONLY	111002-sw_fdb_system_test.c	/^   WT_LEARNING_ONLY,$/;"	e	enum:__anon2	file:
-WT_MAX_FRAME_SIZE	111001-sw_fdb_checkin.c	191;"	d	file:
-WT_MAX_FRAME_SIZE	111002-sw_fdb_system_test.c	309;"	d	file:
-WT_RX_LOOP_LIMIT	111001-sw_fdb_checkin.c	143;"	d	file:
-WT_RX_LOOP_LIMIT	111002-sw_fdb_system_test.c	257;"	d	file:
+WT_MAX_FRAME_SIZE	111001-sw_fdb_checkin.c	192;"	d	file:
+WT_MAX_FRAME_SIZE	111002-sw_fdb_system_test.c	310;"	d	file:
+WT_RX_LOOP_LIMIT	111001-sw_fdb_checkin.c	144;"	d	file:
+WT_RX_LOOP_LIMIT	111002-sw_fdb_system_test.c	258;"	d	file:
 WT_RunAgingScenario	111002-sw_fdb_system_test.c	/^void WT_RunAgingScenario(void)$/;"	f
 WT_RunLearningScenario	111002-sw_fdb_system_test.c	/^void WT_RunLearningScenario(void)$/;"	f
 WT_SCH_TIMESTAMP	111002-sw_fdb_system_test.c	/^WP_U16 WT_SCH_TIMESTAMP=700;$/;"	v
@@ -507,9 +508,9 @@ start_system	111002-sw_fdb_system_test.c	/^WP_U32 start_system = 0;$/;"	v
 sw_fdb_info	111001-sw_fdb_checkin.c	/^WP_sw_fdb_info sw_fdb_info =$/;"	v
 sw_fdb_info	111002-sw_fdb_system_test.c	/^WP_sw_fdb_info sw_fdb_info =$/;"	v
 terminate	111001-sw_fdb_checkin.c	/^static void terminate(WP_CHAR *s, WP_U32 line)$/;"	f	file:
-terminate	111002-sw_fdb_system_test.c	/^static void terminate(WP_CHAR *s, WP_U32 line)$/;"	f	file:
+terminate	111002-sw_fdb_system_test.c	/^void terminate(WP_CHAR *s, WP_U32 line)$/;"	f
 terminate_on_error	111001-sw_fdb_checkin.c	/^static void terminate_on_error(WP_handle handle, WP_CHAR *s,WP_U32 line)$/;"	f	file:
-terminate_on_error	111002-sw_fdb_system_test.c	/^static void terminate_on_error(WP_handle handle, WP_CHAR *s,WP_U32 line)$/;"	f	file:
+terminate_on_error	111002-sw_fdb_system_test.c	/^void terminate_on_error(WP_handle handle, WP_CHAR *s,WP_U32 line)$/;"	f
 tx_binding_cfg	111001-sw_fdb_checkin.c	/^WP_tx_binding tx_binding_cfg[1] =$/;"	v
 tx_binding_cfg	111002-sw_fdb_system_test.c	/^WP_tx_binding tx_binding_cfg[1] =$/;"	v
 tx_binding_iw	111001-sw_fdb_checkin.c	/^WP_tx_binding  tx_binding_iw[1]=$/;"	v

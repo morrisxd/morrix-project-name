@@ -2718,22 +2718,12 @@ void CLI_CreateTest(void)
 
 
 /*---------------------------------------*\
-	total 12 IW systems
+	total 2 IW systems
 		dl_iwsys_bridge[0]
 		dl_iwsys_bridge[1]
-		dl_iwsys_bridge[2]
-		dl_iwsys_bridge[3]
-		dl_iwsys_bridge[4]
-		dl_iwsys_bridge[5]
-		dl_iwsys_bridge[6]
-		dl_iwsys_bridge[7]
-		dl_iwsys_bridge[8]
-		dl_iwsys_bridge[9]
-		dl_iwsys_bridge[10]
-		dl_iwsys_bridge[11]
 \*---------------------------------------*/
    /* Create IW systems */
-   for(i=0; i<NUM_OF_INPUT_PORT_PER_FILTER_SET; i++)
+   for(i=0; i<NUM_OF_INPUT_PORT_PER_FILTER_SET/*2*/; i++)
    {
       dl_iwsys_bridge[i] = WP_IwSystemCreate(WP_WINPATH(DEFAULT_WPID), WP_IW_VLAN_AWARE_BRIDGING_MODE, &iw_sys_bridging[0]);
       terminate_on_error(dl_iwsys_bridge[i], "WP_IwSystemCreate",__LINE__);
@@ -2744,24 +2734,22 @@ void CLI_CreateTest(void)
 
 
 /*---------------------------------------*\
-	total = 5 * 12 = 60
+	total = 5 * 2 = 10
 		: h_iw_port_gbe[0]
-		: h_iw_port_gbe[1]
 		: h_iw_port_gbe[2]
-		: h_iw_port_gbe[3]
-		: h_iw_port_gbe[4]
-		: h_iw_port_gbe[5]
+		: h_iw_port_gbe[4] 	===> dl_iwsys_bridge[0]
 		: h_iw_port_gbe[6]
-		: h_iw_port_gbe[7]
 		: h_iw_port_gbe[8]
+
+
+		: h_iw_port_gbe[1]
+		: h_iw_port_gbe[3]
+		: h_iw_port_gbe[5]	===> dl_iwsys_bridge[1]
+		: h_iw_port_gbe[7]
 		: h_iw_port_gbe[9]
-			...
-			...
-			...
-		: h_iw_port_gbe[59]
 \*---------------------------------------*/
    /* create Input IW Ports */
-   for(i=0; i<(FILTER_SET_COUNT/*5*/ * NUM_OF_INPUT_PORT_PER_FILTER_SET/*12*/); i++)
+   for(i=0; i<(FILTER_SET_COUNT/*5*/ * NUM_OF_INPUT_PORT_PER_FILTER_SET/*2*/); i++)
    {
       max_mac_addresses = NUM_OF_RULES_PER_FILTER_SET;
       WPE_PortsCreate(dl_iwsys_bridge[(i%2)], &h_iw_port_gbe[i], max_mac_addresses);
