@@ -2577,6 +2577,8 @@ void WPE_CheckMaxRulesRestriction(void)
 
 void CLI_RunScenarios(void)
 {
+
+   /* rules mean where to goes, the action */
    WPE_CreateDlSecondRoundPceRules();
 
    WPE_CreateDlPceRules();
@@ -4303,7 +4305,12 @@ static void WPE_CheckForwardingFilterCreateErrors(void)
    printf("\nTest Fowrarding WP_PceFilterCreate, no match action == accept -- PASSED\n");
 }
 
-   
+/*
+ * Create group (A, C, D, E) : (classification, forwarding, learning) filter now
+ * FILTER_SET_A_CLASSIFICATION, FILTER_SET_C_CLASSIFICATION
+ *
+ * group B is used in second round
+ */   
 static void WPE_CreateDlPceFilters(void)
 {
    WP_pce_filter_classification filter_class = {0};
@@ -4316,15 +4323,26 @@ static void WPE_CreateDlPceFilters(void)
 
    filter_class.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
+   // filter 1
+   /*----------------------------*\ 
+    * A classification --- VLAN ID 1 
+   \*----------------------------*/
    filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_RANGE_LOW;
    filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_USED;
    filter_class.filter_fields[0].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
    filter_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
 
+   /*----------------------------*\ 
+    * A classification --- LAN ID 2
+   \*----------------------------*/
    filter_class.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_RANGE_HIGH;
    filter_class.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    filter_class.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
    filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
+
+   /*----------------------------*\ 
+    * A classification --- the END
+   \*----------------------------*/
    filter_class.filter_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
    PCE_filter[FILTER_SET_A_CLASSIFICATION] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_class);
    terminate_on_error(PCE_filter[FILTER_SET_A_CLASSIFICATION], "WP_PceFilterCreate",__LINE__);
@@ -4333,11 +4351,18 @@ static void WPE_CreateDlPceFilters(void)
    fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    fwd_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   // filter 2
+   /*----------------------------*\ 
+    * A forwarding --- if no match
+   \*----------------------------*/
    fwd_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    fwd_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*----------------------------*\ 
+    * A forwarding --- dest MAC address
+   \*----------------------------*/
    fwd_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
@@ -4350,6 +4375,10 @@ static void WPE_CreateDlPceFilters(void)
    lrn_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    lrn_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   // filter 3
+   /*----------------------------*\ 
+    * A forwarding --- source MAC address
+   \*----------------------------*/
    lrn_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    lrn_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
@@ -4366,11 +4395,18 @@ static void WPE_CreateDlPceFilters(void)
 
    fwd_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   // filter 1
+   /*----------------------------*\ 
+    * C forwarding --- dest MAC address
+   \*----------------------------*/
    fwd_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    fwd_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*----------------------------*\ 
+    * C forwarding --- VLAN TAG 1
+   \*----------------------------*/
    fwd_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    fwd_filter_cfg.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
@@ -4384,6 +4420,10 @@ static void WPE_CreateDlPceFilters(void)
    terminate_on_error(PCE_filter[FILTER_SET_C_FORWARDING], "WP_PceFilterCreate",__LINE__);
 
    
+   // filter 2
+   /*----------------------------*\ 
+    * C learning --- source MAC address
+   \*----------------------------*/
    lrn_filter_cfg.forwarding_filter = PCE_filter[FILTER_SET_C_FORWARDING];
    lrn_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
@@ -4392,6 +4432,9 @@ static void WPE_CreateDlPceFilters(void)
    lrn_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*----------------------------*\ 
+    * C learning --- VLAN TAG 1
+   \*----------------------------*/
    lrn_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    lrn_filter_cfg.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
@@ -4405,6 +4448,10 @@ static void WPE_CreateDlPceFilters(void)
    terminate_on_error(PCE_filter[FILTER_SET_C_LEARNING], "WP_PceFilterCreate",__LINE__);
    
 
+   // filter 3
+   /*----------------------------*\ 
+    * D forwarding --- dest MAC address
+   \*----------------------------*/
    fwd_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
    fwd_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
@@ -4412,10 +4459,16 @@ static void WPE_CreateDlPceFilters(void)
    fwd_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*----------------------------*\ 
+    * D forwarding --- VLAN TAG 1
+   \*----------------------------*/
    fwd_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    fwd_filter_cfg.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
 
+   /*----------------------------*\ 
+    * D forwarding --- VLAN TAG 2
+   \*----------------------------*/
    fwd_filter_cfg.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_USED;
    fwd_filter_cfg.filter_fields[2].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
@@ -4429,6 +4482,7 @@ static void WPE_CreateDlPceFilters(void)
       fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    else
       fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_ACCEPT;
+   // D forwarding --- 
    PCE_filter[FILTER_SET_D_FORWARDING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_FORWARDING, &fwd_filter_cfg);
    terminate_on_error(PCE_filter[FILTER_SET_D_FORWARDING], "WP_PceFilterCreate",__LINE__);
 
@@ -4436,15 +4490,24 @@ static void WPE_CreateDlPceFilters(void)
    lrn_filter_cfg.forwarding_filter = PCE_filter[FILTER_SET_D_FORWARDING];
    lrn_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   /*----------------------------*\ 
+    * D learning --- source MAC address
+   \*----------------------------*/
    lrn_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    lrn_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*----------------------------*\ 
+    * D learning --- VLAN TAG 1
+   \*----------------------------*/
    lrn_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    lrn_filter_cfg.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
 
+   /*----------------------------*\ 
+    * D learning --- VLAN TAG 2
+   \*----------------------------*/
    lrn_filter_cfg.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_USED;
    lrn_filter_cfg.filter_fields[2].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
@@ -4461,15 +4524,24 @@ static void WPE_CreateDlPceFilters(void)
 
    fwd_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   /*----------------------------*\ 
+    * E forwarding --- dest MAC address 
+   \*----------------------------*/
    fwd_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    fwd_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*----------------------------*\ 
+    * E forwarding ---  VLAN ID 1
+   \*----------------------------*/
    fwd_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    fwd_filter_cfg.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
 
+   /*----------------------------*\ 
+    * E forwarding ---  VLAN ID 2
+   \*----------------------------*/
    fwd_filter_cfg.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
@@ -4489,15 +4561,24 @@ static void WPE_CreateDlPceFilters(void)
    lrn_filter_cfg.forwarding_filter = PCE_filter[FILTER_SET_E_FORWARDING];
    lrn_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   /*----------------------------*\ 
+    * E learning --- source MAC address 
+   \*----------------------------*/
    lrn_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    lrn_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*----------------------------*\ 
+    * E learning --- VLAN TAG 1
+   \*----------------------------*/
    lrn_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    lrn_filter_cfg.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
 
+   /*----------------------------*\ 
+    * E learning --- IW system
+   \*----------------------------*/
    lrn_filter_cfg.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
@@ -4577,6 +4658,9 @@ static void WPE_CreateDlPceRules(void)
 
       rule_cfg.filter_handle = PCE_filter[FILTER_SET_A_CLASSIFICATION];
 
+      /*----------------------------*\
+       * we use 2 VLAN tag here only 
+      \*----------------------------*/
       rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
       rule_cfg.rule_fields[0].value.vlan_tag = 0x100 + (0x08 * flow_index);
 
@@ -4606,6 +4690,9 @@ static void WPE_CreateDlPceRules(void)
 
       rule_cfg.filter_handle = PCE_filter[FILTER_SET_A_CLASSIFICATION];
 
+      /*----------------------------*\
+       * we use 2 VLAN tag here only 
+      \*----------------------------*/
       rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
       rule_cfg.rule_fields[0].value.vlan_tag = 0x110 + (0x10 * (flow_index/NUM_OF_INPUT_PORT_PER_FILTER_SET)) + (flow_index%2);
 
@@ -4616,6 +4703,7 @@ static void WPE_CreateDlPceRules(void)
 
       rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
 
+      /* is of no use following */
       rule_cfg.match_result[0].result_type = WP_PCE_RESULT_IN_IW_PORT_UPDATE;
       rule_cfg.match_result[0].param.iw_port.iw_port_handle = h_iw_port_gbe[NUM_OF_INPUT_PORT_PER_FILTER_SET + flow_index];
 
@@ -4642,6 +4730,9 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.filter_handle = PCE_filter[FILTER_SET_A_FORWARDING];
       rule_index = RULES_A_FORWARDING_START + i;
       
+      /*----------------------------*\
+       * we use only dest MAC address
+      \*----------------------------*/
       rule_fwd.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
       for(ii=0; ii<5; ii++)
          rule_fwd.rule_fields[0].value.mac_addr[ii] = start_mac_addr[ii]; 
@@ -4686,6 +4777,9 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.filter_handle = PCE_filter[FILTER_SET_C_FORWARDING];
       rule_index = RULES_C_FORWARDING_START + i;
       
+      /*----------------------------*\
+       * dest MAC address
+      \*----------------------------*/
       rule_fwd.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
       for(ii=0; ii<5; ii++)
          rule_fwd.rule_fields[0].value.mac_addr[ii] = start_mac_addr[ii]; 
@@ -4695,7 +4789,7 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.rule_fields[1].value.vlan_tag = 0x120 + (i%2);
 
       rule_fwd.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
-      
+     /* ------------- */ 
       rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
       rule_fwd.match_result[0].param.iw_port.iw_port_handle = h_iw_output_port; 
       
@@ -4733,11 +4827,17 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.filter_handle = PCE_filter[FILTER_SET_D_FORWARDING];
       rule_index = RULES_D_FORWARDING_START + i;
       
+      /*----------------------------*\
+       * dest MAC address
+      \*----------------------------*/
       rule_fwd.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
       for(ii=0; ii<5; ii++)
          rule_fwd.rule_fields[0].value.mac_addr[ii] = start_mac_addr[ii]; 
       rule_fwd.rule_fields[0].value.mac_addr[5] = i; 
       
+      /*----------------------------*\
+       * and 2 VLAN tag
+      \*----------------------------*/
       rule_fwd.rule_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
       rule_fwd.rule_fields[1].value.vlan_tag = 0x130 + (i%2);
    
@@ -4783,19 +4883,29 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.filter_handle = PCE_filter[FILTER_SET_E_FORWARDING];
       rule_index = RULES_E_FORWARDING_START + i;
       
+      /*----------------------------*\
+       * dest MAC address
+      \*----------------------------*/
       rule_fwd.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
       for(ii=0; ii<5; ii++)
          rule_fwd.rule_fields[0].value.mac_addr[ii] = start_mac_addr[ii]; 
       rule_fwd.rule_fields[0].value.mac_addr[5] = i; 
       
+      /*----------------------------*\
+       * VLAN
+      \*----------------------------*/
       rule_fwd.rule_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
       rule_fwd.rule_fields[1].value.vlan_tag = 0x140 + (i%2);
    
+      /*----------------------------*\
+       * IW port
+      \*----------------------------*/
       rule_fwd.rule_fields[2].field_id = WP_PCE_FIELD_ID_IW_SYSTEM;
       rule_fwd.rule_fields[2].value.iw_system_handle = dl_iwsys_bridge[i%2];
 
       rule_fwd.rule_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
-      
+     
+     /* --------------- */ 
       rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
       rule_fwd.match_result[0].param.iw_port.iw_port_handle = h_iw_output_port; 
       
@@ -5002,6 +5112,9 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    filter_class.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   /*----------------------------*
+    * B classification ---  IW PORT 
+   \*----------------------------*/
    filter_class.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
@@ -5013,24 +5126,34 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    filter_class.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_class.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
-   /* PCE_filter1 */
+   /* B classification --- PCE_filter1 */
    filter_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_OUTPUT_IW_PORT;
    filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
    PCE_filter[FILTER_SET_B_CLASSIFICATION] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_class);
    terminate_on_error(PCE_filter[FILTER_SET_B_CLASSIFICATION], "WP_PceFilterCreate",__LINE__);
 
 
+   /* PCE_filter2 */
    fwd_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   /*-------------------------------------------*\
+    * B forwarding --- VLAN ID 1
+   \*-------------------------------------------*/
    fwd_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    fwd_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*-------------------------------------------*\
+    * B forwarding --- VLAN ID 1
+   \*-------------------------------------------*/
    fwd_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    fwd_filter_cfg.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
 
+   /*-------------------------------------------*\
+    * B forwarding --- VLAN ID 2
+   \*-------------------------------------------*/
    fwd_filter_cfg.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_USED;
    fwd_filter_cfg.filter_fields[2].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
@@ -5038,6 +5161,9 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    fwd_filter_cfg.filter_fields[3].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[3].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*-------------------------------------------*\
+    * B forwarding --- dest MAC address
+   \*-------------------------------------------*/
    fwd_filter_cfg.filter_fields[0].field_id   = WP_PCE_FIELD_ID_MAC_DA;
    fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 
@@ -5046,18 +5172,28 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    terminate_on_error(PCE_filter[FILTER_SET_B_FORWARDING], "WP_PceFilterCreate",__LINE__);
 
 
+   /* PCE_filter3 */
    lrn_filter_cfg.forwarding_filter = PCE_filter[FILTER_SET_B_FORWARDING];
    lrn_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
+   /*-------------------------------------------*\
+    * B learning --- source MAC address
+   \*-------------------------------------------*/
    lrn_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    lrn_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+   /*-------------------------------------------*\
+    * B learning --- VLAN ID 1, no use becase ID_LAST at [1]
+   \*-------------------------------------------*/
    lrn_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
    lrn_filter_cfg.filter_fields[1].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
 
+   /*-------------------------------------------*\
+    * B learning --- VLAN ID 2, no use becase ID_LAST at [1]
+   \*-------------------------------------------*/
    lrn_filter_cfg.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_USED;
    lrn_filter_cfg.filter_fields[2].mask.vlan_tag = WP_PCE_FIELD_MASK_VLAN_ID;
@@ -5104,11 +5240,17 @@ static void WPE_CreateDlSecondRoundPceRules(void)
    rule_index = RULES_B_CLASSIFICATION_START;
    rule_cfg.filter_handle = PCE_filter[FILTER_SET_B_CLASSIFICATION];
    
+   /*--------------------------*\
+    * B forwarding --- IW port
+   \*--------------------------*/
    rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_OUTPUT_IW_PORT;
    rule_cfg.rule_fields[0].value.iw_port_handle = h_iw_output_port_b;
    
    rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
    
+   /*
+    * i think there is no use about the following lines
+    */
    rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
    
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
@@ -5134,6 +5276,9 @@ static void WPE_CreateDlSecondRoundPceRules(void)
       rule_fwd.filter_handle = PCE_filter[FILTER_SET_B_FORWARDING];
       rule_index = RULES_B_FORWARDING_START + i;
       
+   /*--------------------------*\
+    * B forwarding --- dest MAC address
+   \*--------------------------*/
       rule_fwd.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
       for(ii=0; ii<5; ii++)
          rule_fwd.rule_fields[0].value.mac_addr[ii] = start_mac_addr[ii]; 
@@ -5141,6 +5286,7 @@ static void WPE_CreateDlSecondRoundPceRules(void)
       
       rule_fwd.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
       
+      // the underlying lines of codes is of no use
       rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
       rule_fwd.match_result[0].param.iw_port.iw_port_handle = h_iw_output_port; 
       
@@ -5191,16 +5337,18 @@ static void WPE_CreateDlSecondRoundPceInterface()
    WPE_CreateDlSecondRoundPceFilters();
    WPE_CreateDlSecondRoundPceFilterSets();
 
+   /* WP_PCE_IW_PORT_CONNECTION_ENABLED is the only choice */
    pce_if_params.mode = WP_PCE_IW_PORT_CONNECTION_ENABLED;
-   pce_if_params.parsing_ref_point = WP_PCE_PARSER_REF_POINT_FRAME_START;
-   pce_if_params.parser_start_type = WP_PCE_PARSER_START_TYPE_ETHERNET;
-   pce_if_params.parsing_ref_offset = 0;
+   pce_if_params.parsing_ref_point = WP_PCE_PARSER_REF_POINT_FRAME_START;	// where to start the field check, start from where
+   pce_if_params.parser_start_type = WP_PCE_PARSER_START_TYPE_ETHERNET;	// start program counter for specific protocol type
+   pce_if_params.parsing_ref_offset = 0;	// start from parsing_ref_point
    pce_if_params.filter_set_handle = dl_filter_set[FILTER_SET_B];
    pce_if_params.ip_header_validation = WP_DISABLE;
    pce_if_params.characteristics = WP_PCE_IF_OUTPUT_PORT_PROPAGATION_ENABLE;
 
    if (TestType == TEST_HYBRID_FDB)
    {
+      /* iw port handle should be preserved from previous PCE module */
       pce_if_params.characteristics |= WP_PCE_IF_IW_PORT_PROPAGATION_ENABLE;
       pce_if_params.iw_port = WP_UNUSED;
    }
