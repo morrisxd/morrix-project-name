@@ -1,0 +1,846 @@
+************************************************************************
+  DEBUG SW menu
+  Hot keys: !-Main Menu ^-Upper Menu =-Display Cur Menu  p-Prev Menu
+  Name: Main Menu
+1.  Display log
+2.  Enable/Disable log
+3.  Display event groups status
+4.  Unload group event
+5.  Unload all groups events
+6.  Load group event
+7.  Display the maximum event size that can be loaded
+8.  Set Boundary Check Bounds
+9.  Change WinPath # (0 in default)
+10.  Quit
+# Enter your command:3
+
+=============================================================================================================================
+ WP:0 WF:0 || Event Group name                                                    | # of opcodes | # of events |   Status   |
+
+=============================================================================================================================
+           || BD_CORRUPTION_GENERAL                                               |  0x0000043e  |      64     |   loaded   |
+           || BD_CORRUPTION_IWCP                                                  |  0x00000210  |      31     |   loaded   |
+           || BD_CORRUPTION_IWGP                                                  |  0x00000304  |      46     |   loaded   |
+           || BD_CORRUPTION_L2PI                                                  |  0x00000360  |      49     |   loaded   |
+           || L2PI_RX_FLOW_DATA_UNIT                                              |  0x000000a9  |      9      |   loaded   |
+           || ASSERTIONS_GENERAL                                                  |  0x00000029  |      2      | not loaded |
+           || BD_CORRUPTION_AAL0                                                  |  0x00000046  |      5      | not loaded |
+           || BD_CORRUPTION_AAL5                                                  |  0x0000008e  |      9      | not loaded |
+           || BD_CORRUPTION_CES                                                   |  0x0000016a  |      24     | not loaded |
+           || BD_CORRUPTION_ENET_OAM                                              |  0x00000058  |      6      | not loaded |
+           || BD_CORRUPTION_HDLC                                                  |  0x000000fa  |      15     | not loaded |
+           || BD_CORRUPTION_PWE3                                                  |  0x00000104  |      15     | not loaded |
+           || DEBUG_BOUNDARY_CHECK_SCENARIO_4_1                                   |  0x00000049  |      1      | not loaded |
+           || DEBUG_BOUNDARY_CHECK_SCENARIO_4_2                                   |  0x00000049  |      1      | not loaded |
+           || DEBUG_SW_LOG_SCENARIO_4_1                                           |  0x00000006  |      1      | not loaded |
+           || DEBUG_SW_LOG_SCENARIO_4_2                                           |  0x00000005  |      1      | not loaded |
+           || IWGP_BACKGROUND_LOW_LEVEL                                           |  0x0000001f  |      1      | not loaded |
+           || IWGP_DROP_PACKET_LOW_LEVEL                                          |  0x0000000f  |      1      | not loaded |
+           || IWGP_ENQUEUING_LOW_LEVEL                                            |  0x0000003b  |      3      | not loaded |
+           || IWGP_FIWT_SWITCH_LOW_LEVEL                                          |  0x00000016  |      1      | not loaded |
+           || IWGP_GENERIC_FWD_LOW_LEVEL                                          |  0x0000003d  |      2      | not loaded |
+           || IWGP_LOCKS                                                          |  0x0000021c  |      36     | not loaded |
+           || IWGP_MODULE_ENTRIES                                                 |  0x000000d2  |      14     | not loaded |
+           || IWGP_MODULE_EXITS                                                   |  0x000002c1  |      47     | not loaded |
+           || IWGP_MULTICAST_LOW_LEVEL                                            |  0x00000051  |      4      | not loaded |
+           || IWGP_SUBMODULE_ENTRIES                                              |  0x0000013b  |      21     | not loaded |
+           || IWGP_SUBMODULE_EXITS                                                |  0x000000b4  |      12     | not loaded |
+           || L2PI_RX_FLOW_LOW_LEVEL                                              |  0x0000013b  |      15     | not loaded |
+           || L2PI_RX_FLOW_PACKET                                                 |  0x00000062  |      6      | not loaded |
+           || L2PI_RX_LOCKS                                                       |  0x00000385  |      40     | not loaded |
+           || L2PI_TX_CB_FLOW_DATA_UNIT                                           |  0x000000e4  |      12     | not loaded |
+           || L2PI_TX_CB_FLOW_LOW_LEVEL                                           |  0x000000f3  |      11     | not loaded |
+           || L2PI_TX_CB_FLOW_PACKET                                              |  0x0000002d  |      3      | not loaded |
+           || L2PI_TX_CB_LOCKS                                                    |  0x000001a8  |      18     | not loaded |
+           || L2PI_TX_PB_FLOW_DATA_UNIT                                           |  0x0000015f  |      18     | not loaded |
+           || L2PI_TX_PB_FLOW_PACKET                                              |  0x00000034  |      3      | not loaded |
+           || L2PI_TX_PB_LOCKS                                                    |  0x000001c9  |      17     | not loaded |
+
+=============================================================================================================================
+ WP:0 WF:1 || Event Group name                                                    | # of opcodes | # of events |   Status   |
+
+=============================================================================================================================
+           || BD_CORRUPTION_GENERAL                                               |  0x0000043e  |      64     |   loaded   |
+           || BD_CORRUPTION_IWCP                                                  |  0x00000210  |      31     |   loaded   |
+           || BD_CORRUPTION_IWGP                                                  |  0x00000304  |      46     |   loaded   |
+           || BD_CORRUPTION_L2PI                                                  |  0x00000360  |      49     |   loaded   |
+           || L2PI_RX_FLOW_DATA_UNIT                                              |  0x000000a9  |      9      |   loaded   |
+           || ASSERTIONS_GENERAL                                                  |  0x00000029  |      2      | not loaded |
+           || BD_CORRUPTION_AAL0                                                  |  0x00000046  |      5      | not loaded |
+           || BD_CORRUPTION_AAL5                                                  |  0x0000008e  |      9      | not loaded |
+           || BD_CORRUPTION_CES                                                   |  0x0000016a  |      24     | not loaded |
+           || BD_CORRUPTION_ENET_OAM                                              |  0x00000058  |      6      | not loaded |
+           || BD_CORRUPTION_HDLC                                                  |  0x000000fa  |      15     | not loaded |
+           || BD_CORRUPTION_PWE3                                                  |  0x00000104  |      15     | not loaded |
+           || DEBUG_BOUNDARY_CHECK_SCENARIO_4_1                                   |  0x00000049  |      1      | not loaded |
+           || DEBUG_BOUNDARY_CHECK_SCENARIO_4_2                                   |  0x00000049  |      1      | not loaded |
+           || DEBUG_SW_LOG_SCENARIO_4_1                                           |  0x00000006  |      1      | not loaded |
+           || DEBUG_SW_LOG_SCENARIO_4_2                                           |  0x00000005  |      1      | not loaded |
+           || IWGP_BACKGROUND_LOW_LEVEL                                           |  0x0000001f  |      1      | not loaded |
+           || IWGP_DROP_PACKET_LOW_LEVEL                                          |  0x0000000f  |      1      | not loaded |
+           || IWGP_ENQUEUING_LOW_LEVEL                                            |  0x0000003b  |      3      | not loaded |
+           || IWGP_FIWT_SWITCH_LOW_LEVEL                                          |  0x00000016  |      1      | not loaded |
+           || IWGP_GENERIC_FWD_LOW_LEVEL                                          |  0x0000003d  |      2      | not loaded |
+           || IWGP_LOCKS                                                          |  0x0000021c  |      36     | not loaded |
+           || IWGP_MODULE_ENTRIES                                                 |  0x000000d2  |      14     | not loaded |
+           || IWGP_MODULE_EXITS                                                   |  0x000002c1  |      47     | not loaded |
+           || IWGP_MULTICAST_LOW_LEVEL                                            |  0x00000051  |      4      | not loaded |
+           || IWGP_SUBMODULE_ENTRIES                                              |  0x0000013b  |      21     | not loaded |
+           || IWGP_SUBMODULE_EXITS                                                |  0x000000b4  |      12     | not loaded |
+           || L2PI_RX_FLOW_LOW_LEVEL                                              |  0x0000013b  |      15     | not loaded |
+           || L2PI_RX_FLOW_PACKET                                                 |  0x00000062  |      6      | not loaded |
+           || L2PI_RX_LOCKS                                                       |  0x00000385  |      40     | not loaded |
+           || L2PI_TX_CB_FLOW_DATA_UNIT                                           |  0x000000e4  |      12     | not loaded |
+           || L2PI_TX_CB_FLOW_LOW_LEVEL                                           |  0x000000f3  |      11     | not loaded |
+           || L2PI_TX_CB_FLOW_PACKET                                              |  0x0000002d  |      3      | not loaded |
+           || L2PI_TX_CB_LOCKS                                                    |  0x000001a8  |      18     | not loaded |
+           || L2PI_TX_PB_FLOW_DATA_UNIT                                           |  0x0000015f  |      18     | not loaded |
+           || L2PI_TX_PB_FLOW_PACKET                                              |  0x00000034  |      3      | not loaded |
+           || L2PI_TX_PB_LOCKS                                                    |  0x000001c9  |      17     | not loaded |
+
+=============================================================================================================================
+ WP:0 WF:2 || Event Group name                                                    | # of opcodes | # of events |   Status   |
+
+=============================================================================================================================
+           || BD_CORRUPTION_GENERAL                                               |  0x0000043e  |      64     |   loaded   |
+           || BD_CORRUPTION_IWCP                                                  |  0x00000210  |      31     |   loaded   |
+           || BD_CORRUPTION_IWGP                                                  |  0x00000304  |      46     |   loaded   |
+           || BD_CORRUPTION_L2PI                                                  |  0x00000360  |      49     |   loaded   |
+           || L2PI_RX_FLOW_DATA_UNIT                                              |  0x000000a9  |      9      |   loaded   |
+           || ASSERTIONS_GENERAL                                                  |  0x00000029  |      2      | not loaded |
+           || BD_CORRUPTION_AAL0                                                  |  0x00000046  |      5      | not loaded |
+           || BD_CORRUPTION_AAL5                                                  |  0x0000008e  |      9      | not loaded |
+           || BD_CORRUPTION_CES                                                   |  0x0000016a  |      24     | not loaded |
+           || BD_CORRUPTION_ENET_OAM                                              |  0x00000058  |      6      | not loaded |
+           || BD_CORRUPTION_HDLC                                                  |  0x000000fa  |      15     | not loaded |
+           || BD_CORRUPTION_PWE3                                                  |  0x00000104  |      15     | not loaded |
+           || DEBUG_BOUNDARY_CHECK_SCENARIO_4_1                                   |  0x00000049  |      1      | not loaded |
+           || DEBUG_BOUNDARY_CHECK_SCENARIO_4_2                                   |  0x00000049  |      1      | not loaded |
+           || DEBUG_SW_LOG_SCENARIO_4_1                                           |  0x00000006  |      1      | not loaded |
+           || DEBUG_SW_LOG_SCENARIO_4_2                                           |  0x00000005  |      1      | not loaded |
+           || IWGP_BACKGROUND_LOW_LEVEL                                           |  0x0000001f  |      1      | not loaded |
+           || IWGP_DROP_PACKET_LOW_LEVEL                                          |  0x0000000f  |      1      | not loaded |
+           || IWGP_ENQUEUING_LOW_LEVEL                                            |  0x0000003b  |      3      | not loaded |
+           || IWGP_FIWT_SWITCH_LOW_LEVEL                                          |  0x00000016  |      1      | not loaded |
+           || IWGP_GENERIC_FWD_LOW_LEVEL                                          |  0x0000003d  |      2      | not loaded |
+           || IWGP_LOCKS                                                          |  0x0000021c  |      36     | not loaded |
+           || IWGP_MODULE_ENTRIES                                                 |  0x000000d2  |      14     | not loaded |
+           || IWGP_MODULE_EXITS                                                   |  0x000002c1  |      47     | not loaded |
+           || IWGP_MULTICAST_LOW_LEVEL                                            |  0x00000051  |      4      | not loaded |
+           || IWGP_SUBMODULE_ENTRIES                                              |  0x0000013b  |      21     | not loaded |
+           || IWGP_SUBMODULE_EXITS                                                |  0x000000b4  |      12     | not loaded |
+           || L2PI_RX_FLOW_LOW_LEVEL                                              |  0x0000013b  |      15     | not loaded |
+           || L2PI_RX_FLOW_PACKET                                                 |  0x00000062  |      6      | not loaded |
+           || L2PI_RX_LOCKS                                                       |  0x00000385  |      40     | not loaded |
+           || L2PI_TX_CB_FLOW_DATA_UNIT                                           |  0x000000e4  |      12     | not loaded |
+           || L2PI_TX_CB_FLOW_LOW_LEVEL                                           |  0x000000f3  |      11     | not loaded |
+           || L2PI_TX_CB_FLOW_PACKET                                              |  0x0000002d  |      3      | not loaded |
+           || L2PI_TX_CB_LOCKS                                                    |  0x000001a8  |      18     | not loaded |
+           || L2PI_TX_PB_FLOW_DATA_UNIT                                           |  0x0000015f  |      18     | not loaded |
+           || L2PI_TX_PB_FLOW_PACKET                                              |  0x00000034  |      3      | not loaded |
+           || L2PI_TX_PB_LOCKS                                                    |  0x000001c9  |      17     | not loaded |
+
+=============================================================================================================================
+ WP:0 WF:3 || Event Group name                                                    | # of opcodes | # of events |   Status   |
+
+=============================================================================================================================
+           || BD_CORRUPTION_GENERAL                                               |  0x0000043e  |      64     |   loaded   |
+           || BD_CORRUPTION_IWCP                                                  |  0x00000210  |      31     |   loaded   |
+           || BD_CORRUPTION_IWGP                                                  |  0x00000304  |      46     |   loaded   |
+           || BD_CORRUPTION_L2PI                                                  |  0x00000360  |      49     |   loaded   |
+           || L2PI_RX_FLOW_DATA_UNIT                                              |  0x000000a9  |      9      |   loaded   |
+           || ASSERTIONS_GENERAL                                                  |  0x00000029  |      2      | not loaded |
+           || BD_CORRUPTION_AAL0                                                  |  0x00000046  |      5      | not loaded |
+           || BD_CORRUPTION_AAL5                                                  |  0x0000008e  |      9      | not loaded |
+           || BD_CORRUPTION_CES                                                   |  0x0000016a  |      24     | not loaded |
+           || BD_CORRUPTION_ENET_OAM                                              |  0x00000058  |      6      | not loaded |
+           || BD_CORRUPTION_HDLC                                                  |  0x000000fa  |      15     | not loaded |
+           || BD_CORRUPTION_PWE3                                                  |  0x00000104  |      15     | not loaded |
+           || DEBUG_BOUNDARY_CHECK_SCENARIO_4_1                                   |  0x00000049  |      1      | not loaded |
+           || DEBUG_BOUNDARY_CHECK_SCENARIO_4_2                                   |  0x00000049  |      1      | not loaded |
+           || DEBUG_SW_LOG_SCENARIO_4_1                                           |  0x00000006  |      1      | not loaded |
+           || DEBUG_SW_LOG_SCENARIO_4_2                                           |  0x00000005  |      1      | not loaded |
+           || IWGP_BACKGROUND_LOW_LEVEL                                           |  0x0000001f  |      1      | not loaded |
+           || IWGP_DROP_PACKET_LOW_LEVEL                                          |  0x0000000f  |      1      | not loaded |
+           || IWGP_ENQUEUING_LOW_LEVEL                                            |  0x0000003b  |      3      | not loaded |
+           || IWGP_FIWT_SWITCH_LOW_LEVEL                                          |  0x00000016  |      1      | not loaded |
+           || IWGP_GENERIC_FWD_LOW_LEVEL                                          |  0x0000003d  |      2      | not loaded |
+           || IWGP_LOCKS                                                          |  0x0000021c  |      36     | not loaded |
+           || IWGP_MODULE_ENTRIES                                                 |  0x000000d2  |      14     | not loaded |
+           || IWGP_MODULE_EXITS                                                   |  0x000002c1  |      47     | not loaded |
+           || IWGP_MULTICAST_LOW_LEVEL                                            |  0x00000051  |      4      | not loaded |
+           || IWGP_SUBMODULE_ENTRIES                                              |  0x0000013b  |      21     | not loaded |
+           || IWGP_SUBMODULE_EXITS                                                |  0x000000b4  |      12     | not loaded |
+           || L2PI_RX_FLOW_LOW_LEVEL                                              |  0x0000013b  |      15     | not loaded |
+           || L2PI_RX_FLOW_PACKET                                                 |  0x00000062  |      6      | not loaded |
+           || L2PI_RX_LOCKS                                                       |  0x00000385  |      40     | not loaded |
+           || L2PI_TX_CB_FLOW_DATA_UNIT                                           |  0x000000e4  |      12     | not loaded |
+           || L2PI_TX_CB_FLOW_LOW_LEVEL                                           |  0x000000f3  |      11     | not loaded |
+           || L2PI_TX_CB_FLOW_PACKET                                              |  0x0000002d  |      3      | not loaded |
+           || L2PI_TX_CB_LOCKS                                                    |  0x000001a8  |      18     | not loaded |
+           || L2PI_TX_PB_FLOW_DATA_UNIT                                           |  0x0000015f  |      18     | not loaded |
+           || L2PI_TX_PB_FLOW_PACKET                                              |  0x00000034  |      3      | not loaded |
+           || L2PI_TX_PB_LOCKS                                                    |  0x000001c9  |      17     | not loaded |
+
+
+*************************************************************************
+  DEBUG SW menu
+  Hot keys: !-Main Menu ^-Upper Menu =-Display Cur Menu  p-Prev Menu
+  Name: Main Menu
+1.  Display log
+2.  Enable/Disable log
+3.  Display event groups status
+4.  Unload group event
+5.  Unload all groups events
+6.  Load group event
+7.  Display the maximum event size that can be loaded
+8.  Set Boundary Check Bounds
+9.  Change WinPath # (0 in default)
+10.  Quit
+# Enter your command:1
+Enter the number of entries to display or 'q' to return
+100
+
+Chip Revision: WP3 REV B.2
+
+WDDI Build: 1504
+WinFarm-0:DPS Build: 1833
+WinFarm-1:DPS Build: 1833
+WinFarm-2:DPS Build: 1833
+WinFarm-3:DPS Build: 1833
+
+WF-0 features set:
+30d43f57 79877fee 30f80386 4280da62 016d100e
+c380344e 38357dd1 00940200 00000000 00000000
+00000000 00000000 00000000 00000000 4ebb89bf
+
+WF-1 features set:
+30d43f57 79877fee 30f80386 4280da62 016d100e
+c380344e 38357dd1 00940200 00000000 00000000
+00000000 00000000 00000000 00000000 4ebb89bf
+
+WF-2 features set:
+30d43f57 79877fee 30f80386 4280da62 016d100e
+c380344e 38357dd1 00940200 00000000 00000000
+00000000 00000000 00000000 00000000 4ebb89bf
+
+WF-3 features set:
+30d43f57 79877fee 30f80386 4280da62 016d100e
+c380344e 38357dd1 00940200 00000000 00000000
+00000000 00000000 00000000 00000000 4ebb89bf
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e4166354
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e416638a
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e42555f4
+TRS_number = 0x0
+Status0 0x80 0x80 0xa0 0x0
+Status1 0x6 0xb4 0x2 0x0
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e4255661
+TRS_number = 0x0
+Packet header 0x1 0x0 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x0 0x0 0xd 0x81 0x0 0xc 0x81 0x8 0x0 0x45 0x4 0x0 0x4c 0x0 0x1b 0xa5 0x7d 0x5 0x
+11 0xf 0xff 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x5 0x0 0x8 0x0 0x3 0x0 0x1b 0x77 0xc0 0x0 0xa4 0xc5 0xff 0x0 0x1b 0x77 0xc4 0x3a 0x52 0x8a
+ 0x3f 0x0 0x1b 0x77 0xc8 0xee 0xff
+
+Event name = L2PI_RX_GET_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x189
+Pc = 0x96d3
+File = l2pi_rx.dpl
+Line = 1033
+Timestamp = 0x00000001e42556b2
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e4255859
+TRS_number = 0x0
+Status0 0x0 0x80 0xa0 0x0
+Status1 0x6 0xb5 0x2 0x0
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e425586e
+TRS_number = 0x10
+Status0 0x40 0x80 0xa5 0x0
+Status1 0x6 0xb6 0x0 0x1a
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x10
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e42558bf
+TRS_number = 0x0
+Packet header 0x77 0x77 0x88 0x88 0x88 0x88 0x99 0x99 0x99 0x99 0xaa 0xaa 0xaa 0xaa 0x1 0x1 0x1 0x1 0x2 0x2 0x2 0x2 0x3 0x3 0x3 0x3
+ 0x4 0x4 0x4 0x4 0x5 0x5 0x5 0x5 0x6 0x6 0x6 0x6 0x7 0x7 0x7 0x7 0x8 0x8 0x8 0x8 0x9 0x9 0x9 0x9 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0x
+a 0xa 0xa 0xa 0xa 0xa
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e42558d4
+TRS_number = 0x10
+Packet header 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xcd 0x2 0x4a 0x4e 0x0 0x0 0x
+0 0x0 0x0 0x0 0x5 0x5 0x6 0x6 0x6 0x6 0x7 0x7 0x7 0x7 0x8 0x8 0x8 0x8 0x9 0x9 0xff 0x2e 0x0 0x0 0xfe 0x29 0x0 0x0 0xa 0xa 0xa 0xa 0
+xa 0xa 0xa 0xa
+
+Event name = L2PI_RX_NOT_FIRST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1d
+Pc = 0x9b5a
+File = l2pi_rx.dpl
+Line = 3562
+Timestamp = 0x00000001e4255911
+TRS_number = 0x0
+
+Event name = L2PI_RX_NOT_FIRST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1d
+Pc = 0x9b5a
+File = l2pi_rx.dpl
+Line = 3562
+Timestamp = 0x00000001e4255933
+TRS_number = 0x10
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e4255963
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e425599a
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e42559f2
+TRS_number = 0x10
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e4255a29
+TRS_number = 0x10
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e43450ac
+TRS_number = 0x0
+Status0 0x80 0x80 0xa0 0x0
+Status1 0x6 0xb7 0x2 0x0
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e4345112
+TRS_number = 0x0
+Packet header 0x1 0x0 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x0 0x0 0xd 0x81 0x0 0xc 0x82 0x8 0x0 0x45 0x4 0x0 0x4c 0x0 0x1b 0xa5 0x7d 0x5 0x
+11 0xf 0xff 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x5 0x0 0x8 0x0 0x3 0x0 0x1b 0x77 0xc0 0x0 0xa4 0xc5 0xff 0x0 0x1b 0x77 0xc4 0x3a 0x52 0x8a
+ 0x3f 0x0 0x1b 0x77 0xc8 0xee 0xff
+
+Event name = L2PI_RX_GET_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x189
+Pc = 0x96d3
+File = l2pi_rx.dpl
+Line = 1033
+Timestamp = 0x00000001e4345164
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e434530b
+TRS_number = 0x0
+Status0 0x0 0x80 0xa0 0x0
+Status1 0x6 0xb8 0x2 0x0
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e4345371
+TRS_number = 0x0
+Packet header 0x77 0x77 0x88 0x88 0x88 0x88 0x99 0x99 0x99 0x99 0xaa 0xaa 0xaa 0xaa 0x1 0x1 0x1 0x1 0x2 0x2 0x2 0x2 0x3 0x3 0x3 0x3
+ 0x4 0x4 0x4 0x4 0x5 0x5 0x5 0x5 0x6 0x6 0x6 0x6 0x7 0x7 0x7 0x7 0x8 0x8 0x8 0x8 0x9 0x9 0x9 0x9 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0x
+a 0xa 0xa 0xa 0xa 0xa
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e43453b5
+TRS_number = 0x10
+Status0 0x40 0x80 0xa5 0x0
+Status1 0x6 0xb9 0x0 0x92
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x10
+
+Event name = L2PI_RX_NOT_FIRST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1d
+Pc = 0x9b5a
+File = l2pi_rx.dpl
+Line = 3562
+Timestamp = 0x00000001e43453ca
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e4345415
+TRS_number = 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e4345422
+TRS_number = 0x10
+Packet header 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0
+xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa
+0xa 0xa
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e4345452
+TRS_number = 0x0
+
+Event name = L2PI_RX_NOT_FIRST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1d
+Pc = 0x9b5a
+File = l2pi_rx.dpl
+Line = 3562
+Timestamp = 0x00000001e4345474
+TRS_number = 0x10
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e43454c6
+TRS_number = 0x10
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e4345503
+TRS_number = 0x10
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e4434edb
+TRS_number = 0x0
+Status0 0x80 0x80 0xa0 0x0
+Status1 0x6 0xba 0x2 0x0
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e4434f48
+TRS_number = 0x0
+Packet header 0x1 0x0 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x0 0x0 0xd 0x81 0x0 0xc 0x83 0x8 0x0 0x45 0x4 0x0 0x4c 0x0 0x1b 0xa5 0x7d 0x5 0x
+11 0xf 0xff 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x5 0x0 0x8 0x0 0x3 0x0 0x1b 0x77 0xc0 0x0 0xa4 0xc5 0xff 0x0 0x1b 0x77 0xc4 0x3a 0x52 0x8a
+ 0x3f 0x0 0x1b 0x77 0xc8 0xee 0xff
+
+Event name = L2PI_RX_GET_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x189
+Pc = 0x96d3
+File = l2pi_rx.dpl
+Line = 1033
+Timestamp = 0x00000001e4434f9a
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e4435141
+TRS_number = 0x0
+Status0 0x0 0x80 0xa0 0x0
+Status1 0x6 0xbb 0x2 0x0
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e44351ae
+TRS_number = 0x0
+Packet header 0x77 0x77 0x88 0x88 0x88 0x88 0x99 0x99 0x99 0x99 0xaa 0xaa 0xaa 0xaa 0x1 0x1 0x1 0x1 0x2 0x2 0x2 0x2 0x3 0x3 0x3 0x3
+ 0x4 0x4 0x4 0x4 0x5 0x5 0x5 0x5 0x6 0x6 0x6 0x6 0x7 0x7 0x7 0x7 0x8 0x8 0x8 0x8 0x9 0x9 0x9 0x9 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0x
+a 0xa 0xa 0xa 0xa 0xa
+
+Event name = L2PI_RX_NOT_FIRST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1d
+Pc = 0x9b5a
+File = l2pi_rx.dpl
+Line = 3562
+Timestamp = 0x00000001e4435200
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e4435252
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e4435288
+TRS_number = 0x10
+Status0 0x40 0x80 0xa5 0x0
+Status1 0x6 0xbc 0x1 0xa
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x10
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e4435296
+TRS_number = 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e44352ee
+TRS_number = 0x10
+Packet header 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0
+xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa
+0xa 0xa
+
+Event name = L2PI_RX_NOT_FIRST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1d
+Pc = 0x9b5a
+File = l2pi_rx.dpl
+Line = 3562
+Timestamp = 0x00000001e4435347
+TRS_number = 0x10
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e4435399
+TRS_number = 0x10
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e44353d6
+TRS_number = 0x10
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e4525280
+TRS_number = 0x0
+Status0 0x80 0x80 0xa0 0x0
+Status1 0x6 0xbd 0x2 0x0
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e45252e6
+TRS_number = 0x0
+Packet header 0x1 0x0 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x0 0x0 0xd 0x81 0x0 0xc 0x84 0x8 0x0 0x45 0x4 0x0 0x4c 0x0 0x1b 0xa5 0x7d 0x5 0x
+11 0xf 0xff 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x5 0x0 0x8 0x0 0x3 0x0 0x1b 0x77 0xc0 0x0 0xa4 0xc5 0xff 0x0 0x1b 0x77 0xc4 0x3a 0x52 0x8a
+ 0x3f 0x0 0x1b 0x77 0xc8 0xee 0xff
+
+Event name = L2PI_RX_GET_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x189
+Pc = 0x96d3
+File = l2pi_rx.dpl
+Line = 1033
+Timestamp = 0x00000001e452533f
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e45254df
+TRS_number = 0x0
+Status0 0x0 0x80 0xa0 0x0
+Status1 0x6 0xbe 0x2 0x0
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e452554c
+TRS_number = 0x0
+Packet header 0x77 0x77 0x88 0x88 0x88 0x88 0x99 0x99 0x99 0x99 0xaa 0xaa 0xaa 0xaa 0x1 0x1 0x1 0x1 0x2 0x2 0x2 0x2 0x3 0x3 0x3 0x3
+ 0x4 0x4 0x4 0x4 0x5 0x5 0x5 0x5 0x6 0x6 0x6 0x6 0x7 0x7 0x7 0x7 0x8 0x8 0x8 0x8 0x9 0x9 0x9 0x9 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0x
+a 0xa 0xa 0xa 0xa 0xa
+
+Event name = L2PI_RX_NOT_FIRST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1d
+Pc = 0x9b5a
+File = l2pi_rx.dpl
+Line = 3562
+Timestamp = 0x00000001e452559e
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e45255f0
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e4525626
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e45256c3
+TRS_number = 0x0
+Status0 0x40 0x80 0xa5 0x0
+Status1 0x6 0xbf 0x1 0x82
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e4525729
+TRS_number = 0x0
+Packet header 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0
+xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa 0xa
+0xa 0xa
+
+Event name = L2PI_RX_NOT_FIRST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1d
+Pc = 0x9b5a
+File = l2pi_rx.dpl
+Line = 3562
+Timestamp = 0x00000001e4525782
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_BUFFER_CHAINING
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0xb
+Pc = 0x9b86
+File = l2pi_rx.dpl
+Line = 1738
+Timestamp = 0x00000001e45257d4
+TRS_number = 0x0
+
+Event name = L2PI_RX_MATRIX_DONT_OPEN_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x10
+Pc = 0x9bca
+File = l2pi_rx.dpl
+Line = 1886
+Timestamp = 0x00000001e4525811
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e461225e
+TRS_number = 0x0
+Status0 0xc0 0x80 0xa5 0x0
+Status1 0x6 0x80 0x0 0x5a
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
+Pc = 0x967b
+File = l2pi_rx.dpl
+Line = 3478
+Timestamp = 0x00000001e46122cb
+TRS_number = 0x0
+Packet header 0x1 0x0 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x0 0x0 0xd 0x81 0x0 0xc 0x85 0x8 0x0 0x45 0x4 0x0 0x4c 0x0 0x1b 0xa5 0x7d 0x5 0x
+11 0xf 0xff 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x5 0x0 0x8 0x0 0x3 0x0 0x1b 0x77 0xc0 0x0 0xa4 0xc5 0xff 0x0 0x1b 0x77 0xc4 0x3a 0x52 0x8a
+ 0x3f 0x0 0x1b 0x77 0xc8 0xee 0xff
+
+Event name = L2PI_RX_FIRST_PLUS_LAST
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x3
+Pc = 0x96a0
+File = l2pi_rx.dpl
+Line = 1439
+Timestamp = 0x00000001e461231d
+TRS_number = 0x0
+
+Event name = L2PI_RX_GET_NEW_BD
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x189
+Pc = 0x96d3
+File = l2pi_rx.dpl
+Line = 1033
+Timestamp = 0x00000001e461235a
+TRS_number = 0x0
+
+Event name = L2PI_RX_START
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x19
+Pc = 0x9673
+File = l2pi_rx.dpl
+Line = 3445
+Timestamp = 0x00000001e46ffabb
+TRS_number = 0x0
+Status0 0xc0 0x80 0xa5 0x0
+Status1 0x6 0x81 0x0 0xd2
+Status2, Status3 0xda 0x14 0x38 0x0 0x0 0x1 0x0 0x0
+
+Event name = L2PI_RX_START_PACKET
+Group name = L2PI_RX_FLOW_DATA_UNIT
+Event ID = 0x1a
