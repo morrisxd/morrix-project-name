@@ -2688,6 +2688,7 @@ void    WPE_CLI(void)
    char InputBuf[256];
    WP_U32 i;
 
+	// MENU
    while ((InputBuf[0] != 'q') && (InputBuf[0] != 'k') ) {
       printf("Enter: Enet->HierarchicalEnet: 1-EnetPortDev,       2-bPortEnet,       3-FlowAggHierarchicalEnet,  \n");
       printf("       HierarchicalEnet->Enet: 4-HierarchicalEnetPortDev,  5-bPoprtHierarchicalEnet, 6-FlowAggEnet,       \n");
