@@ -5,3 +5,11 @@ curl http://www.ibm.com/index[0-9].html
 curl http://mediastore.magnumphotos.com/CoreXDoc/MAG/Media/TR3/7/6/9/2/PAR[0-411850].jpg
      http://mediastore.magnumphotos.com/CoreXDoc/MAG/Media/TR3/d/b/4/9/PAR411848.jpg
      http://mediastore.magnumphotos.com/CoreXDoc/MAG/Media/TR3/[0-9a-f]/[0-9a-f]/[0-9a-f]/[0-9a-f]/PAR[0-411848].jpg  
+
+
+
+
+sudo dpkg -i package_file.deb
+http://outlook.pmc-sierra.bc.ca
+
+
