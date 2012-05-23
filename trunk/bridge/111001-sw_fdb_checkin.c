@@ -2786,6 +2786,11 @@ void CLI_CreateTest(void)
    status = WP_IwSystemBuild(dl_general_iwsys_bridge);
    terminate_on_error(status, "WP_IwSystemBuild()",__LINE__);
 
+
+/*----------------------------------------------------------------*\
+	we create PCE module here
+\*----------------------------------------------------------------*/
+
    /* Creates the DL Second round PCE Interface, filters and filter sets (FilterSet B) */
    WPE_CreateDlSecondRoundPceInterface();
 
@@ -4310,6 +4315,21 @@ static void WPE_CheckForwardingFilterCreateErrors(void)
  * FILTER_SET_A_CLASSIFICATION, FILTER_SET_C_CLASSIFICATION
  *
  * group B is used in second round
+ * 
+ * FILTER_SET_A_CLASSIFICATION 	::= {WP_PCE_FIELD_ID_INT_VLAN_TAG, WP_PCE_FIELD_ID_INT_VLAN_TAG}
+ * FILTER_SET_A_FORWARDING 		::= {WP_PCE_FIELD_ID_MAC_DA}
+ * FILTER_SET_A_LEARNING		::= {WP_PCE_FIELD_ID_MAC_SA}
+ * 
+ * FILTER_SET_C_FORWARDING 		::= {WP_PCE_FIELD_ID_INT_VLAN_TAG, WP_PCE_FIELD_ID_INT_VLAN_TAG}
+ * FILTER_SET_C_LEARNING		::= {WP_PCE_FIELD_ID_MAC_SA, WP_PCE_FIELD_ID_INT_VLAN_TAG}
+ * FILTER_SET_D_FORWARDING		::= {WP_PCE_FIELD_ID_MAC_DA, WP_PCE_FIELD_ID_INT_VLAN_TAG, \
+																		WP_PCE_FIELD_ID_EXT_VLAN_TAG}
+ * FILTER_SET_D_LEARNING		::= {WP_PCE_FIELD_ID_MAC_SA, WP_PCE_FIELD_ID_INT_VLAN_TAG, \
+																		WP_PCE_FIELD_ID_EXT_VLAN_TAG}}
+ * FILTER_SET_E_FORWARDING		::= {WP_PCE_FIELD_ID_IW_SYSTEM, WP_PCE_FIELD_ID_MAC_DA, \
+																		WP_PCE_FIELD_ID_INT_VLAN_TAG}
+ * FILTER_SET_E_LEARNING		::= {WP_PCE_FIELD_ID_IW_SYSTEM, WP_PCE_FIELD_ID_MAC_SA, \
+																		WP_PCE_FIELD_ID_INT_VLAN_TAG}
  */   
 static void WPE_CreateDlPceFilters(void)
 {
@@ -4366,6 +4386,8 @@ static void WPE_CreateDlPceFilters(void)
    fwd_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    fwd_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+//////////////////////////////////////////////////////////
+
    fwd_filter_cfg.filter_fields[0].field_id   = WP_PCE_FIELD_ID_MAC_DA;
    fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
    PCE_filter[FILTER_SET_A_FORWARDING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_FORWARDING, &fwd_filter_cfg);
@@ -4387,6 +4409,7 @@ static void WPE_CreateDlPceFilters(void)
    lrn_filter_cfg.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+//////////////////////////////////////////////////////////
    lrn_filter_cfg.filter_fields[0].field_id = WP_PCE_FIELD_ID_MAC_SA;
    lrn_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
    PCE_filter[FILTER_SET_A_LEARNING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_LEARNING, &lrn_filter_cfg);
@@ -4415,6 +4438,7 @@ static void WPE_CreateDlPceFilters(void)
    fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
    fwd_filter_cfg.filter_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
 
+//////////////////////////////////////////////////////////
    fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    PCE_filter[FILTER_SET_C_FORWARDING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_FORWARDING, &fwd_filter_cfg);
    terminate_on_error(PCE_filter[FILTER_SET_C_FORWARDING], "WP_PceFilterCreate",__LINE__);
@@ -4442,6 +4466,7 @@ static void WPE_CreateDlPceFilters(void)
    lrn_filter_cfg.filter_fields[0].field_id   = WP_PCE_FIELD_ID_MAC_SA;
    lrn_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
    lrn_filter_cfg.filter_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////
 
    lrn_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    PCE_filter[FILTER_SET_C_LEARNING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_LEARNING, &lrn_filter_cfg);
@@ -4477,6 +4502,7 @@ static void WPE_CreateDlPceFilters(void)
    fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
    fwd_filter_cfg.filter_fields[2].field_id = WP_PCE_FIELD_ID_EXT_VLAN_TAG;
    fwd_filter_cfg.filter_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////
 
    if (TestType == TEST_SW_FDB_ONLY)
       fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
@@ -4516,6 +4542,7 @@ static void WPE_CreateDlPceFilters(void)
    lrn_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
    lrn_filter_cfg.filter_fields[2].field_id = WP_PCE_FIELD_ID_EXT_VLAN_TAG;
    lrn_filter_cfg.filter_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////
 
    lrn_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    PCE_filter[FILTER_SET_D_LEARNING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_LEARNING, &lrn_filter_cfg);
@@ -4549,6 +4576,7 @@ static void WPE_CreateDlPceFilters(void)
    fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
    fwd_filter_cfg.filter_fields[2].field_id = WP_PCE_FIELD_ID_IW_SYSTEM;
    fwd_filter_cfg.filter_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////
 
    if (TestType == TEST_SW_FDB_ONLY)
       fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
@@ -4586,6 +4614,7 @@ static void WPE_CreateDlPceFilters(void)
    lrn_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
    lrn_filter_cfg.filter_fields[2].field_id = WP_PCE_FIELD_ID_IW_SYSTEM;
    lrn_filter_cfg.filter_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////
 
    lrn_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    PCE_filter[FILTER_SET_E_LEARNING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_LEARNING, &lrn_filter_cfg);
@@ -5102,6 +5131,14 @@ static void WPE_DeleteDlPceInterface(void)
    terminate_on_error(status ,"WP_PceFilterDelete()",__LINE__);  
 }
 
+
+
+/*------------------------------------------------------*\
+FILTER_SET_B_CLASSIFICATION ::= { WP_PCE_FIELD_ID_OUTPUT_IW_PORT }
+FILTER_SET_B_FORWARDING		::= { WP_PCE_FIELD_ID_MAC_DA }
+FILTER_SET_B_LEARNING		::= { WP_PCE_FIELD_ID_MAC_SA }
+\*------------------------------------------------------*/
+
 static void WPE_CreateDlSecondRoundPceFilters(void)
 {
    WP_pce_filter_classification filter_class = {0};
@@ -5129,6 +5166,7 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    /* B classification --- PCE_filter1 */
    filter_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_OUTPUT_IW_PORT;
    filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
    PCE_filter[FILTER_SET_B_CLASSIFICATION] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_class);
    terminate_on_error(PCE_filter[FILTER_SET_B_CLASSIFICATION], "WP_PceFilterCreate",__LINE__);
 
@@ -5164,6 +5202,7 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    /*-------------------------------------------*\
     * B forwarding --- dest MAC address
    \*-------------------------------------------*/
+//////////////////////////////////////////////////////////////////
    fwd_filter_cfg.filter_fields[0].field_id   = WP_PCE_FIELD_ID_MAC_DA;
    fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 
@@ -5201,6 +5240,7 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    lrn_filter_cfg.filter_fields[3].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[3].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
+//////////////////////////////////////////////////////////////////
    lrn_filter_cfg.filter_fields[0].field_id   = WP_PCE_FIELD_ID_MAC_SA;
    lrn_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 
@@ -5330,6 +5370,9 @@ static void WPE_CreateDlSecondRoundPceFilterSets(void)
    terminate_on_error(dl_filter_set[FILTER_SET_B], "WP_PceFilterSetCreate",__LINE__);
 }
 
+
+/*------------------------------------------------*\
+\*------------------------------------------------*/
 static void WPE_CreateDlSecondRoundPceInterface()
 {
    WP_pce_if_params_iw_next_round pce_if_params = {0};
