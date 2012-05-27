@@ -170,12 +170,17 @@ static int initWebs(int demo)
 		error(E_L, E_LOG, T("Can't get hostname"));
 		return -1;
 	}
+#if 1
+	/*-----------------------------------------------------*\
+	 * something wrong here, this code can not run in the HISI
+	\*-----------------------------------------------------*/
 	if ((hp = gethostbyname(host)) == NULL) {
 		error(E_L, E_LOG, T("Can't get host address"));
 		return -1;
 	}
 	memcpy((char *) &intaddr, (char *) hp->h_addr_list[0],
 		(size_t) hp->h_length);
+#endif
 
 /*
  *	Set ../web as the root web. Modify this to suit your needs
