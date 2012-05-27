@@ -5134,7 +5134,7 @@ static void WPE_DeleteDlPceInterface(void)
 
 
 /*------------------------------------------------------*\
-FILTER_SET_B_CLASSIFICATION ::= { WP_PCE_FIELD_ID_OUTPUT_IW_PORT }
+FILTER_SET_B_CLASSIFICATION 	::= { WP_PCE_FIELD_ID_OUTPUT_IW_PORT }
 FILTER_SET_B_FORWARDING		::= { WP_PCE_FIELD_ID_MAC_DA }
 FILTER_SET_B_LEARNING		::= { WP_PCE_FIELD_ID_MAC_SA }
 \*------------------------------------------------------*/
