@@ -6,7 +6,7 @@
 # Copyright (c) PeerSec Networks, Inc. 2010
 #
 #
-
+#include xXXXXX
 all:	compile 
 
 ARCH	= libwebs.a
@@ -66,7 +66,7 @@ DEPEND_FILES	= $(OPT_FILES) ../asp.o ../balloc.o ../mime64.o \
 CFLAGS	= -DWEBS -DOS="LINUX" -DLINUX $(UMSW) $(DASW) $(SSLSW) $(IFMODSW)
 OTHERS	= -DB_STATS -DB_FILL 
 IFLAGS 	= -I.. 
-LDFLAGS	= $(SSLLIB) $(IFMODLIB)
+LDFLAGS	= $(SSLLIB) $(IFMODLIB) -static
 
 compile: $(NAME)
 
