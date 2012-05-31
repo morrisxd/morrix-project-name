@@ -1196,7 +1196,7 @@ void CLI_RunAllFiltersScenario(void)
    /* send data */
    for(filter_set_index=0; filter_set_index < FILTER_SET_COUNT; filter_set_index++)
    {
-      for(ii=0; ii < NUM_OF_FLOWS; ii++)
+      for(ii=0; ii < NUM_OF_FLOWS/* 12 */; ii++)
       {
          WPE_HostSendPacket(filter_set_index, ii);
       }
@@ -2649,6 +2649,7 @@ void CLI_CreateTest(void)
 
    status = WP_SysCommit();
    terminate_on_error(status, "WP_SysCommit",__LINE__);
+printf ("CLI_CreateTest: WP_SysCommit() OK\n");
    
    status = WPU_DebugEventGroupLoad(WP_WINPATH(DEFAULT_WPID),-1,"IWGP_MODULE_EXITS");
    terminate_on_error(status, "WPU_DebugEventGroupLoad",__LINE__);
@@ -2662,6 +2663,7 @@ void CLI_CreateTest(void)
    status = WPU_DebugEventGroupLoad(WP_WINPATH(DEFAULT_WPID),-1,"IWGP_LOCKS");
    terminate_on_error(status, "WPU_DebugEventGroupLoad",__LINE__);
 
+printf ("CLI_CreateTest: WPU_DebugEventGroupLoad() OK\n");
 
 
 /*---------------------------------------*\
@@ -2684,6 +2686,7 @@ void CLI_CreateTest(void)
                                              WP_IW_VLAN_AWARE_BRIDGING_MODE,
                                              &br_agg_gbe[0]);
    terminate_on_error(default_agg, "WP_IwFlowAggregationCreate()",__LINE__);
+printf ("CLI_CreateTest: WP_IwFlowAggregationCreate(default_agg ) OK\n");
 
 /*---------------------------------------*\
  * 	morris
@@ -2700,6 +2703,7 @@ void CLI_CreateTest(void)
                                                 WP_IW_VLAN_AWARE_BRIDGING_MODE,
                                                 &br_agg_gbe[0]);
       terminate_on_error(flow_agg[i], "WP_IwFlowAggregationCreate()",__LINE__);
+printf ("CLI_CreateTest: WP_IwFlowAggregationCreate(flow_agg[%d])OK\n", i);
    }
    
 /*---------------------------------------*\
@@ -2710,6 +2714,7 @@ void CLI_CreateTest(void)
    /* Create Generic IW system */
    dl_general_iwsys_bridge = WP_IwSystemCreate(WP_WINPATH(DEFAULT_WPID), WP_IW_VLAN_AWARE_BRIDGING_MODE, &iw_sys_bridging[0]);
    terminate_on_error(dl_general_iwsys_bridge, "WP_IwSystemCreate",__LINE__);
+printf ("CLI_CreateTest: WP_IwSystemCreate(dl_general_iwsys_bridge ) OK\n");
 
 
 
@@ -2724,10 +2729,13 @@ void CLI_CreateTest(void)
 \*---------------------------------------*/
    /* create output IW Ports */
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_output_port, 300);
+printf ("CLI_CreateTest: WPE_PortsCreate(h_iw_output_port) OK\n");
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_output_port_b, 300);
+printf ("CLI_CreateTest: WPE_PortsCreate(h_iw_output_port_b) OK\n");
 
    /* Create next round IW port */
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_port_next_round, 300);
+printf ("CLI_CreateTest: WPE_PortsCreate(h_iw_port_next_round) OK\n");
 
 
 
@@ -2743,6 +2751,7 @@ void CLI_CreateTest(void)
    {
       dl_iwsys_bridge[i] = WP_IwSystemCreate(WP_WINPATH(DEFAULT_WPID), WP_IW_VLAN_AWARE_BRIDGING_MODE, &iw_sys_bridging[0]);
       terminate_on_error(dl_iwsys_bridge[i], "WP_IwSystemCreate",__LINE__);
+printf ("CLI_CreateTest: WP_IwSystemCreate(dl_iwsys_bridge[%d]) OK\n", i);
    }
    
 
@@ -2769,6 +2778,7 @@ void CLI_CreateTest(void)
    {
       max_mac_addresses = NUM_OF_RULES_PER_FILTER_SET;
       WPE_PortsCreate(dl_iwsys_bridge[(i%2)], &h_iw_port_gbe[i], max_mac_addresses);
+printf ("CLI_CreateTest: WPE_PortsCreate(h_iw_port_gbe[%d]) OK\n", i);
    }
 
 
@@ -2779,12 +2789,16 @@ void CLI_CreateTest(void)
 \*---------------------------------------*/
    /* Create General IW port */
    WPE_PortsCreate(dl_general_iwsys_bridge, &h_iw_port_general, 300);
+printf ("CLI_CreateTest: WPE_PortsCreate(h_iw_port_general OK\n");
    WPE_DlRxBindingCreate(dl_general_iwsys_bridge);
+printf ("CLI_CreateTest: WPE_DlRxBindingCreate(dl_general_iwsys_bridge) OK\n");
 
    WPE_SystemEnable();
+printf ("CLI_CreateTest: WPE_SystemEnable() OK\n");
 
    status = WP_IwSystemBuild(dl_general_iwsys_bridge);
    terminate_on_error(status, "WP_IwSystemBuild()",__LINE__);
+printf ("CLI_CreateTest: WP_IwSystemBuild(dl_general_iwsys_bridge) OK\n");
 
 
 /*----------------------------------------------------------------*\
@@ -2793,12 +2807,15 @@ void CLI_CreateTest(void)
 
    /* Creates the DL Second round PCE Interface, filters and filter sets (FilterSet B) */
    WPE_CreateDlSecondRoundPceInterface();
+printf ("CLI_CreateTest: WPE_CreateDlSecondRoundPceInterface() OK\n");
 
    /* Creates the DL PCE filters and rules (and filter sets A,C,D,E) */
    WPE_CreateDlPceInterface(dl_general_iwsys_bridge);
+printf ("CLI_CreateTest: WPE_CreateDlPceInterface(dl_general_iwsys_bridge) OK\n");
 
    /* PCE Statistics reset */
    WPE_CheckPceFilterStatsReset();
+printf ("CLI_CreateTest: WPE_CheckPceFilterStatsReset() OK\n");
 }
 
 void WPE_CheckPceFilterStatsReset(void)
@@ -3289,19 +3306,24 @@ static void WPE_LayerTwoSystemCreate(void)
       status = WP_DriverInit();
    }
    terminate_on_error(status, "WP_DriverInit",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_DriverRelease() OK\n");
 
    int_ram_partition.policer_entries = 0;
    int_ram_partition.pce_hw_rules_num = pce_init.hardware_rules_num;
    WT_SetIntRamPartition(WP_WINPATH(DEFAULT_WPID), &int_ram_partition);
+printf ("WPE_LayerTwoSystemCreate: WT_SetIntRamPartition() OK\n");
 
    status = WP_SysInit(WP_WINPATH(DEFAULT_WPID), context);
    terminate_on_error(status, "WP_SysInit",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_SysInit() OK\n");
 
    status = WPX_BoardConfigure(WP_WINPATH(DEFAULT_WPID), WPX_CONFIGURE_DEFAULT_CHECKIN);
    terminate_on_error(status, "WPX_BoardConfigure()", __LINE__);
+printf ("WPE_LayerTwoSystemCreate: WPX_BoardConfigure() OK\n");
 
    status = WPX_BoardSerdesInit(WP_WINPATH(DEFAULT_WPID), ENET_PORT, WP_TRUE);
    terminate_on_error(status, "WPX_BoardSerdesInit()", __LINE__);      
+printf ("WPE_LayerTwoSystemCreate: WPX_BoardSerdesInit() OK\n");
 
    /* Check only once */
    if (!Checked)
@@ -3309,6 +3331,7 @@ static void WPE_LayerTwoSystemCreate(void)
       /* Check PCE Module Init scenarios */
       WP_CheckPceModuleInitScenarios();
       Checked = WP_TRUE;
+printf ("WPE_LayerTwoSystemCreate: WP_CheckPceModuleInitScenarios() OK\n");
    }
    
 
@@ -3319,6 +3342,7 @@ static void WPE_LayerTwoSystemCreate(void)
       pce_init.sw_fdb_info->fdb_threshold = 0;
       pce_init.sw_fdb_info->max_fdb_rules = 64;
       pce_init.pce_discard_mode = WP_PCE_DISCARD_MODE_ALL;
+printf ("WPE_LayerTwoSystemCreate: TestType == TEST_SW_FDB_ONLY() OK\n");
    }
    else  if (TestType == TEST_HYBRID_FDB)
    {      
@@ -3327,16 +3351,19 @@ static void WPE_LayerTwoSystemCreate(void)
       pce_init.sw_fdb_info->fdb_threshold = 20;
       pce_init.sw_fdb_info->max_fdb_rules = 128;
       pce_init.pce_discard_mode = WP_PCE_DISCARD_MODE_SMART_DISCARD;
+printf ("WPE_LayerTwoSystemCreate: TestType == TEST_HYBRID_FDB() OK\n");
    } 
    else 
    {      
       pce_init.enhanced_mode = WP_NO_ENHANCMENT;
       pce_init.pce_discard_mode = WP_PCE_DISCARD_MODE_ALL;
+printf ("WPE_LayerTwoSystemCreate: TestType == else () OK\n");
    }
    pce_init.hardware_rules_num = 200;
    pce_init.parser_info = &pce_parser_info;
    status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_PCE, &pce_init);
    terminate_on_error(status, "WPI_PceModuleInit()",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_ModuleInit() OK\n");
    
    free_pce_hw_rules = pce_init.hardware_rules_num;
 
@@ -3346,11 +3373,13 @@ static void WPE_LayerTwoSystemCreate(void)
 
    pool_144 = WP_PoolCreate(WP_WINPATH(DEFAULT_WPID), WP_pool_buffer, buffer_data_144);
    terminate_on_error(pool_144, "WP_PoolCreate() pool_144",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_PoolCreate() OK\n");
 
    /* Create an interworking queue node */
    qn_iw->adjunct_pool = pool_2048;
    qniw = WP_QNodeCreate(WP_WINPATH(DEFAULT_WPID),WP_QNODE_IWQ| WP_QNODE_OPT_FMU, qn_iw);
    terminate_on_error(qniw, "WP_QNodeCreate() qniw",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_QNodeCreate() OK\n");
 
 
 /*---------------------------------------*\
@@ -3362,15 +3391,18 @@ static void WPE_LayerTwoSystemCreate(void)
    /* Create an IW Host port */
    iwp1 = WP_PortCreate(WP_WINPATH(DEFAULT_WPID), WP_PORT_IW_HOST, NULL);
    terminate_on_error(iwp1, "WP_PortCreate() IW Host",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_PortCreate(iwp1/WP_PORT_IW_HOST) OK\n");
 
    /* Create an IW Host Device */
    devhost = WP_DeviceCreate(iwp1, 0, WP_DEVICE_IW_HOST, NULL);
    terminate_on_error(devhost, "WP_DeviceCreate() IW Host",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_DeviceCreate(devhost) OK\n");
 
    /* Create an GEnet Port (the device that use "regular" mode) */
    enet_s_fast->interface_mode = WP_ENET_SGMII_1000;
    gbe_port1 = WP_PortCreate(WP_WINPATH(DEFAULT_WPID), ENET_PORT, enet_s_fast);
    terminate_on_error(gbe_port1, "WP_PortCreate()",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_PortCreate(ENET_PORT/gbe_port1) OK\n");
 
    /* Create an GEnet Device (the device that use "regular" mode) */
    enet_dev->max_tx_channels = 1;
@@ -3378,6 +3410,7 @@ static void WPE_LayerTwoSystemCreate(void)
    enet_dev->extended_params = NULL;
    gbe_dev1 = WP_DeviceCreate(gbe_port1, 0,WP_DEVICE_ENET, enet_dev);
    terminate_on_error(gbe_dev1, "WP_DeviceCreate() GENET13",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_DeviceCreate(gbe_dev1) OK\n");
 
    enet_dev->max_tx_channels = MAX_NUM_OF_CHANNELS;
    enet_dev->extended_params = enet_device_extended_config;
@@ -3386,6 +3419,7 @@ static void WPE_LayerTwoSystemCreate(void)
                             WP_DEV_MOD_ENET_RX_STATMODE ,
                             enet_dev);
    terminate_on_error(status, "WP_DeviceModify() GENET13",__LINE__);
+printf ("WPE_LayerTwoSystemCreate: WP_DeviceModify(gbe_dev1) OK\n");
 }
 
 
@@ -3861,6 +3895,7 @@ static void WPE_ChannelsCreate(void)
                                         WP_ENET,
                                         &gbe_ch[0]);
    terminate_on_error(gbe1_rx_ch_handle, "WP_ChannelCreate() RX_Channel ENET13",__LINE__);
+printf ("WPE_ChannelsCreate: WP_ChannelCreate(gbe1_rx_ch_handle) OK\n");
 
    /* Create Enet1 fast ("reguler") TX channel */
    gbe1_tx_ch_handle = WP_ChannelCreate(ch_tag++,
@@ -3870,9 +3905,11 @@ static void WPE_ChannelsCreate(void)
                                         WP_ENET,
                                         &gbe_ch[0]);
    terminate_on_error(gbe1_tx_ch_handle, "WP_ChannelCreate() TX_Channel ENET13",__LINE__);
+printf ("WPE_ChannelsCreate: WP_ChannelCreate(gbe1_tx_ch_handle) OK\n");
    
    status =  WP_IwTxBindingCreate(gbe1_tx_ch_handle, WP_IW_TX_BINDING, &tx_binding_l2pi[0]);
    terminate_on_error(status, "WP_IwTxBindingCreate() TX ENET fast device",__LINE__);
+printf ("WPE_ChannelsCreate: WP_ChannelCreate(WP_IwTxBindingCreate) OK\n");
 
    /*create host rx channel*/
    rx_host_handle = WP_ChannelCreate(0x1111,
@@ -3882,6 +3919,7 @@ static void WPE_ChannelsCreate(void)
                                      WP_IW_HOST,
                                      &ch_config_iw[0]);
    terminate_on_error(rx_host_handle, "WP_ChannelCreate() Host sys",__LINE__);
+printf ("WPE_ChannelsCreate: WP_ChannelCreate(rx_host_handle) OK\n");
 }
 
 static void WPE_PortsCreate(WP_handle iw_sys, WP_handle *iwport, WP_U32 max_mac_addresses)
@@ -4730,6 +4768,7 @@ static void WPE_CreateDlPceRules(void)
       rule_cfg.rule_fields[1].value.vlan_tag = 0x107 + (0x08 * flow_index);
 
       rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
 
       rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
 
@@ -4762,6 +4801,7 @@ static void WPE_CreateDlPceRules(void)
       rule_cfg.rule_fields[1].value.vlan_tag = 0x110 + (0x10 * (flow_index/NUM_OF_INPUT_PORT_PER_FILTER_SET)) + (flow_index%2);
 
       rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
 
       rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
 
@@ -4801,6 +4841,7 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.rule_fields[0].value.mac_addr[5] = i; 
 
       rule_fwd.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
       
       rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
       rule_fwd.match_result[0].param.iw_port.iw_port_handle = h_iw_output_port_b; 
@@ -4851,6 +4892,7 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.rule_fields[1].value.vlan_tag = 0x120 + (i%2);
 
       rule_fwd.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
      /* ------------- */ 
       rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
       rule_fwd.match_result[0].param.iw_port.iw_port_handle = h_iw_output_port; 
@@ -4907,6 +4949,7 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.rule_fields[2].value.vlan_tag = 0x130 + (i%2);
 
       rule_fwd.rule_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
       
       rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
       rule_fwd.match_result[0].param.iw_port.iw_port_handle = h_iw_output_port; 
@@ -4966,6 +5009,7 @@ static void WPE_CreateDlPceRules(void)
       rule_fwd.rule_fields[2].value.iw_system_handle = dl_iwsys_bridge[i%2];
 
       rule_fwd.rule_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
      
      /* --------------- */ 
       rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
@@ -5235,9 +5279,9 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    /*-------------------------------------------*\
     * B forwarding --- dest MAC address
    \*-------------------------------------------*/
-//////////////////////////////////////////////////////////////////
    fwd_filter_cfg.filter_fields[0].field_id   = WP_PCE_FIELD_ID_MAC_DA;
    fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
 
    fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    PCE_filter[FILTER_SET_B_FORWARDING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_FORWARDING, &fwd_filter_cfg);
@@ -5273,9 +5317,9 @@ static void WPE_CreateDlSecondRoundPceFilters(void)
    lrn_filter_cfg.filter_fields[3].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    lrn_filter_cfg.filter_fields[3].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
-//////////////////////////////////////////////////////////////////
    lrn_filter_cfg.filter_fields[0].field_id   = WP_PCE_FIELD_ID_MAC_SA;
    lrn_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
 
    lrn_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    PCE_filter[FILTER_SET_B_LEARNING] = WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_LEARNING, &lrn_filter_cfg);
@@ -5325,6 +5369,7 @@ static void WPE_CreateDlSecondRoundPceRules(void)
    rule_cfg.rule_fields[0].value.iw_port_handle = h_iw_output_port_b;
    
    rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
    
    /*
     * i think there is no use about the following lines
@@ -5363,6 +5408,7 @@ static void WPE_CreateDlSecondRoundPceRules(void)
       rule_fwd.rule_fields[0].value.mac_addr[5] = i; 
       
       rule_fwd.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
       
       // the underlying lines of codes is of no use
       rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
@@ -5522,6 +5568,7 @@ void WPE_CreateDummyPceHwRules(WP_U32 rules_needed_count)
       rule_cfg.rule_fields[1].value.vlan_tag = 0xF00 + rule_index;
 
       rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+//////////////////////////////////////////////////////////////////
 
       rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
 
