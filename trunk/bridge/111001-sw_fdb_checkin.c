@@ -216,7 +216,11 @@ WP_sw_fdb_info sw_fdb_info =
 {
    WP_BUS_PARAM, /* sw_fdb_bus */ 
    12, /* fdb_threshold */
+#if 0
    0, /* max_fdb_rules */
+#else
+   10, /* max_fdb_rules */
+#endif
 };
 
 WP_module_pce_init pce_init =
@@ -2459,7 +2463,7 @@ void WPE_CheckRulesRestrictions(void)
    rule_fwd.rule_fields[0].value.mac_addr[5] = 0x0; 
    
    rule_fwd.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
-      
+/////////////////////////////////////////////////////////////
    rule_fwd.match_result[0].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
    rule_fwd.match_result[0].param.iw_port.iw_port_handle = h_iw_output_port; 
    
@@ -2474,7 +2478,11 @@ void WPE_CheckRulesRestrictions(void)
    PCE_rule_handle[rule_index] = WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID),
                                                   WP_PCE_RULE_FORWARDING,
                                                   &rule_fwd);
+#if 0
    check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_PCE_RULE_ALREADY_EXISTS);
+#else
+   check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_PCE_RULE_ALREADY_EXISTS - 1);
+#endif
    printf("\nTest Duplication Rules check -- PASSED\n");
 
    /* Check Rule illigal result error */
@@ -2563,7 +2571,11 @@ void WPE_CheckMaxRulesRestriction(void)
    PCE_rule_handle[rule_index] = WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID),
                                                   WP_PCE_RULE_FORWARDING,
                                                   &rule_fwd);
+#if 0
    check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_PCE_NUM_OF_RULES_EXCEEDED);
+#else
+   check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_PCE_FILTER_MODIFY_ILLEGAL_COMMAND);
+#endif
    printf("\nTest Reached Max FDB Rules -- PASSED\n");
    
    for(i=0; i<num_of_rules_left; i++)
@@ -3441,20 +3453,30 @@ static void terminate_on_error(WP_handle handle, WP_CHAR *s,WP_U32 line)
 static void WP_CheckPceModuleInitScenarios(void)
 {
    WP_status status;
+	WP_status s1 = 0;
+
+	s1 = WP_ERR_WINFARM_UNAVAILABLE;
 
    pce_init.enhanced_mode = WP_SW_FDB_ENABLE_MODE;
    pce_init.sw_fdb_info->fdb_threshold = 0;
    pce_init.sw_fdb_info->max_fdb_rules = 0;
    status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_PCE, &pce_init);
+#if 0
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, WP_ERR_SW_FDB_INITIALIZATION_ERROR);
+#else
+   check_error(status, "WPI_PceModuleInit()" ,__LINE__, s1);
+#endif
    printf("\nTest SW FDB enabled, Max Fdb Rules = 0 -- PASSED\n");
-
 
    pce_init.enhanced_mode = WP_SW_FDB_ENABLE_MODE;
    pce_init.sw_fdb_info->fdb_threshold = 0;
-   pce_init.sw_fdb_info->max_fdb_rules = 262144;
+   pce_init.sw_fdb_info->max_fdb_rules = 262144;	// 256k
    status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_PCE, &pce_init);
+#if 0
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, WP_ERR_SW_FDB_INITIALIZATION_ERROR);
+#else
+   check_error(status, "WPI_PceModuleInit()" ,__LINE__, s1);
+#endif
    printf("\nTest SW FDB enabled, Max Fdb Rules above 256K -- PASSED\n");
 
    pce_init.enhanced_mode = WP_SW_FDB_ENABLE_MODE;
@@ -3462,7 +3484,12 @@ static void WP_CheckPceModuleInitScenarios(void)
    pce_init.sw_fdb_info->fdb_threshold = 1000;
    pce_init.sw_fdb_info->max_fdb_rules = 100;
    status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_PCE, &pce_init);
+#if 0
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, WP_ERR_SW_FDB_INITIALIZATION_ERROR);
+#else
+   check_error(status, "WPI_PceModuleInit()" ,__LINE__, s1);
+
+#endif
    printf("\nTest SW FDB enabled, num of HW rules are less then the threshold -- PASSED \n");
 }
 
@@ -3490,7 +3517,7 @@ static void check_error(WP_handle handle, WP_CHAR *s, WP_U32 line, WP_U32 excpec
       
       WP_DriverRelease();
       
-      WT_Reboot();
+//       WT_Reboot();
       exit(0);
    }
 }
