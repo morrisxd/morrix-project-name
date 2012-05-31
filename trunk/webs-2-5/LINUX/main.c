@@ -170,7 +170,7 @@ static int initWebs(int demo)
 		error(E_L, E_LOG, T("Can't get hostname"));
 		return -1;
 	}
-#if 1
+#if 0
 	/*-----------------------------------------------------*\
 	 * something wrong here, this code can not run in the HISI
 	\*-----------------------------------------------------*/
@@ -180,6 +180,8 @@ static int initWebs(int demo)
 	}
 	memcpy((char *) &intaddr, (char *) hp->h_addr_list[0],
 		(size_t) hp->h_length);
+#else
+	inet_aton (&intaddr, "192.168.0.168");
 #endif
 
 /*
