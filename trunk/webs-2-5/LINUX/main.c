@@ -35,8 +35,8 @@ void	formDefineUserMgmt(void);
 /*
  *	Change configuration here
  */
-
-static char_t		*rootWeb = T("www");			/* Root web directory */
+#define	ROOT_DIR	T("/www")
+static char_t		*rootWeb = T("/www");			/* Root web directory */
 static char_t		*demoWeb = T("wwwdemo");		/* Root web directory */
 static char_t		*password = T("");				/* Security password */
 static int			port = WEBS_DEFAULT_PORT;		/* Server port */
@@ -181,7 +181,7 @@ static int initWebs(int demo)
 	memcpy((char *) &intaddr, (char *) hp->h_addr_list[0],
 		(size_t) hp->h_length);
 #else
-	inet_aton (&intaddr, "192.168.0.168");
+	inet_aton ("192.168.0.168", &intaddr);
 #endif
 
 /*
