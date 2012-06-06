@@ -56,6 +56,7 @@ WP_CHAR appname[] = "Test for SW FDB";
 
 #define DEBUG 0
 #define DEFAULT_WPID	(0)
+#define USE_SHIFT_ENUM	(1)
 
 enum filter_sets
 {
@@ -216,7 +217,7 @@ WP_sw_fdb_info sw_fdb_info =
 {
    WP_BUS_PARAM, /* sw_fdb_bus */ 
    12, /* fdb_threshold */
-#if 0
+#if 1
    0, /* max_fdb_rules */
 #else
    10, /* max_fdb_rules */
@@ -2478,7 +2479,7 @@ void WPE_CheckRulesRestrictions(void)
    PCE_rule_handle[rule_index] = WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID),
                                                   WP_PCE_RULE_FORWARDING,
                                                   &rule_fwd);
-#if 0
+#if USE_SHIFT_ENUM	
    check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_PCE_RULE_ALREADY_EXISTS);
 #else
    check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_PCE_RULE_ALREADY_EXISTS - 1);
@@ -2497,7 +2498,12 @@ void WPE_CheckRulesRestrictions(void)
                                                   &rule_fwd);
    if (pce_init.enhanced_mode == WP_SW_FDB_ENABLE_MODE)
    {
+#if USE_SHIFT_ENUM	
       check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_SW_FDB_RULE_RESULT_ILLEGAL_COMBINATION);
+#else
+      check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_SW_FDB_RULE_RESULT_ILLEGAL_COMBINATION - 1);
+#endif
+
    }
    else
    {
@@ -2571,7 +2577,7 @@ void WPE_CheckMaxRulesRestriction(void)
    PCE_rule_handle[rule_index] = WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID),
                                                   WP_PCE_RULE_FORWARDING,
                                                   &rule_fwd);
-#if 0
+#if USE_SHIFT_ENUM	
    check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_PCE_NUM_OF_RULES_EXCEEDED);
 #else
    check_error(PCE_rule_handle[rule_index], "WP_PceRuleCreate()" ,__LINE__, WP_ERR_PCE_FILTER_MODIFY_ILLEGAL_COMMAND);
@@ -3461,7 +3467,7 @@ static void WP_CheckPceModuleInitScenarios(void)
    pce_init.sw_fdb_info->fdb_threshold = 0;
    pce_init.sw_fdb_info->max_fdb_rules = 0;
    status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_PCE, &pce_init);
-#if 0
+#if USE_SHIFT_ENUM	
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, WP_ERR_SW_FDB_INITIALIZATION_ERROR);
 #else
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, s1);
@@ -3472,7 +3478,7 @@ static void WP_CheckPceModuleInitScenarios(void)
    pce_init.sw_fdb_info->fdb_threshold = 0;
    pce_init.sw_fdb_info->max_fdb_rules = 262144;	// 256k
    status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_PCE, &pce_init);
-#if 0
+#if USE_SHIFT_ENUM	
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, WP_ERR_SW_FDB_INITIALIZATION_ERROR);
 #else
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, s1);
@@ -3484,7 +3490,7 @@ static void WP_CheckPceModuleInitScenarios(void)
    pce_init.sw_fdb_info->fdb_threshold = 1000;
    pce_init.sw_fdb_info->max_fdb_rules = 100;
    status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_PCE, &pce_init);
-#if 0
+#if USE_SHIFT_ENUM	
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, WP_ERR_SW_FDB_INITIALIZATION_ERROR);
 #else
    check_error(status, "WPI_PceModuleInit()" ,__LINE__, s1);
