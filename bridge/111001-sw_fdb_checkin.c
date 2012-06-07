@@ -3505,8 +3505,14 @@ static void check_error(WP_handle handle, WP_CHAR *s, WP_U32 line, WP_U32 excpec
    
    if (WP_ERROR_P(handle)) 
    {
+		if (WP_ERR_IW_NAT_ALLOCATION < excpected_error)
+	{
       if ((WP_ERROR(handle) != (excpected_error - 1)))
          err = 1;
+	} else {
+      if ((WP_ERROR(handle) != excpected_error))
+         err = 1;
+	}
    }
    else
    {
@@ -3535,7 +3541,9 @@ static void terminate(WP_CHAR *s, WP_U32 line)
 
    WP_DriverRelease();
 
+#if 0
    WT_Reboot();
+#endif
    exit(0);
 }
 
