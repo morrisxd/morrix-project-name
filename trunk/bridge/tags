@@ -152,6 +152,8 @@ PHY_BOARD_LIB_DIR	makefile	/^PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)\/$(WPI_BOARD)\/li
 PHY_DIR	makefile	/^PHY_DIR = $(WDDI_DIR)\/phy$/;"	m
 POOL_LIMIT	111001-sw_fdb_checkin.c	148;"	d	file:
 POOL_LIMIT	111002-sw_fdb_system_test.c	262;"	d	file:
+PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_backhaul$/;"	m
+PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/wpi_pps_image_iwgp_parser.o$/;"	m
 PacketDataUnitSetup	111001-sw_fdb_checkin.c	/^void PacketDataUnitSetup(WP_data_unit *data_unit,$/;"	f
 PrepareExpectedData	111001-sw_fdb_checkin.c	/^void PrepareExpectedData(WP_U8 *expected_data,$/;"	f
 QNCallback	111001-sw_fdb_checkin.c	/^WP_S32 QNCallback(WP_S32 status) {$/;"	f

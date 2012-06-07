@@ -13,6 +13,7 @@ WPI_BOARD  	= wds
 WPI_HOST   	= linux
 UFE_TYPE        = ufe412
 DPS_IMAGE_NAME  = wpi_dps_image_backhaul
+PPS_IMAGE_NAME  = wpi_pps_image_backhaul
 
 WDDS_OBJECTS = objects
 WDDI_SOURCES = /sources
@@ -155,6 +156,7 @@ WDDI_LIBS += $(BOARD_LIB)
 
 # DPS Image to use
 DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)/$(WDDS_OBJECTS)/$(WPI_HOST)/$(WPI_TARGET)/lib/$(DPS_IMAGE_NAME).o
+PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)/objects/$(WPI_HOST)/$(WPI_TARGET)/lib/wpi_pps_image_iwgp_parser.o
 
 #setting special flag for linux compilation
 ifeq "$(WPI_TARGET)" "mips_linux"
@@ -205,7 +207,7 @@ ifneq "$(START_FILE)" ""
 	-cp $(WPI_START_FILE)/$(START_FILE) $(START_FILE)
 endif
 # Do the link	
-	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) \
+	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(PPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) \
 	$(WDDI_LIBS) $(OTHER_LIB)
 
 # Clean up after everything that might have happened
