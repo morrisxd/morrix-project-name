@@ -318,12 +318,14 @@ WPT_GenericFlowStatistics	111001-sw_fdb_checkin.c	/^void WPT_GenericFlowStatisti
 WPT_GenericFlowStatistics	111002-sw_fdb_system_test.c	/^void WPT_GenericFlowStatistics( WP_handle agg)$/;"	f
 WPT_GenericFlowStatisticsReset	111002-sw_fdb_system_test.c	/^void WPT_GenericFlowStatisticsReset(WP_handle agg)$/;"	f
 WPT_HostChannelQueueSize	111001-sw_fdb_checkin.c	/^WP_U32 WPT_HostChannelQueueSize(WP_handle rx_host_handle)$/;"	f
+WPT_HostChannelQueueSizeX	111001-sw_fdb_checkin.c	/^WP_U32 WPT_HostChannelQueueSizeX (WP_handle rx_host_handle)$/;"	f
 WPT_IwBridgingPortStatsReset	111002-sw_fdb_system_test.c	/^void WPT_IwBridgingPortStatsReset(WP_handle port_handle)$/;"	f
 WPT_LocalDeviceStatsReset	111001-sw_fdb_checkin.c	/^void WPT_LocalDeviceStatsReset(WP_handle enet_handle)$/;"	f
 WPT_LocalDeviceStatsReset	111002-sw_fdb_system_test.c	/^void WPT_LocalDeviceStatsReset(WP_handle enet_handle)$/;"	f
 WPT_LocalDisplayDeviceStats	111001-sw_fdb_checkin.c	/^WP_U32 WPT_LocalDisplayDeviceStats(WP_handle enet_handle)$/;"	f
 WPT_LocalDisplayDeviceStats	111002-sw_fdb_system_test.c	/^WP_U32 WPT_LocalDisplayDeviceStats(WP_handle enet_handle)$/;"	f
 WPT_LocalDisplayXgiDeviceStats	111002-sw_fdb_system_test.c	/^WP_U32 WPT_LocalDisplayXgiDeviceStats(WP_handle enet_handle)$/;"	f
+WPT_ShowChannelQueueSize	111001-sw_fdb_checkin.c	/^WP_U32 WPT_ShowChannelQueueSize(WP_handle rx_host_handle)$/;"	f
 WPT_StatField	111001-sw_fdb_checkin.c	/^} WPT_StatField;$/;"	t	typeref:union:StatField	file:
 WPT_StatField	111002-sw_fdb_system_test.c	/^} WPT_StatField;$/;"	t	typeref:union:StatField	file:
 WPX_UFE_DIR	makefile	/^WPX_UFE_DIR = $(WPI_WDDS_DIR)\/ufe$/;"	m

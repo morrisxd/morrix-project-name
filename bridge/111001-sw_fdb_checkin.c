@@ -54,7 +54,7 @@ extern WP_U16 dps_PC_Table_Init[];
 
 WP_CHAR appname[] = "Test for SW FDB";
 
-#define DEBUG 0
+#define DEBUG 1
 #define DEFAULT_WPID	(0)
 #define USE_SHIFT_ENUM	(1)
 
@@ -811,6 +811,8 @@ static void WPE_CheckLearningFilterModifyErrors(void);
 static void WT_CheckFilterSetModify(void);
 
 WP_U32 WPT_HostChannelQueueSize(WP_handle rx_host_handle);
+WP_U32 WPT_HostChannelQueueSizeX(WP_handle rx_host_handle);
+WP_U32 WPT_ShowChannelQueueSize(WP_handle rx_host_handle);
 WP_U32 WPT_LocalDisplayDeviceStats(WP_handle device_handle);
 void WPE_CheckPceFilterStats(WP_handle filter);
 
@@ -1009,6 +1011,9 @@ void PacketDataUnitSetup(WP_data_unit *data_unit,
    WP_CHAR mac_da_high[9];
    WP_CHAR mac_da_low[5];
    WP_CHAR cvlan[7];
+#if DEBUG
+   WP_U32 ii = 0;
+#endif
 
    /* set the ip header the packet */
    WP_U8 temp_ip_header_hex[100];
@@ -1119,7 +1124,6 @@ void PacketDataUnitSetup(WP_data_unit *data_unit,
 #if DEBUG
    printf ("packet : %x \n ", (WP_U32) km_data_ptr);
 
-   WP_U32 ii = 0;
    for( ii=0; ii < data_unit->segment->data_size; ii++)
    {
       if((ii)%4 == 0) printf("\n");
@@ -1204,14 +1208,19 @@ void CLI_RunAllFiltersScenario(void)
       for(ii=0; ii < NUM_OF_FLOWS/* 12 */; ii++)
       {
          WPE_HostSendPacket(filter_set_index, ii);
+         WPT_ShowChannelQueueSize (rx_host_handle);
       }
       
       for(ii=0; ii < NUM_OF_FLOWS; ii++)
       {
-         WPE_CheckReceivedTraffic(ii);         
+         if (1)
+         {
+            WPE_CheckReceivedTraffic(ii);         
+            printf ("CLI_RunAllFiltersScenario: WPE_CheckReceivedTraffic(%2d)(%2d)\n", filter_set_index, ii);
+         }
       }
    }
-   
+   printf ("CLI_RunAllFiltersScenario: before WPE_CheckStatistics()\n"); 
    WPE_CheckStatistics();
 
    printf("\nFilter Scenarios Pass\n");
@@ -2078,7 +2087,7 @@ void CLI_RunRuleScenarios(void)
    }
    
    /* check for packet drop */
-   if(WPT_HostChannelQueueSize(rx_host_handle))
+   if(WPT_HostChannelQueueSizeX(rx_host_handle))
       terminate("Rx Host Channel wrong Size",__LINE__);
 
    /* Check recieved data */
@@ -2128,7 +2137,7 @@ void CLI_RunRuleScenarios(void)
    }
 
    /* check for packet drop */
-   if(WPT_HostChannelQueueSize(rx_host_handle) != NUM_OF_FLOWS)
+   if(WPT_HostChannelQueueSizeX(rx_host_handle) != NUM_OF_FLOWS)
       terminate("Rx Host Channel wrong Size",__LINE__);
 
    /* check statistics */
@@ -3505,14 +3514,14 @@ static void check_error(WP_handle handle, WP_CHAR *s, WP_U32 line, WP_U32 excpec
    
    if (WP_ERROR_P(handle)) 
    {
-		if (WP_ERR_IW_NAT_ALLOCATION < excpected_error)
-	{
-      if ((WP_ERROR(handle) != (excpected_error - 1)))
-         err = 1;
-	} else {
-      if ((WP_ERROR(handle) != excpected_error))
-         err = 1;
-	}
+      if (WP_ERR_IW_NAT_ALLOCATION < excpected_error)
+      {
+         if ((WP_ERROR(handle) != (excpected_error - 1)))
+            err = 1;
+      } else {
+         if ((WP_ERROR(handle) != excpected_error))
+            err = 1;
+      }
    }
    else
    {
@@ -3547,6 +3556,28 @@ static void terminate(WP_CHAR *s, WP_U32 line)
    exit(0);
 }
 
+WP_U32 WPT_ShowChannelQueueSize(WP_handle rx_host_handle)
+{
+   WP_U32 qdepth = 0;
+   WP_status status;
+
+   status = WP_ChannelQDepth(rx_host_handle,
+                             &qdepth);
+   printf ("WPT_ShowChannelQueueSize: qdepth(%d)\n", qdepth);
+   return (qdepth - 1);
+}
+
+WP_U32 WPT_HostChannelQueueSizeX (WP_handle rx_host_handle)
+{
+   WP_U32 qdepth = 0;
+   WP_status status;
+
+   status = WP_ChannelQDepth(rx_host_handle,
+                             &qdepth);
+   terminate_on_error(status, "WP_ChannelQDepth", __LINE__);
+   printf ("WPT_HostChannelQueueSize: qdepth(%d)\n", qdepth);
+   return (qdepth);
+}
 
 WP_U32 WPT_HostChannelQueueSize(WP_handle rx_host_handle)
 {
@@ -3556,6 +3587,7 @@ WP_U32 WPT_HostChannelQueueSize(WP_handle rx_host_handle)
    status = WP_ChannelQDepth(rx_host_handle,
                              &qdepth);
    terminate_on_error(status, "WP_ChannelQDepth", __LINE__);
+   printf ("WPT_HostChannelQueueSize: qdepth(%d)\n", qdepth);
    return (qdepth - 1);
 }
 
@@ -5552,7 +5584,7 @@ static void WPE_CheckStatistics()
    WP_U32 i=0;
    WP_status status;
    
-   if(WPT_HostChannelQueueSize(rx_host_handle))
+   if(WPT_HostChannelQueueSizeX(rx_host_handle))
       terminate("Rx Host Channel wrong Size",__LINE__);
 
    for (i=0; i<FLOW_AGG_COUNT; i++)

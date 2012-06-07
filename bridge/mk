@@ -2,4 +2,11 @@ make TEST=111001-sw_fdb_checkin.c 2>&1 | tee make.checkin.log
 make TEST=111002-sw_fdb_system_test.c 2>&1 | tee make2.test.log
 
 copy_to_tftpboot.sh
+sync
+echo syncing ...done
+sync
+echo syncing ...done
+sync
+echo syncing ...done
+
 
