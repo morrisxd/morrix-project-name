@@ -345,7 +345,7 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    {
 
       //WPE_Send_HostData(tx_host_channel, WP_DATA_IW, enet_change_dst_mac);
-      WPE_IWSendReceive (1, enet_change_dst_mac);
+      //WPE_IWSendReceive (1, enet_change_dst_mac);
    }
    WPE_CLI ();
    printf ("Test Passed \n");
@@ -2605,20 +2605,35 @@ void WPE_ShowAvailableBusesMemory (void)
       WP_MemoryAvailable (WP_WINPATH (0), WP_BUS_HOST,
                           APP_BANK_HOST, &bytes);
    printf ("Host bus bytes left = %d\n", bytes);
-} void WPE_CLI (void)
+} 
+
+
+
+
+
+
+
+void WPE_CLI (void)
 {
    char InputBuf[256];
 
+   InputBuf[0] = '\0';
    while ((InputBuf[0] != 'q') && (InputBuf[0] != 'k'))
 
    {
+      printf ("\n\n\n");
       printf
-         ("Enter: Enet->HierarchicalEnet: 1-EnetPortDev,       2-bPortEnet,       3-FlowAggHierarchicalEnet,  \n");
+         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev,       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
-         ("       HierarchicalEnet->Enet: 4-HierarchicalEnetPortDev,  5-bPoprtHierarchicalEnet, 6-FlowAggEnet,       \n");
+         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev,  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
       printf
-         ("       HostTermination: 7-bPortHost,  8-FlowAggHost, q-Exit, k-Kill(noDriverRelease) \n");
+         ("       HostTermination: \n \t\t\t7-bPortHost,  \n \t\t\t8-FlowAggHost, \n \t\t\tq-Exit, \n \t\t\tr-Reboot, \n \t\t\tk-Kill(noDriverRelease) \n");
+
+#if 0
       gets (InputBuf);
+#else
+      InputBuf[0] = getchar ();
+#endif
       switch (InputBuf[0])
 
       {
@@ -2687,6 +2702,9 @@ void WPE_ShowAvailableBusesMemory (void)
          printf
             ("************************* Exiting with Driver Release ********************* \n");
          WP_DriverRelease ();
+         break;
+      case 'r':
+         WPX_Reboot ();
          break;
       case 'k':
          printf
