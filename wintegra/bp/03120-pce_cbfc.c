@@ -1438,6 +1438,7 @@ void CLI_RunCommonConfig (void)
 #endif
       printf ("...\n");
       printf ("r: Rebot the system\n");
+      printf ("a: show flowAgg info\n");
       printf ("x: Exit to WinMon\n");
       cmd = getchar ();
 
@@ -1514,6 +1515,12 @@ void CLI_RunCommonConfig (void)
       {
          printf ("Please wait while rebooting ...\n");
          WT_Reboot ();
+      }
+      if (cmd == 'a')
+      {
+         // show flow aggregationi info
+         // WP_IwFlowAggregationInfo ();
+         break;
       }
       if (cmd == 'x')
       {

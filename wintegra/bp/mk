@@ -7,3 +7,10 @@ fi
 
 copy_to_tftpboot.sh
 
+sync
+echo syncing ...
+sync
+echo syncing ...
+sync
+echo syncing ...
+
