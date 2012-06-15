@@ -344,7 +344,7 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 
    {
 
-      //WPE_Send_HostData(tx_host_channel, WP_DATA_IW, enet_change_dst_mac);
+      WPE_Send_HostData(tx_host_channel, WP_DATA_IW, enet_change_dst_mac);
       //WPE_IWSendReceive (1, enet_change_dst_mac);
    }
    WPE_CLI ();
@@ -2484,7 +2484,7 @@ void WPE_Send_HostData (WP_handle tx_channel, WP_data_type data_type,
    data_unit.status = 0;        /* Rx protocol specific status      */
 
    i = 0;
-#if 0
+#if 1
    printf ("WP_HostSend \n");
    for (i = 0; i < PACKET_SIZE; i++)
    {
