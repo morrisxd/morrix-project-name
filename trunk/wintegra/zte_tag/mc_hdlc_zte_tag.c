@@ -900,15 +900,31 @@ static void WPE_SystemSetup (WPE_system * the_system)
       /* extended_params */         NULL,
    };
 
-   WP_port_enet port_enet_cfg = {
-      /* pkt_limits             */ {2, 2, 0, 0, WP_UNUSED},
 #if MODIFIED_BY_MORRIS
+   WP_port_enet port_enet_cfg = {   /* we need both port & deivce created, this is the port -- morris */
+
+      /* pkt_limits */
+      {
+
+       /* max_tx_channels */ 1,
+       /* max_rx_channels */ 1,
+       /* pq_block_size */ 0,
+       /* n_pq_blocks */ 0,
+       /* emphy_devices */ WP_UNUSED
+       },
+      /* flowmode */ WP_FLOWMODE_FAST,
+      /* interface_mode */ WP_ENET_SGMII_1000,
+      /* rx_iw_bkgnd */ 0,
+   };
+#else
+
+   WP_port_enet port_enet_cfg = {
+      /* pkt_limits             */ {2, 2},
       /* flowmode               */ WP_FLOWMODE_FAST,
       /* miimode                */ WP_ENET_RGMII_1000,
-#else
-#endif
       /* rx_iw_bkgnd            */ WP_IW_BKGND_USED,
    };
+#endif
 
 #if MODIFIED_BY_MORRIS
    App_InitHW ();
@@ -927,8 +943,6 @@ static void WPE_SystemSetup (WPE_system * the_system)
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG4, WP_BRG_SRC_BRGIN2, 2);
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG5, WP_BRG_SRC_BRGIN2, 2);
 
-   port_enet_cfg.pkt_limits.max_tx_channels = 20;   /* key point -- morris */
-   port_enet_cfg.pkt_limits.max_rx_channels = 20;   /* key point -- morris */
  
    port_enet_cfg.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
    /* Create Enet port */
@@ -945,7 +959,11 @@ static void WPE_SystemSetup (WPE_system * the_system)
 /*-------------------------------------------------------------------*\
    the_system->Enet_dev
 \*-------------------------------------------------------------------*/
+#if 0
+   // this value can NOT be set larger than 1, 
+   // which will cause tx channel OVERFLOW
    device_enet_cfg.max_tx_channels = /*NUM_OF_HIER_ENET_TX_CHANNELS*/ 32;
+#endif
    the_system->Enet_dev =
       WP_DeviceCreate (the_system->Enet_port, WP_PHY (0), WP_DEVICE_ENET,
                        &device_enet_cfg);
