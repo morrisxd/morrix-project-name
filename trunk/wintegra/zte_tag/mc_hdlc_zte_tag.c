@@ -46,6 +46,8 @@ extern WP_U32 dps_ProgramImage[];
 extern WP_U16 dps_PC_Table_Init[];
 WP_CHAR ch = 'c';
 
+#define MODIFIED_BY_MORRIS (1)
+
 #define N_TX_HDLC_CH 10
 #define WPE_DEBUG_LEVEL /*0*/2
 
@@ -490,6 +492,7 @@ typedef struct
    WP_data_unit rx_data_unit;
    WP_data_segment rx_segment;
 } WPE_system;
+
 WPE_system wpe_system[1];
 
 /* Prototypes of internal functions of this example */
@@ -574,6 +577,8 @@ WP_U32 WP_DeviceCrcModify (WPE_system * system)
    return status;
 }
 
+static void App_ShapingGroupsCreate (WPE_system *the_system);
+
 WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 {
    WPE_system *the_system;
@@ -604,13 +609,20 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    status = WP_DriverInit ();
    WPE_TerminateOnError (status, "WP_DriverInit()");
 
+/*---------------------------------------------------------------*\
+         WPX_BoardConfigure  ()
+\*---------------------------------------------------------------*/
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_CHECKIN_TDI_16);
    WPE_TerminateOnError (status, "WPX_BoardConfigure()");
 
    the_system = wpe_system;
 
+
    /* Set up the system */
    WPE_SystemSetup (the_system);
+
+
+
 
   /*********************************/
    WPE_TDM2PSNHostInfoSetup (the_system); //Phenix
@@ -763,6 +775,16 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    return 0;
 }
 
+#if MODIFIED_BY_MORRIS
+void App_InitHW (void)
+{
+   WP_status status;
+
+   status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_NORMAL);
+   WPE_TerminateOnError (status, " WPX_BoardSerdesInit- WP_PORT_ENET3");
+}
+#endif
+
 static void WPE_SystemSetup (WPE_system * the_system)
 {
    WP_status status;
@@ -876,13 +898,24 @@ static void WPE_SystemSetup (WPE_system * the_system)
 
    WP_port_enet port_enet_cfg = {
       /* pkt_limits             */ {2, 2},
+#if MODIFIED_BY_MORRIS
       /* flowmode               */ WP_FLOWMODE_FAST,
+#else
+      /* flowmode               */ WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE,
+#endif
       /* miimode                */ WP_ENET_RGMII_1000,
       /* rx_iw_bkgnd            */ WP_IW_BKGND_USED,
    };
 
+#if MODIFIED_BY_MORRIS
+   App_InitHW ();
+#else
+   printf ("WPE_SystemSetup(): before WPU_EnetPhyInit()\n");
    status = WPU_EnetPhyInit (WP_PORT_ENET3, WPU_MODE_RGMII | WPU_OV_FIBER);
    WPE_TerminateOnError (status, " WPU_WinnetPhyInit - WP_PORT_ENET3");
+
+   printf ("WPE_SystemSetup(): after WPU_EnetPhyInit()\n");
+#endif
 
    /* Create BRG1 & BRG3 */
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG1, WP_BRG_SRC_BRGIN2, 2);
@@ -899,6 +932,9 @@ static void WPE_SystemSetup (WPE_system * the_system)
    /* Create device on Enet2 */
    MAC_COPY (device_enet_cfg.mac_addr, wt_mac_enet);
 
+/*-------------------------------------------------------------------*\
+   the_system->Enet_dev
+\*-------------------------------------------------------------------*/
    the_system->Enet_dev =
       WP_DeviceCreate (the_system->Enet_port, WP_PHY (0), WP_DEVICE_ENET,
                        &device_enet_cfg);
@@ -914,9 +950,12 @@ static void WPE_SystemSetup (WPE_system * the_system)
    WPE_TerminateOnError (the_system->trans_dev_handle,
                          "WP_DeviceCreate() TDM TRANS");
 
+#if MODIFIED_BY_MORRIS
+   App_ShapingGroupsCreate (the_system);
+#endif
+
    status = WP_SysSchedulerCreate (wpid, cw_config);
    WPE_TerminateOnError (status, "WP_SysSchedulerCreate()");
-
 }
 
 static void WPE_McDevicesSetup (WPE_system * the_system)
@@ -928,6 +967,80 @@ static void WPE_McDevicesSetup (WPE_system * the_system)
    WPE_TerminateOnError (the_system->mc_hdlc_dev_handle,
                          "WP_DeviceCreate() MC_HDLC");
 }
+
+#if MODIFIED_BY_MORRIS
+#define NUM_OF_FLOWS 8
+
+#define NUM_OF_CHANNELS NUM_OF_FLOWS
+#define NUM_PQ_BLOCK 1
+WP_handle l1_group_h[NUM_OF_FLOWS];
+WP_handle l2_group_h[NUM_OF_FLOWS];
+
+WP_fmu_shaping_cir_eir l1_group_shaping_params[1];
+WP_fmu_shaping_cir_eir l2_group_shaping_params[1];
+WP_shaping_group_type_enet packet_group_l1_config[1];
+WP_shaping_group_type_enet packet_group_l2_config[1];
+
+WP_handle MultiClass_Device_h[NUM_OF_FLOWS];
+WP_handle MultiClass_Tx_Channel_h[NUM_OF_FLOWS];
+
+static void App_ShapingGroupsCreate (WPE_system *the_system)
+{
+   WP_U32 ii;
+
+   memset (l1_group_shaping_params, 0, sizeof (l1_group_shaping_params));
+   l1_group_shaping_params[0].cir = 200000000;
+   l1_group_shaping_params[0].cbs = 800000; 
+   l1_group_shaping_params[0].eir = 200000000;
+   l1_group_shaping_params[0].ebs = 800000; 
+   l1_group_shaping_params[0].flags = 0;
+
+   memset (packet_group_l1_config, 0, sizeof (packet_group_l1_config));
+   packet_group_l1_config[0].group_level = WP_L1_GROUP;
+   packet_group_l1_config[0].tx_shaping_type = WP_FMU_SHAPING_TYPE_CIR_EIR;
+   packet_group_l1_config[0].tx_shaping_params =
+      &l1_group_shaping_params[0];
+   packet_group_l1_config[0].num_fifos = WP_NUM_FIFOS_8;
+   packet_group_l1_config[0].block_level = 0;
+   packet_group_l1_config[0].group_mode = WP_MODE_HW;
+
+   memset (l2_group_shaping_params, 0, sizeof (l2_group_shaping_params));
+   l2_group_shaping_params[0].cir = 200000000;
+   l2_group_shaping_params[0].cbs = 800000; 
+   l2_group_shaping_params[0].eir = 200000000;
+   l2_group_shaping_params[0].ebs = 800000; 
+   l2_group_shaping_params[0].flags = 0;
+
+   memset (packet_group_l2_config, 0, sizeof (packet_group_l2_config));
+   packet_group_l2_config[0].group_level = WP_L2_GROUP;
+   packet_group_l2_config[0].tx_shaping_type = WP_FMU_SHAPING_TYPE_CIR_EIR;
+   packet_group_l2_config[0].tx_shaping_params =
+      &l2_group_shaping_params[0];
+   packet_group_l2_config[0].num_fifos = WP_NUM_FIFOS_8;
+   packet_group_l2_config[0].block_level = 0;
+   packet_group_l2_config[0].group_mode = WP_MODE_HW;
+
+   for (ii = 0; ii < NUM_OF_FLOWS; ii++)
+   {
+      printf ("App_ShapingGroupsCreate: WP_ShapingGroupCreate(), ii=[%d]\n", ii);
+
+      l1_group_h[ii] =
+         WP_ShapingGroupCreate (the_system->Enet_dev, 
+                                WP_SHAPING_GROUP_TYPE_ENET,
+                                &packet_group_l1_config[0]);
+
+      WPE_TerminateOnError (l1_group_h[ii], "l1_group create");
+
+      l2_group_h[ii] =
+         WP_ShapingGroupCreate (l1_group_h[ii],
+                                WP_SHAPING_GROUP_TYPE_ENET,
+                                &packet_group_l2_config[0]);
+      WPE_TerminateOnError (l2_group_h[ii], "l2_group[0] create");
+   }
+
+}
+#endif
+
 
 static void WPE_ChannelsSetup (WPE_system * the_system)
 {
@@ -998,8 +1111,22 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
                                                 &ch_enet_cfg);
    WPE_TerminateOnError (the_system->Enet_chan_rx,
                          "WP_ChannelCreate() Enet Rx");
+#if MODIFIED_BY_MORRIS
+   printf ("before ChannelCreate ()\n");
+#endif
 
+#if MODIFIED_BY_MORRIS
+   ch_enet_cfg.tx_shaping_type = WP_PKT_SHAPING_CIR;
+#endif
+
+
+
+#if MODIFIED_BY_MORRIS
+   the_system->Enet_chan_tx = WP_ChannelCreate (21, l2_group_h[0],
+#else
+#error MODIFIED_BY_MORRIS_must_be_defined
    the_system->Enet_chan_tx = WP_ChannelCreate (21, the_system->Enet_dev,
+#endif
                                                 the_system->h_qnode_iwq,
                                                 WP_CH_TX, WP_ENET,
                                                 &ch_enet_cfg);
@@ -2228,6 +2355,27 @@ static void WPE_PPPRxBinding (WPE_system * the_system)
 
 }
 
+
+void App_EnableGroup (void)
+{
+   WP_U32 ii = 0;
+   WP_handle status;
+
+   for (ii = 0; ii < NUM_OF_FLOWS; ii++)
+   {
+      status = WP_ShapingGroupEnable (l1_group_h[ii]);
+      WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1");
+
+      status = WP_ShapingGroupEnable (l2_group_h[ii]);
+      WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1");
+
+      status = WP_ChannelEnable (MultiClass_Tx_Channel_h[ii]);
+      WPE_TerminateOnError (status, "WP_ChannelEnable() tx_enet");
+   }
+}
+
+
+
 static void WPE_SystemEnable (WPE_system * the_system)
 {
    WP_status status;
@@ -2275,6 +2423,11 @@ static void WPE_SystemEnable (WPE_system * the_system)
    status =
       WP_DeviceEnable (the_system->trans_dev_handle, WP_DIRECTION_DUPLEX);
    WPE_TerminateOnError (status, "WP_DeviceEnable() (TDM_TRANS)");
+
+   App_EnableGroup ();
+
+
+
    WP_Delay (1000);
 }
 
