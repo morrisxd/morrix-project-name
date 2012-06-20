@@ -6,7 +6,7 @@
 # Copyright (c) PeerSec Networks, Inc. 2010
 #
 #
-include ./Makefile.param
+include ../../Makefile.param
 all:	compile 
 
 ARCH	= libwebs.a
