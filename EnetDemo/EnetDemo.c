@@ -953,7 +953,9 @@ void WPE_CreateHostTermFlowAgg ()
                                   WP_IW_FLOW_AGG_B_MOD_BPORT,
                                   &agg_host_config);
    terminate_on_error (status, "WP_IwFlowAggregationModify");
-} void WPE_CreateFastEnetPortDevice ()
+} 
+
+void WPE_CreateFastEnetPortDevice ()
 {
    WP_port_enet enet_port_config = {   /* we need both port & deivce created, this is the port -- morris */
 
@@ -1027,7 +1029,10 @@ void WPE_CreateHostTermFlowAgg ()
       WP_DeviceCreate (port_enet, WP_PHY (0), WP_DEVICE_ENET,
                        &enet_dev_config);
    terminate_on_error (dev_enet, "WP_DeviceCreate() Fast Enet");
-} void WPE_CreateHierEnetPortDevice ()
+} 
+
+
+void WPE_CreateHierEnetPortDevice ()
 {
    WP_port_enet enet_port_config = {
 
@@ -1068,7 +1073,7 @@ void WPE_CreateHostTermFlowAgg ()
    };
 
 #endif /*  */
-   WP_device_enet enet_dev_config = {
+   WP_device_enet hier_enet_dev_config = {
 
       /* max_tx_channels */ 1,
       /* tx_maxsdu */ SDU_SIZE,
@@ -1090,13 +1095,15 @@ void WPE_CreateHostTermFlowAgg ()
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET8, &enet_port_config);
    terminate_on_error (port_hier_enet,
                        "WP_PortCreate() Hierarchical ENET");
-   enet_dev_config.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;
+   hier_enet_dev_config.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;
    dev_hier_enet =
       WP_DeviceCreate (port_hier_enet, WP_PHY (0),
-                       WP_DEVICE_ENET, &enet_dev_config);
+                       WP_DEVICE_ENET, &hier_enet_dev_config);
    terminate_on_error (dev_hier_enet,
                        "WP_DeviceCreate() Hierarchical Enet");
-} void WPE_CreateFastEnetIwBport ()
+} 
+
+void WPE_CreateFastEnetIwBport ()
 {
    WP_bridge_port enet_bport_config = {
 
