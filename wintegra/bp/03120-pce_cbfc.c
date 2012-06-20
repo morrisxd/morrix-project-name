@@ -1439,6 +1439,7 @@ void CLI_RunCommonConfig (void)
       printf ("...\n");
       printf ("r: Rebot the system\n");
       printf ("a: show flowAgg info\n");
+      printf ("k: Exit to WinMon without WP_DriverRelease()\n");
       printf ("x: Exit to WinMon\n");
       cmd = getchar ();
 
@@ -1516,14 +1517,19 @@ void CLI_RunCommonConfig (void)
          printf ("Please wait while rebooting ...\n");
          WT_Reboot ();
       }
+      if (cmd == 'k')
+      {
+         printf ("Driver still alive\n");
+         exit (0);
+         break;
+      }
       if (cmd == 'a')
       {
-         // show flow aggregationi info
-         // WP_IwFlowAggregationInfo ();
          break;
       }
       if (cmd == 'x')
       {
+         WP_DriverRelease ();
          break;
       }
    }
