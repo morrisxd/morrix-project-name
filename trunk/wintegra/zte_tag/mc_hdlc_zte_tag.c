@@ -887,23 +887,26 @@ static void WPE_SystemSetup (WPE_system * the_system)
                          "WP_QNodeCreate() h_qnode_iwq_tdm");
 
    WP_device_enet device_enet_cfg = {
-      /* max_tx_channels */ 1,
-      /* tx_maxsdu       */ 1536,
-      /* rmii_operating_speed */ WP_UNUSED,
-      /* mac_addr[6] */ {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-      /* tx_bit_rate */ 1000000000,
-      /* loopbackmode  */ WP_ENET_LOOPBACK,
-      /* extended_params */ NULL,
+      /* max_tx_channels */         1,
+#if MODIFIED_BY_MORRIS
+      /* tx_maxsdu       */         2048,
+#else
+      /* tx_maxsdu       */         1536,
+#endif
+      /* rmii_operating_speed */    WP_UNUSED,
+      /* mac_addr[6] */             {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
+      /* tx_bit_rate */             1000000000,
+      /* loopbackmode  */           WP_ENET_LOOPBACK,
+      /* extended_params */         NULL,
    };
 
    WP_port_enet port_enet_cfg = {
-      /* pkt_limits             */ {2, 2},
+      /* pkt_limits             */ {2, 2, 0, 0, WP_UNUSED},
 #if MODIFIED_BY_MORRIS
       /* flowmode               */ WP_FLOWMODE_FAST,
-#else
-      /* flowmode               */ WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE,
-#endif
       /* miimode                */ WP_ENET_RGMII_1000,
+#else
+#endif
       /* rx_iw_bkgnd            */ WP_IW_BKGND_USED,
    };
 
@@ -924,8 +927,15 @@ static void WPE_SystemSetup (WPE_system * the_system)
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG4, WP_BRG_SRC_BRGIN2, 2);
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG5, WP_BRG_SRC_BRGIN2, 2);
 
+   port_enet_cfg.pkt_limits.max_tx_channels = 20;   /* key point -- morris */
+   port_enet_cfg.pkt_limits.max_rx_channels = 20;   /* key point -- morris */
+ 
+   port_enet_cfg.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
    /* Create Enet port */
+#if MODIFIED_BY_MORRIS
    the_system->Enet_port = WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET3,
+#else
+#endif
                                           &port_enet_cfg);
    WPE_TerminateOnError (the_system->Enet_port, "WP_PortCreate() Enet");
 
@@ -935,6 +945,7 @@ static void WPE_SystemSetup (WPE_system * the_system)
 /*-------------------------------------------------------------------*\
    the_system->Enet_dev
 \*-------------------------------------------------------------------*/
+   device_enet_cfg.max_tx_channels = /*NUM_OF_HIER_ENET_TX_CHANNELS*/ 32;
    the_system->Enet_dev =
       WP_DeviceCreate (the_system->Enet_port, WP_PHY (0), WP_DEVICE_ENET,
                        &device_enet_cfg);
@@ -988,37 +999,23 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
 {
    WP_U32 ii;
 
-   memset (l1_group_shaping_params, 0, sizeof (l1_group_shaping_params));
-   l1_group_shaping_params[0].cir = 200000000;
-   l1_group_shaping_params[0].cbs = 800000; 
-   l1_group_shaping_params[0].eir = 200000000;
-   l1_group_shaping_params[0].ebs = 800000; 
-   l1_group_shaping_params[0].flags = 0;
+   WP_fmu_shaping_wfq l1_group_shaping_params = {
 
-   memset (packet_group_l1_config, 0, sizeof (packet_group_l1_config));
-   packet_group_l1_config[0].group_level = WP_L1_GROUP;
-   packet_group_l1_config[0].tx_shaping_type = WP_FMU_SHAPING_TYPE_CIR_EIR;
-   packet_group_l1_config[0].tx_shaping_params =
-      &l1_group_shaping_params[0];
-   packet_group_l1_config[0].num_fifos = WP_NUM_FIFOS_8;
-   packet_group_l1_config[0].block_level = 0;
-   packet_group_l1_config[0].group_mode = WP_MODE_HW;
+      /* weight */ 1,
+      /* flags */ 0,
+   };
 
-   memset (l2_group_shaping_params, 0, sizeof (l2_group_shaping_params));
-   l2_group_shaping_params[0].cir = 200000000;
-   l2_group_shaping_params[0].cbs = 800000; 
-   l2_group_shaping_params[0].eir = 200000000;
-   l2_group_shaping_params[0].ebs = 800000; 
-   l2_group_shaping_params[0].flags = 0;
+   WP_shaping_group_type_packet enet_group_l1_config = {
 
-   memset (packet_group_l2_config, 0, sizeof (packet_group_l2_config));
-   packet_group_l2_config[0].group_level = WP_L2_GROUP;
-   packet_group_l2_config[0].tx_shaping_type = WP_FMU_SHAPING_TYPE_CIR_EIR;
-   packet_group_l2_config[0].tx_shaping_params =
-      &l2_group_shaping_params[0];
-   packet_group_l2_config[0].num_fifos = WP_NUM_FIFOS_8;
-   packet_group_l2_config[0].block_level = 0;
-   packet_group_l2_config[0].group_mode = WP_MODE_HW;
+      /* group_level */       WP_L1_GROUP,
+      /* tx_shaping_type */   WP_FMU_SHAPING_TYPE_CIR_EIR,
+      /* shaping_params */    &l1_group_shaping_params,
+      /* num_fifos */         WP_NUM_FIFOS_8,
+      /* block_handle */      0,      
+      /* block_level */       1,      
+      /* block_mode */ 0,
+      // not relevant for L1
+   };
 
    for (ii = 0; ii < NUM_OF_FLOWS; ii++)
    {
@@ -1026,8 +1023,8 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
 
       l1_group_h[ii] =
          WP_ShapingGroupCreate (the_system->Enet_dev, 
-                                WP_SHAPING_GROUP_TYPE_ENET,
-                                &packet_group_l1_config[0]);
+                                WP_SHAPING_GROUP_TYPE_PACKET,
+                                &enet_group_l1_config);
 
       WPE_TerminateOnError (l1_group_h[ii], "l1_group create");
 

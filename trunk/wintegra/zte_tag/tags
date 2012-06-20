@@ -11,6 +11,7 @@ APP_MAX_TDM_PORTS	mc_hdlc_zte_tag.c	91;"	d	file:
 APP_NUM_IW_BUFFERS	mc_hdlc_zte_tag.c	93;"	d	file:
 App_EnableGroup	mc_hdlc_zte_tag.c	/^void App_EnableGroup (void)$/;"	f
 App_InitHW	mc_hdlc_zte_tag.c	/^void App_InitHW (void)$/;"	f
+App_ShapingGroupsCreate	mc_hdlc_zte_tag.c	/^static void App_ShapingGroupsCreate (WPE_system *the_system)$/;"	f	file:
 BIN_DIR	makefile	/^BIN_DIR = $(TEST_DIR)\/bin$/;"	m
 BOARD_DIR	makefile	/^BOARD_DIR = $(WDDI_DIR)\/board\/$(WPI_BOARD)_$(HW_DEVICE)$/;"	m
 BOARD_LIB	makefile	/^BOARD_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_board.a$/;"	m
@@ -30,9 +31,9 @@ MODIFIED_BY_MORRIS	mc_hdlc_zte_tag.c	49;"	d	file:
 MPLS_SIZE	mc_hdlc_zte_tag.c	82;"	d	file:
 MultiClass_Device_h	mc_hdlc_zte_tag.c	/^WP_handle MultiClass_Device_h[NUM_OF_FLOWS];$/;"	v
 MultiClass_Tx_Channel_h	mc_hdlc_zte_tag.c	/^WP_handle MultiClass_Tx_Channel_h[NUM_OF_FLOWS];$/;"	v
-NUM_OF_CHANNELS	mc_hdlc_zte_tag.c	967;"	d	file:
-NUM_OF_FLOWS	mc_hdlc_zte_tag.c	965;"	d	file:
-NUM_PQ_BLOCK	mc_hdlc_zte_tag.c	968;"	d	file:
+NUM_OF_CHANNELS	mc_hdlc_zte_tag.c	981;"	d	file:
+NUM_OF_FLOWS	mc_hdlc_zte_tag.c	979;"	d	file:
+NUM_PQ_BLOCK	mc_hdlc_zte_tag.c	982;"	d	file:
 NUM_SLOTS	mc_hdlc_zte_tag.c	62;"	d	file:
 NUM_SLOTS	mc_hdlc_zte_tag.c	67;"	d	file:
 N_CHANNELS	mc_hdlc_zte_tag.c	78;"	d	file:
@@ -98,7 +99,6 @@ WPE_PPPRxBinding	mc_hdlc_zte_tag.c	/^static void WPE_PPPRxBinding (WPE_system * 
 WPE_PSN2TDMSysSetup	mc_hdlc_zte_tag.c	/^static void WPE_PSN2TDMSysSetup (WPE_system * the_system)$/;"	f	file:
 WPE_PrintStatistics	mc_hdlc_zte_tag.c	/^static void WPE_PrintStatistics (WPE_system * the_system)$/;"	f	file:
 WPE_RX_CH_TAG	mc_hdlc_zte_tag.c	429;"	d	file:
-WPE_ShapingGroupsCreate	mc_hdlc_zte_tag.c	/^static void WPE_ShapingGroupsCreate (WPE_system *the_system)$/;"	f	file:
 WPE_SystemEnable	mc_hdlc_zte_tag.c	/^static void WPE_SystemEnable (WPE_system * the_system)$/;"	f	file:
 WPE_SystemSetup	mc_hdlc_zte_tag.c	/^static void WPE_SystemSetup (WPE_system * the_system)$/;"	f	file:
 WPE_TDM2PSNHostInfoSetup	mc_hdlc_zte_tag.c	/^static void WPE_TDM2PSNHostInfoSetup (WPE_system * the_system)$/;"	f	file:
