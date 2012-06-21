@@ -508,7 +508,7 @@ static void WPE_ChannelsSetup (WPE_system * system);
 static void WPE_TDM2PSNSysSetup (WPE_system * system);
 static void WPE_PSN2TDMSysSetup (WPE_system * system);
 
-static void WPE_TDM2PSNHostInfoSetup (WPE_system * system);
+/* static */void WPE_TDM2PSNHostInfoSetup (WPE_system * system);
 static void WPE_PPPRxBinding (WPE_system * system);
 
 /**************************************************************/
@@ -578,6 +578,7 @@ WP_U32 WP_DeviceCrcModify (WPE_system * system)
 }
 
 static void App_ShapingGroupsCreate (WPE_system *the_system);
+static void App_InitHW (void);
 
 WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 {
@@ -612,25 +613,35 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 /*---------------------------------------------------------------*\
          WPX_BoardConfigure  ()
 \*---------------------------------------------------------------*/
+#if 0 
+   status = WPX_BoardConfigure (0, WPX_CONFIGURE_2UPI_1XGI_10SGMII);
+#else
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_CHECKIN_TDI_16);
+#endif
    WPE_TerminateOnError (status, "WPX_BoardConfigure()");
 
-   the_system = wpe_system;
+#if MODIFIED_BY_MORRIS
+   App_InitHW ();
+#else
+#endif
 
+
+   the_system = wpe_system;
 
    /* Set up the system */
    WPE_SystemSetup (the_system);
 
-
-
-
   /*********************************/
-   WPE_TDM2PSNHostInfoSetup (the_system); //Phenix
+   // WPE_TDM2PSNHostInfoSetup (the_system); //Phenix
   /*********************************/
 
    /* System Commit */
    status = WP_SysCommit ();
    WPE_TerminateOnError (status, "WP_SysCommit()");
+
+#if MODIFIED_BY_MORRIS
+   App_ShapingGroupsCreate (the_system);
+#endif
 
    /* Create the multi channel HDLC virtual devices */
    WPE_McDevicesSetup (the_system);
@@ -793,9 +804,74 @@ static void WPE_SystemSetup (WPE_system * the_system)
 
    WP_U32 bytes;
 
+   WP_device_enet device_enet_cfg = {
+      /* max_tx_channels */         1,
+#if MODIFIED_BY_MORRIS
+      /* tx_maxsdu       */         2048,
+#else
+#error jaskldjf;as
+      /* tx_maxsdu       */         1536,
+#endif
+      /* rmii_operating_speed */    WP_UNUSED,
+      /* mac_addr[6] */             {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
+      /* tx_bit_rate */             1000000000,
+#if MODIFIED_BY_MORRIS
+      /* loopbackmode  */           WP_ENET_NORMAL,
+#else
+      /* loopbackmode  */           WP_ENET_LOOPBACK,
+#endif
+      /* extended_params */         NULL
+   };
+   /***************************///Phenix
+   WP_qnode_iwq qnode_iwq_cfg = {
+      /* interruptqueue         */ WP_IRQT1,
+      /* num_buffers            */ 1000,
+      /* adjunct_pool           */ 0,
+   };
+
+   WP_pool_buffer_data pool_buffer_data_iw_cfg = {
+      /* n_buffers              */ APP_NUM_IW_BUFFERS,
+      /* offset                 */ 64,
+      /* size                   */ 1536,
+      /* pad                    */ 0,
+      /* bus                    */ WP_BUS_PACKET,
+      /* bank                   */ APP_BANK_PACKET
+   };
+
+#if MODIFIED_BY_MORRIS
+   WP_port_enet port_enet_cfg = {   /* we need both port & deivce created, this is the port -- morris */
+
+      /* pkt_limits */
+      {
+
+       /* max_tx_channels */ 1,
+       /* max_rx_channels */ 1,
+       /* pq_block_size */ 0,
+       /* n_pq_blocks */ 0,
+       /* emphy_devices */ WP_UNUSED
+       },
+      /* flowmode */ WP_FLOWMODE_FAST,
+      /* interface_mode */ WP_ENET_SGMII_1000,
+      /* rx_iw_bkgnd */ 0,
+   };
+#else
+#error lsakjfd;lsjfllkfdjgoqurow
+   WP_port_enet port_enet_cfg = {
+      /* pkt_limits             */ {2, 2},
+      /* flowmode               */ WP_FLOWMODE_FAST,
+      /* miimode                */ WP_ENET_RGMII_1000,
+      /* rx_iw_bkgnd            */ WP_IW_BKGND_USED,
+   };
+#endif
+
+
    the_system->wpid = wpid = WP_WINPATH (0);
    status = WP_SysInit (wpid, context);
    WPE_TerminateOnError (status, "WP_SysInit()");
+
+/*--------------------------------------------*\
+   PortCreate ()
+\*--------------------------------------------*/
 
    /* Create a TDM1 Port */
    the_system->port_handle =
@@ -805,6 +881,9 @@ static void WPE_SystemSetup (WPE_system * the_system)
    // status = WPU_TdmCometCardInit(WPE_PORT_TDM, WPU_MODE_TDM_E1_MASTER),
    //WPE_TerminateOnError(status, "WPU_TdmCometCardInit()");
 
+/*--------------------------------------------*\
+   PoolCreate ()
+\*--------------------------------------------*/
    /* Create the Buffer pool(s) */
    pool_handle = WP_PoolCreate (wpid, WP_pool_buffer, buffer_data);
    WPE_TerminateOnError (pool_handle, "WP_PoolCreate() Data Buffers");
@@ -824,23 +903,8 @@ static void WPE_SystemSetup (WPE_system * the_system)
    WPE_TerminateOnError (the_system->host_qnode_handle,
                          "WP_QNodeCreate()");
 
-   /***************************///Phenix
-   WP_qnode_iwq qnode_iwq_cfg = {
-      /* interruptqueue         */ WP_IRQT1,
-      /* num_buffers            */ 1000,
-      /* adjunct_pool           */ 0,
-   };
 
-   WP_pool_buffer_data pool_buffer_data_iw_cfg = {
-      /* n_buffers              */ APP_NUM_IW_BUFFERS,
-      /* offset                 */ 64,
-      /* size                   */ 1536,
-      /* pad                    */ 0,
-      /* bus                    */ WP_BUS_PACKET,
-      /* bank                   */ APP_BANK_PACKET
-   };
-
-/**********************/
+/********* show memory availiabe *************/
    /* Show available memory (for diagnostic purposes only) */
    status =
       WP_MemoryAvailable (WP_WINPATH (0), WP_BUS_PACKET, APP_BANK_PACKET,
@@ -862,6 +926,7 @@ static void WPE_SystemSetup (WPE_system * the_system)
                           &bytes);
    WPE_TerminateOnError (status, "WP_MemoryAvailable() HOST");
    printf ("Host bus bytes left = %d\n", bytes);
+
 /************************/
    /* Create Buffer pools */
    the_system->h_pool_buffer_iw =
@@ -886,49 +951,14 @@ static void WPE_SystemSetup (WPE_system * the_system)
    WPE_TerminateOnError (the_system->h_qnode_iwq_hdlc,
                          "WP_QNodeCreate() h_qnode_iwq_tdm");
 
-   WP_device_enet device_enet_cfg = {
-      /* max_tx_channels */         1,
-#if MODIFIED_BY_MORRIS
-      /* tx_maxsdu       */         2048,
-#else
-      /* tx_maxsdu       */         1536,
-#endif
-      /* rmii_operating_speed */    WP_UNUSED,
-      /* mac_addr[6] */             {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-      /* tx_bit_rate */             1000000000,
-      /* loopbackmode  */           WP_ENET_LOOPBACK,
-      /* extended_params */         NULL,
-   };
+/*------------------------------------------------------*\
+   SerdesInit ()
+\*------------------------------------------------------*/
 
 #if MODIFIED_BY_MORRIS
-   WP_port_enet port_enet_cfg = {   /* we need both port & deivce created, this is the port -- morris */
-
-      /* pkt_limits */
-      {
-
-       /* max_tx_channels */ 1,
-       /* max_rx_channels */ 1,
-       /* pq_block_size */ 0,
-       /* n_pq_blocks */ 0,
-       /* emphy_devices */ WP_UNUSED
-       },
-      /* flowmode */ WP_FLOWMODE_FAST,
-      /* interface_mode */ WP_ENET_SGMII_1000,
-      /* rx_iw_bkgnd */ 0,
-   };
+//    App_InitHW ();
 #else
-
-   WP_port_enet port_enet_cfg = {
-      /* pkt_limits             */ {2, 2},
-      /* flowmode               */ WP_FLOWMODE_FAST,
-      /* miimode                */ WP_ENET_RGMII_1000,
-      /* rx_iw_bkgnd            */ WP_IW_BKGND_USED,
-   };
-#endif
-
-#if MODIFIED_BY_MORRIS
-   App_InitHW ();
-#else
+#error MODIFIED_BY_MORRIS_must_NOT_be_defined
    printf ("WPE_SystemSetup(): before WPU_EnetPhyInit()\n");
    status = WPU_EnetPhyInit (WP_PORT_ENET3, WPU_MODE_RGMII | WPU_OV_FIBER);
    WPE_TerminateOnError (status, " WPU_WinnetPhyInit - WP_PORT_ENET3");
@@ -943,19 +973,25 @@ static void WPE_SystemSetup (WPE_system * the_system)
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG4, WP_BRG_SRC_BRGIN2, 2);
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG5, WP_BRG_SRC_BRGIN2, 2);
 
-#if MODIFIED_BY_MORRIS 
+/*------------------------------------------------------*\
+   PortCreate ()
+\*------------------------------------------------------*/
+
+   port_enet_cfg.pkt_limits.max_tx_channels =  32;
+   port_enet_cfg.pkt_limits.max_rx_channels =  1;
+
+#if 0 
    port_enet_cfg.flowmode = WP_FLOWMODE_FAST;
 #else
-   port_enet_cfg.flowmode = WP_FLOWMODE_SHAPING_GROUP_TYPE;
+   port_enet_cfg.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
 #endif
 
-   port_enet_cfg.pkt_limits.max_tx_channels =  1;
-   port_enet_cfg.pkt_limits.max_rx_channels =  1;
 
    /* Create Enet port */
 #if MODIFIED_BY_MORRIS
    the_system->Enet_port = WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET3,
 #else
+#error MODIFIED_BY_MORRIS_must_be_defined
 #endif
                                           &port_enet_cfg);
    WPE_TerminateOnError (the_system->Enet_port, "WP_PortCreate() Enet");
@@ -964,9 +1000,9 @@ static void WPE_SystemSetup (WPE_system * the_system)
    MAC_COPY (device_enet_cfg.mac_addr, wt_mac_enet);
 
 /*-------------------------------------------------------------------*\
-   the_system->Enet_dev
+   DeviceCreate ()
 \*-------------------------------------------------------------------*/
-#if 0
+#if 1
    // this value can NOT be set larger than 1, 
    // which will cause tx channel OVERFLOW
    device_enet_cfg.max_tx_channels = /*NUM_OF_HIER_ENET_TX_CHANNELS*/ 32;
@@ -986,9 +1022,6 @@ static void WPE_SystemSetup (WPE_system * the_system)
    WPE_TerminateOnError (the_system->trans_dev_handle,
                          "WP_DeviceCreate() TDM TRANS");
 
-#if MODIFIED_BY_MORRIS
-   App_ShapingGroupsCreate (the_system);
-#endif
 
    status = WP_SysSchedulerCreate (wpid, cw_config);
    WPE_TerminateOnError (status, "WP_SysSchedulerCreate()");
@@ -1010,12 +1043,12 @@ static void WPE_McDevicesSetup (WPE_system * the_system)
 #define NUM_OF_CHANNELS NUM_OF_FLOWS
 #define NUM_PQ_BLOCK 1
 WP_handle l1_group_h[NUM_OF_FLOWS];
-WP_handle l2_group_h[NUM_OF_FLOWS];
+WP_handle l2_group_h[NUM_OF_FLOWS][1024];
 
 WP_fmu_shaping_cir_eir l1_group_shaping_params[1];
-WP_fmu_shaping_cir_eir l2_group_shaping_params[1];
+// WP_fmu_shaping_cir_eir l2_group_shaping_params[1];
 WP_shaping_group_type_enet packet_group_l1_config[1];
-WP_shaping_group_type_enet packet_group_l2_config[1];
+// WP_shaping_group_type_enet packet_group_l2_config[1];
 
 WP_handle MultiClass_Device_h[NUM_OF_FLOWS];
 WP_handle MultiClass_Tx_Channel_h[NUM_OF_FLOWS];
@@ -1023,6 +1056,7 @@ WP_handle MultiClass_Tx_Channel_h[NUM_OF_FLOWS];
 static void App_ShapingGroupsCreate (WPE_system *the_system)
 {
    WP_U32 ii;
+   WP_U32 jj;
 
    WP_fmu_shaping_wfq l1_group_shaping_params = {
 
@@ -1042,6 +1076,36 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
       // not relevant for L1
    };
 
+
+   WP_fmu_shaping_cir_eir l2_group_shaping_params = {
+
+      /* cir */ 1000000,
+      /* cbs */ 80000,
+      /* eir */ 0,
+      /* ebs */ 0,
+      /* flags */ 0
+   };
+
+
+   WP_shaping_group_type_enet packet_group_l2_config = {
+
+      /* group_level */ WP_L2_GROUP,
+      /* key point to which layer(layer1 or layer2 -- morris */
+#if 0
+      /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_STRICT,
+      /* shaping_params */ NULL,
+#else /*  */
+      /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_CIR_EIR,
+      /* shaping_params */ &l2_group_shaping_params,
+#endif /*  */
+      /* num_fifos */ WP_NUM_FIFOS_8,
+      /* block_handle */ 0,
+      /* block_level */ 1,
+      // not used without ShapingBlock
+      /* block_mode */ WP_MODE_HW,
+   };
+
+
    for (ii = 0; ii < /*NUM_OF_FLOWS*/ 1; ii++)
    {
       WP_status status = 0;
@@ -1058,11 +1122,13 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
       status = WP_ShapingGroupEnable (l1_group_h[ii]);
       WPE_TerminateOnError (status, "WP_ShapingGroupEnable");
 
-      l2_group_h[ii] =
-         WP_ShapingGroupCreate (l1_group_h[ii],
-                                WP_SHAPING_GROUP_TYPE_ENET,
-                                &packet_group_l2_config[0]);
-      WPE_TerminateOnError (l2_group_h[ii], "l2_group[0] create");
+      for (jj = 0; jj < 4; jj ++)
+      {
+         l2_group_h[ii][jj] = WP_ShapingGroupCreate (l1_group_h[ii],
+                                WP_SHAPING_GROUP_TYPE_PACKET,
+                                &packet_group_l2_config);
+         WPE_TerminateOnError (l2_group_h[ii][jj], "l2_group[0] create");
+      }
    }
 
 }
@@ -1149,7 +1215,7 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
 
 
 #if MODIFIED_BY_MORRIS
-   the_system->Enet_chan_tx = WP_ChannelCreate (21, l2_group_h[0],
+   the_system->Enet_chan_tx = WP_ChannelCreate (21, l2_group_h[0][0],
 #else
 #error MODIFIED_BY_MORRIS_must_be_defined
    the_system->Enet_chan_tx = WP_ChannelCreate (21, the_system->Enet_dev,
@@ -1214,7 +1280,7 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
 
 }
 
-static void WPE_TDM2PSNHostInfoSetup (WPE_system * the_system)
+/*static*/ void WPE_TDM2PSNHostInfoSetup (WPE_system * the_system)
 {
 
    /* Create an IW Host port */
@@ -1399,6 +1465,7 @@ static void WPE_TDM2PSNSysSetup (WPE_system * the_system)
 
 static void WPE_PPPRxBinding (WPE_system * the_system)
 {
+   WP_iw_agg_pwe3 pwe3_hdlc_flow_agg_config;
    WP_rx_binding_ppp_switching rx_binding_pppsw;
    WP_feature_iw_pppsw_rx_lcp_forwarding pppsw_lcp;
    WP_U8 dummy_prefix_header[APP_MAX_TDM_PORTS][14];
@@ -1720,7 +1787,6 @@ static void WPE_PPPRxBinding (WPE_system * the_system)
    WPE_TerminateOnError (the_system->TDM2PSN_bridge_port2ENET,
                          "WP_IwBridgingPortCreate() connect to ENET");
 
-   WP_iw_agg_pwe3 pwe3_hdlc_flow_agg_config;
 
    //WP_U32 mpls_label = WTI_MPLS_LABEL + ((ii +1) << 12);
 
@@ -2393,7 +2459,7 @@ void App_EnableGroup (void)
       status = WP_ShapingGroupEnable (l1_group_h[ii]);
       WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1");
 
-      status = WP_ShapingGroupEnable (l2_group_h[ii]);
+      status = WP_ShapingGroupEnable (l2_group_h[ii][0]);
       WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1");
 
       status = WP_ChannelEnable (MultiClass_Tx_Channel_h[ii]);
