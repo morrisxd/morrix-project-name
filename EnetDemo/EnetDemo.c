@@ -557,7 +557,9 @@ void WPE_SysInit (void)
    };
    status = WP_SysInit (WP_WINPATH (0), &context);
    terminate_on_error (status, "WP_SysInit");
-} void WPE_InitHWCards ()
+} 
+
+void WPE_InitHWCards ()
 {
    WP_handle status;
 
@@ -609,7 +611,10 @@ void WPE_CreateIWQnode ()
                       WP_QNODE_OPT_DEDICATED_RX_HWQ |
                       WP_QNODE_OPT_FMU, &qn_iw_config);
    terminate_on_error (iw_qnode, "WP_QNodeCreate()");
-} void WPE_CreateHostQnode ()
+} 
+
+
+void WPE_CreateHostQnode ()
 {
    WP_handle pool_host, pool_ring_host;
    WP_pool_buffer_data buffers_host_config = {  /* n_buffers */
@@ -649,7 +654,9 @@ void WPE_CreateIWQnode ()
    qn_host_config.pool_ring = pool_ring_host;
    qnode_host = WP_QNodeCreate (0, WP_QNODE_HOSTQ, &qn_host_config);
    terminate_on_error (qnode_host, "WP_QNodeCreate() qnode_host");
-} void WPE_CreateMultiCastQnode ()
+} 
+
+void WPE_CreateMultiCastQnode ()
 {
    WP_qnode_iw_mcq iw_mc_qn_config = {
 
@@ -663,12 +670,17 @@ void WPE_CreateIWQnode ()
    qnode_mc = WP_QNodeCreate (WP_WINPATH (0), WP_QNODE_IW_MCQ, /* WP_QNDE_IW_MCQ is the key point */
                               &iw_mc_qn_config);
    terminate_on_error (qnode_mc, "WP_QNodeCreate MCQ()");
-} void WPE_CreateBufferPools ()
+} 
+
+
+void WPE_CreateBufferPools ()
 {
    WPE_CreateIWQnode ();
    WPE_CreateHostQnode ();
    WPE_CreateMultiCastQnode ();
-} void WPE_CreateIWBridgeSystem ()
+} 
+
+void WPE_CreateIWBridgeSystem ()
 {
    WP_dfc_sys_info dfc_sys_info = {
 
@@ -719,7 +731,10 @@ void WPE_CreateIWQnode ()
       WP_IwSystemCreate (WP_WINPATH (0),
                          WP_IW_VLAN_AWARE_BRIDGING_MODE, &iw_sys_bridge);
    terminate_on_error (iw_sys, " WP_IwSystemCreate - Bridging");
-} void WPE_EnableSystem ()
+} 
+
+
+void WPE_EnableSystem ()
 {
    WP_handle status;
    WP_U32 i, j, k;
@@ -774,7 +789,9 @@ void WPE_CreateHostPortDevice ()
    terminate_on_error (port_host, "WP_PortCreate() HOST");
    dev_host = WP_DeviceCreate (port_host, 0, WP_DEVICE_IW_HOST, NULL);
    terminate_on_error (dev_host, "WP_DeviceCreate() Host");
-} void WPE_CreateHostIwRxChannel ()
+} 
+
+void WPE_CreateHostIwRxChannel ()
 {
 
    // This is TX from DPS point of view but RX from Host point of view
@@ -799,7 +816,9 @@ void WPE_CreateHostPortDevice ()
                         WP_IW_HOST, &iw_host_ch_config);
    terminate_on_error (rx_host_channel,
                        "WP_ChannelCreate RX Host channel");
-} void WPE_CreateHostIwTxChannel ()
+} 
+
+void WPE_CreateHostIwTxChannel ()
 {
    WP_ch_iw_tx ch_iw_tx_config = {
 
@@ -892,7 +911,10 @@ void WPE_CreateHostTermFlowAgg ()
                                   WP_IW_TRANS_BRIDGING_MODE,
                                   &agg_host_config);
    terminate_on_error (agg_host, "WPE_CreateHostTermIwFlowAgg() Host");
-} void WPE_CreateIwBportHost ()
+}  
+
+
+void WPE_CreateIwBportHost ()
 {
    WP_handle status;
    WP_iw_agg_bridging agg_host_config = {
@@ -1157,7 +1179,10 @@ void WPE_CreateFastEnetIwBport ()
    enet_bport_config.flow_agg = agg_host; // default flow agg
    bport_enet = WP_IwPortCreate (iw_sys, &enet_bport_config);
    terminate_on_error (bport_enet, " WPE_CreateIwBportEnet Fast");
-} void WPE_CreateHierEnetIwBport ()
+}  
+
+
+void WPE_CreateHierEnetIwBport ()
 {
    WP_bridge_port enet_bport_config = {
 
@@ -1210,7 +1235,10 @@ void WPE_CreateFastEnetIwBport ()
    bport_hier_enet = WP_IwPortCreate (iw_sys, &enet_bport_config);
    terminate_on_error (bport_hier_enet,
                        " WPE_CreateIwBportEnet Hierarchical");
-} void WPE_CreateFastEnetFlowAgg ()
+}  
+
+
+void WPE_CreateFastEnetFlowAgg ()
 {
    WP_U32 i;
 
@@ -1654,18 +1682,13 @@ void WPE_CreateL1FMUGroups (void)
    };
    WP_shaping_group_type_packet enet_group_l1_config = {
 
-      /* group_level */ WP_L1_GROUP,
-      /* key point to which layer(layer1 or layer2) -- morris */
-      /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_WFQ,
-      /* weighted fair queue --- morris */
-      //WP_FMU_SHAPING_TYPE_CIR_EIR,
-      /* shaping_params */ &l1_group_shaping_params,
-      /* num_fifos */ WP_NUM_FIFOS_8,
-      /* block_handle */ 0,
-      /* block_level */ 1,
-      // not used without ShapingBlock
-      /* block_mode */ 0,
-      // not relevant for L1
+      /* group_level */       WP_L1_GROUP,
+      /* tx_shaping_type */   WP_FMU_SHAPING_TYPE_WFQ, 
+      /* shaping_params */    &l1_group_shaping_params,
+      /* num_fifos */         WP_NUM_FIFOS_8,
+      /* block_handle */      0,
+      /* block_level */       1,
+      /* block_mode */        0,
    };
    for (entry = 0; entry < NUM_OF_L1_GROUP /* 1 */ ; entry++)
 
@@ -1786,7 +1809,9 @@ void WPE_CreateSchedulingUnit (void)
    status =
       WP_FeatureInit (WP_WINPATH (0), WP_FEATURE_PSU, &feature_psu_config);
    terminate_on_error (status, "WP_FeatureInit-PSU");
-} void WPE_CreateDedicatedFlowAgg ()
+} 
+
+void WPE_CreateDedicatedFlowAgg ()
 {
    WP_U32 i;
    WP_iw_agg_bridging dedicated_agg_hier_enet_config = {
@@ -1884,7 +1909,9 @@ void WPE_CreateSchedulingUnit (void)
                                   &dedicated_agg_hier_enet_config);
    terminate_on_error (flow_agg_dedicated[i],
                        "WP_IwFlowAggregationCreate");
-} void WPE_SetStaticForwardRules ()
+} 
+
+void WPE_SetStaticForwardRules ()
 {
    WP_U32 i, j, k;
    WP_handle status;
@@ -2531,7 +2558,9 @@ void WPE_ShowForwardingRules (void)
       ("MAC\t\tVLAN\tBPORT\tFLOW\t\tAGING\tSTATIC\tDENY SA\tPROCESS\tUNK MODE\n");
    status = WP_IwForwardingRuleFindAll (iw_sys, &forward_rule, 0);
    terminate_on_error (status, "WP_IwForwardingRuleFindAll()");
-} void WPE_DisplayForwardingRule (WP_U32 * l2_forward_rule)
+} 
+
+void WPE_DisplayForwardingRule (WP_U32 * l2_forward_rule)
 {
    WP_U32 j;
    WP_l2_forward *forward_rule_ptr;
@@ -2735,7 +2764,10 @@ static void WPE_LogFunctionCb (WP_CHAR * pi_file, WP_CHAR * pi_func,
                                WP_U32 i_line)
 {
    printf ("CALL %s:%s:%d\n", pi_file, pi_func, i_line);
-} static void WPE_LogCb (WP_S32 i_lvl, const WP_CHAR * pi_string)
+} 
+
+
+static void WPE_LogCb (WP_S32 i_lvl, const WP_CHAR * pi_string)
 {
    printf ("LOG [%d]: %s", i_lvl, pi_string);
 }
@@ -2757,7 +2789,11 @@ void WPE_RegisterLogCbFunc ()
 
    //status = WP_ControlRegister(WP_DEBUG_CALLBACK_WDDI_LOG, WPE_LogCb);
    //terminate_on_error(status, "WP_ControlRegister() ErrorIndicateEvent");
-} void terminate_on_error (WP_handle handle, WP_CHAR * s)
+} 
+
+
+
+void terminate_on_error (WP_handle handle, WP_CHAR * s)
 {
    if (WP_ERROR_P (handle))
 
