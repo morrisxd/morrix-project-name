@@ -943,8 +943,15 @@ static void WPE_SystemSetup (WPE_system * the_system)
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG4, WP_BRG_SRC_BRGIN2, 2);
    //status = WP_SysClockCreate(WP_WINPATH(0), WP_BRG5, WP_BRG_SRC_BRGIN2, 2);
 
- 
-   port_enet_cfg.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
+#if MODIFIED_BY_MORRIS 
+   port_enet_cfg.flowmode = WP_FLOWMODE_FAST;
+#else
+   port_enet_cfg.flowmode = WP_FLOWMODE_SHAPING_GROUP_TYPE;
+#endif
+
+   port_enet_cfg.pkt_limits.max_tx_channels =  1;
+   port_enet_cfg.pkt_limits.max_rx_channels =  1;
+
    /* Create Enet port */
 #if MODIFIED_BY_MORRIS
    the_system->Enet_port = WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET3,
@@ -1026,25 +1033,30 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
    WP_shaping_group_type_packet enet_group_l1_config = {
 
       /* group_level */       WP_L1_GROUP,
-      /* tx_shaping_type */   WP_FMU_SHAPING_TYPE_CIR_EIR,
+      /* tx_shaping_type */   WP_FMU_SHAPING_TYPE_WFQ,
       /* shaping_params */    &l1_group_shaping_params,
       /* num_fifos */         WP_NUM_FIFOS_8,
       /* block_handle */      0,      
       /* block_level */       1,      
-      /* block_mode */ 0,
+      /* block_mode */        0,
       // not relevant for L1
    };
 
-   for (ii = 0; ii < NUM_OF_FLOWS; ii++)
+   for (ii = 0; ii < /*NUM_OF_FLOWS*/ 1; ii++)
    {
+      WP_status status = 0;
+
       printf ("App_ShapingGroupsCreate: WP_ShapingGroupCreate(), ii=[%d]\n", ii);
 
+      enet_group_l1_config.block_level = ii;
       l1_group_h[ii] =
          WP_ShapingGroupCreate (the_system->Enet_dev, 
                                 WP_SHAPING_GROUP_TYPE_PACKET,
                                 &enet_group_l1_config);
 
       WPE_TerminateOnError (l1_group_h[ii], "l1_group create");
+      status = WP_ShapingGroupEnable (l1_group_h[ii]);
+      WPE_TerminateOnError (status, "WP_ShapingGroupEnable");
 
       l2_group_h[ii] =
          WP_ShapingGroupCreate (l1_group_h[ii],
