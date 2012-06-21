@@ -31,9 +31,9 @@ MODIFIED_BY_MORRIS	mc_hdlc_zte_tag.c	49;"	d	file:
 MPLS_SIZE	mc_hdlc_zte_tag.c	82;"	d	file:
 MultiClass_Device_h	mc_hdlc_zte_tag.c	/^WP_handle MultiClass_Device_h[NUM_OF_FLOWS];$/;"	v
 MultiClass_Tx_Channel_h	mc_hdlc_zte_tag.c	/^WP_handle MultiClass_Tx_Channel_h[NUM_OF_FLOWS];$/;"	v
-NUM_OF_CHANNELS	mc_hdlc_zte_tag.c	981;"	d	file:
-NUM_OF_FLOWS	mc_hdlc_zte_tag.c	979;"	d	file:
-NUM_PQ_BLOCK	mc_hdlc_zte_tag.c	982;"	d	file:
+NUM_OF_CHANNELS	mc_hdlc_zte_tag.c	1003;"	d	file:
+NUM_OF_FLOWS	mc_hdlc_zte_tag.c	1001;"	d	file:
+NUM_PQ_BLOCK	mc_hdlc_zte_tag.c	1004;"	d	file:
 NUM_SLOTS	mc_hdlc_zte_tag.c	62;"	d	file:
 NUM_SLOTS	mc_hdlc_zte_tag.c	67;"	d	file:
 N_CHANNELS	mc_hdlc_zte_tag.c	78;"	d	file:
