@@ -1,5 +1,5 @@
 /*
- * main.c -- Main program for the GoAhead WebServer (LINUX version)
+ * main.c -- Main program for the GoAhead WebServer
  *
  * Copyright (c) GoAhead Software Inc., 1995-2010. All Rights Reserved.
  *
@@ -10,16 +10,16 @@
 /******************************** Description *********************************/
 
 /*
- *	Main program for for the GoAhead WebServer.
+ *	Main program for the GoAhead WebServer. This is a demonstration
+ *	program to initialize and configure the web server.
  */
 
 /********************************* Includes ***********************************/
 
-#include	"../uemf.h"
+#include	<windows.h>
+#include	<winsock.h>
+
 #include	"../wsIntrn.h"
-#include	<signal.h>
-#include	<unistd.h> 
-#include	<sys/types.h>
 
 #ifdef WEBS_SSL_SUPPORT
 #include	"../websSSL.h"
@@ -27,42 +27,44 @@
 
 #ifdef USER_MANAGEMENT_SUPPORT
 #include	"../um.h"
-void	formDefineUserMgmt(void);
+void		formDefineUserMgmt(void);
 #endif
-
 
 /*********************************** Locals ***********************************/
 /*
  *	Change configuration here
  */
-#define MODIFIED_BY_MORRIS (1)
-#define	ROOT_DIR	T("/www")
+static HWND			hwnd;							/* Window handle */
+static int			sockServiceTime = 1000;			/* milliseconds */
+static char_t		*title = T("GoAhead WebServer");/* Window title */
+static char_t		*name = T("gowebs");			/* Window name */
 static char_t		*rootWeb = T("/www");			/* Root web directory */
-static char_t		*demoWeb = T("wwwdemo");		/* Root web directory */
+static char_t		*demoWeb = T("/wwwdemo");		/* Root web directory */
 static char_t		*password = T("");				/* Security password */
-static int			port = WEBS_DEFAULT_PORT;		/* Server port */
+static int			port = 80;						/* Server port */
 static int			retries = 5;					/* Server port retries */
-static int			finished = 0;					/* Finished flag */
+static int			finished;						/* Finished flag */
 
 /****************************** Forward Declarations **************************/
 
 static int 	initWebs(int demo);
+static long	CALLBACK websWindProc(HWND hwnd, unsigned int msg, 
+				unsigned int wp, long lp);
 static int	aspTest(int eid, webs_t wp, int argc, char_t **argv);
 static void formTest(webs_t wp, char_t *path, char_t *query);
+static int	windowsInit(HINSTANCE hinstance);
 static int  websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
-				int arg, char_t *url, char_t *path, char_t *query);
-static void	sigintHandler(int);
-#ifdef B_STATS
+			int arg, char_t *url, char_t *path, char_t *query);
 static void printMemStats(int handle, char_t *fmt, ...);
 static void memLeaks();
-#endif
 
 /*********************************** Code *************************************/
 /*
- *	Main -- entry point from LINUX
+ *	WinMain -- entry point from Windows
  */
 
-int main(int argc, char** argv)
+int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance,
+					LPTSTR args, int cmd_show)
 {
 	int i, demo = 0;
 
@@ -79,20 +81,23 @@ int main(int argc, char** argv)
  *	is required, malloc will be used for the overflow.
  */
 	bopen(NULL, (60 * 1024), B_USE_MALLOC);
-	signal(SIGPIPE, SIG_IGN);
-	signal(SIGINT, sigintHandler);
-	signal(SIGTERM, sigintHandler);
+
+/* 
+ *	Store the instance handle (used in socket.c)
+ */
+	if (windowsInit(hinstance) < 0) {
+		return FALSE;
+	}
 
 /*
  *	Initialize the web server
  */
 	if (initWebs(demo) < 0) {
-		return -1;
+		return FALSE;
 	}
 
 #ifdef WEBS_SSL_SUPPORT
 	websSSLOpen();
-/*	websRequireSSL("/"); */	/* Require all files be served via https */
 #endif
 
 /*
@@ -100,19 +105,21 @@ int main(int argc, char** argv)
  *	service. SocketSelect will block until an event occurs. SocketProcess
  *	will actually do the servicing.
  */
-	finished = 0;
 	while (!finished) {
-		if (socketReady(-1) || socketSelect(-1, 1000)) {
+		if (socketReady(-1) || socketSelect(-1, sockServiceTime)) {
 			socketProcess(-1);
 		}
-		websCgiCleanup();
 		emfSchedProcess();
+		websCgiCleanup();
 	}
 
 #ifdef WEBS_SSL_SUPPORT
 	websSSLClose();
 #endif
 
+/*
+ *	Close the User Management database
+ */
 #ifdef USER_MANAGEMENT_SUPPORT
 	umClose();
 #endif
@@ -129,14 +136,6 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-/*
- *	Exit cleanly on interrupt
- */
-static void sigintHandler(int unused)
-{
-	finished = 1;
-}
-
 /******************************************************************************/
 /*
  *	Initialize the web server.
@@ -144,21 +143,21 @@ static void sigintHandler(int unused)
 
 static int initWebs(int demo)
 {
-	struct hostent	*hp;
+	struct hostent *hp;
 	struct in_addr	intaddr;
-	char			host[128], dir[128], webdir[128];
-	char			*cp;
 	char_t			wbuf[128];
+	char			host[64];
+	char			*cp;
 
 /*
  *	Initialize the socket subsystem
  */
 	socketOpen();
 
-#ifdef USER_MANAGEMENT_SUPPORT
 /*
  *	Initialize the User Management database
  */
+#ifdef USER_MANAGEMENT_SUPPORT
 	umOpen();
 	umRestore(T("umconfig.txt"));
 #endif
@@ -171,64 +170,30 @@ static int initWebs(int demo)
 		error(E_L, E_LOG, T("Can't get hostname"));
 		return -1;
 	}
-#if 0
-	/*-----------------------------------------------------*\
-	 * something wrong here, this code can not run in the HISI
-	\*-----------------------------------------------------*/
 	if ((hp = gethostbyname(host)) == NULL) {
 		error(E_L, E_LOG, T("Can't get host address"));
 		return -1;
 	}
-	memcpy((char *) &intaddr, (char *) hp->h_addr_list[0],
+	memcpy((void*) &intaddr, (void*) hp->h_addr_list[0],
 		(size_t) hp->h_length);
-#else
-	inet_aton ("192.168.0.168", &intaddr);
-#endif
 
 /*
- *	Set ../web as the root web. Modify this to suit your needs
- *	A "-demo" option to the command line will set a webdemo root
+ *	Set /web as the root web. Modify this to suit your needs
  */
-	getcwd(dir, sizeof(dir)); 
-#if MODIFIED_BY_MORRIS
-   printf ("getcwd: (%s)\n", dir);
-#endif
-	if ((cp = strrchr(dir, '/'))) {
-		*cp = '\0';
-	}
-printf ("cp(%s)", cp);
-
 	if (demo) {
-		sprintf(webdir, "%s/%s", dir, demoWeb);
-#if MODIFIED_BY_MORRIS
-      printf ("initWebs: we are in demo webdir(%s)\n", webdir);
-#endif
+		websSetDefaultDir(demoWeb);
 	} else {
-		sprintf(webdir, "%s/%s", dir, rootWeb);
-#if MODIFIED_BY_MORRIS
-      printf ("initWebs: we are in real world webdir(%s)\n", webdir);
-#endif
+		websSetDefaultDir(rootWeb);
 	}
 
 /*
- *	Configure the web server options before opening the web server
+ *	Set the IP address and host name.
  */
-	websSetDefaultDir(webdir);
 	cp = inet_ntoa(intaddr);
-#if MODIFIED_BY_MORRIS 
-   printf ("initWebs: cp(%s)\n", cp);
-#endif
 	ascToUni(wbuf, cp, min(strlen(cp) + 1, sizeof(wbuf)));
 	websSetIpaddr(wbuf);
-
-#if MODIFIED_BY_MORRIS
-   printf ("initWebs: ipaddr(%s)\n", wbuf);
-#endif
-	ascToUni(wbuf, host, min(strlen(host) + 1, sizeof(wbuf)));
+	ascToUni(wbuf, hp->h_name, min(strlen(hp->h_name) + 1, sizeof(wbuf)));
 	websSetHost(wbuf);
-#if MODIFIED_BY_MORRIS
-   printf ("initWebs: host(%s)\n", wbuf);
-#endif
 
 /*
  *	Configure the web server options before opening the web server
@@ -248,11 +213,11 @@ printf ("cp(%s)", cp);
  *	handler, forms handler and the default web page handler.
  */
 	websUrlHandlerDefine(T(""), NULL, 0, websSecurityHandler, 
-		WEBS_HANDLER_FIRST);
+						WEBS_HANDLER_FIRST);
 	websUrlHandlerDefine(T("/goform"), NULL, 0, websFormHandler, 0);
 	websUrlHandlerDefine(T("/cgi-bin"), NULL, 0, websCgiHandler, 0);
 	websUrlHandlerDefine(T(""), NULL, 0, websDefaultHandler, 
-		WEBS_HANDLER_LAST); 
+						WEBS_HANDLER_LAST); 
 
 /*
  *	Now define two test procedures. Replace these with your application
@@ -274,6 +239,72 @@ printf ("cp(%s)", cp);
 	websUrlHandlerDefine(T("/"), NULL, 0, websHomePageHandler, 0); 
 	return 0;
 }
+
+/******************************************************************************/
+/*
+ *	Create a taskbar entry. Register the window class and create a window
+ */
+
+static int windowsInit(HINSTANCE hinstance)
+{
+/*
+ *	Restore this code if you want to call Create Window
+ */
+#if 0
+	WNDCLASS  		wc;						/* Window class */
+
+	emfInstSet((int) hinstance);
+
+	wc.style		 = 0;
+	wc.hbrBackground = NULL;
+	wc.hCursor		 = NULL;
+	wc.cbClsExtra	 = 0;
+	wc.cbWndExtra	 = 0;
+	wc.hInstance	 = hinstance;
+	wc.hIcon		 = NULL;
+	wc.lpfnWndProc	 = (WNDPROC) websWindProc;
+	wc.lpszMenuName	 = NULL;
+	wc.lpszClassName = name;
+	if (! RegisterClass(&wc)) {
+		return -1;
+	}
+
+/*
+ *	Create a window just so we can have a taskbar to close this web server
+ */
+	hwnd = CreateWindow(name, title, WS_VISIBLE,
+		CW_USEDEFAULT, 0, 0, 0, NULL, NULL, hinstance, NULL);
+	if (hwnd == NULL) {
+		return -1;
+	}
+	ShowWindow(hwnd, SW_MINIMIZE);
+	UpdateWindow(hwnd);
+
+#endif
+	return 0;
+}
+
+/*
+ *	Restore websWindProc if you want to use windowsInit and call CreateWindow
+ */
+#if 0
+/******************************************************************************/
+/*
+ *	Windows message handler. Just process the window destroy event.
+ */
+
+static long CALLBACK websWindProc(HWND hwnd, unsigned int msg, 
+	unsigned int wp, long lp)
+{
+	switch (msg) {
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			finished++;
+			return 0;
+	}
+	return DefWindowProc(hwnd, msg, wp, lp);
+}
+#endif /* #if 0 */
 
 /******************************************************************************/
 /*
@@ -318,26 +349,25 @@ static void formTest(webs_t wp, char_t *path, char_t *query)
  */
 
 static int websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
-	int arg, char_t *url, char_t *path, char_t *query)
+							int arg, char_t *url, char_t *path, char_t *query)
 {
 /*
  *	If the empty or "/" URL is invoked, redirect default URLs to the home page
  */
 	if (*url == '\0' || gstrcmp(url, T("/")) == 0) {
-		websRedirect(wp, WEBS_DEFAULT_HOME);
+		websRedirect(wp, T("home.asp"));
 		return 1;
 	}
 	return 0;
 }
 
 /******************************************************************************/
-
 #ifdef B_STATS
 static void memLeaks() 
 {
 	int		fd;
 
-	if ((fd = gopen(T("leak.txt"), O_CREAT | O_TRUNC | O_WRONLY, 0666)) >= 0) {
+	if ((fd = gopen(T("leak.txt"), O_CREAT | O_TRUNC | O_WRONLY)) >= 0) {
 		bstats(fd, printMemStats);
 		close(fd);
 	}
@@ -345,7 +375,7 @@ static void memLeaks()
 
 /******************************************************************************/
 /*
- *	Print memory usage / leaks
+ *	Print memory usage / leaks  
  */
 
 static void printMemStats(int handle, char_t *fmt, ...)
@@ -358,6 +388,6 @@ static void printMemStats(int handle, char_t *fmt, ...)
 	va_end(args);
 	write(handle, buf, strlen(buf));
 }
-#endif
+#endif	/* B_STATS */
 
 /******************************************************************************/

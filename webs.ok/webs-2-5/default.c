@@ -75,8 +75,8 @@ static void websDefaultWriteEvent(webs_t wp);
 /*
  *	Process a default URL request. This will validate the URL and handle "../"
  *	and will provide support for Active Server Pages. As the handler is the
- *	last handler to run, it always indicates that it has handled the URL 
- *	by returning 1. 
+ *	last handler to run, it always indicates that it has handled the URL
+ *	by returning 1.
  */
 
 int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
@@ -92,6 +92,7 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
 	a_assert(query);
 
 	flags = websGetRequestFlags(wp);
+
 /*
  *	We do whitelist validation in addition to standard URL validation.
  *	The whitelist should really catch anything invalid first.
@@ -100,11 +101,10 @@ int websDefaultHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
  *	entry has the SSL flag set, do not serve the page.
  */
 #ifdef WEBS_WHITELIST_SUPPORT
-printf ("wp->url: (%s)\n", wp->url);
 	if ((rc = websWhitelistCheck(wp->url)) < 0) {
 		websBuildWhitelist();
 		if ((rc = websWhitelistCheck(wp->url)) < 0) {
-			websError(wp, 404, T("Cannot open URL: type 1"));
+			websError(wp, 404, T("Cannot open URL"));
 			return 1;
 		}
 	}
@@ -117,7 +117,7 @@ printf ("wp->url: (%s)\n", wp->url);
  *	Validate the URL and ensure that ".."s don't give access to unwanted files
  */
 	if (websValidateUrl(wp, path) < 0) {
-      /* 
+      /*
        * preventing a cross-site scripting exploit -- you may restore the
        * following line of code to revert to the original behavior...
 		websError(wp, 500, T("Invalid URL %s"), url);
@@ -142,38 +142,33 @@ printf ("wp->url: (%s)\n", wp->url);
 		}
 		nchars += gstrlen(websDefaultPage) + 2;
 		fmtAlloc(&tmp, nchars, T("%s/%s"), path, websDefaultPage);
-printf ("websDefaultHandler: tmp(%s)\n", tmp);
 		websRedirect(wp, tmp);
 		bfreeSafe(B_L, tmp);
 		return 1;
 	}
 
-printf ("we now open the web pages\n");
-printf ("lpath(%s), path(%s)\n", lpath, path);
-
 /*
  *	Open the document. Stat for later use.
  */
-	if (websPageOpen(wp, lpath, path, O_RDONLY | O_BINARY, 
-		0666) < 0) 
+	if (websPageOpen(wp, lpath, path, O_RDONLY | O_BINARY,
+		0666) < 0)
    {
-      /* 10 Dec 02 BgP -- according to 
-       * <http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html>, 
+      /* 10 Dec 02 BgP -- according to
+       * <http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html>,
        * the proper code to return here is NOT 400 (old code), which is used
        * to indicate a malformed request. Here, the request is good, but the
        * error we need to tell the client about is 404 (Not Found).
        */
-      /* 
+      /*
        * 17 Mar 03 BgP -- prevent a cross-site scripting exploit
 		websError(wp, 404, T("Cannot open URL %s"), url);
        */
-      
-		websError(wp, 404, T("Cannot open URL, type 2"));
+
+		websError(wp, 404, T("Cannot open URL"));
 		websBuildWhitelist();
 		return 1;
-	} 
+	}
 
-printf ("lpath(%s), path(%s)\n", lpath, path);
 	if (websPageStat(wp, lpath, path, &sbuf) < 0) {
       /*
        * 17 Mar 03 BgP
@@ -223,7 +218,7 @@ printf ("lpath(%s), path(%s)\n", lpath, path);
  *		explicitly allowed by licensing terms.
  */
 #ifdef WEBS_SSL_SUPPORT
-		websWrite(wp, T("Server: %s/%s %s/%s\r\n"), 
+		websWrite(wp, T("Server: %s/%s %s/%s\r\n"),
 			WEBS_NAME, WEBS_VERSION, SSL_NAME, SSL_VERSION);
 #else
 		websWrite(wp, T("Server: %s/%s\r\n"), WEBS_NAME, WEBS_VERSION);
@@ -302,7 +297,7 @@ static int badPath(char_t* path, char_t* badPath, int badLen)
          }
       }
       /* if we get here, the first 'badLen' characters match.
-       * If 'path' is 1 character larger than 'badPath' and that extra 
+       * If 'path' is 1 character larger than 'badPath' and that extra
        * character is NOT a letter or a number, we have a bad path.
        */
       retval = 1;
@@ -311,8 +306,8 @@ static int badPath(char_t* path, char_t* badPath, int badLen)
          /* e.g. path == "aux:" */
          if (gisalnum(path[len-1]))
          {
-            /* the last character is alphanumeric, so we let this path go 
-             * through. 
+            /* the last character is alphanumeric, so we let this path go
+             * through.
              */
             retval = 0;
          }
@@ -324,33 +319,33 @@ static int badPath(char_t* path, char_t* badPath, int badLen)
 static int isBadWindowsPath(char_t** parts, int partCount)
 {
    /*
-    * If we're running on Windows 95/98/ME, malicious users can crash the 
-    * OS by requesting an URL with any of several reserved DOS device names 
+    * If we're running on Windows 95/98/ME, malicious users can crash the
+    * OS by requesting an URL with any of several reserved DOS device names
     * in them (AUX, NUL, etc.).
-    * If we're running on any of those OS versions, we scan the URL 
-    * for paths with any of these elements before 
+    * If we're running on any of those OS versions, we scan the URL
+    * for paths with any of these elements before
     * trying to access them. If any of the subdirectory names match one
-    * of our prohibited links, we declare this to be a 'bad' path, and return 
-    * 1 to indicate this. This may be a heavy-handed approach, but should 
+    * of our prohibited links, we declare this to be a 'bad' path, and return
+    * 1 to indicate this. This may be a heavy-handed approach, but should
     * prevent the DOS attack.
-    * NOTE that this function is only compiled in when we are running on Win32, 
-    * and only has an effect when running on Win95/98, or ME. On all other 
+    * NOTE that this function is only compiled in when we are running on Win32,
+    * and only has an effect when running on Win95/98, or ME. On all other
     * versions of Windows, we check the version info, and return 0 immediately.
     *
     * According to http://packetstormsecurity.nl/0003-exploits/SCX-SA-01.txt:
     *  II.  Problem Description
-    *   When the Microsoft Windows operating system is parsing a path that 
-    *   is being crafted like "c:\[device]\[device]" it will halt, and crash 
-    *   the entire operating system.  
+    *   When the Microsoft Windows operating system is parsing a path that
+    *   is being crafted like "c:\[device]\[device]" it will halt, and crash
+    *   the entire operating system.
 	*   Four device drivers have been found to crash the system.  The CON,
-    *   NUL, AUX, CLOCK$ and CONFIG$ are the two device drivers which are 
-    *   known to crash.  Other devices as LPT[x]:, COM[x]: and PRN have not 
-    *   been found to crash the system.  
-    *   Making combinations as CON\NUL, NUL\CON, AUX\NUL, ... seems to 
+    *   NUL, AUX, CLOCK$ and CONFIG$ are the two device drivers which are
+    *   known to crash.  Other devices as LPT[x]:, COM[x]: and PRN have not
+    *   been found to crash the system.
+    *   Making combinations as CON\NUL, NUL\CON, AUX\NUL, ... seems to
     *   crash Ms Windows as well.
     *   Calling a path such as "C:\CON\[filename]" won't result in a crash
     *   but in an error-message.  Creating the map "CON", "CLOCK$", "AUX"
-    *   "NUL" or "CONFIG$" will also result in a simple error-message 
+    *   "NUL" or "CONFIG$" will also result in a simple error-message
     *   saying: ''creating that map isn't allowed''.
     *
     * returns 1 if it finds a bad path element.
@@ -368,10 +363,10 @@ static int isBadWindowsPath(char_t** parts, int partCount)
          for (i = 0; i < partCount; ++i)
          {
             /*
-             * check against the prohibited names. If any of our requested 
+             * check against the prohibited names. If any of our requested
              * subdirectories match any of these, return '1' immediately.
              */
-            if ( 
+            if (
              (badPath(parts[i], T("con"), 3)) ||
              (badPath(parts[i], T("com"), 3)) ||
              (badPath(parts[i], T("nul"), 3)) ||
@@ -384,7 +379,7 @@ static int isBadWindowsPath(char_t** parts, int partCount)
       }
    }
    /*
-    * either we're not on one of the bad OS versions, or the request has 
+    * either we're not on one of the bad OS versions, or the request has
     * no problems.
     */
    return 0;
@@ -407,7 +402,7 @@ int websValidateUrl(webs_t wp, char_t *path)
 	 Also fixes: http://www.securiteam.com/securitynews/5MP0C1580W.html
     */
 	char_t	*parts[MAX_URL_DEPTH];	/* Array of ptr's to URL parts */
-	char_t	*token, *dir, *lpath; 
+	char_t	*token, *dir, *lpath;
 	int	      i, len, npart;
 
 	a_assert(websValid(wp));
@@ -431,20 +426,20 @@ int websValidateUrl(webs_t wp, char_t *path)
     * Fixed by Matt Moore, 22 Jul 02
 	* http://www.securiteam.com/securitynews/5RP0I007PG.html
 	* http://www.securiteam.com/securitynews/5QP010U3FS.html
-	* 
+	*
 	* There were reports that a directory traversal exploit was
     * possible in the WebServer running under Windows if directory paths
     * outside the server's specified root web were given by URL-encoding the
     * backslash character, like:
     *
     *  GoAhead is vulnerable to a directory traversal bug. A request such as
-    *  
+    *
     *  GoAhead-server/../../../../../../../ results in an error message
     *  'Cannot open URL'.
     *  However, by encoding the '/' character, it is possible to break out of
     *  the web root and read arbitrary files from the server.
     *  Hence a request like:
-    * 
+    *
     *  GoAhead-server/..%5C..%5C..%5C..%5C..%5C..%5C/winnt/win.ini returns the
     *  contents of the win.ini file.
     * (Note that the description uses forward slashes (0x2F), but the example
@@ -462,9 +457,9 @@ int websValidateUrl(webs_t wp, char_t *path)
 
 /*
  *	Look at each directory segment and process "." and ".." segments
- *	Don't allow the browser to pop outside the root web. 
+ *	Don't allow the browser to pop outside the root web.
  */
-	while (token != NULL) 
+	while (token != NULL)
    {
       if (npart >= MAX_URL_DEPTH)
       {
@@ -474,9 +469,9 @@ int websValidateUrl(webs_t wp, char_t *path)
          bfree(B_L, path);
          return -1;
       }
-		if (gstrcmp(token, T("..")) == 0) 
+		if (gstrcmp(token, T("..")) == 0)
       {
-			if (npart > 0) 
+			if (npart > 0)
          {
 				npart--;
 			}
@@ -581,7 +576,7 @@ static void websDefaultWriteEvent(webs_t wp)
 }
 
 /******************************************************************************/
-/* 
+/*
  *	Initialize variables and data for the default URL handler module
  */
 
@@ -597,7 +592,7 @@ void websDefaultOpen()
 }
 
 /******************************************************************************/
-/* 
+/*
  *	Closing down. Free resources.
  */
 
@@ -611,7 +606,7 @@ void websDefaultClose()
 		sslList = sslList->next;
 		bfreeSafe(B_L, l->url);
 		bfree(B_L, l);
-	}	
+	}
 #endif
 	websDeleteWhitelist();
 #endif /* WEBS_WHITELIST_SUPPORT */
@@ -658,7 +653,6 @@ void websSetDefaultPage(char_t *page)
 		bfree(B_L, websDefaultPage);
 	}
 	websDefaultPage = bstrdup(B_L, page);
-printf ("websSetDefaultPage: (%s)\n", websDefaultPage); 
 }
 
 /******************************************************************************/
@@ -726,7 +720,7 @@ int websRequireSSL(char *url)
 {
 	sslList_t	*l;
 	int			sz;
-	
+
 	l = balloc(B_L, sizeof(sslList_t));
 	memset(l, 0x0, sizeof(sslList_t));
 	sz = strlen(url) + 1;
@@ -833,13 +827,13 @@ static int websBuildWhitelistRecursive(char *_path, fileNode_t *dir, int level)
 			cnode->next = nnode;
 		}
 		cnode = nnode;
-		if (strncmp(path + strlen(websDefaultDir), "/" CGI_BIN, 
+		if (strncmp(path + strlen(websDefaultDir), "/" CGI_BIN,
 				strlen(CGI_BIN) + 1) == 0) {
 			cnode->flags |= WHITELIST_CGI;
 		}
 #ifdef WEBS_SSL_SUPPORT
 		for (l = sslList; l != NULL; l = l->next) {
-			if (strncmp(path + strlen(websDefaultDir), l->url, 
+			if (strncmp(path + strlen(websDefaultDir), l->url,
 					strlen(l->url)) == 0) {
 				cnode->flags |= WHITELIST_SSL;
 			}
@@ -885,11 +879,11 @@ static int websBuildWhitelistRecursive(char *_path, fileNode_t *dir, int level)
 	 * byte for d_name field, meaning we would overflow the field when
 	 * readdir_r is called.  So we check for this here.
 	 * Another potential issue is if somehow a filesystem is mounted or linked
-	 * in a subdirectory or file that has name longer than PATH_MAX.  We 
+	 * in a subdirectory or file that has name longer than PATH_MAX.  We
 	 * ignore that possibility here, and leave it to the user to ensure that
 	 * the wwwroot directory does not contain this configuration.
 	 * http://womble.decadentplace.org.uk/readdir_r-advisory.html
-	 */ 
+	 */
 	if (sizeof(struct dirent) > PATH_MAX) {
 		findData = balloc(B_L, sizeof(struct dirent));
 	} else {
@@ -921,14 +915,14 @@ static int websBuildWhitelistRecursive(char *_path, fileNode_t *dir, int level)
 			cnode->next = nnode;
 		}
 		cnode = nnode;
-		if (strncmp(path + strlen(websDefaultDir), "/" CGI_BIN, 
+		if (strncmp(path + strlen(websDefaultDir), "/" CGI_BIN,
 				strlen(CGI_BIN) + 1) == 0) {
 			cnode->flags |= WHITELIST_CGI;
 		}
 #ifdef WEBS_SSL_SUPPORT
 		sslList_t	*l;
 		for (l = sslList; l != NULL; l = l->next) {
-			if (strncmp(path + strlen(websDefaultDir), l->url, 
+			if (strncmp(path + strlen(websDefaultDir), l->url,
 					strlen(l->url)) == 0) {
 				cnode->flags |= WHITELIST_SSL;
 				break;
