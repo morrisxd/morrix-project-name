@@ -593,10 +593,8 @@ void WPE_CreateIWQnode ()
    /* IW QNode (Free Buffer Pool part of IW QNode) */
    WP_qnode_iwq qn_iw_config = {
 
-      /* interruptqueue */ 0,
-      // for IW TX channels only
-      /* num_buffers */
-      MAXT_SIZE * (NUM_OF_HIER_ENET_TX_CHANNELS + 1 +
+      /* interruptqueue */ 0, // for IW TX channels only
+      /* num_buffers */ MAXT_SIZE * (NUM_OF_HIER_ENET_TX_CHANNELS + 1 +
                    1) + (NUM_OF_HIER_ENET_RX_CHANNELS + 1 + 1),
       /* adjunct_pool */ 0
    };
@@ -1563,15 +1561,12 @@ void WPE_CreateFastEnetRxTxChannel ()
       /* intmode */ WP_PKTCH_INT_ENABLE,
       /* iwmode */ WP_PKTCH_IWM_ENABLE,
       /* testmode */ WP_PKTCH_TEST_DISABLE,
-      /* tx_pqblock */ 0,
-      // Unused in HW mode
-      /* tx_pqlevel */ 0,
-      // Unused in HW mode
+      /* tx_pqblock */ 0, // Unused in HW mode
+      /* tx_pqlevel */ 0, // Unused in HW mode
       /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_STRICT,
       /* tx_shaping_params */ NULL,
       /* rx_maxsdu */ SDU_SIZE,
-      /* tx_cwid */ WP_CW_ID_A,
-      // Unused in HW mode
+      /* tx_cwid */ WP_CW_ID_A, // Unused in HW mode
       /* tx_tq */ 0,
       /* rx_queuedepth */ 10,
    };
@@ -1609,26 +1604,23 @@ void WPE_CreateHierHWEnetRxTxChannel ()
       /* Committed Burst Size in bits */
       /* flags */ 0,
    };
-   WP_ch_enet enet_ch_config = {
+   WP_ch_enet hier_enet_ch_config = {
 
       /* intmode */ WP_PKTCH_INT_ENABLE,
       /* iwmode */ WP_PKTCH_IWM_ENABLE,
       /* testmode */ WP_PKTCH_TEST_DISABLE,
-      /* tx_pqblock */ 0,
-      // Unused in HW mode
-      /* tx_pqlevel */ 0,
-      // Unused in HW mode
+      /* tx_pqblock */ 0, // Unused in HW mode
+      /* tx_pqlevel */ 0, // Unused in HW mode
       /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_CIR_EIR,
       /* tx_shaping_params */ &cir_eir_shaping_param,
       /* rx_maxsdu */ SDU_SIZE,
-      /* tx_cwid */ WP_CW_ID_A,
-      // Unused in HW mode
+      /* tx_cwid */ WP_CW_ID_A, // Unused in HW mode
       /* tx_tq */ 0,
       /* rx_queuedepth */ 10,
    };
    rx_gbe_hier_channel =
       WP_ChannelCreate (0x22, dev_hier_enet, iw_qnode, WP_CH_RX,
-                        WP_ENET, &enet_ch_config);
+                        WP_ENET, &hier_enet_ch_config);
    terminate_on_error (rx_gbe_hier_channel,
                        "WP_Channel_Create() Gige Hierarchical RX");
 
@@ -1646,12 +1638,12 @@ void WPE_CreateHierHWEnetRxTxChannel ()
               k++)
 
          {
-            enet_ch_config.tx_tq = k;
+            hier_enet_ch_config.tx_tq = k;
             tx_gbe_hier_channel[i][j][k] =
                WP_ChannelCreate (0x11,
-                                 l2_group_hier[i]
-                                 [j], iw_qnode,
-                                 WP_CH_TX, WP_ENET, &enet_ch_config);
+                                 l2_group_hier[i][j], 
+                                 iw_qnode,
+                                 WP_CH_TX, WP_ENET, &hier_enet_ch_config);
             terminate_on_error (tx_gbe_hier_channel[i]
                                 [j][k],
                                 "WP_Channel_Create() Gige Hierarchical TX");
@@ -1659,6 +1651,9 @@ void WPE_CreateHierHWEnetRxTxChannel ()
       }
    }
 }
+
+
+
 void WPE_CreateL1FMUGroups (void)
 {
    WP_U32 entry;
