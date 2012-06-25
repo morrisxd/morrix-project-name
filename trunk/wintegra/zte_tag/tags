@@ -5,10 +5,10 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.6	//
 API_DIR	makefile	/^API_DIR = $(WDDI_DIR)$(WDDI_SOURCES)\/api$/;"	m
-APP_MAX_BPORTS	mc_hdlc_zte_tag.c	95;"	d	file:
-APP_MAX_MAC_ADDRESS	mc_hdlc_zte_tag.c	97;"	d	file:
-APP_MAX_TDM_PORTS	mc_hdlc_zte_tag.c	91;"	d	file:
-APP_NUM_IW_BUFFERS	mc_hdlc_zte_tag.c	93;"	d	file:
+APP_MAX_BPORTS	mc_hdlc_zte_tag.c	97;"	d	file:
+APP_MAX_MAC_ADDRESS	mc_hdlc_zte_tag.c	99;"	d	file:
+APP_MAX_TDM_PORTS	mc_hdlc_zte_tag.c	93;"	d	file:
+APP_NUM_IW_BUFFERS	mc_hdlc_zte_tag.c	95;"	d	file:
 App_EnableGroup	mc_hdlc_zte_tag.c	/^void App_EnableGroup (void)$/;"	f
 App_InitHW	mc_hdlc_zte_tag.c	/^void App_InitHW (void)$/;"	f
 App_ShapingGroupsCreate	mc_hdlc_zte_tag.c	/^static void App_ShapingGroupsCreate (WPE_system *the_system)$/;"	f	file:
@@ -22,26 +22,27 @@ Enet_chan_rx	mc_hdlc_zte_tag.c	/^   WP_handle Enet_chan_rx;$/;"	m	struct:__anon1
 Enet_chan_tx	mc_hdlc_zte_tag.c	/^   WP_handle Enet_chan_tx;$/;"	m	struct:__anon1	file:
 Enet_dev	mc_hdlc_zte_tag.c	/^   WP_handle Enet_dev;$/;"	m	struct:__anon1	file:
 Enet_port	mc_hdlc_zte_tag.c	/^   WP_handle Enet_port;$/;"	m	struct:__anon1	file:
-HDLC_ADDRESS	mc_hdlc_zte_tag.c	73;"	d	file:
+HDLC_ADDRESS	mc_hdlc_zte_tag.c	75;"	d	file:
 HW_DEVICE	makefile	/^HW_DEVICE       = winpath3$/;"	m
 INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \\$/;"	m
 LDFLAGS2	makefile	/^LDFLAGS2	= -lpthread$/;"	m
-MAC_COPY	mc_hdlc_zte_tag.c	85;"	d	file:
+MAC_COPY	mc_hdlc_zte_tag.c	87;"	d	file:
 MODIFIED_BY_MORRIS	mc_hdlc_zte_tag.c	49;"	d	file:
-MPLS_SIZE	mc_hdlc_zte_tag.c	82;"	d	file:
+MPLS_SIZE	mc_hdlc_zte_tag.c	84;"	d	file:
+MTU_SIZE	mc_hdlc_zte_tag.c	51;"	d	file:
 MultiClass_Device_h	mc_hdlc_zte_tag.c	/^WP_handle MultiClass_Device_h[NUM_OF_FLOWS];$/;"	v
 MultiClass_Tx_Channel_h	mc_hdlc_zte_tag.c	/^WP_handle MultiClass_Tx_Channel_h[NUM_OF_FLOWS];$/;"	v
-NUM_OF_CHANNELS	mc_hdlc_zte_tag.c	1044;"	d	file:
-NUM_OF_FLOWS	mc_hdlc_zte_tag.c	1042;"	d	file:
-NUM_PQ_BLOCK	mc_hdlc_zte_tag.c	1045;"	d	file:
-NUM_SLOTS	mc_hdlc_zte_tag.c	62;"	d	file:
-NUM_SLOTS	mc_hdlc_zte_tag.c	67;"	d	file:
-N_CHANNELS	mc_hdlc_zte_tag.c	78;"	d	file:
-N_FRAMES	mc_hdlc_zte_tag.c	77;"	d	file:
-N_POLL_CYCLES	mc_hdlc_zte_tag.c	79;"	d	file:
-N_POOLS	mc_hdlc_zte_tag.c	76;"	d	file:
-N_QNODES	mc_hdlc_zte_tag.c	75;"	d	file:
-N_TX_HDLC_CH	mc_hdlc_zte_tag.c	51;"	d	file:
+NUM_OF_CHANNELS	mc_hdlc_zte_tag.c	1047;"	d	file:
+NUM_OF_FLOWS	mc_hdlc_zte_tag.c	1045;"	d	file:
+NUM_PQ_BLOCK	mc_hdlc_zte_tag.c	1048;"	d	file:
+NUM_SLOTS	mc_hdlc_zte_tag.c	64;"	d	file:
+NUM_SLOTS	mc_hdlc_zte_tag.c	69;"	d	file:
+N_CHANNELS	mc_hdlc_zte_tag.c	80;"	d	file:
+N_FRAMES	mc_hdlc_zte_tag.c	79;"	d	file:
+N_POLL_CYCLES	mc_hdlc_zte_tag.c	81;"	d	file:
+N_POOLS	mc_hdlc_zte_tag.c	78;"	d	file:
+N_QNODES	mc_hdlc_zte_tag.c	77;"	d	file:
+N_TX_HDLC_CH	mc_hdlc_zte_tag.c	53;"	d	file:
 OBJ_DIR	makefile	/^OBJ_DIR = $(TEST_DIR)\/bin$/;"	m
 PHY_BOARD_LIB_DIR	makefile	/^PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)\/$(WPI_BOARD)\/lib$/;"	m
 PHY_DIR	makefile	/^PHY_DIR = $(WDDI_DIR)\/phy$/;"	m
@@ -52,6 +53,7 @@ PSN2TDM_bridge_port	mc_hdlc_zte_tag.c	/^   WP_handle PSN2TDM_bridge_port[APP_MAX
 PSN2TDM_bridge_port2TDM	mc_hdlc_zte_tag.c	/^   WP_handle PSN2TDM_bridge_port2TDM;$/;"	m	struct:__anon1	file:
 PSN2TDM_default_agg	mc_hdlc_zte_tag.c	/^   WP_handle PSN2TDM_default_agg;$/;"	m	struct:__anon1	file:
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
+SDU_SIZE	mc_hdlc_zte_tag.c	50;"	d	file:
 SPECIAL_FLAG	makefile	/^SPECIAL_FLAG = -lpthread$/;"	m
 TDM2PSN_bridge_dfcflow	mc_hdlc_zte_tag.c	/^   WP_handle TDM2PSN_bridge_dfcflow[4];$/;"	m	struct:__anon1	file:
 TDM2PSN_bridge_filter	mc_hdlc_zte_tag.c	/^   WP_handle TDM2PSN_bridge_filter[3];$/;"	m	struct:__anon1	file:
@@ -89,25 +91,25 @@ WINUTIL_DIR	makefile	/^WINUTIL_DIR = $(WDDI_DIR)\/sources\/winutil\/include\/$/;
 WPE_ChannelsDelete	mc_hdlc_zte_tag.c	/^static void WPE_ChannelsDelete (WPE_system * the_system)$/;"	f	file:
 WPE_ChannelsEnable	mc_hdlc_zte_tag.c	/^static void WPE_ChannelsEnable (WPE_system * the_system)$/;"	f	file:
 WPE_ChannelsSetup	mc_hdlc_zte_tag.c	/^static void WPE_ChannelsSetup (WPE_system * the_system)$/;"	f	file:
-WPE_DEBUG_LEVEL	mc_hdlc_zte_tag.c	52;"	d	file:
+WPE_DEBUG_LEVEL	mc_hdlc_zte_tag.c	54;"	d	file:
 WPE_DataUnitsSetup	mc_hdlc_zte_tag.c	/^static void WPE_DataUnitsSetup (WPE_system * the_system)$/;"	f	file:
 WPE_McDevicesDelete	mc_hdlc_zte_tag.c	/^static void WPE_McDevicesDelete (WPE_system * the_system)$/;"	f	file:
 WPE_McDevicesEnable	mc_hdlc_zte_tag.c	/^static void WPE_McDevicesEnable (WPE_system * the_system)$/;"	f	file:
 WPE_McDevicesSetup	mc_hdlc_zte_tag.c	/^static void WPE_McDevicesSetup (WPE_system * the_system)$/;"	f	file:
-WPE_PORT_TDM	mc_hdlc_zte_tag.c	54;"	d	file:
+WPE_PORT_TDM	mc_hdlc_zte_tag.c	56;"	d	file:
 WPE_PPPRxBinding	mc_hdlc_zte_tag.c	/^static void WPE_PPPRxBinding (WPE_system * the_system)$/;"	f	file:
 WPE_PSN2TDMSysSetup	mc_hdlc_zte_tag.c	/^static void WPE_PSN2TDMSysSetup (WPE_system * the_system)$/;"	f	file:
 WPE_PrintStatistics	mc_hdlc_zte_tag.c	/^static void WPE_PrintStatistics (WPE_system * the_system)$/;"	f	file:
-WPE_RX_CH_TAG	mc_hdlc_zte_tag.c	429;"	d	file:
+WPE_RX_CH_TAG	mc_hdlc_zte_tag.c	432;"	d	file:
 WPE_SystemEnable	mc_hdlc_zte_tag.c	/^static void WPE_SystemEnable (WPE_system * the_system)$/;"	f	file:
 WPE_SystemSetup	mc_hdlc_zte_tag.c	/^static void WPE_SystemSetup (WPE_system * the_system)$/;"	f	file:
-WPE_TDM2PSNHostInfoSetup	mc_hdlc_zte_tag.c	/^\/*static*\/ void WPE_TDM2PSNHostInfoSetup (WPE_system * the_system)$/;"	f
+WPE_TDM2PSNHostInfoSetup	mc_hdlc_zte_tag.c	/^static void WPE_TDM2PSNHostInfoSetup (WPE_system * the_system)$/;"	f	file:
 WPE_TDM2PSNSysSetup	mc_hdlc_zte_tag.c	/^static void WPE_TDM2PSNSysSetup (WPE_system * the_system)$/;"	f	file:
-WPE_TDM_E1	mc_hdlc_zte_tag.c	55;"	d	file:
-WPE_TDM_MODE	mc_hdlc_zte_tag.c	57;"	d	file:
-WPE_TDM_PROTOCOL	mc_hdlc_zte_tag.c	58;"	d	file:
-WPE_TDM_T1	mc_hdlc_zte_tag.c	56;"	d	file:
-WPE_TX_CH_TAG	mc_hdlc_zte_tag.c	430;"	d	file:
+WPE_TDM_E1	mc_hdlc_zte_tag.c	57;"	d	file:
+WPE_TDM_MODE	mc_hdlc_zte_tag.c	59;"	d	file:
+WPE_TDM_PROTOCOL	mc_hdlc_zte_tag.c	60;"	d	file:
+WPE_TDM_T1	mc_hdlc_zte_tag.c	58;"	d	file:
+WPE_TX_CH_TAG	mc_hdlc_zte_tag.c	433;"	d	file:
 WPE_Terminate	mc_hdlc_zte_tag.c	/^static void WPE_Terminate (WP_U32 status)$/;"	f	file:
 WPE_TerminateOnError	mc_hdlc_zte_tag.c	/^static void WPE_TerminateOnError (WP_handle handle, WP_CHAR * s)$/;"	f	file:
 WPE_frame_config	mc_hdlc_zte_tag.c	/^struct WPE_frame_config$/;"	s	file:
@@ -125,10 +127,10 @@ WPI_T_DIR	makefile	/^WPI_T_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
 WPI_UFE4_DIR	makefile	/^WPI_UFE4_DIR = $(WPI_HTB_DIR)\/$(UFE_TYPE)$/;"	m
 WPI_UFE4_OBJ	makefile	/^WPI_UFE4_OBJ = $(WPI_UFE4_DIR)\/obj$/;"	m
 WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..\/..\/..$/;"	m
-WPU_INIT_COMET_CPLD_GEN	mc_hdlc_zte_tag.c	63;"	d	file:
-WPU_INIT_COMET_CPLD_GEN	mc_hdlc_zte_tag.c	68;"	d	file:
-WPU_MODE_TDM_GEN_MASTER	mc_hdlc_zte_tag.c	64;"	d	file:
-WPU_MODE_TDM_GEN_MASTER	mc_hdlc_zte_tag.c	69;"	d	file:
+WPU_INIT_COMET_CPLD_GEN	mc_hdlc_zte_tag.c	65;"	d	file:
+WPU_INIT_COMET_CPLD_GEN	mc_hdlc_zte_tag.c	70;"	d	file:
+WPU_MODE_TDM_GEN_MASTER	mc_hdlc_zte_tag.c	66;"	d	file:
+WPU_MODE_TDM_GEN_MASTER	mc_hdlc_zte_tag.c	71;"	d	file:
 WPX_UFE_DIR	makefile	/^WPX_UFE_DIR = $(PHY_DIR)\/wpx_ufe$/;"	m
 WP_AppLog	mc_hdlc_zte_tag.c	/^void WP_AppLog (WP_CHAR * s)$/;"	f
 WP_BOARD_NAME	makefile	/^WP_BOARD_NAME=WP_BOARD_WDS3$/;"	m
@@ -136,9 +138,9 @@ WP_DeviceCrcModify	mc_hdlc_zte_tag.c	/^WP_U32 WP_DeviceCrcModify (WPE_system * s
 WP_ErrCallback	mc_hdlc_zte_tag.c	/^void WP_ErrCallback (WP_CHAR * file, WP_CHAR * function, WP_U32 line,$/;"	f
 WP_HW_WINPATHX	makefile	/^WP_HW_WINPATHX = WP_HW_WINPATH3$/;"	m
 WP_MessageCallback	mc_hdlc_zte_tag.c	/^void WP_MessageCallback (WP_S32 level, const WP_CHAR * string)$/;"	f
-WP_TDM_DELAY_TYPE	mc_hdlc_zte_tag.c	65;"	d	file:
-WP_TDM_DELAY_TYPE	mc_hdlc_zte_tag.c	70;"	d	file:
-WTI_MPLS_LABEL	mc_hdlc_zte_tag.c	81;"	d	file:
+WP_TDM_DELAY_TYPE	mc_hdlc_zte_tag.c	67;"	d	file:
+WP_TDM_DELAY_TYPE	mc_hdlc_zte_tag.c	72;"	d	file:
+WTI_MPLS_LABEL	mc_hdlc_zte_tag.c	83;"	d	file:
 atm_global_cfg	mc_hdlc_zte_tag.c	/^WP_atm_global atm_global_cfg = {$/;"	v
 bridge_system_PSN2TDM	mc_hdlc_zte_tag.c	/^   WP_handle bridge_system_PSN2TDM;$/;"	m	struct:__anon1	file:
 bridge_system_TDM2PSN	mc_hdlc_zte_tag.c	/^   WP_handle bridge_system_TDM2PSN;$/;"	m	struct:__anon1	file:
@@ -170,14 +172,12 @@ int_queue_tables	mc_hdlc_zte_tag.c	/^WP_int_queue_table int_queue_tables = {$/;"
 iw_global_cfg	mc_hdlc_zte_tag.c	/^WP_iw_global iw_global_cfg = {$/;"	v
 l1_group_h	mc_hdlc_zte_tag.c	/^WP_handle l1_group_h[NUM_OF_FLOWS];$/;"	v
 l1_group_shaping_params	mc_hdlc_zte_tag.c	/^WP_fmu_shaping_cir_eir l1_group_shaping_params[1];$/;"	v
-l2_group_h	mc_hdlc_zte_tag.c	/^WP_handle l2_group_h[NUM_OF_FLOWS];$/;"	v
-l2_group_shaping_params	mc_hdlc_zte_tag.c	/^WP_fmu_shaping_cir_eir l2_group_shaping_params[1];$/;"	v
+l2_group_h	mc_hdlc_zte_tag.c	/^WP_handle l2_group_h[NUM_OF_FLOWS][1024];$/;"	v
 length	mc_hdlc_zte_tag.c	/^   WP_U32 length;$/;"	m	struct:WPE_frame_config	file:
 main	mc_hdlc_zte_tag.c	/^WP_S32 main (WP_S32 argc, WP_CHAR ** argv)$/;"	f
 mc_hdlc_dev_config	mc_hdlc_zte_tag.c	/^WP_device_mc_hdlc mc_hdlc_dev_config[1] = {$/;"	v
 mc_hdlc_dev_handle	mc_hdlc_zte_tag.c	/^   WP_handle mc_hdlc_dev_handle;$/;"	m	struct:__anon1	file:
 packet_group_l1_config	mc_hdlc_zte_tag.c	/^WP_shaping_group_type_enet packet_group_l1_config[1];$/;"	v
-packet_group_l2_config	mc_hdlc_zte_tag.c	/^WP_shaping_group_type_enet packet_group_l2_config[1];$/;"	v
 port_handle	mc_hdlc_zte_tag.c	/^   WP_handle port_handle;$/;"	m	struct:__anon1	file:
 pqblock1	mc_hdlc_zte_tag.c	/^   WP_handle pqblock1;$/;"	m	struct:__anon1	file:
 ring_data	mc_hdlc_zte_tag.c	/^WP_pool_ring_data ring_data[] = {$/;"	v
@@ -185,6 +185,7 @@ rx_data_unit	mc_hdlc_zte_tag.c	/^   WP_data_unit rx_data_unit;$/;"	m	struct:__an
 rx_segment	mc_hdlc_zte_tag.c	/^   WP_data_segment rx_segment;$/;"	m	struct:__anon1	file:
 tdm_config	mc_hdlc_zte_tag.c	/^WP_port_tdm tdm_config[1] = {$/;"	v
 tdm_slots	mc_hdlc_zte_tag.c	/^WP_tdm_slotgroup tdm_slots[] = {$/;"	v
+terminate_on_error	mc_hdlc_zte_tag.c	/^void terminate_on_error (WP_handle handle, WP_CHAR * s)$/;"	f
 test_failed	mc_hdlc_zte_tag.c	/^static WP_U32 test_failed;$/;"	v	file:
 trans_binding	mc_hdlc_zte_tag.c	/^WP_tdm_binding trans_binding[] = {$/;"	v
 trans_dev_config	mc_hdlc_zte_tag.c	/^WP_device_tdm_trans trans_dev_config[1] = {$/;"	v
