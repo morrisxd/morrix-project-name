@@ -749,18 +749,30 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 
    WP_Delay (500);
    WPE_PrintStatistics (the_system);
+   printf ("\n");
+   printf ("\n");
+   printf ("\n");
    do
    {
-      //printf("\n1 -- Send a test packet to GigE1");
-      //printf("\n2 -- Send a test packet to GigE2");
-      //printf("\n3 -- Poll for a packet on GigE1");
-      //printf("\n4 -- Poll for a packet on GigE2");
-      //printf("\nS -- Print Statistics for both ports");
-      //printf("\nD -- Dump phy registers for both ports");
+      printf ("MENU\n");
+      printf ("===================\n");
+#if 0
+      printf("1 -- Send a test packet to GigE1\n");
+      printf("2 -- Send a test packet to GigE2\n");
+      printf("3 -- Poll for a packet on GigE1\n");
+      printf("4 -- Poll for a packet on GigE2\n");
+#endif
+      printf("S -- Print Statistics for both ports\n");
+#if 0
+      printf("D -- Dump phy registers for both ports\n");
 
-      //printf("\nW -- Write a phy register");
-      //printf("\nT -- Dump Debug Registers");
-      //printf("\nP -- Control Callback function\n");/*add by Phenix*/
+      printf("W -- Write a phy register\n");
+      printf("T -- Dump Debug Registers\n");
+      printf("P -- Control Callback function\n");     /*add by Phenix*/
+#endif
+   
+      printf("C -- Try to change CRC type\n");
+      printf("R -- Reboot the system\n");
 
       ch = getchar ();
       if (ch == 's' || ch == 'S')
@@ -771,9 +783,15 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
       {
          printf ("try to change CRC type\n");
          WP_DeviceCrcModify (the_system);
+      } else if('r' == ch || 'R' == ch) {
+         WPX_Reboot();
       }
    }
    while (ch != 'q');
+
+
+
+
 #if 1
    /* Delete the channels */
    WPE_ChannelsDelete (the_system);
@@ -798,7 +816,11 @@ void App_InitHW (void)
 {
    WP_status status;
 
+#if 0
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_NORMAL);
+#else
+   status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_LOOPBACK);
+#endif
    WPE_TerminateOnError (status, " WPX_BoardSerdesInit- WP_PORT_ENET3");
 }
 #endif
