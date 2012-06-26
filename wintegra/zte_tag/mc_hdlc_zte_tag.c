@@ -879,7 +879,11 @@ static void WPE_SystemSetup (WPE_system * the_system)
    WP_port_enet port_enet_cfg = {
       /* pkt_limits             */ {2, 2},
       /* flowmode               */ WP_FLOWMODE_FAST,
+#if 0
       /* miimode                */ WP_ENET_RGMII_1000,
+#else
+      /* miimode                */ WP_ENET_SGMII_1000,
+#endif
       /* rx_iw_bkgnd            */ WP_IW_BKGND_USED,
    };
 #endif
