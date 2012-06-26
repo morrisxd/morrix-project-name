@@ -274,7 +274,11 @@ WP_ch_hdlc hdlc_ch_config[1] = {
     /* testmode */ WP_PKTCH_TEST_DISABLE,
     /* tx_pqblock */ 0,
     /* tx_pqlevel */ 0,
+#if 0 
+    /* tx_shaping_type */ WP_PKT_SHAPING_CIR_EIR,
+#else
     /* tx_shaping_type */ WP_PKT_SHAPING_PPR,
+#endif
     /* tx_shaping_params */ &hdlc_ch_shaping[0],
     /* rx_maxsdu */ MTU_SIZE,
     /* tx_cwid */ WP_CW_ID_A,
@@ -1097,6 +1101,7 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
    {
       WP_status status = 0;
 
+      status = 0;
       printf ("App_ShapingGroupsCreate: WP_ShapingGroupCreate(), ii=[%d]\n", ii);
 
 
@@ -1107,8 +1112,10 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
                                 &enet_group_l1_config);
 
       WPE_TerminateOnError (l1_group_h[ii], "l1_group create");
+#if 0
       status = WP_ShapingGroupEnable (l1_group_h[ii]);
-      WPE_TerminateOnError (status, "WP_ShapingGroupEnable");
+      WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1_group_h[]");
+#endif
 
       for (jj = 0; jj < 4; jj ++)
       {
@@ -1778,10 +1785,17 @@ static void WPE_PPPRxBinding (WPE_system * the_system)
       /* ENABLE LCP forwarding on the HDLC RX channel, so that LCP packets come into the PPP Switching system instead of being host terminated */
       pppsw_lcp.iw_system = the_system->h_iw_sys_pppsw;
       pppsw_lcp.aggregation = the_system->h_flow_agg_pppsw_link[ii];
+printf ("before WP_FeatureInit ()\n");
       status =
+#if 0
+         WP_ModuleInit (the_system->ch_handle[WPE_RX_CH_TAG],
+                         WP_FEATURE_IW_PPPSW_RX_LCP_FORWARDING_MODE,
+                         &pppsw_lcp);
+#else
          WP_FeatureInit (the_system->ch_handle[WPE_RX_CH_TAG],
                          WP_FEATURE_IW_PPPSW_RX_LCP_FORWARDING_MODE,
                          &pppsw_lcp);
+#endif
       WPE_TerminateOnError (status, "WP_FeatureInit LCP");
    }
 
@@ -2464,13 +2478,15 @@ void App_EnableGroup (void)
    WP_U32 ii = 0;
    WP_handle status;
 
-   for (ii = 0; ii < NUM_OF_FLOWS; ii++)
-   {
-      status = WP_ShapingGroupEnable (l1_group_h[ii]);
-      WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1");
+   status = WP_ShapingGroupEnable (l1_group_h[0]);
+   WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1_group_h[0]");
 
-      status = WP_ShapingGroupEnable (l2_group_h[ii][0]);
-      WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1");
+   for (ii = 0; ii < /* NUM_OF_FLOWS */4; ii++)
+   {
+printf ("App_EnableGroup(): ii(%d)", ii);
+
+      status = WP_ShapingGroupEnable (l2_group_h[0][ii]);
+      WPE_TerminateOnError (status, "WP_ShapingGroupEnable l2_group_h");
    }
 }
 
