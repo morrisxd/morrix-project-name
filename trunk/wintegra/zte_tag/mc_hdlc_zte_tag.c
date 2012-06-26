@@ -816,7 +816,7 @@ void App_InitHW (void)
 {
    WP_status status;
 
-#if 0
+#if 1
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_NORMAL);
 #else
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_LOOPBACK);
@@ -1139,7 +1139,7 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
       WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1_group_h[]");
 #endif
 
-      for (jj = 0; jj < 4; jj ++)
+      for (jj = 0; jj < NUM_OF_FLOWS; jj ++)
       {
          packet_group_l2_config.group_mode = WP_MODE_HW;
          l2_group_h[ii][jj] = WP_ShapingGroupCreate (l1_group_h[ii],
@@ -1248,7 +1248,9 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
 #endif
 
 
-
+/*------------------------------------------------------------*\
+   we setup shaping groups here replacing normal TX channel
+\*------------------------------------------------------------*/
 #if MODIFIED_BY_MORRIS
    ch_enet_cfg.tx_tq = 0;
    printf ("before ChannelCreate (l2_group_h)\n");
@@ -2503,7 +2505,7 @@ void App_EnableGroup (void)
    status = WP_ShapingGroupEnable (l1_group_h[0]);
    WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1_group_h[0]");
 
-   for (ii = 0; ii < /* NUM_OF_FLOWS */4; ii++)
+   for (ii = 0; ii < NUM_OF_FLOWS; ii++)
    {
 printf ("App_EnableGroup(): ii(%d)", ii);
 
