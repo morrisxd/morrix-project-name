@@ -816,7 +816,7 @@ void App_InitHW (void)
 {
    WP_status status;
 
-#if 1
+#if 0
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_NORMAL);
 #else
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_LOOPBACK);
@@ -839,7 +839,7 @@ static void WPE_SystemSetup (WPE_system * the_system)
       /* rmii_operating_speed */    WP_UNUSED,
       /* mac_addr[6] */             {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
       /* tx_bit_rate */             1000000000,
-      /* loopbackmode  */           WP_ENET_NORMAL,
+      /* loopbackmode  */           WP_ENET_LOOPBACK,
       /* extended_params */         NULL
    };
    /***************************///Phenix
