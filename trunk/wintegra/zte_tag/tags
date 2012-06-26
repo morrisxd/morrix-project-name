@@ -30,11 +30,9 @@ MAC_COPY	mc_hdlc_zte_tag.c	87;"	d	file:
 MODIFIED_BY_MORRIS	mc_hdlc_zte_tag.c	49;"	d	file:
 MPLS_SIZE	mc_hdlc_zte_tag.c	84;"	d	file:
 MTU_SIZE	mc_hdlc_zte_tag.c	51;"	d	file:
-MultiClass_Device_h	mc_hdlc_zte_tag.c	/^WP_handle MultiClass_Device_h[NUM_OF_FLOWS];$/;"	v
-MultiClass_Tx_Channel_h	mc_hdlc_zte_tag.c	/^WP_handle MultiClass_Tx_Channel_h[NUM_OF_FLOWS];$/;"	v
-NUM_OF_CHANNELS	mc_hdlc_zte_tag.c	1047;"	d	file:
-NUM_OF_FLOWS	mc_hdlc_zte_tag.c	1045;"	d	file:
-NUM_PQ_BLOCK	mc_hdlc_zte_tag.c	1048;"	d	file:
+NUM_OF_CHANNELS	mc_hdlc_zte_tag.c	1041;"	d	file:
+NUM_OF_FLOWS	mc_hdlc_zte_tag.c	1039;"	d	file:
+NUM_PQ_BLOCK	mc_hdlc_zte_tag.c	1042;"	d	file:
 NUM_SLOTS	mc_hdlc_zte_tag.c	64;"	d	file:
 NUM_SLOTS	mc_hdlc_zte_tag.c	69;"	d	file:
 N_CHANNELS	mc_hdlc_zte_tag.c	80;"	d	file:
@@ -100,7 +98,7 @@ WPE_PORT_TDM	mc_hdlc_zte_tag.c	56;"	d	file:
 WPE_PPPRxBinding	mc_hdlc_zte_tag.c	/^static void WPE_PPPRxBinding (WPE_system * the_system)$/;"	f	file:
 WPE_PSN2TDMSysSetup	mc_hdlc_zte_tag.c	/^static void WPE_PSN2TDMSysSetup (WPE_system * the_system)$/;"	f	file:
 WPE_PrintStatistics	mc_hdlc_zte_tag.c	/^static void WPE_PrintStatistics (WPE_system * the_system)$/;"	f	file:
-WPE_RX_CH_TAG	mc_hdlc_zte_tag.c	432;"	d	file:
+WPE_RX_CH_TAG	mc_hdlc_zte_tag.c	436;"	d	file:
 WPE_SystemEnable	mc_hdlc_zte_tag.c	/^static void WPE_SystemEnable (WPE_system * the_system)$/;"	f	file:
 WPE_SystemSetup	mc_hdlc_zte_tag.c	/^static void WPE_SystemSetup (WPE_system * the_system)$/;"	f	file:
 WPE_TDM2PSNHostInfoSetup	mc_hdlc_zte_tag.c	/^static void WPE_TDM2PSNHostInfoSetup (WPE_system * the_system)$/;"	f	file:
@@ -109,7 +107,7 @@ WPE_TDM_E1	mc_hdlc_zte_tag.c	57;"	d	file:
 WPE_TDM_MODE	mc_hdlc_zte_tag.c	59;"	d	file:
 WPE_TDM_PROTOCOL	mc_hdlc_zte_tag.c	60;"	d	file:
 WPE_TDM_T1	mc_hdlc_zte_tag.c	58;"	d	file:
-WPE_TX_CH_TAG	mc_hdlc_zte_tag.c	433;"	d	file:
+WPE_TX_CH_TAG	mc_hdlc_zte_tag.c	437;"	d	file:
 WPE_Terminate	mc_hdlc_zte_tag.c	/^static void WPE_Terminate (WP_U32 status)$/;"	f	file:
 WPE_TerminateOnError	mc_hdlc_zte_tag.c	/^static void WPE_TerminateOnError (WP_handle handle, WP_CHAR * s)$/;"	f	file:
 WPE_frame_config	mc_hdlc_zte_tag.c	/^struct WPE_frame_config$/;"	s	file:
@@ -171,13 +169,11 @@ host_qnode_handle	mc_hdlc_zte_tag.c	/^   WP_handle host_qnode_handle;$/;"	m	stru
 int_queue_tables	mc_hdlc_zte_tag.c	/^WP_int_queue_table int_queue_tables = {$/;"	v
 iw_global_cfg	mc_hdlc_zte_tag.c	/^WP_iw_global iw_global_cfg = {$/;"	v
 l1_group_h	mc_hdlc_zte_tag.c	/^WP_handle l1_group_h[NUM_OF_FLOWS];$/;"	v
-l1_group_shaping_params	mc_hdlc_zte_tag.c	/^WP_fmu_shaping_cir_eir l1_group_shaping_params[1];$/;"	v
 l2_group_h	mc_hdlc_zte_tag.c	/^WP_handle l2_group_h[NUM_OF_FLOWS][1024];$/;"	v
 length	mc_hdlc_zte_tag.c	/^   WP_U32 length;$/;"	m	struct:WPE_frame_config	file:
 main	mc_hdlc_zte_tag.c	/^WP_S32 main (WP_S32 argc, WP_CHAR ** argv)$/;"	f
 mc_hdlc_dev_config	mc_hdlc_zte_tag.c	/^WP_device_mc_hdlc mc_hdlc_dev_config[1] = {$/;"	v
 mc_hdlc_dev_handle	mc_hdlc_zte_tag.c	/^   WP_handle mc_hdlc_dev_handle;$/;"	m	struct:__anon1	file:
-packet_group_l1_config	mc_hdlc_zte_tag.c	/^WP_shaping_group_type_enet packet_group_l1_config[1];$/;"	v
 port_handle	mc_hdlc_zte_tag.c	/^   WP_handle port_handle;$/;"	m	struct:__anon1	file:
 pqblock1	mc_hdlc_zte_tag.c	/^   WP_handle pqblock1;$/;"	m	struct:__anon1	file:
 ring_data	mc_hdlc_zte_tag.c	/^WP_pool_ring_data ring_data[] = {$/;"	v
