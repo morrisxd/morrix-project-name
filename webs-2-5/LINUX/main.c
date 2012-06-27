@@ -174,6 +174,7 @@ static int initWebs(int demo)
 #if 0
 	/*-----------------------------------------------------*\
 	 * something wrong here, this code can not run in the HISI
+      Yes, it is
 	\*-----------------------------------------------------*/
 	if ((hp = gethostbyname(host)) == NULL) {
 		error(E_L, E_LOG, T("Can't get host address"));
