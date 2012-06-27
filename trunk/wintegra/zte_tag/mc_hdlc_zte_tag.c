@@ -113,7 +113,6 @@ struct WPE_frame_config
          { 80, 0x16 } */
 };
 static WP_U32 test_failed;
-static void terminate_on_error (WP_handle handle, WP_CHAR * s);
 
 /* TDI1 Port configuration (HDLC Mode) */
 /* TDM frame configuration */
@@ -1095,8 +1094,8 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
 
    WP_fmu_shaping_cir_eir l2_group_shaping_params = {
 #if MODIFIED_BY_MORRIS
-      /* cir */ 1000,
-      /* cbs */ 80,
+      /* cir */ 1000000,
+      /* cbs */ 80000,
       /* eir */ 0,
       /* ebs */ 0,
       /* flags */ 0
@@ -1150,8 +1149,6 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
                                 WP_SHAPING_GROUP_TYPE_PACKET,
                                 &packet_group_l2_config);
          WPE_TerminateOnError (l2_group_h[ii][jj], "l2_group[0] create");
-         terminate_on_error (l2_group_h[ii][jj],
-                                 "WP_ShapingGroupCreate() Hierarchical TX");
       }
    }
 
@@ -2511,7 +2508,7 @@ void App_EnableGroup (void)
 
    for (ii = 0; ii < NUM_OF_FLOWS; ii++)
    {
-printf ("App_EnableGroup(): ii(%d)", ii);
+printf ("App_EnableGroup(): l2_group_h[0][%d]\n", ii);
 
       status = WP_ShapingGroupEnable (l2_group_h[0][ii]);
       WPE_TerminateOnError (status, "WP_ShapingGroupEnable l2_group_h");
