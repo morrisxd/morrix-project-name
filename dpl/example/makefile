@@ -17,7 +17,7 @@ example.eef: $(OBJ)
 	 @echo ''
 	 @echo 'Creating executable ...'
 	 @echo ''
-	winlnk.exe  -o example.eef -g   $(OBJ)
+	winlnk  -o example.eef -g   $(OBJ)
 	 @echo 'Build completed'
 	 
 	
