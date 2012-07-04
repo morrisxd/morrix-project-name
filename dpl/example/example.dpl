@@ -1,0 +1,54 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2006.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: example.dpl
+*
+* Description: The example application:
+*              the example application implements, a simple DPS application
+*              which consists of the following:
+*              I. An application for transmitting and receiving ATM data using UPI 
+*                 external loop-back
+*                1. DPL code for Transmitter 
+*                2. DPL code for Receiver 
+*                3. WinIDE project for compiling and creating the eef executable 
+*                4. A command file used for:
+*                  a. Loading application 
+*                  b. Preparing the data packets 
+*                  c. Configuring the memory buses 
+*                  d. Specifying test termination events 
+*
+****************************************************************************/
+
+
+
+#include "example.h"
+
+
+/****************************************************************************
+*
+* Section: Main
+*
+* Description: Both Rx and Tx threads start at this section
+*              The test file (example.cmd) sets up transmit threads to begin
+*              at TX_ and reaceive threads to begin at RX_
+****************************************************************************/
+section Main
+{
+   
+  global TX_,RX_;
+   
+TX_:
+      F_Transmit() ; 
+      
+      
+RX_:
+     F_Receive() ;   
+     
+      
+}

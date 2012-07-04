@@ -1,0 +1,103 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2006.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: example_rx.dpl
+*
+* Description: Implements the receiver function which receives the data
+*              and copies it to the memory
+*
+****************************************************************************/
+
+
+
+
+#include "example.h"
+
+
+/****************************************************************************
+*
+* Function:    F_Receive
+*
+* Description: The reciever function which receives the data from the serial
+*              and buffers it in the memory
+*
+****************************************************************************/
+func F_Receive()
+{
+   
+   
+   register struct   Cell rx_cell  = r96;
+   register struct   S_SerialStatusReg2 status1 = r8 ;
+   register          B_DATA_RX    = b3  ;
+   register          B_CTR_RX     = b4  ;
+   register struct   Mode_Register  B_MODE0_RX  = b5  ;
+   register          B_CTR_ERR_RX = b6  ; 
+   
+   
+   register          temp_ctr        = r95;
+   register          zero            = r94 ;
+   register          base_offset_rx  = r93 ;
+   register  struct  Mode_Register  mode0    = r6 ;
+   register  struct  Mode_Register  temp_mode0 = r92 ;
+   //register  struct  Keys key        = r91 ;
+   register  struct  LabelTag  tag = r90 ;
+   register          crc_result      = r87 ;
+   register          time_stamp      = r86 ;
+   
+   zero = 0 ;
+   
+   /* reads the time stamp */
+   time_stamp = _time_stamp();
+   
+   /* calculates crc on the time stamp */
+   _crc32(time_stamp); 
+   //crc_result = _crc32_res(); 
+   crc_result = crc_result & mask ;
+    
+   tag.Offset = 0x0002 ; 
+   tag.TagLabel = 0x01 ;
+   tag.LabelMode = 0x1 ;
+   
+  //_get_key(status1,tag,NUM_OF_KEYS,NULL);
+   _get_key(status1,tag,NUM_OF_KEYS,_ORDER_UNLOCK);
+  
+   
+   for ( r89=0; r89 < crc_result; r89=r89+1  )
+   {
+      r88 = r88 ;
+   }
+   
+   
+   /* updating the counter of the rx */
+   temp_ctr=_mem(tag,B_CTR_RX[zero],_MASTER7 | _ORDER_LOCK)+=1 ; 
+   
+   temp_ctr = temp_ctr & 0x3;
+   
+   if ( temp_ctr == rx_cell.header )
+   {
+      /* update the mode0 register */
+      temp_mode0=_mem(r0,B_MODE0_RX[zero],4,_MASTER6) ;
+      mode0.map=temp_mode0.map ;
+      
+      base_offset_rx = temp_ctr * SIZE_OF_DATA ; 
+      _data_mem(tag,B_DATA_RX[base_offset_rx],SIZE_OF_DATA,_TERMINATE | _ORDER_UNLOCK) = rx_cell;
+      
+   }
+   else
+   {
+      
+      _mem(tag,B_CTR_ERR_RX[zero],_MASTER8 | _TERMINATE | _ORDER_UNLOCK )+=1 ;
+        
+      
+   }  
+   
+   
+   
+     
+}

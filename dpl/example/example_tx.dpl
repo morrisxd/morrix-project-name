@@ -1,0 +1,85 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2006.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: example_tx.dpl
+*
+* Description: Implements the transmitter function which reads the data
+*              from the memory and transmits it
+*
+****************************************************************************/
+
+
+
+#include "example.h"
+
+
+/****************************************************************************
+*
+* Function:    F_Transmit
+*
+* Description: The transimt function which reads data from the memory
+*              and sends it out
+*
+****************************************************************************/
+func F_Transmit()
+{
+   
+   register          base_offset_tx  = r10 ;
+   register          time_stamp      = r11 ;
+   register          crc_result      = r12 ;
+   register  struct  LabelTag  tag         = r16 ;
+   register  struct  Cell        tx_cell     = r96 ;
+   register          B_DATA_TX    = b0  ;
+   register          B_CTR_TX     = b1  ;
+   register  struct  Mode_Register  B_MODE0_TX  = b2  ;
+   register          zero         = r95 ;
+   register          temp_ctr     = r94 ;  
+   register  struct  Mode_Register  mode0    = r6 ;
+   register  struct  Mode_Register2  temp_mode0= r93 ;
+   
+   zero = 0;
+   /* reads the time stamp */
+   time_stamp = _time_stamp();
+   
+   /* calculates crc on the time stamp */
+  
+    
+   tag.Offset = 0x0001 ; 
+   tag.TagLabel = 0x01 ;
+   tag.LabelMode = 0x1 ;
+   
+   _get_key(r0,tag,NUM_OF_KEYS,NULL);
+   
+   
+ 
+   
+    /* updates mode0 with *b2 */
+   temp_mode0 =_mem(tag,B_MODE0_TX[zero],4,_MASTER4 | _ORDER_LOCK );
+   mode0.map = temp_mode0.map;
+   
+     /* increments counter */
+   temp_ctr = _mem(r0,B_CTR_TX[zero],_MASTER5) +=1;
+   temp_ctr = temp_ctr & 0x3;
+    
+   /* calculates the offset to the next Tx cell */   
+   base_offset_tx = temp_ctr * SIZE_OF_DATA;
+   
+   
+   /* move data from memory to TRS */
+   tx_cell = _data_mem(r0,B_DATA_TX[base_offset_tx],SIZE_OF_DATA,NULL);
+   
+  /* update header  */
+   tx_cell.header = temp_ctr;
+   
+   /* transmit data to through serial */
+  _serial(tag,SIZE_OF_DATA,SERIAL_LAST,_MASTER9 | _TERMINATE | _ORDER_UNLOCK ) = tx_cell;
+   
+   
+   
+}
