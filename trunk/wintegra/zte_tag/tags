@@ -98,7 +98,7 @@ WPE_PORT_TDM	mc_hdlc_zte_tag.c	56;"	d	file:
 WPE_PPPRxBinding	mc_hdlc_zte_tag.c	/^static void WPE_PPPRxBinding (WPE_system * the_system)$/;"	f	file:
 WPE_PSN2TDMSysSetup	mc_hdlc_zte_tag.c	/^static void WPE_PSN2TDMSysSetup (WPE_system * the_system)$/;"	f	file:
 WPE_PrintStatistics	mc_hdlc_zte_tag.c	/^static void WPE_PrintStatistics (WPE_system * the_system)$/;"	f	file:
-WPE_RX_CH_TAG	mc_hdlc_zte_tag.c	436;"	d	file:
+WPE_RX_CH_TAG	mc_hdlc_zte_tag.c	435;"	d	file:
 WPE_SystemEnable	mc_hdlc_zte_tag.c	/^static void WPE_SystemEnable (WPE_system * the_system)$/;"	f	file:
 WPE_SystemSetup	mc_hdlc_zte_tag.c	/^static void WPE_SystemSetup (WPE_system * the_system)$/;"	f	file:
 WPE_TDM2PSNHostInfoSetup	mc_hdlc_zte_tag.c	/^static void WPE_TDM2PSNHostInfoSetup (WPE_system * the_system)$/;"	f	file:
@@ -107,7 +107,7 @@ WPE_TDM_E1	mc_hdlc_zte_tag.c	57;"	d	file:
 WPE_TDM_MODE	mc_hdlc_zte_tag.c	59;"	d	file:
 WPE_TDM_PROTOCOL	mc_hdlc_zte_tag.c	60;"	d	file:
 WPE_TDM_T1	mc_hdlc_zte_tag.c	58;"	d	file:
-WPE_TX_CH_TAG	mc_hdlc_zte_tag.c	437;"	d	file:
+WPE_TX_CH_TAG	mc_hdlc_zte_tag.c	436;"	d	file:
 WPE_Terminate	mc_hdlc_zte_tag.c	/^static void WPE_Terminate (WP_U32 status)$/;"	f	file:
 WPE_TerminateOnError	mc_hdlc_zte_tag.c	/^static void WPE_TerminateOnError (WP_handle handle, WP_CHAR * s)$/;"	f	file:
 WPE_frame_config	mc_hdlc_zte_tag.c	/^struct WPE_frame_config$/;"	s	file:
