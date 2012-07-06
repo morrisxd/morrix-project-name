@@ -3166,9 +3166,9 @@ static void WPE_PrintStatistics (WPE_system * the_system)
    printf ("hash_fail_cells= %d\n",
            (WP_U32) flow_stats_pwe3.hash_fail_cells);
 
-   printf ("-------------------------------\n");
+   printf ("--------------------------------------------------------------\n");
    printf (" the_system->ENET_dev  statisics \n");
-   printf ("-------------------------------\n");
+   printf ("--------------------------------------------------------------\n");
    status = WP_DeviceStatistics (the_system->Enet_dev, &s_hs_enet);
    WPE_TerminateOnError (status, "WP_DeviceStatistics");
    printf ("   rx_bytes            : %u\n", (WP_U32) s_hs_enet.rx_bytes);
