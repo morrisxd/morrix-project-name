@@ -502,6 +502,7 @@ typedef struct
 WPE_system wpe_system[1];
 
 /* Prototypes of internal functions of this example */
+static void App_EnableGroup (void);
 static void WPE_SystemSetup (WPE_system * system);
 static void WPE_SystemEnable (WPE_system * system);
 static void WPE_McDevicesSetup (WPE_system * system);
@@ -675,6 +676,8 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    status = WP_PortEnable (the_system->Enet_port, WP_DIRECTION_DUPLEX);
    WPE_TerminateOnError (status, "WP_PortEnable() Enet_port");
 
+   App_EnableGroup ();
+
    /* Enable the multi channel vitual devices */
    WPE_McDevicesEnable (the_system);
 
@@ -841,7 +844,11 @@ static void WPE_SystemSetup (WPE_system * the_system)
       /* max_tx_channels */         1,
       /* tx_maxsdu       */         MTU_SIZE,
       /* rmii_operating_speed */    WP_UNUSED,
+#if 1
       /* mac_addr[6] */             {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
+#else
+                                    { 0x45, 0x6e, 0x65, 0x74, 0x23, 0x32 },
+#endif
       /* tx_bit_rate */             1000000000,
       /* loopbackmode  */           WP_ENET_LOOPBACK,
       /* extended_params */         NULL
@@ -1139,10 +1146,6 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
                                 &enet_group_l1_config);
 
       WPE_TerminateOnError (l1_group_h[ii], "l1_group create");
-#if 0
-      status = WP_ShapingGroupEnable (l1_group_h[ii]);
-      WPE_TerminateOnError (status, "WP_ShapingGroupEnable l1_group_h[]");
-#endif
 
       for (jj = 0; jj < NUM_OF_FLOWS; jj ++)
       {
@@ -1451,7 +1454,14 @@ static void WPE_TDM2PSNSysSetup (WPE_system * the_system)
       /* svl_mode */ WP_IW_SVL_DISABLED,
    };
 
-   /* PPP Switching System */
+
+
+
+/*-------------------------------------------*\ 
+   PPP Switching System 
+
+   the_system->bridge_system_TDM2PSN = 
+\*-------------------------------------------*/
    the_system->h_iw_sys_pppsw =
       WP_IwSystemCreate (WP_WINPATH (0), WP_IW_PPP_SWITCHING_MODE,
                          &iw_sys_pppsw_cfg);
@@ -1468,6 +1478,9 @@ static void WPE_TDM2PSNSysSetup (WPE_system * the_system)
 
 /*---------------------------------------------------*\
    Create 3 USER PROGRAMMABLE FILTERS
+   
+   Here uses only software filters, 
+   This is NOT PCE hardware filters & rules
 \*---------------------------------------------------*/
    /* 1. FOR CISCO HDLC TRAFFIC CONTROL AND DATA */
    classification_filter.fields_mask = WP_FIELD_IDS_ARRAY;
@@ -1834,7 +1847,11 @@ static void WPE_PPPRxBinding (WPE_system * the_system)
       WPE_TerminateOnError (status, " WP_IwRxBindingCreate() PPPSW");
 #endif
 
-      /* ENABLE LCP forwarding on the HDLC RX channel, so that LCP packets come into the PPP Switching system instead of being host terminated */
+      /* 
+         ENABLE LCP forwarding on the HDLC RX channel, 
+         so that LCP packets come into the PPP Switching system 
+         instead of being host terminated 
+       */
       pppsw_lcp.iw_system = the_system->h_iw_sys_pppsw;
       pppsw_lcp.aggregation = the_system->h_flow_agg_pppsw_link[ii];
 printf ("before WP_FeatureInit ()\n");
@@ -1967,11 +1984,15 @@ printf ("before WP_FeatureInit ()\n");
    the_system->h_flow_agg_enet2 =
 \*---------------------------------------------------------------*/
    /* Data packets go here - both PPP IP (0x21) and CISCO HDLC IP (0x0F000800) */
+
+
 #if 0
    iw_agg_bridging_cfg.tag = 17;
    iw_agg_bridging_cfg.txfunc = the_system->Enet_chan_tx;
    iw_agg_bridging_cfg.iw_port = the_system->TDM2PSN_bridge_port2ENET;
 #endif
+
+
    the_system->h_flow_agg_enet2 =
       WP_IwFlowAggregationCreate (WP_WINPATH (0), WP_IW_PWE3_MODE,
                                   &pwe3_hdlc_flow_agg_config
@@ -2042,19 +2063,30 @@ printf ("before WP_FeatureInit ()\n");
 
    /* Add DFC flows */
 
-   /* NOTE for this test we are using TDM#1 to send out and receive the packet, so we use the bridge port for TDM 1 */
-   dfc_flow_info.input_port = the_system->TDM2PSN_bridge_port[0]; /* Note that Input_port is one of the fields in the filter */
+/*-----------------------------------------------------*\
+   goto extract_fa[1]
+\*-----------------------------------------------------*/
+   /* 
+      NOTE for this test we are using TDM#1 to 
+      send out and receive the packet, 
+      so we use the bridge port for TDM 1 
+    */
+   /* 
+      Note that Input_port is one of the fields in the filter 
+    */
+   dfc_flow_info.input_port = the_system->TDM2PSN_bridge_port[0]; 
    dfc_flow_info.output_port = 0;
 
-   /* While adding these flows, make sure to use the correct filter for each flow */
+   /* 
+      While adding these flows, 
+      make sure to use the correct 
+      filter for each flow 
+    */
 
    /* CISCO HDLC Control packets flow */
    dfc_flow_info.filter_handle = the_system->TDM2PSN_bridge_filter[0];
    strcpy (rule_string, "n;n;n;n;n;n;#;0x0f008035");
 
-/*-----------------------------------------------------*\
-   goto extract_fa[1]
-\*-----------------------------------------------------*/
 
    forwarding_action.flow_aggregation = the_system->TDM2PSN_extract_fa[1];
    flow_class_rule.classifier_string = rule_string;
@@ -2069,13 +2101,13 @@ printf ("before WP_FeatureInit ()\n");
    WPE_TerminateOnError (the_system->TDM2PSN_bridge_dfcflow[0],
                          " WP_IwFlowAdd() DFC Bridge2");
 
+/*-----------------------------------------------------*\
+   goto extract_fa[2]
+\*-----------------------------------------------------*/
    /* CISCO HDLC Data packets flow *//* Same filter as above using 4 byte user fields */
    dfc_flow_info.filter_handle = the_system->TDM2PSN_bridge_filter[0];
    strcpy (rule_string, "n;n;n;n;n;n;#;0x0f000800");
 
-/*-----------------------------------------------------*\
-   goto extract_fa[2]
-\*-----------------------------------------------------*/
    forwarding_action.flow_aggregation = the_system->TDM2PSN_extract_fa[2];
    flow_class_rule.classifier_string = rule_string;
    flow_class_rule.dfc_info = &dfc_flow_info;
@@ -2089,13 +2121,13 @@ printf ("before WP_FeatureInit ()\n");
    WPE_TerminateOnError (the_system->TDM2PSN_bridge_dfcflow[1],
                          " WP_IwFlowAdd() DFC Bridge2");
 
+/*-----------------------------------------------------*\
+   goto extract_fa[0]
+\*-----------------------------------------------------*/
    /* PPP LCP flow *//* Note the use of FILTER 1 */
    dfc_flow_info.filter_handle = the_system->TDM2PSN_bridge_filter[1];
    strcpy (rule_string, "n;n;n;n;n;n;#;0xc021");
 
-/*-----------------------------------------------------*\
-   goto extract_fa[0]
-\*-----------------------------------------------------*/
    forwarding_action.flow_aggregation = the_system->TDM2PSN_extract_fa[0];
    flow_class_rule.classifier_string = rule_string;
    flow_class_rule.dfc_info = &dfc_flow_info;
@@ -2109,13 +2141,13 @@ printf ("before WP_FeatureInit ()\n");
    WPE_TerminateOnError (the_system->TDM2PSN_bridge_dfcflow[2],
                          " WP_IwFlowAdd() DFC Bridge2");
 
+/*-----------------------------------------------------*\
+   goto extract_fa[2]
+\*-----------------------------------------------------*/
    /* PPP IP flow *//* Note the use of FILTER 2 */
    dfc_flow_info.filter_handle = the_system->TDM2PSN_bridge_filter[2];
    strcpy (rule_string, "n;n;n;n;n;n;#;0x21");
 
-/*-----------------------------------------------------*\
-   goto extract_fa[2]
-\*-----------------------------------------------------*/
    forwarding_action.flow_aggregation = the_system->TDM2PSN_extract_fa[2];
    flow_class_rule.classifier_string = rule_string;
    flow_class_rule.dfc_info = &dfc_flow_info;
@@ -2679,7 +2711,7 @@ void App_EnableGroup (void)
 
    for (ii = 0; ii < NUM_OF_FLOWS; ii++)
    {
-printf ("App_EnableGroup(): l2_group_h[0][%d]\n", ii);
+      printf ("App_EnableGroup(): l2_group_h[0][%d]\n", ii);
 
       status = WP_ShapingGroupEnable (l2_group_h[0][ii]);
       WPE_TerminateOnError (status, "WP_ShapingGroupEnable l2_group_h");
@@ -2736,9 +2768,9 @@ static void WPE_SystemEnable (WPE_system * the_system)
       WP_DeviceEnable (the_system->trans_dev_handle, WP_DIRECTION_DUPLEX);
    WPE_TerminateOnError (status, "WP_DeviceEnable() (TDM_TRANS)");
 
+#if 0
    App_EnableGroup ();
-
-
+#endif
 
    WP_Delay (1000);
 }
@@ -2940,7 +2972,7 @@ static void WPE_PrintStatistics (WPE_system * the_system)
    WPE_TerminateOnError (status, "WP_DeviceStatistics");
 #if WPE_DEBUG_LEVEL > 0
    /* print device statistics */
-   printf ("HDLC TDI DEVICE STATISTICS:\n");
+   printf ("HDLC TDI DEVICE STATISTICS(mc_hdlc_dev_handle):\n");
    printf ("----------------------------\n");
    printf ("Received frames = %#8.8x%8.8x\n",
            (WP_U32) (tdi_hdlc->rx_frames >> 32),
@@ -3040,7 +3072,7 @@ static void WPE_PrintStatistics (WPE_system * the_system)
    for (ii = 0; ii < 1 /*APP_MAX_TDM_PORTS */ ; ii++)
    {
       printf ("-------------------------------\n");
-      printf (" Flow statistics PPPSW %d\n", ii);
+      printf (" Flow statistics PPPSW(h_flow_agg_pppsw_link) %d\n", ii);
       printf ("-------------------------------\n");
       memset (&flow_stats, 0, sizeof (flow_stats));
       status =
@@ -3069,7 +3101,7 @@ static void WPE_PrintStatistics (WPE_system * the_system)
               (WP_U32) flow_stats.policer_non_conforming_packets);
 
       printf ("-------------------------------\n");
-      printf ("Bridge Port Statistics TDM %d\n", ii);
+      printf ("Bridge Port Statistics TDM(TDM2PSN_bridge_port) %d\n", ii);
       printf ("-------------------------------\n");
       memset (&bport_stats, 0, sizeof (bport_stats));
       status =
@@ -3132,7 +3164,7 @@ static void WPE_PrintStatistics (WPE_system * the_system)
            (WP_U32) flow_stats.policer_non_conforming_packets);
 
    printf ("-------------------------------\n");
-   printf (" Flow statistics Bridge FA-->ENET(LCP)\n");
+   printf (" Flow statistics Bridge FA-->ENET(LCP)(h_flow_agg_lcp)\n");
    printf ("-------------------------------\n");
    memset (&flow_stats_pwe3, 0, sizeof (flow_stats_pwe3));
    status =
@@ -3260,7 +3292,7 @@ static void WPE_PrintStatistics (WPE_system * the_system)
 
 #if 1
    printf ("-------------------------------\n");
-   printf (" Flow statistics Bridge FA-->PSN2TDM\n");
+   printf (" Flow statistics Bridge FA-->PSN2TDM(h_flow_agg_PSN2TDM_Pwe3)\n");
    printf ("-------------------------------\n");
    memset (&flow_stats_pwe3, 0, sizeof (flow_stats_pwe3));
    status =

@@ -1,3 +1,4 @@
+ctags -R
 make TEST=mc_hdlc_zte_tag.c 2>&1 | tee make.log
 copy_to_tftpboot.sh
 
