@@ -9,9 +9,9 @@ mips-sde-elf-gcc -c -mips32 -G 0 -nostdinc -fno-builtin -fno-inline-functions -f
 ./mc_hdlc_zte_tag.c: In function 'WPE_SystemSetup':
 ./mc_hdlc_zte_tag.c:1035: note: #pragma message: WP_FLOWMODE_FAST
 ./mc_hdlc_zte_tag.c: In function 'WPE_ChannelsSetup':
-./mc_hdlc_zte_tag.c:1308: note: #pragma message: tx channel IW disable
-./mc_hdlc_zte_tag.c:1323: note: #pragma message: USE normal channels the_system->Enet_dev
-./mc_hdlc_zte_tag.c:1346: note: #pragma message: DO NOT CREATE TX2
+./mc_hdlc_zte_tag.c:1305: note: #pragma message: tx channel IW disable
+./mc_hdlc_zte_tag.c:1320: note: #pragma message: USE normal channels the_system->Enet_dev
+./mc_hdlc_zte_tag.c:1343: note: #pragma message: DO NOT CREATE TX2
 
 Linking the test!
 cp ../../../objects/linux/mips_winmon_winpath3/lib/start.o start.o
