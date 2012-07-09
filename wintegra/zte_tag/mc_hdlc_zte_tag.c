@@ -1222,21 +1222,18 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
       /* tx_pqblock */ 0,
       /* tx_pqlevel */ 0,
 #if !(MORRIS_USE_OLD_CHANNELS)
-#pragma message("USE SHAPING GROUP")
       /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_CIR_EIR,
       /* tx_shaping_params */ &cir_eir_shaping_param,
 #else
 
 
-#if 0
+
+#if !(MORRIS_USE_OLD_CHANNELS)
       /* tx_shaping_type */ WP_PKT_SHAPING_STRICT,
 #else
       /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_STRICT,
 #endif
-
-
-
-#if 0
+#if !(MORRIS_USE_OLD_CHANNELS)
       /* tx_shaping_params */ &default_pkt_shaping_wfq_cfg,
 #else
       0, 
