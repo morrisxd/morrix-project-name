@@ -47,6 +47,7 @@ extern WP_U16 dps_PC_Table_Init[];
 WP_CHAR ch = 'c';
 
 #define MODIFIED_BY_MORRIS (1)
+#define MORRIS_USE_OLD_CHANNELS  (1)
 #define SDU_SIZE  (2048)
 #define MTU_SIZE  (1536)
 
@@ -456,6 +457,7 @@ typedef struct
    WP_handle Enet_dev;
    WP_handle Enet_chan_rx;
    WP_handle Enet_chan_tx;
+   WP_handle Enet_chan_tx2[16];
 
    WP_handle TDM2PSN_bridge_port2ENET;
    WP_handle PSN2TDM_bridge_port2TDM;
@@ -502,7 +504,11 @@ typedef struct
 WPE_system wpe_system[1];
 
 /* Prototypes of internal functions of this example */
+#if !(MORRIS_USE_OLD_CHANNELS)
 static void App_EnableGroup (void);
+#endif
+
+
 static void WPE_SystemSetup (WPE_system * system);
 static void WPE_SystemEnable (WPE_system * system);
 static void WPE_McDevicesSetup (WPE_system * system);
@@ -584,7 +590,12 @@ WP_U32 WP_DeviceCrcModify (WPE_system * system)
    return status;
 }
 
+#define NUM_OF_FLOWS 4
+
+#if !(MORRIS_USE_OLD_CHANNELS)
 static void App_ShapingGroupsCreate (WPE_system *the_system);
+#endif
+
 static void App_InitHW (void);
 
 WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
@@ -592,6 +603,9 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    WPE_system *the_system;
    WP_status status;
    WP_U32 i, crc_size;
+#if !(MORRIS_USE_OLD_CHANNELS)
+   int jj = 0;
+#endif
 
 #if WPE_DEBUG_LEVEL > 0
    WP_U32 j;
@@ -646,7 +660,7 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    status = WP_SysCommit ();
    WPE_TerminateOnError (status, "WP_SysCommit()");
 
-#if MODIFIED_BY_MORRIS
+#if !(MORRIS_USE_OLD_CHANNELS)
    App_ShapingGroupsCreate (the_system);
 #endif
 
@@ -676,7 +690,9 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    status = WP_PortEnable (the_system->Enet_port, WP_DIRECTION_DUPLEX);
    WPE_TerminateOnError (status, "WP_PortEnable() Enet_port");
 
+#if !(MORRIS_USE_OLD_CHANNELS)
    App_EnableGroup ();
+#endif
 
    /* Enable the multi channel vitual devices */
    WPE_McDevicesEnable (the_system);
@@ -697,6 +713,14 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 
    status = WP_ChannelEnable (the_system->Enet_chan_tx);
    WPE_TerminateOnError (status, "WP_ChannelEnable() Enet_chan_tx");
+
+#if !(MORRIS_USE_OLD_CHANNELS)
+   for (jj = 1; jj < NUM_OF_FLOWS; jj ++)
+   {
+      status = WP_ChannelEnable (the_system->Enet_chan_tx2[jj]);
+      WPE_TerminateOnError (status, "WP_ChannelEnable() Enet_chan_tx2[jj]");
+   }
+#endif
 
    status = WP_ChannelEnable (the_system->TDM2PSN_chan_iwhost);
    WPE_TerminateOnError (status, "WP_ChannelEnable() TDM2PSN_chan_iwhost");
@@ -1006,12 +1030,14 @@ static void WPE_SystemSetup (WPE_system * the_system)
    PortCreate () ENET3
 \*------------------------------------------------------*/
 
-   port_enet_cfg.pkt_limits.max_tx_channels =  32;
-   port_enet_cfg.pkt_limits.max_rx_channels =  1;
 
-#if 0 
+#if (MORRIS_USE_OLD_CHANNELS)
+#pragma message ("WP_FLOWMODE_FAST")
    port_enet_cfg.flowmode = WP_FLOWMODE_FAST;
 #else
+#pragma message ("WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE, tx=32")
+   port_enet_cfg.pkt_limits.max_tx_channels =  32;
+   port_enet_cfg.pkt_limits.max_rx_channels =  1;
    port_enet_cfg.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
 #endif
 
@@ -1031,7 +1057,7 @@ static void WPE_SystemSetup (WPE_system * the_system)
 /*-------------------------------------------------------------------*\
    DeviceCreate () from port ENET
 \*-------------------------------------------------------------------*/
-#if 1
+#if !(MORRIS_USE_OLD_CHANNELS)
    // this value can NOT be set larger than 1, 
    // which will cause tx channel OVERFLOW
    device_enet_cfg.max_tx_channels = /*NUM_OF_HIER_ENET_TX_CHANNELS*/ 32;
@@ -1070,13 +1096,13 @@ static void WPE_McDevicesSetup (WPE_system * the_system)
 }
 
 #if MODIFIED_BY_MORRIS
-#define NUM_OF_FLOWS 8
 
 #define NUM_OF_CHANNELS NUM_OF_FLOWS
 #define NUM_PQ_BLOCK 1
 WP_handle l1_group_h[NUM_OF_FLOWS];
 WP_handle l2_group_h[NUM_OF_FLOWS][1024];
 
+#if !(MORRIS_USE_OLD_CHANNELS)
 static void App_ShapingGroupsCreate (WPE_system *the_system)
 {
    WP_U32 ii;
@@ -1131,7 +1157,7 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
    };
 
 
-   for (ii = 0; ii < /*NUM_OF_FLOWS*/ 1; ii++)
+   for (ii = 0; ii < 1; ii++)
    {
       WP_status status = 0;
 
@@ -1159,6 +1185,7 @@ static void App_ShapingGroupsCreate (WPE_system *the_system)
 
 }
 #endif
+#endif
 
 
 static void WPE_ChannelsSetup (WPE_system * the_system)
@@ -1166,6 +1193,10 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
    WP_handle handle;
    WP_status status;
    int ii;
+
+#if !(MORRIS_USE_OLD_CHANNELS)
+   int jj = 0;
+#endif
 
 
 
@@ -1190,12 +1221,29 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
       /* testmode */ WP_PKTCH_TEST_DISABLE,
       /* tx_pqblock */ 0,
       /* tx_pqlevel */ 0,
-#if MODIFIED_BY_MORRIS
+#if !(MORRIS_USE_OLD_CHANNELS)
+#pragma message("USE SHAPING GROUP")
       /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_CIR_EIR,
       /* tx_shaping_params */ &cir_eir_shaping_param,
 #else
+
+
+#if 0
       /* tx_shaping_type */ WP_PKT_SHAPING_STRICT,
+#else
+      /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_STRICT,
+#endif
+
+
+
+#if 0
       /* tx_shaping_params */ &default_pkt_shaping_wfq_cfg,
+#else
+      0, 
+#endif
+
+
+
 #endif
       /* rx_maxsdu */ MTU_SIZE,
       /* tx_cwid */ WP_CW_ID_A,
@@ -1253,20 +1301,26 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
    WPE_TerminateOnError (the_system->Enet_chan_rx,
                          "WP_ChannelCreate() Enet Rx");
 
-#if MODIFIED_BY_MORRIS
+#if !(MORRIS_USE_OLD_CHANNELS)
+#pragma message("USE SHAPING GROUP")
    ch_enet_cfg.tx_shaping_type = WP_FMU_SHAPING_TYPE_CIR_EIR;
+#else
+#pragma message("tx channel IW disable")
+   ch_enet_cfg.iwmode = WP_PKTCH_IWM_DISABLE;
 #endif
 
 
 /*------------------------------------------------------------*\
    we setup shaping groups here replacing normal TX channel
 \*------------------------------------------------------------*/
-#if MODIFIED_BY_MORRIS
+#if !(MORRIS_USE_OLD_CHANNELS)
+#pragma message("USE SHAPING GROUP")
    ch_enet_cfg.tx_tq = 0;
    printf ("before ChannelCreate (l2_group_h)\n");
    the_system->Enet_chan_tx = WP_ChannelCreate (1021, l2_group_h[0][0],
+
 #else
-#error MODIFIED_BY_MORRIS_must_be_defined
+#pragma message("USE normal channels the_system->Enet_dev")
    the_system->Enet_chan_tx = WP_ChannelCreate (21, the_system->Enet_dev,
 #endif
                                                 the_system->h_qnode_iwq,
@@ -1274,14 +1328,39 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
                                                 &ch_enet_cfg);
    printf ("line(%d)", __LINE__);
    WPE_TerminateOnError (the_system->Enet_chan_tx,
-                         "WP_ChannelCreate() Enet Tx");
-printf ("after create TX channel\n");
+                         "WP_ChannelCreate(the_system->Enet_chan_tx) Enet Tx");
+   printf ("after create TX channel\n");
+
+#if !(MORRIS_USE_OLD_CHANNELS)
+#pragma message("kkkkkkkkkkkkkkkkkkkkk")
+   for (jj = 1; jj < NUM_OF_FLOWS; jj ++)
+   {  
+      the_system->Enet_chan_tx2[jj] = WP_ChannelCreate (1021+1000+jj, l2_group_h[0][jj],
+                                                the_system->h_qnode_iwq,
+                                                WP_CH_TX, WP_ENET,
+                                                &ch_enet_cfg);
+      WPE_TerminateOnError (the_system->Enet_chan_tx2[jj],
+                         "WP_ChannelCreate() Enet Tx2[jj]");
+   }
+#else
+#pragma message("DO NOT CREATE TX2")
+#endif
 
    tx_binding_cfg.dci_mode = WP_IW_DYN_CH_INSERT_ENABLE;
    status =
       WP_IwTxBindingCreate (the_system->Enet_chan_tx, WP_IW_TX_BINDING,
                             &tx_binding_cfg);
    WPE_TerminateOnError (status, "WP_IwTxBindingCreate()");
+
+#if !(MORRIS_USE_OLD_CHANNELS)
+   for (jj = 1; jj < NUM_OF_FLOWS; jj ++)
+   {  
+      status =
+         WP_IwTxBindingCreate (the_system->Enet_chan_tx2[jj], WP_IW_TX_BINDING,
+                            &tx_binding_cfg);
+      WPE_TerminateOnError (status, "WP_IwTxBindingCreate(), tx2[jj]");
+   }
+#endif
 
 /*------------------------------------------------------------*\
    channel create WPE_RX_CH_TAG
