@@ -47,6 +47,7 @@ extern WP_U16 dps_PC_Table_Init[];
 WP_CHAR ch = 'c';
 
 #define MODIFIED_BY_MORRIS (1)
+#define USE_ENET7 (0)
 #define MORRIS_USE_OLD_CHANNELS  (1)
 #define SDU_SIZE  (2048)
 #define MTU_SIZE  (1536)
@@ -79,7 +80,12 @@ WP_CHAR ch = 'c';
 #define N_POOLS    4
 #define N_FRAMES   1
 #define N_CHANNELS 2
+
+#if 0
 #define N_POLL_CYCLES 100000    /* timeout */
+#else
+#define N_POLL_CYCLES 10         /* timeout */
+#endif
 
 #define WTI_MPLS_LABEL 0x100101f
 #define MPLS_SIZE 4
@@ -107,7 +113,11 @@ struct WPE_frame_config
 } frame_config[N_FRAMES] =
 {
    {
+#if 0
    32, 0x12},
+#else
+   64, 0x12},
+#endif
       /*{ 6,  0x13 },
          { 62, 0x14 },
          { 14, 0x15 },
@@ -597,6 +607,320 @@ static void App_ShapingGroupsCreate (WPE_system *the_system);
 #endif
 
 static void App_InitHW (void);
+extern void WPI_SimulateInterrupts(void);
+
+
+/* Interrupt handling structures */
+typedef struct {
+   WP_tag event_tag;
+   WP_U32 event_type;
+   void *event_param;
+} app_task;
+
+typedef struct {
+   WP_U16 head;
+   WP_U16 tail;
+   WP_U16 num_elements;
+   WP_U16 pad;
+   app_task *task;
+} app_task_list;
+
+typedef struct
+{
+   WP_U16 in;
+   WP_U16 out;
+   WP_U16 size;
+   WP_ima_event *task;
+}
+ima_app_task_list;
+
+static char *ima_events_name[] = {
+   "WP_IMA_EVENT_TTS 0",
+   "WP_IMA_EVENT_TOS 1",
+   "WP_IMA_EVENT_TXQEMPTY 2",
+   "WP_IMA_EVENT_TXQFULL 3",
+   "WP_IMA_EVENT_OPERATIONAL_CHANGE 4",
+   "gap 5",
+   "WP_IMA_EVENT_GSU_LASR_RX 6",
+   "WP_IMA_EVENT_GSU_LASR_TX 7",
+   "WP_IMA_EVENT_FE_ICP_CHANGE 8",
+   "WP_IMA_EVENT_NE_ICP_CHANGE 9",
+   "WP_IMA_EVENT_TICK 10",
+   "WP_IMA_EVENT_PROPRIETARY 11",
+   "WP_IMA_EVENT_BANDWIDTH_CHANGE 12"
+};
+
+
+
+
+
+WP_U32 ticks;  /* IMA ticks */
+WP_handle ima_sys_handle;
+/* Interrupt task list */
+#define IRQ_TASK_LIST_SIZE 4096
+app_task irq_task[IRQ_TASK_LIST_SIZE];
+app_task_list irq_task_list[1] = { { 0, 0, IRQ_TASK_LIST_SIZE, 0, irq_task} };
+ima_app_task_list ima_irq_task_list[1] = { {0, 0, IRQ_TASK_LIST_SIZE,(WP_ima_event*) &irq_task} };
+
+WP_tag tag_iw_sys_bridge1, tag_iw_sys_bridge2;
+WP_tag tag_agg_default_bridge1, tag_agg_default_bridge2;
+            
+WP_tag tag_enet1_rx, tag_enet2_rx;
+WP_tag tag_enet1_tx, tag_enet2_tx;
+WP_tag tag_iwhost_rx1,tag_iwhost_rx2;
+WP_tag tag_tdmrx = 200;
+WP_tag tag_tdmtx = 300;
+WP_boolean debug_on = WP_FALSE;
+WP_handle               h_pool_buffer_host;
+WP_handle               h_pool_ring_host;
+WP_handle               h_pool_buffer_iw,h_pool_256;
+WP_handle               h_qnode_iwq, h_qnode_host,h_qnode_iwq_tdm;
+WP_handle               h_bridge1_iwhost, h_bridge2_iwhost;
+WP_handle               h_bridge1_default_agg,h_bridge2_default_agg;
+WP_handle               h_flow_agg_tdm[APP_MAX_TDM_PORTS];
+WP_handle               h_iw_sys_bridge1, h_iw_sys_bridge2;
+WP_handle               h_learningflow_enet1;
+WP_handle               h_bridge2_dfcflow[4];
+WP_handle               h_bridge1_filter[2],h_bridge2_filter[4];
+WP_handle               h_port_iwhost,h_dev_iwhost;
+WP_handle               h_bridge1_bport_enet1, h_bridge1_bport_tdm[APP_MAX_TDM_PORTS];
+WP_handle               h_bridge2_bport_enet2, h_bridge2_bport_tdm[APP_MAX_TDM_PORTS];
+WP_handle               h_flow_agg_enet2;
+WP_handle               h_rport_tdm[APP_MAX_TDM_PORTS], h_rport_enet2;
+WP_handle               h_enet1_rx, h_enet1_host_tx, h_enet1_tx;
+WP_handle               h_enet2_rx, h_enet2_tx;
+WP_handle               h_tdm_rx[APP_MAX_TDM_PORTS],h_tdm_tx[APP_MAX_TDM_PORTS];
+
+WP_handle            emphy_port;
+
+int tx_safe = 0;
+
+void App_DuReceive (WP_handle h_rx, WP_U32 data_type)
+{
+   WP_data_unit data_unit;
+   WP_data_segment data_segment, *curr_buff_ptr;
+   WP_U32 kk;
+   WP_status status;
+   
+   data_unit.segment = &data_segment;
+   data_unit.n_segments = 1;
+   data_unit.type = data_type;
+   data_unit.n_active = 0;
+   
+   status = WP_HostReceive (h_rx, &data_unit);
+   WPE_TerminateOnError (status, "WP_HostReceive");
+
+   if (data_unit.n_active > 0)
+   {  
+      curr_buff_ptr = data_unit.segment;
+      for (kk = 0; kk < curr_buff_ptr->data_size; kk++)
+      {
+         printf ("%2.2x", curr_buff_ptr->data[kk]);
+      }
+      printf ("( %d bytes )\n", curr_buff_ptr->data_size);
+   }
+}
+
+
+
+/*****************************************************************************
+ * Function name: add_task
+ * Description  : Event handling , added task in the list
+ * Input  params: None
+ * Output params: None
+ * Return val   : None  
+ *****************************************************************************/
+void add_task (app_task_list * task_list, WP_U32 event_type,
+               WP_tag event_tag, void *event_param)
+{
+   WP_U16 tail = task_list->tail;
+   WP_U32 next = tail + 1;
+
+   if (next == task_list->num_elements)
+      next = 0;
+
+   if (next != task_list->head)
+   {
+      task_list->task[tail].event_tag = event_tag;
+      task_list->task[tail].event_type = event_type;
+      task_list->task[tail].event_param = event_param;
+      task_list->tail = next; 
+   }
+}
+
+
+void App_EventRxIndicate (WP_tag tag, WP_U32 data, WP_U32 info)
+{  
+   add_task (irq_task_list, WP_EVENT_RX_INDICATE, tag, NULL);
+} 
+
+void App_EventTxIndicate (WP_tag tag, WP_U32 data, WP_U32 info)
+{  
+   add_task (irq_task_list, WP_EVENT_TX_INDICATE, tag, NULL);
+}
+
+WP_ima_event *ima_next_task (ima_app_task_list * task_list,
+                             WP_ima_event * result)
+{
+   WP_U32 in = task_list->in;
+   WP_U32 out = task_list->out;
+
+   if (out != in)
+   {  
+      *result = task_list->task[out];
+      out++;
+      if (out == task_list->size)
+         out = 0;
+      task_list->out = out;
+      return result;
+   }
+   printf ("ima_next_task: in(%4d),out(%4d)\n", in, out);
+
+   return NULL;
+}
+
+void app_perform_action (app_task * task) 
+{
+   WP_U32 tag = task->event_tag;
+
+   switch (task->event_type)
+   {
+   case WP_EVENT_RX_INDICATE:
+      {
+         printf ("Rx event on tag %d \n", tag);
+         if (tag == tag_enet1_rx)
+         {       
+            printf ("receiving on enet1\n");
+            App_DuReceive (h_enet1_rx, WP_DATA_ENET);
+         }       
+         else if (tag == tag_enet2_rx)
+         {       
+            printf ("receiving on enet2(event catch)\n");
+            App_DuReceive (h_enet2_rx, WP_DATA_ENET);
+         }       
+         else if (tag == tag_agg_default_bridge1)
+         {       
+            printf ("receiving on default bridge1\n");
+            App_DuReceive (h_bridge1_iwhost, WP_DATA_IW);
+         }       
+         else if (tag == tag_agg_default_bridge2)
+         {       
+            printf ("receiving on default bridge2\n");
+            App_DuReceive (h_bridge2_iwhost, WP_DATA_IW);
+         }       
+         else if ((tag >= tag_tdmrx)
+                  && (tag <= tag_tdmrx + APP_MAX_TDM_PORTS))
+         {       
+            printf ("receiving on tdm %d\n", tag - tag_tdmrx);
+            App_DuReceive (h_tdm_rx[tag - tag_tdmrx], WP_DATA_PPP_HDLC);
+         }
+         else
+         {
+            printf ("RX event on unknown tag  %d\n", tag);
+         }
+         break;
+      }
+   case WP_EVENT_TX_INDICATE:
+      {  
+         printf ("TX event on tag %d\n", tag);
+         tx_safe = 1;
+         break;
+      }
+   case WP_EVENT_STATUS_INDICATE:
+      break;
+   default:
+      printf ("Not processing unknown event\n");
+   }
+}
+
+
+
+
+
+void ima_app_perform_action (WP_ima_event * task)
+{
+   WP_status status;
+
+   WP_U32 data;
+   WP_U32 info;
+   WP_U32 action;
+
+   WP_U32 port;
+   WP_U32 group;
+
+   data = task->data;
+   info = task->info;
+   action = data & 0xff;
+
+   group = (data >> 16) & 0xff;
+   port = (data >> 8) & 0xff;
+
+   switch (action)
+   {
+   case WP_IMA_EVENT_BANDWIDTH_CHANGE:
+   case WP_IMA_EVENT_TXQEMPTY:
+   case WP_IMA_EVENT_TTS:
+   case WP_IMA_EVENT_OPERATIONAL_CHANGE:
+   case WP_IMA_EVENT_FE_ICP_CHANGE:
+   case WP_IMA_EVENT_NE_ICP_CHANGE:
+   case WP_IMA_EVENT_PROPRIETARY:
+   case WP_IMA_EVENT_GSU_LASR_TX:
+   case WP_IMA_EVENT_GSU_LASR_RX:
+   case WP_IMA_EVENT_TOS:
+      // break;
+
+   case WP_IMA_EVENT_TICK:
+
+      status = WP_ImaEvent (ima_sys_handle, task);
+      if (status)
+         WPE_TerminateOnError (status, "WP_ImaEvent()");
+
+      if (action == WP_IMA_EVENT_TICK)
+         ticks++;
+
+      if (action != WP_IMA_EVENT_TICK)
+      {
+         printf ("event(%s) cleared!\n", ima_events_name[action % 13]);
+      }
+      break;
+#if 0
+   case WP_EVENT_TX_INDICATE:
+      printf ("ima_app_perform_action tx safe now\n");
+      tx_safe = 1;
+      break;
+#endif
+   default:
+      printf ("---Unknown IMA event 0x%x 0x%x\n", data, info);
+      break;
+   }
+}
+
+app_task *next_task (app_task_list * task_list, app_task * result)
+{
+   WP_U32 head = task_list->head;
+   WP_U32 tail = task_list->tail;
+
+   if (head == tail)
+      return NULL;
+
+   *result = task_list->task[head];
+   if (++head == task_list->num_elements)
+      head = 0;
+   task_list->head = head;
+   return result;
+}
+
+void display_events (void)
+{
+   app_task a_task;
+   app_task *task;
+   
+   if (0) return ;
+
+   WPI_SimulateInterrupts ();
+   while ((task = next_task (irq_task_list, &a_task)))
+      app_perform_action (task); 
+}
 
 WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 {
@@ -617,6 +941,11 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 
 //WP_stats_tdi_hdlc tdi_hdlc[1];
    test_failed = 0;
+   j = 0;
+   loop_cycles = 0;
+   rx_frames = 0;
+   data_unit = NULL;
+   segment = NULL;
 
     /*****************************************************************************
     * WP_ControlRegister - Attaches a callback function to be called whenever WDDI
@@ -627,6 +956,7 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
                           &WP_ErrCallback);
    WPE_TerminateOnError (status, "WP_Control Register()");
 
+
    /* Initialize WDDI */
    status = WP_DriverInit ();
    WPE_TerminateOnError (status, "WP_DriverInit()");
@@ -634,16 +964,11 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 /*---------------------------------------------------------------*\
          WPX_BoardConfigure  ()
 \*---------------------------------------------------------------*/
-#if 0 
-   status = WPX_BoardConfigure (0, WPX_CONFIGURE_2UPI_1XGI_10SGMII);
-#else
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_CHECKIN_TDI_16);
-#endif
    WPE_TerminateOnError (status, "WPX_BoardConfigure()");
 
 #if MODIFIED_BY_MORRIS
    App_InitHW ();
-#else
 #endif
 
 
@@ -677,8 +1002,6 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    WPE_PPPRxBinding (the_system);   //Phenix
 /*******************************/
 
-   /* Set up frames (data_units) for transmission */
-   WPE_DataUnitsSetup (the_system);
    crc_size = ((mc_hdlc_dev_config[0].crctype == WP_HDLC_CRC16) ? 2 : 4);
    /* Enable the system */
    WPE_SystemEnable (the_system);
@@ -725,8 +1048,11 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    status = WP_ChannelEnable (the_system->TDM2PSN_chan_iwhost);
    WPE_TerminateOnError (status, "WP_ChannelEnable() TDM2PSN_chan_iwhost");
 
+   display_events ();
+   WP_Delay (1000000);
 
-
+   /* Set up frames (data_units) for transmission */
+   WPE_DataUnitsSetup (the_system);
 /*----------------------------------------------------------*\
       HostSend ()
 \*----------------------------------------------------------*/
@@ -738,7 +1064,12 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
       status =
          WP_HostSend (the_system->ch_handle[WPE_TX_CH_TAG], data_unit);
       WPE_TerminateOnError (status, "WP_HostSend()");
+
+      printf ("HostSend () packet(%2d)N_FRAMES(%d)\n", i, N_FRAMES);
    }
+
+#if 0
+   printf ("wait to HostReceive ()\n");
 
    /* Perform Host Receive  */
    rx_frames = 0;
@@ -747,11 +1078,26 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
       data_unit = &(the_system->rx_data_unit);
       data_unit->n_active = 0;
       WP_HostReceive (the_system->ch_handle[WPE_RX_CH_TAG], data_unit);
+
+      WP_Delay (1000000);
+
+      printf ("we got data now(%p), rx_frames(%d)\n", data_unit, rx_frames);
+      printf ("data_unit->n_active(%d)\n", data_unit->n_active);
+      printf ("loop_cycles(%d)\n", loop_cycles);
+
+      if (loop_cycles++ > N_POLL_CYCLES)
+      {
+         printf ("break\n");
+         test_failed++;
+         break;
+      }
+
       if (data_unit->n_active > 0)
       {
+         printf ("do segment now, data_unit->n_active(%d)\n", data_unit->n_active);
          segment = &(the_system->rx_segment);
-#if WPE_DEBUG_LEVEL > 0
          printf ("Received frame:\n");
+#if WPE_DEBUG_LEVEL > 0
          printf ("---------------\n");
          for (j = 0; j < segment->data_size; j++)
          {
@@ -771,14 +1117,12 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
          /* Release data buffer back to its pool */
          WP_PoolFree (segment->pool_handle, segment->data);
       }
-      else if (loop_cycles++ > N_POLL_CYCLES)
-      {
-         test_failed++;
-         break;
-      }
    }
 
-   WP_Delay (500);
+#endif
+
+   WP_Delay (1000000);
+
    WPE_PrintStatistics (the_system);
    printf ("\n");
    printf ("\n");
@@ -847,11 +1191,9 @@ void App_InitHW (void)
 {
    WP_status status;
 
-#if 0
-   status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_NORMAL);
-#else
+   status = 0;
+#pragma message("SERDES3 with loop back")
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_LOOPBACK);
-#endif
    WPE_TerminateOnError (status, " WPX_BoardSerdesInit- WP_PORT_ENET3");
 }
 #endif
@@ -868,13 +1210,9 @@ static void WPE_SystemSetup (WPE_system * the_system)
       /* max_tx_channels */         1,
       /* tx_maxsdu       */         MTU_SIZE,
       /* rmii_operating_speed */    WP_UNUSED,
-#if 1
       /* mac_addr[6] */             {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-#else
-                                    { 0x45, 0x6e, 0x65, 0x74, 0x23, 0x32 },
-#endif
       /* tx_bit_rate */             1000000000,
-      /* loopbackmode  */           WP_ENET_LOOPBACK,
+      /* loopbackmode  */           WP_ENET_NORMAL,
       /* extended_params */         NULL
    };
    /***************************///Phenix
@@ -886,15 +1224,20 @@ static void WPE_SystemSetup (WPE_system * the_system)
 
    WP_pool_buffer_data pool_buffer_data_iw_cfg = {
       /* n_buffers              */ APP_NUM_IW_BUFFERS,
+#if 1
+      /* offset                 */ 64,
+      /* size                   */ MTU_SIZE*2,
+#else
+#pragma message("single MTU_SZIE")
       /* offset                 */ 64,
       /* size                   */ MTU_SIZE,
+#endif
       /* pad                    */ 0,
       /* bus                    */ WP_BUS_PACKET,
       /* bank                   */ APP_BANK_PACKET
    };
 
-#if 0
-#error lsakjfd;lsjfllkfdjgoqurow
+#if 1
    WP_port_enet port_enet_cfg = {   /* we need both port & deivce created, this is the port -- morris */
 
       /* pkt_limits */
@@ -914,11 +1257,7 @@ static void WPE_SystemSetup (WPE_system * the_system)
    WP_port_enet port_enet_cfg = {
       /* pkt_limits             */ {2, 2},
       /* flowmode               */ WP_FLOWMODE_FAST,
-#if 0
-      /* miimode                */ WP_ENET_RGMII_1000,
-#else
       /* miimode                */ WP_ENET_SGMII_1000,
-#endif
       /* rx_iw_bkgnd            */ WP_IW_BKGND_USED,
    };
 #endif
@@ -1008,10 +1347,10 @@ static void WPE_SystemSetup (WPE_system * the_system)
                          "WP_QNodeCreate() h_qnode_iwq_tdm");
 
 
-#if MODIFIED_BY_MORRIS
-//    App_InitHW ();
-#else
-#error MODIFIED_BY_MORRIS_must_NOT_be_defined
+#if 0
+/*------------------------------------------------------*\
+   here is the old source code
+\*------------------------------------------------------*/
    printf ("WPE_SystemSetup(): before WPU_EnetPhyInit()\n");
    status = WPU_EnetPhyInit (WP_PORT_ENET3, WPU_MODE_RGMII | WPU_OV_FIBER);
    WPE_TerminateOnError (status, " WPU_WinnetPhyInit - WP_PORT_ENET3");
@@ -1044,7 +1383,12 @@ static void WPE_SystemSetup (WPE_system * the_system)
 
    /* Create Enet port */
 #if MODIFIED_BY_MORRIS
+#if USE_ENET7
+   the_system->Enet_port = WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7,
+#else
    the_system->Enet_port = WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET3,
+#endif
+
 #else
 #error MODIFIED_BY_MORRIS_must_be_defined
 #endif
@@ -1061,6 +1405,8 @@ static void WPE_SystemSetup (WPE_system * the_system)
    // this value can NOT be set larger than 1, 
    // which will cause tx channel OVERFLOW
    device_enet_cfg.max_tx_channels = /*NUM_OF_HIER_ENET_TX_CHANNELS*/ 32;
+#else
+   device_enet_cfg.max_tx_channels = 1;
 #endif
    the_system->Enet_dev =
       WP_DeviceCreate (the_system->Enet_port, WP_PHY (0), WP_DEVICE_ENET,
@@ -1303,7 +1649,7 @@ static void WPE_ChannelsSetup (WPE_system * the_system)
    ch_enet_cfg.tx_shaping_type = WP_FMU_SHAPING_TYPE_CIR_EIR;
 #else
 #pragma message("tx channel IW disable")
-   ch_enet_cfg.iwmode = WP_PKTCH_IWM_DISABLE;
+   ch_enet_cfg.iwmode = /*WP_PKTCH_IWM_DISABLE*/WP_PKTCH_IWM_ENABLE;
 #endif
 
 
@@ -1931,12 +2277,17 @@ static void WPE_PPPRxBinding (WPE_system * the_system)
       pppsw_lcp.iw_system = the_system->h_iw_sys_pppsw;
       pppsw_lcp.aggregation = the_system->h_flow_agg_pppsw_link[ii];
 printf ("before WP_FeatureInit ()\n");
-      status =
+
 #if 0
+/*------------------------------------------------------*\
+   here is the old source code
+\*------------------------------------------------------*/
+      status =
          WP_ModuleInit (the_system->ch_handle[WPE_RX_CH_TAG],
-                         WP_FEATURE_IW_PPPSW_RX_LCP_FORWARDING_MODE,
+                         /*WP_FEATURE_IW_PPPSW_RX_LCP_FORWARDING_MODE*/WP_WDDI_MODULE_POLICER,
                          &pppsw_lcp);
 #else
+      status =
          WP_FeatureInit (the_system->ch_handle[WPE_RX_CH_TAG],
                          WP_FEATURE_IW_PPPSW_RX_LCP_FORWARDING_MODE,
                          &pppsw_lcp);
@@ -2770,6 +3121,12 @@ printf ("before WP_FeatureInit ()\n");
                              &WP_MessageCallback);
       WPE_TerminateOnError (status, "WP_Control Register()");
 
+      status = WP_ControlRegister (WP_EVENT_RX_INDICATE, App_EventRxIndicate);
+      WPE_TerminateOnError (status, "WP_ControlRegister()");
+
+      status = WP_ControlRegister (WP_EVENT_TX_INDICATE, App_EventTxIndicate);
+      WPE_TerminateOnError (status, "WP_ControlRegister()");
+
       status = WP_IwSystemBuild (the_system->bridge_system_PSN2TDM);
       WPE_TerminateOnError (status, " WP_IwSystemBuild() Bridge PSN2TDM");
    }
@@ -2801,6 +3158,8 @@ static void WPE_SystemEnable (WPE_system * the_system)
    WP_status status;
 
 #ifndef WP_HW_WINPATH1
+#pragma message ("init COMET card\n")
+
    printf ("______ Init COMET ___________\n");
 
    status = WPU_TdmCometCardInit (WP_PORT_TDM1, WPU_INIT_COMET_CPLD_GEN);
@@ -2848,7 +3207,7 @@ static void WPE_SystemEnable (WPE_system * the_system)
    App_EnableGroup ();
 #endif
 
-   WP_Delay (1000);
+   WP_Delay (1000000);
 }
 
 static void WPE_McDevicesEnable (WPE_system * the_system)
@@ -2860,7 +3219,7 @@ static void WPE_McDevicesEnable (WPE_system * the_system)
       WP_DeviceEnable (the_system->mc_hdlc_dev_handle,
                        WP_DIRECTION_DUPLEX);
    WPE_TerminateOnError (status, "WP_DeviceEnable() (MC_HDLC)");
-   WP_Delay (1000);
+   WP_Delay (1000000);
 }
 
 #if 1
