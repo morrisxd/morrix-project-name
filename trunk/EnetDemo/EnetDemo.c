@@ -1716,6 +1716,7 @@ void WPE_CreateL2FMUGroups (void)
       /* group_level */ WP_L2_GROUP,
       /* key point to which layer(layer1 or layer2 -- morris */
 #if USE_SOCKET                  //// <<<<<, WINSIM BUS: the FMU register does not updated correctly >>>>>>>
+#error USE_SOCKET_SHOULD_NOT_BE_DEFINED
       /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_STRICT,
       /* shaping_params */ NULL,
 #else /*  */
