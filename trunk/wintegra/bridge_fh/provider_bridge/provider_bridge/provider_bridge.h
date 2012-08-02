@@ -35,7 +35,7 @@
 #include "api/wp_pce.h"
 
 
-#define NR_GBE                          10
+#define NR_GBE                          2
 
 #define DEFAULT_WPID                    0
 
@@ -85,6 +85,10 @@ typedef struct APP_gbe_enet_s
 
 enum filters
 {
+        FILTER_SET_IPV6_IP_CLASSIFICATION,
+        FILTER_SET_L4_SUBTYPE_CLASSIFICATION,
+        FILTER_SET_L4_PORT_CLASSIFICATION,
+        FILTER_SET_RESERVED_MAC_CLASSIFICATION,
         FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION,
         FILTER_SET_CLASSIFICATION,
         FILTER_SET_FORWARDING,

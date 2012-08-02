@@ -8,14 +8,9 @@
 
 #include "provider_bridge.h"
 
-APP_gbe_enet_t gbe[NR_GBE] = {{WP_PORT_ENET13, }, {WP_PORT_ENET14, },
-                              {WP_PORT_ENET15, }, {WP_PORT_ENET16, },
-                              {WP_PORT_ENET3, }, {WP_PORT_ENET5, },
-                              {WP_PORT_ENET4, }, {WP_PORT_ENET6, },
-                              {WP_PORT_ENET8, }, {WP_PORT_ENET7, }};
+APP_gbe_enet_t gbe[NR_GBE] = {{WP_PORT_ENET8, }, {WP_PORT_ENET7, }};
 
 WP_handle devhost, default_agg_host, h_iw_port_general_host, rx_host_handle;
-WP_handle xgi_port, xgi_dev, xgi_bport, xgi_rx_ch_handle, xgi_tx_ch_handle, ul_flow_agg;
 WP_handle qniw;
 WP_handle qniw_mc;
 WP_handle pecs_handles[NUM_OF_PECS];
@@ -38,6 +33,9 @@ WP_pce_filter_stat filter_stat[100];
 WP_handle PCE_filter[100];
 WP_handle filter_set_lrn_en, filter_set_lrn_dis;
 WP_handle PCE_rule_handle;
+
+WP_pce_user_programmable_fields_set_config pce_user_programmable_fields_set_config;
+WP_handle pce_upf_set;
 
 WP_pce_learned_forwarding_rule learned_rules_list[WP_PCE_LEARNING_QUEUE_MAX_SIZE];
 
@@ -83,6 +81,7 @@ WP_module_pce_init pce_init =
         0,/* device_interfaces_num */
         WP_NO_ENHANCMENT/*WP_SW_FDB_ENABLE_MODE*/,/* enhanced_mode */
         &sw_fdb_info, /* sw_fdb_info  */
+        WP_ENABLE, /* pce_user_programmable_fields_mode */
 };
 
 WP_gpe_pecs gpe_pecs_cfg[NUM_OF_PECS] = 
@@ -157,6 +156,9 @@ int main(int argc, char *argv[])
         /* connect the interrupt events */
         App_EventsInit();
 
+        /* create user defined fileds set */
+        WTE_CreateUDFSet();
+        
         /* commit the system configuration */
         status = WP_SysCommit();
         App_TerminateOnError(status, "WP_SysCommit",__LINE__);
@@ -394,13 +396,6 @@ void App_InitHW(void)
         status = WPX_BoardConfigure(WP_WINPATH(DEFAULT_WPID), WPX_CONFIGURE_DEFAULT_CHECKIN); /* 1xXAUI & 10xSGMII */
         App_TerminateOnError(status, "WPX_BoardConfigure()", __LINE__);
 
-        /* XGI */
-        status = WPX_BoardXgiConfig(WP_WINPATH(DEFAULT_WPID), WP_PORT_XGI1);
-        App_TerminateOnError(status, "WPX_BoardXgiConfig()", __LINE__);   
-
-        status = WPX_BoardSerdesInit(WP_WINPATH(DEFAULT_WPID), WP_PORT_XGI1, WP_FALSE); 
-        App_TerminateOnError(status, "WPX_BoardSerdesInit",__LINE__);
-
         /* 10 GEs */
         for (ii = 0; ii < NR_GBE; ii++)
         {
@@ -422,49 +417,9 @@ void App_InitHW(void)
  *****************************************************************************/
 void App_PortsDevicesCreate(void)
 {
-        WP_status status;
         WP_U32 ii;
         WP_handle iwp1;
-        WP_port_enet enet_port[1] =
-                {
-                        {
-                                /* pkt_limits */  {64, 64, 0 ,0 },
-                                /* flowmode */       WP_FLOWMODE_FAST,
-                                /* interface_mode */ WP_ENET_SGMII_1000,
-                                /* rx_iw_bkgnd */    0
-                        }
-                };
 
-        WP_device_enet enet_dev[1] =
-                {
-                        {
-                                /* max_tx_channels */     MAX_NUM_OF_CHANNELS,
-                                /* tx_maxsdu */           WT_MAX_FRAME_SIZE,
-                                /* operating_speed */     WP_UNUSED,
-                                /* mac_addr */ {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-                                /* tx_bit_rate */        WP_TX_BIT_RATE_UNLIMITED,
-                                /* loopbackmode */ WP_ENET_NORMAL,
-                                /* extended_params */ NULL,
-                        }
-                };
-        WP_device_enet_ex enet_device_extended_config[1] =
-                {
-                        {
-                                /*duplexmode*/       WP_ENET_FULLDUPLEX,
-                                /*rx_maclookup_mode*/       WP_DISABLE,
-                                /*rx_flowcontrol*/       WP_ENET_FLOW_ENABLE,
-                                /*tx_flowcontrol*/       WP_ENET_FLOW_ENABLE,
-                                /*rx_addrmode*/       WP_ENET_ADDR_ACCEPTALL,
-                                /*phystatmode*/       WP_ENET_STAT_ENABLE,
-                                /*tx_statmode*/       WP_ENABLE,
-                                /*rx_statmode*/       WP_ENABLE,
-                                /*tx_duplicate*/       WP_DISABLE,
-                                /*rx_filters*/       0,
-                                /*rx_timestamp*/       WP_DISABLE,
-                                /*timestamp_type*/       0,
-                                /*max_tx_slow_channels*/  MAX_NUM_OF_CHANNELS,
-                        },
-                };
         WP_port_enet enet_port_config =
                 {
                         /* pkt_limits */
@@ -490,30 +445,6 @@ void App_PortsDevicesCreate(void)
                         /* loopbackmode */    WP_ENET_NORMAL,
                         /* extended_params */ NULL 
                 };
-
-	
-        /* XGI port*/
-        enet_port->interface_mode = WP_ENET_XAUI;
-        xgi_port = WP_PortCreate(WP_WINPATH(DEFAULT_WPID), WP_PORT_XGI1, enet_port);
-        App_TerminateOnError(xgi_port, "WP_PortCreate XGI1",__LINE__);
-
-        /* Create an XGI Device */
-        enet_dev->max_tx_channels = 1;
-   
-        enet_dev->extended_params = NULL;
-        xgi_dev = WP_DeviceCreate(xgi_port, 0,WP_DEVICE_ENET, enet_dev);
-        App_TerminateOnError(xgi_dev, "WP_DeviceCreate() XGI",__LINE__);
-   
-        enet_dev->max_tx_channels = MAX_NUM_OF_CHANNELS;
-        enet_dev->extended_params = enet_device_extended_config;
-        status = WP_DeviceModify(xgi_dev,
-                                 WP_DEV_MOD_ENET_TX_STATMODE |
-                                 WP_DEV_MOD_ENET_PHYSTATMODE |
-                                 WP_DEV_MOD_ENET_RX_FLOWCONTROL | 
-                                 WP_DEV_MOD_ENET_TX_FLOWCONTROL |
-                                 WP_DEV_MOD_ENET_RX_STATMODE ,
-                                 enet_dev);
-        App_TerminateOnError(status, "WP_DeviceModify() XGI",__LINE__);
 
         /* Create Giga enet port & device */
         for (ii = 0; ii < NR_GBE; ii++) 
@@ -735,6 +666,10 @@ void App_EventsInit(void)
         status = WP_ControlRegister(WP_EVENT_IWGP_LEARNING_QUEUE, &F_MyAppIndicateEventIwgpLearning);
         App_TerminateOnError(status, "WP_ControlRegister()", __LINE__);
 
+        /* Host RX interrupt */
+        status = WP_ControlRegister(WP_EVENT_RX_INDICATE, &WPE_Receive_HostData_IRQ);
+        App_TerminateOnError(status, "WP_ControlRegister()", __LINE__);
+        
         return ;
 }
 
@@ -748,33 +683,8 @@ void App_EventsInit(void)
  *****************************************************************************/   
 void App_ChannelsCreate(void)
 {
-        WP_tag ch_tag = 0;
         WP_status status;
         WP_U16 ii;
-        WP_ch_enet gbe_ch[1] =
-                {
-                        {
-                                /* intmode */           WP_PKTCH_INT_DISABLE,
-                                /* iwmode */            WP_PKTCH_IWM_ENABLE,
-                                /* testmode */          WP_PKTCH_TEST_DISABLE,
-                                /* tx_pqblock */        0,
-                                /* tx_pqlevel */        0,
-                                /* tx_shaping_type */   WP_FMU_SHAPING_TYPE_STRICT,
-                                /* tx_shaping_params */ NULL,
-                                /* rx_maxsdu */         WT_MAX_FRAME_SIZE,
-                                /* tx_cwid */           WP_CW_ID_A,
-                                /* tx_tq */             0,
-                                /* rx_queuedepth[4] */  50
-                        },
-                };
-        WP_tx_binding  tx_binding_l2pi[1]=
-                {
-                        {
-                                /* wred_mode;*/ 0,
-                                /* dci_mode;*/  1,
-                                /* maxt;*/128,
-                        }
-                };
         WP_ch_enet enet_ch_config =
                 {
                         /* intmode */         WP_PKTCH_INT_DISABLE,
@@ -796,27 +706,6 @@ void App_ChannelsCreate(void)
                         /* maxt;*/      255,
                 };
 
-
-        /* create XGI device rx and tx channels */
-        xgi_tx_ch_handle = WP_ChannelCreate(ch_tag++, 
-                                            xgi_dev, 
-                                            qniw, 
-                                            WP_CH_TX, 
-                                            WP_ENET, 
-                                            &gbe_ch[0]);
-        App_TerminateOnError(xgi_tx_ch_handle, "WP_ChannelCreate() Enet TX XGI",__LINE__);
-   
-        xgi_rx_ch_handle = WP_ChannelCreate(ch_tag++, 
-                                            xgi_dev, 
-                                            qniw, 
-                                            WP_CH_RX, 
-                                            WP_ENET, 
-                                            &gbe_ch[0]);
-        App_TerminateOnError(xgi_rx_ch_handle, "WP_ChannelCreate() Enet RX XGI",__LINE__);
-
-        /* Create Tx binding to the Tx Channel XGI */
-        status = WP_IwTxBindingCreate(xgi_tx_ch_handle, WP_IW_TX_BINDING, &tx_binding_l2pi[0]);
-        App_TerminateOnError(status, "WP_IwTxBindingCreate() ENET TX XGI",__LINE__);
 
         /* Channels for 10 GEs */
         for (ii = 0; ii < NR_GBE; ii++)
@@ -876,7 +765,7 @@ void App_IwSystemInit(void)
         // Create host handler, host agg, host iw port
         WPE_HostCreate();
 
-        /* Create XGI & 10 GEs bridging ports */
+        /* Create GEs bridging ports */
         WPE_BridgePortsCreate(dl_general_iwsys_bridge);
 
         /* Binding the RX channels to bridging ports */
@@ -899,18 +788,6 @@ void App_SystemEnable(void)
         WP_status status;
         WP_U16 ii;
 
-        status = WP_PortEnable(xgi_port, WP_DIRECTION_DUPLEX);
-        App_TerminateOnError(status, "WP_PortEnable gbe_port",__LINE__);
-   
-        status = WP_DeviceEnable(xgi_dev, WP_DIRECTION_DUPLEX);
-        App_TerminateOnError(status, "WP_DeviceEnable gbe_dev", __LINE__);
-
-        status = WP_ChannelEnable(xgi_rx_ch_handle);
-        App_TerminateOnError(status, "WP_ChannelEnable Rx XGI",__LINE__);
-
-        status = WP_ChannelEnable(xgi_tx_ch_handle);
-        App_TerminateOnError(status, "WP_ChannelEnable Tx XGI",__LINE__);
-        
         for (ii = 0; ii < NR_GBE; ii++)
         {
                 status = WP_PortEnable(gbe[ii].port_enet, WP_DIRECTION_DUPLEX);
@@ -939,6 +816,7 @@ void App_SystemEnable(void)
  *****************************************************************************/   
 void App_PceInterfaceCreate(void)
 {
+
         // vlan flooding and multicast filters for DL & UL
         WPE_MulticastInit();
         WPE_VlanInit();
@@ -950,6 +828,7 @@ void App_PceInterfaceCreate(void)
         WPE_CreatePceFilterSets();
 
         //WPE_PceCreatePceRules();
+        WT_PCERulesAdd();
         
         // Create pce interfaces
         WPE_CreatePceInterface(dl_general_iwsys_bridge);
