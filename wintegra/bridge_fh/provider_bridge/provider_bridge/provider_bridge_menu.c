@@ -42,18 +42,26 @@ static Y_MenuEntry *V_CurrMenuP = &V_MainMenu[0];
 Y_MenuEntry V_MainMenu[] = 
 {
         {K_Menu, MAIN_MENU_ITEM_NUM, TRUE, "Main Menu",         {(Y_MenuEntry *)V_MainMenu}},
-        {K_Menu, 1, TRUE, " -> Vlan Menu",                      {(Y_MenuEntry *)VLAN_menu}},
-        {K_Menu, 2, TRUE, " -> Multicast group",                {(Y_MenuEntry *)MC_menu}},
+        {K_Menu, 1, TRUE, " -> FH Test Menu",                   {(Y_MenuEntry *)FH_Test_menu}},
+        {K_Menu, 2, TRUE, " -> Vlan Menu",                      {(Y_MenuEntry *)VLAN_menu}},
         {K_Menu, 3, TRUE, " -> Aging Menu",                     {(Y_MenuEntry *)AGING_menu}},
         {K_Menu, 4, TRUE, " -> Learning Menu",                  {(Y_MenuEntry *)LEARNING_menu}},
         {K_Menu, 5, TRUE, " -> System Statistics",              {(Y_MenuEntry *)STAT_menu}},
         {K_Leaf, 6, TRUE, " <> Dump FDB entry",                 {(void*)(int)CLI_Dump_FDB_entry}},
         {K_Leaf, 7, TRUE, " <> Flush FDB by Vlan",              {(void*)(int)CLI_Flush_FDB_entry_by_Vlan}},
         {K_Menu, 8, TRUE, " -> Performance test",               {(Y_MenuEntry *)Performance_menu}},
-        {K_Menu, 9, TRUE, " <> WinUtil",                        {(void*)(int)CLI_WinUtil}},
-        {K_Leaf, 10, TRUE, " <> Quit",                           {(void*)(int)CLI_MAIN_Quit}},
+        {K_Leaf, 9, TRUE, " <> Quit",                           {(void*)(int)CLI_MAIN_Quit}},
 };
 
+
+Y_MenuEntry FH_Test_menu[] = 
+{
+        {K_Menu, FHT_MENU_ITEM_NUM, TRUE, "FiberHome Test Menu",        {(Y_MenuEntry *)V_MainMenu}},
+        {K_Leaf, 1, TRUE, " -> IPV6 filtering",                         {(void*)(int)CLI_FHT_IPV6_filter}},
+        {K_Leaf, 2, TRUE, " -> L4 port filtering",                      {(void*)(int)CLI_FHT_L4_port_filter}},
+        {K_Leaf, 3, TRUE, " -> L4 subtype filtering",                   {(void*)(int)CLI_FHT_L4_subtype_filter}},
+        {K_Leaf, 4, TRUE, " -> Reserved MAC filtering",                 {(void*)(int)CLI_FHT_Reserved_Mac_filter}},
+};
 
 Y_MenuEntry VLAN_menu[] = 
 {
@@ -260,9 +268,6 @@ int CLI_STAT_ShowDevStats(char *StrPrm)
 {
         WP_U32 i;
         
-        printf("\n               XGI Device Statistics\n");
-        WPT_LocalDisplayXgiDeviceStats(xgi_dev);
-
         for (i = 0; i < NR_GBE; i++)
         {
                 printf("\n               Enet[%d] Device Statistics\n", i);
@@ -283,9 +288,6 @@ int CLI_STAT_ClearDevStats(char *StrPrm)
 {
         WP_U32 i;
         
-        printf("\n               Reseting XGI Device Statistics\n");
-        WPT_LocalDeviceStatsReset(xgi_dev);
-
         for (i = 0; i < NR_GBE; i++)
         {
                 printf("\n               Reseting Enet[%d] Device Statistics\n", i);
@@ -306,10 +308,6 @@ int CLI_STAT_ShowBrgPrtStats(char *StrPrm)
 {
         WP_U32 i;
         
-        printf("\n               XGI BridgePorts Statistics\n");
-        WPT_DisplayBridgingPortStats(xgi_bport, "XGI");
-        //WPT_IwBridgingPortStatsReset(xgi_bport);
-
         for (i = 0; i < NR_GBE; i++)
         {
                 printf("\n               Enet[%d] BridgePorts Statistics\n", i);
@@ -331,10 +329,6 @@ int CLI_STAT_ClearBrgPrtStats(char *StrPrm)
 {
         WP_U32 i;
         
-        printf("\n               Reseting XGI BridgePorts Statistics\n");
-        //WPT_DisplayBridgingPortStats(xgi_bport, "XGI");
-        WPT_IwBridgingPortStatsReset(xgi_bport);
-
         for (i = 0; i < NR_GBE; i++)
         {
                 printf("\n               Reseting Enet[%d] BridgePorts Statistics\n", i);
@@ -356,10 +350,6 @@ int CLI_STAT_ShowFlwAggStats(char *StrPrm)
 {
         WP_U32 i;
         
-        printf("\n               XGI FlowAgg Statistics\n");
-        WPT_GenericFlowStatistics(ul_flow_agg);
-        //WPT_GenericFlowStatisticsReset(ul_flow_agg);
-
         for (i = 0; i < NR_GBE; i++)
         {
                 printf("\n               Enet[%d] FlowAgg Statistics\n", i);
@@ -382,10 +372,6 @@ int CLI_STAT_ClearFlwAggStats(char *StrPrm)
 {
         WP_U32 i;
         
-        printf("\n               Reseting XGI FlowAgg Statistics\n");
-        //WPT_GenericFlowStatistics(ul_flow_agg);
-        WPT_GenericFlowStatisticsReset(ul_flow_agg);
-
         for (i = 0; i < NR_GBE; i++)
         {
                 printf("\n               Reseting Enet[%d] FlowAgg Statistics\n", i);
@@ -664,7 +650,7 @@ int CLI_VLAN_Create_Vlan(char *StrPrm)
 
         char* pPortStr = NULL;
         printf("\nPlease input vlan and port pair. Enter \"Exit\" if end\n");
-        printf("\nport index: 0-ENET13; 1-ENET14; 2-ENET15; 3-ENET16; 4-ENET3; 5-ENET5; 6-ENET4; 7-ENET6; 8-ENET8; 9-ENET7; 10-XGI1.\n");
+        printf("\nport index: 0-ENET8; 1-ENET7.\n");
         printf("\ne.g: 101 1\n");
 
         while (1)
@@ -699,7 +685,7 @@ int CLI_VLAN_Delete_Vlan(char *StrPrm)
 
         char* pPortStr = NULL;
         printf("\nPlease input vlan and port pair.Enter \"Exit\" if end\n");
-        printf("\nport index: 0-ENET13; 1-ENET14; 2-ENET15; 3-ENET16; 4-ENET3; 5-ENET4; 6-ENET5; 7-ENET6; 8-ENET8; 9-ENET7; 10-XGI1.\n");
+        printf("\nport index: 0-ENET7; 1-ENET7.\n");
         printf("\ne.g: 101 1\n");
 
         while (1)
@@ -874,7 +860,7 @@ int CLI_MC_Add_Muticast_member(char *StrPrm)
         char* pPortStr = NULL;
         char* pMacStr = NULL;
         printf("\nPlease input vlan,port and multicast MAC address.\n");
-        printf("\nport index: 0-ENET13; 1-ENET14; 2-ENET15; 3-ENET16; 4-ENET3; 5-ENET4; 6-ENET5; 7-ENET6; 8-ENET8; 9-ENET7; 10-XGI1.\n");
+        printf("\nport index: 0-ENET7; 1-ENET7.\n");
         printf("\ne.g: 101 1 01-00-5e-00-01-01\n");
         get_line(val_str);
 
@@ -940,7 +926,7 @@ int CLI_MC_Remove_Muticast_member(char *StrPrm)
         char* pPortStr = NULL;
         char* pMacStr = NULL;
         printf("\nPlease input vlan,port and multicast mac pair.\n");
-        printf("\nport index: 0-ENET13; 1-ENET14; 2-ENET15; 3-ENET16; 4-ENET3; 5-ENET4; 6-ENET5; 7-ENET6; 8-ENET8; 9-ENET7; 10-XGI1.\n");
+        printf("\nport index: 0-ENET8; 1-ENET7.\n");
         printf("\ne.g: 101 1 01-00-5e-00-01-01\n");
         
         get_line(val_str);
@@ -1043,7 +1029,7 @@ int CLI_Enable_port_lrn(char *StrPrm)
                 return OK;
         }
         
-        temp = CLI_GetNumber("Input port(0 - 9 for GBEs, 10 for XGI)", 0, 10);
+        temp = CLI_GetNumber("Input port(0 - 1 for GBEs)", 0, 1);
         WPE_DisableEnablePortLearning(temp, 1);
         
         return OK;
@@ -1059,7 +1045,7 @@ int CLI_Disable_port_lrn(char *StrPrm)
                 return OK;
         }
         
-        temp = CLI_GetNumber("Input port(0 - 9 for GBEs, 10 for XGI)", 0, 10);
+        temp = CLI_GetNumber("Input port(0 - 1 for GBEs)", 0, 1);
         WPE_DisableEnablePortLearning(temp, 0);
 
         return OK;
@@ -1120,5 +1106,99 @@ int CLI_WinUtil(char *StrPrm)
         printf("\n");
         WPUI_RunWinMon(InputBuf);
 
+        return 0;
+}
+
+
+
+/* ------------------------- Fiberhome Test CLI --------------------------*/
+
+int F_ConvertStr2Ipv6Address(char *pStr, unsigned char* ipv6)
+{
+        static char buff[128] = {0};
+
+        char *token = NULL;
+        int i = strlen(pStr);
+        if ((i < 10) || (i > 128))
+        {
+                return -1;
+        }
+        memset(buff, 0, sizeof(buff));
+        strcpy(buff, pStr);
+
+        token = strtok(buff, delimiters);
+        if (NULL == token)
+        {
+                return -2;
+        }
+
+        ipv6[0] = strtoul(token, NULL, 16);
+    
+        for (i = 1; i < 16; i++)
+        {
+                token = strtok (NULL, delimiters);
+                if (NULL == token)
+                {
+                        return -3;
+                }
+                ipv6[i] = strtoul(token, NULL, 16);
+        }
+
+        return 0;
+}
+
+int CLI_FHT_IPV6_filter(char *StrPrm)
+{
+        WP_U8 ipv6[16] = {0x00};
+        WP_CHAR InputBuf[255];
+
+        printf ("Enter IPV6 address >\n");
+        get_line(InputBuf);
+        printf("\n");
+
+        F_ConvertStr2Ipv6Address(InputBuf, ipv6);
+
+        WPE_CreateIPV6MatchPceRule(0, ipv6);
+        
+        return 0;
+}
+
+int CLI_FHT_L4_port_filter(char *StrPrm)
+{
+        WP_U32 temp;
+
+        temp = CLI_GetNumber("Configure L4 port number ( 1 - 10000)", 1, 10000);
+
+        WPE_CreateL4PortPceRule(0, temp);
+
+        return 0;
+}
+
+
+int CLI_FHT_L4_subtype_filter(char *StrPrm)
+{
+        WP_U32 temp;
+
+        temp = CLI_GetNumber("Configure L4 subtype ( 1 - 65535)", 1, 65535);
+
+        WPE_CreateL4SubtypePceRule(0, temp);
+
+        return 0;
+}
+
+
+int CLI_FHT_Reserved_Mac_filter(char *StrPrm)
+{
+        unsigned char mac[6];
+        char* pMacStr = val_str;
+        
+        printf("Please input MAC.\n");
+        printf("e.g: 01-00-5e-00-01-01\n");
+        get_line(val_str);
+
+        F_ConvertStr2MacAddress(pMacStr, mac);
+
+        WPE_CreateReservedMacPceRule(0, mac);        
+        
         return 0;
 }

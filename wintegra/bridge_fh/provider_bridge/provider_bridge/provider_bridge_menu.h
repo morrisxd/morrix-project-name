@@ -25,6 +25,7 @@
 
 #define CLI_INPUT_BUFF_LEN      128
 #define MAIN_MENU_ITEM_NUM      10
+#define FHT_MENU_ITEM_NUM       4
 #define VLAN_MENU_ITEM_NUM      4
 #define MC_MENU_ITEM_NUM        5
 #define AGING_MENU_ITEM_NUM     4
@@ -119,6 +120,7 @@ int CLI_Delete_Lrn_FlwAgg_rule(char *StrPrm);
 int CLI_Dump_FDB_entry(char *StrPrm);
 int CLI_Flush_FDB_entry_by_Vlan(char *StrPrm);
 
+extern Y_MenuEntry FH_Test_menu[];
 extern Y_MenuEntry VLAN_menu[];
 extern Y_MenuEntry MC_menu[];
 extern Y_MenuEntry AGING_menu[];
@@ -129,5 +131,10 @@ int CLI_Performance_TestStart(char *StrPrm);
 int CLI_Performance_TestExit(char *StrPrm);
 
 int CLI_WinUtil(char *StrPrm);
+
+int CLI_FHT_IPV6_filter(char *StrPrm);
+int CLI_FHT_L4_port_filter(char *StrPrm);
+int CLI_FHT_L4_subtype_filter(char *StrPrm);
+int CLI_FHT_Reserved_Mac_filter(char *StrPrM);
 
 #endif
