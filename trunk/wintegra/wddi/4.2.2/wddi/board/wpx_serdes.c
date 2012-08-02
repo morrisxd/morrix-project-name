@@ -37,7 +37,8 @@ static void WPX_SerdesSetQuadPerLaneIOCtrl(wpx_serdes_quad_io_ctrl *quad_io_ctrl
                                            WP_U8 loopback_mode,
                                            WP_U32 ctrl_value,
                                            WP_U32 ctrl_value_loopback_nes);
-
+#define WPX_QUAD_RESET_X   (0x4000000)
+#define DBG_MSG_X (1)
 
 extern wpx_board_configuration current_configuration;
 
@@ -1665,23 +1666,27 @@ WP_status WPX_HwSerdesReset (WP_U32 wpid, WP_handle port_handle,
    loopback_mode = 0;
    status = 0;
 
-
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesReset: current_configuration(%2d)\n", current_configuration); 
    serdes_data =  &(port_to_serdes[current_configuration]);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesReset: port(%2d)\n", port); 
    serdes_lane_data = &(serdes_data->lane_data[port-WP_PORT_ENET1]);
 
    serdes_index = serdes_lane_data->serdes_index;
    lane_index = serdes_lane_data->lane_index;
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesReset: lane_index(%2d)\n", lane_index); 
    rate = serdes_lane_data->rate;
 
    serdes = serdes_index;
 
 
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesReset: wpid(%2d)\n", wpid); 
    serdes_regs = WPX_SerdesBaseGet(wpid);
    mux_regs = &(serdes_regs->serdes_mux);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesReset: serdes_regs(%p)\n", serdes_regs); 
 
 
@@ -1692,10 +1697,12 @@ WP_status WPX_HwSerdesReset (WP_U32 wpid, WP_handle port_handle,
    single_io_control = &(mux_regs->io_ctrl_single[serdes]);
 
    WPI_MEM_GET(single_io_ctrl_1, single_io_control->single_io_ctrl1);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesReset: single_io_ctrl_1(%x)\n",single_io_ctrl_1); 
    
    single_io_ctrl_1 &= ~0x800;
    WPI_MEM_SET(single_io_control->single_io_ctrl1, single_io_ctrl_1);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesReset: ==========resetting (%x)=========\n",\
                                        single_io_ctrl_1); 
    WP_Delay(100000);
@@ -1730,22 +1737,27 @@ WP_status WPX_HwSerdesResetX (WP_U32 wpid, WP_U32 port)
    status = 0;
 
 
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetX: current_configuration(%2d)\n", current_configuration); 
    serdes_data =  &(port_to_serdes[current_configuration]);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetX: port(%2d)\n", port); 
    serdes_lane_data = &(serdes_data->lane_data[port-WP_PORT_ENET1]);
 
    serdes_index = serdes_lane_data->serdes_index;
    lane_index = serdes_lane_data->lane_index;
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetX: lane_index(%2d)\n", lane_index); 
    rate = serdes_lane_data->rate;
 
    serdes = serdes_index;
 
 
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetX: wpid(%2d)\n", wpid); 
    serdes_regs = WPX_SerdesBaseGet(wpid);
    mux_regs = &(serdes_regs->serdes_mux);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetX: serdes_regs(%p)\n", serdes_regs); 
 
 
@@ -1756,11 +1768,13 @@ WP_status WPX_HwSerdesResetX (WP_U32 wpid, WP_U32 port)
    single_io_control = &(mux_regs->io_ctrl_single[serdes]);
 
    WPI_MEM_GET(single_io_ctrl_1, single_io_control->single_io_ctrl1);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetX: single_io_ctrl_1(%x)\n",\
                                              single_io_ctrl_1); 
    
    single_io_ctrl_1 &= ~0x800;
    WPI_MEM_SET(single_io_control->single_io_ctrl1, single_io_ctrl_1);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetX: ==========resetting (%x)=========\n",\
                                        single_io_ctrl_1); 
    WP_Delay(100000);
@@ -1799,21 +1813,26 @@ WP_status WPX_HwSerdesResetQuadX (WP_U32 wpid, WP_U32 port)
    status = 0;
 
 
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetQuadX: current_configuration(%2d)\n", current_configuration); 
    serdes_data =  &(port_to_serdes[current_configuration]);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetQuadX: port(%2d)\n", port); 
    serdes_lane_data = &(serdes_data->lane_data[port-WP_PORT_ENET1]);
 
    serdes_index = serdes_lane_data->serdes_index;
    lane_index = serdes_lane_data->lane_index;
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetQuadX: lane_index(%2d)\n", lane_index); 
    rate = serdes_lane_data->rate;
 
    serdes = serdes_index;
 
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetQuadX: wpid(%2d)\n", wpid); 
 
    serdes_regs = WPX_SerdesBaseGet(wpid);
+   if (DBG_MSG_X)
    printf ("WPX_HwSerdesResetQuadX: serdes_regs(%p)\n", serdes_regs); 
 
    mux_regs = &(serdes_regs->serdes_mux);
@@ -1824,28 +1843,44 @@ WP_status WPX_HwSerdesResetQuadX (WP_U32 wpid, WP_U32 port)
    single_lane_regs = &(serdes_regs->serdes_single[serdes]);
    single_io_control = &(mux_regs->io_ctrl_single[serdes]);
    quad_io_ctrl = &(mux_regs->io_ctrl_quad[serdes-WPX_SERDES_QUAD_LANE_FIRST]);
+   if (DBG_MSG_X)
+   {
    printf ("WPX_HwSerdesResetQuadX: quad_io_ctrl(%x)\n",quad_io_ctrl);
 
+   printf ("WPX_HwSerdesResetQuadX: quad_io_ctrl->quad_io_ctrl1(%x)\n",\
+                                          &quad_io_ctrl->quad_io_ctrl1);
+   printf ("WPX_HwSerdesResetQuadX: quad_io_ctrl->quad_io_ctrl2(%x)\n",\
+                                          &quad_io_ctrl->quad_io_ctrl2);
+   printf ("WPX_HwSerdesResetQuadX: quad_io_ctrl->quad_io_ctrl3(%x)\n",\
+                                          &quad_io_ctrl->quad_io_ctrl3);
+   printf ("WPX_HwSerdesResetQuadX: quad_io_ctrl->quad_io_ctrl4(%x)\n",\
+                                          &quad_io_ctrl->quad_io_ctrl4);
+   }
 
    WPI_MEM_GET(quad_io_ctrl_1, quad_io_ctrl->quad_io_ctrl1);
    WPI_MEM_GET(quad_io_ctrl_2, quad_io_ctrl->quad_io_ctrl2);
    WPI_MEM_GET(quad_io_ctrl_3, quad_io_ctrl->quad_io_ctrl3);
    WPI_MEM_GET(quad_io_ctrl_4, quad_io_ctrl->quad_io_ctrl4);
+   if (DBG_MSG_X)
+   {
    printf ("WPX_QuadX: quad_io_ctrl_1(%x)\n", quad_io_ctrl_1); 
    printf ("WPX_QuadX: quad_io_ctrl_2(%x)\n", quad_io_ctrl_2); 
    printf ("WPX_QuadX: quad_io_ctrl_3(%x)\n", quad_io_ctrl_3); 
    printf ("WPX_QuadX: quad_io_ctrl_4(%x)\n", quad_io_ctrl_4); 
+   }
    
-   quad_io_ctrl_1 &= ~0x4000000;
-   quad_io_ctrl_2 &= ~0x4000000;
-   quad_io_ctrl_3 &= ~0x4000000;
-   quad_io_ctrl_4 &= ~0x4000000;
+   quad_io_ctrl_1 &= ~WPX_QUAD_RESET_X;
+   quad_io_ctrl_2 &= ~WPX_QUAD_RESET_X;
+   quad_io_ctrl_3 &= ~WPX_QUAD_RESET_X;
+   quad_io_ctrl_4 &= ~WPX_QUAD_RESET_X;
 
-#if 0
+#if 1
    WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl1, quad_io_ctrl_1);
    WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl2, quad_io_ctrl_2);
    WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl3, quad_io_ctrl_3);
    WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl4, quad_io_ctrl_4);
+   if (DBG_MSG_X)
+   {
    printf ("WPX_HwSerdesResetQuadX: ==========resetting (%x)=========\n",\
                                        quad_io_ctrl_1); 
    printf ("WPX_HwSerdesResetQuadX: ==========resetting (%x)=========\n",\
@@ -1854,12 +1889,14 @@ WP_status WPX_HwSerdesResetQuadX (WP_U32 wpid, WP_U32 port)
                                        quad_io_ctrl_3); 
    printf ("WPX_HwSerdesResetQuadX: ==========resetting (%x)=========\n",\
                                        quad_io_ctrl_4); 
+   }
+
    WP_Delay(100000);
-   quad_io_ctrl_1 |= 0x4000000;
-   quad_io_ctrl_2 |= 0x4000000;
-   quad_io_ctrl_3 |= 0x4000000;
-   quad_io_ctrl_4 |= 0x4000000;
-   WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl2, quad_io_ctrl_1);
+   quad_io_ctrl_1 |= WPX_QUAD_RESET_X;
+   quad_io_ctrl_2 |= WPX_QUAD_RESET_X;
+   quad_io_ctrl_3 |= WPX_QUAD_RESET_X;
+   quad_io_ctrl_4 |= WPX_QUAD_RESET_X;
+   WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl1, quad_io_ctrl_1);
    WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl2, quad_io_ctrl_2);
    WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl3, quad_io_ctrl_3);
    WPI_MEM_SET(quad_io_ctrl->quad_io_ctrl4, quad_io_ctrl_4);
@@ -1926,7 +1963,7 @@ WP_status WPX_BoardSerdesReset( WP_U32 wpid,
                               serdes_loopback_mode[serdes_index]);
 #else
       WPX_HwSerdesResetX (wpid, port);
-      WPX_HwSerdesResetQuadX (wpid, port);
+      // WPX_HwSerdesResetQuadX (wpid, port);
 #endif
    }
    else if(serdes_index >= WPX_SERDES_QUAD_LANE_FIRST &&
