@@ -15,6 +15,7 @@ WP_handle qniw;
 WP_handle qniw_mc;
 WP_handle pecs_handles[NUM_OF_PECS];
 WP_handle dl_general_iwsys_bridge;
+WP_handle policer_handle;
 
 WP_U32 aging_enable = 0;
 WP_U32 aging_weight = 1;
@@ -24,6 +25,8 @@ WP_THREAD_ID aging_tid;
 WP_U32 learning_enable = 0;
 WP_U32 learnt_rules = 0;
 WP_THREAD_ID learning_tid;
+
+WP_THREAD_ID host_rx_tid;
 
 WP_U32 PMTest_enable = 0;
 WP_U32 PMTest_vid = 0;
@@ -45,6 +48,7 @@ WP_U32 bridge_lock;
 
 WP_SEM_ID aging_sem;
 WP_SEM_ID learning_sem;
+WP_SEM_ID host_rx_sem;
 
 WP_boolean demo_running = WP_TRUE;
 
@@ -189,6 +193,11 @@ int main(int argc, char *argv[])
         WPL_SemInit(&aging_sem);
         WPL_ThreadInit(&aging_tid, App_AgingThread, NULL);
 
+        /* semaphore and thread for Host rx */
+        WPL_SemInit(&host_rx_sem);
+        WPL_ThreadInit(&host_rx_tid, App_HostRxThread, NULL);
+
+        
         /* CLI */
         WPL_LockKeyInit(WPL_THREAD_LOCK_KEY, &bridge_lock);
 
@@ -367,7 +376,11 @@ void App_SysInit(void)
         }
 
         /* initialize the ram partition, configure its pce rules's number */
+#ifdef WP_BOARD_WDS3_SL
         int_ram_partition.policer_entries = 0;
+#else
+        int_ram_partition.policer_entries = 8000;
+#endif
         int_ram_partition.pce_hw_rules_num = pce_init.hardware_rules_num;
         WT_SetIntRamPartition(WP_WINPATH(DEFAULT_WPID), &int_ram_partition);
 
@@ -488,7 +501,7 @@ void App_BufferPoolsCreate(void)
                         }
                 };
 
-#if 0
+#if 1
         WP_handle pool_2048;
         WP_pool_buffer_data buffer_data_2048[] =
                 {
@@ -639,6 +652,27 @@ void App_ModulesInit(void)
                         NUM_OF_PECS, /* max_num_of_pecs */
                         NUM_OF_PECS_GLOBAL_INFO, /* max_num_of_pecs_global_info */
                 };
+        WP_policer_limits_v2 v2_policer_limits[1]=
+                {
+                        {
+#ifdef WP_BOARD_WDS3_SL
+                                /* max_internal_policers*/0,
+#else
+                                /* max_internal_policers*/5,
+#endif
+                                /* max_external_policers*/5,
+                                /* max_policer_actions*/5
+                        }
+                };
+        WP_module_policer policer_module_config[1]=
+                {
+                        {
+                                /*v2_policer_limits*/v2_policer_limits,
+                                /*v1_policer_limits*/0,
+                                /*atm_policer_limits*/0,
+                                /*mode*/WP_POLICER_STATS_ENABLE
+                        }
+                };
 
         /* PCE module initialization */
         pce_init.parser_info = &pce_parser_info;
@@ -648,6 +682,10 @@ void App_ModulesInit(void)
         /* GPE module initialization */
         status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_GPE, &gpe_init);
         App_TerminateOnError(status, "WPI_GpeModuleInit()", __LINE__);
+
+        /* PCE policer module initialiaztion */
+        status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_POLICER, policer_module_config);
+        App_TerminateOnError(status,"Policer Module Init", __LINE__);
 }
 
 
@@ -863,7 +901,7 @@ void App_perform_freerun(void)
  *****************************************************************************/   
 void * App_LearningThread(void *arg)
 {
-        WP_U32 ii, size;
+        WP_U32 ii, size, i;
         WP_status status;
         WP_U32 rules_returned;
         WP_pce_rule_forwarding rule_fwd = {0};
@@ -902,6 +940,22 @@ void * App_LearningThread(void *arg)
                 {
                         memcpy(&rule_fwd, &(learned_rules_list[ii].fwd_rule), sizeof(WP_pce_rule_forwarding));
 
+                        for (i = 0; i < NR_GBE; i++)
+                        {
+                                if (gbe[i].bport_enet == rule_fwd.match_result[0].param.iw_port.iw_port_handle)
+                                {
+                                        break;
+                                }
+                        }
+
+                        if ((i < NR_GBE) && (gbe[i].cur_learned_mac < gbe[i].max_learned_mac))
+                                gbe[i].cur_learned_mac++;
+                        else
+                        {
+                                printf("-->PORT %d full, max %d\n", i, gbe[i].max_learned_mac);
+                                continue;
+                        }
+                        
                         /* Enable aging and set weight */
                         rule_fwd.match_result[1].param.aging.mode = WP_PCE_AGING_ENABLE;
                         rule_fwd.match_result[1].param.aging.weight = aging_weight;
@@ -1025,6 +1079,17 @@ void * App_AgingThread(void *arg)
                 if (!aging_enable)  continue;
                 
                 App_AgingFunc(NULL);
+        }
+}
+
+void * App_HostRxThread(void *arg)
+{
+        while (1)
+        {
+                //WPL_SemDecrement(&host_rx_sem, 1);
+
+                if (WPE_Receive_HostData()) WP_Delay(1000);
+
         }
 }
 
