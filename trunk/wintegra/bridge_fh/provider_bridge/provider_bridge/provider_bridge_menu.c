@@ -61,6 +61,7 @@ Y_MenuEntry FH_Test_menu[] =
         {K_Leaf, 2, TRUE, " -> L4 port filtering",                      {(void*)(int)CLI_FHT_L4_port_filter}},
         {K_Leaf, 3, TRUE, " -> L4 subtype filtering",                   {(void*)(int)CLI_FHT_L4_subtype_filter}},
         {K_Leaf, 4, TRUE, " -> Reserved MAC filtering",                 {(void*)(int)CLI_FHT_Reserved_Mac_filter}},
+        {K_Leaf, 5, TRUE, " -> Max Learned Mac by port",                {(void*)(int)CLI_FHT_Max_Learned_Mac}},
 };
 
 Y_MenuEntry VLAN_menu[] = 
@@ -273,7 +274,7 @@ int CLI_STAT_ShowDevStats(char *StrPrm)
                 printf("\n               Enet[%d] Device Statistics\n", i);
                 WPT_LocalDisplayDeviceStats(gbe[i].dev_enet);
         }
-        
+
         return WP_OK;
 }
 
@@ -293,6 +294,7 @@ int CLI_STAT_ClearDevStats(char *StrPrm)
                 printf("\n               Reseting Enet[%d] Device Statistics\n", i);
                 WPT_LocalDeviceStatsReset(gbe[i].dev_enet);
         }
+
         printf("\n               Done!\n");
         return WP_OK;
 }
@@ -312,9 +314,11 @@ int CLI_STAT_ShowBrgPrtStats(char *StrPrm)
         {
                 printf("\n               Enet[%d] BridgePorts Statistics\n", i);
                 WPT_DisplayBridgingPortStats(gbe[i].bport_enet, "ENET");
-                //WPT_IwBridgingPortStatsReset(gbe[i].bport_enet);
         }
 
+        printf("\n               Host BridgePorts Statistics\n");
+        WPT_DisplayBridgingPortStats(h_iw_port_general_host, "HOST");
+        
         return WP_OK;
 }
 
@@ -332,9 +336,11 @@ int CLI_STAT_ClearBrgPrtStats(char *StrPrm)
         for (i = 0; i < NR_GBE; i++)
         {
                 printf("\n               Reseting Enet[%d] BridgePorts Statistics\n", i);
-                //WPT_DisplayBridgingPortStats(gbe[i].bport_enet, "ENET");
                 WPT_IwBridgingPortStatsReset(gbe[i].bport_enet);
         }
+
+        printf("\n               Reseting Host BridgePorts Statistics\n");
+        WPT_IwBridgingPortStatsReset(h_iw_port_general_host);
 
         return WP_OK;
 }
@@ -357,6 +363,8 @@ int CLI_STAT_ShowFlwAggStats(char *StrPrm)
                 //WPT_GenericFlowStatisticsReset(gbe[i].agg_enet);
         }
 
+        printf("\n              Host FlowAgg Statistics\n");
+        WPT_GenericFlowStatistics(default_agg_host);
         
         return WP_OK;
 }
@@ -378,6 +386,9 @@ int CLI_STAT_ClearFlwAggStats(char *StrPrm)
                 //WPT_GenericFlowStatistics(gbe[i].agg_enet);
                 WPT_GenericFlowStatisticsReset(gbe[i].agg_enet);
         }
+
+        printf("\n              Reset Host FlowAgg Statistics\n");
+        WPT_GenericFlowStatisticsReset(default_agg_host);
 
         printf("\n               Done!\n");
         return WP_OK;
@@ -1153,6 +1164,7 @@ int CLI_FHT_IPV6_filter(char *StrPrm)
         WP_CHAR InputBuf[255];
 
         printf ("Enter IPV6 address >\n");
+        printf ("e.g. 00-01-02-03-04-05-06-07-08-09-0a-0b-0c-0d-0e-0f\n");
         get_line(InputBuf);
         printf("\n");
 
@@ -1200,5 +1212,20 @@ int CLI_FHT_Reserved_Mac_filter(char *StrPrm)
 
         WPE_CreateReservedMacPceRule(0, mac);        
         
+        return 0;
+}
+
+int CLI_FHT_Max_Learned_Mac(char *StrPrm)
+{
+        WP_U32 temp, port;
+
+        temp = CLI_GetNumber("Input port number ( 0 - 1)", 0, 1);
+
+        port = temp;
+
+        temp = CLI_GetNumber("Max mac number ( 0 - 65535)", 1, 65535);
+        
+        gbe[port].max_learned_mac = temp;
+
         return 0;
 }

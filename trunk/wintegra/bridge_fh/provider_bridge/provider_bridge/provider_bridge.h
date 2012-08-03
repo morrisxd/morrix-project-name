@@ -79,6 +79,8 @@ typedef struct APP_gbe_enet_s
         WP_handle agg_enet;
         WP_handle rx_chan_enet;
         WP_handle tx_chan_enet;
+        WP_U32    max_learned_mac;
+        WP_U32    cur_learned_mac;
 } APP_gbe_enet_t;
 
 #define NUM_OF_PECS	2
@@ -113,6 +115,7 @@ extern void App_perform_freerun(void);
 extern void * App_LearningThread(void *arg);
 extern void * App_AgingTimer(void *arg);
 extern void * App_AgingThread(void *arg);
+extern void * App_HostRxThread(void *arg);
 
 extern WP_U32 dps_ProgramImage[];
 extern WP_U16 dps_PC_Table_Init[];

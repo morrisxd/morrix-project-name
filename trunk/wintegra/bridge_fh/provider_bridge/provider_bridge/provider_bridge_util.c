@@ -133,7 +133,7 @@ void WPE_HostCreate(void)
                         {
                                 /* res0;*/ 0,
                                 /* dci_mode;*/  WP_IW_DYN_CH_INSERT_DISABLE,
-                                /* maxt;*/55,
+                                /* maxt;*/255,
                         }
                 };
         WP_ch_iw_rx ch_config_iw[1]=
@@ -156,13 +156,13 @@ void WPE_HostCreate(void)
                                 /*vlan_tag_mode*/WP_IW_VLAN_TAG_ENABLE,
                                 /*interruptqueue;*/WP_IW_IRQT1,
                                 /*error_pkt_mode*/WP_IW_ERRPKT_DISCARD,
-                                /*intmode;*/WP_IW_INT_DISABLE,
+                                /*intmode;*/ WP_IW_INT_ENABLE, //WP_IW_INT_DISABLE,
                                 /*statmode;*/WP_IW_STAT_ENABLE,
                                 /*timestamp_mode;*/WP_IW_TIME_STAMP_DISABLE,
                                 /*ov_pool_mode */ WP_IW_OV_POOL_DISABLE,
                                 /*fbp_drop_threshold;*/0,
                                 /*replace_vlan_id*/WP_IW_REPLACE_VTAG_DISABLE,
-                                /*vlan_id*/0x05,
+                                /*vlan_id*/0x0,
                                 /*vpmt_handle */0,
                                 /*mtu;*/WT_MAX_FRAME_SIZE,
                                 /*prefix_length */ 0,
@@ -180,14 +180,14 @@ void WPE_HostCreate(void)
                 {
                         {
                                 /* tag */ 0x2000,
-                                /* direct_mapping */ WP_IW_DIRECT_MAP_ENABLE,
+                                /* direct_mapping */ /*WP_IW_DIRECT_MAP_DISABLE,//*/WP_IW_DIRECT_MAP_ENABLE,
                                 /* flow_agg */ 0,
                                 /* flooding_term_mode */ WP_IW_HOST_TERM_MODE,
                                 /* learning_mode */ WP_IW_LEARNING_DISABLE,
-                                /* in_filter_mode */ WP_IW_INGRESS_FILTER_DISABLE,
+                                /* in_filter_mode */ WP_IW_INGRESS_FILTER_ENABLE, //WP_IW_INGRESS_FILTER_DISABLE,
                                 /* vlan_param */
                                 {
-                                        /* vlan_acceptance_mode */ WP_IW_ACCEPT_TAGGED_ONLY,
+                                        /* vlan_acceptance_mode */ WP_IW_ACCEPT_TAGGED_UNTAGGED, // WP_IW_ACCEPT_TAGGED_ONLY,
                                         /* vlan_tag */ 0x5,
                                         /*vlan_tunnel*/WP_IW_VLAN_TUNNEL_1Q_IN_1Q_DISABLE,
                                         /*vlan_priority_enforce_mode*/WP_IW_VLAN_PRIORITY_ENFORCE_DISABLED,
@@ -201,7 +201,9 @@ void WPE_HostCreate(void)
                                 /*bc_ht_mode;*/ 0,
                                 /*input_filters_mask*/ 0,
                                 /*output_filters_mask;*/ 0,
-                                /*statmode*/ WP_IW_PORT_STAT_ENABLE
+                                /*statmode*/ WP_IW_PORT_STAT_ENABLE,
+                                /*unk_uc_mode;*/        WP_IW_UNK_UC_SR_ENABLE,
+                                /*classification_flag*/ WP_IW_BPORT_CLASSIFICATION_ENABLED,
                         }
                 };
 
@@ -388,7 +390,7 @@ void WTE_CreateUDFSet(void)
                 = WP_PCE_UPF_REF_POINT_LAYER4_START;
         pce_user_programmable_fields_set_config.pce_user_programmable_field_config[0].user_programmable_field_collected_field_id
                 = WP_PCE_FIELD_ID_USER_PROGRAMMABLE_FIELDS;
-        pce_user_programmable_fields_set_config.pce_user_programmable_field_config[0].field_offset = 1;
+        pce_user_programmable_fields_set_config.pce_user_programmable_field_config[0].field_offset = 10;
         pce_user_programmable_fields_set_config.pce_user_programmable_field_config[0].field_size = 1;
 
         pce_upf_set = WP_PceUserProgrammableFieldsSetCreate(WP_SYSHANDLE(DEFAULT_WPID),
@@ -489,19 +491,9 @@ void WPE_CreatePceFilters(void)
         filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
         
         filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_USER_PROGRAMMABLE_FIELDS;
-        filter_class.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_HIGHER_THAN; // WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+        filter_class.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
         filter_class.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
         filter_class.filter_fields[1].mask.pce_user_programmable_fields = 0xff000000;
-
-        //filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_USER_PROGRAMMABLE_FIELDS;
-        //filter_class.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_RANGE_LOW;
-        //filter_class.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
-        //filter_class.filter_fields[1].mask.pce_user_programmable_fields = 0;
-        //
-        //filter_class.filter_fields[2].field_id = WP_PCE_FIELD_ID_USER_PROGRAMMABLE_FIELDS;
-        //filter_class.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_RANGE_HIGH;
-        //filter_class.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_USED;
-        //filter_class.filter_fields[2].mask.pce_user_programmable_fields = 0;
 
         filter_class.filter_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
         
@@ -1986,9 +1978,13 @@ void WPE_CreateL4PortPceRule(WP_U8 portid, WP_U16 l4_port)
         rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
 
         rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
-        rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;  
-                        
-        rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
+        rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
+        
+        rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INGRESS_POLICER;
+        rule_cfg.match_result[1].param.ingress_policer.policer = policer_handle;                // policer
+        
+        rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
+        //rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
       
         h_PCE_rule = WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID),
                                       WP_PCE_RULE_CLASSIFICATION,
@@ -2030,14 +2026,8 @@ void WPE_CreateL4SubtypePceRule(WP_U8 portid, WP_U32 subtype)
         rule_cfg.rule_fields[0].value.iw_port_handle = port_handle;
 
         rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_USER_PROGRAMMABLE_FIELDS;
-        rule_cfg.rule_fields[1].value.pce_user_programmable_fields = subtype;
+        rule_cfg.rule_fields[1].value.pce_user_programmable_fields = subtype << 24;
 
-        //rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_USER_PROGRAMMABLE_FIELDS;
-        //rule_cfg.filter_fields[1].mask.pce_user_programmable_fields = 0;
-        //
-        //rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_USER_PROGRAMMABLE_FIELDS;
-        //rule_cfg.filter_fields[2].mask.pce_user_programmable_fields = ;
-        
         rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
 
         rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
@@ -2094,7 +2084,7 @@ void WPE_CreateReservedMacPceRule(WP_U8 portid, WP_U8 *mac)
         rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
 
         rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
-        rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;  //default_agg_host; //agg_handle;  
+        rule_cfg.match_result[0].param.flow_agg.flow_aggregation = default_agg_host; // agg_handle;  //
                         
         rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
       
@@ -2196,26 +2186,7 @@ WP_U32 WT_TimeDelta(WP_U32 later,WP_U32 earlier)
 }
 
 
-void WT_PCERulesAdd(void)
-{
-        WP_U8 ipv6[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                          0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
-        WP_U8 mac[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x00};
-        
-        WPE_CreateIPV6MatchPceRule(0, ipv6);
-
-        WPE_CreateL4PortPceRule(0, 68);
-        WPE_CreateL4PortPceRule(0, 69);
-        
-        //WPE_CreateL4SubtypePceRule(0, 1);
-        
-        WPE_CreateReservedMacPceRule(0, mac);
-
-        return ;
-}
-
-
-void WPE_Receive_HostData_IRQ(WP_tag tag, WP_U32 event, WP_U32 info)
+int WPE_Receive_HostData(void)
 {
         WP_data_unit     data_unit;
         WP_data_segment  segment;
@@ -2234,7 +2205,7 @@ void WPE_Receive_HostData_IRQ(WP_tag tag, WP_U32 event, WP_U32 info)
         {
                 if ((WP_ERROR(status) == WP_ERR_HST_NO_DATA_TO_GET))
                 {
-                        return;
+                        return -1;
                 }
                 else App_TerminateOnError(status, "WP_HostReceive Error()", __LINE__);
         }
@@ -2250,5 +2221,108 @@ void WPE_Receive_HostData_IRQ(WP_tag tag, WP_U32 event, WP_U32 info)
         status = WP_PoolFree(segment.pool_handle,segment.data);
         App_TerminateOnError(status, "WP_PoolFree ()", __LINE__);
 
+        return 0;
+}
+
+void WPE_Receive_HostData_IRQ(WP_tag tag, WP_U32 event, WP_U32 info)
+{
+        WPL_SemIncrement(&host_rx_sem, 1);
+
         return;
+}
+
+void WPE_Create_Pce_Policer(void)
+{
+        WP_handle policer_action_handle;
+        
+        WP_policer_action policer_action =
+                {
+                        {/* green */
+                                WP_POLICER_ACTION_PRIORITY_MAPPING | WP_POLICER_ACTION_PREFIX_REMARKING,
+                                {
+                                        {WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_EXT_VLAN_PRIO,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_INT_VLAN_PRIO,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_DO_NOT_CHANGE,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_TOS
+                                        },
+                                        {
+                                                3, 4, 0, 1
+                                        }
+                                },
+                                /* priority_mapping_value */ 0x15,
+                                /* congestion_profile_entry */ 0
+                        },
+                        {/* yellow */
+                                WP_POLICER_ACTION_PRIORITY_MAPPING | WP_POLICER_ACTION_PREFIX_REMARKING,
+                                {
+                                        {WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_EXT_VLAN_PRIO,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_INT_VLAN_PRIO,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_DO_NOT_CHANGE,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_TOS
+                                        },
+                                        {
+                                                3, 4, 0, 1
+                                        }
+                                },
+                                /* priority_mapping_value */ 0x15,
+                                /* congestion_profile_entry */ 0
+                        },
+                        {/* red */
+                                WP_POLICER_ACTION_PRIORITY_MAPPING | WP_POLICER_ACTION_PREFIX_REMARKING,
+                                {
+                                        {WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_EXT_VLAN_PRIO,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_INT_VLAN_PRIO,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_DO_NOT_CHANGE,
+                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_TOS
+                                        },
+                                        {
+                                                3, 4, 0, 1
+                                        }
+                                },
+                                /* priority_mapping_value */ 0x15,
+                                /* congestion_profile_entry */ 0
+                        },
+                };
+
+        WP_policer_v2 pv2 =
+                {
+                        /* method */ WP_POLICER_METHOD_SINGLE_LEAKY_BUCKET,
+                        /* type */ WP_POLICER_V2_TYPE_INTERNAL,
+                        /* color_mode */ WP_POLICER_COLOR_AWARE, //WP_POLICER_COLOR_BLIND, 
+                        /* red_packets_action */ WP_POLICER_DROP_RED_PACKETS,
+                        /* cir */ 875000,/*(875000*8/1000)=7,000 Kbps for each stream*/
+                        /* cbs */ 2000,
+                        /* eir */ 81250000,/*(81250000*8/1000)=600 Mbps for each stream*/
+                        /* ebs */ 2000,
+                        /* policer_action */ 0,
+                        /* frame_len_correction */ WP_POLICER_LENGTH_CORRECT_DISABLE,
+                };
+
+        policer_action_handle = WP_PolicerActionCreate(WP_WINPATH(DEFAULT_WPID), &policer_action);
+        App_TerminateOnError(policer_action_handle, "WP_PolicerActionCreate", __LINE__);
+
+        pv2.policer_action = policer_action_handle;
+        pv2.frame_len_correction = WP_POLICER_LENGTH_CORRECT_4B;
+        policer_handle = WP_PolicerCreate(WP_WINPATH(DEFAULT_WPID), WP_POLICER_V2, &pv2);
+        App_TerminateOnError(policer_handle, "WP_PolicerActionCreate", __LINE__);
+}
+
+void WT_PCERulesAdd(void)
+{
+        WP_U8 ipv6[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                          0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+        WP_U8 mac[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x00};
+
+        WPE_Create_Pce_Policer();
+        
+        WPE_CreateIPV6MatchPceRule(0, ipv6);
+        
+        WPE_CreateL4PortPceRule(0, 68);
+        WPE_CreateL4PortPceRule(0, 67);
+        
+        WPE_CreateL4SubtypePceRule(0, 1);
+        
+        WPE_CreateReservedMacPceRule(0, mac);
+
+        return ;
 }
