@@ -1925,7 +1925,7 @@ void WPE_CreateIPV6MatchPceRule(WP_U8 portid, WP_U8 *ipv6)
 
         rule_cfg.rule_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
 
-        rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
+        rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
 
         rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
         rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
@@ -1975,16 +1975,16 @@ void WPE_CreateL4PortPceRule(WP_U8 portid, WP_U16 l4_port)
                 
         rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
 
-        rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
+        rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
 
         rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
         rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
-        
+
         rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INGRESS_POLICER;
         rule_cfg.match_result[1].param.ingress_policer.policer = policer_handle;                // policer
+
         
         rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
-        //rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
       
         h_PCE_rule = WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID),
                                       WP_PCE_RULE_CLASSIFICATION,
@@ -2030,10 +2030,10 @@ void WPE_CreateL4SubtypePceRule(WP_U8 portid, WP_U32 subtype)
 
         rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
 
-        rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
+        rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
 
         rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
-        rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;   //default_agg_host; //
+        rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
                         
         rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
       
@@ -2081,10 +2081,10 @@ void WPE_CreateReservedMacPceRule(WP_U8 portid, WP_U8 *mac)
                 
         rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
 
-        rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
+        rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
 
         rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
-        rule_cfg.match_result[0].param.flow_agg.flow_aggregation = default_agg_host; // agg_handle;  //
+        rule_cfg.match_result[0].param.flow_agg.flow_aggregation = default_agg_host;
                         
         rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
       
@@ -2233,62 +2233,11 @@ void WPE_Receive_HostData_IRQ(WP_tag tag, WP_U32 event, WP_U32 info)
 
 void WPE_Create_Pce_Policer(void)
 {
-        WP_handle policer_action_handle;
-        
-        WP_policer_action policer_action =
-                {
-                        {/* green */
-                                WP_POLICER_ACTION_PRIORITY_MAPPING | WP_POLICER_ACTION_PREFIX_REMARKING,
-                                {
-                                        {WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_EXT_VLAN_PRIO,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_INT_VLAN_PRIO,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_DO_NOT_CHANGE,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_TOS
-                                        },
-                                        {
-                                                3, 4, 0, 1
-                                        }
-                                },
-                                /* priority_mapping_value */ 0x15,
-                                /* congestion_profile_entry */ 0
-                        },
-                        {/* yellow */
-                                WP_POLICER_ACTION_PRIORITY_MAPPING | WP_POLICER_ACTION_PREFIX_REMARKING,
-                                {
-                                        {WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_EXT_VLAN_PRIO,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_INT_VLAN_PRIO,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_DO_NOT_CHANGE,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_TOS
-                                        },
-                                        {
-                                                3, 4, 0, 1
-                                        }
-                                },
-                                /* priority_mapping_value */ 0x15,
-                                /* congestion_profile_entry */ 0
-                        },
-                        {/* red */
-                                WP_POLICER_ACTION_PRIORITY_MAPPING | WP_POLICER_ACTION_PREFIX_REMARKING,
-                                {
-                                        {WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_EXT_VLAN_PRIO,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_INT_VLAN_PRIO,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_DO_NOT_CHANGE,
-                                         WP_POLICER_ACTION_PREFIX_REMARKING_TYPE_TOS
-                                        },
-                                        {
-                                                3, 4, 0, 1
-                                        }
-                                },
-                                /* priority_mapping_value */ 0x15,
-                                /* congestion_profile_entry */ 0
-                        },
-                };
-
         WP_policer_v2 pv2 =
                 {
                         /* method */ WP_POLICER_METHOD_SINGLE_LEAKY_BUCKET,
                         /* type */ WP_POLICER_V2_TYPE_INTERNAL,
-                        /* color_mode */ WP_POLICER_COLOR_AWARE, //WP_POLICER_COLOR_BLIND, 
+                        /* color_mode */ WP_POLICER_COLOR_BLIND, //WP_POLICER_COLOR_AWARE, //
                         /* red_packets_action */ WP_POLICER_DROP_RED_PACKETS,
                         /* cir */ 875000,/*(875000*8/1000)=7,000 Kbps for each stream*/
                         /* cbs */ 2000,
@@ -2298,11 +2247,7 @@ void WPE_Create_Pce_Policer(void)
                         /* frame_len_correction */ WP_POLICER_LENGTH_CORRECT_DISABLE,
                 };
 
-        policer_action_handle = WP_PolicerActionCreate(WP_WINPATH(DEFAULT_WPID), &policer_action);
-        App_TerminateOnError(policer_action_handle, "WP_PolicerActionCreate", __LINE__);
-
-        pv2.policer_action = policer_action_handle;
-        pv2.frame_len_correction = WP_POLICER_LENGTH_CORRECT_4B;
+        pv2.policer_action = 0;
         policer_handle = WP_PolicerCreate(WP_WINPATH(DEFAULT_WPID), WP_POLICER_V2, &pv2);
         App_TerminateOnError(policer_handle, "WP_PolicerActionCreate", __LINE__);
 }
