@@ -1,0 +1,1 @@
+make TEST=provider_bridge.c 2>&1 | tee make.log
