@@ -347,13 +347,14 @@ static void WPE_CreateChannels(void)
    ch_config_enet[0].iwmode = WP_PKTCH_IWM_DISABLE;
    rx_channel_enet_handle2 = WP_ChannelCreate(ETH_RX_TAG2, enetdev2, qniw_enet, WP_CH_RX, WP_ENET, &ch_config_enet[0]);
    terminate_on_error(rx_channel_enet_handle2, "WP_ChannelCreate() Enet RX");
-
+#if 0
    /* Create host channel of bridging port */
    iw_tx_ch_cfg->iw_system = iw_system_bridging_handle;
    iw_tx_ch_cfg->group_id = WP_IW_CH_GROUP_ID_NULL;
    iw_tx_ch_cfg->input_port = bport_iw_host;
    tx_host_bp_handle = WP_ChannelCreate(HOST_TX_CH_TAG10, host_device10, qniw_enet5, WP_CH_TX, WP_IW_HOST, &iw_tx_ch_cfg);
    terminate_on_error(tx_host_bp_handle, "Host TX Channel BP Create(iw)");
+#endif
 
    /* Create dummy host channel */ 
    iw_rx_ch = WP_ChannelCreate(IW_RX_DUMMY_CH_TAG, iw_dev, qniw_enet, WP_CH_RX, WP_IW_HOST, &iw_rx_ch_cfg);
@@ -443,6 +444,20 @@ static void WPE_CreateIwSystemAndItsComponents(void)
    terminate_on_error(iw_system_bridging_handle, "WP_IwSystemCreate() - Bridging");
 
    WPE_CreateGenericFlowAggregationsAndBports();
+
+
+#if 1
+   /* Create host channel of bridging port */
+   iw_tx_ch_cfg->iw_system = iw_system_bridging_handle;
+   iw_tx_ch_cfg->group_id = WP_IW_CH_GROUP_ID_NULL;
+   iw_tx_ch_cfg->input_port = bport_iw_host;
+   tx_host_bp_handle = WP_ChannelCreate(HOST_TX_CH_TAG10, host_device10, qniw_enet5, WP_CH_TX, WP_IW_HOST, &iw_tx_ch_cfg);
+   terminate_on_error(tx_host_bp_handle, "Host TX Channel BP Create(iw)");
+#endif
+
+
+
+
    
    /* Create Rx binding to the Rx Channel 1 */
    rx_binding_cfg->input_port = bport_iw1;
