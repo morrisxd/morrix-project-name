@@ -286,10 +286,10 @@ void App_SysInit (void)
        /*max_iw_ports; */ 100,
        /* max_iw_mc_groups; */ NUM_OF_MC_GROUPS + NUM_OF_VLAN_GROUPS,
        /* max_nat_systems; */ 0,
-                                             /*max_iw_second_aggregations; */ 0,
-                                             /* secondary flow aggregations */
+       /*max_iw_second_aggregations; */ 0,
+       /* secondary flow aggregations */
        /*iw_comp_limits; */ 0,
-       /* max_iw_mc_members; */ 
+       /* max_iw_mc_members; */
        (NUM_OF_MC_GROUPS + NUM_OF_VLAN_GROUPS) * IW_SYS_MAX_ENET_PORT,
        /* max_iw_programmable_filters; */ MAX_IW_PROGRAMMABLE_FILTERS,
        /* max_iw_policers; */ MAX_IW_POLICERS,
@@ -523,8 +523,8 @@ void App_BufferPoolsCreate (void)
       {
        /* n_buffers */ 28192,
        /* offset */ 64,
-                                /* size */ 1984,
-                                /* RBS */
+       /* size */ 1984,
+       /* RBS */
        /* pad */ 0,
        /* bus */ BUFFER_BUS,
        /* bank */ BUFFER_BANK
@@ -567,8 +567,8 @@ void App_BufferPoolsCreate (void)
       {
        /* n_buffers */ 192,
        /* offset */ 64,
-                                /* size */ 1984,
-                                /* RBS */
+       /* size */ 1984,
+       /* RBS */
        /* pad */ 0,
        /* bus */ BUFFER_BUS,
        /* bank */ BUFFER_BANK
