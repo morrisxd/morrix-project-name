@@ -1,0 +1,11 @@
+# Copyright 2001-2009, Wintegra.  All Rights Reserved.
+
+# Define EXAMPLE_SRC = list of source files
+
+########################################
+#      user modify
+########################################
+
+WDDI_DPS_IMAGE = wpi_dps_image_backhaul.o
+WDDI_PPS_IMAGE=wpi_pps_image_iwgp_parser.o
+EXAMPLE_SRC = fh_demo.c
