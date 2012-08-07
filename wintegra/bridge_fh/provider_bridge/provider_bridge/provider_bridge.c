@@ -1095,3 +1095,7 @@ void * App_HostRxThread(void *arg)
 
 // for init ram
 #include "wt_partition_ecc_util.c"
+
+
+
+
