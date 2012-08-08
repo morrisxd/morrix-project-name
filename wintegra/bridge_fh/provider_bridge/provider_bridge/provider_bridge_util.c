@@ -391,6 +391,87 @@ void WPE_TxAggCreate (void)
                                      WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
       App_TerminateOnError (gbe[i].agg_enet,
                             "WP_IwFlowAggregationCreate()", __LINE__);
+
+      //////////////////////////////////////////////////////////
+
+      dl_tx_agg_gbe->txfunc = gbe[i].tx_chan_enet;
+      dl_tx_agg_gbe->iw_port = gbe[i].bport_enet;
+      dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+      dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info[0];
+      gbe[i].agg_ipv6_match =
+         WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                     WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+      App_TerminateOnError (gbe[i].agg_ipv6_match,
+                            "WP_IwFlowAggregationCreate()", __LINE__);
+
+      //////////////////////////////////////////////////////////
+
+      dl_tx_agg_gbe->txfunc = gbe[i].tx_chan_enet;
+      dl_tx_agg_gbe->iw_port = gbe[i].bport_enet;
+      dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+      dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info[0];
+      gbe[i].agg_l4_port_match_1 =
+         WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                     WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+      App_TerminateOnError (gbe[i].agg_l4_port_match_1,
+                            "WP_IwFlowAggregationCreate()", __LINE__);
+
+      //////////////////////////////////////////////////////////
+
+      dl_tx_agg_gbe->txfunc = gbe[i].tx_chan_enet;
+      dl_tx_agg_gbe->iw_port = gbe[i].bport_enet;
+      dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+      dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info[0];
+      gbe[i].agg_l4_port_match_2 =
+         WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                     WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+      App_TerminateOnError (gbe[i].agg_l4_port_match_2,
+                            "WP_IwFlowAggregationCreate()", __LINE__);
+
+      //////////////////////////////////////////////////////////
+
+      dl_tx_agg_gbe->txfunc = gbe[i].tx_chan_enet;
+      dl_tx_agg_gbe->iw_port = gbe[i].bport_enet;
+      dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+      dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info[0];
+      gbe[i].agg_l4_subtype =
+         WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                     WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+      App_TerminateOnError (gbe[i].agg_l4_subtype,
+                            "WP_IwFlowAggregationCreate()", __LINE__);
+      //////////////////////////////////////////////////////////
+
+      dl_tx_agg_gbe->txfunc = gbe[i].tx_chan_enet;
+      dl_tx_agg_gbe->iw_port = gbe[i].bport_enet;
+      dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+      dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info[0];
+      gbe[i].agg_host =
+         WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                     WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+      App_TerminateOnError (gbe[i].agg_host,
+                            "WP_IwFlowAggregationCreate()", __LINE__);
+      //////////////////////////////////////////////////////////
+
+      dl_tx_agg_gbe->txfunc = gbe[i].tx_chan_enet;
+      dl_tx_agg_gbe->iw_port = gbe[i].bport_enet;
+      dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+      dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info[0];
+      gbe[i].agg_reserved1 =
+         WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                     WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+      App_TerminateOnError (gbe[i].agg_reserved1,
+                            "WP_IwFlowAggregationCreate()", __LINE__);
+      //////////////////////////////////////////////////////////
+
+      dl_tx_agg_gbe->txfunc = gbe[i].tx_chan_enet;
+      dl_tx_agg_gbe->iw_port = gbe[i].bport_enet;
+      dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+      dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info[0];
+      gbe[i].agg_reserved2 =
+         WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                     WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+      App_TerminateOnError (gbe[i].agg_reserved2,
+                            "WP_IwFlowAggregationCreate()", __LINE__);
    }
 }
 
