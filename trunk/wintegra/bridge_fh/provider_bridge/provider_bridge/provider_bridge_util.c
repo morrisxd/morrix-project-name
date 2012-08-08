@@ -523,7 +523,9 @@ void WPE_CreatePceFilters (void)
    WP_pce_filter_learning lrn_filter_cfg = { 0 };
    WP_pce_filter_classification filter_class = { 0 };
 
-   /* create unknown unicast classification filter */
+   /* 
+    * create unknown unicast classification filter 
+    */
    unicast_filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    unicast_filter_class.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
@@ -545,7 +547,9 @@ void WPE_CreatePceFilters (void)
                          [FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION],
                          "WP_PceFilterCreate", __LINE__);
 
-   /* ipv6 match */
+   /* 
+    * ipv6 match 
+    */
    memset (&filter_class, 0, sizeof (filter_class));
 
    filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
@@ -576,7 +580,9 @@ void WPE_CreatePceFilters (void)
    App_TerminateOnError (PCE_filter[FILTER_SET_IPV6_IP_CLASSIFICATION],
                          "WP_PceFilterCreate", __LINE__);
 
-   /* L4 port */
+   /* 
+    * L4 port
+    */
    memset (&filter_class, 0, sizeof (filter_class));
 
    filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
@@ -602,7 +608,9 @@ void WPE_CreatePceFilters (void)
    App_TerminateOnError (PCE_filter[FILTER_SET_L4_PORT_CLASSIFICATION],
                          "WP_PceFilterCreate", __LINE__);
 
-   /* L4 port  & subtype */
+   /* 
+    * L4 port & subtype 
+    */
    memset (&filter_class, 0, sizeof (filter_class));
 
 #define RX_CHANNEL_FILTER_TAG          0x2200
@@ -635,7 +643,9 @@ void WPE_CreatePceFilters (void)
    App_TerminateOnError (PCE_filter[FILTER_SET_L4_SUBTYPE_CLASSIFICATION],
                          "WP_PceFilterCreate", __LINE__);
 
-   /* Reserved MAC */
+   /* 
+    * Reserved MAC
+    */
    memset (&filter_class, 0, sizeof (filter_class));
 
    filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
@@ -662,7 +672,9 @@ void WPE_CreatePceFilters (void)
                          [FILTER_SET_RESERVED_MAC_CLASSIFICATION],
                          "WP_PceFilterCreate", __LINE__);
 
-   /* create classification for learning flow agg filter */
+   /* 
+    * create classification for learning flow agg filter
+    */
    memset (&filter_class, 0, sizeof (filter_class));
 
    filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
@@ -689,7 +701,9 @@ void WPE_CreatePceFilters (void)
    App_TerminateOnError (PCE_filter[FILTER_SET_CLASSIFICATION],
                          "WP_PceFilterCreate", __LINE__);
 
-   /* forward filter */
+   /* 
+    * forward filter
+    */
    fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    fwd_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
@@ -719,7 +733,9 @@ void WPE_CreatePceFilters (void)
    App_TerminateOnError (PCE_filter[FILTER_SET_FORWARDING],
                          "WP_PceFilterCreate", __LINE__);
 
-   /* learning fitler */
+   /* 
+    * learning fitler
+    */
    lrn_filter_cfg.forwarding_filter = PCE_filter[FILTER_SET_FORWARDING];
    lrn_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    lrn_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
@@ -749,6 +765,49 @@ void WPE_CreatePceFilters (void)
                           WP_PCE_FILTER_LEARNING, &lrn_filter_cfg);
    App_TerminateOnError (PCE_filter[FILTER_SET_LEARNING],
                          "WP_PceFilterCreate", __LINE__);
+
+
+   /* 
+    * ICMPv6 fitler  --- yellow
+    */
+   fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
+   fwd_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
+
+   fwd_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
+
+   fwd_filter_cfg.filter_fields[0].field_mode =
+      WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+   fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+
+   fwd_filter_cfg.filter_fields[1].field_mode =
+      WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+   fwd_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
+   fwd_filter_cfg.filter_fields[1].mask.vlan_tag =
+      WP_PCE_FIELD_MASK_VLAN_ID;
+
+   fwd_filter_cfg.filter_fields[2].field_mode =
+      WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+   fwd_filter_cfg.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+
+
+   fwd_filter_cfg.filter_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
+   fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_VLAN_TAG;
+   fwd_filter_cfg.filter_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+
+   /*
+    * All the above has no use
+    */
+   fwd_filter_cfg.filter_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_NEXT_HEADER;
+   fwd_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+   fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+   fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+
+   PCE_filter[FILTER_SET_ICMPV6] =
+      WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
+                          WP_PCE_FILTER_FORWARDING, &fwd_filter_cfg);
+   App_TerminateOnError (PCE_filter[FILTER_SET_ICMPV6],
+                         "WP_PceFilterCreate", __LINE__);
+
 }
 
 void WPE_CreatePceFilterSets (void)
@@ -2172,6 +2231,76 @@ void WPE_CreateIPV6MatchPceRule (WP_U8 portid, WP_U8 * ipv6)
    return;
 }
 
+
+void WPE_CreateICMPv6PceRule (WP_U8 portid, WP_U16 l4_port)
+{
+   WP_pce_rule_classification rule_cfg = { 0 };
+   WP_handle port_handle = 0, agg_handle = 0, h_PCE_rule = 0;
+
+   switch (portid)
+   {
+   case 0:
+   case 1:
+      port_handle = gbe[portid].bport_enet;
+#if USE_DIFFERENT_FLOW_AGG   
+      agg_handle = gbe[1 - portid].agg_l4_port_match_1;
+#else
+      agg_handle = gbe[1 - portid].agg_enet;
+#endif
+      break;
+   default:
+      printf ("NO such port : %d\n", portid);
+      return;
+   }
+
+   rule_cfg.enabled = WP_ENABLE;
+
+   rule_cfg.filter_handle = PCE_filter[FILTER_SET_L4_PORT_CLASSIFICATION];
+
+   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_INPUT_IW_PORT;
+   rule_cfg.rule_fields[0].value.iw_port_handle = port_handle;
+
+   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_L4_DST_PORT;
+   rule_cfg.rule_fields[1].value.l4_port = l4_port;
+
+   rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+
+   rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
+
+   rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
+   rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
+
+   rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INGRESS_POLICER;
+   rule_cfg.match_result[1].param.ingress_policer.policer = policer_handle;   // policer
+
+   rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
+
+
+   /*
+    * all the above has no use
+    */
+   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_NEXT_HEADER;
+   rule_cfg.rule_fields[0].value.ipv6_next_header = 0x01;
+   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+
+
+   h_PCE_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
+                                  WP_PCE_RULE_CLASSIFICATION, &rule_cfg);
+   if (WP_ERROR (h_PCE_rule) == WP_ERR_PCE_RULE_ALREADY_EXISTS)
+   {
+      printf ("PCE rule already exist!\n");
+   }
+   else
+   {
+      App_TerminateOnError (h_PCE_rule, "WP_PceRuleCreate", __LINE__);
+   }
+
+   return;
+}
+
+
+
+
 void WPE_CreateL4PortPceRule (WP_U8 portid, WP_U16 l4_port)
 {
    WP_pce_rule_classification rule_cfg = { 0 };
@@ -2518,5 +2647,11 @@ void WT_PCERulesAdd (void)
 
    WPE_CreateReservedMacPceRule (0, mac);
 
+   WPE_CreateICMPv6PceRule  (0, 0);
+
    return;
 }
+
+
+
+
