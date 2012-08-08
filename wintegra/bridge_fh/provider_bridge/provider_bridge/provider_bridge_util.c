@@ -7,6 +7,9 @@
  ****************************************************************************/
 
 #include "provider_bridge_util.h"
+#define USE_DIFFERENT_FLOW_AGG   (1)
+
+
 
 void WPE_Pecs_Init (WP_gpe_pecs gpe_pecs_config[], WP_handle pecs_handle[])
 {
@@ -2122,7 +2125,11 @@ void WPE_CreateIPV6MatchPceRule (WP_U8 portid, WP_U8 * ipv6)
    case 0:
    case 1:
       port_handle = gbe[portid].bport_enet;
+#ifdef USE_DIFFERENT_FLOW_AGG   
       agg_handle = gbe[1 - portid].agg_enet;
+#else
+      agg_handle = gbe[1 - portid].agg_ipv6_match;
+#endif
       break;
    default:
       printf ("NO such port : %d\n", portid);
