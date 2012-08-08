@@ -2125,10 +2125,10 @@ void WPE_CreateIPV6MatchPceRule (WP_U8 portid, WP_U8 * ipv6)
    case 0:
    case 1:
       port_handle = gbe[portid].bport_enet;
-#ifdef USE_DIFFERENT_FLOW_AGG   
-      agg_handle = gbe[1 - portid].agg_enet;
-#else
+#if USE_DIFFERENT_FLOW_AGG   
       agg_handle = gbe[1 - portid].agg_ipv6_match;
+#else
+      agg_handle = gbe[1 - portid].agg_enet;
 #endif
       break;
    default:
@@ -2182,7 +2182,11 @@ void WPE_CreateL4PortPceRule (WP_U8 portid, WP_U16 l4_port)
    case 0:
    case 1:
       port_handle = gbe[portid].bport_enet;
+#if USE_DIFFERENT_FLOW_AGG   
+      agg_handle = gbe[1 - portid].agg_l4_port_match_1;
+#else
       agg_handle = gbe[1 - portid].agg_enet;
+#endif
       break;
    default:
       printf ("NO such port : %d\n", portid);
@@ -2235,7 +2239,11 @@ void WPE_CreateL4SubtypePceRule (WP_U8 portid, WP_U32 subtype)
    case 0:
    case 1:
       port_handle = gbe[portid].bport_enet;
+#if USE_DIFFERENT_FLOW_AGG   
+      agg_handle = gbe[1 - portid].agg_l4_subtype;
+#else
       agg_handle = gbe[1 - portid].agg_enet;
+#endif
       break;
    default:
       printf ("NO such port : %d\n", portid);
@@ -2288,7 +2296,11 @@ void WPE_CreateReservedMacPceRule (WP_U8 portid, WP_U8 * mac)
    case 0:
    case 1:
       port_handle = gbe[portid].bport_enet;
+#if USE_DIFFERENT_FLOW_AGG   
+      agg_handle = gbe[1 - portid].agg_host;
+#else
       agg_handle = gbe[1 - portid].agg_enet;
+#endif
       break;
    default:
       printf ("NO such port : %d\n", portid);
