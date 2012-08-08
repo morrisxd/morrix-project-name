@@ -74,6 +74,15 @@ typedef struct APP_gbe_enet_s
    WP_handle dev_enet;
    WP_handle bport_enet;
    WP_handle agg_enet;
+///////////////////////////////////////////
+   WP_handle agg_ipv6_match;
+   WP_handle agg_l4_port_match_1;
+   WP_handle agg_l4_port_match_2;
+   WP_handle agg_l4_subtype;
+   WP_handle agg_host;
+   WP_handle agg_reserved1;
+   WP_handle agg_reserved2;
+///////////////////////////////////////////
    WP_handle rx_chan_enet;
    WP_handle tx_chan_enet;
    WP_U32 max_learned_mac;

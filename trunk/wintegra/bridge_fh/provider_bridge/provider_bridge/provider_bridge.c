@@ -12,6 +12,23 @@ APP_gbe_enet_t gbe[NR_GBE] = { {WP_PORT_ENET8,}
 , {WP_PORT_ENET7,}
 };
 
+#if 0
+/*
+ * for different flowAggs
+ */
+WP_handle agg_ipv6_match;
+WP_handle agg_l4_port_match_1;
+WP_handle agg_l4_port_match_2;
+WP_handle agg_l4_subtype;
+WP_handle agg_host;
+WP_handle agg_reserved1;
+WP_handle agg_reserved2;
+#endif
+
+
+
+
+
 WP_handle devhost, default_agg_host, h_iw_port_general_host,
    rx_host_handle;
 WP_handle qniw;
