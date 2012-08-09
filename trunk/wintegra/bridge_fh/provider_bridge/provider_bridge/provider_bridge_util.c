@@ -334,6 +334,40 @@ void WPE_TxAggCreate (void)
 
    WP_iw_agg_ipv6_routing dl_tx_agg_gbe_ipv6[1] ;
 
+WP_iw_agg_ipv6_routing rout_agg_ipv6[1] =
+      {
+         {
+            /*tag */    1,
+            /* txfunc */      0,
+            /* flow_agg_type */ WP_IW_FLOW_AGG_PRIMARY,
+            /* iw_port */0,
+            /* fbp_drop_threshold */ 0,
+            /* mtu */                WT_MAX_FRAME_SIZE,
+            /* multi_cong_prof */ WP_DISABLE,
+            /* cong_mode;*/                  WP_IW_CONGESTION_DISABLE,
+            /* *cong_threshold_param;*/      NULL,
+            /* dscpmt_handle */ 0,
+            /* l2hie_mode */         WP_IW_L2H_INSERT_DISABLE,
+            /* prefix_length */      14,
+            /* prefix_header[68] */ {0x1,0x2,0x3,0x4,0x5,0x6,0x7,
+                                     0x8,0x9,0x10,0x11,0x12,0x13,0x14,
+                                     0x15,0x16,0x17,0x18,0x19,0x20,0x21,
+                                     0x22,0x23,0x24,0,0,0,0},
+            /* dynamic_length_update */ WP_DISABLE,
+            /* l2_length_offset */   0,
+            /* l3_offset */          0,
+            /* traffic_class_remarking_mode */ WP_DISABLE,
+            /* traffic_class_remarking_value */ 0,
+            /* ipv6_to_ipv4_tunneling */ WP_DISABLE,
+            /* header_extract_size */ 0,
+            /* l3_len_update_type */ 0,
+            /* next_sys_preserve_inport */WP_DISABLE,
+            /* next_sys_preserve_inport_params */ WP_DISABLE,
+            /* l2_prefix_vlan_mode */ WP_IW_L2_PREFIX_NO_VLAN,
+            /* *extended_params */ NULL,
+         }
+      };
+
    WP_iw_agg_generic dl_tx_agg_gbe[1] = {
       {
        /*tag */ 2,
