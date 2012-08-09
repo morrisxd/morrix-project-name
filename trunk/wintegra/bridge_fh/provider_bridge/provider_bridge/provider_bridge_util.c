@@ -529,15 +529,11 @@ void WPE_CreatePceFilters (void)
    unicast_filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
    unicast_filter_class.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
-   unicast_filter_class.no_match_result[0].result_type =
-      WP_PCE_RESULT_LAST;
+   unicast_filter_class.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
-   unicast_filter_class.filter_fields[0].field_mode =
-      WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
-   unicast_filter_class.filter_fields[0].mask_mode =
-      WP_PCE_FIELD_MASK_NOT_USED;
-   unicast_filter_class.filter_fields[0].field_id =
-      WP_PCE_FIELD_ID_VLAN_TAG;
+   unicast_filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+   unicast_filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+   unicast_filter_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_VLAN_TAG;
    unicast_filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
    PCE_filter[FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION] =
       WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
@@ -766,45 +762,29 @@ void WPE_CreatePceFilters (void)
    App_TerminateOnError (PCE_filter[FILTER_SET_LEARNING],
                          "WP_PceFilterCreate", __LINE__);
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 #if MORRIS_ENABLE_YELLOW
    /* 
     * ICMPv6 fitler  --- yellow
     */
-   fwd_filter_cfg.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
-   fwd_filter_cfg.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
-   fwd_filter_cfg.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
+   unicast_filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
+   unicast_filter_class.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
 
-   fwd_filter_cfg.filter_fields[0].field_mode =
-      WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
-   fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+   // unicast_filter_class.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
-   fwd_filter_cfg.filter_fields[1].field_mode =
-      WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
-   fwd_filter_cfg.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
-   fwd_filter_cfg.filter_fields[1].mask.vlan_tag =
-      WP_PCE_FIELD_MASK_VLAN_ID;
+   unicast_filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+   unicast_filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+   unicast_filter_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_NEXT_HEADER;
+   unicast_filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 
-   fwd_filter_cfg.filter_fields[2].field_mode =
-      WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
-   fwd_filter_cfg.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
-
-
-   fwd_filter_cfg.filter_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
-   fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_VLAN_TAG;
-   fwd_filter_cfg.filter_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
-
-   /*
-    * All the above has no use
-    */
-   fwd_filter_cfg.filter_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_NEXT_HEADER;
-   fwd_filter_cfg.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
-   fwd_filter_cfg.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
-   fwd_filter_cfg.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 
    PCE_filter[FILTER_SET_ICMPV6] =
       WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
-                          WP_PCE_FILTER_FORWARDING, &fwd_filter_cfg);
+                          WP_PCE_FILTER_CLASSIFICATION/*WP_PCE_FILTER_FORWARDING*/, &unicast_filter_class);
    App_TerminateOnError (PCE_filter[FILTER_SET_ICMPV6],
                          "WP_PceFilterCreate", __LINE__);
 
@@ -846,7 +826,7 @@ void WPE_CreatePceFilters (void)
 
    PCE_filter[FILTER_SET_IGMPV6] =
       WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
-                          WP_PCE_FILTER_FORWARDING, &fwd_filter_cfg);
+                         WP_PCE_FILTER_CLASSIFICATION/*WP_PCE_FILTER_FORWARDING*/, &fwd_filter_cfg);
    App_TerminateOnError (PCE_filter[FILTER_SET_IGMPV6],
                          "WP_PceFilterCreate", __LINE__);
 #endif
@@ -2419,9 +2399,9 @@ void WPE_CreateICMPv6PceRule (WP_U8 portid, WP_U16 l4_port)
 		WP_IPV6_NEXT_HEADER_IGRE (47)
 		WP_IPV6_NEXT_HEADER_ICMP (1)
     */
-   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_IPV6_NEXT_HEADER;
-   rule_cfg.rule_fields[1].value.ipv6_next_header = 0x01;
-   rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_NEXT_HEADER;
+   rule_cfg.rule_fields[0].value.ipv6_next_header = 0x01;
+   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 
 
    h_PCE_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
