@@ -332,6 +332,8 @@ void WPE_TxAggCreate (void)
 {
    WP_U32 i;
 
+   WP_iw_agg_ipv6_routing dl_tx_agg_gbe_ipv6[1] ;
+
    WP_iw_agg_generic dl_tx_agg_gbe[1] = {
       {
        /*tag */ 2,
@@ -351,6 +353,25 @@ void WPE_TxAggCreate (void)
        /*pecs_global_info_handle; */ 0,
        },
    };
+   dl_tx_agg_gbe_ipv6[0].tag = 2;
+   dl_tx_agg_gbe_ipv6[0].txfunc = 0;
+   dl_tx_agg_gbe_ipv6[0].iw_port = 0;
+   dl_tx_agg_gbe_ipv6[0].rfcs = WP_IW_RFCS_ENABLE;
+   dl_tx_agg_gbe_ipv6[0].interruptqueue = WP_IW_IRQ1;
+   dl_tx_agg_gbe_ipv6[0].error_pkt_mode = WP_IW_ERRPKT_DISCARD;
+   dl_tx_agg_gbe_ipv6[0].intmode = WP_IW_INT_DISABLE;
+   dl_tx_agg_gbe_ipv6[0].statmode = WP_IW_STAT_ENABLE;
+   dl_tx_agg_gbe_ipv6[0].timestamp_mode = WP_IW_TIME_STAMP_DISABLE;
+   dl_tx_agg_gbe_ipv6[0].mtu = 9216;
+   dl_tx_agg_gbe_ipv6[0].flow_agg_type = WP_IW_FLOW_AGG_PRIMARY;
+   dl_tx_agg_gbe_ipv6[0].policer_handle = 0;
+   dl_tx_agg_gbe_ipv6[0].pecs_handle = 0;
+   dl_tx_agg_gbe_ipv6[0].pecs_flow_info= 0;
+   dl_tx_agg_gbe_ipv6[0].pecs_global_info_handle = 0;
+
+
+
+
    WPE_gpe_brouter_pecs_flow_info brouter_pecs_flow_info[] = {
       /*  */
       {
@@ -2776,6 +2797,34 @@ void WT_PCERulesAdd (void)
    return;
 }
 
+#if 0
 
+static void WPE_TrafficRemarkingEnableIPv6 (char *StrPrm,  WP_iw_agg_generic/*WP_iw_agg_ipv6_routing*/ agg_enet)
+{
+   WP_U32 TrafficClassRemVal;
+   WP_handle status;
+   char InputBuf[256];
+
+   tx_agg_ipv6[0].traffic_class_remarking_mode = WP_ENABLE;
+#if AUTOMATION_MODE
+   WP_U32 cmd = 0;
+   sscanf(StrPrm, "%d %s", &cmd, &InputBuf );
+#else
+   printf("Insert traffic class remarking value.\n");
+   gets(InputBuf);
+   printf("\n");
+#endif    
+
+   TrafficClassRemVal = atoi(InputBuf);
+   tx_agg_ipv6[0].traffic_class_remarking_value = TrafficClassRemVal;
+
+   status = WP_IwFlowAggregationModify(flow_agg_atm_ipv6[0],WP_IW_FLOW_AGG_R_IPV6_MOD_TC, &tx_agg_ipv6[0]);
+   terminate_on_error(status, "WP_IwFlowAggregationModify()",__LINE__);
+
+   status= WP_IwFlowAggregationModify(flow_agg_gbe_ipv6[0], WP_IW_FLOW_AGG_R_IPV6_MOD_TC, &tx_agg_ipv6[0]);
+   terminate_on_error(status, "WP_IwFlowAggregationModify()",__LINE__);
+}
+
+#endif
 
 
