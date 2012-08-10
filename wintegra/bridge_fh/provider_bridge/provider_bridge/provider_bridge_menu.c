@@ -1274,6 +1274,9 @@ int CLI_FHT_Max_Learned_Mac (char *StrPrm)
 }
 
 
+extern void WPE_TrafficRemarkingEnableIPv6 (char *StrPrm,  
+                                       WP_handle agg_enet_ipv6,
+                                       char * remarkVal);
 
 int CLI_FHT_Set_TC_Remarking (char *StrPrm)
 {
@@ -1286,6 +1289,8 @@ int CLI_FHT_Set_TC_Remarking (char *StrPrm)
    temp = CLI_GetNumber ("Max mac number ( 0 - 65535)", 1, 65535);
 
    gbe[port].max_learned_mac = temp;
+
+   WPE_TrafficRemarkingEnableIPv6  ("hello", gbe[1 - port].agg_enet_ipv6, "newValue");
 
    return 0;
 }
