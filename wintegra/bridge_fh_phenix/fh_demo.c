@@ -564,9 +564,10 @@ static void WPE_CreatePceFilters(void)
 //    WP_ipv4_addr ipv4_mask4 = 0x3ffff800;
 //    WP_ipv4_addr ipv4_mask5 = 0x003c0000;
   // WP_ipv4_addr ipv4_mask6 = 0x00FFFF00;
-  WP_U8 mask_mac_addr[6]={0xFE,0xFF,0xFF,0xFF,0xFF,0xFF};
+   WP_U8 mask_mac_addr[6]={0xFE,0xFF,0xFF,0xFF,0xFF,0xFF};
    memset(dfilter, 0, sizeof(dfilter));
       
+   memset(&filter_clas,0,sizeof(filter_clas));
    /******************************************************************/
    /**************** Start of filters configuration ******************/
    /******************************************************************/
