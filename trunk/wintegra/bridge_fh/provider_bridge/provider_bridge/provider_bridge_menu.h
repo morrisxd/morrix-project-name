@@ -31,7 +31,7 @@
 #define AGING_MENU_ITEM_NUM     4
 #define LEARNING_MENU_ITEM_NUM  4
 #define MENU_ITEM_ONLY_ONE      1
-#define STAT_MENU_ITEM_NUM      6
+#define STAT_MENU_ITEM_NUM      /*6*/7
 #define PERF_MENU_ITEM_NUM      2
 
 
@@ -91,6 +91,7 @@ int CLI_STAT_ShowBrgPrtStats(char *StrPrm);
 int CLI_STAT_ClearBrgPrtStats(char *StrPrm);
 int CLI_STAT_ShowFlwAggStats(char *StrPrm);
 int CLI_STAT_ClearFlwAggStats(char *StrPrm);
+int CLI_STAT_ShowFlwAggReservedMacStats (char *StrPrm);
 
 extern Y_MenuEntry Init_configuration_menu[];
 

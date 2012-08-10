@@ -138,10 +138,12 @@ Y_MenuEntry STAT_menu[] = {
     {(void *) (int) CLI_STAT_ShowBrgPrtStats}},
    {K_Leaf, 4, TRUE, " <> Clear Bport  Stats",
     {(void *) (int) CLI_STAT_ClearBrgPrtStats}},
-   {K_Leaf, 5, TRUE, " <> Show FlwAgg Stats",
+   {K_Leaf, 5, TRUE, " <> Show FlwAgg Stats==========",
     {(void *) (int) CLI_STAT_ShowFlwAggStats}},
    {K_Leaf, 6, TRUE, " <> Clear FlwAgg Stats",
     {(void *) (int) CLI_STAT_ClearFlwAggStats}},
+   {K_Leaf, 7, TRUE, " <> Show FlwAgg Reserved1 Mac",
+    {(void *) (int) CLI_STAT_ShowFlwAggReservedMacStats}},
 };
 
 Y_MenuEntry Performance_menu[] = {
@@ -395,11 +397,46 @@ int CLI_STAT_ShowFlwAggStats (char *StrPrm)
       printf ("\n               Enet[%d] FlowAgg Statistics\n", i);
       WPT_GenericFlowStatistics (gbe[i].agg_enet);
       //WPT_GenericFlowStatisticsReset(gbe[i].agg_enet);
+      printf ("\n+++++++++++++++++++++++++++++++++++++++++\n");
+      printf ("+++++++++++++++++++++++++++++++++++++++++\n");
+      printf ("+++++++++++++++++++++++++++++++++++++++++\n");
+      printf ("\n               Enet[%d] FlowAgg Reserved Mac Statistics\n", i);
+      WPT_GenericFlowStatistics (gbe[i].agg_reserved1);
    }
 
    printf ("\n              Host FlowAgg Statistics\n");
    WPT_GenericFlowStatistics (default_agg_host);
 
+   return WP_OK;
+}
+
+
+
+
+
+/*****************************************************************************
+ * Function name: CLI_STAT_ClearFlwAggStats
+ * Description  : 
+ * Input  params: None
+ * Output params: None
+ * Return val   : None
+ *****************************************************************************/
+int CLI_STAT_ShowFlwAggReservedMacStats (char *StrPrm)
+{
+   WP_U32 i;
+
+   for (i = 0; i < NR_GBE; i++)
+   {
+      printf ("\n               Reseting Enet[%d] FlowAgg Statistics\n",
+              i);
+      //WPT_GenericFlowStatistics(gbe[i].agg_enet);
+      WPT_GenericFlowStatisticsReset (gbe[i].agg_enet);
+   }
+
+   printf ("\n              Reset Host FlowAgg Statistics\n");
+   WPT_GenericFlowStatisticsReset (default_agg_host);
+
+   printf ("\n               Done!\n");
    return WP_OK;
 }
 
