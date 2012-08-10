@@ -53,6 +53,10 @@ Y_MenuEntry V_MainMenu[] = {
    {K_Leaf, 9, TRUE, " <> Quit", {(void *) (int) CLI_MAIN_Quit}},
 };
 
+
+/*-----------------------------------------------------------*\
+   FH demo show MENU
+\*-----------------------------------------------------------*/
 Y_MenuEntry FH_Test_menu[] = {
    {K_Menu, FHT_MENU_ITEM_NUM, TRUE, "FiberHome Test Menu",
     {(Y_MenuEntry *) V_MainMenu}},
@@ -66,6 +70,8 @@ Y_MenuEntry FH_Test_menu[] = {
     {(void *) (int) CLI_FHT_Reserved_Mac_filter}},
    {K_Leaf, 5, TRUE, " -> Max Learned Mac by port",
     {(void *) (int) CLI_FHT_Max_Learned_Mac}},
+   {K_Leaf, 6, TRUE, " -> TC remarking",
+    {(void *) (int) CLI_FHT_Set_TC_Remarking}},
 };
 
 Y_MenuEntry VLAN_menu[] = {
@@ -115,9 +121,9 @@ Y_MenuEntry LEARNING_menu[] = {
     {(void *) (int) CLI_Enable_learning}},
    {K_Leaf, 2, TRUE, " -> Disable learning",
     {(void *) (int) CLI_Disable_learning}},
-   {K_Leaf, 3, TRUE, " -> Enable port learning",
+   {K_Leaf, 3, FALSE, " -> Enable port learning",
     {(void *) (int) CLI_Enable_port_lrn}},
-   {K_Leaf, 4, TRUE, " -> Disable port learning",
+   {K_Leaf, 4, FALSE, " -> Disable port learning",
     {(void *) (int) CLI_Disable_port_lrn}},
 };
 
@@ -1266,3 +1272,21 @@ int CLI_FHT_Max_Learned_Mac (char *StrPrm)
 
    return 0;
 }
+
+
+
+int CLI_FHT_Set_TC_Remarking (char *StrPrm)
+{
+   WP_U32 temp, port;
+
+   temp = CLI_GetNumber ("Input port number ( 0 - 1)", 0, 1);
+
+   port = temp;
+
+   temp = CLI_GetNumber ("Max mac number ( 0 - 65535)", 1, 65535);
+
+   gbe[port].max_learned_mac = temp;
+
+   return 0;
+}
+
