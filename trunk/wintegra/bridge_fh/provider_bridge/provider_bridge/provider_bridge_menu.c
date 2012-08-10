@@ -1283,7 +1283,7 @@ int CLI_FHT_Set_TC_Remarking (char *StrPrm)
    WP_U32 temp = 0;
    WP_U32 port = 0;
 
-   temp = CLI_GetNumber ("Input port number ( 0 - 1)[0=ENET8(send), 1=ENET7]", 0, 1);
+   temp = CLI_GetNumber ("Input port number ( 0 - 1)[0=ENET8(send), 1=ENET7(TC set here)]", 0, 1);
    port = temp;
    temp = CLI_GetNumber ("Max mac number ( 0 - 255)", 1, 255);
    gbe[port].tc_remark = temp;
