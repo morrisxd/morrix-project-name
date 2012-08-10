@@ -25,7 +25,7 @@
 
 #define CLI_INPUT_BUFF_LEN      128
 #define MAIN_MENU_ITEM_NUM      10
-#define FHT_MENU_ITEM_NUM       /*5*/6
+#define FHT_MENU_ITEM_NUM       /*5*/7
 #define VLAN_MENU_ITEM_NUM      4
 #define MC_MENU_ITEM_NUM        5
 #define AGING_MENU_ITEM_NUM     4
@@ -139,5 +139,6 @@ int CLI_FHT_L4_subtype_filter(char *StrPrm);
 int CLI_FHT_Reserved_Mac_filter(char *StrPrM);
 int CLI_FHT_Max_Learned_Mac(char *StrPrm);
 int CLI_FHT_Set_TC_Remarking (char *StrPrm);
+int CLI_FHT_Set_IPv6_Broadcast_Group (char *StrPrm);
 
 #endif
