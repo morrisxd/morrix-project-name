@@ -72,6 +72,8 @@ Y_MenuEntry FH_Test_menu[] = {
     {(void *) (int) CLI_FHT_Max_Learned_Mac}},
    {K_Leaf, 6, TRUE, " -> TC remarking",
     {(void *) (int) CLI_FHT_Set_TC_Remarking}},
+   {K_Leaf, 7, TRUE, " -> Create IPv6 Broadcast Group",
+    {(void *) (int) CLI_FHT_Set_IPv6_Broadcast_Group}},
 };
 
 Y_MenuEntry VLAN_menu[] = {
@@ -1330,3 +1332,19 @@ int CLI_FHT_Set_TC_Remarking (char *StrPrm)
    return 0;
 }
 
+int CLI_FHT_Set_IPv6_Broadcast_Group (char *StrPrm)
+{
+   WP_U8 ipv6[16] = { 0x00 };
+   WP_CHAR InputBuf[255];
+
+   printf ("Enter IPV6 address for Creating Broadcast Group>\n");
+   printf ("e.g. 00-01-02-03-04-05-06-07-08-09-0a-0b-0c-0d-0e-0f\n");
+   get_line (InputBuf);
+   printf ("\n");
+
+   F_ConvertStr2Ipv6Address (InputBuf, ipv6);
+
+
+
+   return 0;
+}
