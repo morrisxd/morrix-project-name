@@ -88,6 +88,7 @@ typedef struct APP_gbe_enet_s
    WP_handle tx_chan_enet;
    WP_U32 max_learned_mac;
    WP_U32 cur_learned_mac;
+   WP_U8 tc_remark;
 } APP_gbe_enet_t;
 
 #define NUM_OF_PECS	2

@@ -1276,21 +1276,19 @@ int CLI_FHT_Max_Learned_Mac (char *StrPrm)
 
 extern void WPE_TrafficRemarkingEnableIPv6 (char *StrPrm,  
                                        WP_handle agg_enet_ipv6,
-                                       char * remarkVal);
+                                       WP_U8 remarkVal);
 
 int CLI_FHT_Set_TC_Remarking (char *StrPrm)
 {
-   WP_U32 temp, port;
+   WP_U32 temp = 0;
+   WP_U32 port = 0;
 
-   temp = CLI_GetNumber ("Input port number ( 0 - 1)", 0, 1);
-
+   temp = CLI_GetNumber ("Input port number ( 0 - 1)[0=ENET8(send), 1=ENET7]", 0, 1);
    port = temp;
+   temp = CLI_GetNumber ("Max mac number ( 0 - 255)", 1, 255);
+   gbe[port].tc_remark = temp;
 
-   temp = CLI_GetNumber ("Max mac number ( 0 - 65535)", 1, 65535);
-
-   gbe[port].max_learned_mac = temp;
-
-   WPE_TrafficRemarkingEnableIPv6  ("hello", gbe[1 - port].agg_enet_ipv6, "newValue");
+   WPE_TrafficRemarkingEnableIPv6  ("hello", gbe[port].agg_enet_ipv6, temp);
 
    return 0;
 }
