@@ -75,6 +75,7 @@ typedef struct APP_gbe_enet_s
    WP_handle bport_enet;
    WP_handle agg_enet;
 ///////////////////////////////////////////
+   WP_handle agg_enet_ipv6;
    WP_handle agg_ipv6_match;
    WP_handle agg_l4_port_match_1;
    WP_handle agg_l4_port_match_2;
