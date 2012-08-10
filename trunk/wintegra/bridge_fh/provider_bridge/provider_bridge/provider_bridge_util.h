@@ -73,4 +73,6 @@ typedef struct
         WP_U16    valid;        // 0 for not valid, others for valid
 } WPE_lrn_flwagg_rule;
 
+extern WP_iw_agg_ipv6_routing rout_agg_ipv6[1];
+
 #endif
