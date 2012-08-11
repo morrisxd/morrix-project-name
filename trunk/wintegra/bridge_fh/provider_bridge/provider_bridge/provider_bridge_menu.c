@@ -1332,18 +1332,32 @@ int CLI_FHT_Set_TC_Remarking (char *StrPrm)
    return 0;
 }
 
+extern void WPE_CreateIPV6GroupBroadcastMatchPceRule (WP_U8 portid, WP_U8 * ipv6);
+
 int CLI_FHT_Set_IPv6_Broadcast_Group (char *StrPrm)
 {
    WP_U8 ipv6[16] = { 0x00 };
    WP_CHAR InputBuf[255];
+   WP_U8 i = 0;
 
    printf ("Enter IPV6 address for Creating Broadcast Group>\n");
-   printf ("e.g. 00-01-02-03-04-05-06-07-08-09-0a-0b-0c-0d-0e-0f\n");
+   printf ("e.g. ff-01-02-03-04-05-06-07-08-09-0a-0b-0c-0d-0e-0f\n");
    get_line (InputBuf);
    printf ("\n");
 
    F_ConvertStr2Ipv6Address (InputBuf, ipv6);
+   for (i = 0; i < 16; i ++)
+   {
+      printf ("%2d:", ipv6[i]);
+   }
+   printf ("\n");
+   if (0xff != ipv6[0])
+   {
+      printf ("Must input a broadcast IPv6 address start with 0xff ....\n");
+      return 0;
+   }
 
+   WPE_CreateIPV6GroupBroadcastMatchPceRule (0, ipv6);
 
 
    return 0;
