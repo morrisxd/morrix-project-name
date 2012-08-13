@@ -404,6 +404,11 @@ int CLI_STAT_ShowFlwAggStats (char *StrPrm)
       printf ("+++++++++++++++++++++++++++++++++++++++++\n");
       printf ("\n               Enet[%d] FlowAgg Reserved Mac Statistics\n", i);
       WPT_GenericFlowStatistics (gbe[i].agg_reserved1);
+      printf ("\n=========================================\n");
+      printf ("=========================================\n");
+      printf ("=========================================\n");
+      printf ("\n               Enet[%d] FlowAgg IPv6 Broadcast Statistics\n", i);
+      WPT_GenericFlowStatistics (gbe[i].agg_multicast);
    }
 
    printf ("\n              Host FlowAgg Statistics\n");
