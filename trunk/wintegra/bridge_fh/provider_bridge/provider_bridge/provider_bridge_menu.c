@@ -1292,7 +1292,7 @@ int CLI_FHT_Reserved_Mac_filter (char *StrPrm)
 
    F_ConvertStr2MacAddress (pMacStr, mac);
 
-   WPE_CreateReservedMacPceRule (0, mac);
+   // WPE_CreateReservedMacPceRule (0, mac);
 
    return 0;
 }
