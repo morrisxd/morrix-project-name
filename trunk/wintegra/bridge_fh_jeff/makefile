@@ -3,7 +3,7 @@
 # By default this makefile assumes that the test directory reside under the WDDI root directory!
 # If you want to change it please redefine WDDI_DIR in this makefile!
 TEST_DIR = .
-WPI_WDDS_DIR = ..
+WPI_WDDS_DIR = ../../../../..
 WDDI_DIR = $(WPI_WDDS_DIR)/wddi
 ifeq "$(WPI_TARGET)" ""
 WPI_TARGET 	= mips_linux

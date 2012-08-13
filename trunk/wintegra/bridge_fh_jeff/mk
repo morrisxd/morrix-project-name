@@ -1,2 +1,7 @@
-make TEST=provider_bridge
-cd bin; mv provider_bridge pb
+ctags -R
+make TEST=provider_bridge.c 2>&1 | tee make.log
+
+cd bin
+cp provider_bridge provider_bridge_jeff.exe
+up provider_bridge_jeff.exe bin
+
