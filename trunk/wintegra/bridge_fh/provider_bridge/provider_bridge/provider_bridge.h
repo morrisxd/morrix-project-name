@@ -83,6 +83,10 @@ typedef struct APP_gbe_enet_s
    WP_handle agg_host;
    WP_handle agg_reserved1;
    WP_handle agg_reserved2;
+   WP_handle agg_multicast;
+   WP_handle mc_group_handle;
+   WP_handle qn_mc;
+   WP_handle mc_member_handle[100];
 ///////////////////////////////////////////
    WP_handle rx_chan_enet;
    WP_handle tx_chan_enet;

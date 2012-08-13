@@ -523,6 +523,8 @@ void App_PortsDevicesCreate (void)
  *****************************************************************************/
 void App_BufferPoolsCreate (void)
 {
+   WP_U8 i = 0;
+   
    WP_qnode_iw_mcq iw_mc_qn_config[1] = {
       {
        /* interruptqueue */ 0,
@@ -679,6 +681,14 @@ void App_BufferPoolsCreate (void)
       WP_QNodeCreate (WP_WINPATH (DEFAULT_WPID), WP_QNODE_IW_MCQ,
                       iw_mc_qn_config);
    App_TerminateOnError (qniw_mc, "WP_QNodeCreate() qniw_mc", __LINE__);
+
+
+   for (i = 0; i < 2; i ++)
+   {
+      gbe[i].qn_mc = WP_QNodeCreate(WP_WINPATH(DEFAULT_WPID), 
+                           WP_QNODE_IW_MCQ | WP_QNODE_OPT_FMU, iw_mc_qn_config);
+      App_TerminateOnError (gbe[i].qn_mc, "WP_QNodeCreate() qniw_mc", __LINE__);
+   }
 
    return;
 }
@@ -871,6 +881,9 @@ void App_IwSystemInit (void)
 
    /* Create TX flow aggregation */
    WPE_TxAggCreate ();
+   WPE_AddL3GroupMember (default_agg_host, h_iw_port_general_host);
+   WPE_AddL3GroupMember (gbe[1].agg_enet, gbe[1].bport_enet);
+   // WPE_AddL3GroupMember (default_agg_host, h_iw_port_general_host);
 }
 
 /*****************************************************************************
