@@ -37,12 +37,11 @@ extern Y_MenuEntry V_MainMenu[];
 static Y_MenuEntry *V_CurrMenuP = &V_MainMenu[0];
 
 Y_MenuEntry V_MainMenu[] = {
-   {K_Menu, MAIN_MENU_ITEM_NUM, TRUE, "Main Menu",
-    {(Y_MenuEntry *) V_MainMenu}},
+   {K_Menu, MAIN_MENU_ITEM_NUM, TRUE, "Main Menu", {(Y_MenuEntry *) V_MainMenu}},
    {K_Menu, 1, TRUE, " -> FH Test Menu", {(Y_MenuEntry *) FH_Test_menu}},
    {K_Menu, 2, FALSE, " -> Vlan Menu", {(Y_MenuEntry *) VLAN_menu}},
    {K_Menu, 3, FALSE, " -> Aging Menu", {(Y_MenuEntry *) AGING_menu}},
-   {K_Menu, 4, TRUE, " -> Learning Menu", {(Y_MenuEntry *) LEARNING_menu}},
+   {K_Menu, 4, TRUE, " -> Learning Menu (enable here first)", {(Y_MenuEntry *) LEARNING_menu}},
    {K_Menu, 5, TRUE, " -> System Statistics", {(Y_MenuEntry *) STAT_menu}},
    {K_Leaf, 6, TRUE, " <> Dump FDB entry",
     {(void *) (int) CLI_Dump_FDB_entry}},
@@ -60,19 +59,19 @@ Y_MenuEntry V_MainMenu[] = {
 Y_MenuEntry FH_Test_menu[] = {
    {K_Menu, FHT_MENU_ITEM_NUM, TRUE, "FiberHome Test Menu",
     {(Y_MenuEntry *) V_MainMenu}},
-   {K_Leaf, 1, TRUE, " -> IPV6 filtering",
+   {K_Leaf, 1, TRUE, " -> IPV6 filtering (sent to ENET7)",
     {(void *) (int) CLI_FHT_IPV6_filter}},
-   {K_Leaf, 2, TRUE, " -> L4 port filtering",
+   {K_Leaf, 2, TRUE, " -> L4 port filtering (DHCP, port 67, 68-send to ENET7)",
     {(void *) (int) CLI_FHT_L4_port_filter}},
-   {K_Leaf, 3, TRUE, " -> L4 subtype filtering",
+   {K_Leaf, 3, TRUE, " -> L4 subtype filtering (offset 10), send to ENET7",
     {(void *) (int) CLI_FHT_L4_subtype_filter}},
-   {K_Leaf, 4, TRUE, " -> Reserved MAC filtering",
+   {K_Leaf, 4, TRUE, " -> Reserved MAC filtering (send to ENET7)",
     {(void *) (int) CLI_FHT_Reserved_Mac_filter}},
-   {K_Leaf, 5, TRUE, " -> Max Learned Mac by port",
+   {K_Leaf, 5, TRUE, " -> Max Learned Mac by port (traffic blocked case, please ENABLE first)",
     {(void *) (int) CLI_FHT_Max_Learned_Mac}},
-   {K_Leaf, 6, TRUE, " -> TC remarking",
+   {K_Leaf, 6, TRUE, " -> TC remarking (send to ENET7)",
     {(void *) (int) CLI_FHT_Set_TC_Remarking}},
-   {K_Leaf, 7, TRUE, " -> Create IPv6 Broadcast Group",
+   {K_Leaf, 7, TRUE, " -> Create IPv6 Broadcast Group (NOT protocol packets, it is data packets)",
     {(void *) (int) CLI_FHT_Set_IPv6_Broadcast_Group}},
 };
 
@@ -399,11 +398,13 @@ int CLI_STAT_ShowFlwAggStats (char *StrPrm)
       printf ("\n               Enet[%d] FlowAgg Statistics\n", i);
       WPT_GenericFlowStatistics (gbe[i].agg_enet);
       //WPT_GenericFlowStatisticsReset(gbe[i].agg_enet);
+
       printf ("\n+++++++++++++++++++++++++++++++++++++++++\n");
       printf ("+++++++++++++++++++++++++++++++++++++++++\n");
       printf ("+++++++++++++++++++++++++++++++++++++++++\n");
       printf ("\n               Enet[%d] FlowAgg Reserved Mac Statistics\n", i);
       WPT_GenericFlowStatistics (gbe[i].agg_reserved1);
+
       printf ("\n=========================================\n");
       printf ("=========================================\n");
       printf ("=========================================\n");
@@ -413,6 +414,9 @@ int CLI_STAT_ShowFlwAggStats (char *StrPrm)
 
    printf ("\n              Host FlowAgg Statistics\n");
    WPT_GenericFlowStatistics (default_agg_host);
+
+   printf ("\n               Enet[%d] Host FlowAgg IGMP Statistics\n", i);
+   WPT_GenericFlowStatistics (agg_host_igmp);
 
    return WP_OK;
 }
@@ -468,6 +472,8 @@ int CLI_STAT_ClearFlwAggStats (char *StrPrm)
 
    printf ("\n              Reset Host FlowAgg Statistics\n");
    WPT_GenericFlowStatisticsReset (default_agg_host);
+   printf ("\n              Reset Host FlowAgg IGMP Statistics\n");
+   WPT_GenericFlowStatisticsReset (agg_host_igmp);
 
    printf ("\n               Done!\n");
    return WP_OK;

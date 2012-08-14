@@ -42,14 +42,14 @@ static Y_MenuEntry *V_CurrMenuP = &V_MainMenu[0];
 Y_MenuEntry V_MainMenu[] = 
 {
         {K_Menu, MAIN_MENU_ITEM_NUM, TRUE, "Main Menu",         {(Y_MenuEntry *)V_MainMenu}},
-        {K_Menu, 1, TRUE, " -> FH Test Menu",                   {(Y_MenuEntry *)FH_Test_menu}},
+        {K_Menu, 1, FALSE, " -> FH Test Menu",                   {(Y_MenuEntry *)FH_Test_menu}},
         {K_Menu, 2, TRUE, " -> Vlan Menu",                      {(Y_MenuEntry *)VLAN_menu}},
-        {K_Menu, 3, TRUE, " -> Aging Menu",                     {(Y_MenuEntry *)AGING_menu}},
+        {K_Menu, 3, FALSE, " -> Aging Menu",                     {(Y_MenuEntry *)AGING_menu}},
         {K_Menu, 4, TRUE, " -> Learning Menu",                  {(Y_MenuEntry *)LEARNING_menu}},
         {K_Menu, 5, TRUE, " -> System Statistics",              {(Y_MenuEntry *)STAT_menu}},
         {K_Leaf, 6, TRUE, " <> Dump FDB entry",                 {(void*)(int)CLI_Dump_FDB_entry}},
         {K_Leaf, 7, TRUE, " <> Flush FDB by Vlan",              {(void*)(int)CLI_Flush_FDB_entry_by_Vlan}},
-        {K_Menu, 8, TRUE, " -> Performance test",               {(Y_MenuEntry *)Performance_menu}},
+        {K_Menu, 8, FALSE, " -> Performance test",               {(Y_MenuEntry *)Performance_menu}},
         {K_Leaf, 9, TRUE, " <> Quit",                           {(void*)(int)CLI_MAIN_Quit}},
 };
 
@@ -70,7 +70,7 @@ Y_MenuEntry VLAN_menu[] =
         {K_Leaf, 1, TRUE, " <> Show Vlan",                      {(void*)(int)CLI_VLAN_Show_Vlan}},
         {K_Leaf, 2, TRUE, " -> Create Vlan",                    {(void*)(int)CLI_VLAN_Create_Vlan}},
         {K_Leaf, 3, TRUE, " -> Delete Vlan",                    {(void*)(int)CLI_VLAN_Delete_Vlan}},
-        {K_Leaf, 4, TRUE, " -> Set Vlan Tag",                    {(void*)(int)CLI_VLAN_Set_Default_Tag}},
+        {K_Leaf, 4, TRUE, " -> Set Default Vlan Tag",                    {(void*)(int)CLI_VLAN_Set_Default_Tag}},
 };
 
 
