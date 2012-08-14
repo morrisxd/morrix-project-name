@@ -29,7 +29,7 @@ WP_handle agg_reserved2;
 
 
 
-WP_handle devhost, default_agg_host, h_iw_port_general_host,
+WP_handle devhost, default_agg_host, agg_host_igmp,  h_iw_port_general_host,
    rx_host_handle;
 WP_handle qniw;
 WP_handle qniw_mc;

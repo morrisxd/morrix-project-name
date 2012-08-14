@@ -81,6 +81,7 @@ typedef struct APP_gbe_enet_s
    WP_handle agg_l4_port_match_2;
    WP_handle agg_l4_subtype;
    WP_handle agg_host;
+   WP_handle agg_igmp_host;
    WP_handle agg_reserved1;
    WP_handle agg_reserved2;
    WP_handle agg_multicast;
