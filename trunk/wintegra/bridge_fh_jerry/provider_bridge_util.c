@@ -11,6 +11,11 @@
 #define USE_IPV6_FLOWAGG         (1)
 
 
+typedef enum
+{
+   SEND_TO_ENET7 = 0,
+   SEND_TO_CPU
+} SEND_TO_WHERE;
 
 void WPE_Pecs_Init (WP_gpe_pecs gpe_pecs_config[], WP_handle pecs_handle[])
 {
@@ -2648,7 +2653,7 @@ void WPE_CreateBroadcastIPv6PceRule (WP_U8 portid, WP_U16 l4_port)
    return;
 }
 
-void WPE_CreateICMPv6PceRule (WP_U8 portid, WP_U16 next_header)
+void WPE_CreateICMPv6PceRule (WP_U8 portid, WP_U16 next_header, SEND_TO_WHERE flag)
 {
    WP_pce_rule_classification rule_cfg = { 0 };
    WP_handle port_handle = 0, agg_handle = 0, h_PCE_rule = 0;
@@ -3109,16 +3114,13 @@ void WPE_Create_Pce_Policer (void)
                          __LINE__);
 }
 
-#if 1
-   WP_U8 mac_addr_low_1[6]  = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x00};
-   WP_U8 mac_addr_high_1[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x0f};
+WP_U8 mac_addr_low_1[6]  = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x00};
+WP_U8 mac_addr_high_1[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x0f};
+WP_U8 mac_addr_low_2[6]  = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x10};
+WP_U8 mac_addr_high_2[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x10};
+WP_U8 mac_addr_low_3[6]  = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x20};
+WP_U8 mac_addr_high_3[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x2f};
 
-   WP_U8 mac_addr_low_2[6]  = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x10};
-   WP_U8 mac_addr_high_2[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x10};
-
-   WP_U8 mac_addr_low_3[6]  = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x20};
-   WP_U8 mac_addr_high_3[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x2f};
-#endif
 void WT_PCERulesAdd (void)
 {
    WP_U8 ipv6[16] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
@@ -3142,8 +3144,8 @@ void WT_PCERulesAdd (void)
    WPE_CreateL4PortPceRule (0, 67);
 
 #if MORRIS_ENABLE_YELLOW
-   WPE_CreateICMPv6PceRule  (0, 0x3a);
-   WPE_CreateICMPv6PceRule  (0, 0x04); // for IGMP
+   WPE_CreateICMPv6PceRule  (0, 0x3a, SEND_TO_ENET7);
+   WPE_CreateICMPv6PceRule  (0, 0x04, SEND_TO_CPU); // for IGMP, please send to HOST CPU
 
    // WPE_CreateBroadcastIPv6PceRule (0, 0);
 #endif
