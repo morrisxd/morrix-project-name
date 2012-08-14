@@ -21,7 +21,8 @@ WP_handle dl_general_iwsys_bridge;
 WP_handle policer_handle;
 WP_handle iw_pool;
 
-WP_handle bc_rule;//Phenix
+WP_handle bc_rule = 0;//Phenix
+WP_handle bc_rule_policer = 0;//Phenix
 WP_handle vlancos_rule[8];//Phenix
 
 WP_U32 aging_enable = 0;
@@ -41,7 +42,7 @@ WP_U32 PMTest_delta = 0;
 
 WP_pce_filter_stat filter_stat[100];
 WP_handle PCE_filter[100];
-WP_handle filter_set_lrn_en, filter_set_lrn_dis, filter_set_bc,filter_set_vlancos,filter_set_macbinging;
+WP_handle filter_set_lrn_en, filter_set_lrn_dis, filter_set_bc,filter_set_vlancos,filter_set_macbinging,filter_set_un,filter_set_ipv4;
 WP_handle PCE_rule_handle;
 
 WP_pce_user_programmable_fields_set_config
@@ -142,6 +143,11 @@ void App_TerminateOnError (WP_handle handle, WP_CHAR * s, WP_U32 line)
       WPE_Reboot ();
       exit (0);
    }
+   else
+   	{
+   	//printf("handle return from %s is 0x%x\n",s,handle);
+   	}
+   
 }
 
 /****************************************************************************************************************************
