@@ -398,11 +398,13 @@ int CLI_STAT_ShowFlwAggStats (char *StrPrm)
       printf ("\n               Enet[%d] FlowAgg Statistics\n", i);
       WPT_GenericFlowStatistics (gbe[i].agg_enet);
       //WPT_GenericFlowStatisticsReset(gbe[i].agg_enet);
+
       printf ("\n+++++++++++++++++++++++++++++++++++++++++\n");
       printf ("+++++++++++++++++++++++++++++++++++++++++\n");
       printf ("+++++++++++++++++++++++++++++++++++++++++\n");
       printf ("\n               Enet[%d] FlowAgg Reserved Mac Statistics\n", i);
       WPT_GenericFlowStatistics (gbe[i].agg_reserved1);
+
       printf ("\n=========================================\n");
       printf ("=========================================\n");
       printf ("=========================================\n");
@@ -412,6 +414,9 @@ int CLI_STAT_ShowFlwAggStats (char *StrPrm)
 
    printf ("\n              Host FlowAgg Statistics\n");
    WPT_GenericFlowStatistics (default_agg_host);
+
+   printf ("\n               Enet[%d] Host FlowAgg IGMP Statistics\n", i);
+   WPT_GenericFlowStatistics (agg_host_igmp);
 
    return WP_OK;
 }
@@ -467,6 +472,8 @@ int CLI_STAT_ClearFlwAggStats (char *StrPrm)
 
    printf ("\n              Reset Host FlowAgg Statistics\n");
    WPT_GenericFlowStatisticsReset (default_agg_host);
+   printf ("\n              Reset Host FlowAgg IGMP Statistics\n");
+   WPT_GenericFlowStatisticsReset (agg_host_igmp);
 
    printf ("\n               Done!\n");
    return WP_OK;

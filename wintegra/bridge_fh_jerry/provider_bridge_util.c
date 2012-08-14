@@ -14,7 +14,8 @@
 typedef enum
 {
    SEND_TO_ENET7 = 0,
-   SEND_TO_CPU
+   SEND_TO_CPU,
+   SEND_IGMP_PROTOCOL_PACKETS_TO_CPU
 } SEND_TO_WHERE;
 
 void WPE_Pecs_Init (WP_gpe_pecs gpe_pecs_config[], WP_handle pecs_handle[])
@@ -243,6 +244,15 @@ void WPE_HostCreate (void)
                                   &br_agg_gbe[0]);
    App_TerminateOnError (default_agg_host, "WP_IwFlowAggregationCreate()",
                          __LINE__);
+
+   agg_host_igmp =
+      WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                  WP_IW_VLAN_AWARE_BRIDGING_MODE,
+                                  &br_agg_gbe[0]);
+   App_TerminateOnError (agg_host_igmp, "WP_IwFlowAggregationCreate()",
+                         __LINE__);
+
+
 
    /* create bridging port */
    iwhost_bport_config->flow_agg = default_agg_host;
@@ -2672,8 +2682,12 @@ void WPE_CreateICMPv6PceRule (WP_U8 portid, WP_U16 next_header, SEND_TO_WHERE fl
       if (SEND_TO_ENET7 == flag)
       {
          agg_handle = gbe[1 - portid].agg_enet_ipv6;
-      } else {
+      } else if (SEND_TO_CPU == flag) {
          agg_handle = default_agg_host;
+      } else if (SEND_IGMP_PROTOCOL_PACKETS_TO_CPU == flag) {
+         agg_handle = agg_host_igmp;
+      } else {
+         agg_handle = gbe[1 - portid].agg_enet_ipv6;
       }
 #else
       agg_handle = gbe[1 - portid].agg_enet;
@@ -3150,7 +3164,7 @@ void WT_PCERulesAdd (void)
 
 #if MORRIS_ENABLE_YELLOW
    WPE_CreateICMPv6PceRule  (0, 0x3a, SEND_TO_ENET7);
-   WPE_CreateICMPv6PceRule  (0, 0x04, SEND_TO_CPU); // for IGMP, please send to HOST CPU
+   WPE_CreateICMPv6PceRule  (0, 0x04, SEND_IGMP_PROTOCOL_PACKETS_TO_CPU); // for IGMP, please send to HOST CPU
 
    // WPE_CreateBroadcastIPv6PceRule (0, 0);
 #endif
