@@ -150,7 +150,7 @@ Menu	provider_bridge_menu.h	/^                void *Menu;$/;"	m	union:__anon5::_
 NR_GBE	provider_bridge.h	37;"	d
 NR_PM_TEST_REQUIRED_RULES	provider_bridge.h	66;"	d
 NUM_OF_MC_GROUPS	provider_bridge_util.h	26;"	d
-NUM_OF_PECS	provider_bridge.h	98;"	d
+NUM_OF_PECS	provider_bridge.h	99;"	d
 NUM_OF_PECS_GLOBAL_INFO	provider_bridge.h	62;"	d
 NUM_OF_VLAN_GROUPS	provider_bridge_util.h	27;"	d
 Node	provider_bridge_menu.h	/^        } Node;$/;"	m	struct:__anon5	typeref:union:__anon5::__anon6
@@ -176,8 +176,9 @@ PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_backhaul$/;"	m
 PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/wpi_pps_image_iwgp_parser.o$/;"	m
 Performance_menu	provider_bridge_menu.c	/^Y_MenuEntry Performance_menu[] = {$/;"	v
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
-RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	814;"	d	file:
-SEND_TO_CPU	provider_bridge_util.c	/^   SEND_TO_CPU$/;"	e	enum:__anon12	file:
+RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	824;"	d	file:
+SEND_IGMP_PROTOCOL_PACKETS_TO_CPU	provider_bridge_util.c	/^   SEND_IGMP_PROTOCOL_PACKETS_TO_CPU$/;"	e	enum:__anon12	file:
+SEND_TO_CPU	provider_bridge_util.c	/^   SEND_TO_CPU,$/;"	e	enum:__anon12	file:
 SEND_TO_ENET7	provider_bridge_util.c	/^   SEND_TO_ENET7 = 0,$/;"	e	enum:__anon12	file:
 SEND_TO_WHERE	provider_bridge_util.c	/^} SEND_TO_WHERE;$/;"	t	typeref:enum:__anon12	file:
 SIG	os_timer.c	12;"	d	file:
@@ -364,6 +365,8 @@ agg_enet_ipv6	provider_bridge.h	/^   WP_handle agg_enet_ipv6;$/;"	m	struct:APP_g
 agg_handle	provider_bridge_util.h	/^        WP_handle agg_handle;         \/\/the mc flow agg handle$/;"	m	struct:__anon9
 agg_handle	provider_bridge_util.h	/^        WP_handle agg_handle;         \/\/the vlan flooding flow agg handle$/;"	m	struct:__anon10
 agg_host	provider_bridge.h	/^   WP_handle agg_host;$/;"	m	struct:APP_gbe_enet_s
+agg_host_igmp	provider_bridge.c	/^WP_handle devhost, default_agg_host, agg_host_igmp,  h_iw_port_general_host,$/;"	v
+agg_igmp_host	provider_bridge.h	/^   WP_handle agg_igmp_host;$/;"	m	struct:APP_gbe_enet_s
 agg_ipv6_match	provider_bridge.h	/^   WP_handle agg_ipv6_match;$/;"	m	struct:APP_gbe_enet_s
 agg_l4_port_match_1	provider_bridge.h	/^   WP_handle agg_l4_port_match_1;$/;"	m	struct:APP_gbe_enet_s
 agg_l4_port_match_2	provider_bridge.h	/^   WP_handle agg_l4_port_match_2;$/;"	m	struct:APP_gbe_enet_s
@@ -389,11 +392,11 @@ count	provider_bridge_util.h	/^        WP_U16    count;   \/\/vlan group menber 
 cur_learned_mac	provider_bridge.h	/^   WP_U32 cur_learned_mac;$/;"	m	struct:APP_gbe_enet_s
 dbf_8_15_base	wt_partition_ecc_util.c	/^        WP_U32 dbf_8_15_base[8];$/;"	m	struct:__anon1	file:
 dbf_8_15_offset	wt_partition_ecc_util.c	/^        WP_U32 dbf_8_15_offset[8];$/;"	m	struct:__anon1	file:
-default_agg_host	provider_bridge.c	/^WP_handle devhost, default_agg_host, h_iw_port_general_host,$/;"	v
+default_agg_host	provider_bridge.c	/^WP_handle devhost, default_agg_host, agg_host_igmp,  h_iw_port_general_host,$/;"	v
 delimiters	provider_bridge_menu.c	/^static char delimiters[] = ".:-";$/;"	v	file:
 demo_running	provider_bridge.c	/^WP_boolean demo_running = WP_TRUE;$/;"	v
 dev_enet	provider_bridge.h	/^   WP_handle dev_enet;$/;"	m	struct:APP_gbe_enet_s
-devhost	provider_bridge.c	/^WP_handle devhost, default_agg_host, h_iw_port_general_host,$/;"	v
+devhost	provider_bridge.c	/^WP_handle devhost, default_agg_host, agg_host_igmp,  h_iw_port_general_host,$/;"	v
 disable_terminal_return	provider_bridge_menu.c	/^void disable_terminal_return (void)$/;"	f
 dl_general_iwsys_bridge	provider_bridge.c	/^WP_handle dl_general_iwsys_bridge;$/;"	v
 dum_bport_handle	provider_bridge_util.h	/^        WP_handle dum_bport_handle;$/;"	m	struct:__anon10
@@ -416,7 +419,7 @@ gmr	wt_partition_ecc_util.c	/^        WP_U32 gmr;$/;"	m	struct:__anon1	file:
 gpe_pecs_cfg	provider_bridge.c	/^WP_gpe_pecs gpe_pecs_cfg[NUM_OF_PECS] = {$/;"	v
 group_handle	provider_bridge_util.h	/^        WP_handle group_handle;       \/\/mc group handle$/;"	m	struct:__anon9
 group_handle	provider_bridge_util.h	/^        WP_handle group_handle;       \/\/vlan group handle$/;"	m	struct:__anon10
-h_iw_port_general_host	provider_bridge.c	/^WP_handle devhost, default_agg_host, h_iw_port_general_host,$/;"	v
+h_iw_port_general_host	provider_bridge.c	/^WP_handle devhost, default_agg_host, agg_host_igmp,  h_iw_port_general_host,$/;"	v
 handle	provider_bridge_util.h	/^        WP_handle handle;       \/\/ handle for the rule$/;"	m	struct:__anon11
 handler	os_timer.c	/^static void handler(int sig, siginfo_t *si, void *uc)$/;"	f	file:
 hbm	wt_partition_ecc_util.c	/^        WP_VU32 hbm;$/;"	m	struct:__anon3	file:
