@@ -2669,7 +2669,12 @@ void WPE_CreateICMPv6PceRule (WP_U8 portid, WP_U16 next_header, SEND_TO_WHERE fl
 
 
 #if USE_IPV6_FLOWAGG
-      agg_handle = gbe[1 - portid].agg_enet_ipv6;
+      if (SEND_TO_ENET7 == flag)
+      {
+         agg_handle = gbe[1 - portid].agg_enet_ipv6;
+      } else {
+         agg_handle = default_agg_host;
+      }
 #else
       agg_handle = gbe[1 - portid].agg_enet;
 #endif
