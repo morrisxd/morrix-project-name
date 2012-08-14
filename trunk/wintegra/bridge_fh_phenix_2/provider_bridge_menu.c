@@ -41,16 +41,16 @@ static Y_MenuEntry *V_CurrMenuP = &V_MainMenu[0];
 Y_MenuEntry V_MainMenu[] = {
    {K_Menu, MAIN_MENU_ITEM_NUM, TRUE, "Main Menu",
     {(Y_MenuEntry *) V_MainMenu}},
-   {K_Menu, 1, FALSE, " -> FH Test Menu", {(Y_MenuEntry *) FH_Test_menu}},
-   {K_Menu, 2, FALSE, " -> Vlan Menu", {(Y_MenuEntry *) VLAN_menu}},
-   {K_Menu, 3, FALSE, " -> Aging Menu", {(Y_MenuEntry *) AGING_menu}},
-   {K_Menu, 4, FALSE, " -> Learning Menu", {(Y_MenuEntry *) LEARNING_menu}},
-   {K_Menu, 5, FALSE, " -> System Statistics", {(Y_MenuEntry *) STAT_menu}},
-   {K_Leaf, 6, FALSE, " <> Dump FDB entry",
+   {K_Menu, 1, TRUE, " -> FH Test Menu", {(Y_MenuEntry *) FH_Test_menu}},
+   {K_Menu, 2, TRUE, " -> Vlan Menu", {(Y_MenuEntry *) VLAN_menu}},
+   {K_Menu, 3, TRUE, " -> Aging Menu", {(Y_MenuEntry *) AGING_menu}},
+   {K_Menu, 4, TRUE, " -> Learning Menu", {(Y_MenuEntry *) LEARNING_menu}},
+   {K_Menu, 5, TRUE, " -> System Statistics", {(Y_MenuEntry *) STAT_menu}},
+   {K_Leaf, 6, TRUE, " <> Dump FDB entry",
     {(void *) (int) CLI_Dump_FDB_entry}},
-   {K_Leaf, 7, FALSE, " <> Flush FDB by Vlan",
+   {K_Leaf, 7, TRUE, " <> Flush FDB by Vlan",
     {(void *) (int) CLI_Flush_FDB_entry_by_Vlan}},
-   {K_Menu, 8, FALSE, " -> Performance test",
+   {K_Menu, 8, TRUE, " -> Performance test",
     {(Y_MenuEntry *) Performance_menu}},
    {K_Leaf, 9, TRUE, " <> Quit", {(void *) (int) CLI_MAIN_Quit}},
    {K_Menu, 10, TRUE, " -> IPV4 test", {(Y_MenuEntry *) IPV4_menu}},//Phenix
@@ -59,19 +59,23 @@ Y_MenuEntry V_MainMenu[] = {
 Y_MenuEntry IPV4_menu[] = {
    {K_Menu, IPV4_MENU_ITEM_NUM, TRUE, "IPV4 Menu",
     {(Y_MenuEntry *) V_MainMenu}},
-   {K_Leaf, 1, TRUE, " <> Enable suppress broadcast/unknow unicast storm ",
-    {(void *) (int) CLI_Suppress_Enable}},
-    {K_Leaf, 2, TRUE, " <> Disable suppress broadcast/unknow unicast storm ",
-    {(void *) (int) CLI_Suppress_Disable}},
-   {K_Leaf, 3, TRUE, " <> Vlan COS Trans",
+   {K_Leaf, 1, TRUE, " <> Enable suppress broadcast storm ",
+    {(void *) (int) CLI_BC_Suppress_Enable}},
+    {K_Leaf, 2, TRUE, " <> Disable suppress broadcast storm ",
+    {(void *) (int) CLI_BC_Suppress_Disable}},
+   {K_Leaf, 3, TRUE, " <> Enable suppress unknow-unicast storm ",
+    {(void *) (int) CLI_Unknown_Unicast_Suppress_Enable}},
+    {K_Leaf, 4, TRUE, " <> Disable suppress unknow-unicast storm ",
+    {(void *) (int) CLI_Unknown_Unicast_Suppress_Disable}},   
+   {K_Leaf, 5, TRUE, " <> Vlan COS Trans",
     {(void *) (int) CLI_VlanCos_Trans}},
-   {K_Leaf, 4, TRUE, " <> Mac Binding",
+   {K_Leaf, 6, TRUE, " <> Mac Binding",
     {(void *) (int) CLI_MacBinding_Create}},   
-    {K_Leaf, 5, TRUE, " <> Get Policer statistics ",
+    {K_Leaf, 7, TRUE, " <> Get Policer statistics ",
     {(void *) (int) CLI_STAT_PrintPolicerStatistics}},
-   {K_Leaf, 6, TRUE, " <> Reset Policer statistics",
+   {K_Leaf, 8, TRUE, " <> Reset Policer statistics",
     {(void *) (int) CLI_STAT_ResetPolicerStatistics}},
-   {K_Leaf, 7, TRUE, " <> Send Packets",
+   {K_Leaf, 9, TRUE, " <> Send Packets",
     {(void *) (int) CLI_Send_Packets}},   
 };
 
@@ -443,6 +447,10 @@ int CLI_STAT_ClearBrgPrtStats (char *StrPrm)
 int CLI_STAT_ShowFlwAggStats (char *StrPrm)
 {
    WP_U32 i;
+   WP_U32 j;
+   WP_status status;
+  WP_iw_mc_member_stats  stats;
+  memset(&stats,0,sizeof(stats));
 
    for (i = 0; i < NR_GBE; i++)
    {
@@ -453,6 +461,91 @@ int CLI_STAT_ShowFlwAggStats (char *StrPrm)
 
    printf ("\n              Host FlowAgg Statistics\n");
    WPT_GenericFlowStatistics (default_agg_host);
+
+   printf ("\n              MC FlowAgg Statistics\n");
+
+	for(i=0;i<NUM_OF_VLAN_GROUPS;i++)
+	{
+		if(1== vlan_groups[i].valid)
+		{
+		for(j=0;j<IW_SYS_MAX_VLAN_MEMBERS;j++)
+			{
+			if(vlan_groups[i].member_handle[j])
+				{
+		   printf ("member %d (%x)\n",(vlan_groups[i].member_handle[j] & 0x000000ff), vlan_groups[i].member_handle[j]);
+
+
+		status =WP_IwMcMemberStatistics(vlan_groups[i].group_handle, vlan_groups[i].member_handle[j], &stats);
+                   App_TerminateOnError (status, "WP_IwMcMemberStatistics", __LINE__);
+
+	   printf ("buffers_counter:                                    %08x%08x\n",
+	           ((WPT_StatField *) & stats.buffers_counter)->part.high,
+	           ((WPT_StatField *) & stats.buffers_counter)->part.low);
+
+	   printf ("threshold_dropped_frames:                   %08x%08x\n",
+	           ((WPT_StatField *) & stats.threshold_dropped_frames)->part.high,
+	           ((WPT_StatField *) & stats.threshold_dropped_frames)->part.low);
+
+	   printf ("class_threshold_dropped_frames:          %08x%08x\n",
+	           ((WPT_StatField *) & stats.class_threshold_dropped_frames)->part.high,
+	           ((WPT_StatField *) & stats.class_threshold_dropped_frames)->part.low);
+
+	   printf ("forwarded_frames:                                %08x%08x\n",
+	           ((WPT_StatField *) & stats.forwarded_frames)->part.high,
+	           ((WPT_StatField *) & stats.forwarded_frames)->part.low);
+
+	   printf ("fbp_drop_packets:                                 %08x%08x\n",
+	           ((WPT_StatField *) & stats.fbp_drop_packets)->part.high,
+	           ((WPT_StatField *) & stats.fbp_drop_packets)->part.low);
+
+	   printf ("mtu_drop_packets:                                %08x%08x\n",
+	           ((WPT_StatField *) & stats.mtu_drop_packets)->part.high,
+	           ((WPT_StatField *) & stats.mtu_drop_packets)->part.low);
+
+	   printf ("ttl_drop_packets:                                   %08x%08x\n",
+	           ((WPT_StatField *) & stats.ttl_drop_packets)->part.high,
+	           ((WPT_StatField *) & stats.ttl_drop_packets)->part.low);
+
+	   printf ("tx_queue_drop_packets:                        %08x%08x\n",
+	           ((WPT_StatField *) & stats.tx_queue_drop_packets)->part.high,
+	           ((WPT_StatField *) & stats.tx_queue_drop_packets)->part.low);
+
+	   printf ("mpls_drop:                                             %08x%08x\n",
+	           ((WPT_StatField *) & stats.mpls_drop)->part.high,
+	           ((WPT_StatField *) & stats.mpls_drop)->part.low);
+
+	   printf ("denied_packets:                                      %08x%08x\n",
+	           ((WPT_StatField *) & stats.denied_packets)->part.high,
+	           ((WPT_StatField *) & stats.denied_packets)->part.low);
+
+
+	   printf ("group_filtered_packets:                           %08x%08x\n",
+	           ((WPT_StatField *) & stats.group_filtered_packets)->part.high,
+	           ((WPT_StatField *) & stats.group_filtered_packets)->part.low);
+
+	   printf ("forwarded_bytes:                                    %08x%08x\n",
+	           ((WPT_StatField *) & stats.forwarded_bytes)->part.high,
+	           ((WPT_StatField *) & stats.forwarded_bytes)->part.low);
+
+	   printf ("gtp_bad_headers:                                    %08x%08x\n",
+	           ((WPT_StatField *) & stats.gtp_bad_headers)->part.high,
+	           ((WPT_StatField *) & stats.gtp_bad_headers)->part.low);
+
+	   printf ("policer_non_conforming_packets:            %08x%08x\n",
+	           ((WPT_StatField *) & stats.policer_non_conforming_packets)->part.high,
+	           ((WPT_StatField *) & stats.policer_non_conforming_packets)->part.low);
+
+	   printf ("fbp_underrun:                                          %08x%08x\n",
+	           ((WPT_StatField *) & stats.fbp_underrun)->part.high,
+	           ((WPT_StatField *) & stats.fbp_underrun)->part.low);
+
+	   printf ("src_ip_filter_dropped_frames:                  %08x%08x\n",
+	           ((WPT_StatField *) & stats.src_ip_filter_dropped_frames)->part.high,
+	           ((WPT_StatField *) & stats.src_ip_filter_dropped_frames)->part.low);	  
+				}
+		}
+			}
+	}
 
    return WP_OK;
 }
@@ -467,6 +560,9 @@ int CLI_STAT_ShowFlwAggStats (char *StrPrm)
 int CLI_STAT_ClearFlwAggStats (char *StrPrm)
 {
    WP_U32 i;
+   WP_U32 j;
+  WP_iw_mc_member_stats  stats;
+  memset(&stats,0,sizeof(stats));
 
    for (i = 0; i < NR_GBE; i++)
    {
@@ -479,6 +575,22 @@ int CLI_STAT_ClearFlwAggStats (char *StrPrm)
    printf ("\n              Reset Host FlowAgg Statistics\n");
    WPT_GenericFlowStatisticsReset (default_agg_host);
 
+	for(i=0;i<NUM_OF_VLAN_GROUPS;i++)
+	{
+		if(1== vlan_groups[i].valid)
+		{
+		for(j=0;j<IW_SYS_MAX_VLAN_MEMBERS;j++)
+			{
+			if(vlan_groups[i].member_handle[j])
+				{
+		   printf ("Reset member [%d](%x)\n",(vlan_groups[i].member_handle[j] & 0x000000ff), vlan_groups[i].member_handle[j]);
+
+
+		WP_IwMcMemberStatisticsReset(vlan_groups[i].group_handle, vlan_groups[i].member_handle[j], &stats);
+				}
+			}
+		}
+   }
    printf ("\n               Done!\n");
    return WP_OK;
 }
@@ -740,15 +852,17 @@ int F_ConvertStr2MacAddress (char *pStr, unsigned char *pMac)
 
 }
 
+int BC_enable = 0;
 
-int CLI_Suppress_Enable (char *StrPrm)
+int CLI_BC_Suppress_Enable(char *StrPrm)
 {
    WP_U16 vlan;
    WP_U32 port;
 
    char *pPortStr = NULL;
+
    
-   printf ("\nPlease input vlan and port pair. Enter \"Exit\" if end\n");
+   printf ("\nPlease vlan and port pair. Enter \"Exit\" if end\n");
    printf ("\nport index: 0-ENET8; 1-ENET7.\n");
    printf ("\ne.g: 101 1\n");
 
@@ -770,25 +884,133 @@ int CLI_Suppress_Enable (char *StrPrm)
          return -1;
       }
       port = (WP_U32) strtoul (pPortStr, NULL, 0);
+      if(1 == BC_enable)
+      {
+      	printf("Attention!!You have set this!!!\n");
+        return 0;
+      }
+      if(bc_rule)
+      {
+	      WPE_DeleteBCPCERules(port,bc_rule);
+      }
 
-      WPE_CreateBCPceRules(port);
-      WPE_CreateUnknownUnicastGroupWithPolicer (vlan, port);
-      WPE_CreateLearningFlowAggPceRule (port, vlan);
+      WPE_CreateBCPceRulesWithPolicer(port,vlan);
+      BC_enable = 1;
    }
 
    return OK;
 }
 
-int CLI_Suppress_Disable (char *StrPrm)
+int CLI_BC_Suppress_Disable (char *StrPrm)
 {
    WP_U16 vlan;
    WP_U32 port;
 
    char *pPortStr = NULL;
 
-   printf ("\nPlease input vlan and port pair.Enter \"Exit\" if end\n");
+
+   printf ("\nPlease vlan and port pair.Enter \"Exit\" if end\n");
    printf ("\nport index: 0-ENET8; 1-ENET7.\n");
    printf ("\ne.g: 101 1\n");
+
+   while (1)
+   {
+      memset (val_str, 0, 32);
+      get_line (val_str);
+
+      if (!strncmp (val_str, "Exit", 4) || !strncmp (val_str, "exit", 4))
+         break;
+
+      vlan = (WP_U16) strtoul (val_str, &pPortStr, 0);
+
+      pPortStr = strchr (pPortStr, ' ');
+
+      if (NULL == pPortStr)
+      {
+         printf ("Port Number invalid!\n");
+         return -1;
+      }
+      port = (WP_U32) strtoul (pPortStr, NULL, 0);
+      if(0 == BC_enable)
+      {
+      	printf("Attention!!You have clear this!!!\n");
+        return 0;
+      }
+
+      if(bc_rule_policer)
+      {
+	      WPE_DeleteBCPCERules(port,bc_rule_policer);
+      }
+      WPE_CreateBCPceRulesWithOutPolicer(port,vlan);
+      BC_enable = 0;
+   }
+   return OK;
+}
+
+int un_enable[10000]={0};
+int CLI_Unknown_Unicast_Suppress_Enable (char *StrPrm)
+{
+   WP_U16 vlan;
+   int i;
+   
+   printf ("\nPlease input vlan. Enter \"Exit\" if end\n");
+   printf ("\ne.g: 101\n");
+
+   while (1)
+   {
+      memset (val_str, 0, 32);
+      get_line (val_str);
+
+      if (!strncmp (val_str, "Exit", 4) || !strncmp (val_str, "exit", 4))
+         break;
+
+      vlan = (WP_U16) strtoul (val_str, NULL, 0);
+
+      for(i=0;i<NUM_OF_VLAN_GROUPS;i++)
+      {
+
+	       if((1 == un_enable[vlan])&&(vlan_groups[i].vlan == vlan))
+	      {
+	      	printf("Attention!!You have set this!!!\n");
+	        return 0;
+	      }
+      }
+
+      for(i=0;i<NUM_OF_VLAN_GROUPS;i++)
+      {
+          if ((vlan_groups[i].vlan == vlan) && (vlan_groups[i].valid == 1)&&(vlan_groups[i].PCE_rule_handle))
+      	{
+            WPE_DeleteUnkonwnUnicast_rules(vlan, 0,0);
+            WPE_DeleteUnkonwnUnicast_rules (vlan, 1,0);
+      	}
+      }
+      WPE_DeleteUnkonwnUnicastGroup( vlan, 0);
+      WPE_DeleteUnkonwnUnicastGroup( vlan, 1);  
+	  
+      WPE_CreateUnknownUnicastGroupWithPolicer (vlan, 0);
+      //WPE_CreateLearningFlowAggPceRule (0, vlan);
+      WPE_CreateUnknownUnicastGroupWithPolicer (vlan, 1);
+      //WPE_CreateLearningFlowAggPceRule (1, vlan);
+      for(i=0;i<NUM_OF_VLAN_GROUPS;i++)
+      {
+	 if ((vlan_groups[i].vlan == vlan) && (vlan_groups[i].valid == 1)&&(!vlan_groups[i].PCE_rule_handle_policer))
+	 {
+      	      WPE_CreateUnknownUnicastPceRulesWithPolicer(vlan, &vlan_groups[i]);
+         }
+      }
+      un_enable[vlan] = 1;
+   }
+
+   return OK;
+}
+
+int CLI_Unknown_Unicast_Suppress_Disable (char *StrPrm)
+{
+   WP_U16 vlan;
+   int i;
+   
+   printf ("\nPlease input vlan.Enter \"Exit\" if end\n");
+   printf ("\ne.g: 101\n");
 
    while (1)
    {
@@ -799,19 +1021,43 @@ int CLI_Suppress_Disable (char *StrPrm)
       if (!strncmp (val_str, "Exit", 4) || !strncmp (val_str, "exit", 4))
          break;
 
-      vlan = (WP_U16) strtoul (val_str, &pPortStr, 0);
+      vlan = (WP_U16) strtoul (val_str, NULL, 0);
 
-      pPortStr = strchr (pPortStr, ' ');
-      if (NULL == pPortStr)
+      for(i=0;i<NUM_OF_VLAN_GROUPS;i++)
       {
-         printf ("Port Number invalid!\n");
-         return -1;
+
+	       if((0 == un_enable[vlan])&&(vlan_groups[i].vlan == vlan))
+	      {
+	      	printf("Attention!!You have clear this!!!\n");
+	        return 0;
+	      }
       }
-      port = (WP_U32) strtoul (pPortStr, NULL, 0);
-	  
-      WPE_DeleteBCPCERules(port);
-      WPE_DeleteUnkonwnUnicastGroupWithPolicer(vlan, port);
-      WPE_DeleteLearningFlowAggPceRule (port, vlan);
+
+      for(i=0;i<NUM_OF_VLAN_GROUPS;i++)
+      {
+          if ((vlan_groups[i].vlan == vlan) && (vlan_groups[i].valid == 1)&&(vlan_groups[i].PCE_rule_handle_policer))
+      	{
+            WPE_DeleteUnkonwnUnicast_rules(vlan, 0,1);
+            WPE_DeleteUnkonwnUnicast_rules (vlan, 1,1);
+      	}
+      }
+
+      WPE_DeleteUnkonwnUnicastGroup( vlan, 0);
+      WPE_DeleteUnkonwnUnicastGroup( vlan, 1);  
+
+      WPE_CreateUnknownUnicastGroup (vlan, 0);
+      //WPE_CreateLearningFlowAggPceRule (0, vlan);
+      WPE_CreateUnknownUnicastGroup (vlan, 1);
+      //WPE_CreateLearningFlowAggPceRule (1, vlan);
+      for(i=0;i<NUM_OF_VLAN_GROUPS;i++)
+      {
+	 if ((vlan_groups[i].vlan == vlan) && (vlan_groups[i].valid == 1)&&(!vlan_groups[i].PCE_rule_handle))
+	 {
+      	      WPE_CreateUnknownUnicastPceRules(vlan, &vlan_groups[i]);
+         }
+      }
+      un_enable[vlan] = 0;
+
    }
 
    return OK;
@@ -855,13 +1101,30 @@ int CLI_VlanCos_Trans (char *StrPrm)
 int CLI_MacBinding_Create (char *StrPrm)
 {
    unsigned char mac[6];
+   WP_U32 port;
+
    char *pMacStr = val_str;
+   char *pPortStr = NULL;
+
 
    printf ("Please input MAC.\n");
-   printf ("e.g: 01-02-03-04-05-00\n");
+   printf ("\nport index: 0-ENET8; 1-ENET7.\n");
+
+   printf ("\nPlease input MAC and port pair. Enter \"Exit\" if end\n");
+
+   printf ("e.g: 01-02-03-04-05-00 1\n");
    get_line (val_str);
 
    F_ConvertStr2MacAddress (pMacStr, mac);
+
+      pPortStr = strchr (pMacStr, ' ');
+
+      if (NULL == pPortStr)
+      {
+         printf ("Port Number invalid!\n");
+         return -1;
+      }
+      port = (WP_U32) strtoul (pPortStr, NULL, 0);
 
    WPE_CreateMacBindingPceRule (0, mac);
 
@@ -1886,7 +2149,7 @@ void WPE_DataUnitSendToEnet(const WP_CHAR* mac_dst,
 
 int CLI_Send_Packets (char *StrPrm)
 {
-   WPE_DataUnitSendToEnet("FFFFFFFFFFF0", /* mac_dst */
+   WPE_DataUnitSendToEnet("FFFFFFFFFFFF", /* mac_dst */
                              "040101010101", /* mac_src */
                              "8100", /* svlan_etype */
                              "0001", /* svlan */
@@ -1896,7 +2159,7 @@ int CLI_Send_Packets (char *StrPrm)
                              "DC", /* slow_protocol */
                              "12121212", /* ip_dst */
                              "abcdef01", /* ip_src */
-                             gbe[0].tx_chan_enet);
+                             gbe[1].tx_chan_enet);
 
    return 0;
 

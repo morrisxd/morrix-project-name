@@ -34,7 +34,7 @@
 #define STAT_MENU_ITEM_NUM      6
 #define PERF_MENU_ITEM_NUM      2
 
-#define IPV4_MENU_ITEM_NUM       7//Phenix
+#define IPV4_MENU_ITEM_NUM       9//Phenix
 
 
 #define STR_STAR           "******************************************************************"
@@ -72,7 +72,6 @@ typedef struct
                 Y_MenuLeafP Leaf;
         } Node;
 } Y_MenuEntry;
-
 
 /******************************* MENU API *************************/
 void *CLI_T_Main(void* arg);
@@ -135,10 +134,13 @@ extern Y_MenuEntry LEARNING_menu[];
 extern Y_MenuEntry Performance_menu[];
 extern Y_MenuEntry IPV4_menu[];//Phenix
 
-int CLI_Suppress_Enable(char *StrPrm);//Phenix
-int CLI_Suppress_Disable(char *StrPrm);//Phenix
+int CLI_BC_Suppress_Enable(char *StrPrm);//Phenix
+int CLI_BC_Suppress_Disable (char *StrPrm);//Phenix
+int CLI_Unknown_Unicast_Suppress_Enable (char *StrPrm);//Phenix
+int CLI_Unknown_Unicast_Suppress_Disable (char *StrPrm);//Phenix
 int CLI_VlanCos_Trans (char *StrPrm);//Phenix
 int CLI_MacBinding_Create(char *StrPrm);//Phenix
+
 int CLI_Performance_TestStart(char *StrPrm);
 int CLI_Performance_TestExit(char *StrPrm);
 
