@@ -23,7 +23,7 @@ WP_handle iw_pool;
 
 WP_handle bc_rule = 0;//Phenix
 WP_handle bc_rule_policer = 0;//Phenix
-WP_handle vlancos_rule[8];//Phenix
+WP_handle vlancos_rule[1000][2];//Phenix
 
 WP_U32 aging_enable = 0;
 WP_U32 aging_weight = 1;
@@ -436,7 +436,7 @@ void App_InitHW (void)
    {
       status =
          WPX_BoardSerdesInit (WP_WINPATH (DEFAULT_WPID), gbe[ii].hw_port,
-                              WPX_SERDES_NORMAL);
+                              WPX_SERDES_LOOPBACK);
       App_TerminateOnError (status, "WPX_BoardSerdesInit 3()", __LINE__);
    }
 
