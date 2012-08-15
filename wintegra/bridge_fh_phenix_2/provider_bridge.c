@@ -436,7 +436,7 @@ void App_InitHW (void)
    {
       status =
          WPX_BoardSerdesInit (WP_WINPATH (DEFAULT_WPID), gbe[ii].hw_port,
-                              WPX_SERDES_LOOPBACK);
+                              /* WPX_SERDES_LOOPBACK */WPX_SERDES_NORMAL);
       App_TerminateOnError (status, "WPX_BoardSerdesInit 3()", __LINE__);
    }
 
