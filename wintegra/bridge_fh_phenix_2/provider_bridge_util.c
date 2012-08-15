@@ -335,18 +335,18 @@ WPE_vlan_edit_options vlan_options =
    { 
       WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_UNTAGGED,
       WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
-      WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_STACKED, /* C-TAGGED --> STACEKD */
-      WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_STACKED, /* S-TAGGED --> STACEKD */
-      WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_STACKED,
-      WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_STACKED
+      WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED, /* C-TAGGED --> STACEKD */
+      WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED, /* S-TAGGED --> STACEKD */
+      WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+      WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED
    },
 
-   /* replace_int_vlan_mode */            WPE_GPE_BROUTER_PECS_REPLACE_VLAN_ID,
+   /* replace_int_vlan_mode */            WPE_GPE_BROUTER_PECS_REPLACE_VLAN_ID_AND_PRIORITY,
    /* int_vlan_tag */                     0,
    /* int_vlan_etype_source */            WPE_GPE_BROUTER_PECS_VLAN_ETYPE_UNCHANGED,
    /* replace_ext_vlan_mode */            WPE_GPE_BROUTER_PECS_REPLACE_VLAN_DISABLE,
    /* ext_vlan_tag */                     0,
-   /* ext_vlan_etype_source */            WPE_GPE_BROUTER_PECS_VLAN_ETYPE_FIWT_STAG,
+   /* ext_vlan_etype_source */            WPE_GPE_BROUTER_PECS_VLAN_ETYPE_UNCHANGED,
    /* vlan_stag_etype */                  0x9100,
 };
    WP_iw_agg_generic dl_tx_agg_gbe[1] = {
@@ -369,6 +369,37 @@ WPE_vlan_edit_options vlan_options =
        },
    };
    WPE_gpe_brouter_pecs_flow_info brouter_pecs_flow_info[] = {
+      /*  */
+      {
+       WPE_GPE_BROUTER_PECS_EXTRACT_DISABLE, /* header_extract_mode */
+       0,                       /* extraction_size */
+       WPE_GPE_BROUTER_PECS_ADD_DISABLE,  /* prefix_add_mode */
+       4,                       /* prefix_add_size */
+       14,                      /* prefix_ip_offset */
+       WPE_GPE_BROUTER_PECS_REPLACE_MAC_DISABLE,   /* mac_replace_mode */
+       {0x11, 0x22, 0x33, 0x44, 0x55, 0x00}, /* mac_da */
+       {0x66, 0x77, 0x88, 0x99, 0xaa, 0x00}, /* mac_sa */
+       0,                       /* vlan_edit_options */
+
+       {0},                     /* prefix_remark_options */
+       WPE_GPE_BROUTER_PECS_TTL_DISABLE,  /* ttl_mode */
+       WPE_GPE_BROUTER_PECS_TOS_REMARKING_DISABLE, /* tos_remarking_mode */
+       {                        /* prefix */
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x00,
+        0x11, 0x12, 0x13, 0x14, 0x17, 0x00,
+        0x81, 0, 0, 1,
+        0x88, 0x47,
+        0x11, 0x11, 0x10, 0x80,
+        0x22, 0x22, 0x21, 0x80,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0}
+       }
+   };
+
+      WPE_gpe_brouter_pecs_flow_info brouter_pecs_flow_info_vlan[] = {
       /*  */
       {
        WPE_GPE_BROUTER_PECS_EXTRACT_DISABLE, /* header_extract_mode */
@@ -411,6 +442,16 @@ WPE_vlan_edit_options vlan_options =
                                      WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
       App_TerminateOnError (gbe[i].agg_enet,
                             "WP_IwFlowAggregationCreate()", __LINE__);
+      dl_tx_agg_gbe->txfunc = gbe[i].tx_chan_enet;
+      dl_tx_agg_gbe->iw_port = gbe[i].bport_enet;
+      dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+      dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info_vlan[0];
+      gbe[i].agg_enet_vlan =
+         WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                     WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+      App_TerminateOnError (gbe[i].agg_enet_vlan,
+                            "WP_IwFlowAggregationCreate(vlan)", __LINE__);
+
    }
 }
 
@@ -512,8 +553,8 @@ void WPE_CreateVlanCosFilter(void)
 
    filter_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_VLAN_TAG;
    filter_class.filter_fields[0].field_mode =WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
-   filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_USED;
-   filter_class.filter_fields[0].mask.vlan_tag= WP_PCE_FIELD_MASK_VLAN_PRIORITY;
+   filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+   //filter_class.filter_fields[0].mask.vlan_tag= WP_PCE_FIELD_MASK_VLAN_PRIORITY;
 
    filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 
@@ -1489,7 +1530,9 @@ static void WPE_CreateUnknownUnicastPceRulesWithPolicer (WP_U16 vlan,
 }
 
 static void WPE_CreateVlanCosPceRules (WP_U16 vlan_tag,
-                                              WP_U32 portid)
+                                              WP_U32 portid,
+                                              WP_U8 cos,
+                                              WP_U16 out_vlan_tag)
 {
    WP_pce_rule_classification rule_cfg = { 0 };
 
@@ -1500,7 +1543,7 @@ static void WPE_CreateVlanCosPceRules (WP_U16 vlan_tag,
    {
    case 0:
    case 1:
-      agg_handle = gbe[1 - portid].agg_enet;
+      agg_handle = gbe[1 - portid].agg_enet_vlan;
       break;
    default:
       printf ("NO such port : %d\n", portid);
@@ -1525,20 +1568,32 @@ static void WPE_CreateVlanCosPceRules (WP_U16 vlan_tag,
    rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
    
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
-   rule_cfg.match_result[1].param.int_vlan.vlan_tag = 100; 
-   rule_cfg.match_result[1].param.int_vlan.mask= WP_PCE_FIELD_MASK_VLAN_ID; 
-   rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
+   rule_cfg.match_result[1].param.int_vlan.vlan_tag = cos<<13 | out_vlan_tag; 
+   rule_cfg.match_result[1].param.int_vlan.mask= WP_PCE_MASK_VLAN_FULL; 
+
+   rule_cfg.match_result[2].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
+   rule_cfg.match_result[2].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE; 
+   rule_cfg.match_result[2].param.prefix_priority_remarking.value[0] = 0;  
+
+   rule_cfg.match_result[2].param.prefix_priority_remarking.remarking_type[1] = WP_PCE_RESULT_PPR_TYPE_INT_VLAN_PRIO; 
+   rule_cfg.match_result[2].param.prefix_priority_remarking.value[1] = cos;  
+   rule_cfg.match_result[2].param.prefix_priority_remarking.remarking_type[2] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE; 
+   rule_cfg.match_result[2].param.prefix_priority_remarking.value[2] = 0;  
+   rule_cfg.match_result[2].param.prefix_priority_remarking.remarking_type[3] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE; 
+   rule_cfg.match_result[2].param.prefix_priority_remarking.value[3] = 0;  
+
+   rule_cfg.match_result[3].result_type = WP_PCE_RESULT_LAST;
 
    h_PCE_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
                                   WP_PCE_RULE_CLASSIFICATION, &rule_cfg);
 
    if (!WP_ERROR_P (h_PCE_rule))
    {
-      vlancos_rule[(vlan_tag&WP_PCE_FIELD_MASK_VLAN_PRIORITY)>>13]= h_PCE_rule;
+      vlancos_rule[vlan_tag][portid]= h_PCE_rule;
    }
    else if (WP_ERROR (h_PCE_rule) == WP_ERR_PCE_RULE_ALREADY_EXISTS)
    {
-      printf ("PCE rule for port %d already exist!\n", portid);
+      printf ("PCE rule for vlan %d port %d already exist!\n", vlan_tag,portid);
    }
    else
    {

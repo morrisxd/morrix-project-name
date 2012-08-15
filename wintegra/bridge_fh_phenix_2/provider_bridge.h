@@ -74,6 +74,7 @@ typedef struct APP_gbe_enet_s
    WP_handle dev_enet;
    WP_handle bport_enet;
    WP_handle agg_enet;
+   WP_handle agg_enet_vlan;
    WP_handle rx_chan_enet;
    WP_handle tx_chan_enet;
    WP_U32 max_learned_mac;

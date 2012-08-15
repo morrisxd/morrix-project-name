@@ -164,7 +164,7 @@ Menu	provider_bridge_menu.h	/^                void *Menu;$/;"	m	union:__anon5::_
 NR_GBE	provider_bridge.h	37;"	d
 NR_PM_TEST_REQUIRED_RULES	provider_bridge.h	66;"	d
 NUM_OF_MC_GROUPS	provider_bridge_util.h	22;"	d
-NUM_OF_PECS	provider_bridge.h	83;"	d
+NUM_OF_PECS	provider_bridge.h	84;"	d
 NUM_OF_PECS_GLOBAL_INFO	provider_bridge.h	62;"	d
 NUM_OF_VLAN_GROUPS	provider_bridge_util.h	23;"	d
 Node	provider_bridge_menu.h	/^        } Node;$/;"	m	struct:__anon5	typeref:union:__anon5::__anon6
@@ -191,7 +191,7 @@ PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_backhaul$/;"	m
 PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/wpi_pps_image_iwgp_parser.o$/;"	m
 Performance_menu	provider_bridge_menu.c	/^Y_MenuEntry Performance_menu[] = {$/;"	v
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
-RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	625;"	d	file:
+RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	666;"	d	file:
 SIG	os_timer.c	12;"	d	file:
 SPECIAL_FLAG	makefile	/^SPECIAL_FLAG = -lpthread -lrt$/;"	m
 STAT_MENU_ITEM_NUM	provider_bridge_menu.h	34;"	d
@@ -322,7 +322,7 @@ WPI_TARGET	makefile	/^WPI_TARGET 	= mips_winmon_$(HW_DEVICE)$/;"	m
 WPI_T_DIR	makefile	/^WPI_T_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
 WPI_UFE4_DIR	makefile	/^WPI_UFE4_DIR = $(WPI_HTB_DIR)\/$(UFE_TYPE)$/;"	m
 WPI_UFE4_OBJ	makefile	/^WPI_UFE4_OBJ = $(WPI_UFE4_DIR)\/obj$/;"	m
-WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..\/..\/..\/..$/;"	m
+WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..\/..\/..$/;"	m
 WPL_THREAD_LOCK_KEY	provider_bridge.h	46;"	d
 WPT_DisplayBridgingPortStats	provider_bridge_util.c	/^void WPT_DisplayBridgingPortStats (WP_handle port_handle, WP_CHAR * type)$/;"	f
 WPT_GenericFlowStatistics	provider_bridge_util.c	/^void WPT_GenericFlowStatistics (WP_handle agg)$/;"	f
@@ -377,6 +377,7 @@ addr_start	wt_partition_ecc_util.c	/^        WP_U32 addr_start;$/;"	m	struct:__a
 ae_hi	wt_partition_ecc_util.c	/^        WP_U32 ae_hi;$/;"	m	struct:__anon1	file:
 ae_low	wt_partition_ecc_util.c	/^        WP_U32 ae_low;$/;"	m	struct:__anon1	file:
 agg_enet	provider_bridge.h	/^   WP_handle agg_enet;$/;"	m	struct:APP_gbe_enet_s
+agg_enet_vlan	provider_bridge.h	/^   WP_handle agg_enet_vlan;$/;"	m	struct:APP_gbe_enet_s
 agg_handle	provider_bridge_util.h	/^        WP_handle agg_handle;         \/\/the mc flow agg handle$/;"	m	struct:__anon9
 agg_handle	provider_bridge_util.h	/^        WP_handle agg_handle;         \/\/the vlan flooding flow agg handle$/;"	m	struct:__anon10
 aging_enable	provider_bridge.c	/^WP_U32 aging_enable = 0;$/;"	v
@@ -521,7 +522,7 @@ vlan	provider_bridge_util.c	/^   WP_U16 vlan;$/;"	m	struct:FdbEntry	file:
 vlan	provider_bridge_util.h	/^        WP_U16    vlan;   \/\/mc group vlan$/;"	m	struct:__anon9
 vlan	provider_bridge_util.h	/^        WP_U16    vlan;   \/\/vlan group vlan$/;"	m	struct:__anon10
 vlan_groups	provider_bridge_util.c	/^WPE_vlan_group *vlan_groups = NULL;$/;"	v
-vlancos_rule	provider_bridge.c	/^WP_handle vlancos_rule[8];\/\/Phenix$/;"	v
+vlancos_rule	provider_bridge.c	/^WP_handle vlancos_rule[1000][2];\/\/Phenix$/;"	v
 writeTrs	wt_partition_ecc_util.c	/^static WP_U32 writeTrs( WP_U32 start_addr, WP_U32 size,$/;"	f	file:
 wt_fuse_reg	wt_partition_ecc_util.c	/^} wt_fuse_reg;$/;"	t	typeref:struct:__anon2	file:
 wt_siu_internal	wt_partition_ecc_util.c	/^} wt_siu_internal;$/;"	t	typeref:struct:__anon3	file:

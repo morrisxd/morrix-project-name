@@ -1064,14 +1064,19 @@ int CLI_Unknown_Unicast_Suppress_Disable (char *StrPrm)
 }
 int CLI_VlanCos_Trans (char *StrPrm)
 {
-   WP_U16 vlan;
+   WP_U16 in_vlan;
+   WP_U16 out_vlan;
+   WP_U8  cos;
    WP_U32 port;
 
    char *pPortStr = NULL;
+   char *pCosStr = NULL;
+   char *pVlanStr = NULL;
+
    
-   printf ("\nPlease input vlan(16bits) and port pair. Enter \"Exit\" if end\n");
+   printf ("\nPlease input the original vlan, port  and the updated COS and vlan . Enter \"Exit\" if end\n");
    printf ("\nport index: 0-ENET8; 1-ENET7.\n");
-   printf ("\ne.g: 0xE000 1\n");
+   printf ("\ne.g: 100 1 7 200 (100---original vlan,1---port index, 7--- updated COS, 200 --- updated vlan)\n");
 
    while (1)
    {
@@ -1081,18 +1086,42 @@ int CLI_VlanCos_Trans (char *StrPrm)
       if (!strncmp (val_str, "Exit", 4) || !strncmp (val_str, "exit", 4))
          break;
 
-      vlan = (WP_U16) strtoul (val_str, &pPortStr, 0);
+      in_vlan = (WP_U16) strtoul (val_str, &pPortStr, 0);
 
       pPortStr = strchr (pPortStr, ' ');
 
       if (NULL == pPortStr)
       {
-         printf ("Port Number invalid!\n");
+         printf ("port Number invalid!\n");
          return -1;
       }
-      port = (WP_U32) strtoul (pPortStr, NULL, 0);
+	  
+      port = (WP_U32) strtoul (pPortStr, &pCosStr, 0);
+	  
+      pCosStr = strchr (pCosStr, ' ');
+      if (NULL == pCosStr)
+      {
+         printf ("COS value invalid!\n");
+         return -1;
+      }
+	  
+      cos = (WP_U8) strtoul (pCosStr, &pVlanStr, 0);
+      if(cos>7)
+      {
+	      printf("Please input the right COS value[0--7]\n");
+              return 0;
+      }
+      pVlanStr = strchr (pVlanStr, ' ');
+      if (NULL == pVlanStr)
+      {
+         printf ("Vlan Number invalid!\n");
+         return -1;
+      }
+	  
+      out_vlan = (WP_U32) strtoul (pVlanStr, NULL, 0);
 
-      WPE_CreateVlanCosPceRules(vlan,port);      
+      //printf("(%d-%d-%d-%d)\n",in_vlan,port,cos,out_vlan);
+      WPE_CreateVlanCosPceRules(in_vlan,port,cos,out_vlan);      
    }
 
    return OK;
