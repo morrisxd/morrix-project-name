@@ -1,7 +1,0 @@
-ctags -R
-make TEST=fh_demo.c 2>&1 | tee make.log
-
-cd bin
-cp fh_demo provider_bridge_phenix.exe
-up provider_bridge_phenix.exe bin
-
