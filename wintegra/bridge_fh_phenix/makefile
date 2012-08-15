@@ -6,8 +6,9 @@ TEST_DIR = .
 WPI_WDDS_DIR = ../../..
 WDDI_DIR = $(WPI_WDDS_DIR)/wddi
 ifeq "$(WPI_TARGET)" ""
-# WPI_TARGET 	= mips_linux
-WPI_TARGET 	= mips_winmon
+WPI_TARGET 	= mips_linux
+# WPI_TARGET 	= mips_winmon
+# WPI_TARGET 	= mips_winmon
 endif
 
 WPI_BOARD  	= wds
