@@ -1633,7 +1633,11 @@ void WPE_CreateMacBindingPceRule (WP_U8 portid, WP_U8 * mac)
 
    rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
 
+#if 0
    rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
+#else
+   rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
+#endif
 
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
