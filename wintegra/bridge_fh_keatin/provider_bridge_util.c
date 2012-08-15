@@ -329,7 +329,7 @@ void WPE_TxAggCreate (void)
 {
    WP_U32 i;
 
-   WP_iw_agg_generic dl_tx_agg_gbe[1] = {
+   WP_iw_agg_generic dl_tx_agg_gbe[1] = {       // outging port flowAgg
       {
        /*tag */ 2,
        /*txfunc */ 0,

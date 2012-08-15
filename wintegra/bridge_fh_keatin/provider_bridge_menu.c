@@ -1550,7 +1550,7 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
   
   filter_class.filter_fields[0].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
   filter_class.filter_fields[0].mask_mode =  WP_PCE_FIELD_MASK_USED;
-  filter_class.filter_fields[0].mask.parser_flags  = WP_PCE_MASK_PARSER_FLAG_BC;
+  filter_class.filter_fields[0].mask.parser_flags  = WP_PCE_MASK_PARSER_FLAG_BC; // here
   filter_class.filter_fields[0].field_id =  WP_PCE_FIELD_ID_PARSER_FLAGS;
   
   filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
@@ -1599,7 +1599,7 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
   rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
   
   rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
-  rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
+  rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;   // flowAgg
   
   rule_cfg.match_result[1].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
   #if 0
@@ -1611,7 +1611,7 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
   rule_cfg.match_result[1].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
   rule_cfg.match_result[1].param.prefix_priority_remarking.value[0] = 0;
   rule_cfg.match_result[1].param.prefix_priority_remarking.remarking_type[1] = WP_PCE_RESULT_PPR_TYPE_INT_VLAN_PRIO;
-  rule_cfg.match_result[1].param.prefix_priority_remarking.value[1] = 3;  
+  rule_cfg.match_result[1].param.prefix_priority_remarking.value[1] = 3;  // modify PRIO
   #endif
 
   rule_cfg.match_result[1].param.prefix_priority_remarking.remarking_type[2] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1633,13 +1633,13 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
   }
   testwddiobj.rules[0]= h_pce_rule;
   
-  // rule2 for bc
+  // rule2 for bc =================================================
   rule_cfg.enabled = WP_ENABLE;
   
   rule_cfg.filter_handle = filter;
   
   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_PARSER_FLAGS;
-  rule_cfg.rule_fields[0].value.parser_flags = WP_PCE_MASK_PARSER_FLAG_BC;
+  rule_cfg.rule_fields[0].value.parser_flags = WP_PCE_MASK_PARSER_FLAG_BC; // set BC flag
   
   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
   
@@ -1691,7 +1691,7 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
   
   pce_if_params.mode = WP_PCE_IW_PORT_CONNECTION_ENABLED;
   pce_if_params.parser_start_type = WP_PCE_PARSER_START_TYPE_ETHERNET;
-  pce_if_params.filter_set_handle = filter_set;
+  pce_if_params.filter_set_handle = filter_set; // =======================
   pce_if_params.ip_header_validation = WP_DISABLE;
   //pce_if_params.user_programmable_fields_handle = 0;//fht
   
@@ -1749,7 +1749,7 @@ void CLI_HostSendPacketCase34(void)
    assemble_packet(&data_ptr[0], 4, 0x00000000);
    assemble_packet(&data_ptr[4], 4, 0x00010000);
    assemble_packet(&data_ptr[8], 4, 0x00000002);
-   assemble_packet(&data_ptr[12], 4, 0x81000001); /* vlan = 1*/
+   assemble_packet(&data_ptr[12], 4, 0x81000001); /* vlan = 1, should got 0x81003000*/
    assemble_packet(&data_ptr[16], 2, 0x0800);
    assemble_packet(&data_ptr[18], 4, 0x45040020);/* tos = 4 */
    assemble_packet(&data_ptr[22], 4, 0x001b0000);
@@ -1783,7 +1783,7 @@ void CLI_HostSendPacketCase34(void)
    assemble_packet(&data_ptr[0], 4, 0xffffffff);
    assemble_packet(&data_ptr[4], 4, 0xffff0000);
    assemble_packet(&data_ptr[8], 4, 0x00000002);
-   assemble_packet(&data_ptr[12], 4, 0x81000002);/* vlan = 1*/
+   assemble_packet(&data_ptr[12], 4, 0x81000002);/* vlan = 1, should 0x81008002*/
    assemble_packet(&data_ptr[16], 2, 0x0800);
    assemble_packet(&data_ptr[18], 4, 0x45040020);/* tos = 4 */
    assemble_packet(&data_ptr[22], 4, 0x001b0000);
@@ -2020,10 +2020,10 @@ int CLI_FHT_Case35_SmacDmacSipDipTos2SVlan (char *StrPrm)
 
   rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
   
-  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
+  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;// ===============
   rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
 
-  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
+  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE/*WP_PCE_RESULT_INT_VLAN_UPDATE*/;//===========
   rule_cfg.match_result[1].param.int_vlan.vlan_tag = 0x100;
   rule_cfg.match_result[1].param.int_vlan.mask = 0xfff;
 
@@ -2225,7 +2225,7 @@ void CLI_HostSendPacketCase35(void)
 /*
 case36
 in this case,  match ext vlan range from 0x100 - 0x200, change ext vlan = 1
-for no matching packet, drop
+for no matching packet, drop --- test OK
 */
 
 int CLI_FHT_Case36_Vlan2Vlan (char *StrPrm)
@@ -2449,7 +2449,7 @@ int CLI_FHT_Case36_Vlan2Vlan (char *StrPrm)
   rule_cfg.match_result[0].param.int_vlan.mask = 0xfff;
 #else
   rule_cfg.match_result[0].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE;
-  rule_cfg.match_result[0].param.ext_vlan.vlan_tag = 0x1;
+  rule_cfg.match_result[0].param.ext_vlan.vlan_tag = 0x1;   //================
   rule_cfg.match_result[0].param.ext_vlan.mask = 0xfff;
   // please also change vlan_edit_option ext_replace_mode=vlanid
   // and after filter1, ext vlan is updated, filter2 need to match new vlan.
@@ -2856,7 +2856,7 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
    /* Modify the PCE interface for GE RX channel handle */
   for (ii = 0; ii < 1 /*NR_GBE*/; ii++)  // leave enet2 to host for checking
   {
-    rx_binding_cfg[0].pce_if_handle = pce_if_handle;
+    rx_binding_cfg[0].pce_if_handle = pce_if_handle /*0*/;
     rx_binding_cfg[0].input_port = gbe[ii].bport_enet;
     
     status = WP_IwRxBindingModify (gbe[ii].rx_chan_enet,
