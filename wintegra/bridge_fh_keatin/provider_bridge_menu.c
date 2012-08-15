@@ -40,15 +40,15 @@ Y_MenuEntry V_MainMenu[] = {
    {K_Menu, MAIN_MENU_ITEM_NUM, TRUE, "Main Menu",
     {(Y_MenuEntry *) V_MainMenu}},
    {K_Menu, 1, TRUE, " -> FH Test Menu", {(Y_MenuEntry *) FH_Test_menu}},
-   {K_Menu, 2, TRUE, " -> Vlan Menu", {(Y_MenuEntry *) VLAN_menu}},
-   {K_Menu, 3, TRUE, " -> Aging Menu", {(Y_MenuEntry *) AGING_menu}},
-   {K_Menu, 4, TRUE, " -> Learning Menu", {(Y_MenuEntry *) LEARNING_menu}},
+   {K_Menu, 2, FALSE, " -> Vlan Menu", {(Y_MenuEntry *) VLAN_menu}},
+   {K_Menu, 3, FALSE, " -> Aging Menu", {(Y_MenuEntry *) AGING_menu}},
+   {K_Menu, 4, FALSE, " -> Learning Menu", {(Y_MenuEntry *) LEARNING_menu}},
    {K_Menu, 5, TRUE, " -> System Statistics", {(Y_MenuEntry *) STAT_menu}},
-   {K_Leaf, 6, TRUE, " <> Dump FDB entry",
+   {K_Leaf, 6, FALSE, " <> Dump FDB entry",
     {(void *) (int) CLI_Dump_FDB_entry}},
-   {K_Leaf, 7, TRUE, " <> Flush FDB by Vlan",
+   {K_Leaf, 7, FALSE, " <> Flush FDB by Vlan",
     {(void *) (int) CLI_Flush_FDB_entry_by_Vlan}},
-   {K_Menu, 8, TRUE, " -> Performance test",
+   {K_Menu, 8, FALSE, " -> Performance test",
     {(Y_MenuEntry *) Performance_menu}},
    {K_Leaf, 9, TRUE, " <> Quit", {(void *) (int) CLI_MAIN_Quit}},
 };
@@ -56,15 +56,15 @@ Y_MenuEntry V_MainMenu[] = {
 Y_MenuEntry FH_Test_menu[] = {
    {K_Menu, FHT_MENU_ITEM_NUM, TRUE, "FiberHome Test Menu",
     {(Y_MenuEntry *) V_MainMenu}},
-   {K_Leaf, 1, TRUE, " -> IPV6 filtering",
+   {K_Leaf, 1, FALSE, " -> IPV6 filtering",
     {(void *) (int) CLI_FHT_IPV6_filter}},
-   {K_Leaf, 2, TRUE, " -> L4 port filtering",
+   {K_Leaf, 2, FALSE, " -> L4 port filtering",
     {(void *) (int) CLI_FHT_L4_port_filter}},
-   {K_Leaf, 3, TRUE, " -> L4 subtype filtering",
+   {K_Leaf, 3, FALSE, " -> L4 subtype filtering",
     {(void *) (int) CLI_FHT_L4_subtype_filter}},
-   {K_Leaf, 4, TRUE, " -> Reserved MAC filtering",
+   {K_Leaf, 4, FALSE, " -> Reserved MAC filtering",
     {(void *) (int) CLI_FHT_Reserved_Mac_filter}},
-   {K_Leaf, 5, TRUE, " -> Max Learned Mac by port",
+   {K_Leaf, 5, FALSE, " -> Max Learned Mac by port",
     {(void *) (int) CLI_FHT_Max_Learned_Mac}},
    {K_Leaf, 6, TRUE, " -> Case34 Uc Bc packet -> Vlan Prio",
     {(void *) (int) CLI_FHT_Case34_UcBc2Prio}},
@@ -206,6 +206,7 @@ int get_line (char *buf)
       switch (ch)
       {
       case KEY_ENTER:
+      case KEY_RETURN:
          /* skip space */
          i = 0;
          while (!(isalpha (line[i]) || isdigit (line[i])) && (i < index))
@@ -1288,11 +1289,12 @@ int CLI_FHT_Max_Learned_Mac (char *StrPrm)
 /********************  ADDED BY KEATIN ***********************/
 
 #define HOST_SEND 
+#undef HOST_SEND
 
 struct  testingWddiObj testwddiobj = {0, {0}, 0, {0}, 0};
 WP_pce_filter_stat pce_filter_stats[256];
 
-static void WPE_PrintPceFilterStats(WP_handle filter)
+void WPE_PrintPceFilterStats(WP_handle filter)
 {
    WP_U32 index;
    WP_U32 temp1, temp2;
@@ -1448,11 +1450,11 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
    WP_handle iw_sys = dl_general_iwsys_bridge;
 
 #ifdef HOST_SEND
-  temp = 0;
+   temp = 0;
 #else
-  temp = CLI_GetNumber ("Input port number ( 0 - 1)", 0, 1);
+   temp = CLI_GetNumber ("Input port number ( 0 - 1)", 0, 1);
 #endif
-  portid = temp;
+   portid = temp;
 
    CLI_FHT_ClearTestingWddiObj();
 
@@ -1526,7 +1528,7 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
         0, 0, 0, 0, 0, 0, 0, 0}
        }
    };
-
+   i = 0;
    // keatin here use modify maybe better. or delete it first.
 
    /* DL GE TX flow agg */
@@ -1611,7 +1613,7 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
   rule_cfg.match_result[1].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
   rule_cfg.match_result[1].param.prefix_priority_remarking.value[0] = 0;
   rule_cfg.match_result[1].param.prefix_priority_remarking.remarking_type[1] = WP_PCE_RESULT_PPR_TYPE_INT_VLAN_PRIO;
-  rule_cfg.match_result[1].param.prefix_priority_remarking.value[1] = 3;  // modify PRIO
+  rule_cfg.match_result[1].param.prefix_priority_remarking.value[1] = 3;  // modify PRIO to 3 if old = 0
   #endif
 
   rule_cfg.match_result[1].param.prefix_priority_remarking.remarking_type[2] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1750,7 +1752,7 @@ void CLI_HostSendPacketCase34(void)
    assemble_packet(&data_ptr[4], 4, 0x00010000);
    assemble_packet(&data_ptr[8], 4, 0x00000002);
    assemble_packet(&data_ptr[12], 4, 0x81000001); /* vlan = 1, should got 0x81003000*/
-   assemble_packet(&data_ptr[16], 2, 0x0800);
+   assemble_packet(&data_ptr[16], 2, 0x0800);   // VLAN type
    assemble_packet(&data_ptr[18], 4, 0x45040020);/* tos = 4 */
    assemble_packet(&data_ptr[22], 4, 0x001b0000);
    assemble_packet(&data_ptr[26], 4, 0x0a11e449);/* protocol = 0x11*/
@@ -1913,7 +1915,7 @@ int CLI_FHT_Case35_SmacDmacSipDipTos2SVlan (char *StrPrm)
         0, 0, 0, 0, 0, 0, 0, 0}
        }
    };
-
+   i = 0;
    /* DL GE TX flow agg */
 
   dl_tx_agg_gbe->txfunc = gbe[1].tx_chan_enet;
@@ -2327,7 +2329,7 @@ int CLI_FHT_Case36_Vlan2Vlan (char *StrPrm)
    };
 
    // keatin here use modify maybe better. or delete it first.
-
+   i = 0;
    /* DL GE TX flow agg */
 
   dl_tx_agg_gbe->txfunc = gbe[1].tx_chan_enet;
@@ -2736,7 +2738,7 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
       0, 0, 0, 0, 0, 0, 0, 0}
      }
   };
-  
+   i = 0;    
   // keatin here use modify maybe better. or delete it first.
   
   /* DL GE TX flow agg */
@@ -2767,6 +2769,13 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
   filter_class.filter_fields[1].field_id =  WP_PCE_FIELD_ID_INT_VLAN_TAG;
   
   filter_class.filter_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+#ifdef MORRIS_MOD
+  filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+  filter_class.filter_fields[0].field_id =  WP_PCE_FIELD_ID_PARSER_FLAGS;
+  filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+  filter_class.filter_fields[0].mask_mode =  WP_PCE_FIELD_MASK_USED;
+  filter_class.filter_fields[0].mask.parser_flags  = WP_PCE_MASK_PARSER_FLAG_BC; // here
+#endif
 
   filter = WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
                         WP_PCE_FILTER_CLASSIFICATION,
@@ -2811,6 +2820,12 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
   rule_cfg.rule_fields[1].value.vlan_tag = 0x200;
   // range 1 - 200,  so 300 is denied.
+
+#ifdef MORRIS_MOD
+  rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_PARSER_FLAGS;
+  rule_cfg.rule_fields[0].value.parser_flags = 0;
+  rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+#endif
   
   rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
   
@@ -2856,7 +2871,11 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
    /* Modify the PCE interface for GE RX channel handle */
   for (ii = 0; ii < 1 /*NR_GBE*/; ii++)  // leave enet2 to host for checking
   {
+#if 1
     rx_binding_cfg[0].pce_if_handle = pce_if_handle /*0*/;
+#else
+    rx_binding_cfg[0].pce_if_handle = 0;
+#endif
     rx_binding_cfg[0].input_port = gbe[ii].bport_enet;
     
     status = WP_IwRxBindingModify (gbe[ii].rx_chan_enet,
