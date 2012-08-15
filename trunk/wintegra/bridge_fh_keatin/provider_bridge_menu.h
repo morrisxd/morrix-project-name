@@ -48,6 +48,7 @@
 
 #define KEY_BACKSPACE           8
 #define KEY_ENTER               10
+#define KEY_RETURN               13
 
 typedef int  (*Y_MenuLeafP) (char *StrPrm);
 
