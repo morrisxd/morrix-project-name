@@ -2225,7 +2225,7 @@ void CLI_HostSendPacketCase35(void)
    CLI_HostSendPacket(data_ptr,  size);
    
 }
-
+#define NEW_VLAN  (0x100)
 
 /*
 case 35
@@ -2277,7 +2277,7 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
 	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
       },
       /* replace_int_vlan_mode;*/ WPE_GPE_BROUTER_PECS_REPLACE_VLAN_ID,
-      /* int_vlan_tag;*/ 11,
+      /* int_vlan_tag;*/ NEW_VLAN,
       /*  int_vlan_etype_source;*/ WPE_GPE_BROUTER_PECS_VLAN_ETYPE_8100,
       /*  replace_ext_vlan_mode;*/WPE_GPE_BROUTER_PECS_REPLACE_VLAN_PRIORITY,
       /* ext_vlan_tag;*/0,
@@ -2462,8 +2462,8 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
 
   rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
   
-  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE;
-  rule_cfg.match_result[0].param.ext_vlan.vlan_tag = 0x100;
+  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE/*WP_PCE_RESULT_EXT_VLAN_UPDATE*/;
+  rule_cfg.match_result[0].param.ext_vlan.vlan_tag = NEW_VLAN /* 0x100*/;
   rule_cfg.match_result[0].param.ext_vlan.mask = 0xfff;
 
   rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
@@ -2486,7 +2486,7 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
   rule_cfg.filter_handle = testwddiobj.filter[1];
   
   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_EXT_VLAN_TAG;
-  rule_cfg.rule_fields[0].value.vlan_tag = 0x100;
+  rule_cfg.rule_fields[0].value.vlan_tag = NEW_VLAN /* 0x100*/;
 
   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 
@@ -2547,7 +2547,7 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
   // rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
                                           
   rule_cfg.match_result[0].result_type =  WP_PCE_RESULT_EXT_VLAN_UPDATE;
-  rule_cfg.match_result[0].param.ext_vlan/*int_vlan*/.vlan_tag = 0x100;
+  rule_cfg.match_result[0].param.ext_vlan/*int_vlan*/.vlan_tag = NEW_VLAN /* 0x100*/;
   rule_cfg.match_result[0].param.ext_vlan/*int_vlan*/.mask = 0xfff;
   
   rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
@@ -2571,7 +2571,7 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
   rule_cfg.filter_handle = testwddiobj.filter[1];
   
   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_EXT_VLAN_TAG;
-  rule_cfg.rule_fields[0].value./*ext_vlan.*/vlan_tag = /*0x300*/0x100;
+  rule_cfg.rule_fields[0].value./*ext_vlan.*/vlan_tag = /*0x300*/NEW_VLAN /* 0x100*/;
 
   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 

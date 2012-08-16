@@ -154,6 +154,7 @@ MC_menu	provider_bridge_menu.c	/^Y_MenuEntry MC_menu[] = {$/;"	v
 MENU_ITEM_ONLY_ONE	provider_bridge_menu.h	33;"	d
 MORRIS_MOD	provider_bridge_menu.c	1292;"	d	file:
 Menu	provider_bridge_menu.h	/^                void *Menu;$/;"	m	union:__anon5::__anon6
+NEW_VLAN	provider_bridge_menu.c	2228;"	d	file:
 NR_GBE	provider_bridge.h	37;"	d
 NR_PM_TEST_REQUIRED_RULES	provider_bridge.h	66;"	d
 NUM_OF_MC_GROUPS	provider_bridge_util.h	22;"	d
