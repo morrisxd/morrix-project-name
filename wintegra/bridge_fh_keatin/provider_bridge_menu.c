@@ -53,6 +53,8 @@ Y_MenuEntry V_MainMenu[] = {
    {K_Leaf, 9, TRUE, " <> Quit", {(void *) (int) CLI_MAIN_Quit}},
 };
 
+extern int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm);
+
 Y_MenuEntry FH_Test_menu[] = {
    {K_Menu, FHT_MENU_ITEM_NUM, TRUE, "FiberHome Test Menu",
     {(Y_MenuEntry *) V_MainMenu}},
@@ -1287,7 +1289,7 @@ int CLI_FHT_Max_Learned_Mac (char *StrPrm)
 
 
 /********************  ADDED BY KEATIN ***********************/
-
+#define MORRIS_MOD
 #define HOST_SEND 
 #undef HOST_SEND
 
@@ -2333,7 +2335,7 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
         0, 0, 0, 0, 0, 0, 0, 0}
        }
    };
-
+   i = 0;
    /* DL GE TX flow agg */
 
   dl_tx_agg_gbe->txfunc = gbe[1].tx_chan_enet;
@@ -3270,6 +3272,12 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
   filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
   filter_class.filter_fields[0].mask_mode =  WP_PCE_FIELD_MASK_USED;
   filter_class.filter_fields[0].mask.parser_flags  = WP_PCE_MASK_PARSER_FLAG_BC; // here
+
+
+  filter_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_INPUT_IW_PORT;
+  filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+  filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+  filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 #endif
 
   filter = WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
@@ -3317,9 +3325,11 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
   // range 1 - 200,  so 300 is denied.
   
 #ifdef MORRIS_MOD
-  rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_PARSER_FLAGS;
-  rule_cfg.rule_fields[0].value.parser_flags = 0;
-  rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_PARSER_FLAGS;
+   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_INPUT_IW_PORT;
+   rule_cfg.rule_fields[0].value.parser_flags = 0;
+   rule_cfg.rule_fields[0].value.iw_port_handle = gbe[0].bport_enet;
+   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
 #endif
   
   rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;

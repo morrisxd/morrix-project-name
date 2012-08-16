@@ -40,7 +40,7 @@ CLI_Enable_learning	provider_bridge_menu.c	/^int CLI_Enable_learning (char *StrP
 CLI_Enable_port_lrn	provider_bridge_menu.c	/^int CLI_Enable_port_lrn (char *StrPrm)$/;"	f
 CLI_FHT_Case34_UcBc2Prio	provider_bridge_menu.c	/^int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)$/;"	f
 CLI_FHT_Case35_SmacDmacSipDipTos2SVlan	provider_bridge_menu.c	/^int CLI_FHT_Case35_SmacDmacSipDipTos2SVlan (char *StrPrm)$/;"	f
-CLI_FHT_Case36_Vlan2Vlan	provider_bridge_menu.c	/^int CLI_FHT_Case36_Vlan2Vlan (char *StrPrm)$/;"	f
+CLI_FHT_Case36_SmacDmacSipDipTos2SVlan	provider_bridge_menu.c	/^int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)$/;"	f
 CLI_FHT_Case37_Tag_Stack_Tunneling	provider_bridge_menu.c	/^int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)$/;"	f
 CLI_FHT_ClearTestingWddiObj	provider_bridge_menu.c	/^int CLI_FHT_ClearTestingWddiObj (void)$/;"	f
 CLI_FHT_IPV6_filter	provider_bridge_menu.c	/^int CLI_FHT_IPV6_filter (char *StrPrm)$/;"	f
@@ -117,8 +117,8 @@ FdbEntry	provider_bridge_util.c	/^typedef struct FdbEntry$/;"	s	file:
 Fdbhead	provider_bridge_util.c	/^Node *Fdbhead = NULL;$/;"	v
 HOST_CMD_WRITE_SIZE	wt_partition_ecc_util.c	123;"	d	file:
 HOST_READ_CMD_OP	wt_partition_ecc_util.c	122;"	d	file:
-HOST_SEND	provider_bridge_menu.c	1291;"	d	file:
-HOST_SEND	provider_bridge_menu.c	1292;"	d	file:
+HOST_SEND	provider_bridge_menu.c	1293;"	d	file:
+HOST_SEND	provider_bridge_menu.c	1294;"	d	file:
 HOST_WRITE_CMD_OP	wt_partition_ecc_util.c	121;"	d	file:
 HOTKEY_CUR_MENU	provider_bridge_menu.h	45;"	d
 HOTKEY_MAIN_MENU	provider_bridge_menu.h	43;"	d
@@ -152,6 +152,7 @@ MAX_NUM_OF_CHANNELS	provider_bridge.h	57;"	d
 MC_MENU_ITEM_NUM	provider_bridge_menu.h	30;"	d
 MC_menu	provider_bridge_menu.c	/^Y_MenuEntry MC_menu[] = {$/;"	v
 MENU_ITEM_ONLY_ONE	provider_bridge_menu.h	33;"	d
+MORRIS_MOD	provider_bridge_menu.c	1292;"	d	file:
 Menu	provider_bridge_menu.h	/^                void *Menu;$/;"	m	union:__anon5::__anon6
 NR_GBE	provider_bridge.h	37;"	d
 NR_PM_TEST_REQUIRED_RULES	provider_bridge.h	66;"	d
