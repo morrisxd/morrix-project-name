@@ -2512,7 +2512,7 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
   // rule2 for  smac=00..03, dmac=00..04, sip=10.0.0.3,dip=10.0.0.4,tos=3  vlan -> 100
   rule_cfg.enabled = WP_ENABLE;
   
-  rule_cfg.filter_handle = filter;
+  rule_cfg.filter_handle = testwddiobj.filter[0];
   
   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
   rule_cfg.rule_fields[0].value.mac_addr[0] = 0x00;
@@ -2543,8 +2543,8 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
   
   // results
   rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
-  
-  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
+                                          
+  rule_cfg.match_result[0].result_type =  WP_PCE_RESULT_EXT_VLAN_UPDATE;
   rule_cfg.match_result[0].param.int_vlan.vlan_tag = 0x100;
   rule_cfg.match_result[0].param.int_vlan.mask = 0xfff;
   
@@ -2558,6 +2558,7 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
   }
   else
   {
+/////////////////////////////////////////////////////////////////////
     App_TerminateOnError (h_pce_rule, "WP_PceRuleCreate", __LINE__);
   }
   testwddiobj.rules[3]= h_pce_rule;
