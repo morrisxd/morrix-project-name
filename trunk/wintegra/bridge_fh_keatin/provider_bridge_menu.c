@@ -2354,7 +2354,7 @@ int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
   
   filter_class.no_match_result[0].result_type =
     WP_PCE_RESULT_LAST;
-  
+   /* MAC_DA, MAC_SA, IPV4_DSA, IPV4_DA */ 
   filter_class.filter_fields[0].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
   filter_class.filter_fields[0].mask_mode =  WP_PCE_FIELD_MASK_NOT_USED;
   filter_class.filter_fields[0].field_id =  WP_PCE_FIELD_ID_MAC_DA;
