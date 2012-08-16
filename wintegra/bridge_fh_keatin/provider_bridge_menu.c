@@ -68,10 +68,10 @@ Y_MenuEntry FH_Test_menu[] = {
     {(void *) (int) CLI_FHT_Max_Learned_Mac}},
    {K_Leaf, 6, TRUE, " -> Case34 Uc Bc packet -> Vlan Prio",
     {(void *) (int) CLI_FHT_Case34_UcBc2Prio}},
-   {K_Leaf, 7, TRUE, " -> Case35 SMAC DMAC SIP DIP TOS -> SVLAN",
+   {K_Leaf, 7, TRUE, " -> Case35 SMAC DMAC SIP DIP TOS -> differ SVLAN",
     {(void *) (int) CLI_FHT_Case35_SmacDmacSipDipTos2SVlan}},
-   {K_Leaf, 8, TRUE, " -> Case36 VLAN -> VLAN",
-    {(void *) (int) CLI_FHT_Case36_Vlan2Vlan}},
+   {K_Leaf, 8, TRUE, " -> Case36 SMAC DMAC SIP DIP TOS -> same SVLAN",
+    {(void *) (int) CLI_FHT_Case36_SmacDmacSipDipTos2SVlan}},
    {K_Leaf, 9, TRUE, " -> Case37 Tagg Stack Tagg tunneling",
     {(void *) (int) CLI_FHT_Case37_Tag_Stack_Tunneling}},
 };
@@ -1450,11 +1450,11 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
    WP_handle iw_sys = dl_general_iwsys_bridge;
 
 #ifdef HOST_SEND
-   temp = 0;
+  temp = 0;
 #else
-   temp = CLI_GetNumber ("Input port number ( 0 - 1)", 0, 1);
+  temp = CLI_GetNumber ("Input port number ( 0 - 1)", 0, 1);
 #endif
-   portid = temp;
+  portid = temp;
 
    CLI_FHT_ClearTestingWddiObj();
 
@@ -2081,9 +2081,9 @@ int CLI_FHT_Case35_SmacDmacSipDipTos2SVlan (char *StrPrm)
   rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
   rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
   
-  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
-  rule_cfg.match_result[1].param.int_vlan.vlan_tag = 0x300;
-  rule_cfg.match_result[1].param.int_vlan.mask = 0xfff;
+  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE;
+  rule_cfg.match_result[1].param.ext_vlan.vlan_tag = 0x300;
+  rule_cfg.match_result[1].param.ext_vlan.mask = 0xfff;
   
   rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
   
@@ -2224,6 +2224,500 @@ void CLI_HostSendPacketCase35(void)
    
 }
 
+
+/*
+case 35
+smac=00..01, dmac=00..02, sip=10.0.0.1,dip=10.0.0.2,tos=1 vlan ->100
+smac=00..03, dmac=00..04, sip=10.0.0.3,dip=10.0.0.4,tos=3 vlan ->300
+
+this case is not tested pass in WDDS4.1 for not able to set INT_VLAN update and FA together in one filter
+I believed it can be set in WDDS4.3
+if in WDDS4.3 can not do it either, we shall split the mathing result into 2 filters.
+please refer to Case36, which is an example of spliting.
+*/
+
+int CLI_FHT_Case36_SmacDmacSipDipTos2SVlan (char *StrPrm)
+{
+   WP_U32 temp, portid;
+   
+   WP_pce_filter_classification filter_class = { 0 };
+   WP_handle filter;
+   WP_handle filter_set;
+   WP_handle txfa;
+   WP_pce_filter_set fs_level;
+   WP_pce_rule_classification rule_cfg = { 0 };
+   WP_handle port_handle = 0, agg_handle = 0, h_pce_rule = 0;
+
+   WP_pce_if_params_pkt_rx_channel pce_if_params = { 0 };
+   WP_handle pce_if_handle;
+   WP_status status;
+   WP_U32 ii;
+   WP_handle iw_sys = dl_general_iwsys_bridge;
+
+#ifdef HOST_SEND
+  temp = 0;
+#else
+  temp = CLI_GetNumber ("Input port number ( 0 - 1)", 0, 1);
+#endif
+  portid = temp;
+
+   CLI_FHT_ClearTestingWddiObj();
+
+   WP_U32 i = 0;
+
+   WPE_vlan_edit_options veoption = {
+      /* egress_rule; */{
+	    WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+      },
+      /* replace_int_vlan_mode;*/ WPE_GPE_BROUTER_PECS_REPLACE_VLAN_ID,
+      /* int_vlan_tag;*/ 11,
+      /*  int_vlan_etype_source;*/ WPE_GPE_BROUTER_PECS_VLAN_ETYPE_8100,
+      /*  replace_ext_vlan_mode;*/WPE_GPE_BROUTER_PECS_REPLACE_VLAN_PRIORITY,
+      /* ext_vlan_tag;*/0,
+      /*  ext_vlan_etype_source;*/WPE_GPE_BROUTER_PECS_VLAN_ETYPE_8100,
+      /* vlan_stag_etype;*/0x8100,
+      /*  replace_sub_port_vlan_mode;*/WPE_GPE_BROUTER_PECS_SUB_PORT_VLAN_DISABLE,
+      /* sub_port_vlan_tag;*/0x0,
+   };
+
+   WP_iw_agg_generic dl_tx_agg_gbe[1] = {
+      {
+       /*tag */ 2,
+       /*txfunc */ 0,
+       /*iw_port */ 0,
+       /*rfcs */ WP_IW_RFCS_ENABLE,
+       /*interruptqueue; */ WP_IW_IRQT1,
+       /*error_pkt_mode */ WP_IW_ERRPKT_DISCARD,
+       /*intmode; */ WP_IW_INT_DISABLE,
+       /*statmode; */ WP_IW_STAT_ENABLE,
+       /*timestamp_mode; */ WP_IW_TIME_STAMP_DISABLE,
+       /*mtu; */ 9216,
+       /*flow_agg_type; */ WP_IW_FLOW_AGG_PRIMARY,
+       /*policer_handle; */ 0,
+       /*pecs_handle; */ 0,
+       /*pecs_flow_info; */ 0,
+       /*pecs_global_info_handle; */ 0,
+       },
+   };
+   WPE_gpe_brouter_pecs_flow_info brouter_pecs_flow_info[] = {
+      /*  */
+      {
+       WPE_GPE_BROUTER_PECS_EXTRACT_DISABLE, /* header_extract_mode */
+       0,                       /* extraction_size */
+       WPE_GPE_BROUTER_PECS_ADD_DISABLE,  /* prefix_add_mode */
+       4,                       /* prefix_add_size */
+       14,                      /* prefix_ip_offset */
+       WPE_GPE_BROUTER_PECS_REPLACE_MAC_DISABLE,   /* mac_replace_mode */
+       {0x11, 0x22, 0x33, 0x44, 0x55, 0x00}, /* mac_da */
+       {0x66, 0x77, 0x88, 0x99, 0xaa, 0x00}, /* mac_sa */
+       &veoption,                       /* vlan_edit_options */
+       {0},                     /* prefix_remark_options */
+       WPE_GPE_BROUTER_PECS_TTL_DISABLE,  /* ttl_mode */
+       WPE_GPE_BROUTER_PECS_TOS_REMARKING_DISABLE, /* tos_remarking_mode */
+       {                        /* prefix */
+        0x11, 0x22, 0x33, 0x44, 0x55, 0x00,
+        0x11, 0x12, 0x13, 0x14, 0x17, 0x00,
+        0x81, 0, 0, 1,
+        0x88, 0x47,
+        0x11, 0x11, 0x10, 0x80,
+        0x22, 0x22, 0x21, 0x80,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0}
+       }
+   };
+
+   /* DL GE TX flow agg */
+
+  dl_tx_agg_gbe->txfunc = gbe[1].tx_chan_enet;
+  dl_tx_agg_gbe->iw_port = gbe[1].bport_enet;
+  dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+  dl_tx_agg_gbe->pecs_flow_info = (void *) &brouter_pecs_flow_info[0];
+  txfa = WP_IwFlowAggregationCreate (WP_WINPATH (DEFAULT_WPID),
+                                 WP_IW_GENERIC_MODE, &dl_tx_agg_gbe);
+  App_TerminateOnError (txfa,
+                        "WP_IwFlowAggregationCreate()", __LINE__);
+  testwddiobj.txfa = txfa;
+  
+  /* create unknown unicast classification filter */
+  filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
+  filter_class.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
+  
+  filter_class.no_match_result[0].result_type =
+    WP_PCE_RESULT_LAST;
+  
+  filter_class.filter_fields[0].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+  filter_class.filter_fields[0].mask_mode =  WP_PCE_FIELD_MASK_NOT_USED;
+  filter_class.filter_fields[0].field_id =  WP_PCE_FIELD_ID_MAC_DA;
+
+  filter_class.filter_fields[1].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+  filter_class.filter_fields[1].mask_mode =  WP_PCE_FIELD_MASK_NOT_USED;
+  filter_class.filter_fields[1].field_id =  WP_PCE_FIELD_ID_MAC_SA;
+
+  filter_class.filter_fields[2].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+  filter_class.filter_fields[2].mask_mode =  WP_PCE_FIELD_MASK_NOT_USED;
+  filter_class.filter_fields[2].field_id =  WP_PCE_FIELD_ID_IPV4_SA;
+  
+  filter_class.filter_fields[3].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+  filter_class.filter_fields[3].mask_mode =  WP_PCE_FIELD_MASK_NOT_USED;
+  filter_class.filter_fields[3].field_id =  WP_PCE_FIELD_ID_IPV4_DA;
+  
+  filter_class.filter_fields[4].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+  filter_class.filter_fields[4].mask_mode =  WP_PCE_FIELD_MASK_NOT_USED;
+  filter_class.filter_fields[4].field_id =  WP_PCE_FIELD_ID_IPV4_TOS;
+  
+  filter_class.filter_fields[5].field_id = WP_PCE_FIELD_ID_LAST;
+  
+  filter = WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
+                        WP_PCE_FILTER_CLASSIFICATION,
+                        &filter_class);
+  App_TerminateOnError (filter,"WP_PceFilterCreate", __LINE__);
+  testwddiobj.filter[0] = filter;
+  testwddiobj.enable = 1;
+
+  filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
+  filter_class.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
+  
+  filter_class.no_match_result[0].result_type =
+    WP_PCE_RESULT_LAST;
+  
+  filter_class.filter_fields[0].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+  filter_class.filter_fields[0].mask_mode =  WP_PCE_FIELD_MASK_NOT_USED;
+  filter_class.filter_fields[0].field_id =  WP_PCE_FIELD_ID_EXT_VLAN_TAG;
+  
+  filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+  
+  filter = WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
+                        WP_PCE_FILTER_CLASSIFICATION,
+                        &filter_class);
+  App_TerminateOnError (filter,"WP_PceFilterCreate", __LINE__);
+  testwddiobj.filter[1] = filter;
+  testwddiobj.enable = 1;
+  
+  /* filter set */
+  fs_level.filter_set_level = 0;
+  fs_level.next_filter_set = WP_UNUSED;
+  fs_level.filters[0] = testwddiobj.filter[0];
+  fs_level.filters[1] = testwddiobj.filter[1];
+  fs_level.filters[2] = WP_UNUSED;
+  
+  filter_set =
+    WP_PceFilterSetCreate (WP_WINPATH (DEFAULT_WPID), &fs_level);
+  App_TerminateOnError (filter_set, "WP_PceFilterSetCreate",
+                       __LINE__);
+  testwddiobj.filter_set = filter_set;
+  
+  switch (portid)
+  {
+  case 0:
+  case 1:
+    port_handle = gbe[portid].bport_enet;
+    agg_handle = txfa;
+    break;
+  default:
+    printf ("NO such port : %d\n", portid);
+    return 0;
+  }
+  
+  // rule1 for  smac=00..01, dmac=00..02, sip=10.0.0.1,dip=10.0.0.2,tos=1 vlan ->100
+  rule_cfg.enabled = WP_ENABLE;
+  
+  rule_cfg.filter_handle = testwddiobj.filter[0];
+  
+  rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
+  rule_cfg.rule_fields[0].value.mac_addr[0] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[1] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[2] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[3] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[4] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[5] = 0x01;
+  
+  rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_MAC_SA;
+  rule_cfg.rule_fields[1].value.mac_addr[0] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[1] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[2] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[3] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[4] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[5] = 0x02;
+
+  rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_IPV4_SA;
+  rule_cfg.rule_fields[2].value.ipv4_addr = 0x0a000001;
+  
+  rule_cfg.rule_fields[3].field_id = WP_PCE_FIELD_ID_IPV4_DA;
+  rule_cfg.rule_fields[3].value.ipv4_addr = 0x0a000002;
+  
+  rule_cfg.rule_fields[4].field_id = WP_PCE_FIELD_ID_IPV4_TOS;
+  rule_cfg.rule_fields[4].value.ipv4_tos = 0x1;
+  
+  rule_cfg.rule_fields[5].field_id = WP_PCE_FIELD_ID_LAST;
+
+  rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
+  
+  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE;
+  rule_cfg.match_result[0].param.ext_vlan.vlan_tag = 0x100;
+  rule_cfg.match_result[0].param.ext_vlan.mask = 0xfff;
+
+  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
+
+  h_pce_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
+                                WP_PCE_RULE_CLASSIFICATION, &rule_cfg);
+  if (WP_ERROR (h_pce_rule) == WP_ERR_PCE_RULE_ALREADY_EXISTS)
+  {
+    printf ("PCE rule - %d already exist!\n", 0);
+  }
+  else
+  {
+    App_TerminateOnError (h_pce_rule, "WP_PceRuleCreate", __LINE__);
+  }
+  testwddiobj.rules[0]= h_pce_rule;
+
+
+  rule_cfg.enabled = WP_ENABLE;
+  
+  rule_cfg.filter_handle = testwddiobj.filter[1];
+  
+  rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_EXT_VLAN_TAG;
+  rule_cfg.rule_fields[0].value.vlan_tag = 0x100;
+
+  rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+
+  rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
+  
+  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
+  rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
+  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
+
+  h_pce_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
+                                WP_PCE_RULE_CLASSIFICATION, &rule_cfg);
+  if (WP_ERROR (h_pce_rule) == WP_ERR_PCE_RULE_ALREADY_EXISTS)
+  {
+    printf ("PCE rule - %d already exist!\n", 0);
+  }
+  else
+  {
+    App_TerminateOnError (h_pce_rule, "WP_PceRuleCreate", __LINE__);
+  }
+  testwddiobj.rules[1]= h_pce_rule;
+
+
+  // rule2 for  smac=00..03, dmac=00..04, sip=10.0.0.3,dip=10.0.0.4,tos=3  vlan -> 100
+  rule_cfg.enabled = WP_ENABLE;
+  
+  rule_cfg.filter_handle = filter;
+  
+  rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
+  rule_cfg.rule_fields[0].value.mac_addr[0] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[1] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[2] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[3] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[4] = 0x00;
+  rule_cfg.rule_fields[0].value.mac_addr[5] = 0x03;
+  
+  rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_MAC_SA;
+  rule_cfg.rule_fields[1].value.mac_addr[0] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[1] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[2] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[3] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[4] = 0x00;
+  rule_cfg.rule_fields[1].value.mac_addr[5] = 0x04;
+
+  rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_IPV4_SA;
+  rule_cfg.rule_fields[2].value.ipv4_addr = 0x0a000003;
+  
+  rule_cfg.rule_fields[3].field_id = WP_PCE_FIELD_ID_IPV4_DA;
+  rule_cfg.rule_fields[3].value.ipv4_addr = 0x0a000004;
+  
+  rule_cfg.rule_fields[4].field_id = WP_PCE_FIELD_ID_IPV4_TOS;
+  rule_cfg.rule_fields[4].value.ipv4_tos = 0x3;
+
+  rule_cfg.rule_fields[5].field_id = WP_PCE_FIELD_ID_LAST;
+  
+  // results
+  rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
+  
+  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
+  rule_cfg.match_result[0].param.int_vlan.vlan_tag = 0x100;
+  rule_cfg.match_result[0].param.int_vlan.mask = 0xfff;
+  
+  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
+  
+  h_pce_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
+                                WP_PCE_RULE_CLASSIFICATION, &rule_cfg);
+  if (WP_ERROR (h_pce_rule) == WP_ERR_PCE_RULE_ALREADY_EXISTS)
+  {
+    printf ("PCE rule - %d already exist!\n", 1);
+  }
+  else
+  {
+    App_TerminateOnError (h_pce_rule, "WP_PceRuleCreate", __LINE__);
+  }
+  testwddiobj.rules[3]= h_pce_rule;
+
+#if 0  // N:1 then only one matching fa for filter[1] is ok.
+  rule_cfg.enabled = WP_ENABLE;
+  
+  rule_cfg.filter_handle = testwddiobj.filter[1];
+  
+  rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_EXT_VLAN_TAG;
+  rule_cfg.rule_fields[0].value.ext_vlan.vlan_tag = 0x300;
+
+  rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+
+  rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
+  
+  rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
+  rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
+  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
+
+  h_pce_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
+                                WP_PCE_RULE_CLASSIFICATION, &rule_cfg);
+  if (WP_ERROR (h_pce_rule) == WP_ERR_PCE_RULE_ALREADY_EXISTS)
+  {
+    printf ("PCE rule - %d already exist!\n", 0);
+  }
+  else
+  {
+    App_TerminateOnError (h_pce_rule, "WP_PceRuleCreate", __LINE__);
+  }
+  testwddiobj.rules[4]= h_pce_rule;
+#endif
+
+  WP_rx_binding_bridging rx_binding_cfg[1] = {
+    {
+     /*  encap_mode */ 0,
+     /*  mru; */ 512,
+     /*  vcfcs; */ 0,
+     /*  input_port; */ 0
+     }
+  };
+  
+  pce_if_params.mode = WP_PCE_IW_PORT_CONNECTION_ENABLED;
+  pce_if_params.parser_start_type = WP_PCE_PARSER_START_TYPE_ETHERNET;
+  pce_if_params.filter_set_handle = filter_set;
+  pce_if_params.ip_header_validation = WP_DISABLE;
+  //pce_if_params.user_programmable_fields_handle = 0;//fht
+  
+  pce_if_handle =
+    WP_PceInterfaceCreate (WP_PCE_IF_TYPE_PKT_RX_CHANNEL,
+                           &pce_if_params);
+  App_TerminateOnError (pce_if_handle, "WP_PceInterfaceCreate()",
+                       __LINE__);
+  
+  /* Modify the PCE interface for GE RX channel handle */
+  for (ii = 0; ii < 1 /*NR_GBE*/; ii++)  // leave enet2 to host for checking
+  {
+    rx_binding_cfg[0].pce_if_handle = pce_if_handle;
+    rx_binding_cfg[0].input_port = gbe[ii].bport_enet;
+    
+    status = WP_IwRxBindingModify (gbe[ii].rx_chan_enet,
+                                   iw_sys,
+                                   qniw,
+                                   WP_IW_RX_BIND_MOD_PCE_INTERFACE,
+                                   &rx_binding_cfg[0]);
+    App_TerminateOnError (status, "WP_IwRxBindingModify", __LINE__);
+  }
+
+  WP_PceFilterStatisticsReset(filter, &(pce_filter_stats[filter & 0xFF]));
+
+#ifdef HOST_SEND
+  // send a tx packet
+  CLI_HostSendPacketCase36();
+  
+  printf("Waiting for a while...\n");
+  for(i=0;i<5000000;i++);
+  
+  WPE_PrintPceFilterStats(filter);
+#endif
+
+   return 0;
+}
+
+void CLI_HostSendPacketCase36(void)
+{
+   WP_U32 i, size=100;
+   WP_U8 *data_ptr;
+   WP_handle pool = qniw_adjpool;
+
+   data_ptr = WP_PoolAlloc(pool);
+   if(data_ptr == 0)
+   {
+     printf("no free buffer in pool.\n");
+     return ;
+   }
+   printf("assembiling packet at 0x%08x\n", &data_ptr[0]);
+
+   // uc packet,  dmac=00...01 smac=00..02
+   // uc packet,  dmac=00...01 smac=00..02
+   assemble_packet(&data_ptr[0], 4, 0x00000000);
+   assemble_packet(&data_ptr[4], 4, 0x00010000);
+   assemble_packet(&data_ptr[8], 4, 0x00000002);
+   assemble_packet(&data_ptr[12], 4, 0x81000100);/* s-vlan = 100*/
+   assemble_packet(&data_ptr[16], 4, 0x81000200);/* c-vlan = 200*/
+   assemble_packet(&data_ptr[20], 2, 0x0800);
+   assemble_packet(&data_ptr[24], 4, 0x45010020);/* tos = 1 */
+   assemble_packet(&data_ptr[28], 4, 0x001b0000);
+   assemble_packet(&data_ptr[32], 4, 0x0a11e449);/* protocol = 0x11*/
+   assemble_packet(&data_ptr[36], 4, 0x0a000001);/* sa ip */
+   assemble_packet(&data_ptr[40], 4, 0x0a000002);/* da ip */
+   assemble_packet(&data_ptr[44], 4, 0x00190015);
+   assemble_packet(&data_ptr[48], 4, 0x001b77c0);
+   assemble_packet(&data_ptr[52], 4, 0x00a4c5ff);
+
+   printf("assembiling packet payload\n");
+   for(i = 50; i < size; i++)
+   {
+     data_ptr[i] = (i - 50);
+   }
+
+   printf("send packet 1\n");
+   CLI_HostSendPacket(data_ptr,  size);
+   printf("Waiting for a while...\n");
+   for(i=0;i<5000000;i++);
+
+   data_ptr = WP_PoolAlloc(pool);
+   if(data_ptr == 0)
+   {
+     printf("no free buffer in pool.\n");
+     return ;
+   }
+   printf("assembiling packet at 0x%08x\n", &data_ptr[0]);
+
+   // uc packet,  dmac=00...03 smac=00..04
+   assemble_packet(&data_ptr[0], 4, 0x00000000);
+   assemble_packet(&data_ptr[4], 4, 0x00010000);
+   assemble_packet(&data_ptr[8], 4, 0x00000002);
+   assemble_packet(&data_ptr[12], 4, 0x81000300);/* vlan = 300*/
+   assemble_packet(&data_ptr[16], 4, 0x81000400);/* vlan = 400*/
+   assemble_packet(&data_ptr[20], 2, 0x0800);
+   assemble_packet(&data_ptr[24], 4, 0x45010020);/* tos = 1 */
+   assemble_packet(&data_ptr[28], 4, 0x001b0000);
+   assemble_packet(&data_ptr[32], 4, 0x0a11e449);/* protocol = 0x11*/
+   assemble_packet(&data_ptr[36], 4, 0x0a000003);/* sa ip */
+   assemble_packet(&data_ptr[40], 4, 0x0a000004);/* da ip */
+   assemble_packet(&data_ptr[44], 4, 0x00190015);
+   assemble_packet(&data_ptr[48], 4, 0x001b77c0);
+   assemble_packet(&data_ptr[52], 4, 0x00a4c5ff);
+
+
+   printf("assembiling packet payload\n");
+   for(i = 50; i < size; i++)
+   {
+     data_ptr[i] = (i - 50);
+   }
+
+   printf("send packet 2\n");
+   CLI_HostSendPacket(data_ptr,  size);
+   
+}
+
+#if 0   // the old case 36 translate stag,  but requirement said translate same as case 35
 /*
 case36
 in this case,  match ext vlan range from 0x100 - 0x200, change ext vlan = 1
@@ -2632,6 +3126,7 @@ void CLI_HostSendPacketCase36(void)
    CLI_HostSendPacket(data_ptr,  size);
    
 }
+#endif
 
 /*
 case37
@@ -2820,7 +3315,7 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
   rule_cfg.rule_fields[1].value.vlan_tag = 0x200;
   // range 1 - 200,  so 300 is denied.
-
+  
 #ifdef MORRIS_MOD
   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_PARSER_FLAGS;
   rule_cfg.rule_fields[0].value.parser_flags = 0;
