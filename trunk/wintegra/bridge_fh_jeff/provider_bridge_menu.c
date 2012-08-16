@@ -42,7 +42,7 @@ static Y_MenuEntry *V_CurrMenuP = &V_MainMenu[0];
 Y_MenuEntry V_MainMenu[] = 
 {
         {K_Menu, MAIN_MENU_ITEM_NUM, TRUE, "Main Menu",         {(Y_MenuEntry *)V_MainMenu}},
-        {K_Menu, 1, FALSE, " -> FH Test Menu",                   {(Y_MenuEntry *)FH_Test_menu}},
+        {K_Menu, 1, TRUE, " -> FH Test Menu",                   {(Y_MenuEntry *)FH_Test_menu}},
         {K_Menu, 2, TRUE, " -> Vlan Menu",                      {(Y_MenuEntry *)VLAN_menu}},
         {K_Menu, 3, FALSE, " -> Aging Menu",                     {(Y_MenuEntry *)AGING_menu}},
         {K_Menu, 4, TRUE, " -> Learning Menu",                  {(Y_MenuEntry *)LEARNING_menu}},
