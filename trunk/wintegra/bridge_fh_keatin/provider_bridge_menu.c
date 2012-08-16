@@ -1811,8 +1811,8 @@ void CLI_HostSendPacketCase34(void)
 
 /*
 case 35
-smac=00..01, dmac=00..02, sip=10.0.0.1,dip=10.0.0.2,tos=1 vlan ->100
-smac=00..03, dmac=00..04, sip=10.0.0.3,dip=10.0.0.4,tos=3 vlan ->300
+smac=00..02, dmac=00..01, sip=10.0.0.2,dip=10.0.0.1,tos=1 vlan ->100
+smac=00..04, dmac=00..03, sip=10.0.0.4,dip=10.0.0.3,tos=3 vlan ->300
 
 this case is not tested pass in WDDS4.1 for not able to set INT_VLAN update and FA together in one filter
 I believed it can be set in WDDS4.3
@@ -1859,7 +1859,7 @@ int CLI_FHT_Case35_SmacDmacSipDipTos2SVlan (char *StrPrm)
 	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
       },
       /* replace_int_vlan_mode;*/ WPE_GPE_BROUTER_PECS_REPLACE_VLAN_ID,
-      /* int_vlan_tag;*/ 11,
+      /* int_vlan_tag;*/ 11,  /////////////////////////
       /*  int_vlan_etype_source;*/ WPE_GPE_BROUTER_PECS_VLAN_ETYPE_8100,
       /*  replace_ext_vlan_mode;*/WPE_GPE_BROUTER_PECS_REPLACE_VLAN_PRIORITY,
       /* ext_vlan_tag;*/0,
@@ -2012,10 +2012,10 @@ int CLI_FHT_Case35_SmacDmacSipDipTos2SVlan (char *StrPrm)
   rule_cfg.rule_fields[1].value.mac_addr[5] = 0x02;
 
   rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_IPV4_SA;
-  rule_cfg.rule_fields[2].value.ipv4_addr = 0x0a000001;
+  rule_cfg.rule_fields[2].value.ipv4_addr = 0x0a000002;
   
   rule_cfg.rule_fields[3].field_id = WP_PCE_FIELD_ID_IPV4_DA;
-  rule_cfg.rule_fields[3].value.ipv4_addr = 0x0a000002;
+  rule_cfg.rule_fields[3].value.ipv4_addr = 0x0a000001;
   
   rule_cfg.rule_fields[4].field_id = WP_PCE_FIELD_ID_IPV4_TOS;
   rule_cfg.rule_fields[4].value.ipv4_tos = 0x1;
@@ -2067,10 +2067,10 @@ int CLI_FHT_Case35_SmacDmacSipDipTos2SVlan (char *StrPrm)
   rule_cfg.rule_fields[1].value.mac_addr[5] = 0x04;
 
   rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_IPV4_SA;
-  rule_cfg.rule_fields[2].value.ipv4_addr = 0x0a000003;
+  rule_cfg.rule_fields[2].value.ipv4_addr = 0x0a000004;
   
   rule_cfg.rule_fields[3].field_id = WP_PCE_FIELD_ID_IPV4_DA;
-  rule_cfg.rule_fields[3].value.ipv4_addr = 0x0a000004;
+  rule_cfg.rule_fields[3].value.ipv4_addr = 0x0a000003;
   
   rule_cfg.rule_fields[4].field_id = WP_PCE_FIELD_ID_IPV4_TOS;
   rule_cfg.rule_fields[4].value.ipv4_tos = 0x3;
@@ -2083,9 +2083,9 @@ int CLI_FHT_Case35_SmacDmacSipDipTos2SVlan (char *StrPrm)
   rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
   rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
   
-  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE;
-  rule_cfg.match_result[1].param.ext_vlan.vlan_tag = 0x300;
-  rule_cfg.match_result[1].param.ext_vlan.mask = 0xfff;
+  rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
+  rule_cfg.match_result[1].param.int_vlan.vlan_tag = 0x300;
+  rule_cfg.match_result[1].param.int_vlan.mask = 0xfff;
   
   rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
   
