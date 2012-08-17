@@ -117,8 +117,7 @@ FdbEntry	provider_bridge_util.c	/^typedef struct FdbEntry$/;"	s	file:
 Fdbhead	provider_bridge_util.c	/^Node *Fdbhead = NULL;$/;"	v
 HOST_CMD_WRITE_SIZE	wt_partition_ecc_util.c	123;"	d	file:
 HOST_READ_CMD_OP	wt_partition_ecc_util.c	122;"	d	file:
-HOST_SEND	provider_bridge_menu.c	1293;"	d	file:
-HOST_SEND	provider_bridge_menu.c	1294;"	d	file:
+HOST_SEND	provider_bridge_menu.c	1290;"	d	file:
 HOST_WRITE_CMD_OP	wt_partition_ecc_util.c	121;"	d	file:
 HOTKEY_CUR_MENU	provider_bridge_menu.h	45;"	d
 HOTKEY_MAIN_MENU	provider_bridge_menu.h	43;"	d
@@ -134,7 +133,6 @@ IW_SYS_MAX_VLAN_MEMBERS	provider_bridge_util.h	28;"	d
 Index	provider_bridge_menu.h	/^        unsigned char Index;$/;"	m	struct:__anon5
 KEY_BACKSPACE	provider_bridge_menu.h	49;"	d
 KEY_ENTER	provider_bridge_menu.h	50;"	d
-KEY_RETURN	provider_bridge_menu.h	51;"	d
 K_Leaf	provider_bridge_menu.h	/^        K_Leaf,$/;"	e	enum:__anon4
 K_Menu	provider_bridge_menu.h	/^        K_Menu,$/;"	e	enum:__anon4
 LDFLAGS2	makefile	/^LDFLAGS2	= -lpthread -lrt$/;"	m
@@ -166,9 +164,9 @@ Node	provider_bridge_util.c	/^} Node;$/;"	t	typeref:struct:FdbEntry	file:
 OBJ_DIR	makefile	/^OBJ_DIR = $(TEST_DIR)\/bin$/;"	m
 OK	provider_bridge_menu.h	10;"	d
 OK	provider_bridge_menu.h	13;"	d
-OS_AgingTimerCreate	os_timer.c	/^int OS_AgingTimerCreate (void)$/;"	f
-OS_AgingTimerDelete	os_timer.c	/^int OS_AgingTimerDelete (void)$/;"	f
-OS_AgingTimerStart	os_timer.c	/^int OS_AgingTimerStart (void)$/;"	f
+OS_AgingTimerCreate	os_timer.c	/^int OS_AgingTimerCreate(void)$/;"	f
+OS_AgingTimerDelete	os_timer.c	/^int OS_AgingTimerDelete(void)$/;"	f
+OS_AgingTimerStart	os_timer.c	/^int OS_AgingTimerStart(void)$/;"	f
 PCE_filter	provider_bridge.c	/^WP_handle PCE_filter[100];$/;"	v
 PCE_rule_handle	provider_bridge.c	/^WP_handle PCE_rule_handle;$/;"	v
 PCE_rule_handle	provider_bridge_util.h	/^        WP_handle PCE_rule_handle;$/;"	m	struct:__anon10
@@ -275,7 +273,7 @@ WPE_Pecs_Init	provider_bridge_util.c	/^void WPE_Pecs_Init (WP_gpe_pecs gpe_pecs_
 WPE_PortsCreate	provider_bridge_util.c	/^void WPE_PortsCreate (WP_handle iw_sys, WP_handle * iwport,$/;"	f
 WPE_PortsVlanTagMdf	provider_bridge_util.c	/^void WPE_PortsVlanTagMdf (WP_handle iwport, WP_U16 vlan_tag)$/;"	f
 WPE_PrintFDBList	provider_bridge_util.c	/^void WPE_PrintFDBList (void)$/;"	f
-WPE_PrintPceFilterStats	provider_bridge_menu.c	/^void WPE_PrintPceFilterStats(WP_handle filter)$/;"	f
+WPE_PrintPceFilterStats	provider_bridge_menu.c	/^static void WPE_PrintPceFilterStats(WP_handle filter)$/;"	f	file:
 WPE_Reboot	provider_bridge_util.c	/^void WPE_Reboot (void)$/;"	f
 WPE_Receive_HostData	provider_bridge_util.c	/^int WPE_Receive_HostData (void)$/;"	f
 WPE_Receive_HostData_IRQ	provider_bridge_util.c	/^void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)$/;"	f
@@ -412,7 +410,7 @@ group_handle	provider_bridge_util.h	/^        WP_handle group_handle;       \/\/
 group_handle	provider_bridge_util.h	/^        WP_handle group_handle;       \/\/vlan group handle$/;"	m	struct:__anon10
 h_iw_port_general_host	provider_bridge.c	/^WP_handle devhost, default_agg_host, h_iw_port_general_host,$/;"	v
 handle	provider_bridge_util.h	/^        WP_handle handle;       \/\/ handle for the rule$/;"	m	struct:__anon11
-handler	os_timer.c	/^static void handler (int sig, siginfo_t * si, void *uc)$/;"	f	file:
+handler	os_timer.c	/^static void handler(int sig, siginfo_t *si, void *uc)$/;"	f	file:
 hbm	wt_partition_ecc_util.c	/^        WP_VU32 hbm;$/;"	m	struct:__anon3	file:
 hbms1	wt_partition_ecc_util.c	/^        WP_VU32 hbms1;$/;"	m	struct:__anon3	file:
 hbms2	wt_partition_ecc_util.c	/^        WP_VU32 hbms2;$/;"	m	struct:__anon3	file:
