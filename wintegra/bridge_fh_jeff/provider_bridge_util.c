@@ -8,6 +8,9 @@
 
 #include "provider_bridge_util.h"
 
+void WPE_TxDummyAggCreate(WP_U32 port_num, WP_handle* dummy_agg, WP_U16 vlan_tag);
+void WPE_CreateEtypeMatchPceRule(WP_U8 portid, WP_U16 etype, WP_U16 vlan_tag, WP_handle agg_handle);
+
 void WPE_Pecs_Init(WP_gpe_pecs gpe_pecs_config[],WP_handle pecs_handle[])
 {
         WP_U32 ii;
@@ -77,6 +80,52 @@ void WPE_PortsCreate(WP_handle iw_sys, WP_handle *iwport, WP_U32 max_mac_address
         *iwport = WP_IwPortCreate(iw_sys, &bport_conf);// direct map
         App_TerminateOnError(*iwport, "WP_IwPortCreate ",__LINE__);
 }
+
+void WPE_DummyPortsCreate(WP_handle iw_sys, WP_handle *iwport, WP_U32 max_mac_address, WP_U32 tag)
+{
+        WP_bridge_port bport_conf =
+                {
+                        /* tag */                   0,
+                        /* direct_mapping*/         WP_IW_DIRECT_MAP_ENABLE,
+                        /* flow_agg */              0,
+                        /* termination_mode*/       WP_IW_HOST_TERM_MODE,
+                        /* learning_mode */         WP_IW_LEARNING_DISABLE,
+                        /* in_filter_mode */        WP_IW_INGRESS_FILTER_DISABLE,
+                        /* vlan_param */
+                        {
+                                /* vlan_acceptance_mode */WP_IW_ACCEPT_TAGGED_UNTAGGED,
+                                /* vlan_tag */0,
+                                /*vlan_tunnel*/WP_IW_VLAN_TUNNEL_1Q_IN_1Q_DISABLE,
+                                /*vlan_priority_enforce_mode*/WP_IW_VLAN_PRIORITY_ENFORCE_DISABLED,
+                                /*stag_vlan_etype*/ 0x8100, //WP_IW_BPORT_STAG_VLAN_ETYPE_DISABLE
+                        },
+                        /* max_mac_addresses */ 300,
+                        /* group_tag */ 0,
+                        /*group_filtering_mode*/     WP_IW_GROUP_FILTER_DISABLE,
+                        /*unk_mac_sa_filter*/        WP_IW_UNK_MACSA_FILTER_DISABLE,
+                        /*unk_mc_mode*/              WP_IW_UNK_MC_DROP,
+                        /*bc_ht_mode*/               WP_IW_BC_HT_DISABLE,
+                        /*unk_input_filters_mask*/   0,
+                        /*unk_output_filters_mask*/  0,
+                        /*statmode*/                 WP_IW_PORT_STAT_ENABLE,
+                        /*unk_uc_mode*/              WP_IW_UNK_UC_SR_ENABLE,
+                        /*classification_flag*/      WP_IW_BPORT_CLASSIFICATION_ENABLED,
+                        /*adv_unk_lookup_mode*/      WP_IW_ADV_UNK_LOOKUP_ENABLED,
+                        /*cfi_ht_mode*/              WP_IW_CFI_HT_DISABLE,
+                        /*reserved_mc_ht_mode*/      WP_IW_RES_MC_HT_DISABLE,
+                        /*predefined_ht_mode*/       WP_DISABLE,
+                        /*res_mc_action_table */     {0},
+                        /*WP_iw_bport_enet_oam_params */ NULL
+                };
+     
+        bport_conf.flow_agg = default_agg_host;
+        bport_conf.vlan_param.vlan_tag= tag;
+        bport_conf.max_mac_addresses = max_mac_address;
+   
+        *iwport = WP_IwPortCreate(iw_sys, &bport_conf);// direct map
+        App_TerminateOnError(*iwport, "WP_IwPortCreate ",__LINE__);
+}
+
 
 void WPE_PortsVlanTagMdf(WP_handle iwport, WP_U16 vlan_tag)
 {
@@ -272,10 +321,10 @@ void WPE_RxBindingCreate(WP_handle iw_sys)
 
 void WPE_RxBindingMdfVlan(WP_handle iw_sys, WP_U32 port_num)
 {
-#if 1
+
         WP_pce_if_params_pkt_rx_channel pce_if_params = {0};
         WP_handle pce_if_handle;
-#endif
+
 	 WP_status status;
         WP_rx_binding_bridging  rx_binding_cfg[1]=
                 {
@@ -286,7 +335,7 @@ void WPE_RxBindingMdfVlan(WP_handle iw_sys, WP_U32 port_num)
                                 /*  input_port;*/0
                         }
                 };
-#if 1
+
         pce_if_params.mode = WP_PCE_IW_PORT_CONNECTION_ENABLED;
         pce_if_params.parser_start_type = WP_PCE_PARSER_START_TYPE_ETHERNET;
         pce_if_params.filter_set_handle = filter_set_lrn_en; //filter_set_lrn_dis;
@@ -295,32 +344,14 @@ void WPE_RxBindingMdfVlan(WP_handle iw_sys, WP_U32 port_num)
 
         pce_if_handle = WP_PceInterfaceCreate(WP_PCE_IF_TYPE_PKT_RX_CHANNEL, &pce_if_params);
         App_TerminateOnError(pce_if_handle,"WP_PceInterfaceCreate()",__LINE__);
-#endif
 
-#if 0
-        if (port_num == NR_GBE)
-        {
-            rx_binding_cfg[0].input_port = xgi_bport;
-#if 1			
-	     rx_binding_cfg[0].pce_if_handle = pce_if_handle;
-#else
-            rx_binding_cfg[0].pce_if_handle = pce_interface;
-#endif
-            status = WP_IwRxBindingModify(xgi_rx_ch_handle ,iw_sys,
-                                          qniw,
-                                          WP_IW_RX_BIND_B_MOD_BPORT_VLAN | WP_IW_RX_BIND_MOD_PCE_INTERFACE,
-                                          &rx_binding_cfg[0]);
-        }
-	 else
-#endif	 	
+
 	 	if (/*(port_num >= 0) && */(port_num < NR_GBE))
         {
             rx_binding_cfg[0].input_port = gbe[port_num].bport_enet;
-#if 1			
+		
 	     rx_binding_cfg[0].pce_if_handle = pce_if_handle;
-#else
-	     rx_binding_cfg[0].pce_if_handle = pce_interface;
-#endif
+
             status = WP_IwRxBindingModify(gbe[port_num].rx_chan_enet, iw_sys,
                                           qniw,
                                           WP_IW_RX_BIND_B_MOD_BPORT_VLAN | WP_IW_RX_BIND_MOD_PCE_INTERFACE,
@@ -340,15 +371,30 @@ void WPE_BridgePortsVlanTagSet(WP_U32 port_num, WP_U16 vlan_tag)
 {
 	 if (/*(port_num >= 0)&&*/(port_num<NR_GBE))
             WPE_PortsVlanTagMdf(gbe[port_num].bport_enet, vlan_tag);
-#if 0
-	 else if (port_num == NR_GBE)
-            WPE_PortsVlanTagMdf(xgi_bport, vlan_tag);
-#endif	 
+
         else 
 	     printf("port number %d : Wrong port number!Valid value is from %d to %d\n", port_num, 0, NR_GBE);
 
 
         WPE_RxBindingMdfVlan(dl_general_iwsys_bridge, port_num);
+}	
+
+
+void WPE_EtypeVlanTagSet(WP_U32 port_num, WP_U16 etype, WP_U16 vlan_tag)
+{
+        WP_handle dummy_agg = 0;
+
+	 if (/*(port_num >= 0)&&*/(port_num<NR_GBE)) {
+            if(port_num == 0)
+               WPE_TxDummyAggCreate(1, &dummy_agg, vlan_tag);
+            else
+               WPE_TxDummyAggCreate(0, &dummy_agg, vlan_tag);
+
+	    WPE_CreateEtypeMatchPceRule(port_num, etype, vlan_tag, dummy_agg);
+	 }
+        else 
+	     printf("port number %d : Wrong port number!Valid value is from %d to %d\n", port_num, 0, NR_GBE);
+
 }	
 
 void WPE_TxAggCreate(void)
@@ -374,6 +420,7 @@ void WPE_TxAggCreate(void)
                                 /*pecs_global_info_handle;*/0,
                         },
                 };
+		
         WPE_gpe_brouter_pecs_flow_info brouter_pecs_flow_info[] = 
                 {
                         /*  */
@@ -420,6 +467,121 @@ void WPE_TxAggCreate(void)
                                                              &dl_tx_agg_gbe);
                 App_TerminateOnError(gbe[i].agg_enet, "WP_IwFlowAggregationCreate()",__LINE__);
         }
+
+/*
+        veoption.int_vlan_tag = 10;
+	 brouter_pecs_flow_info[0].vlan_edit_options = &veoption;
+        dl_tx_agg_gbe->txfunc = gbe[1].tx_chan_enet;
+        dl_tx_agg_gbe->iw_port = gbe[1].bport_enet;
+        dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+        dl_tx_agg_gbe->pecs_flow_info=(void *) &brouter_pecs_flow_info[0];
+        dummy_agg1 = WP_IwFlowAggregationCreate(WP_WINPATH(DEFAULT_WPID),
+                                                             WP_IW_GENERIC_MODE,
+                                                             &dl_tx_agg_gbe);
+        App_TerminateOnError(dummy_agg1, "WP_IwFlowAggregationCreate()",__LINE__);
+
+        veoption.int_vlan_tag = 20;
+        brouter_pecs_flow_info[0].vlan_edit_options = &veoption;
+        dl_tx_agg_gbe->txfunc = gbe[1].tx_chan_enet;
+        dl_tx_agg_gbe->iw_port = gbe[1].bport_enet;
+        dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+        dl_tx_agg_gbe->pecs_flow_info=(void *) &brouter_pecs_flow_info[0];
+        dummy_agg2 = WP_IwFlowAggregationCreate(WP_WINPATH(DEFAULT_WPID),
+                                                             WP_IW_GENERIC_MODE,
+                                                             &dl_tx_agg_gbe);
+        App_TerminateOnError(dummy_agg1, "WP_IwFlowAggregationCreate()",__LINE__);
+*/
+
+}
+
+void WPE_TxDummyAggCreate(WP_U32 port_num, WP_handle* dummy_agg, WP_U16 vlan_tag)
+{
+        WP_iw_agg_generic dl_tx_agg_gbe[1] =
+                {
+                        {
+                                /*tag*/ 2,
+                                /*txfunc*/ 0,
+                                /*iw_port*/0,
+                                /*rfcs*/WP_IW_RFCS_ENABLE,
+                                /*interruptqueue;*/WP_IW_IRQT1,
+                                /*error_pkt_mode*/WP_IW_ERRPKT_DISCARD,
+                                /*intmode;*/WP_IW_INT_DISABLE,
+                                /*statmode;*/WP_IW_STAT_ENABLE,
+                                /*timestamp_mode;*/WP_IW_TIME_STAMP_DISABLE,
+                                /*mtu;*/9216,
+                                /*flow_agg_type;*/WP_IW_FLOW_AGG_PRIMARY,
+                                /*policer_handle;*/0,
+                                /*pecs_handle;*/0,
+                                /*pecs_flow_info;*/0,
+                                /*pecs_global_info_handle;*/0,
+                        },
+                };
+
+   WPE_vlan_edit_options veoption = {
+      /* egress_rule; */{
+	    WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+	  	WPE_GPE_BROUTER_PECS_VLAN_EGRESS_RULE_TAGGED,
+      },
+      /* replace_int_vlan_mode;*/ WPE_GPE_BROUTER_PECS_REPLACE_VLAN_ID_OVERRIDE_PCE,
+      /* int_vlan_tag;*/ 11,  /////////////////////////
+      /*  int_vlan_etype_source;*/ WPE_GPE_BROUTER_PECS_VLAN_ETYPE_8100,
+      /*  replace_ext_vlan_mode;*/WPE_GPE_BROUTER_PECS_REPLACE_VLAN_PRIORITY,
+      /* ext_vlan_tag;*/0,
+      /*  ext_vlan_etype_source;*/WPE_GPE_BROUTER_PECS_VLAN_ETYPE_8100,
+      /* vlan_stag_etype;*/0x8100,
+      /*  replace_sub_port_vlan_mode;*/WPE_GPE_BROUTER_PECS_SUB_PORT_VLAN_DISABLE,
+      /* sub_port_vlan_tag;*/0x0,
+   };
+		
+        WPE_gpe_brouter_pecs_flow_info brouter_pecs_flow_info[] = 
+                {
+                        /*  */
+                        {
+                                WPE_GPE_BROUTER_PECS_EXTRACT_DISABLE, /* header_extract_mode */
+                                0, /* extraction_size */
+                                WPE_GPE_BROUTER_PECS_ADD_DISABLE, /* prefix_add_mode */
+                                4, /* prefix_add_size */
+                                14, /* prefix_ip_offset */
+                                WPE_GPE_BROUTER_PECS_REPLACE_MAC_DISABLE, /* mac_replace_mode */
+                                {0x11, 0x22, 0x33, 0x44, 0x55, 0x00}, /* mac_da */
+                                {0x66, 0x77, 0x88, 0x99, 0xaa, 0x00}, /* mac_sa */
+                                0, /* vlan_edit_options*/
+      
+      
+                                {0}, /* prefix_remark_options*/
+                                WPE_GPE_BROUTER_PECS_TTL_DISABLE, /* ttl_mode */
+                                WPE_GPE_BROUTER_PECS_TOS_REMARKING_DISABLE, /* tos_remarking_mode */
+                                {/* prefix */
+                                        0x11, 0x22, 0x33, 0x44, 0x55, 0x00,
+                                        0x11, 0x12, 0x13, 0x14, 0x17, 0x00,
+                                        0x81, 0, 0, 1, 
+                                        0x88,0x47,
+                                        0x11,0x11, 0x10, 0x80,
+                                        0x22,0x22, 0x21, 0x80,
+                                        0,0,0,0,0,0,0,0, 
+                                        0,0,0,0,0,0,0,0,
+                                        0,0,0,0,0,0,0,0, 
+                                        0,0,0,0,0,0,0,0,
+                                        0,0,0,0,0,0,0,0
+                                }  
+                        }
+                };
+
+        veoption.int_vlan_tag = vlan_tag;
+	 brouter_pecs_flow_info[0].vlan_edit_options = &veoption;
+        dl_tx_agg_gbe->txfunc = gbe[port_num].tx_chan_enet;
+        dl_tx_agg_gbe->iw_port = gbe[port_num].bport_enet;
+        dl_tx_agg_gbe->pecs_handle = pecs_handles[0];
+        dl_tx_agg_gbe->pecs_flow_info=(void *) &brouter_pecs_flow_info[0];
+        *dummy_agg = WP_IwFlowAggregationCreate(WP_WINPATH(DEFAULT_WPID),
+                                                             WP_IW_GENERIC_MODE,
+                                                             &dl_tx_agg_gbe);
+        App_TerminateOnError(*dummy_agg, "WP_IwFlowAggregationCreate()",__LINE__);
+		
 }
 
 void WTE_CreateUDFSet(void)
@@ -447,6 +609,32 @@ void WPE_CreatePceFilters(void)
         WP_pce_filter_forwarding fwd_filter_cfg = {0};
         WP_pce_filter_learning lrn_filter_cfg = {0};
         WP_pce_filter_classification filter_class = {0};
+        WP_pce_filter_classification etype_class = { 0 };   
+
+        /* 
+         * create ethernet type classification filter 
+         */
+        etype_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
+        etype_class.no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
+
+        etype_class.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
+
+        etype_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_INPUT_IW_PORT;
+        etype_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+        etype_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+
+        etype_class.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+        etype_class.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+        etype_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_ETHER_TYPE;
+		
+        etype_class.filter_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+        PCE_filter[FILTER_SET_ETYPE_CLASSIFICATION] =
+        WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
+                          WP_PCE_FILTER_CLASSIFICATION,
+                          &etype_class);
+        App_TerminateOnError (PCE_filter
+                         [FILTER_SET_ETYPE_CLASSIFICATION],
+                         "WP_PceFilterCreate", __LINE__);
 
         /* create unknown unicast classification filter*/
         unicast_filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
@@ -650,15 +838,16 @@ void WPE_CreatePceFilterSets(void)
         /* filter set with learning */
         fs_level.filter_set_level = 0;
         fs_level.next_filter_set = WP_UNUSED;
-        fs_level.filters[0] = PCE_filter[FILTER_SET_IPV6_IP_CLASSIFICATION];
-        fs_level.filters[1] = PCE_filter[FILTER_SET_L4_SUBTYPE_CLASSIFICATION];
-        fs_level.filters[2] = PCE_filter[FILTER_SET_L4_PORT_CLASSIFICATION];
-        fs_level.filters[3] = PCE_filter[FILTER_SET_RESERVED_MAC_CLASSIFICATION];
-        fs_level.filters[4] = PCE_filter[FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION];
-        fs_level.filters[5] = PCE_filter[FILTER_SET_CLASSIFICATION];
-        fs_level.filters[6] = PCE_filter[FILTER_SET_LEARNING];
-        fs_level.filters[7] = PCE_filter[FILTER_SET_FORWARDING];
-        fs_level.filters[8] = WP_UNUSED;
+	 fs_level.filters[0] = PCE_filter[FILTER_SET_ETYPE_CLASSIFICATION];
+        fs_level.filters[1] = PCE_filter[FILTER_SET_IPV6_IP_CLASSIFICATION];
+        fs_level.filters[2] = PCE_filter[FILTER_SET_L4_SUBTYPE_CLASSIFICATION];
+        fs_level.filters[3] = PCE_filter[FILTER_SET_L4_PORT_CLASSIFICATION];
+        fs_level.filters[4] = PCE_filter[FILTER_SET_RESERVED_MAC_CLASSIFICATION];
+        fs_level.filters[5] = PCE_filter[FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION];
+        fs_level.filters[6] = PCE_filter[FILTER_SET_CLASSIFICATION];
+        fs_level.filters[7] = PCE_filter[FILTER_SET_LEARNING];
+        fs_level.filters[8] = PCE_filter[FILTER_SET_FORWARDING];
+        fs_level.filters[9] = WP_UNUSED;
 
         filter_set_lrn_en = WP_PceFilterSetCreate(WP_WINPATH(DEFAULT_WPID), &fs_level);
         App_TerminateOnError(filter_set_lrn_en, "WP_PceFilterSetCreate",__LINE__);
@@ -666,14 +855,15 @@ void WPE_CreatePceFilterSets(void)
         /* filter set without learning */
         fs_level.filter_set_level = 0;
         fs_level.next_filter_set = WP_UNUSED;
-        fs_level.filters[0] = PCE_filter[FILTER_SET_IPV6_IP_CLASSIFICATION];
-        fs_level.filters[1] = PCE_filter[FILTER_SET_L4_SUBTYPE_CLASSIFICATION];
-        fs_level.filters[2] = PCE_filter[FILTER_SET_L4_PORT_CLASSIFICATION];
-        fs_level.filters[3] = PCE_filter[FILTER_SET_RESERVED_MAC_CLASSIFICATION];
-        fs_level.filters[4] = PCE_filter[FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION];
-        fs_level.filters[5] = PCE_filter[FILTER_SET_CLASSIFICATION];
-        fs_level.filters[6] = PCE_filter[FILTER_SET_FORWARDING];
-        fs_level.filters[7] = WP_UNUSED;
+		fs_level.filters[0] = PCE_filter[FILTER_SET_ETYPE_CLASSIFICATION];
+        fs_level.filters[1] = PCE_filter[FILTER_SET_IPV6_IP_CLASSIFICATION];
+        fs_level.filters[2] = PCE_filter[FILTER_SET_L4_SUBTYPE_CLASSIFICATION];
+        fs_level.filters[3] = PCE_filter[FILTER_SET_L4_PORT_CLASSIFICATION];
+        fs_level.filters[4] = PCE_filter[FILTER_SET_RESERVED_MAC_CLASSIFICATION];
+        fs_level.filters[5] = PCE_filter[FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION];
+        fs_level.filters[6] = PCE_filter[FILTER_SET_CLASSIFICATION];
+        fs_level.filters[7] = PCE_filter[FILTER_SET_FORWARDING];
+        fs_level.filters[8] = WP_UNUSED;
 
         filter_set_lrn_dis = WP_PceFilterSetCreate(WP_WINPATH(DEFAULT_WPID), &fs_level);
         App_TerminateOnError(filter_set_lrn_dis, "WP_PceFilterSetCreate",__LINE__);
@@ -1933,6 +2123,59 @@ void WPE_CreateLearningFlowAggPceRule(WP_U32 portid, WP_U32 vid)
         return;
 }
 
+void WPE_CreateEtypeMatchPceRule(WP_U8 portid, WP_U16 etype, WP_U16 vlan_tag, WP_handle agg_handle)
+{
+        WP_pce_rule_classification rule_cfg = {0};
+        WP_handle port_handle = 0, /*agg_handle = 0, */h_PCE_rule = 0;
+
+        switch (portid)
+        {
+        case 0: case 1:
+                port_handle = gbe[portid].bport_enet;
+//                agg_handle  = gbe[1 - portid].agg_enet;
+                break;
+        default:
+                printf("NO such port : %d\n", portid);
+                return ;
+        }
+
+        rule_cfg.enabled = WP_ENABLE;
+
+        rule_cfg.filter_handle = PCE_filter[FILTER_SET_ETYPE_CLASSIFICATION];
+
+        rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_INPUT_IW_PORT;
+        rule_cfg.rule_fields[0].value.iw_port_handle = port_handle;
+
+        rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_ETHER_TYPE;
+        rule_cfg.rule_fields[1].value.ethertype = etype;
+
+        rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
+
+        rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
+
+        rule_cfg.match_result[0].result_type = WP_PCE_RESULT_VLAN_UPDATE;
+	 rule_cfg.match_result[0].param.int_vlan.vlan_tag = vlan_tag;
+	 rule_cfg.match_result[0].param.int_vlan.mask = 0xFFF;
+ 
+        rule_cfg.match_result[1].result_type = WP_PCE_RESULT_FLOW_AGG;
+        rule_cfg.match_result[1].param.flow_agg.flow_aggregation = agg_handle;
+                        
+        rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
+      
+        h_PCE_rule = WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID),
+                                      WP_PCE_RULE_CLASSIFICATION,
+                                      &rule_cfg);
+        if (WP_ERROR(h_PCE_rule) == WP_ERR_PCE_RULE_ALREADY_EXISTS)
+        {
+                printf("PCE rule already exist!\n");
+        }
+        else 
+        {
+                App_TerminateOnError(h_PCE_rule, "WP_PceRuleCreate", __LINE__);
+        }
+
+        return;
+}
 
 void WPE_CreateIPV6MatchPceRule(WP_U8 portid, WP_U8 *ipv6)
 {
@@ -2299,7 +2542,12 @@ void WT_PCERulesAdd(void)
         WP_U8 mac[6] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x00};
 
         WPE_Create_Pce_Policer();
-        
+
+
+        //WPE_TxDummyAggCreate(&dummy_bp1, vlan_tag1);
+	 //WPE_CreateEtypeMatchPceRule(0, 0x0800, vlan_tag1, dummy_agg2);
+	 //WPE_CreateEtypeMatchPceRule(0, 0x86dd, dummy_bp2, dummy_agg1);
+		
         WPE_CreateIPV6MatchPceRule(0, ipv6);
         
         WPE_CreateL4PortPceRule(0, 68);
