@@ -26,7 +26,7 @@
 #define CLI_INPUT_BUFF_LEN      128
 #define MAIN_MENU_ITEM_NUM      10
 #define FHT_MENU_ITEM_NUM       5
-#define VLAN_MENU_ITEM_NUM      4
+#define VLAN_MENU_ITEM_NUM      5
 #define MC_MENU_ITEM_NUM        5
 #define AGING_MENU_ITEM_NUM     4
 #define LEARNING_MENU_ITEM_NUM  4
@@ -98,6 +98,7 @@ int CLI_VLAN_Show_Vlan(char *StrPrm);
 int CLI_VLAN_Create_Vlan(char *StrPrm);
 int CLI_VLAN_Delete_Vlan(char *StrPrm);
 int CLI_VLAN_Set_Default_Tag (char *StrPrm);
+int CLI_VLAN_Set_Etype_Tag (char *StrPrm);
 
 int CLI_MC_Show_Muticast_group(char *StrPrm);
 int CLI_MC_Create_Muticast_group(char *StrPrm);
