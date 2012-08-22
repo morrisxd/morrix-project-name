@@ -91,6 +91,7 @@ FILTER_SET_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_CLASSIFICATION,$/;"	
 FILTER_SET_FORWARDING	provider_bridge.h	/^   FILTER_SET_FORWARDING,$/;"	e	enum:filters
 FILTER_SET_ICMPV6	provider_bridge.h	/^   FILTER_SET_ICMPV6,$/;"	e	enum:filters
 FILTER_SET_IGMPV6	provider_bridge.h	/^   FILTER_SET_IGMPV6,$/;"	e	enum:filters
+FILTER_SET_IPV4_IGMP	provider_bridge.h	/^   FILTER_SET_IPV4_IGMP,$/;"	e	enum:filters
 FILTER_SET_IPV6_IP_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_IPV6_IP_CLASSIFICATION,$/;"	e	enum:filters
 FILTER_SET_IPV6_L3_BROADCAST_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_IPV6_L3_BROADCAST_CLASSIFICATION,$/;"	e	enum:filters
 FILTER_SET_L4_PORT_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_L4_PORT_CLASSIFICATION,$/;"	e	enum:filters
@@ -176,7 +177,7 @@ PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_backhaul$/;"	m
 PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/wpi_pps_image_iwgp_parser.o$/;"	m
 Performance_menu	provider_bridge_menu.c	/^Y_MenuEntry Performance_menu[] = {$/;"	v
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
-RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	824;"	d	file:
+RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	849;"	d	file:
 SEND_IGMP_PROTOCOL_PACKETS_TO_CPU	provider_bridge_util.c	/^   SEND_IGMP_PROTOCOL_PACKETS_TO_CPU$/;"	e	enum:__anon12	file:
 SEND_TO_CPU	provider_bridge_util.c	/^   SEND_TO_CPU,$/;"	e	enum:__anon12	file:
 SEND_TO_ENET7	provider_bridge_util.c	/^   SEND_TO_ENET7 = 0,$/;"	e	enum:__anon12	file:
@@ -239,6 +240,7 @@ WPE_CheckPceFilterStatsReset	provider_bridge_util.c	/^void WPE_CheckPceFilterSta
 WPE_CreateBroadcastIPv6PceRule	provider_bridge_util.c	/^void WPE_CreateBroadcastIPv6PceRule (WP_U8 portid, WP_U16 l4_port)$/;"	f
 WPE_CreateFDBList	provider_bridge_util.c	/^Node *WPE_CreateFDBList (unsigned char *mac, WP_U16 vlan, WP_U16 port,$/;"	f
 WPE_CreateICMPv6PceRule	provider_bridge_util.c	/^void WPE_CreateICMPv6PceRule (WP_U8 portid, WP_U16 next_header, SEND_TO_WHERE flag)$/;"	f
+WPE_CreateIPV4IGMPPceRule	provider_bridge_util.c	/^void WPE_CreateIPV4IGMPPceRule (WP_U8 portid)$/;"	f
 WPE_CreateIPV6GroupBroadcastMatchPceRule	provider_bridge_util.c	/^void WPE_CreateIPV6GroupBroadcastMatchPceRule (WP_U8 portid, WP_U8 * ipv6)$/;"	f
 WPE_CreateIPV6MatchPceRule	provider_bridge_util.c	/^void WPE_CreateIPV6MatchPceRule (WP_U8 portid, WP_U8 * ipv6)$/;"	f
 WPE_CreateL4PortPceRule	provider_bridge_util.c	/^void WPE_CreateL4PortPceRule (WP_U8 portid, WP_U16 l4_port)$/;"	f
