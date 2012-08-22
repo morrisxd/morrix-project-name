@@ -881,7 +881,7 @@ void App_IwSystemInit (void)
 
    /* Create TX flow aggregation */
    WPE_TxAggCreate ();
-   // WPE_AddL3GroupMember (default_agg_host, h_iw_port_general_host);
+   WPE_AddL3GroupMember (default_agg_host, h_iw_port_general_host);
    WPE_AddL3GroupMember (gbe[1].agg_enet, gbe[1].bport_enet);
 }
 
