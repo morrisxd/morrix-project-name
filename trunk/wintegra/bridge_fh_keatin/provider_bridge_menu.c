@@ -1554,7 +1554,7 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
   
   filter_class.filter_fields[0].field_mode =  WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
   filter_class.filter_fields[0].mask_mode =  WP_PCE_FIELD_MASK_USED;
-  filter_class.filter_fields[0].mask.parser_flags  = WP_PCE_MASK_PARSER_FLAG_BC; // here
+  filter_class.filter_fields[0].mask.parser_flags  = WP_PCE_MASK_PARSER_FLAG_MC; // here
   filter_class.filter_fields[0].field_id =  WP_PCE_FIELD_ID_PARSER_FLAGS;
   
   filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
@@ -1643,7 +1643,7 @@ int CLI_FHT_Case34_UcBc2Prio (char *StrPrm)
   rule_cfg.filter_handle = filter;
   
   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_PARSER_FLAGS;
-  rule_cfg.rule_fields[0].value.parser_flags = WP_PCE_MASK_PARSER_FLAG_BC; // set BC flag
+  rule_cfg.rule_fields[0].value.parser_flags = WP_PCE_MASK_PARSER_FLAG_MC; // set BC flag
   
   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
   
@@ -3189,7 +3189,7 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
     /*  replace_sub_port_vlan_mode;*/ WPE_GPE_BROUTER_PECS_SUB_PORT_VLAN_DISABLE,
     /* sub_port_vlan_tag;*/0x0,
   };
-  
+
   WP_iw_agg_generic dl_tx_agg_gbe[1] = {
     {
      /*tag */ 2,
@@ -3220,7 +3220,11 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
      WPE_GPE_BROUTER_PECS_REPLACE_MAC_DISABLE,   /* mac_replace_mode */
      {0x11, 0x22, 0x33, 0x44, 0x55, 0x00}, /* mac_da */
      {0x66, 0x77, 0x88, 0x99, 0xaa, 0x00}, /* mac_sa */
+#if 0
      &veoption,                       /* vlan_edit_options */
+#else
+      0,
+#endif
      {0},                     /* prefix_remark_options */
      WPE_GPE_BROUTER_PECS_TTL_DISABLE,  /* ttl_mode */
      WPE_GPE_BROUTER_PECS_TOS_REMARKING_DISABLE, /* tos_remarking_mode */
@@ -3238,6 +3242,7 @@ int CLI_FHT_Case37_Tag_Stack_Tunneling (char *StrPrm)
       0, 0, 0, 0, 0, 0, 0, 0}
      }
   };
+   veoption.int_vlan_tag = 0;  
    i = 0;    
   // keatin here use modify maybe better. or delete it first.
   
