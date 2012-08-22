@@ -527,7 +527,7 @@ void WPE_CreateMacBindingFilter(void)
    filter_class.filter_fields[0].field_mode =WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
    
-   filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_MAC_DA;
+   filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_MAC_SA;
    filter_class.filter_fields[1].field_mode =WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_class.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
 
@@ -1628,7 +1628,7 @@ void WPE_CreateMacBindingPceRule (WP_U8 portid, WP_U8 * mac)
    rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_INPUT_IW_PORT;
    rule_cfg.rule_fields[0].value.iw_port_handle = port_handle;
 
-   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_MAC_DA;
+   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_MAC_SA;
    memcpy (rule_cfg.rule_fields[1].value.mac_addr, mac, 6);
 
    rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_LAST;
