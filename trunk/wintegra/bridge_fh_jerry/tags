@@ -98,6 +98,7 @@ FILTER_SET_L4_PORT_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_L4_PORT_CLAS
 FILTER_SET_L4_SUBTYPE_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_L4_SUBTYPE_CLASSIFICATION,$/;"	e	enum:filters
 FILTER_SET_LAST	provider_bridge.h	/^   FILTER_SET_LAST,$/;"	e	enum:filters
 FILTER_SET_LEARNING	provider_bridge.h	/^   FILTER_SET_LEARNING,$/;"	e	enum:filters
+FILTER_SET_PASSTHROUGH	provider_bridge.h	/^   FILTER_SET_PASSTHROUGH,$/;"	e	enum:filters
 FILTER_SET_RESERVED_MAC_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_RESERVED_MAC_CLASSIFICATION,$/;"	e	enum:filters
 FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_UNKNOWNUNICAST_CLASSIFICATION,$/;"	e	enum:filters
 F_ConvertStr2Ipv6Address	provider_bridge_menu.c	/^int F_ConvertStr2Ipv6Address (char *pStr, unsigned char *ipv6)$/;"	f
@@ -177,7 +178,7 @@ PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_backhaul$/;"	m
 PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/wpi_pps_image_iwgp_parser.o$/;"	m
 Performance_menu	provider_bridge_menu.c	/^Y_MenuEntry Performance_menu[] = {$/;"	v
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
-RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	849;"	d	file:
+RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	856;"	d	file:
 SEND_IGMP_PROTOCOL_PACKETS_TO_CPU	provider_bridge_util.c	/^   SEND_IGMP_PROTOCOL_PACKETS_TO_CPU$/;"	e	enum:__anon12	file:
 SEND_TO_CPU	provider_bridge_util.c	/^   SEND_TO_CPU,$/;"	e	enum:__anon12	file:
 SEND_TO_ENET7	provider_bridge_util.c	/^   SEND_TO_ENET7 = 0,$/;"	e	enum:__anon12	file:
@@ -248,6 +249,7 @@ WPE_CreateL4SubtypePceRule	provider_bridge_util.c	/^void WPE_CreateL4SubtypePceR
 WPE_CreateLearningFlowAggPceRule	provider_bridge_util.c	/^void WPE_CreateLearningFlowAggPceRule (WP_U32 portid, WP_U32 vid)$/;"	f
 WPE_CreateMulticastGroup	provider_bridge_util.c	/^void WPE_CreateMulticastGroup (unsigned char *mc_mac, WP_U16 vlan)$/;"	f
 WPE_CreateMulticastPceRules	provider_bridge_util.c	/^static void WPE_CreateMulticastPceRules (unsigned char *mc_mac,$/;"	f	file:
+WPE_CreatePassThroughPceRule	provider_bridge_util.c	/^void WPE_CreatePassThroughPceRule (WP_U8 portid)$/;"	f
 WPE_CreatePceFilterSets	provider_bridge_util.c	/^void WPE_CreatePceFilterSets (void)$/;"	f
 WPE_CreatePceFilters	provider_bridge_util.c	/^void WPE_CreatePceFilters (void)$/;"	f
 WPE_CreatePceInterface	provider_bridge_util.c	/^void WPE_CreatePceInterface (WP_handle iw_sys)$/;"	f
