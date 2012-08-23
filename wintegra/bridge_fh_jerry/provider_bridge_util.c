@@ -661,6 +661,7 @@ void WTE_CreateUDFSet (void)
    PCE_filter[FILTER_SET_IPV6_L3_BROADCAST_CLASSIFICATION] = 
    PCE_filter[FILTER_SET_IPV4_IGMP] = 
    PCE_filter[FILTER_SET_IPV6_MLD] = 
+   PCE_filter[FILTER_SET_PASSTHROUGH] = 
 \*-------------------------------------------------*/
 void WPE_CreatePceFilters (void)
 {
@@ -707,11 +708,9 @@ void WPE_CreatePceFilters (void)
    filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED; // we use mask
 
-
    filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_IPV6_DA_HIGH;
    filter_class.filter_fields[1].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_class.filter_fields[1].mask_mode = WP_PCE_FIELD_MASK_USED;
-#if 1
    filter_class.filter_fields[1].mask.ipv6_addr_half[0] = 0xff;  // for broadcast address
    filter_class.filter_fields[1].mask.ipv6_addr_half[1] = 0x00;
    filter_class.filter_fields[1].mask.ipv6_addr_half[2] = 0x00;
@@ -720,34 +719,16 @@ void WPE_CreatePceFilters (void)
    filter_class.filter_fields[1].mask.ipv6_addr_half[5] = 0x00;
    filter_class.filter_fields[1].mask.ipv6_addr_half[6] = 0x00;
    filter_class.filter_fields[1].mask.ipv6_addr_half[7] = 0x00;
-#endif
 
-#if 0
-   filter_class.filter_fields[2].field_id = WP_PCE_FIELD_ID_IPV6_DA_LOW;
-   filter_class.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
-   filter_class.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_USED;
-if (1)
-{
-   filter_class.filter_fields[2].mask.ipv6_addr_half[0] = 0x00;
-   filter_class.filter_fields[2].mask.ipv6_addr_half[1] = 0x00;
-   filter_class.filter_fields[2].mask.ipv6_addr_half[2] = 0x00;
-   filter_class.filter_fields[2].mask.ipv6_addr_half[3] = 0x00;
-   filter_class.filter_fields[2].mask.ipv6_addr_half[4] = 0xff;
-   filter_class.filter_fields[2].mask.ipv6_addr_half[5] = 0xff;
-   filter_class.filter_fields[2].mask.ipv6_addr_half[6] = 0xff;
-   filter_class.filter_fields[2].mask.ipv6_addr_half[7] = 0xff;
-}
-#else
    filter_class.filter_fields[2].field_id = WP_PCE_FIELD_ID_MAC_DA;
    filter_class.filter_fields[2].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_class.filter_fields[2].mask_mode = WP_PCE_FIELD_MASK_USED;
-   filter_class.filter_fields[2].mask.mac_addr[0] = 0x33;
-   filter_class.filter_fields[2].mask.mac_addr[1] = 0x33;
+   filter_class.filter_fields[2].mask.mac_addr[0] = 0xff;
+   filter_class.filter_fields[2].mask.mac_addr[1] = 0xff;
    filter_class.filter_fields[2].mask.mac_addr[2] = 0x00;
    filter_class.filter_fields[2].mask.mac_addr[3] = 0x00;
    filter_class.filter_fields[2].mask.mac_addr[4] = 0x00;
    filter_class.filter_fields[2].mask.mac_addr[5] = 0x00;
-#endif
 
    filter_class.filter_fields[3].field_id = WP_PCE_FIELD_ID_LAST;
 
@@ -782,6 +763,32 @@ if (1)
                           WP_PCE_FILTER_CLASSIFICATION, &filter_class);
    App_TerminateOnError (PCE_filter[FILTER_SET_IPV4_IGMP],
                          "WP_PceFilterCreate", __LINE__);
+
+
+      
+   /* 
+    * pass through
+    */
+
+   memset (&filter_class, 0, sizeof (filter_class));
+
+   filter_class.no_match_action = WP_PCE_FILTER_NO_MATCH_CONTINUE;
+   filter_class.no_fields_action = WP_PCE_FILTER_NO_FIELDS_CONTINUE;
+
+   filter_class.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
+
+   filter_class.filter_fields[0].field_id = WP_PCE_FIELD_ID_INPUT_IW_PORT;
+   filter_class.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
+   filter_class.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
+
+   filter_class.filter_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+
+   PCE_filter[FILTER_SET_PASSTHROUGH] =
+      WP_PceFilterCreate (WP_WINPATH (DEFAULT_WPID),
+                          WP_PCE_FILTER_CLASSIFICATION, &filter_class);
+   App_TerminateOnError (PCE_filter[FILTER_SET_PASSTHROUGH],
+                         "WP_PceFilterCreate", __LINE__);
+
 
    /* 
     * ipv6 match 
@@ -1111,7 +1118,8 @@ void WPE_CreatePceFilterSets (void)
    fs_level.filters[8] = PCE_filter[FILTER_SET_ICMPV6];
    fs_level.filters[9] = PCE_filter[FILTER_SET_IGMPV6];
    fs_level.filters[10] = PCE_filter[FILTER_SET_IPV6_L3_BROADCAST_CLASSIFICATION];
-   fs_level.filters[11] = WP_UNUSED;
+   fs_level.filters[11] = PCE_filter[FILTER_SET_PASSTHROUGH];
+   fs_level.filters[12] = WP_UNUSED;
 #else
    fs_level.filters[8] = WP_UNUSED;
 #endif
@@ -1135,7 +1143,8 @@ void WPE_CreatePceFilterSets (void)
    fs_level.filters[7] = PCE_filter[FILTER_SET_ICMPV6];
    fs_level.filters[8] = PCE_filter[FILTER_SET_IGMPV6];
    fs_level.filters[9] = PCE_filter[FILTER_SET_IPV6_L3_BROADCAST_CLASSIFICATION];
-   fs_level.filters[10] = WP_UNUSED;
+   fs_level.filters[10] = PCE_filter[FILTER_SET_PASSTHROUGH];
+   fs_level.filters[11] = WP_UNUSED;
 #else
    fs_level.filters[7] = WP_UNUSED;
 #endif
@@ -2512,6 +2521,8 @@ void WPE_CreateIPV6GroupBroadcastMatchPceRule (WP_U8 portid, WP_U8 * ipv6)
    rule_cfg.rule_fields[1].value.ipv6_addr_half[3] = 0x00;
    rule_cfg.rule_fields[1].value.ipv6_addr_half[4] = 0x00;
    rule_cfg.rule_fields[1].value.ipv6_addr_half[5] = 0x00;
+   rule_cfg.rule_fields[1].value.ipv6_addr_half[6] = 0x00;
+   rule_cfg.rule_fields[1].value.ipv6_addr_half[7] = 0x00;
 
 
    rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_MAC_DA;
@@ -2605,6 +2616,77 @@ void WPE_CreateIPV4IGMPPceRule (WP_U8 portid)
    rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
 
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
+
+   h_PCE_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
+                                  WP_PCE_RULE_CLASSIFICATION, &rule_cfg);
+   if (WP_ERROR (h_PCE_rule) == WP_ERR_PCE_RULE_ALREADY_EXISTS)
+   {
+      printf ("PCE rule already exist!\n");
+   }
+   else
+   {
+      App_TerminateOnError (h_PCE_rule, "WP_PceRuleCreate", __LINE__);
+   }
+
+   return;
+}
+
+//    WPE_CreatePassThroughPceRule (0);
+void WPE_CreatePassThroughPceRule (WP_U8 portid)
+{
+   WP_pce_rule_classification rule_cfg = { 0 };
+   WP_handle port_handle = 0, agg_handle = 0, h_PCE_rule = 0;
+
+   switch (portid)
+   {
+   case 0:
+   case 1:
+      port_handle = gbe[portid].bport_enet;
+#if USE_DIFFERENT_FLOW_AGG   
+      agg_handle = gbe[1 - portid].agg_l4_port_match_1;
+#else
+#if USE_IPV6_FLOWAGG
+      if (1)
+      {
+         agg_handle = gbe[1 - portid].agg_enet;
+      } else {
+         agg_handle = default_agg_host;
+      }
+#else
+      agg_handle = gbe[1 - portid].agg_enet;
+#endif
+#endif
+      break;
+   default:
+      printf ("NO such port : %d\n", portid);
+      return;
+   }
+
+   rule_cfg.enabled = WP_ENABLE;
+
+   rule_cfg.filter_handle = PCE_filter[FILTER_SET_PASSTHROUGH];
+
+   rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_INPUT_IW_PORT;
+   rule_cfg.rule_fields[0].value.iw_port_handle = port_handle;
+
+
+#if 0
+   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_L4_DST_PORT;
+   rule_cfg.rule_fields[1].value.l4_port = l4_port;
+#endif
+
+
+   rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_LAST;
+
+   rule_cfg.match_action = WP_PCE_RULE_MATCH_ACCEPT;
+
+   rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
+   rule_cfg.match_result[0].param.flow_agg.flow_aggregation = agg_handle;
+
+   rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INGRESS_POLICER;
+   rule_cfg.match_result[1].param.ingress_policer.policer = policer_handle;   // policer
+
+   rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
 
    h_PCE_rule = WP_PceRuleCreate (WP_WINPATH (DEFAULT_WPID),
                                   WP_PCE_RULE_CLASSIFICATION, &rule_cfg);
@@ -3279,12 +3361,16 @@ void WT_PCERulesAdd (void)
    WPE_Create_Pce_Policer ();
 
    WPE_CreateIPV6GroupBroadcastMatchPceRule (0, ipv6_2);
-
-   WPE_CreateIPV6MatchPceRule (0, ipv6);
-
 #if 0
-   WPE_CreateIPV4IGMPPceRule (0);
+   WPE_CreatePassThroughPceRule (0);
 #endif
+
+
+
+
+if (1)
+{   
+   WPE_CreateIPV6MatchPceRule (0, ipv6);
 
    WPE_CreateL4PortPceRule (0, 68);
    WPE_CreateL4PortPceRule (0, 67);
@@ -3293,16 +3379,15 @@ void WT_PCERulesAdd (void)
    WPE_CreateICMPv6PceRule  (0, 0x3a, SEND_TO_ENET7);
    WPE_CreateICMPv6PceRule  (0, 0x04, SEND_TO_ENET7); // for IGMP, please send to HOST CPU
    // WPE_CreateICMPv6PceRule  (0, 0x04, SEND_IGMP_PROTOCOL_PACKETS_TO_CPU);
-
-   // WPE_CreateBroadcastIPv6PceRule (0, 0);
 #endif
 
    WPE_CreateL4SubtypePceRule (0, 0x1);
 #if 1
    WPE_CreateReservedMacPceRule (0, mac_addr_low_1, mac_addr_high_1);
-   // WPE_CreateReservedMacPceRule (0, mac_addr_low_2, mac_addr_high_2);
-   // WPE_CreateReservedMacPceRule (0, mac_addr_low_3, mac_addr_high_3);
+   WPE_CreateReservedMacPceRule (0, mac_addr_low_2, mac_addr_high_2);
+   WPE_CreateReservedMacPceRule (0, mac_addr_low_3, mac_addr_high_3);
 #endif
+}
 
    return;
 }
