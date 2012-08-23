@@ -94,6 +94,7 @@ FILTER_SET_IGMPV6	provider_bridge.h	/^   FILTER_SET_IGMPV6,$/;"	e	enum:filters
 FILTER_SET_IPV4_IGMP	provider_bridge.h	/^   FILTER_SET_IPV4_IGMP,$/;"	e	enum:filters
 FILTER_SET_IPV6_IP_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_IPV6_IP_CLASSIFICATION,$/;"	e	enum:filters
 FILTER_SET_IPV6_L3_BROADCAST_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_IPV6_L3_BROADCAST_CLASSIFICATION,$/;"	e	enum:filters
+FILTER_SET_IPV6_UNKNOWN_MULTICAST_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_IPV6_UNKNOWN_MULTICAST_CLASSIFICATION,$/;"	e	enum:filters
 FILTER_SET_L4_PORT_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_L4_PORT_CLASSIFICATION,$/;"	e	enum:filters
 FILTER_SET_L4_SUBTYPE_CLASSIFICATION	provider_bridge.h	/^   FILTER_SET_L4_SUBTYPE_CLASSIFICATION,$/;"	e	enum:filters
 FILTER_SET_LAST	provider_bridge.h	/^   FILTER_SET_LAST,$/;"	e	enum:filters
@@ -178,7 +179,7 @@ PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_backhaul$/;"	m
 PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/wpi_pps_image_iwgp_parser.o$/;"	m
 Performance_menu	provider_bridge_menu.c	/^Y_MenuEntry Performance_menu[] = {$/;"	v
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
-RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	856;"	d	file:
+RX_CHANNEL_FILTER_TAG	provider_bridge_util.c	912;"	d	file:
 SEND_IGMP_PROTOCOL_PACKETS_TO_CPU	provider_bridge_util.c	/^   SEND_IGMP_PROTOCOL_PACKETS_TO_CPU$/;"	e	enum:__anon12	file:
 SEND_TO_CPU	provider_bridge_util.c	/^   SEND_TO_CPU,$/;"	e	enum:__anon12	file:
 SEND_TO_ENET7	provider_bridge_util.c	/^   SEND_TO_ENET7 = 0,$/;"	e	enum:__anon12	file:
@@ -254,6 +255,7 @@ WPE_CreatePceFilterSets	provider_bridge_util.c	/^void WPE_CreatePceFilterSets (v
 WPE_CreatePceFilters	provider_bridge_util.c	/^void WPE_CreatePceFilters (void)$/;"	f
 WPE_CreatePceInterface	provider_bridge_util.c	/^void WPE_CreatePceInterface (WP_handle iw_sys)$/;"	f
 WPE_CreateReservedMacPceRule	provider_bridge_util.c	/^void WPE_CreateReservedMacPceRule (WP_U8 portid, WP_U8 * mac, WP_U8 *mac_high)$/;"	f
+WPE_CreateUnknownMulticastPceRule	provider_bridge_util.c	/^void WPE_CreateUnknownMulticastPceRule (WP_U8 portid, WP_U8 * ipv6)$/;"	f
 WPE_CreateUnknownUnicastGroup	provider_bridge_util.c	/^void WPE_CreateUnknownUnicastGroup (WP_U16 vlan, WP_U32 port)$/;"	f
 WPE_CreateUnknownUnicastPceRules	provider_bridge_util.c	/^static void WPE_CreateUnknownUnicastPceRules (WP_U16 vlan,$/;"	f	file:
 WPE_Create_Pce_Policer	provider_bridge_util.c	/^void WPE_Create_Pce_Policer (void)$/;"	f
