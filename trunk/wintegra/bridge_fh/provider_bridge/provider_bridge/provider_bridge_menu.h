@@ -24,7 +24,7 @@
 #define FALSE  0
 
 #define CLI_INPUT_BUFF_LEN      128
-#define MAIN_MENU_ITEM_NUM      10
+#define MAIN_MENU_ITEM_NUM      9 
 #define FHT_MENU_ITEM_NUM       /*5*/7
 #define VLAN_MENU_ITEM_NUM      4
 #define MC_MENU_ITEM_NUM        5
