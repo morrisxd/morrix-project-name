@@ -268,7 +268,7 @@ void WPE_L2SendReceiveUPI (WP_U32 packets, WP_U8 dst_mac[]);
 /********************************************************************************
  ***                        Functions Implementations: Main                   ***
  *******************************************************************************/
-WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
+int main (int argc, WP_CHAR ** argv)
 {
    WP_handle status;
    WP_U32 i;
@@ -1793,14 +1793,14 @@ void WPE_CreateSchedulingUnit (void)
        // bps
        }, WP_CALENDAR_WHEEL_TERM
    };
-   status = WP_SysSchedulerCreate (WP_WINPATH (0), calendar);
-   terminate_on_error (status, "WP_SysSchedulerCreate()");
    WP_feature_psu feature_psu_config = {
 
       /* max_ppr_plus_channels */ 0,
       /* max_cir_eir_channels */ 1,
       /* tx_maxsdu */ SDU_SIZE
    };
+   status = WP_SysSchedulerCreate (WP_WINPATH (0), calendar);
+   terminate_on_error (status, "WP_SysSchedulerCreate()");
    printf ("PSU_MODE On\n");
    status =
       WP_FeatureInit (WP_WINPATH (0), WP_FEATURE_PSU, &feature_psu_config);

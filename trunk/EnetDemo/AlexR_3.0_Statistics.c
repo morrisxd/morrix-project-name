@@ -30,7 +30,8 @@
 #include <unistd.h>
 #endif
 
-
+// #include "wp_types.h"
+#include "wp_wddi.h"
 
 typedef union StatField {
       WP_U64 field;
@@ -523,38 +524,38 @@ void WPE_DisplayFlowAggStats(WP_handle agg)
    printf ("==========================================================\n");
 
    printf ("Forward Packet:          %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.forward_packet).part.high,
-           ((WPE_StatField)iw_flow_stats.forward_packet).part.low);
+           ((WPE_StatField*)&iw_flow_stats.forward_packet)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.forward_packet)->part.low);
    printf( "FBP Drop Packets:        %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.fbp_drop_packets).part.high,
-           ((WPE_StatField)iw_flow_stats.fbp_drop_packets).part.low);
+           ((WPE_StatField*)&iw_flow_stats.fbp_drop_packets)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.fbp_drop_packets)->part.low);
    printf( "MTU Drop Packets:        %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.mtu_drop_packets).part.high,
-           ((WPE_StatField)iw_flow_stats.mtu_drop_packets).part.low);
+           ((WPE_StatField*)&iw_flow_stats.mtu_drop_packets)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.mtu_drop_packets)->part.low);
    printf( "TTL Drop Packets:        %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.ttl_drop_packets).part.high,
-           ((WPE_StatField)iw_flow_stats.ttl_drop_packets).part.low);
+           ((WPE_StatField*)&iw_flow_stats.ttl_drop_packets)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.ttl_drop_packets)->part.low);
    printf( "TX Queue Drop Packets:   %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.tx_queue_drop_packets).part.high,
-           ((WPE_StatField)iw_flow_stats.tx_queue_drop_packets).part.low);
+           ((WPE_StatField*)&iw_flow_stats.tx_queue_drop_packets)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.tx_queue_drop_packets)->part.low);
    printf( "MPLS Drop:               %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.mpls_drop).part.high,
-           ((WPE_StatField)iw_flow_stats.mpls_drop).part.low);
+           ((WPE_StatField*)&iw_flow_stats.mpls_drop)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.mpls_drop)->part.low);
    printf( "Denied Packets:          %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.denied_packets).part.high,
-           ((WPE_StatField)iw_flow_stats.denied_packets).part.low);
+           ((WPE_StatField*)&iw_flow_stats.denied_packets)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.denied_packets)->part.low);
    printf( "Group Filtered Packets:  %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.group_filtered_packets).part.high,
-           ((WPE_StatField)iw_flow_stats.group_filtered_packets).part.low);
+           ((WPE_StatField*)&iw_flow_stats.group_filtered_packets)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.group_filtered_packets)->part.low);
    printf( "Forwarded Bytes:         %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.forwarded_bytes).part.high,
-           ((WPE_StatField)iw_flow_stats.forwarded_bytes).part.low);
+           ((WPE_StatField*)&iw_flow_stats.forwarded_bytes)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.forwarded_bytes)->part.low);
    printf( "Gtp Bad Headers:         %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.gtp_bad_headers).part.high,
-           ((WPE_StatField)iw_flow_stats.gtp_bad_headers).part.low);
+           ((WPE_StatField*)&iw_flow_stats.gtp_bad_headers)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.gtp_bad_headers)->part.low);
    printf( "Bad Policer Packets:     %08x%08x\n",
-           ((WPE_StatField)iw_flow_stats.policer_non_conforming_packets).part.high,
-           ((WPE_StatField)iw_flow_stats.policer_non_conforming_packets).part.low);
+           ((WPE_StatField*)&iw_flow_stats.policer_non_conforming_packets)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.policer_non_conforming_packets)->part.low);
 
    printf("\n");
 }
@@ -577,44 +578,44 @@ void WPE_DisplayIWPortStats(WP_handle iw_port_handle)
    printf("\n");
 
    printf ("rx_valid_packets :                %08x%08x\n",
-           ((WPE_StatField)bport_stats.rx_valid_packets).part.high,
-           ((WPE_StatField)bport_stats.rx_valid_packets).part.low);
+           ((WPE_StatField*)&bport_stats.rx_valid_packets)->part.high,
+           ((WPE_StatField*)&bport_stats.rx_valid_packets)->part.low);
    printf ("discard_vlan_acceptable_filter :  %08x%08x\n",
-           ((WPE_StatField)bport_stats.discard_vlan_acceptable_filter).part.high,
-           ((WPE_StatField)bport_stats.discard_vlan_acceptable_filter).part.low);
+           ((WPE_StatField*)&bport_stats.discard_vlan_acceptable_filter)->part.high,
+           ((WPE_StatField*)&bport_stats.discard_vlan_acceptable_filter)->part.low);
    printf ("discard_ingress_filter :          %08x%08x\n",
-           ((WPE_StatField)bport_stats.discard_ingress_filter).part.high,
-           ((WPE_StatField)bport_stats.discard_ingress_filter).part.low);
+           ((WPE_StatField*)&bport_stats.discard_ingress_filter)->part.high,
+           ((WPE_StatField*)&bport_stats.discard_ingress_filter)->part.low);
    printf ("discard_bridge_classifier :       %08x%08x\n",
-           ((WPE_StatField)bport_stats.discard_bridge_classifier).part.high,
-           ((WPE_StatField)bport_stats.discard_bridge_classifier).part.low);
+           ((WPE_StatField*)&bport_stats.discard_bridge_classifier)->part.high,
+           ((WPE_StatField*)&bport_stats.discard_bridge_classifier)->part.low);
    printf ("discard_unk_macsa :               %08x%08x\n",
-           ((WPE_StatField)bport_stats.discard_unk_macsa).part.high,
-           ((WPE_StatField)bport_stats.discard_unk_macsa).part.low);
+           ((WPE_StatField*)&bport_stats.discard_unk_macsa)->part.high,
+           ((WPE_StatField*)&bport_stats.discard_unk_macsa)->part.low);
    printf ("deny_mac_sa :                     %08x%08x\n",
-           ((WPE_StatField)bport_stats.deny_mac_sa).part.high,
-           ((WPE_StatField)bport_stats.deny_mac_sa).part.low);
+           ((WPE_StatField*)&bport_stats.deny_mac_sa)->part.high,
+           ((WPE_StatField*)&bport_stats.deny_mac_sa)->part.low);
    printf ("deny_mac_da :                     %08x%08x\n",
-           ((WPE_StatField)bport_stats.deny_mac_da).part.high,
-           ((WPE_StatField)bport_stats.deny_mac_da).part.low);
+           ((WPE_StatField*)&bport_stats.deny_mac_da)->part.high,
+           ((WPE_StatField*)&bport_stats.deny_mac_da)->part.low);
    printf ("rx_bc_valid_packets :             %08x%08x\n",
-           ((WPE_StatField)bport_stats.rx_bc_valid_packets).part.high,
-           ((WPE_StatField)bport_stats.rx_bc_valid_packets).part.low);
+           ((WPE_StatField*)&bport_stats.rx_bc_valid_packets)->part.high,
+           ((WPE_StatField*)&bport_stats.rx_bc_valid_packets)->part.low);
    printf ("rx_mc_valid_packets :             %08x%08x\n",
-           ((WPE_StatField)bport_stats.rx_mc_valid_packets).part.high,
-           ((WPE_StatField)bport_stats.rx_mc_valid_packets).part.low);
+           ((WPE_StatField*)&bport_stats.rx_mc_valid_packets)->part.high,
+           ((WPE_StatField*)&bport_stats.rx_mc_valid_packets)->part.low);
    printf ("forwarded_uc_packets :            %08x%08x\n",
-           ((WPE_StatField)bport_stats.forwarded_uc_packets).part.high,
-           ((WPE_StatField)bport_stats.forwarded_uc_packets).part.low);
+           ((WPE_StatField*)&bport_stats.forwarded_uc_packets)->part.high,
+           ((WPE_StatField*)&bport_stats.forwarded_uc_packets)->part.low);
    printf ("forwarded_bc_packets :            %08x%08x\n",
-           ((WPE_StatField)bport_stats.forwarded_bc_packets).part.high,
-           ((WPE_StatField)bport_stats.forwarded_bc_packets).part.low);
+           ((WPE_StatField*)&bport_stats.forwarded_bc_packets)->part.high,
+           ((WPE_StatField*)&bport_stats.forwarded_bc_packets)->part.low);
    printf ("forwarded_mc_packets :            %08x%08x\n",
-           ((WPE_StatField)bport_stats.forwarded_mc_packets).part.high,
-           ((WPE_StatField)bport_stats.forwarded_mc_packets).part.low);
+           ((WPE_StatField*)&bport_stats.forwarded_mc_packets)->part.high,
+           ((WPE_StatField*)&bport_stats.forwarded_mc_packets)->part.low);
    printf ("protocol_error :                  %08x%08x\n",
-           ((WPE_StatField)bport_stats.protocol_error).part.high,
-           ((WPE_StatField)bport_stats.protocol_error).part.low);
+           ((WPE_StatField*)&bport_stats.protocol_error)->part.high,
+           ((WPE_StatField*)&bport_stats.protocol_error)->part.low);
 
    printf("\n");
    return;
@@ -634,11 +635,11 @@ void WPE_DisplayIWSystemStats(WP_handle port_handle)
 
 
    printf ("\nDenied packets:          %08x%08x\n",
-           ((WPE_StatField)iw_stats.denied_packets).part.high,
-           ((WPE_StatField)iw_stats.denied_packets).part.low);
+           ((WPE_StatField*)&iw_stats.denied_packets)->part.high,
+           ((WPE_StatField*)&iw_stats.denied_packets)->part.low);
    printf ("IW BG FBP underrun:      %08x%08x\n",
-           ((WPE_StatField)iw_stats.iwbg_fbp_underrun).part.high,
-           ((WPE_StatField)iw_stats.iwbg_fbp_underrun).part.low);
+           ((WPE_StatField*)&iw_stats.iwbg_fbp_underrun)->part.high,
+           ((WPE_StatField*)&iw_stats.iwbg_fbp_underrun)->part.low);
    printf("\n");
 }
 
