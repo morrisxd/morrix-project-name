@@ -185,7 +185,7 @@ clean:
 #$(TEST_EXE): $(TEST_OBJ)
 #	@echo 
 #	@echo Linking the test!
-#	$(CC) $(LDFLAGS) -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(WDDI_LIB_DIR)/wpi_wddi.a $(WDDI_LIB_DIR)/wpi_veneer.a $(PHY_BOARD)/wpx_phy.a $(PHY_BOARD)/wpx_board.a $(WPI_HT_DIR)/$(HW_DEVICE)/lib/wpi_hw_device.a $(WIN_UTILS) $(OTHER_LIB) $(SPECIAL_FLAG)
+#	$(CC) $(LDFLAGS) -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(WDDI_LIB_DIR)/wpi_wddi.a $(WDDI_LIB_DIR)/wpi_veneer.a $(PHY_BOARD)/wpx_phy.a $(PHY_BOARD)/wpx_board.a $(WPI_HT_DIR)/$(HW_DEVICE)/lib/wpi_hw_device.a $(WIN_UTILS) $(OTHER_LIB) $(SPECIAL_FLAG)  
 
 $(TEST_EXE): $(TEST_OBJ)
 # If the linker needs a start file, copy it to the local directory
