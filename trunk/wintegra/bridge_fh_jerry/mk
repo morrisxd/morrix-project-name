@@ -1,6 +1,11 @@
 ctags -R
 make TEST=provider_bridge.c 2>&1 | tee make.log
-cd bin
-cp provider_bridge provider_bridge.exe
-up provider_bridge.exe bin
+# ~/bin/copy_to_tftpboot.sh
+cp ./bin/provider_bridge /tftpboot
+
+
+
+
+# cp provider_bridge provider_bridge.exe
+# up provider_bridge.exe bin
 

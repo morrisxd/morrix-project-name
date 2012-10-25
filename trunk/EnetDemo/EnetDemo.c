@@ -61,7 +61,7 @@ Full CLI Statistics
 
 #include "api/wp_wddi.h"
 #include "api/wp_host_io.h"
-#include "wpi_veneer.h"
+// #include "wpi_veneer.h"
 #include "wpx_app_data.h"
 #include "wpx_board_if.h"
 #include "wpx_board_data.h"
@@ -322,16 +322,23 @@ int main (int argc, WP_CHAR ** argv)
    //status = WP_ControlRegister(WP_EVENT_IW_LEARNING_QUEUE, &WPE_LearningIST);
    //terminate_on_error(status, "WP_ControlRegister WP_EVENT_IW_LEARNING_QUEUE");
 
-//    status = WP_ControlRegister(WP_EVENT_RX_INDICATE, &WPE_Receive_HostData_IRQ);
-//    terminate_on_error(status, "WP_ControlRegister WP_EVENT_RX_INDICATE ");
+
+
+      /*
+       * receive signal
+       */
+#if 1
+      status = WP_ControlRegister(WP_EVENT_RX_INDICATE, &WPE_Receive_HostData_IRQ);
+      terminate_on_error(status, "WP_ControlRegister WP_EVENT_RX_INDICATE ");
+#endif
 
    //WPE_CreateDedicatedFlowAgg();
 
    //WPE_MultiCastFlowCreate();
 
-        /*---------------------------------------------------*\
+   /*---------------------------------------------------*\
 		IMPORTANT !
-	\*---------------------------------------------------*/
+   \*---------------------------------------------------*/
    WPE_SetStaticForwardRules ();
 
    //WPE_AddBasicFilters();
@@ -550,7 +557,8 @@ void WPE_SysInit (void)
       {
        dps_ProgramImage, dps_ProgramImage},
       {
-       dps_PC_Table_Init, dps_PC_Table_Init}, &int_queue_tables,  /* Interrupt queue tables */
+       dps_PC_Table_Init, dps_PC_Table_Init}, 
+      &int_queue_tables,  /* Interrupt queue tables */
       N_POOLS,                  /* Maxumum number of pools */
       NULL,                     /* ATM global parameters */
       &max_iw,                  /* Interworking global parameters */
@@ -565,7 +573,12 @@ void WPE_InitHWCards ()
 
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_2UPI_1XGI_10SGMII);
    terminate_on_error (status, "WPX_CONFIGURE_2UPI_1XGI_10SGMII()");
+#if 0
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_NORMAL);
+#else
+   status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_LOOPBACK);
+#endif
+
    terminate_on_error (status, "WPX_BoardSerdesInit 7()");
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET8, WPX_SERDES_NORMAL);
    terminate_on_error (status, "WPX_BoardSerdesInit 8()");
@@ -1044,7 +1057,19 @@ void WPE_CreateFastEnetPortDevice ()
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7, &enet_port_config);
    terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
    enet_dev_config.max_tx_channels = NUM_OF_FAST_ENET_TX_CHANNELS;
-   enet_dev_config.loopbackmode = WP_ENET_LOOPBACK;   /* set loopback here -- morris */
+
+
+   /* 
+    * device loopback was not supported by wdds4.3.1 anymore
+    */
+#if 0
+   /* set loopback here -- morris */
+   enet_dev_config.loopbackmode = WP_ENET_LOOPBACK;   
+#else
+   enet_dev_config.loopbackmode = WP_ENET_NORMAL;
+
+#endif
+
    dev_enet =
       WP_DeviceCreate (port_enet, WP_PHY (0), WP_DEVICE_ENET,
                        &enet_dev_config);
@@ -2336,13 +2361,15 @@ void WPE_AddBasicRules (void)
 #endif /*  */
 }
 
+WP_U32 p_got = 0;
+
 void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
 {
    WP_data_unit data_unit;
    WP_data_segment segment;
    WP_handle status;
 
-//     WP_U32 i;
+WP_U32 i;
    memset (&data_unit, 0, sizeof (WP_data_unit));
    memset (&segment, 0, sizeof (WP_data_segment));
    data_unit.type = WP_DATA_IW; /* Type of this data unit.          */
@@ -2361,16 +2388,37 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
       else
          terminate_on_error (status, "WP_HostReceive Error()");
    }
-   printf ("Receive Packet \n");
+   p_got ++;
+   printf ("Receive Packet (%6d)\n", p_got);
 
-//     for (i=0;i<data_unit.data_size;i++)
-//     {
-//        if(i%16 == 0) printf("\n");
-//        printf("0x%02x ", data_unit.segment->data[i]);
-//     }
-//     printf("\n Data Size = %d \n",data_unit.data_size);
+   i = 0;
+
+#if 0
+   for (i=0;i<data_unit.data_size;i++)
+   {
+      if(i%16 == 0) printf("\n");
+      printf("0x%02x ", data_unit.segment->data[i]);
+   }
+
+   printf("\n Data Size = %d \n",data_unit.data_size);
+#endif
+
+
+
    status = WP_PoolFree (segment.pool_handle, segment.data);
    terminate_on_error (status, "WP_PoolFree ()");
+
+#if 0
+/*----------------------------------------------------*\
+   we are going to make this endlessly !!!
+   Transfer packes here.
+\*----------------------------------------------------*/
+    WPE_Send_HostData(tx_host_channel, WP_DATA_IW, enet_change_dst_mac);
+#endif
+
+
+
+
    return;
 }
 
@@ -2501,20 +2549,24 @@ void WPE_Send_HostData (WP_handle tx_channel, WP_data_type data_type,
 //       }
 //       segment.pool_handle= pool_host;
    }
-   segment.data_size = PACKET_SIZE;
+
+   segment.data_size       = PACKET_SIZE;
    WP_MEM_BYTES_FILL (segment.data, '0', segment.data_size);
    WP_MEM_BYTES_SET (&segment.data[0], hexa_buffer, PACKET_SIZE);
-   data_unit.type = data_type;  /* Type of this data unit.          */
-   data_unit.segment = &segment; /* Pointer to first segment.        */
-   data_unit.n_segments = 1;    /* Number of available segments.    */
-   data_unit.n_active = 1;      /* Number of live segments.         */
-   data_unit.data_size = segment.data_size;  /* Sum of segment data_size values. */
-   data_unit.data_return = 0;   /* Pointer to additional tag data returned by HostReceive */
-   data_unit.control = WP_HT_CONTROL (0) | WP_HT_IW_B_MODE_FIELD (WP_HT_IW_B_NORMAL_MODE);   /* Tx protocol specific settings    */
-   data_unit.status = 0;        /* Rx protocol specific status      */
+   data_unit.type          = data_type;  /* Type of this data unit.          */
+   data_unit.segment       = &segment; /* Pointer to first segment.        */
+   data_unit.n_segments    = 1;    /* Number of available segments.    */
+   data_unit.n_active      = 1;      /* Number of live segments.         */
+   data_unit.data_size     = segment.data_size;  
+   data_unit.data_return   = 0;   
+   data_unit.control       = WP_HT_CONTROL (0) 
+                  | WP_HT_IW_B_MODE_FIELD (WP_HT_IW_B_NORMAL_MODE);   
+   data_unit.status        = 0;
 
    i = 0;
-#if 1
+
+
+#if 0
    printf ("WP_HostSend \n");
    for (i = 0; i < PACKET_SIZE; i++)
    {
@@ -2525,6 +2577,8 @@ void WPE_Send_HostData (WP_handle tx_channel, WP_data_type data_type,
    printf ("\n Data Size = %d \n", data_unit.data_size);
 
 #endif /*  */
+
+
    status = WP_HostSend (tx_channel, &data_unit);
    if (WP_ERR_WMM_FIFO_PUT == WP_ERROR (status))
 
@@ -2543,6 +2597,10 @@ void WPE_Send_HostData (WP_handle tx_channel, WP_data_type data_type,
       terminate_on_error (status, "WP_HostSend ()");
    return;
 }
+
+
+
+
 void WPE_ShowForwardingRules (void)
 {
    WP_l2_forward forward_rule;
@@ -2648,6 +2706,7 @@ void WPE_ShowAvailableBusesMemory (void)
 void WPE_CLI (void)
 {
    char InputBuf[256];
+   int i = 0;
 
    InputBuf[0] = '\0';
    while ((InputBuf[0] != 'q') && (InputBuf[0] != 'k'))
@@ -2660,6 +2719,9 @@ void WPE_CLI (void)
          ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev,  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
       printf
          ("       HostTermination: \n \t\t\t7-bPortHost,  \n \t\t\t8-FlowAggHost, \n \t\t\tq-Exit, \n \t\t\tr-Reboot, \n \t\t\tk-Kill(noDriverRelease) \n");
+
+      printf
+         ("       packet control : \n \t\t\tp-send packets\n");
 
 #if 0
       gets (InputBuf);
@@ -2729,6 +2791,17 @@ void WPE_CLI (void)
          printf
             ("********************* WPE_ShowAvailableBusesMemory **********************   \n");
          WPE_ShowAvailableBusesMemory ();
+         break;
+      case 'p':
+#if 1
+   for (i = 0; i < 10; i++)
+
+   {
+
+      WPE_Send_HostData(tx_host_channel, WP_DATA_IW, enet_change_dst_mac);
+      //WPE_IWSendReceive (1, enet_change_dst_mac);
+   }
+#endif
          break;
       case 'q':
          printf

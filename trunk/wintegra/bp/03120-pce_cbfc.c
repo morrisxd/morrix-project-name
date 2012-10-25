@@ -1497,18 +1497,20 @@ void CLI_RunCommonConfig (void)
             }
             else
             {
+#if 0
                printf ("tx_frames(%6d)\n", mc_tx.tx_frames);
-               printf ("tx_err_underrun\t\t\t(%6d)\n",
-                       mc_tx.tx_err_underrun);
-//                                                                              printf ("serial_tx_dps_if_stats.rx_frames\t(%6d)\n", mc_tx.serial_tx_dps_if_stats.rx_frames);
+               printf ("tx_err_underrun\t\t\t(%6d)\n", 
+                           mc_tx.tx_err_underrun);
+//   printf ("serial_tx_dps_if_stats.rx_frames\t(%6d)\n", mc_tx.serial_tx_dps_if_stats.rx_frames);
                printf ("serial_tx_dps_if_stats.tx_frames(%6d)\n",
                        mc_tx.serial_tx_dps_if_stats.tx_frames);
                printf ("serial_tx_dps_if_stats.tx_bytes\t(%6d)\n",
                        mc_tx.serial_tx_dps_if_stats.tx_bytes);
-//                                                                              printf ("serial_tx_dps_if_stats.rx_bytes\t(%6d)\n", mc_tx.serial_tx_dps_if_stats.rx_bytes);
-//                                                                              printf ("serial_tx_dps_if_stats.rx_dropped_frames\t(%6d)\n", mc_tx.serial_tx_dps_if_stats.rx_dropped_frames);
-//                                                                              printf ("serial_tx_dps_if_stats.rx_pce_denied_frames\t(%6d)\n", mc_tx.serial_tx_dps_if_stats.rx_pce_denied_frames);
-//                                                                              WP_ChannelStatisticsReset ();
+// printf ("serial_tx_dps_if_stats.rx_bytes\t(%6d)\n", mc_tx.serial_tx_dps_if_stats.rx_bytes);
+// printf ("serial_tx_dps_if_stats.rx_dropped_frames\t(%6d)\n", mc_tx.serial_tx_dps_if_stats.rx_dropped_frames);
+// printf ("serial_tx_dps_if_stats.rx_pce_denied_frames\t(%6d)\n", mc_tx.serial_tx_dps_if_stats.rx_pce_denied_frames);
+// WP_ChannelStatisticsReset ();
+#endif
             }
          }
       }
@@ -1584,17 +1586,17 @@ void WPE_CheckPceFilterStats (WP_handle filter)
    temp1 = filter_stat.denied_pkts;
    temp2 = filter_stat.denied_pkts >> 32;
    printf ("denied_pkts            %08X %08X       diff %04X\n",
-           temp2, temp1);
+           temp2, temp1, temp2-temp1);
 
    temp1 = filter_stat.matched_pkts;
    temp2 = filter_stat.matched_pkts >> 32;
    printf ("matched_pkts           %08X %08X       diff %04X\n",
-           temp2, temp1);
+           temp2, temp1, temp2-temp1);
 
    temp1 = filter_stat.no_matched_pkts;
    temp2 = filter_stat.no_matched_pkts >> 32;
    printf ("no_matched_pkts        %08X %08X       diff %04X\n",
-           temp2, temp1);
+           temp2, temp1, temp2-temp1);
 
    printf ("\n\n");
 }
@@ -3126,7 +3128,7 @@ void WTI_TranslateHexToAscii (WP_CHAR * Ascii, WP_CHAR * Hex,
 
    }
 
-   Ascii[2 * length] = NULL;
+   Ascii[2 * length] = (WP_U32)NULL;
 
    return;
 }

@@ -46,6 +46,7 @@ extern WP_U32 dps_ProgramImage[];
 extern WP_U16 dps_PC_Table_Init[];
 WP_CHAR ch = 'c';
 
+#define NEW_SEQUENCE (1)
 #define MODIFIED_BY_MORRIS (1)
 #define USE_ENET7 (0)
 #define MORRIS_USE_OLD_CHANNELS  (1)
@@ -1003,6 +1004,13 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 /*******************************/
 
    crc_size = ((mc_hdlc_dev_config[0].crctype == WP_HDLC_CRC16) ? 2 : 4);
+
+
+#if (NEW_SEQUENCE) 
+   /* Enable the multi channel vitual devices */
+   WPE_McDevicesEnable (the_system);
+#endif
+
    /* Enable the system */
    WPE_SystemEnable (the_system);
 
@@ -1017,8 +1025,11 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
    App_EnableGroup ();
 #endif
 
+#if !(NEW_SEQUENCE) 
+#error McDevicesEnable can not be locate here.
    /* Enable the multi channel vitual devices */
    WPE_McDevicesEnable (the_system);
+#endif
 
    status =
       WP_DeviceEnable (the_system->TDM2PSN_dev_iwhost,

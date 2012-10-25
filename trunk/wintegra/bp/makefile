@@ -5,8 +5,8 @@
 TEST_DIR = .
 #WPI_WDDS_DIR = ../..
 WPI_WDDS_DIR = ../..
-# WPI_TARGET 	= mips_linux
-WPI_TARGET 	= mips_winmon
+WPI_TARGET 	= mips_linux
+# WPI_TARGET 	= mips_winmon
 # WPI_WDDS_DIR = ../WDDS_4_2_GA_RC4_build_1468_ufe
 WDDI_DIR = $(WPI_WDDS_DIR)/wddi
 

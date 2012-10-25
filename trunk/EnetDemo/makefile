@@ -6,13 +6,14 @@ TEST_DIR = .
 WPI_WDDS_DIR = ../../..
 WDDI_DIR = $(WPI_WDDS_DIR)/wddi
 ifeq "$(WPI_TARGET)" ""
-WPI_TARGET 	= mips_winmon
+WPI_TARGET = mips_winmon
 endif
 
 WPI_BOARD  	= wds
 WPI_HOST   	= linux
 UFE_TYPE        = ufe412
 DPS_IMAGE_NAME  = wpi_dps_image_backhaul
+# DPS_IMAGE_NAME  = wpi_dps_image_wireline
 
 WDDS_OBJECTS = objects
 WDDI_SOURCES = /sources
