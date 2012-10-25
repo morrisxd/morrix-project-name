@@ -449,9 +449,6 @@ void WPE_TxAggCreate (void)
    };
 
 
-   rout_agg_ipv6[0].tag = 1;
-
-   memset (dl_tx_agg_gbe_ipv6, 0, sizeof (WP_iw_agg_ipv6_routing));
 
    WPE_gpe_brouter_pecs_flow_info brouter_pecs_flow_info[] = {
       /*  */
@@ -483,6 +480,10 @@ void WPE_TxAggCreate (void)
         0, 0, 0, 0, 0, 0, 0, 0}
        }
    };
+
+   rout_agg_ipv6[0].tag = 1;
+
+   memset (dl_tx_agg_gbe_ipv6, 0, sizeof (WP_iw_agg_ipv6_routing));
 
    /* DL GE TX flow agg */
    for (i = 0; i < NR_GBE; i++)
