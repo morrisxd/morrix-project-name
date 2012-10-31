@@ -89,7 +89,7 @@ extern WP_U16 dps_PC_Table_Init[];
 
 extern WP_pce_parser_info pce_parser_info;
 #define INT_QUEUE_SIZE  (100)
-#define RATIO           (10)
+#define RATIO           (1)
 static WP_int_queue_table int_queue_tables = {{{INT_QUEUE_SIZE, RATIO           }, {INT_QUEUE_SIZE, RATIO}, {INT_QUEUE_SIZE, RATIO}, {INT_QUEUE_SIZE, RATIO}}};
 
 static WP_atm_global atm_params[1] =
