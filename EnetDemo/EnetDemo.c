@@ -73,6 +73,7 @@ Full CLI Statistics
  *******************************************************************************/
 
 // Misc
+#define ENABLE_TRANSFER          (1)
 #define MAX_MACS                 4
 #define N_QNODES                 3
 #define N_POOLS                  4
@@ -264,12 +265,47 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info);
 void WPE_IWSendReceive (WP_U32 packets, WP_U8 dst_mac[]);
 void WPE_L2SendReceiveEnet (WP_U32 packets, WP_U8 dst_mac[]);
 void WPE_L2SendReceiveUPI (WP_U32 packets, WP_U8 dst_mac[]);
+void WPE_Receive_HostData_IRQ_X (WP_tag tag, WP_U32 event, WP_U32 info);
+static WP_tag g_tag;
+static WP_U32 g_event;
+static WP_U32 g_info;
+static WP_U32 g_flag = 0;
+
+
+void app_overrun_callback (WP_U32 wpid, WP_U32 queue_id, WP_U32 overrun_count)
+{
+   printf ("Overrun happenes: wpid(%2d), queue_id(%2d), overrun_cnt(%6d)", 
+      wpid, queue_id, overrun_count);
+
+   return;
+}
+
+static WP_U32 iii = 0;
+extern void usleep(WP_U32 period);
+
+void *LearningPoll(void*i)
+{
+
+   while (1)
+   {
+      if (g_flag)
+      {
+         g_flag = 0;
+         iii ++;
+         WPE_Receive_HostData_IRQ_X (g_tag, g_event, g_info);
+      }
+      usleep (100);
+      ;
+   }
+}
+
 
 /********************************************************************************
  ***                        Functions Implementations: Main                   ***
  *******************************************************************************/
 int main (int argc, WP_CHAR ** argv)
 {
+   WP_THREAD_ID learning_thread_id;
    WP_handle status;
    WP_U32 i;
 
@@ -328,8 +364,15 @@ int main (int argc, WP_CHAR ** argv)
        * receive signal
        */
 #if 1
-      status = WP_ControlRegister(WP_EVENT_RX_INDICATE, &WPE_Receive_HostData_IRQ);
+      // callback
+      status = WP_ControlRegister(WP_EVENT_RX_INDICATE, 
+                                       &WPE_Receive_HostData_IRQ);
       terminate_on_error(status, "WP_ControlRegister WP_EVENT_RX_INDICATE ");
+
+      status = WP_ControlRegister(WP_EVENT_QUEUE_OVERRUN, 
+                                       &app_overrun_callback);
+      terminate_on_error(status, "WP_ControlRegister WP_EVENT_QUEUE_OVERRUN");
+
 #endif
 
    //WPE_CreateDedicatedFlowAgg();
@@ -347,11 +390,21 @@ int main (int argc, WP_CHAR ** argv)
    status = WP_IwSystemBuild (iw_sys);
    terminate_on_error (status, "WP_IwSystemBuild");
    WPE_EnableSystem ();
+
+
+#if 1
+   status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
+   terminate_on_error (status , "WPL_ThreadInit() learning");
+#endif
+
+
+
    for (i = 0; i < 10; i++)
 
    {
 
-      WPE_Send_HostData(tx_host_channel, WP_DATA_IW, enet_change_dst_mac);
+      WPE_Send_HostData(tx_host_channel, WP_DATA_IW, 
+                              /*enet_change_dst_mac*/enet_dst_mac);
       //WPE_IWSendReceive (1, enet_change_dst_mac);
    }
    WPE_CLI ();
@@ -573,7 +626,7 @@ void WPE_InitHWCards ()
 
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_2UPI_1XGI_10SGMII);
    terminate_on_error (status, "WPX_CONFIGURE_2UPI_1XGI_10SGMII()");
-#if 0
+#if 1
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_NORMAL);
 #else
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_LOOPBACK);
@@ -2362,8 +2415,19 @@ void WPE_AddBasicRules (void)
 }
 
 WP_U32 p_got = 0;
+WP_U32 p_getnsend = 0;
 
 void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
+{
+   g_tag = tag;
+   g_event = event;
+   g_info = info;
+   g_flag = 1;
+}
+
+
+
+void WPE_Receive_HostData_IRQ_X (WP_tag tag, WP_U32 event, WP_U32 info)
 {
    WP_data_unit data_unit;
    WP_data_segment segment;
@@ -2389,7 +2453,14 @@ WP_U32 i;
          terminate_on_error (status, "WP_HostReceive Error()");
    }
    p_got ++;
-   printf ("Receive Packet (%6d)\n", p_got);
+#define DISPLAY_MATRIX  (5000)
+#if 1
+   if (0 == (p_got % DISPLAY_MATRIX))
+   {
+      printf ("Receive Packet (%10d)\r", p_got);
+   }
+#endif
+
 
    i = 0;
 
@@ -2408,7 +2479,7 @@ WP_U32 i;
    status = WP_PoolFree (segment.pool_handle, segment.data);
    terminate_on_error (status, "WP_PoolFree ()");
 
-#if 0
+#if ENABLE_TRANSFER
 /*----------------------------------------------------*\
    we are going to make this endlessly !!!
    Transfer packes here.
