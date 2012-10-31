@@ -88,9 +88,9 @@ extern WP_U32 dps_ProgramImage[];
 extern WP_U16 dps_PC_Table_Init[];
 
 extern WP_pce_parser_info pce_parser_info;
-
-
-static WP_int_queue_table int_queue_tables = {{{100, 1}, {100, 1}, {10, 1}, {10, 1}}};
+#define INT_QUEUE_SIZE  (100)
+#define RATIO           (10)
+static WP_int_queue_table int_queue_tables = {{{INT_QUEUE_SIZE, RATIO           }, {INT_QUEUE_SIZE, RATIO}, {INT_QUEUE_SIZE, RATIO}, {INT_QUEUE_SIZE, RATIO}}};
 
 static WP_atm_global atm_params[1] =
 {
