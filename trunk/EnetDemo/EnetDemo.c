@@ -282,6 +282,7 @@ void app_overrun_callback (WP_U32 wpid, WP_U32 queue_id, WP_U32 overrun_count)
 
 static WP_U32 iii = 0;
 extern void usleep(WP_U32 period);
+WP_U32 g_callback = 0;
 
 void *LearningPoll(void*i)
 {
@@ -2423,6 +2424,11 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
    g_event = event;
    g_info = info;
    g_flag = 1;
+   g_callback ++;
+         if (0 == (iii % 5000))
+         {
+            printf ("iii(%6d), callback(%6d)\r", iii, g_callback);
+         }
 }
 
 
