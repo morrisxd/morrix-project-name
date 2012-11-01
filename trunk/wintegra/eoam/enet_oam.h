@@ -13,8 +13,8 @@
  *****************************************************************************/
 /*NOTE: uncomment the macro, compiling for wp3 board... by default compilation will be for WP3 SLB board*/
 
-#include "brouter_pecs.h"
-#include "mpls_pecs.h"
+// #include "brouter_pecs.h"
+// #include "mpls_pecs.h"
 
 #define BOARD_WP3
 

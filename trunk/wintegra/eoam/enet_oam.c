@@ -28,7 +28,7 @@
 #include "wp_host_io.h"
 #include "wpx_app_data.h"
 #include "wpx_board_data.h"
-#include "wpx_enet_phy.h"
+// #include "wpx_enet_phy.h"
 
 //#include "wp_enet_oam.h"
 #include "enet_oam_util.h"
