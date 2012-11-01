@@ -28,7 +28,7 @@
 #include "wpui_dump.h"
 #include "wpui_colors.h"
 #include "wpui_args.h"
-// #include "wpu_util.h"
+#include "wpu_util.h"
 
 extern WPE_EOAM_DB eoam_system;
 extern WP_boolean  eoam_running;
@@ -1921,7 +1921,7 @@ WP_S32 WPE_Eoam_MEP_CreateRemoteMEP(WP_U32 ma_id, WP_U16 mep_id, WP_U8 mac[6], W
 
     mep_config.rxtxfcl_stats_handle = WP_IwFlowStatisticsTableCreate(WP_WINPATH(0), WP_IW_FLOW_CLASS_RULE_ENET_OAM_LM);
     WPE_TerminateOnError(mep_config.rxtxfcl_stats_handle , "WP_IwFlowStatisticsTableCreate",__LINE__);
-	
+
     remote_mep_handle = WP_IwEnetOamRemoteMepCreate(pMaEntry->ma_handle, &mep_config);
     WPE_TerminateOnError(remote_mep_handle , "WP_IwEnetOamRemoteMepCreate",__LINE__);    
 
@@ -3244,7 +3244,7 @@ WP_handle WPE_Eoam_Flow_AddFlowRule(WP_handle filter,
    WP_pce_rule_classification rule_cfg = { 0 };
    WP_U16 i;
    WP_handle pce_rule;
-	
+
    /* Common parameters */
    rule_cfg.enabled = WP_ENABLE;
    rule_cfg.filter_handle = filter;
@@ -3252,15 +3252,15 @@ WP_handle WPE_Eoam_Flow_AddFlowRule(WP_handle filter,
    rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
    for(i=0; i<6; i++)      
    {
-   	rule_cfg.rule_fields[0].value.mac_addr[i] = d_mac[i];
+   rule_cfg.rule_fields[0].value.mac_addr[i] = d_mac[i];
    }
    
    rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_MAC_SA;
    for(i=0; i<6; i++)      
    {
-   	rule_cfg.rule_fields[1].value.mac_addr[i] = s_mac[i];
+   rule_cfg.rule_fields[1].value.mac_addr[i] = s_mac[i];
    }
-	  
+  
    rule_cfg.rule_fields[2].field_id = WP_PCE_FIELD_ID_INT_VLAN_TAG;
    rule_cfg.rule_fields[2].value.vlan_tag = vlan;
 
@@ -3284,7 +3284,7 @@ WP_handle WPE_Eoam_Flow_AddFlowRule(WP_handle filter,
       {
          rule_cfg.match_result[0].result_type = WP_PCE_RESULT_STATISTICS;
          rule_cfg.match_result[0].param.statistics.subtype = WP_PCE_STATISTICS_SUBTYPE_LM_UPDATE_RXFCL;
-         rule_cfg.match_result[0].param.statistics.statistics_handle = lm_stats_handle;	
+         rule_cfg.match_result[0].param.statistics.statistics_handle = lm_stats_handle;
          rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;  
       }
       break;
@@ -3296,8 +3296,8 @@ WP_handle WPE_Eoam_Flow_AddFlowRule(WP_handle filter,
 
          rule_cfg.match_result[1].result_type = WP_PCE_RESULT_STATISTICS;
          rule_cfg.match_result[1].param.statistics.subtype = WP_PCE_STATISTICS_SUBTYPE_LM_UPDATE_RXFCL;
-         rule_cfg.match_result[1].param.statistics.statistics_handle = lm_stats_handle;	
-		
+         rule_cfg.match_result[1].param.statistics.statistics_handle = lm_stats_handle;
+
          rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;  
       }
       break;
@@ -3306,8 +3306,8 @@ WP_handle WPE_Eoam_Flow_AddFlowRule(WP_handle filter,
       {
          rule_cfg.match_result[0].result_type = WP_PCE_RESULT_STATISTICS;
          rule_cfg.match_result[0].param.statistics.subtype = WP_PCE_STATISTICS_SUBTYPE_LM_UPDATE_TXFCL;
-         rule_cfg.match_result[0].param.statistics.statistics_handle = lm_stats_handle;	
-         rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;  			
+         rule_cfg.match_result[0].param.statistics.statistics_handle = lm_stats_handle;
+         rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;  
       }
       break;
 
@@ -3318,8 +3318,8 @@ WP_handle WPE_Eoam_Flow_AddFlowRule(WP_handle filter,
 
          rule_cfg.match_result[1].result_type = WP_PCE_RESULT_STATISTICS;
          rule_cfg.match_result[1].param.statistics.subtype = WP_PCE_STATISTICS_SUBTYPE_LM_UPDATE_TXFCL;
-         rule_cfg.match_result[1].param.statistics.statistics_handle = lm_stats_handle;	
-         rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;  			
+         rule_cfg.match_result[1].param.statistics.statistics_handle = lm_stats_handle;
+         rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;  
       }
       break;
 
@@ -3358,7 +3358,7 @@ WP_status WPE_Eoam_FlowRuleModify( WP_handle flow_handle,
       {
          rule_cfg.match_result[0].result_type = WP_PCE_RESULT_STATISTICS;
          rule_cfg.match_result[0].param.statistics.subtype = WP_PCE_STATISTICS_SUBTYPE_LM_UPDATE_RXFCL;
-         rule_cfg.match_result[0].param.statistics.statistics_handle = lm_stats_handle;	
+         rule_cfg.match_result[0].param.statistics.statistics_handle = lm_stats_handle;
          rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;  
       }
       break;
@@ -3370,8 +3370,8 @@ WP_status WPE_Eoam_FlowRuleModify( WP_handle flow_handle,
 
          rule_cfg.match_result[1].result_type = WP_PCE_RESULT_STATISTICS;
          rule_cfg.match_result[1].param.statistics.subtype = WP_PCE_STATISTICS_SUBTYPE_LM_UPDATE_RXFCL;
-         rule_cfg.match_result[1].param.statistics.statistics_handle = lm_stats_handle;	
-		
+         rule_cfg.match_result[1].param.statistics.statistics_handle = lm_stats_handle;
+
          rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;  
       }
       break;
@@ -3380,8 +3380,8 @@ WP_status WPE_Eoam_FlowRuleModify( WP_handle flow_handle,
       {
          rule_cfg.match_result[0].result_type = WP_PCE_RESULT_STATISTICS;
          rule_cfg.match_result[0].param.statistics.subtype = WP_PCE_STATISTICS_SUBTYPE_LM_UPDATE_TXFCL;
-         rule_cfg.match_result[0].param.statistics.statistics_handle = lm_stats_handle;	
-         rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;  			
+         rule_cfg.match_result[0].param.statistics.statistics_handle = lm_stats_handle;
+         rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;  
       }
       break;
 
@@ -3392,8 +3392,8 @@ WP_status WPE_Eoam_FlowRuleModify( WP_handle flow_handle,
 
          rule_cfg.match_result[1].result_type = WP_PCE_RESULT_STATISTICS;
          rule_cfg.match_result[1].param.statistics.subtype = WP_PCE_STATISTICS_SUBTYPE_LM_UPDATE_TXFCL;
-         rule_cfg.match_result[1].param.statistics.statistics_handle = lm_stats_handle;	
-         rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;  			
+         rule_cfg.match_result[1].param.statistics.statistics_handle = lm_stats_handle;
+         rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;  
       }
       break;
 
@@ -3547,7 +3547,7 @@ WP_S32 WPE_Eoam_FLOW_CreateFlow(WP_boolean ul_dl, WP_U8 s_mac[6], WP_U8 d_mac[6]
 
     type = ul_dl ? WPE_EXT_ACTION_RXFCL_FLOW_AGG : WPE_EXT_ACTION_TXFCL_FLOW_AGG;
     filter =  eoam_system.h_pce_filter[0];
-    iw_port = ul_dl ? eoam_system.bports[ENET2_BPORT] : eoam_system.bports[ENET1_BPORT];	
+    iw_port = ul_dl ? eoam_system.bports[ENET2_BPORT] : eoam_system.bports[ENET1_BPORT];
     flow_aggregation = ul_dl ? eoam_system.flow_agg[FA_PORT_ENET1] : eoam_system.flow_agg[FA_PORT_ENET2]; 
     
     flow_handle = WPE_Eoam_Flow_AddFlowRule(filter, iw_port, flow_aggregation, 
@@ -5012,24 +5012,24 @@ WP_S32 WPE_Eoam_Performance_TestExit()
 
 WP_U32 WPE_PrintBusUtil(WP_U32 wp_no, WPU_util_info* utilization)
 {
-	WP_U32 status = WP_OK;
+WP_U32 status = WP_OK;
 
-	WPU_DUMP("\t\t\t\t%sSystem utilization (in percents):%s \n",COLOR_INVERT,COLOR_NORMAL);
+WPU_DUMP("\t\t\t\t%sSystem utilization (in percents):%s \n",COLOR_INVERT,COLOR_NORMAL);
 
     WPU_DUMP("==============================================================================================\n");
     WPU_DUMP("            ||  siu3 (internal) | siu4x | wse1 | wse2  | Parser | Classifier\n");
     WPU_DUMP("==============================================================================================\n");
     WPU_DUMP("Current     || ");
 
-	WPU_DUMP("      %s%3d%s        | %s%3d%s   | %s%3d%s  | %s%3d%s   |  %s%3d%s   |  %s%3d%s ",
-	COLOR(utilization->internal.total),(utilization->internal).total,COLOR_NORMAL,
-	COLOR(utilization->siu4x),utilization->siu4x,COLOR_NORMAL,
+WPU_DUMP("      %s%3d%s        | %s%3d%s   | %s%3d%s  | %s%3d%s   |  %s%3d%s   |  %s%3d%s ",
+COLOR(utilization->internal.total),(utilization->internal).total,COLOR_NORMAL,
+COLOR(utilization->siu4x),utilization->siu4x,COLOR_NORMAL,
 
-	COLOR(utilization->wse[WPU_WSE1]),utilization->wse[WPU_WSE1],COLOR_NORMAL,
-	COLOR(utilization->wse[WPU_WSE2]),utilization->wse[WPU_WSE2],COLOR_NORMAL,
+COLOR(utilization->wse[WPU_WSE1]),utilization->wse[WPU_WSE1],COLOR_NORMAL,
+COLOR(utilization->wse[WPU_WSE2]),utilization->wse[WPU_WSE2],COLOR_NORMAL,
 
-	COLOR(utilization->pce_parser),utilization->pce_parser,COLOR_NORMAL,
-	COLOR(utilization->pce_classifier),utilization->pce_classifier,COLOR_NORMAL);
+COLOR(utilization->pce_parser),utilization->pce_parser,COLOR_NORMAL,
+COLOR(utilization->pce_classifier),utilization->pce_classifier,COLOR_NORMAL);
 
     WPU_DUMP("\n==============================================================================================\n");
 
@@ -5079,7 +5079,7 @@ WP_U32 WPE_PrintBusUtil(WP_U32 wp_no, WPU_util_info* utilization)
             utilization->internal.internal_util[WPU_INTERNAL_WMM3].read,utilization->internal.internal_util[WPU_INTERNAL_WMM5].read,
             utilization->internal.internal_util[WPU_INTERNAL_FMU].read);
    WPU_DUMP("==============================================================================================\n");
-	  
+  
    return WP_OK;
 
 }
