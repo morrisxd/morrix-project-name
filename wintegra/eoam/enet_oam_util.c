@@ -28,7 +28,7 @@
 #include "wpui_dump.h"
 #include "wpui_colors.h"
 #include "wpui_args.h"
-#include "wpu_util.h"
+// #include "wpu_util.h"
 
 extern WPE_EOAM_DB eoam_system;
 extern WP_boolean  eoam_running;

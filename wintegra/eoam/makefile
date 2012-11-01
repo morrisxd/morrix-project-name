@@ -78,9 +78,13 @@ UFE_FRAMER_INC = -I$(UFE_FRMR_DIR)/flexmux -I$(UFE_FRMR_DIR) -I$(UFE_FRMR_FLEXMU
 #VENEER_TARGET_DIR = $(WDDI_DIR)/target/$(WPI_TARGET)/include
 VENEER_DIR = $(WDDI_DIR)/sources/veneer
 BOARD_DIR = $(WDDI_DIR)/board/$(WPI_BOARD)_$(HW_DEVICE)
-WINUTIL_DIR = $(WDDI_DIR)/sources/winutil/include/
+WINUTIL_DIR = $(WDDI_DIR)/sources/winutil/api/winpath3/
+WINUTIL_DIR_2 = $(WDDI_DIR)/sources/winutil/include/
+WINUTIL_DIR_3 = $(WDDI_DIR)/sources/winutil/api/include/winpath3
+GPE_DIR = $(WDDI_DIR)/../gpe/util/sources/api/
+# wddi/sources/winutil/api/winpath3/
 INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \
-           -I$(BOARD_DIR)/.. -I$(WDDI_DIR)/phy -I$(WDDI_DIR)/sources -I$(WDDI_DIR)/sources/include \
+           -I$(GPE_DIR) -I$(WINUTIL_DIR_3) -I$(WINUTIL_DIR_2) -I$(BOARD_DIR)/.. -I$(WDDI_DIR)/phy -I$(WDDI_DIR)/sources -I$(WDDI_DIR)/sources/include \
 	   -I$(WPI_PLATFORM_DIR)/include -I$(WPI_WDDS_DIR)/include -I$(WPI_WDDS_DIR)/platform/include \
 	   -I$(WDDI_DIR)/tests/common -I$(API_DIR) -I$(PHY_DIR) 
 
