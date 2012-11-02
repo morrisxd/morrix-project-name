@@ -677,7 +677,7 @@ void WPE_Eoam_CCM_LM_MessageEvent(WP_iw_enet_oam_mq_entry_ccm_lm* pCcm)
     /* The number of frames received from the remote MEP. */
     abs(pCcm->rxfcl_tc - pCcm->rxfcl_tp));
 
-    EOAM_DEBUG_LOG(WPE_DEBUG_ALL, "frame_loss_nearend_temp=%ld, frame_loss_farend_temp=%ld\n", 
+    EOAM_DEBUG_LOG(WPE_DEBUG_ALL, "frame_loss_nearend_temp=%d, frame_loss_farend_temp=%d\n", 
                                     frame_loss_nearend_temp, frame_loss_farend_temp);
     if (frame_loss_nearend_temp)
     {
@@ -740,7 +740,7 @@ void WPE_Eoam_LMR_MessageEvent(WP_iw_enet_oam_mq_entry_lmr* pLmr)
     /* The number of frames received from the remote MEP. */
     abs(pLmr->rxfcl_tc - pLmr->rxfcl_tp));
 
-    EOAM_DEBUG_LOG(WPE_DEBUG_ALL, "frame_loss_nearend_temp=%ld, frame_loss_farend_temp=%ld\n", 
+    EOAM_DEBUG_LOG(WPE_DEBUG_ALL, "frame_loss_nearend_temp=%d, frame_loss_farend_temp=%d\n", 
                                     frame_loss_nearend_temp, frame_loss_farend_temp);
                                     
     if (frame_loss_nearend_temp)
@@ -1533,7 +1533,7 @@ WP_S32 WPE_Eoam_MA_CreateMA(WP_U32 ma_id, WP_U8 rate, WP_U8 mac[6])
 
     if (eoam_performance_test)
     {
-        EOAM_DEBUG_LOG(WPE_DEBUG_ERROR, "Performance test is running!\n", ma_id);
+        EOAM_DEBUG_LOG(WPE_DEBUG_ERROR, "Performance test is running(%d)!\n", ma_id);
         
         return 0;        
     }
@@ -1587,7 +1587,7 @@ WP_S32 WPE_Eoam_MA_DeleteMA(WP_U32 ma_id)
 
     if (eoam_performance_test)
     {
-        EOAM_DEBUG_LOG(WPE_DEBUG_ERROR, "Performance test is running!\n", ma_id);
+        EOAM_DEBUG_LOG(WPE_DEBUG_ERROR, "Performance test is running!(%d)\n", ma_id);
         
         return 0;        
     }
@@ -2648,8 +2648,8 @@ WP_S32 WPE_Eoam_LM_GetLossRatio(WP_U32 ma_id, WP_U16 mep_id)
     }
     
     printf("MA ID = %6d,  MEP ID = %d\n", ma_id, mep_id);
-    printf("frame_loss_farend  = %ld\n", pMepEntry->lm_info.frame_loss_farend);
-    printf("frame_loss_nearend = %ld\n\n", pMepEntry->lm_info.frame_loss_nearend);
+    printf("frame_loss_farend  = %d\n", pMepEntry->lm_info.frame_loss_farend);
+    printf("frame_loss_nearend = %d\n\n", pMepEntry->lm_info.frame_loss_nearend);
     
     return 0;
 }
@@ -5206,7 +5206,7 @@ void WPE_HostSendPacket(WP_handle pool, WP_handle txchan, WP_U8 *data_ptr, WP_U1
    for (k = 0; k < curr_buf->data_size; k++)
    {
       if(k %16 == 0) printf("\n0x%04x: ", k);
-      if(k %4 == 0 && k %16 != 0) printf(" ", k);
+      if(k %4 == 0 && k %16 != 0) printf(" %d", k);
       printf("%2.2x", curr_buf->data[k]);
    }
    printf("\n");
