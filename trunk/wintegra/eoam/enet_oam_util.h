@@ -86,7 +86,7 @@
 /* end of Perfomance test macros*/
 
 
-#define EOAM_DB_MAX_MA_NUM              (EOAM_MAX_MA_NUM + EOAM_PERF_TEST_MAX_MA_NUM)
+#define EOAM_DB_MAX_MA_NUM              (/* EOAM_MAX_MA_NUM + */EOAM_PERF_TEST_MAX_MA_NUM)
 #define EOAM_DB_MAX_MEP_NUM_PER_MA      (EOAM_MEP_NUM_PER_MA + EOAM_PERF_TEST_MAX_MEP_NUM_PER_MA)
 #define EOAM_DB_MAX_MEP_NUM             (EOAM_DB_MAX_MA_NUM * EOAM_DB_MAX_MEP_NUM_PER_MA)
 #define EOAM_DB_MAC_MSG_NUM             (EOAM_MAX_MSG_NUM + EOAM_PERF_TEST_MAX_MSG_NUM)
