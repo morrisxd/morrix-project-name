@@ -227,8 +227,8 @@ Y_MenuEntry FLOW_menu[] =
 {
     {K_Menu, FLOW_MENU_ITEM_NUM, TRUE, "Flow Menu",                                {(Y_MenuEntry *)V_MainMenu}, NULL},
     {K_Info, 1, TRUE, " <> Show flow info",                                        {(void*)(int)CLI_FLOW_ShowInfo}, NULL},
-    {K_Menu, 2, TRUE, " -> Create flow(MA ID, MEP ID, Vlan, UL/DL, S-MAC, D-MAC)", {(Y_MenuEntry *)V_FLOW_CreateFlow}, NULL},
-    {K_Menu, 3, TRUE, " -> Delete flow(MA ID, MEP ID, Vlan, UL/DL, S-MAC, D-MAC)", {(Y_MenuEntry *)V_FLOW_DeleteFlow}, NULL},
+    {K_Menu, 2, TRUE, " -> Create flow(MA ID, MEP ID, Vlan, UL(1)/DL(0), S-MAC, D-MAC)", {(Y_MenuEntry *)V_FLOW_CreateFlow}, NULL},
+    {K_Menu, 3, TRUE, " -> Delete flow(MA ID, MEP ID, Vlan, UL(1)/DL(0), S-MAC, D-MAC)", {(Y_MenuEntry *)V_FLOW_DeleteFlow}, NULL},
     {K_Menu, 4, TRUE, " -> Enable TXFCL count(MA ID, MEP ID, Vlan, S-MAC, D-MAC)", {(Y_MenuEntry *)V_FLOW_EnableTXFCLCount}, NULL},
     {K_Menu, 5, TRUE, " -> Disable TXFCL count(MA ID, MEP ID, Vlan, S-MAC, D-MAC)",{(Y_MenuEntry *)V_FLOW_DisableTXFCLCount}, NULL},
     {K_Menu, 6, TRUE, " -> Enable RXFCL count(MA ID, MEP ID, Vlan, S-MAC, D-MAC)", {(Y_MenuEntry *)V_FLOW_EnableRXFCLCount}, NULL},
@@ -237,14 +237,14 @@ Y_MenuEntry FLOW_menu[] =
 
 Y_MenuEntry V_FLOW_CreateFlow[] = 
 {
-    {K_Menu, MENU_ITEM_ONLY_ONE, TRUE, "MA ID, MEP ID, Vlan, UL/DL, S-MAC, D-MAC", {(Y_MenuEntry *)FLOW_menu}, NULL},
-    {K_Cli , 1, TRUE, "Please input MA ID, MEP ID, Vlan, UL/DL, S-MAC, D-MAC.", {(void*)(int)CLI_FLOW_CreateFlow}, CLI_FLOW_CreateFlow_Help},
+    {K_Menu, MENU_ITEM_ONLY_ONE, TRUE, "MA ID, MEP ID, Vlan, UL(1)/DL(1), S-MAC, D-MAC", {(Y_MenuEntry *)FLOW_menu}, NULL},
+    {K_Cli , 1, TRUE, "Please input MA ID, MEP ID, Vlan, UL(1)/DL(0), S-MAC, D-MAC.", {(void*)(int)CLI_FLOW_CreateFlow}, CLI_FLOW_CreateFlow_Help},
 };
 
 Y_MenuEntry V_FLOW_DeleteFlow[] = 
 {
-    {K_Menu, MENU_ITEM_ONLY_ONE, TRUE, "Delete flow(MA ID, MEP ID, Vlan, UL/DL, S-MAC, D-MAC)", {(Y_MenuEntry *)FLOW_menu}, NULL},
-    {K_Cli , 1, TRUE, "Please input MA ID, MEP ID, Vlan, UL/DL, S-MAC, D-MAC.", {(void*)(int)CLI_FLOW_DeleteFlow}, CLI_FLOW_DeleteFlow_Help},
+    {K_Menu, MENU_ITEM_ONLY_ONE, TRUE, "Delete flow(MA ID, MEP ID, Vlan, UL(1)/DL(0), S-MAC, D-MAC)", {(Y_MenuEntry *)FLOW_menu}, NULL},
+    {K_Cli , 1, TRUE, "Please input MA ID, MEP ID, Vlan, UL(1)/DL(0), S-MAC, D-MAC.", {(void*)(int)CLI_FLOW_DeleteFlow}, CLI_FLOW_DeleteFlow_Help},
 };
 
 Y_MenuEntry V_FLOW_EnableTXFCLCount[] = 
@@ -1713,7 +1713,7 @@ int CLI_FLOW_CreateFlow(char *StrPrm)
         return ERROR;
     }
     
-    printf ("Your input MA ID=%u, MEP ID=%u, Vlan=%u, UL/DL=%u,"
+    printf ("Your input MA ID=%u, MEP ID=%u, Vlan=%u, UL(1)/DL(0)=%u,"
                 "S-MAC=%02x:%02x:%02x:%02x:%02x:%02x, "
                 "D-MAC=%02x:%02x:%02x:%02x:%02x:%02x\n",
                 ma_id, mep_id, vlan, ul_dl,
@@ -1807,7 +1807,7 @@ int CLI_FLOW_DeleteFlow(char *StrPrm)
         return ERROR;
     }
 
-    printf ("Your input MA ID=%u, MEP ID=%u, Vlan=%u, UL/DL=%u, "
+    printf ("Your input MA ID=%u, MEP ID=%u, Vlan=%u, UL(1)/DL(0)=%u, "
                 "S-MAC=%02x:%02x:%02x:%02x:%02x:%02x, "
                 "D-MAC=%02x:%02x:%02x:%02x:%02x:%02x\n",
                 ma_id, mep_id, vlan, ul_dl, 
