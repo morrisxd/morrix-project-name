@@ -2407,8 +2407,10 @@ int CLI_PredefinedTest_LmSetup(char *StrPrm)
        return ERROR;
     }
     printf("Debug_Level 4\n");
+#if 0
     /* set debug level from warning to all */
     CLI_Debug_Level("8 4");
+#endif
     printf("EnableTxCCM 1001 2 1 1000\n");
     CLI_CCM_EnableTxCCM("1001 2 1 1000");
     printf("EnableTxCCM 1002 1 1 1000\n");
