@@ -32,7 +32,7 @@
 #define FALSE  0
 
 #define CLI_INPUT_BUFF_LEN      128
-#define MAIN_MENU_ITEM_NUM      11
+#define MAIN_MENU_ITEM_NUM      12
 #define MA_MENU_ITEM_NUM        3
 #define MEP_MENU_ITEM_NUM       4
 #define CCM_MENU_ITEM_NUM       3
@@ -87,6 +87,7 @@ typedef struct
 extern char* E_freq_rate[];
 void *CLI_T_Main(void* arg);
 static int CLI_MAIN_Reboot(char *StrPrm);
+static int CLI_MAIN_QuitAndKeepalive(char *StrPrm);
 int CLI_MAIN_Quit(char *StrPrm);
 void F_SetMainMenu (void);
 void F_SetUpperMenu (void);
