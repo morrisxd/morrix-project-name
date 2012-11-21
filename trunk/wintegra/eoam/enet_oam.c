@@ -172,22 +172,13 @@ WP_U32 get_sp(void)
 	mysp = 0;
 	myhp = 0;
 	myfp = 0;
-#if 0
-	__asm ("move $sp, $t9\t\n"
-		: "=r" (mysp)
-	);
-#else
+
 	__asm__ volatile ("move %0, $29" : "=r"(mysp));
 
-#endif
-	printf ("###########################################\n");
-	printf ("##### mysp(%x)\n", mysp);
-	printf ("###########################################\n");
-#if 0
-	__asm __volatile__ ("move $29, $mysp");
-	__asm __volatile__ ("move $30, $myhp");
-	__asm __volatile__ ("move $31, $myfp");
-#endif
+	printf ("#############################################\n");
+	printf ("##### mysp(0x%x) #####\n", mysp);
+	printf ("#############################################\n");
+
 
 	return (mysp);
 }
