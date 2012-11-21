@@ -165,18 +165,24 @@ WP_U32 get_sp(void)
 {
 	WP_U32 mygp = 0;
 	WP_U32 mysp = 0;
-	WP_U32 myhp = 0;
 	WP_U32 myfp = 0;
+	WP_U32 myra = 0;
 
 	mygp = 0;
 	mysp = 0;
-	myhp = 0;
+	myra = 0;
 	myfp = 0;
 
+	__asm__ volatile ("move %0, $28" : "=r"(mygp));
 	__asm__ volatile ("move %0, $29" : "=r"(mysp));
+	__asm__ volatile ("move %0, $30" : "=r"(myfp));
+	__asm__ volatile ("move %0, $31" : "=r"(myra));
 
 	printf ("#############################################\n");
+	printf ("##### mygp(0x%x) #####\n", mygp);
 	printf ("##### mysp(0x%x) #####\n", mysp);
+	printf ("##### myfp(0x%x) #####\n", myfp);
+	printf ("##### myra(0x%x) #####\n", myra);
 	printf ("#############################################\n");
 
 
