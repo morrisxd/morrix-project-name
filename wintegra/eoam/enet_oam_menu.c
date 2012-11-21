@@ -79,6 +79,7 @@ Y_MenuEntry V_MainMenu[] =
     {K_Menu, 9, TRUE, " -> Performance Menu", {(Y_MenuEntry *)PD_menu}, NULL},	
     {K_Menu, 10, TRUE," <> Predefined Test Menu", {(Y_MenuEntry *)PT_menu}, NULL},
     {K_Info, 11, TRUE," <> Quit & Reboot", {(void*)(int)CLI_MAIN_Reboot}, NULL},
+    {K_Info, 12, TRUE," <> Quit & Keepalive", {(void*)(int)CLI_MAIN_QuitAndKeepalive}, NULL},
 };
 
 Y_MenuEntry MA_menu[] = 
@@ -349,6 +350,15 @@ void *CLI_T_Main(void* arg)
 
     return arg;
 }
+
+static int CLI_MAIN_QuitAndKeepalive(char *StrPrm)
+{
+	exit (0);
+
+	return 0;
+}
+
+
 
 /*****************************************************************************
  * Function name: CLI_MAIN_Reboot

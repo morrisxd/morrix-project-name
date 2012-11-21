@@ -161,6 +161,36 @@ void App_EventRxIndicate(WP_tag tag, WP_U32 data, WP_U32 info)
    add_task(irq_task_list, WP_EVENT_RX_INDICATE, tag, NULL);
 }
 
+WP_U32 get_sp(void)
+{
+	WP_U32 mygp = 0;
+	WP_U32 mysp = 0;
+	WP_U32 myhp = 0;
+	WP_U32 myfp = 0;
+
+	mygp = 0;
+	mysp = 0;
+	myhp = 0;
+	myfp = 0;
+#if 0
+	__asm ("move $sp, $t9\t\n"
+		: "=r" (mysp)
+	);
+#else
+	__asm__ volatile ("move %0, $29" : "=r"(mysp));
+
+#endif
+	printf ("###########################################\n");
+	printf ("##### mysp(%x)\n", mysp);
+	printf ("###########################################\n");
+#if 0
+	__asm __volatile__ ("move $29, $mysp");
+	__asm __volatile__ ("move $30, $myhp");
+	__asm __volatile__ ("move $31, $myfp");
+#endif
+
+	return (mysp);
+}
 
 /****************************************************************************************************************************
 * Function name: main()
@@ -175,6 +205,7 @@ int main(int argc, char *argv[])
     WP_status status;
 
     memset(&eoam_system, 0 , sizeof(WPE_EOAM_DB));
+
 
     status = WP_DriverInit();
     App_TerminateOnError(status,"WP_DriverInit()");
@@ -239,6 +270,7 @@ int main(int argc, char *argv[])
 
     WPL_ThreadInit(&eoam_system.tid, WPE_Eoam_Msg_Thread, NULL);    
 
+	get_sp ();
     if (argc < 1)
     {
        /* Start CLI*/
@@ -361,7 +393,13 @@ void App_InitHW(void)
 #ifdef BOARD_WP3
 
    printf("please input ENET1,2,3 loopback mode at bit0,1,2. e.g. 7=all loop\n");
+#if 0
    loopback = getchar();
+#else
+	loopback = '6';
+#endif
+
+
    if(loopback >= '0' && loopback <= '9')
        loopback = loopback - '0';
    printf("the input = 0x%x\n", loopback);
