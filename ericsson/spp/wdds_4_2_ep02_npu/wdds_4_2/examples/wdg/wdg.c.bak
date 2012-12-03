@@ -1,0 +1,263 @@
+#include <errno.h>
+#include <fcntl.h>
+#include <getopt.h>
+#include <limits.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <setjmp.h>
+
+
+#include "xs_ioctl.h"
+
+
+#ifndef O_NOFOLLOW
+#define O_NOFOLLOW     00400000        /* don't follow links */
+#endif
+
+
+#define CMD_NAME "wdg"
+#define WPL_SIGNAL_RT_SER 35 /*SIGRTMIN*/
+#define WPL_SIGNAL_RT_OV (WPL_SIGNAL_RT_SER + 1)
+#define WPL_SIGNAL_RT_BUSERR (WPL_SIGNAL_RT_SER + 2)
+
+static sigjmp_buf                   jmpbuf;
+static int heartfd[2];
+
+static void
+print_help(void)
+{
+    printf(CMD_NAME " [-vh] [> <file>] <spath> [<args...>]\n");
+    printf("  -v       : Verbose output.\n");
+    printf("  -h       : This help text.\n");
+    printf("  <spath>  : wddi server path to be monitored.\n");
+    printf("  <args>   : Arguments to server.\n");
+    printf("             \n");
+}
+
+void
+print_exit(int status)
+{
+    if (WIFEXITED(status))
+        printf("normal termination, exit status = %d\n",
+                WEXITSTATUS(status));
+    else if (WIFSIGNALED(status))
+        printf("abnormal termination, signal number = %d\n",
+                WTERMSIG(status));
+    else if (WIFSTOPPED(status))
+        printf("child stopped, signal number = %d\n",
+                WSTOPSIG(status));
+}
+
+static void
+sig_restart_child(int signo, siginfo_t* info,  void *context)
+{
+    int status;
+
+    if (signo != SIGCHLD)
+    {
+        printf("unexpected signal");
+        return;
+    }
+      
+ //    printf("receive child signal\n");
+
+     wait(&status);
+//     print_exit(status);
+     close (heartfd[0]);
+     siglongjmp(jmpbuf, 1);  
+}
+
+int xsreset(void)
+{
+    int fd;
+
+    fd = open("/dev/wp_bank24", O_RDWR | O_NOFOLLOW, 0644);
+    if(fd == -1) {
+        perror("open");
+        exit(1);
+    }
+
+    if(ioctl(fd, XS_IOCTL_RESET, NULL) != 0) {
+        close(fd);
+        printf("Reset failed\n");
+        exit(1);
+    }
+    close(fd);
+
+    return 0;
+}
+int main(int argc, char **argv)
+{
+    pid_t child_pid;
+    char *parm; 
+       char *xmlpath;
+//    int bufsize=16;
+    int status;
+//    int flag;
+    int ret;
+    int serverfd;
+    char * sevpath;
+    char fdstring[8];
+
+    argv++; argc--;
+    while (argc != 0 && argv[0][0] == '-')
+    {
+      if (strcmp(argv[0], "-h") == 0)
+	{
+	    print_help();
+	    return 0;
+	}
+        else
+	{
+            printf(CMD_NAME ": unknown option %s\n", argv[0]);
+            return 1;
+        }
+    }
+    
+   //printf("argv[0] = %s, argv[1] = %s\n",argv[0],  argv[1]);
+
+    /* Check that a wddi server path is supplied.
+     */
+    if (argc == 0)
+    {
+        print_help();
+        return 1;
+    }
+    else
+    {
+	sevpath = argv[0];
+	argv++; argc--;
+    }
+    
+    /* no binary given, we have to reboot */
+   if((serverfd = access (sevpath,X_OK)) != 0)
+   {
+      printf("%s doesn't exist or has no execute privilige.\n", sevpath);
+      return (errno);
+   } 
+
+
+    if (sigsetjmp(jmpbuf, 1)) {
+        printf("repeat_create\n");
+    }
+    
+repeat_create:
+
+  if (socketpair( AF_UNIX, SOCK_STREAM, 0, heartfd ) < 0 ) {
+    perror( "socketpair" );
+    exit( 1 );
+  }
+    xsreset();
+ //  printf("%s \n", parm);
+//   bufsize = fpathconf(heartfd[0], _PC_PIPE_BUF);
+   
+    sprintf(fdstring, "%d", heartfd[1]);
+    
+    parm = argv[1];
+    xmlpath = argv[0];
+    
+    child_pid = vfork();
+    if (!child_pid) {
+
+	/* Don't want the stdin and stdout of our program to cause trouble.
+	 *
+	 * So make stdout and stderr go to their respective files */
+        /* now start binary */
+      close(heartfd[0]);
+	if (parm == NULL && xmlpath ==NULL)
+		execl(sevpath,sevpath, "-p",fdstring, NULL);
+	else if (parm == NULL && xmlpath !=NULL)
+		execl(sevpath,sevpath, "-p",fdstring, "-l", xmlpath, NULL);
+	else
+		execl(sevpath,sevpath, "-p",fdstring,"-n", parm, "-l", xmlpath, NULL);
+
+	/* execl should only return in case of an error */
+	/* so we return the reboot code */
+	return (errno);
+    } else if (child_pid < 0) {	/* fork failed */
+	perror("fork");
+	return (errno);
+    }
+    
+   close(heartfd[1]);
+   int htfd = heartfd[0];
+   char txchar[1];
+   fd_set rdset;
+   sigset_t sigmask;
+   struct timespec timeout = {5, 0};
+    pid_t chldpid = child_pid;
+    sigemptyset(&sigmask);
+    struct sigaction siginfo;
+    
+    sigaddset(&sigmask,  SIGALRM |WPL_SIGNAL_RT_SER | WPL_SIGNAL_RT_OV |WPL_SIGNAL_RT_BUSERR);
+    sigprocmask(SIG_BLOCK, &sigmask, NULL);
+
+    sigaction(SIGCHLD, NULL, &siginfo);
+    siginfo.sa_sigaction = (void *) sig_restart_child;
+    sigemptyset(&siginfo.sa_mask);
+    siginfo.sa_flags = SA_SIGINFO | SA_RESTART;
+
+    if (sigaction(SIGCHLD, &siginfo, NULL) == -1){
+        printf("can't catch SIGCHLD");
+    }
+    
+   
+ /* sigaction(SIGTERM, NULL, &siginfo);
+  siginfo.sa_sigaction = (void *) sig_restart_child;
+  sigemptyset(&siginfo.sa_mask);
+  siginfo.sa_flags = SA_SIGINFO | SA_RESTART;
+  
+  if (sigaction(SIGTERM, &siginfo, NULL) == -1){
+	   printf("can't catch SIGTERM");
+  }*/
+
+   sleep(40);//it must wait a long time so that child can be started.
+   
+    /*child still work normal, so get heartbeat form it*/
+
+  for( ; ; )
+  {
+      FD_ZERO(&rdset);
+      FD_SET(htfd, &rdset);
+      
+   //   printf("waitpid status %d, heart beat fd %d.\n", status, htfd);
+      status = write(htfd, txchar, 1);
+   //   printf("write status %d.\n", status);
+      status = pselect(htfd+1, &rdset, NULL, NULL, &timeout, &sigmask);
+  //    printf("pselect status %d.\n", status);
+      if(status > 0)
+      {
+        /*dump the pipe, if find one charact, then it will be thought alive*/
+            status = read(htfd, txchar, 1);
+    //        printf("pselect status %d.\n", status);
+            if(status > 0)
+            {
+               sleep(5);
+               continue;
+            }
+      }
+        
+//    printf("SO BAD, I lost contract with child, restart it.\n");
+    ret = kill(chldpid, SIGINT);
+    // I guess it will never reach here.
+//    printf("kill child status %d.\n", ret);
+    sleep(2);
+
+
+    close(htfd);//destroy the pipe and recreate it
+    goto repeat_create;
+  }   
+
+  return 1;
+
+}
+

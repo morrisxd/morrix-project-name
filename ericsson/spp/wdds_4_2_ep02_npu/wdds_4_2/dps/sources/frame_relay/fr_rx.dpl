@@ -1,0 +1,683 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2010.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+ *
+ * File: fr_rx.dpl
+ *
+ * Description:   Implements WinPath FR Receiver.
+ *                The FR receiver supports two modes of operation:
+ *                 1) Receives FR frames from the TDI or UPI, checks them and
+ *                    passes the received data to the host. In addition, it checks for
+ *                    received errors and informs the host about them too.
+ *                 2) Receives FR frames from TDI or UPI and sends packets
+ *                    with  L3 encapsulation to the L3 IWF.
+ *
+ * Module Originator:  Ronen Weiss
+ * Creation Date:  Jan 14, 2002
+ *
+ * Change History:
+ * +------------+--------------------+----------------------------------------
+ * | Date       | By                 | Description
+ * +------------+--------------------+----------------------------------------
+ * |            |                    |
+ * +------------+--------------------+----------------------------------------
+ * |            |                    |
+ * +------------+--------------------+----------------------------------------
+ *
+ * cvs information: $RCSfile: fr_rx.dpl,v $ $VER$
+ *
+ ****************************************************************************/
+
+
+/* Include Files */
+#include "config.h"
+#include "shared.h"
+#include "order.h"
+#include "irq.h"
+#include "hash_lookup.h"
+#include "iw_buff_chain.h"
+
+#ifdef _MODULE_FR_ENABLE_
+
+#include "fr.h"
+#include "frame_relay.h"
+#include "fr_rx_struct.h"
+#include "fr_iw.h"
+#include "fr_rx_func.h"
+
+
+
+/*****************************************************************************
+ *
+ * Block Name: Fr_rx
+ *
+ * Description: Main body of code of FR receive code.
+ *              Code received packets checks if in hunt mode
+ *              Then checks if the packet is first/last or neither
+ *              and activates the appropriate code routine
+ *
+ * Input interfaces: status0 and status1 are updated by serial.
+ *                   phy (emphy operation only)
+ *
+ * Output interfaces: The following registers are prepered by the
+ *                    FR Rx for further processing by the L3 module:
+ *                    IWInControlWord, IwExControlWord, IwHostkey,
+ *                    IwMasterKey3Tag, status0, mode0, tar0
+ *
+ *****************************************************************************/
+
+section FR_Rx
+{
+   // Receive H/W registers
+   register struct S_FrRcptMode          mode0              = r6;
+   register struct S_FrRxMode1Field      FrMode1            = r1;
+   register struct S_RxMode1             mode1              = r1;
+   register struct S_FrSerialStatusReg0  status0            = STATUS0_REG;
+   register struct S_FrRxSerialStatusReg1 status1            = STATUS1_REG;
+ 
+   register                              TempData           = r96;
+
+   // Receive structures
+   register struct S_FrRcpt              RCPT               = r56;
+   register struct S_FrRgpt              RGPT               = r72;
+   register struct S_FrRxBd              RBD                = r80;
+   register struct S_L2IWT               L2IWT              = r92;
+   register struct S_IWInControlWord     IWInControlWord    = r80;
+   register struct S_IWExControlWord     IWExControlWord    = r92;
+   register union  U_IWExtentionWord     IWExtentionWord    = r88;
+
+
+   // Non Volatile Registers
+   register                              RcptOffset         = r24;
+   register                              RgptOffset         = r25;
+   register                              MaxSDU             = r26;
+   register                              DataLength         = r27;
+   register                              FlowNu             = r28;
+   register                              Rrp                = r29;
+   register                              HeaderSize         = r31;
+   register                              FcsSize            = r32;
+   register                              phy                = r36;
+   register  struct S_EmpHeader          EmphyHeader        = r96;
+   register                              FrIwHostKey        = TagKey1;
+   register                              FrRcptKey          = TagKey2;
+   register                              FrRgptKey          = TagKey3;
+   register                              FrMasterKey        = TagKey4;
+
+   // Constants 
+   const FR_NLPID_SIZE                                      = 1;
+   const FR_UI_SIZE                                         = 1;
+   const FR_SIZEOF_FCS                                      = 2;
+   const FR_RGPT_MODE_OFFS                                  = 0x8 ;
+
+   // Global labels
+   global FR_Rx_Delete_Flow, FR_Rx_Start_POS, FR_Rx_Start_TDI, FR_Rx_Start_TDI_MCH;
+   global FR_Rx_Start_EMPHY,FR_Rx_Start_EMPHY_Error ;
+
+   /**********************************************************************
+    **********************************************************************
+    **********    Main body of code - Frame Relay Receiver    ************
+    **********************************************************************
+    **********************************************************************/
+   FR_Rx_Delete_Flow:
+   B_FrDeleteRxFlow(status0,
+                    status1,
+                    FcsSize);
+   
+   /**********************************************
+    **********    Fr Rx Start EMPHY   ************
+    **********************************************/
+   FR_Rx_Start_EMPHY:
+   B_FrRx_StartEmphy(EmphyHeader.Length,
+		     status0,
+                     status1,
+                     DATA_TMP_BUF,
+                     FrMode1,
+                     tar0,
+		     DataLength);
+
+   FR_Rx_Start_EMPHY_Error:
+   B_FrRx_StartEmphyErr(status0,
+                        status1,
+                        DATA_TMP_BUF,
+                        FrMode1,
+                        tar0,
+			DataLength);
+
+   /**********************************************
+    **********    Fr Rx Start POS     ************
+    **********************************************/
+   FR_Rx_Start_POS:
+   B_FrRx_StartPos(status1,
+                   status0,
+                   phy,
+                   FrMode1,
+                   tar0,
+		   DataLength);
+
+   /**********************************************
+    **********   FR Rx Start TDI      ************
+    **********************************************/
+   FR_Rx_Start_TDI:
+   B_FrRx_StartTdi(FR_Rx_Start_TDI_MCH,
+                   status1,
+                   status0,
+                   phy,
+                   FrMode1,
+                   tar0,
+		           DataLength);
+
+   /********************************************************************
+    ********************************************************************
+    *****************        FR Rx Start              ******************
+    ********************************************************************
+    ********************************************************************/
+   Fr_Rx_Start:
+
+   M_OrderRgptMasKey(status1,
+                     phy,
+                     FR_GET_KEY_ORDER,
+                     FrRgptKey,
+                     FrMasterKey);
+
+   /* Read RGPT with order and lock */
+   RgptOffset = phy*sizeof(S_FrRgpt);
+   *(&RGPT) = _mem(FrRgptKey,B_FrRCPT[status0][RgptOffset],sizeof(S_FrRgpt),
+                   EHP_CPT_BUS|_ORDER_LOCK);
+
+
+   /* Load status bits from RGPT to FrMode1*/
+   FrMode1.GlobalMode = RGPT.ModeField;
+   RgptOffset += FR_RGPT_MODE_OFFS;
+  
+
+    /* load data length and check it aint null */
+   if  (!DataLength)
+   {
+#pragma outofline;
+       /* length == 0, this is an illegal value, mark as error
+	  and change to non null value */
+       status0 |= M_Mask(S_PosSerialStatusReg0.Last);
+       FrMode1 |= (M_Mask(S_FrRxMode1Field.RxError)|
+		   M_Mask(S_FrRxMode1Field.MLE));
+       DataLength =1 ; 
+   }
+   
+   if ( !FrMode1.GlobalMode.OutF )
+   {
+      /************************************************************************
+       ******       In Frame state -  Middle of frame packet             ******
+       ************************************************************************/
+      FlowNu = RGPT.FlowNu;
+        /* added by Jane to resolve the bus error issues caused by phy =
+   FlowNu, FlowHunt in RGPT should be always set to 1 in RGPT, for some
+   unknown case, this bit was cleared, so correct it, when it will be used
+   ---- beginning */ 
+     if (phy == FlowNu)
+       {
+          /*rizh update the statistics*/	   
+	    register DebugNumber = r11;
+	      register PatchOffset = r10;
+	        PatchOffset =0x00;
+		  DebugNumber =_mem(r0,B_DEBUG1[PatchOffset],4,  DEBUG_BUS);
+		    DebugNumber++;
+		      PatchOffset =0x00;
+		        _mem(r0,B_DEBUG1[PatchOffset],4,DEBUG_BUS)
+   =*(&DebugNumber);
+     PatchOffset +=4;
+       _mem(r0,B_DEBUG1[PatchOffset],4,DEBUG_BUS) =*(&phy);
+         PatchOffset +=4;
+	   _mem(r0,B_DEBUG1[PatchOffset],4,DEBUG_BUS) =*(&RgptOffset);
+      /*debug end*/
+
+         $reg(RGPT.ModeField) |= M_Mask(S_FrRgpt.ModeField.FlowHunt);
+	   _mem(r0,B_FrRCPT[status0][RgptOffset],4,EHP_CPT_BUS)=
+   *(&($reg(RGPT.ModeField)));
+     }
+       /* added by Jane to resolve the bus error issues caused by phy =
+   FlowNu, FlowHunt in RGPT should be always set to 1 in RGPT, for some
+   unknown case, this bit was cleared, so correct it, when it will be used
+   ---- end */ 
+
+      /* if this is end of frame need to update the frame state bit,
+       * if this is not end of frame no updates are needed to RGPT
+       */
+      if ( status0.Last )
+      {
+         $reg(RGPT.ModeField) |= M_Mask(S_FrRgpt.ModeField.OutF);
+         _mem(FrRgptKey,B_FrRCPT[status0][RgptOffset],4,
+              EHP_CPT_BUS|_ORDER_UNLOCK)= *(&($reg(RGPT.ModeField)));
+      }
+      else
+      {
+         _task_switch(FrRgptKey,_ORDER_UNLOCK);
+      }
+
+      // Header size register required for IW parsing
+      HeaderSize = 0x02;
+      if (!FrMode1.GlobalMode.TwoByteFr)
+      {
+         HeaderSize += 2;
+      }
+
+
+      // get RCPT and FrRcptKey
+      M_FrRxGetRcpt(FrMasterKey,
+                    FlowNu,
+                    status0,
+                    FrRcptKey,
+                    RCPT,
+                    RcptOffset,
+                    mode0,
+                    MaxSDU);
+
+      mode0 = RCPT.ModeField;
+      
+      /* Load FCS Size */
+
+      /* move somewhere else nops, move CRCT bit to mode1? */
+      if (!mode0.CRCT)
+         FcsSize = 2;
+      else
+         FcsSize = 4;
+
+      Rrp = RCPT.Rrp;
+
+
+   Fr_RxSaveData:
+      B_FR_Rx_InFramePacket(DataLength,
+                            FrRcptKey,
+                            HeaderSize,
+                            mode0,
+                            status0,
+                            status1,
+                            tar0,
+                            FlowNu,
+                            phy,
+                            RGPT,
+                            RcptOffset,
+                            FrIwHostKey,
+                            Rrp,
+                            RCPT,
+                            FcsSize,
+                            FrMode1);
+
+   }
+   else
+   {
+      /**********************************************
+       ***********     Open new Frame       *********
+       **********************************************/
+
+      B_FR_Rx_FirstPacket(FrMasterKey,
+                          FrRgptKey,
+                          RgptOffset,
+                          phy,
+                          FcsSize,
+                          RGPT,
+                          status0,
+                          DataLength,
+                          tar0,
+                          FrMode1,
+                          HeaderSize,
+                          FlowNu,
+                          FrRcptKey,
+                          FrIwHostKey,
+                          IwMasterKey3Tag,
+                          RCPT,
+                          RcptOffset,
+                          mode0,
+                          RBD,
+                          MaxSDU,
+                          Rrp);
+   }
+}
+
+
+/*******************************************************************
+ *
+ * Macro Name: B_FR_Rx_FirstPacket
+ *
+ * Description: This macro receives the first packet of frame,
+ *              The macro opens a new frame, checks header
+ *               fetches dedicated RCPT
+ *
+ * Inputs:  FrMasterKey, FrRgptKey, RgptOffset, status1,
+ *          phy
+ *
+ * Outputs: FBecnDeTmp, HeaderSize, FlowNu, FrRcptKey, FrIwHostKey,
+ *          IwMasterKey3Tag, RCPT, RcptOffset, mode0, RBD, FlowNu,
+ *          MaxSDU, Rrp
+ *
+ * Modified registers: RGPT, status0, DataLength,
+ *                               tar0, FrMode1,
+ *
+ *******************************************************************/
+inline func B_FR_Rx_FirstPacket(in FrMasterKey,
+                                in FrRgptKey,
+                                in RgptOffset,
+                                in phy,
+                                in    P_FcsSize,
+                                inout RGPT,
+                                inout status0,
+                                inout DataLength,
+                                inout tar0,
+                                inout FrMode1,
+                                out HeaderSize,
+                                out FlowNu,
+                                out FrRcptKey,
+                                out FrIwHostKey,
+                                out IwMasterKey3Tag,
+                                out RCPT,
+                                out RcptOffset,
+                                out mode0,
+                                out RBD,
+                                out MaxSDU,
+                                out Rrp)
+{
+   // Local registers
+   register                       FrFbpCnt     = r11;
+   register struct S_FrRcptMode   TempIwbt     = r15;
+   register                       FBecnDeTmp   = r23;
+  
+   /*******   Process State and Header *******/
+
+   /* FR header is checked, DLCI lookup performed and   *
+      * flow returns to this point, RGPT table is released */
+   B_RxFRCheckFirstState(TempData,
+                         mode0,
+                         tar0,
+                         FrMode1,
+                         FrMasterKey,
+                         status0,
+                         FrRgptKey,
+                         RgptOffset,
+                         phy,
+                         DataLength,
+                         RGPT,
+                         FBecnDeTmp,
+                         HeaderSize,
+                         RcptOffset,
+                         FlowNu);
+
+
+   /* Fetch a new buffer from FBP */
+   B_FR_FetchFirstBuff(DataLength,
+                  RGPT,
+                  status1,
+                  FrMasterKey,
+                  FlowNu,
+                  phy,
+                       P_FcsSize,
+                  RCPT,
+                  status0,
+                  FrMode1,
+                  RBD,
+                  FrFbpCnt,
+                  TempIwbt);
+
+
+
+   // Get RCPT, FrRcptKey
+   M_FrRxGetRcpt(FrMasterKey,
+                 FlowNu,
+                 status0,
+                 FrRcptKey,
+                 RCPT,
+                 RcptOffset,
+                 mode0,
+                 MaxSDU);
+
+
+   // RCPT Parameter and Pointer are updated
+   B_FrRxUpdateRcpt(FR_NON_FRAG_FRAME_TYPE,
+                    FR_NULL_PARAMETER,
+                    FBecnDeTmp,
+                    RBD,
+                    FrFbpCnt,
+                    TempIwbt,
+                    RGPT,
+                    status1,
+                    FlowNu,
+                    phy,
+                    DataLength,
+                    P_FcsSize,
+                    RCPT,
+                    FrMode1,
+                    mode0,
+                    Rrp);
+
+
+
+   RGPT.FirstDataPtr  = RCPT.DataPtr;
+   RGPT.FirstBdPtr    = RCPT.BdPtr;
+
+
+   // Release RGPT key
+   if (!status0.Last )
+   {
+
+      // First Packet of a new frame Update RGPT
+      $reg(RGPT.ModeField) &= ~M_Mask(S_FrRgpt.ModeField.OutF);
+      _mem(FrRgptKey,B_FrRCPT[status0][RgptOffset],FR_RGPT_FIRST_WRITE_SIZE,
+           EHP_CPT_BUS|_ORDER_UNLOCK) = *(&($reg(RGPT.ModeField)));
+   }
+   else
+   {
+      // Last Packet of a new frame
+      // no need to update global
+      _task_switch(FrRgptKey, _ORDER_UNLOCK);
+   }
+
+   goto Fr_RxSaveData;
+}
+
+
+/*****************************************************************************
+ *
+ * Macro Name:  B_FR_Rx_InFramePacket
+ *
+ * Description: continue to process a packet from current frame
+ *
+ * Inputs: DataLength, FrRcptKey, HeaderSize, mode0, status0, tar0, RGPT,
+ *         RcptOffset, FrIwHostKey, phy, status1, FlowNu
+ *
+ * Modified and saved registers: RCPT, FrMode1, Rrp
+ *
+ *****************************************************************************/
+inline func B_FR_Rx_InFramePacket(in    DataLength,
+                                  in    FrRcptKey,
+                                  in    HeaderSize,
+                                  in    mode0,
+                                  in    status0,
+                                  in    status1,
+                                  in    tar0,
+                                  in    FlowNu,
+                                  in    phy,
+                                  in    RGPT,
+                                  in    RcptOffset,
+                                  in    FrIwHostKey,
+                                  inout Rrp,
+                                  inout RCPT,
+                                  in    P_FcsSize,
+                                  inout FrMode1)
+
+{
+   // Local registers
+   register DataPtr         = r14;
+   register FrameLength     = r18;
+
+   // Local registers (non volatile)
+   register L2HeaderSize   =  r22;
+   register CurrentBdPtr   =  r23;
+   register BufferLength   =  r30;
+   
+   /* update total received frame length  */
+   $reg(RCPT.Norf) = _add16($reg(RCPT.Norf),DataLength);
+   FrameLength = RCPT.Norf;
+   
+   if (!mode0.FlowHunt)
+   {
+      /* Check if Max SDU was exceeded */
+
+      if (FrameLength <= MaxSDU )
+      {
+
+
+#ifdef _MODULE_MATRIX_BUFF_CHAIN_ENABLE_
+         if ((Rrp -= DataLength)<0)
+         {
+            /* Current buffer has no more memory space for
+             * the received data quantum (DataLength)
+             */
+
+	        if ((FrMode1.POS && !mode0.CrcRem) || !status0.Last || DataLength > P_FcsSize)
+            {
+               /* No more room in current buffer, open new buffer */
+               B_FrRxBufferChaining(0,
+                                    RGPT,
+                                    FrMode1);
+
+            }
+            else
+      {
+               /* if this is the last data unit and packet
+                * contains only FCS then no new buffer will be extracted
+                */
+               B_FrBufferChainFcs(DataLength,
+                                  mode0,
+                                  RCPT);
+            }
+       }
+
+
+#endif // _MODULE_MATRIX_BUFF_CHAIN_ENABLE_
+
+         if ( !status0.Last )
+         {
+            /**********************************************
+             *********      Middle Packet         *********
+             **********************************************/
+         Fr_RxMiddlePacket:
+            // save data, update RCPT and terminate thread.
+            B_FrRxMiddlePacket(RGPT,
+                             FrRcptKey,
+                             FrIwHostKey,
+                             mode0,
+                             status0,
+                             status1,
+                             FlowNu,
+                             phy,
+                             tar0,
+                             DataLength,
+                             RcptOffset,
+			     HeaderSize,
+			     FrameLength,
+                             Rrp,
+                             RCPT,
+                             BufferLength,
+                             CurrentBdPtr,
+                             DataPtr,
+                             L2HeaderSize);
+         }
+         else
+         {
+            /**********************************************
+             ***********    EOF - Last Packet     *********
+             **********************************************/
+            B_FrRxLastPacket(mode0,
+                           DataLength,
+                           tar0,
+                           FlowNu,
+                           phy,
+                           HeaderSize,
+                           status0,
+                           FrRcptKey,
+                           RGPT,
+                           RcptOffset,
+                           FrIwHostKey,
+                           status1,
+                           Rrp,
+                           P_FcsSize,
+                           RCPT,
+                           FrMode1,
+                           CurrentBdPtr,
+                           L2HeaderSize);
+         }
+      }
+      else
+      {
+         /**********************************************
+          ********  Frame length > Max SDU   ***********
+          **********************************************/
+         // Discard/enqueu  frame, enter hunt mode,
+         // and goto last routine.
+      Fr_RxMaxSduExcedded:
+         B_RxMaxSduExcedded(FlowNu,
+                            status0,
+                            FrRcptKey,
+                            RcptOffset,
+                            mode0,
+                            phy,
+                            DataLength,
+                            FrMode1,
+                            RCPT,
+                            Rrp,
+                            DataPtr,
+                            IWExControlWord,
+                            FrIwHostKey,
+                            IwMasterKey3Tag,
+                            FrameLength,
+                            CurrentBdPtr,
+                            L2HeaderSize);
+      }
+   }
+   else
+   {
+
+      /**********************************************
+       **********  Flow specific Hunt Mode  *********
+       **********************************************/
+      // Local registers
+        register      Offset = r10; 
+
+      // Mid frame packet - continue to discard 
+      if (FrMode1.GlobalMode.PSTE)
+      {
+         Offset = phy*sizeof(S_FrRxStTable);
+         // Update errored frame byte counter
+         M_FrRxUpdateErrByteCnt(status0,
+                                Offset,
+                                DataLength);
+      }
+
+      // release key and terminate
+      _task_switch(FrRcptKey, _ORDER_UNLOCK| _TERMINATE);
+   }
+}
+
+/***************************************************************
+ **********            FR not in package            ************
+ ***************************************************************/
+#else
+{
+
+   global FR_Rx_Start_TDI,FR_Rx_Start_POS,FR_Rx_Start_TDI_MCH;
+
+   const  FR_Rx_Start_TDI = 0;
+   const  FR_Rx_Start_POS = 0;
+   const  FR_Rx_Start_TDI_MCH=0;
+
+}
+#endif //_MODULE_FR_ENABLE_
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2003, All rights reserved.
+ *****************************************************************************/
+
+
+

@@ -1,0 +1,1872 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2009.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: forwarding.dpl
+*
+* Description: This module implements the packet forwarding according to the
+*               predefined routing and forwarding parameters.
+*              The forwarding Module reads the specific FIWT configuration,
+*               and update the Layer 2 and Layer 3 headers.
+*              In addition the forwarding Module checks the congestion parameters and
+*               decide whether to accept or drop the received packet.
+*
+* Module Originator:  Eran Kirzner
+*
+* Creation Date:  Jan  1, 2001
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+****************************************************************************/
+
+#pragma list raw;
+/* Include Files */
+#include "config.h"
+#include "shared.h"
+#include "order.h"
+#include "l2_iw.h"
+#include "irq.h" /* Must only be included in DPL files, not H files */
+
+#include "interworking.h"
+#include "interworking_regs.h" /* Must only be included in DPL files, not H files */
+#include "iw_cong_byte_th.h"
+#ifdef _MODULE_INTERWORKING_ENABLE_
+#include "forwarding.h"
+#include "mpls.h"
+#ifdef _MODULE_FR_ENABLE_
+#include "iw_framerelay_forwarding.h"
+#endif
+
+#include "iw_policer.h"
+#include "compressor.h"
+#include "iw_nat.h"
+#ifdef _MODULE_ETHERNET_OAM_ENABLE_
+#include "iw_oam_macros.h"
+#include "iw_gen_to_comp.h"
+#endif /* _MODULE_ETHERNET_OAM_ENABLE_ */
+#include "iw_bridge_macros.h"
+#include "iw_bridging_forwarding.h"
+#include "iw_routing_forwarding.h"
+#include "trs_propagated_params.h"
+
+#ifdef _MODULE_GTP_ENABLE_
+#include "iw_gtp_macros.h"
+#endif
+#ifndef _MODULE_WIMAX_TRANSPORT_ENABLE_
+#include "iw_wimax_transport.h"
+#endif
+
+#ifdef _MODULE_GRE_ENABLE_
+#include "iw_wimax_transport_macros.h"
+#endif
+
+#ifdef _MODULE_BULK_MEMORY_ENABLE_
+#include "bulk_memory.h"
+#endif
+
+#ifdef _MODULE_CUSTOM_SII_ENABLE_
+#include "iw_sii.h"
+#endif
+
+#ifdef _MODULE_CUSTOM_FIGARO_ENABLE_
+#include "customer/figaro/customer_figaro_iw.h"
+#endif
+
+#ifdef _MODULE_CUSTOM_SWAN_LAKE_ENABLE_
+#include "customer/swanlake/customer_swanlake_iw.h"
+#endif
+
+#ifdef _MODULE_CUSTOM_TIGERMILK_QUEUE_PROTECT_ENABLE_
+#include "customer/tigermilk/tigermilk_queue_protect_macros.h"
+#endif
+
+#ifdef _MODULE_INTERWORKING_MULTICAST_ENABLE_
+#include "iw_multicast_macros.h"
+#endif /* _MODULE_INTERWORKING_MULTICAST_ENABLE_ */
+
+#ifdef _MODULE_IW_IP_FRAGMENTATION_ENABLE_
+#include "ip_defrag.h"
+#include "ip_frag.h"
+#endif
+
+#ifdef _MODULE_PWE_ATM_ENABLE_
+#include "scheduler.h"
+#endif // _MODULE_PWE_ATM_ENABLE_
+
+#if defined (_MODULE_PWE3_CESoPSN_UFE2_ENABLE_) || defined (_MODULE_PWE3_CESoPSN_TDI_ENABLE_)
+#include "iw_pwe3_cesop.h"
+#endif // _MODULE_PWE3_CESoPSN_UFE2_ENABLE_ || _MODULE_PWE3_CESoPSN_TDI_ENABLE
+
+#if defined  (_MODULE_PTP_ENABLE_) && defined (_WINPATH_REV_WP3_ENABLE_)
+#include "iw_ptp.h"
+#endif //_MODULE_PTP_ENABLE_
+
+
+#if defined (_MODULE_PWE_ATM_ENABLE_) || defined (_MODULE_PWE_HDLC_ENABLE_)
+#include "iw_pwe3.h"
+#endif // _MODULE_PWE_ATM_ENABLE_ || defined (_MODULE_PWE_HDLC_ENABLE_)
+
+#ifdef  _MODULE_BFD_ENABLE_
+#include "iw_bfd_rx.h"
+#endif  // _MODULE_BFD_ENABLE_
+
+#include "iw_ppp_switching.h"
+
+/* Global Definitions */
+
+#if _MODULE_INTERWORKING_ROUTING_ENABLE_
+global L_Fast_Forwarding_No_Compression;
+#endif  //_MODULE_INTERWORKING_ROUTING_ENABLE
+
+#ifdef _MODULE_IW_COMPRESSION_ENABLE_
+
+global L_CompHeader_Start;
+global L_Fast_Forwarding_Compressor_End;
+global L_Iw_Nested_Forwarding_Fiwt;
+
+#endif	/*_MODULE_IW_COMPRESSION_ENABLE_*/
+
+global L_MultiForwardingLevel;
+
+#ifdef _MODULE_SECURITY_ENABLE_
+#include "../security/wse_iw_interface.h"
+#endif _MODULE_SECURITY_ENABLE_
+
+#ifdef _MODULE_PDCP_ENABLE_
+#include "pdcp.h"
+global L_PdcpReturn;
+#endif
+
+#ifdef _MODULE_PDCP_TESTER_ENABLE_
+#include "pdcp_tester.h"
+global L_PdcpTesterReturn;
+#endif
+
+#ifdef _MODULE_HC_SUPPORT_ENABLE_
+#include "../hc_support/hc_support.h"
+global L_HcSupportReturn;
+#endif
+
+/*************************************************************************************************
+ *
+ *  Macro Name: F_RemarkPrefixField
+ *
+ *  Description:
+ *
+ *
+ *  Inputs:
+ *  Outputs:
+ ************************************************************************************************/
+#ifdef _MODULE_FORWARDING_PREFIX_REMARKING_ENABLE_
+func F_RemarkPrefixField(inout FiwtPrefixInsertionPtr = tar1,
+                         in    RemarkMask = r11,
+                         in    TempL2HeaderSize = r18,
+                         in    struct S_RemarkOffsetReg RemarkOffset = r14,
+                         in    FiwtPrefixInsertionPtrSave = r15,
+                         in    ExtDataPointer = r26)
+{
+   register TempRemarkByteOffset = r12;
+   register TempPrefixByte = r12;
+   register TempExtDataPointer = r16;
+
+   /* The nibble masks clear the upper 3 bits of the nibble.
+      this works because prefix remarking only supports MPLS Exp
+      and VLAN priority remarking. */
+   const PREFIX_REMARKING_MS_BYTE_SHIFT = 24;
+   const PREFIX_REMARKING_FIELD_UPPER_NIBBLE_MASK = (0x1F << PREFIX_REMARKING_MS_BYTE_SHIFT);
+   const PREFIX_REMARKING_FIELD_LOWER_NIBBLE_MASK = (0xF1 << PREFIX_REMARKING_MS_BYTE_SHIFT);
+
+   FiwtPrefixInsertionPtr = FiwtPrefixInsertionPtrSave;
+   if ( RemarkOffset != PREFIX_REMARKING_FIELD_FIWT_DISABLED)
+   {
+      TempRemarkByteOffset = RemarkOffset.RemarkByteOffset;
+      FiwtPrefixInsertionPtr += TempRemarkByteOffset;
+      if (TempRemarkByteOffset >= TempL2HeaderSize)
+      {
+         TempExtDataPointer = ExtDataPointer + TempRemarkByteOffset;
+         /* since only 1 byte is read from the external memory, it is written to the MS byte
+          * of TempPrefixByte, shift the mask accordingly. */
+         TempPrefixByte = _data_mem(r0, TempExtDataPointer, 1, NO_ATTRIBUTE);
+         RemarkMask <<= PREFIX_REMARKING_MS_BYTE_SHIFT;
+         if (RemarkOffset.AddNibbleOffset)
+         {
+            TempPrefixByte &= PREFIX_REMARKING_FIELD_LOWER_NIBBLE_MASK;
+            TempPrefixByte |= RemarkMask;
+         }
+         else
+         {
+            TempPrefixByte &= PREFIX_REMARKING_FIELD_UPPER_NIBBLE_MASK;
+            TempPrefixByte |= (RemarkMask << 4);
+         }
+         _data_mem(r0, TempExtDataPointer, 1, NO_ATTRIBUTE) = TempPrefixByte;
+      }
+      else
+      {
+         TempPrefixByte = _bf(*FiwtPrefixInsertionPtr, 0, 8);
+         /* prefix remarking remarks the upper 3 bits of the nibble.
+            prefix remarking can also remark the original packet, that is
+            why the upper 3 bits of the nibble are cleared before adding the
+            DFC remark mask. */
+         if (RemarkOffset.AddNibbleOffset)
+         {
+            TempPrefixByte |= RemarkMask;
+         }
+         else
+         {
+            TempPrefixByte |= (RemarkMask << 4);
+         }
+         _bf(*FiwtPrefixInsertionPtr, 0, 8) = TempPrefixByte;
+      }
+   }
+} /* F_RemarkPrefixField */
+#endif // _MODULE_FORWARDING_PREFIX_REMARKING_ENABLE_
+
+
+/**************************************************************************************************
+ *
+ *  Macro Name: B_FastSwitchingMode
+ *
+ *  Description: This function performes the layer 2 header striping and insersion.
+ *  The interworking module will extract the "Old" L2 header according amount of bytes specifies
+ *  in the FIWT[L2ES] from the received frame and add the "New" L2 header according to
+ *  the amount of bytes that was specifies in the FIWT[L2PS].
+ *
+ *  Inputs:
+ *    PacketPointer:
+ *         Pointer to the start of the received packet
+ *    FIWT:
+ *        Pointer to the Flow Interworking Table (in the TRS)
+ *    L2FrameLength:
+ *        This register holds the current frame length.
+ *
+ *  Outputs:
+ *
+ *    L2FrameLength:
+ *        Updated Layer 2 frame length (adding the "new" layer 2 header & lable)
+ *
+ *************************************************************************************************/
+
+inline func B_FastSwitchingMode()
+{
+   register struct S_FiwtSwitch          FIWT             = r64  ; // Flow Interworkin table (64 byte)
+   register struct S_IWModeFieldSwitch   mode0            = MODE_REG;
+
+   //*************** Volatile registers ***************//
+
+#pragma reserve r17;
+
+   // ************** Constant ***************//
+
+   const FIWT_SWITCH_L2_HEADER = 36;
+
+   register TempRegister           = r12;
+   register TempL2ExtractSize      = r18;
+   register TempL2HeaderSize       = r19;
+   register ExtensionTableOffset   = r20;
+
+   M_SwitchFcsHandle(mode0,
+                     mode1,
+                     L2FrameLength);
+
+#ifdef _MODULE_CUSTOM_FIGARO_ENABLE_
+   B_FigaroClpForward(mode1,
+                      mode0,
+                      FIWT,
+                      RxL2ProtocolSpecific);
+#endif
+
+#ifdef _MODULE_FR_ENABLE_
+   if (mode0.U_IWModeSwOptions.FrOptions.FRD)
+   {
+      /*    Frame Relay Replce DLCI mode                *
+       * only the DLCI field should be replaced so the  *
+       * FR rotocol bits of original header are updated *
+       * in the new header                              */
+      B_FrameRelayReplaceDlci(FirstParsingBlock,
+                              FIWT.Layer2PrefixWord0);
+   }
+
+   // Optionally BECN monitoring
+   if (mode0.U_IWModeSwOptions.FrOptions.BecnM)
+   {
+      // Read backward data path and update BECN indication in the forwarding path if needed.
+
+      B_UpdateFrameRelayBecn(RxL2ProtocolSpecific,
+                             mode0,
+                             FIWT.BFiwtHandle,
+                             BecnThreshold,
+                             FIWT,
+                             FIWT.TxL2ProtocolType,
+                             status0);
+
+
+      /* In ATM Tx BecnM also enables the Switch Packet marking mode,
+         this alows for FECN and BECN to be directly updated in the frame payload */
+      status0  |=
+         M_Mask(S_IwSerialStatusReg.U_MonitorMode.MonitorModeTag.U_FunctionMode.SwitchPacketMarking);
+
+   }
+#endif // _MODULE_FR_ENABLE_
+
+#if ((defined(_MODULE_FR_ENABLE_)) && (defined(_MODULE_AAL5_ENABLE_)))
+   // Optionally Update/Modify L2 protocol bits
+   if (mode0.U_IWModeSwOptions.FrOptions.UL2PS)
+
+   {
+      B_UpdateL2ProtocolBits(RxL2ProtocolSpecific, FIWT.L2PSMClear, FIWT.L2PSMSet,
+                             status0.U_MonitorMode.MonitorModeTag.EcngTag.DeClpTagState,
+                             S_Protocol_specific.DE_CLP ,
+                             RxL2ProtocolSpecific);
+   }
+#endif // ((defined(_MODULE_FR_ENABLE_)) || (defined(_MODULE_AAL5_ENABLE_)))
+    // Load layer 2 extraction header size
+   TempL2ExtractSize = FIWT.L2ExtractionSize;
+   // Update the Layer 2 transmite frame length
+   L2FrameLength -= TempL2ExtractSize;
+   // Progress the external data pointer by the amount of the prefix extraction.
+   ExtDataPointer += TempL2ExtractSize;
+   if(mode1.U_IwModeField.IwFlags.BridgeRouteCommonBits.IpPacket)
+      L2L3ExternalWord.U_SystemId.IpProtocol.Layer3Offset -= TempL2ExtractSize;
+
+   // Load layer 2 header size
+   TempL2HeaderSize = FIWT.L2PrefixSize;
+
+   /*Enable Prefix Table Extension copy the extention of the l2 to the ebd of the l2 */
+   if (mode0.FET)
+   {
+      //Flow extention table.
+#pragma outofline;
+      // Set the offset of the table (the table size is 64 byte)
+      ExtensionTableOffset = InterworkingFlowNumber  * sizeof(S_PrefixExtensionTable);
+
+      if((TempL2HeaderSize - FIWT_SWITCH_L2_HEADER - QUARTER_EXT_TABLE) < 0)
+      {// the size left to bring is smaller than 16
+         // Ftech the Extension table 16 byte
+         *(&FiwtExtentionStart)=
+            _mem(r0, B_FIWT_TABLE_EXT[ExtensionTableOffset], QUARTER_EXT_TABLE, FIWT_BUS);
+      }
+      else
+      {// Ftech the Extension table 32 byte size
+         *(&FiwtExtentionStart)=
+            _mem(r0, B_FIWT_TABLE_EXT[ExtensionTableOffset], HALF_EXT_TABLE, FIWT_BUS);
+      }
+   }
+   // end of Flow extention table.
+
+   if (FEATURE_CUSTOM_SWAN_LAKE)
+   {
+      M_AddDummyHec(FirstParsingBlockPtr,
+                    L2FrameLength,
+                    ExtDataPointer,
+                    SwFiwtPrefixInseartionPtr,
+                    TempL2HeaderSize);
+   }
+
+   if (mode0.L2HIE)
+   {
+      // Layer 2 Header Insersion - Extended prefix
+      // insert length mode
+      /*modify by rizh*/
+	  #if 1
+	  if (mode0.LU)
+	  {
+          if((TempL2HeaderSize-FIWT.LengthOffset) >0 && (TempL2HeaderSize-FIWT.LengthOffset) < 20)
+          {
+              HeaderTar1 = &($reg(FIWT.Layer2PrefixWord0))+FIWT.LengthOffset;
+			  HeaderTar1 +=(TempL2HeaderSize-FIWT.LengthOffset);
+			  ExtensionTableOffset= 20-(TempL2HeaderSize-FIWT.LengthOffset);
+			  //*(HeaderTar1++) = _data_mem(r0, ExtDataPointer,(20-(TempL2HeaderSize-FIWT.LengthOffset));
+			  *(HeaderTar1++) = _data_mem(r0, ExtDataPointer,ExtensionTableOffset);
+		  }
+	  }
+	  #endif
+      M_SwitchLengthUpdate(L2FrameLength,
+                           TempL2HeaderSize,
+                           FULL_CHECKSUM_CALC);
+
+      // Update the Layer 2 transmit frame length
+      L2FrameLength += TempL2HeaderSize;
+
+      //  Update the external data pointer
+      ExtDataPointer -= TempL2HeaderSize;
+
+      // Store the new layer 2 packet header in the external memory
+      _data_mem(r0, ExtDataPointer, TempL2HeaderSize) = *(&FIWT.Layer2PrefixWord0);
+   }
+#ifdef _MODULE_INTERWORKING_FR_APC_ENABLE_
+   else if(mode0.U_IWModeSwOptions.FrOptions.FAPC)
+   {
+      // Frame relay <-> ATM protocol conversion (FRF8.1)
+
+      M_FrameRelayAtmProtocolConverstion(FIWT,TempL2HeaderSize,
+                                         TempL2ExtractSize,
+                                         L2FrameLength,
+                                         IwFrameLength,
+                                         ExtDataPointer,
+                                         SwFiwtPrefixInseartionPtr,
+                                         FirstParsingBlockPtr,
+                                         HostTerminationInfo);
+
+      /* Update the new encapuslation header and the user prefix in the external memeory */
+      // Update the Layer 2 transmite frame length
+      L2FrameLength += TempL2HeaderSize;
+
+      // Update the external memory pointer
+      ExtDataPointer -= TempL2HeaderSize;
+
+      // Store the new layer 2 packet header in the external memory
+      _data_mem(r0,ExtDataPointer,TempL2HeaderSize)=*(&FIWT.Layer2PrefixWord0) ;
+   }
+#endif /* _MODULE_INTERWORKING_FR_APC_ENABLE_ */
+
+  L_IW_Switch_MTU_Check:
+
+   M_SwitchMTUCheck(L2FrameLength,
+                    MaximumTransmitUnit);
+}
+// B_FastSwitchingMode
+
+/**************************************************************************************************
+ *
+ *  Macro Name: B_FastHostTerminationMode
+ *
+ *  Description: This function performs the layer Fast Host Termination Process.
+ *
+ *  Inputs:
+ *
+ *  Outputs:
+ *
+ *************************************************************************************************/
+
+inline func B_FastHostTerminationMode()
+
+{// B_FastHostTermination  start
+
+   register struct S_FiwtHostT          FIWT       = r64  ; // Flow Interworkin table (64 byte)
+   register struct S_IWModeFieldHostT   mode0      = MODE_REG;
+   register                             L4Checksum = r14 ;
+   if (L2FrameLength > MaximumTransmitUnit)
+   {// Layer 2 frame length > MTU ==>  Drop Packet
+
+      // Increment the packet drop counter (MTU drop counter)
+      // Return the buffer to the free buffer pool
+      F_ForwardingDropPacket(HOST_VIO_ERR_TYPE_MTU,
+                             MTU_DROP_PACKETS,
+                             ENQUEUE_ERROR_PACKET);
+      // release the master key and terminate
+
+   }// End of Layer 2 frame length > MTU
+
+#ifdef _MODULE_INTERWORKING_L4_CHECKSUM_
+
+      //If There Is a need to recalculate L4 checksum
+      if (mode0.L4CR)
+      {
+         //Check the L4 checksum validity (UDP or TCP) , if Checksum fail ,
+         //Update the L4ChecksumError bit in the HT-BD
+         M_L4ChecksumRecalc(Ipv4HeaderPtr,FirstParsingBlockPtr,L4Checksum,ExtDataPointer);
+      }
+
+#endif //_MODULE_INTERWORKING_L4_CHECKSUM_
+
+#ifdef _MODULE_INTERWORKING_NAT_ENABLE_
+   // Check if nat analyze flow
+   if (mode0.PacketAnalyze)
+   {
+      //Perform the NAT Packet analysis
+      M_NatFlowAnalyze(mode0,FIWT,Ipv4HeaderPtr,ExtDataPointer,L2FrameLength,MaximumTransmitUnit,
+                       FirstParsingBlockPtr);
+   }
+#endif //#ifdef _MODULE_INTERWORKING_NAT_ENABLE_
+
+
+#ifdef _MODULE_PTP_ENABLE_
+   if (mode0.PtpRxEvent)
+   {
+      // Set PTP Rx event indication in HostTerminationInfo register
+      HostTerminationInfo.U_HTParam.HTIndication.PtpRxEventBD = 1 ;
+   }
+#endif // _MODULE_PTP_ENABLE_
+
+   if (!mode0.PriorityMapEnable)
+   {
+      /*In case PriorityEnable=0, force zero output priority offset.
+        In MultiForwarding Levels the wddi sets the priority disable
+        bit automatically to the save clocks on vpmt processing */
+      OutputPriorityInfo.Action.PriorityMapping = 0;
+   }
+}// End of B_FastHostTerminationMode inline
+
+/**************************************************************************************************
+ *  Macro Name: B_IwPropagatedParamsSave
+ *
+ *  Description:
+ *    Writes the IW Propagated Parameters table to the external memory.
+ *
+ *  Inputs:
+ *    PrefixRemarkMask
+ *       Contains prefix remarking information.
+ *
+ *    DfcL2Remark1
+ *       Contains the programmable result information.
+ *
+ *  Outputs:
+ *    IwPropParams
+ *       The IW Propagated Parameters table is saved to the external memory from here.
+ *
+ *    TrsIndexTarPtr
+ *       tar register (won't be backed up).
+ *
+ *    L2L3ExternalWordExt
+ *       The IwFiwtParamsSaveInd which is resides in L2L3ExternalWordExt
+ *       is set to indicate the IW Propagated Parameters were saved.
+ *
+ *    TempReg
+ *       Temporary register for M_TrsPropagatedParams.
+ *
+ **************************************************************************************************/
+inline func B_IwPropagatedParamsSave(out struct S_IwPropagatedParams       IwPropParams,
+                                     out                                   TrsIndexTarPtr,
+                                     in  struct S_PrefixRemarkingInfo      PrefixRemarkMask,
+                                     in  struct S_Layer2Remark1            DfcL2Remark1,
+                                     out union  U_IWExtentionWord          L2L3ExternalWordExt,
+                                     out                                   TempReg)
+{
+
+#ifdef _MODULE_FORWARDING_PREFIX_REMARKING_ENABLE_
+   // Set only the prefix remarking (not priority) in the parameters table
+   IwPropParams.IwPropParamsPrefixRemark = _bf(PrefixRemarkMask, 8, 24);
+
+   // Set the programmable result value in the parameters table
+   IwPropParams.ProgrammableResult = DfcL2Remark1.ProgrammableResult;
+#endif
+
+   // Set the bit that indicates to the IWS that the parameters were saved
+   L2L3ExternalWordExt.BridgeExt.U_TempSavedData.ExtFieldsData.IwFiwtParamsSaveInd = 1;
+
+   M_TrsPropagatedParams(TRS_PROP_PARAMS_WRITE,
+                         IwPropParams,
+                         TrsIndexTarPtr,
+                         r0,
+                         TempReg,
+                         TAR_BACKUP_MODE_DISABLE);
+}
+// B_IwPropagatedParamsSave
+
+/**************************************************************************************************
+ *
+ *  Macro Name: B_MultiForwardingLevel
+ *
+ *  Description: This function anlyze the next the type of the next forwarding level.
+ *
+ *  The B_MultiForwardingLevel identfy the next forwarding level (FIWT or System)
+ *  In case that the next level is forwarding level the next FIWT index will extract and the next FIWT will
+ *  be fetch (note that in this case the relevant packat info will reloaaded to the TRS).
+ *  In case that the next level is system level the next systen index and system info will extract
+ *  and the relevant packat info will reloaaded to the TRS).
+ *
+ *  Inputs:
+ *    FIWT:
+ *         Inase of multi forwarding level the FIWT.Qatpointer
+ *         carry the next forwarding level info (system inf or FIWT index)
+ *    TxL2ProtocolType:
+ *         carry the next processing info (forwarding type, system type,etc).
+ *  Outputs:
+ *
+ *     Jir - Holds the return address (PC).
+ *     InterworkingFlowNumber - Holds the next FIWT index.
+ *     IwSystemId - Holds the next IW system index.
+ *     FirstParsingBlockPtr - erset the tar0 loacation (point to r96).
+ *
+ **********************************************************************************************/
+
+inline func B_MultiForwardingLevel(in mode0,
+                                   in FIWT,
+                                   in TxL2ProtocolType,
+                                   in FirstParsingBlock,
+                                   out FirstParsingBlockPtr,
+                                   out InterworkingFlowNumber,
+                                   out jir,
+                                   out IwSystemId)
+{
+   register                               PropParamsTmpReg     = r10;
+   register                               TempIPVer            = r10;
+   register struct S_IwPropagatedParams   IwPropagatedParams   = r11;
+   register struct S_NextForwardingStage  QueueAssignmetPtr    = r32;
+
+   register                               TrsIndexTarPtr       = tar1; // used in B_IwPropagatedParamsSave.
+
+   // ************** Constant ***************//
+
+#define FIRST_DATA_QUANTUOM (64)
+#define BRIDGE_MODE_SYSTEM_PARAMS (M_Mask(S_IWExControlWord.U_MultiModeField.BridgeMode.VlanAware)| M_Mask(S_IWExControlWord.U_MultiModeField.BridgeMode.SVL))
+
+   //*************** Volatile registers ***************//
+
+
+   //Internal Data pointer (Dynamic pointer - start r96)
+   FirstParsingBlockPtr = &FirstParsingBlock;
+
+   /* switch accurding to the next forwarding type
+      system or FIWT */
+
+   if (TxL2ProtocolType & L2_TX_NEXT_FIWT)
+   {/* Next forwarding stage is FIWT */
+#ifdef _MODULE_INTERWORKING_NAT_ENABLE_
+      if(status0.U_MonitorMode.MonitorModeTag.U_NatMode.NatSkipRelode)
+      {
+         status0.U_MonitorMode.MonitorModeTag.U_NatMode.NatSkipRelode =0;
+      }
+      else
+#endif //_MODULE_INTERWORKING_NAT_ENABLE_
+         /* fetch from the external memory first 64 byte of the packet */
+         *(&FirstParsingBlock) = _data_mem(r0,ExtDataPointer,FIRST_DATA_QUANTUOM,0);
+
+      L2L3ExternalWord.L2FlowNum = InterworkingFlowNumber.FwdFlowNum;
+      HostTerminationInfo.U_HTParam.HTIndication.FiwtToFiwt = 1;
+
+      /* Load the QAT pointer from the Interworking table */
+      InterworkingFlowNumber =
+         QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.FIWTIndex.Index;
+
+      // Table offset = FIWT number * 64
+      FlowNumberOffset = InterworkingFlowNumber * sizeof(S_FIWT);
+      // Fetch the match Interworking Flow Table.
+      *(&FIWT)=_mem(r0,B_FIWT[FlowNumberOffset],sizeof(S_FIWT),  FIWT_BUS);
+
+      /* Return to the start of the forwarding module   */
+      goto L_Iw_Nested_Forwarding_Fiwt;
+   }
+   else if(TxL2ProtocolType & L2_TX_NEXT_IW_SYS)
+   {
+     L_MultiForwardingLevel_NextIsSys:
+      /* Next forwarding stage is IW system */
+      /*******************************************/
+      /*  IW System chaining                     */
+      /*******************************************/
+      /* Reload all interworking interface parm  */
+      /* from the FIWT control word (QATptr)     */
+      /* in case of nested IW system the first   */
+      /* FIWT word holds the system Id and       */
+      /* parsing param                           */
+      /*******************************************/
+
+      /* Load System ID */
+      IwSystemId = QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam.
+         U_SystemId.ParsingConfig.U_ParsingType.UserParsingTable;
+
+#ifdef _MODULE_IW_PROPAGATED_PARAMS_ENABLE_
+
+      /* If the FIWT has enabled saving the propagated parameters,
+       * they will be saved before entering the secondary IWS. */
+      if (QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam.U_SystemId.ParsingConfig.IwPropParamsSave)
+      {
+#pragma outofline;
+         B_IwPropagatedParamsSave(IwPropagatedParams,
+                                  TrsIndexTarPtr,
+                                  PrefixRemarkMask,
+                                  DfcL2Remark1,
+                                  L2L3ExternalWordExt,
+                                  PropParamsTmpReg);
+      }
+#endif
+
+#ifdef _MODULE_INTERWORKING_NAT_ENABLE_
+      if(status0.U_MonitorMode.MonitorModeTag.U_NatMode.NatSkipRelode)
+      {
+         status0.U_MonitorMode.MonitorModeTag.U_NatMode.NatSkipRelode = 0;
+
+         /* Restore all system parameters from the FIWT control word */
+         // Load mode1 with the Interworking type & Parsing type
+         mode1=FIWT.NextForwardingStage.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam;
+         L2L3ExternalWord = FIWT.NextForwardingStage.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam;
+
+         goto L_IWM_HI_Router_Ipv4;
+      }
+#endif //_MODULE_INTERWORKING_NAT_ENABLE_
+
+      /* The L2FlowNum (to be used as default L2FlowNum in the next system) is always copied from FIWT */
+      L2L3ExternalWord.L2FlowNum = FIWT.U_FbpDT_SysToSys3.SysToSysL2FlowNum;
+      /* Set the System To System indication so that in case of host termination this information will be available
+         clear all the rest of the HostTerminationInfo register. */
+      HostTerminationInfo = M_Mask(S_HostTerminationInfo.U_HTParam.HTIndication.SysToSys);
+
+      if (FIWT.U_PrefExtIndex_or_SysToSys1.SysToSysBridgeExtField.NsPropagateInParams)
+      {
+         /* In case propagate input parameters is enabled - copy only the
+            next IW Bridge system parameters into the control word. */
+         L2L3ExternalWord.U_SystemId.BridgeConfig =
+            QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam.U_SystemId.BridgeConfig;
+
+         if(TxL2ProtocolType & IW_SYS_BRIDGING_MODE)
+         {
+            L2L3ExternalWord &= ~(BRIDGE_MODE_SYSTEM_PARAMS |
+                                  M_Mask(S_IWExControlWord.InterworkingType.FcsPreserved));
+
+            $reg(L2L3ExternalWord.U_MultiModeField.BridgeMode) |=
+               QueueAssignmetPtr & BRIDGE_MODE_SYSTEM_PARAMS;
+         }
+      }
+      else
+      {
+         /* Copy all parameters from FIWT. */
+         L2L3ExternalWord = QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam;
+         L2L3ExternalWordExt.BridgeExt.BridgeExtField = FIWT.U_PrefExtIndex_or_SysToSys1.SysToSysBridgeExtField;
+         /* clear TOS and DSCP remarking bits for the case of multi systems. */
+         OutputPriorityInfo &= (~TOS_AND_DSCP_REMARKING_MASK);
+      }
+
+      /* Preserve the original FcsPreserved field of the frame. */
+      if (mode1.InterworkingType.FcsPreserved)
+         L2L3ExternalWord.InterworkingType.FcsPreserved = 1;
+      else
+         L2L3ExternalWord.InterworkingType.FcsPreserved = 0;
+
+      if (FIWT.ForwardingOption == FAST_SYS_TO_SYS_MODE)
+      {
+#ifdef  _MODULE_INTERWORKING_BRIDGING_ENABLE_
+         /* Fast Bridge System to Bridge System */
+
+         if (!FIWT.U_PrefExtIndex_or_SysToSys1.SysToSysBridgeExtField.NsPropagateInPort)
+         {
+#pragma outofline;
+#pragma reserve r10;
+
+            /* The next system's input port and default VLAN tag are the taken from the FIWT */
+            L2L3ExternalWordExt.BridgeExt.InputPort = FIWT.U_IwPort_Policer.IwPort;
+            /* In case the Bridge port is Vlan Transparent, the vlan tag is not changed, since there is no default vlan. */
+            if (mode1.U_MultiModeField.BridgeMode.VlanAware)
+            {
+               if (mode1.U_IwModeField.BridgeIwFlags.PriorityTagged)
+                  /* In case Priority Tagged frame - only the VID is taken from FIWT */
+                  L2L3ExternalWord.U_Tag.VlanTag.VlanId = FIWT.U_MTU_or_SysToSys2.SysToSysDefaultVlanTag.VlanId;
+               else if (!mode1.U_IwModeField.BridgeIwFlags.VlanTagged)
+               {
+                  /* In case Untagged both VID and VLAN priority are taken from FIWT */
+                  L2L3ExternalWord.U_Tag.VlanTag = FIWT.U_MTU_or_SysToSys2.SysToSysDefaultVlanTag;
+               }
+            }
+         }
+
+
+         /* update mode1 fields */
+         _bf(mode1, 0, 16) = _bf(L2L3ExternalWord,0,16);
+         if (mode1.U_IwModeField.BridgeIwFlags.VlanStacked)
+         {
+#pragma outofline;
+            register struct S_VlanStackedEthernetHeader VlanStackedEthernetHeader = HEADER_REG;
+            InnerVlanTag.VlanTag = VlanStackedEthernetHeader.CTagVlan.VlanTag;
+            /* set tar0 which will later be use by the DFC. */
+            tar0 = POINTER_TO_END_OF_C_TAG_VLAN;
+         }
+         else
+         {
+            if (mode1 & ( M_Mask(S_IwMode1Reg.U_IwModeField.BridgeIwFlags.VlanTagged) |
+                          M_Mask(S_IwMode1Reg.U_IwModeField.BridgeIwFlags.PriorityTagged) ) )
+            {
+               /* set tar0 which will later be use by the DFC. */
+               tar0 = POINTER_TO_END_OF_S_TAG_VLAN;
+            }
+            else
+            { /* untagged frame. */
+               /* set tar0 which will later be use by the DFC. */
+               tar0 = POINTER_TO_END_OF_MAC_ADDRESSES;
+            }
+         }
+         if (mode1.U_MultiModeField.BridgeMode.VlanAware)
+            /* Reconstruct Bridge Frame VLAN ID register. */
+            BridgeFrameVlanId = L2L3ExternalWord.U_Tag.VlanTag.VlanId;
+         else
+            BridgeFrameVlanId = 0;
+
+         /* Fetch IW System Bridge Info table */
+         M_BridgeFetchIwSysInfo(L2L3ExternalWord,
+                                IwSystemId,
+                                SysBridgeInfo);
+
+         /* IwPort Stag isn't supported in Fast SysToSys FIWT so we need to clear the IwPortSTagEnable bit */
+         SysBridgeInfo.DfcInfo.U_DefaultSysInfo.BridgeInfoExtention.IwPortSTagEnable = 0;
+
+#ifdef _MODULE_ETHERNET_OAM_ENABLE_
+         EthernetOamLmInfo = 0;
+#endif// #ifdef _MODULE_ETHERNET_OAM_ENABLE_
+         goto L_Iw_Nested_Bridge_Sys_Fast_Mode;
+#endif //_MODULE_INTERWORKING_BRIDGING_ENABLE_
+      }
+      /* Normal System To System */
+
+      /* clear the Vlan remarking bits for the case of multi systems. */
+      /* remarking of vlan priority does pass to the next system in case of fast sys to sys. */
+      OutputPriorityInfo &= (~VLAN_REMARKING_BITS_AND_VALUE_MASK);
+
+      if (!FIWT.U_PrefExtIndex_or_SysToSys1.SysToSysBridgeExtField.NsPropagateInPort)
+      {
+         /* The next system's input port and default VLAN tag are the taken from the FIWT */
+         L2L3ExternalWordExt.BridgeExt.InputPort = FIWT.U_IwPort_Policer.IwPort;
+
+         /* load the default vlan only if the frame in forwarded into a bridging system.
+            if the frame is not forwarded to a bridging system, the vlan tag will not be changed. */
+         L2L3ExternalWord.U_Tag.VlanTag = FIWT.U_MTU_or_SysToSys2.SysToSysDefaultVlanTag;
+      }
+      else
+      {
+         /* In case the next system is not a bridge, the external control word holds the frame's vlan tag and
+            should not be changed. */
+         /* In case the next system is a bridge, the bridge port default vlan tag must be placed in
+            the external control word. */
+         if(TxL2ProtocolType & IW_SYS_BRIDGING_MODE)
+         {
+            /* Propagate the Input port, only in bridging did the input port have a default vlan. */
+            /* Restore the original default VLAN tag, in case comming FROM a bridge system. */
+            L2L3ExternalWord.U_Tag.VlanTag =
+               L2L3ExternalWordExt.BridgeExt.U_TempSavedData.ExtFieldsData.U_IwData.DefaultVlanTag;
+            if ( !mode1.InterworkingType.BridgeMode )
+            {
+               /* load the default vlan from the FIWT because otherwise there will be no bridge port default vlan. */
+               L2L3ExternalWord.U_Tag.VlanTag = FIWT.U_MTU_or_SysToSys2.SysToSysDefaultVlanTag;
+            }
+         }
+      }
+
+
+      /* fetch from the external memory first 64 byte of the packet */
+      *(&FirstParsingBlock) = _data_mem(r0, ExtDataPointer, FIRST_DATA_QUANTUOM, 0);
+
+      /* load mode1 with the Interworking type */
+      mode1 = _bf(L2L3ExternalWord,0,16)<<16;
+      /* clear mc/bc indication in case MAC-DA is changed
+         in the transition to the next bridge system.
+         Note that the MAC-DA type will be rechecked in the next system. */
+      status0 &= ~(M_Mask(S_IwSerialStatusReg.McFrame) |
+                   M_Mask(S_IwSerialStatusReg.BcFrame));
+
+      if(TxL2ProtocolType == L2_TX_NEXT_IW_SYS_ROUTING_MODE)
+      {
+         /* Load the jir with the layer 3 protocol Type, used in IW Routing system */
+
+         if (QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam.InterworkingType.FcsPreserved)
+         {
+            TempIPVer = FirstParsingBlock & M_Mask(S_IPv6Header.Vers);
+            if (TempIPVer == IP_VERS_6)
+            {
+               QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam.U_MultiModeField.Layer3ProtocolType = L3_PROTOCOL_TYPE_IPV6;
+            }
+            else if (TempIPVer == IP_VERS_4)
+            {
+               QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam.U_MultiModeField.Layer3ProtocolType = L3_PROTOCOL_TYPE_IPV4;
+            }
+            else
+            {
+#pragma outofline ;
+               /* Invalid system to system IP Packet configuration */
+               F_ForwardingDropPacket(HOST_VIO_ERR_TYPE_GENERAL,
+                                      M_BitToByte(S_FlowStatistics.U_Inv_L4_or_Sw_Over.InvalidL4),
+                                      DROP_WITH_STATISTCS);
+            }
+
+         }
+         jir = QueueAssignmetPtr.U_IwType.SystemFlowInfo.U_IwInfo.SystemParam.U_MultiModeField.Layer3ProtocolType;
+      }
+
+#pragma _sync;
+      goto L_Iw_Nested_Forwarding_System;
+   } // if(TxL2ProtocolType & L2_TX_NEXT_IW_SYS)
+   else
+   {
+#pragma outofline ;
+      /* Invalid FIWT configuration */
+      F_ForwardingDropPacket(HOST_VIO_ERR_TYPE_GENERAL,
+                             M_BitToByte(S_FlowStatistics.DeniedPackets),
+                             DROP_WITH_STATISTCS);
+      // release the master key and terminate
+   }
+
+}/* End of B_MultiForwardingLevel */
+
+
+/*************************************************************************************************
+ *
+ *  Function: F_Forwarding
+ *  Description: This function is performed the interworking forwarding header striping and
+ *                inserting according to information in the received IP packet and various
+ *                routing and classification parameters predefined by the Host in the
+ *                Flow Interworking Table (e.g congestion thresholds).
+ *               The function will strip the L2 overhead (or labels) from the received IP packet,
+ *                optionally replace and remark layer 3 headers (e.g Diffserv Code point),
+ *                decrement the TTL, recalculate the header checksum,Check the maximum MTU ,
+ *                insert the new L2 header and update the relevants statistics.
+ *               The return value of this fuction (if the packet is forwarded) is a pointer
+ *                to the Queue Assignment Table (QAT) that associated with the specific flow.
+ *
+ *  Inputs:
+ *    PacketPointer:
+ *         Pointer to the start of the received packet
+ *    FIWT:
+ *        Pointer to the Flow Interworking Table (in the TRS)
+ *
+ *  Outputs:
+ *    QueueAssignmetPtr:
+ *          Pointer to the QAT that associated with the specific flow
+ *
+ ************************************************************************************************/
+
+
+section Forwarding_Start
+{
+   // Forwarding_Start
+
+   // Note that table (e.g. FIWT) and structures that are greater then 32 bits
+   // (e.g array) MUST deliver as global parameters
+
+   // The function return address is store in temp register (r41)
+
+   func F_Forwarding(in                                     FirstParsingBlockPtr      = tar0,
+                     out                                    SwFiwtPrefixInseartionPtr = tar1,
+                     in    struct S_FIWT                    FIWT                      = r64,
+                     in    struct S_IPv4Header              Ipv4HeaderPtr             = HEADER_REG,
+                     in    struct S_InterworkingFlowNumber  InterworkingFlowNumber    = r30,
+                     inout struct S_OutputPriorityInfo      OutputPriorityInfo        = r31,
+                     inout                                  L2FrameLength             = r40,
+                     inout                                  IwFrameLength             = r39,
+                     inout                                  ExtDataPointer            = r26,
+                     inout struct S_IWExControlWord         L2L3ExternalWord          = r92,
+                     in    union  U_IWExtentionWord         L2L3ExternalWordExt       = r88,
+                     inout struct S_IWModeField             mode0                     = MODE0_REG,
+                     inout struct S_IwMode1Reg              mode1                     = MODE1_REG,
+                     inout struct S_IwSerialStatusReg       status0                   = STATUS0_REG,
+                     in    struct S_IwSerialStatusReg2      status1                   = STATUS1_REG,
+                     out                                    QueueAssignmetPtr         = r32,
+                     out                                    TxL2ProtocolType          = r34,
+                     inout struct S_HostTerminationInfo     HostTerminationInfo       = r44,
+                     inout struct S_CongestionProfileEntry  CongestionProfileEntry    = r64,
+                     in                                     IwMasterKey3              = TagKey1,
+                     in                                     FunctionReturnAddress0    = r41,
+                     inout struct S_Protocol_specific       RxL2ProtocolSpecific      = r25)
+      {
+         // Analyze the IWFT (Table type, Header strip/add etc.).
+
+         // ************** Constant ***************//
+         const FIWT_MTU_PASS                 = 0xFFFF;              // MTU PASS value
+         const COMMON_IW_FBP                 = 0xF;                 // global/common IW
+                                                                    // free buffer pool
+         const EXTRERNAL_WORD_COMMON_IW_FBP  = COMMON_IW_FBP << 4;  // Set COMM_FBP to the
+                                                                    // Ext control word position
+         const COMMON_IW_FBP_DUMMY_THRESHOLD = 0x0 ;                // Set COMM_FBP state to max
+
+         const LENGTH_FIELD_SIZE             = 2;
+         const QUARTER_EXT_TABLE = (sizeof(S_PrefixExtensionTable)/4); //for Flow Extention Table
+         const HALF_EXT_TABLE    = (sizeof(S_PrefixExtensionTable)/2); //for Flow Extention Table
+
+         //*************** Volatile registers ***************//
+         register struct S_TempReg   IwPolicerIndex        = r21;
+         register struct S_TempReg   FreePoolDropThreshold = r21;// Free buffer pool drop threshold
+         register struct S_TempReg   SwitchForwardingOption  = jir;  // jir = Forwarding Option
+
+
+
+   /*******************************************/
+   /* Nested forwarding interface             */
+   /*******************************************/
+   /* Reload all the forwarding  parm         */
+   /* from the FIWT control word (QATptr)     */
+   /* maintain the buffer bus_type and        */
+   /* frame length                            */
+   /*******************************************/
+L_Iw_Nested_Forwarding_Fiwt:
+
+         /* the FIWT is read outside the F_Forwarding function */
+
+/* need to save the data here
+
+save the following:
+1. mode1 - needs to be copied to mode0 before parsing ( 32bit)
+2. L2L3ExternakWordExt.InputPort                      ( 16bit )
+3. L2L3ExternalWord.U_Tag.VlanTag                     ( 16bit )
+4. L2L3ExternalWord.U_SystemId.IpProtocol.IpProtocol  ( 8bit  )
+5. InterworkingFlowNumber                             ( 16bit )
+
+*/
+
+#ifdef  _MODULE_LINK_AGGREGATION_ENABLE_
+
+         if (FIWT.TxL2ProtocolType == L2_TX_PROTOCOL_TYPE_LINK_AGGREGATION)
+         {
+            register struct S_LA_BufferGapInfo LA_Info = r10;
+            register struct S_TempReg TempDataPtr = r13;
+
+            M_LaSaveInfoInGap(L2L3ExternalWordExt.BridgeExt.InputPort,
+                              ExtDataPointer);
+         }
+#endif
+
+         // Isolate the IWBT from the mode0 register (these bits was received from the Layer 2)
+         // note that policer uses 16 msb bits of mode0, these bits must be cleared
+         // after policer operation
+         mode0 = mode0 & M_Mask(S_IWModeField.DBT);
+
+         //reload IWBT (DBT)to mode0
+         mode0 |= (FIWT.IWModeField & ~M_Mask(S_IWModeField.DBT));
+
+         // load the user information field from the FIWT to the status reg
+         status0.IWTUserInfo = FIWT.IWTUserInfo;
+         // Load the jir with the Forwarding Option modes
+         if (! (SwitchForwardingOption = $reg(FIWT.ForwardingOption) >> FORWARDING_OPTION_OFFSET) )
+         {
+#pragma outofline;
+            /* SwitchForwardingOption == FIWT_DISABLED */
+            F_ForwardingDropPacket(HOST_VIO_ERR_TYPE_GENERAL,
+                                   M_BitToByte(S_FlowStatistics.DeniedPackets),
+                                   DROP_WITH_STATISTCS);
+         }
+
+
+         // Load the QAT pointer from the Interworking table
+         QueueAssignmetPtr = FIWT.NextForwardingStage.U_IwType.QATPtr;
+
+         // save the frame length before forwarding
+         IwFrameLength = L2FrameLength;
+
+         // policer location
+         //Optionally police received flows packets
+
+#ifdef _MODULE_INTERWORKING_FUNC_POLICER_ENABLE_
+         if (mode0.PE)
+         {
+            /* The IwPort is taken from the IWPT so that there will be a policer index. */
+            IwPolicerIndex = FIWT.U_IwPort_Policer.IwPort;
+            F_DfcPolicer(IwPolicerIndex,
+                         L2FrameLength,
+                         mode1,
+                         mode0,
+                         status0,
+                         RxL2ProtocolSpecific,
+                         OutputPriorityInfo);
+            /* reconstruct the ForwardingOption in JIR, since it is overrun when using a function */
+            SwitchForwardingOption = $reg(FIWT.ForwardingOption) >> FORWARDING_OPTION_OFFSET;
+            /* The IwPort is taken from the IWPT so that there will be a policer index. */
+            FIWT.U_IwPort_Policer.IwPort = IwPolicerIndex;
+         }
+#endif /* _MODULE_INTERWORKING_FUNC_POLICER_ENABLE_ */
+
+         /* Optionally Update timer in external mem if TimStamp enable */
+         if(status0.IWTUserInfo.TSPE)
+         {// Write the Time Stamp to the external memory
+            register struct S_TempReg TempTimeStamp       = r18;
+            register struct S_TempReg TempTimeStamAddress = r19;
+
+            // The time stamp is 32 bit long
+            TempTimeStamp = _time_stamp();
+            /* Time stamp external Address*/
+            TempTimeStamAddress = InterworkingFlowNumber*4;
+            /* Write Time stamp to ext Memory */
+            _mem(r0,B_IW_TMSTMP[TempTimeStamAddress],4, TMSTMP_BUS) = *(&TempTimeStamp);
+
+         }
+
+         register struct S_TempReg      TempFifoNumber         = r18;
+
+         // Exterac the Free buffer pool number
+         TempFifoNumber= $reg(L2L3ExternalWord.FBPnum) & (M_Mask(S_IWExControlWord.FBPnum));
+
+         if((!mode0.Fbp15E))
+         {// Seconed Free pool level disable
+            // FBP 15 is not enable for this flow Usses only the first FBP level
+            if((TempFifoNumber!=EXTRERNAL_WORD_COMMON_IW_FBP))
+            {// The specific buffer was fetch from the first FBP level
+               // Extract the layer 2 Free pool drop threshold
+               FreePoolDropThreshold = FIWT.U_FbpDT_SysToSys3.FBPDropThreshold;
+            }
+
+            else
+            {// FBP 15 is disable but the specific buffer was fetch FBP15
+               // returne the packet to the commone FBP15 and drop the packet
+               // Increment the packet drop counter (FBP drop counter)
+               F_ForwardingDropPacket(HOST_VIO_ERR_TYPE_GENERAL,
+                                      FBP_DROP_PACKETS,
+                                      DROP_WITH_STATISTCS);
+               // release the master key and terminate
+
+            }
+
+         }
+
+         else
+         {// Seconed free buffer pool level is enable
+            mode0.AutoDInLast = 0;  // re-use of FBP15E bit for AutoD in last
+            if((TempFifoNumber!=EXTRERNAL_WORD_COMMON_IW_FBP))
+            {// The specific buffer was fetch from the first FBP level
+               // Free buffer pool drop threshold checking should ignor
+               FreePoolDropThreshold = COMMON_IW_FBP_DUMMY_THRESHOLD;
+            }
+
+            else
+            {// The specific buffer was fetch from the second FBP level
+               // Extract the layer 2 Free pool drop threshold
+               FreePoolDropThreshold = FIWT.U_FbpDT_SysToSys3.FBPDropThreshold;
+            }
+
+         }
+
+         // Load MTU from the FIWT
+         MaximumTransmitUnit = FIWT.U_MTU_or_SysToSys2.MTU;
+
+         register struct S_TempReg         TempFBPcounter = r19;
+
+         // load the current pool state from the external control word
+         TempFBPcounter = L2L3ExternalWord.FBPcounter;
+
+         if (mode0.MultiForwardingLevel)
+         {
+#pragma outofline;
+            if (FIWT.ForwardingOption == FAST_SYS_TO_SYS_MODE)
+            {
+               register struct S_TempReg           TempStatOffsetTable        = r10;
+               register struct S_TempReg           TempStatOffset             = r11;
+               TempStatOffset = InterworkingFlowNumber * sizeof(S_FlowStatisticsGT);
+               if (status0.IWTUserInfo.STE)
+               {
+                  /************************ update Flow Statistics Table ******************/
+#ifdef _MODULE_IW_FLOW_BYTE_CNT_ENABLE_
+		   M_UpdateIwStatisticsByteCountAndForwardPacket(TempStatOffset,
+								 L2FrameLength);
+#else
+                  // Increment the Forward Packetcounter
+                  _mem(r0,B_IW_STATISTICS_GT[TempStatOffset],STATISTICS_2_BUS) += 1;
+#endif // _MODULE_IW_FLOW_BYTE_CNT_ENABLE_
+               }
+
+               //Extract the Tx protocol type
+               TxL2ProtocolType = FIWT.TxL2ProtocolType;
+
+               goto L_MultiForwardingLevel_NextIsSys;
+            }
+
+            if (FIWT.TxL2ProtocolType & L2_TX_NEXT_IW_SYS)
+            {
+               /* Next forwarding stage is iw_sys */
+               /* In case there is a  next forwarding level - FIWT or SYSTEM -
+                  the Fbpdropthreshold and MTU field in the FIWT are set to PASS ALL mode.
+                  These fields are used to store parameters for the NEXT SYSTEM.
+                  Therefore, these parameters are set to enable the forwarding flow to continue. */
+               FreePoolDropThreshold = 0;
+
+#ifdef _MODULE_IW_IP_FRAGMENTATION_ENABLE_
+               // Do not set MTU_PASS for FIWTs which perform IP fragmentation.
+               if (!FORWARDING_IS_FIWT_IP_FRAG_ENABLED(SwitchForwardingOption, FIWT))
+#endif
+               {
+                  MaximumTransmitUnit = FIWT_MTU_PASS;
+               }
+            }
+         }
+
+#ifdef _MODULE_CUSTOM_TIGERMILK_QUEUE_PROTECT_ENABLE_
+         B_TigerMilkThresholdCheck(L2L3ExternalWord,
+                                   TempFBPcounter,
+                                   status0,
+                                   mode1);
+#endif //_MODULE_CUSTOM_TIGERMILK_QUEUE_PROTECT_ENABLE_
+
+         //Extract the Tx protocol type
+         TxL2ProtocolType = FIWT.TxL2ProtocolType;
+
+         // check free buffer pool threshold
+         if ( FreePoolDropThreshold <= TempFBPcounter
+#if FEATURE_PDCP
+              // allow DL PDCP flow aggregations to process packets even if the FBP has few packets
+              || (SwitchForwardingOption == PDCP_MODE && ((FIWT.IWModeField & M_Mask(S_IWModeFieldPdcp.Uplink)) == 0))
+#endif
+            )
+         { // Drop Threshold < Pool state
+            // The current Free buffer pool state is greater then the flow drop threshold
+
+            switch (SwitchForwardingOption)
+            {
+               // switch on the forwording option type
+
+#ifdef _MODULE_INTERWORKING_ROUTING_ENABLE_
+               case FAST_ROUTING_MODE:
+               {
+                  // Fast Ipv4 Routing Mode
+
+                  // Update Ipv4 header(TTL,CheckSum,DS-CP, etc.),L2Length and return QAT
+                  B_FastRoutingMode();
+                  // Return and updated values : QAT_Ptr, Layer 2 frame length , External Data Ptr.
+                  // Clear the FSC preserved in the external control word
+                  mode1 &= ~M_Mask(S_IWExControlWord.InterworkingType.FcsPreserved);
+
+                  if (mode0.MCP)
+                  {
+                     // Multi Congestion profile - Wred/Tail-drop
+                     // load the match thresholds set from the global congetion table (GCNGT)
+                     M_ReadWredCongestionProfileV1(HostTermCodeAndCongestion,
+                                                   CongestionProfileEntry);
+                  }
+
+                  // End of Ipv4 Routing Mode
+               }
+               break;
+
+#ifdef _MODULE_INTERWORKING_IPV6_ENABLE_
+               case IPv6_ROUTING_MODE:
+               {
+                  // Fast IPv6 Routing Mode
+                  B_FastIpv6RoutingMode(FIWT,
+                                        mode0,
+                                        Ipv6HeaderPtr,
+                                        L2FrameLength);
+
+                  if (mode0.MCP)
+                  {
+                     // Multi Congestion profile - Wred/Tail-drop
+                     // load the match thresholds set from the global congetion table (GCNGT)
+                     M_ReadWredCongestionProfileV1(HostTermCodeAndCongestion,
+                                                   CongestionProfileEntry);
+                  }
+
+               }
+               break;
+#endif // _MODULE_INTERWORKING_IPV6_ENABLE_
+
+#endif // _MODULE_INTERWORKING_ROUTING_ENABLE_
+
+#ifdef _MODULE_INTERWORKING_SWITCHING_ENABLE_
+               case FAST_SWITCHING_MODE:
+               {
+                  /* Fast Switching Mode */
+
+                  // Update Update Layer 2 header,L2Length and return QAT
+                  B_FastSwitchingMode();
+                  // Return and updated values : QAT_Ptr, Layer 2 frame length , External Data Ptr.
+#ifdef _MODULE_INTERWORKING_FUNC_POLICER_ENABLE_
+                  if (IwPolicerIndex = FIWT.PoliceFlowNum)
+                  {
+#pragma outofline;
+                     /* set the PE bit so that flow statistics
+                        will be incremented in case the packet is dropped. */
+                     mode0.PE = 1;
+                     F_DfcPolicer(IwPolicerIndex,
+                                  L2FrameLength,
+                                  mode1,
+                                  mode0,
+                                  status0,
+                                  RxL2ProtocolSpecific,
+                                  OutputPriorityInfo);
+                  }
+#endif /* _MODULE_INTERWORKING_FUNC_POLICER_ENABLE_ */
+
+                  // End of Switching Mode
+               }
+               break;
+
+#endif // _MODULE_INTERWORKING_SWITCHING_ENABLE_
+
+#ifdef  _MODULE_INTERWORKING_BRIDGING_ENABLE_
+               case FAST_BRIDGING_MODE:
+               {
+                  // Fast Bridging Mode
+                  // Update Layer 2 header,L2Length and return QAT
+                  B_FastBridgingMode();
+
+                  // Return and updated values : QAT_Ptr, Layer 2 frame length , External Data Ptr.
+                  if (mode0.MCP)
+                  {
+                     // Multi Congestion profile - Wred/Tail-drop
+                     // load the match thresholds set from the global congetion table (GCNGT)
+                     M_ReadWredCongestionProfileV1(HostTermCodeAndCongestion,
+                                                   CongestionProfileEntry);
+                  }
+
+
+                  // End of Bridging Mode
+               }
+               break;
+#endif // _MODULE_INTERWORKING_BRIDGING_ENABLE_
+
+#ifdef _MODULE_INTERWORKING_HOST_TERMINATION_ENABLE_
+               case FAST_HOST_TERMINATION:
+               {
+                  // Fast Host Termination
+                  B_FastHostTerminationMode();
+                  // Return and updated values : QAT_Ptr, Layer 2 frame length , External Data Ptr.
+
+#ifdef _MODULE_INTERWORKING_FUNC_POLICER_ENABLE_
+                  if (IwPolicerIndex = FIWT.PoliceFlowNum)
+                  {
+#pragma outofline;
+                     /* set the PE bit so that flow statistics
+                         will be incremented in case the packet is dropped. */
+                     mode0.PE = 1;
+                     F_DfcPolicer(IwPolicerIndex,
+                                  L2FrameLength,
+                                  mode1,
+                                  mode0,
+                                  status0,
+                                  RxL2ProtocolSpecific,
+                                  OutputPriorityInfo);
+                  }
+#endif /* _MODULE_INTERWORKING_FUNC_POLICER_ENABLE_ */
+
+                  // End of Host Termination
+               }
+               break;
+#endif // _MODULE_INTERWORKING_HOST_TERMINATION_ENABLE_
+
+#if (defined(_MODULE_INTERWORKING_MPLS_ENABLE_) || (defined(_MODULE_BRIDGE_DFC_MPLS_PARSING_ENABLE_)))
+               case MPLS_ROUTING_MODE:
+               {
+                  B_MplsForwarding(FirstParsingBlockPtr,
+                                   MaximumTransmitUnit,
+                                   ExtDataPointer,
+                                   L2FrameLength,
+                                   Ipv4HeaderPtr,
+                                   mode1,
+                                   status1,
+                                   FIWT,
+                                   mode0);
+
+                  mode1 &= ~M_Mask(S_IWExControlWord.InterworkingType.FcsPreserved);
+
+
+#ifdef _MODULE_INTERWORKING_FUNC_POLICER_ENABLE_
+                  if (IwPolicerIndex = FIWT.PoliceFlowNum)
+                  {
+#pragma outofline;
+                     /* set the PE bit so that flow statistics
+                        will be incremented in case the packet is dropped. */
+                     mode0.PE = 1;
+                     F_DfcPolicer(IwPolicerIndex,
+                                  L2FrameLength,
+                                  mode1,
+                                  mode0,
+                                  status0,
+                                  RxL2ProtocolSpecific,
+                                  OutputPriorityInfo);
+                  }
+#endif // _MODULE_INTERWORKING_FUNC_POLICER_ENABLE_
+
+                  if(mode0.MCP)
+                  {
+                     // Multi Congestion profile - Wred/Tail-drop
+                     // load the match thresholds set from the global congetion table (GCNGT)
+
+                     M_ReadWredCongestionProfileV1(HostTermCodeAndCongestion,
+                                                   CongestionProfileEntry);
+                  }
+
+
+               }
+               break;
+#endif // _MODULE_INTERWORKING_MPLS_ENABLE_ | _MODULE_BRIDGE_DFC_MPLS_PARSING_ENABLE_
+
+
+#ifdef _MODULE_BULK_MEMORY_ENABLE_
+               case BULK_MEMORY_MODE:
+               {
+                  B_BulkMemory(mode0,
+                               FIWT,
+                               Ipv4HeaderPtr);
+               }
+               break;
+#endif
+#ifdef _MODULE_IW_PPPSW_ENABLE_
+               case PPP_SWITCHING_MODE:
+               {
+                  B_PppSwitchingMode(mode0,
+                                     FIWT,
+                                     L2L3ExternalWord,
+                                     L2FrameLength,
+                                     ExtDataPointer,
+                                     OutputPriorityInfo);
+               }
+               break;
+#endif // _MODULE_IW_PPPSW_ENABLE_
+
+#ifdef _MODULE_CUSTOM_SII_ENABLE_
+               case ATM_TO_SII_L2_MODE:
+               {
+                  B_AtmToSiiL2Mode(FIWT,
+                                   Ipv4HeaderPtr,
+                                   L2L3InternalWord.L2ProtocolSpecific,
+                                   L2FrameLength,
+                                   ExtDataPointer);
+               }
+               break;
+
+               case SII_L2_TO_ATM_MODE:
+               {
+                  B_SiiL2ToAtmMode(Ipv4HeaderPtr,
+                                   RxL2ProtocolSpecific,
+                                   L2FrameLength,
+                                   ExtDataPointer);
+               }
+               break;
+#endif // _MODULE_CUSTOM_SII_ENABLE_
+
+
+#if defined (_MODULE_PWE3_CESoPSN_UFE2_ENABLE_) || defined (_MODULE_PWE3_CESoPSN_TDI_ENABLE_)
+               case PWE3_MODE:
+               {
+                  B_Pwe3BiDirection();
+               }
+               break;
+
+#endif //_MODULE_PWE3_CESoPSN_UFE2_ENABLE_ || _MODULE_PWE3_CESoPSN_TDI_ENABLE_
+
+#if defined  (_MODULE_PTP_ENABLE_) && defined (_WINPATH_REV_WP3_ENABLE_)
+               case PTP_MODE:
+                  B_PtpIwPacketFwd(mode0, 
+                                   mode1,
+                                   FIWT,  
+                                   L2FrameLength,
+                                   MaximumTransmitUnit,
+                                   ExtDataPointer);
+                  break;
+
+#endif //_MODULE_PTP_ENABLE_
+
+#if defined (_MODULE_INTERWORKING_ROUTING_ENABLE_) && defined (_MODULE_SECURITY_ENABLE_)
+
+               case IPSEC_OUTPUT_MODE:
+               {
+                  register struct S_IWModeFieldRout mode0 = mode0;
+
+                  if (FEATURE_IP_FRAGMENTATION)
+                  {
+                     status0.U_IpFlag.IPv4HdrNotInTrs = 1;
+                  }
+
+                  // IPsec OUTPUT FIWT
+                  if (FEATURE_IPV6)
+                  {
+                     B_WSE_OUT_Ipv6Tunnel(FIWT,
+                                          ExtDataPointer);
+                  }
+
+#ifdef _MODULE_IPSEC_NAT_T_ENABLE_
+                  /* Handle NAT-T in the outbound direction:
+                   * If NAT-T mode is enabled for the connection,
+                   * L2, IP and UDP headers are written by the IPsec OUTPUT FIWT (overriding the tunnel or
+                   * transport IP headers that were written during the security processing)
+                   * if IP fragmentation is required for the flow, the macro copies the updated IP header to the Ipv4HeaderPtr
+                   * in TRS and clears the IPv4HdrNotInTrs bit in status0. */
+                  B_WSE_OUT_OutboundNatT(mode0,
+                                         FIWT,
+                                         status0,
+                                         HeaderTar1,
+                                         ExtDataPointer);
+#endif // _MODULE_IPSEC_NAT_T_ENABLE_
+
+                  goto L_Fast_Routing_after_ttl_update;
+               }
+               break;
+
+               case IPSEC_SA_MODE:
+               {
+                  // IPsec SA FIWT
+
+                  register                             TempStatTableOffset  = r10;
+                  register                             TempChecksum         = r11;
+                  register struct S_FiwtIPsecSa        FIWT                 = r64;
+                  register struct S_IwIPsecStatus0     status0              = STATUS0_REG;
+                  register struct S_IwSerialStatusReg  SerStatus0           = STATUS0_REG;
+                  register struct S_IWModeFieldRout    mode0                = mode0;
+                  register struct S_SaDfcResultWord2   SecMode1             = MODE1_REG;               
+
+#ifdef _MODULE_MATRIX_BUFF_CHAIN_ENABLE_
+                  /* Enable Buffer chaining */
+                  if(SerStatus0.BuffChainPacket)
+                  {
+                     status0 = $reg(FIWT.WriteIpHeader); /* from r69 */
+                     status0 |= M_Mask(S_IwSerialStatusReg.BuffChainPacket);
+                  }
+                  else
+#endif
+                  {
+                     status0 = $reg(FIWT.WriteIpHeader); /* from r69 */  
+                  }
+                  
+
+                  if (mode1.InterworkingType.FcsPreserved)
+                  {
+#pragma outofline; 
+                     L2FrameLength -= FCS_SIZE; 
+                     mode1 &= ~M_Mask(S_IWExControlWord.InterworkingType.FcsPreserved);
+                  }
+
+                  SecMode1 = FIWT.IPsecInfo;
+
+                  if (status0.UpdateGtFlowStat)
+                  {
+                     // Update flow statistics (Number of forwarding packets)
+                     TempStatTableOffset = InterworkingFlowNumber * sizeof(S_FlowStatisticsGT);
+#ifdef _MODULE_IW_FLOW_BYTE_CNT_ENABLE_
+                     M_UpdateIwStatisticsByteCountAndForwardPacket(TempStatTableOffset,
+                                                                   L2FrameLength);
+#else
+                     _mem(r0,B_IW_STATISTICS_GT[TempStatTableOffset], STATISTICS_2_BUS) += 1;
+#endif
+
+                  }
+
+                  // Check if there is a flow (for the packets after the security) in the FIWT
+                  if (SecMode1.SaFlow)
+                  {
+                     //   DfcEmcFiltersInfo.FwdRuleMatch = 1;
+                     InterworkingFlowNumber =
+                        FIWT.NextForwardingStage.U_IwType.SystemFlowInfo.U_IwInfo.FIWTIndex.Index;
+                  }
+                  else
+                  {
+                     //There is no flow,the packets will go after the securiy to new parsing
+                     SaDfcResultWord.U_ActionInfo.SaInbound =
+                        FIWT.NextForwardingStage.U_IwType.SystemFlowInfo.
+                        U_IwInfo.SystemParam.U_SystemId.ParsingConfig;
+                  }
+
+
+                  if (status0.WriteIpHeader)
+                  {
+                     if (FEATURE_IPV6 && (FirstParsingBlock & 0x20000000)) /* if ipv6 */
+                        _data_mem(r0,ExtDataPointer,sizeof(S_IPv6Header),0) =  *(&Ipv6HeaderPtr);
+                     else
+                     {
+                        // Clear IP.Checksum field
+                        TempChecksum = IP_ZERO_CHECKSUM;
+                        Ipv4HeaderPtr.HeaderChecksum  =
+                           _bf(TempChecksum,16,$bitsize(S_IPv4Header.HeaderChecksum));
+                        // Re calculate header checksum
+                        M_Ipv4HeaderCheckSum(Ipv4HeaderPtr,TempChecksum);
+                        TempChecksum ^= INVERT_DATA ;
+                        // Insert the ~checksum
+                        Ipv4HeaderPtr.HeaderChecksum =
+                           _bf(TempChecksum,16,$bitsize(S_IPv4Header.HeaderChecksum));
+
+                        _data_mem(r0,ExtDataPointer,sizeof(S_IPv4Header),0) =  *(&Ipv4HeaderPtr);
+                     }
+                  }
+
+                  // The register of SaDfcResultWord2 is r68 (reminder FIWT r64-r80)
+                  // In order to not changing the FIWT this command must be -
+                  // after finishing with the FIWT
+                  SaDfcResultWord2 = FIWT.IPsecInfo;
+
+                  // Check if the IW port needs to be overriden
+                  if (!FIWT.U_PrefExtIndex_or_SysToSys1.SysToSysRouterExtField.NsPropagateInPort)
+                  {
+                     L2L3ExternalWordExt.RouterExt.InputPort = FIWT.U_IwPort_Policer.IwPort;
+                  }
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+                  IPsecWp3FifoInfo = FIWT.U_Prefix.IPsecWp3InfoExt.IPsecWp3FifoInfo;
+#endif
+
+                  M_WSE_HandleSA(mode0.NatPrivatePortIndication,
+                                 SaDfcResultWord,
+                                 SaDfcResultWord2,
+                                 DfcEmcFiltersInfo,
+                                 L2L3ExternalWord,
+                                 L2L3ExternalWordExt,
+                                 ExtDataPointer,
+                                 L2FrameLength,
+                                 FIWT.ProtocolOverhead,
+                                 InterworkingFlowNumber,
+                                 HostTerminationInfo,
+                                 RxL2ProtocolSpecific,
+                                 status0);
+               }
+               break;
+
+#endif // _MODULE_INTERWORKING_ROUTING_ENABLE_ && _MODULE_SECURITY_ENABLE_
+
+#ifdef _MODULE_INTERWORKING_MULTICAST_ENABLE_
+               case MULTICAST_MODE:
+               {
+                  /* This macro performs the common multicast group operations, and prepares for
+                   * the member specific operations.
+                   * The macro sets the FunctionReturnAddress to the label  L_Iw_Multicast_Member_Services so when
+                   * F_Forwarding returns, it jumps to Multicast Services, instead of regular Interwoking flow. */
+
+                  B_MulticastMode(FIWT,
+                                  L2FrameLength,
+                                  MaximumTransmitUnit,
+                                  status0,
+                                  mode0,
+                                  mode1,
+                                  L2L3ExternalWordExt,
+                                  L2L3ExternalWord,
+                                  ExtDataPointer,
+                                  IwMcCommonInfo,
+                                  IwMcGroupMemberEntry,
+                                  IwMcCosManagementData,
+                                  IwMcOrigRxExtDataPointer,
+                                  FunctionReturnAddress0);
+               }
+               break;
+#endif // _MODULE_INTERWORKING_MULTICAST_ENABLE_
+
+#ifdef _MODULE_INTERWORKING_NAT_ENABLE_
+                   case NAT_MODE:
+                   {
+                      /* Nat FIWT */
+
+                      B_NatFlow(L2FrameLength,
+                                MaximumTransmitUnit,
+                                ExtDataPointer,
+                                Ipv4Header,
+                                status1,
+                                FIWT,
+                                mode0,
+                                HostTerminationInfo);
+                   }
+                   break;
+#endif // _MODULE_INTERWORKING_NAT_ENABLE_
+
+#ifdef _MODULE_GTP_ENABLE_
+               case GTP_MODE:
+               {
+                  B_GtpMode(InterworkingFlowNumber,
+                            FIWT,
+                            mode0,
+                            L2FrameLength,
+                            ExtDataPointer,
+                            IwMasterKey3);
+
+               }
+               break;
+#endif
+
+#ifdef _MODULE_ITDM_125u_ENABLE_
+               case ITDM_EGRESS_MODE:
+               {
+                  goto L_ITDM_Egress_Start;
+               }
+               break;
+#endif // _MODULE_ITDM_125u_ENABLE_
+
+#if defined (_MODULE_PWE_ATM_ENABLE_) || defined (_MODULE_PWE_HDLC_ENABLE_)
+               case PWE_ATM_MODE:
+               {
+                  B_PwePacketFwd(InterworkingFlowNumber,
+                                 L2FrameLength,
+                                 ExtDataPointer,
+                                 IwMasterKey3);
+
+#ifdef _MODULE_PWE_HDLC_ENABLE_
+                  mode0.MCP = 0;
+#pragma _sync;
+#endif
+                  goto L_IW_Switch_MTU_Check;
+               }
+               break;
+#endif  // _MODULE_PWE_ATM_ENABLE_ |_MODULE_PWE_HDLC_ENABLE_
+
+#ifdef _MODULE_GRE_ENABLE_
+               case WIMAX_TRANSPORT_MODE:
+               {
+                  if (mode1.InterworkingType.FcsPreserved)
+                  {
+# pragma outofline;
+                     L2FrameLength -= FCS_SIZE;
+                     mode1 &= ~M_Mask(S_IWExControlWord.InterworkingType.FcsPreserved);
+                  }
+
+                  F_WimaxTransportMode(InterworkingFlowNumber,
+                                       FIWT,
+                                       mode0,
+                                       MaximumTransmitUnit,
+                                       L2FrameLength,
+                                       ExtDataPointer,
+                                       IwMasterKey3,
+                                       OutputPriorityInfo);
+               }
+               break;
+#endif
+
+#ifdef _MODULE_PDCP_ENABLE_
+               case PDCP_MODE:
+               {
+                  F_PdcpMode(InterworkingFlowNumber,
+                             FIWT,
+                             mode0,
+                             mode1,
+                             MaximumTransmitUnit,
+                             L2FrameLength,
+                             ExtDataPointer,
+                             IwMasterKey3);
+
+               }
+              L_PdcpReturn:
+               break;
+#endif
+
+#ifdef   _MODULE_BFD_ENABLE_
+               case BFD_MODE:
+               {
+                  B_BFDMode(MaximumTransmitUnit,
+                            L2L3ExternalWordExt,
+                            IwMasterKey3,
+                            ExtDataPointer,
+                            L2FrameLength,
+                            FIWT,
+                            BFDChangesBitsetReg,
+                            InterworkingFlowNumber);
+               }
+               break;
+#endif // _MODULE_BFD_ENABLE_
+
+#ifdef _MODULE_PDCP_TESTER_ENABLE_
+               case PDCP_TESTER_MODE:
+                  F_PdcpTesterMode(InterworkingFlowNumber,
+                                   FIWT,
+                                   mode0,
+                                   mode1,
+                                   MaximumTransmitUnit,
+                                   L2FrameLength,
+                                   ExtDataPointer,
+                                   IwMasterKey3);
+               L_PdcpTesterReturn:
+                  _null();
+                  break;
+#endif
+
+#ifdef _MODULE_HC_SUPPORT_ENABLE_
+               case HC_SUPPORT_MODE:
+                  F_HcMode(InterworkingFlowNumber,
+                           FIWT,
+                           mode0,
+                           mode1,
+                           MaximumTransmitUnit,
+                           L2FrameLength,
+                           ExtDataPointer,
+                           IwMasterKey3, OutputPriorityInfo);
+
+               L_HcSupportReturn:
+                  TxL2ProtocolType = FIWT.TxL2ProtocolType;
+
+                  // Return with updated values : QAT_Ptr, Layer 2 frame length , External Data Ptr.
+                  if (mode0.MCP)
+                  {
+                     // Multi Congestion profile - Wred/Tail-drop
+                     // load the match thresholds set from the global congetion table (GCNGT)
+                     M_ReadWredCongestionProfileV1(HostTermCodeAndCongestion,
+                                                   CongestionProfileEntry);
+                  }
+
+                  break;
+#endif
+
+               case FIWT_DISABLED:
+               default:
+               {
+                  /* Check all Special Enhanced Interworking and Routing modes
+                   * In case of Error (user programing error) exit
+                   * Return the buffer to the free buffer, no statistics, Terminate Task.
+                   * user programing error silent drop.*/
+                  F_ForwardingDropPacket(HOST_VIO_ERR_TYPE_GENERAL,
+                                         M_BitToByte(S_FlowStatistics.DeniedPackets),
+                                         DROP_WITH_STATISTCS);
+                  // End of Enhanced Interworking and Routing modes
+               }
+               break;
+            }
+            // End of switch on the forwording option type
+
+            // restore return address from the temp register (r41)
+            jir = FunctionReturnAddress0;
+
+            if (L2FrameLength <= NON_VALID_FRAME_LENGTH)
+            {
+#pragma outofline;
+               /* In case L2 Frame Length is less than or equal to zero
+                  - drop packet with deny statistics. */
+               F_ForwardingDropPacket(HOST_VIO_ERR_TYPE_GENERAL,
+                                      M_BitToByte(S_FlowStatistics.DeniedPackets),
+                                      DROP_WITH_STATISTCS);
+            }
+
+         }
+         // End Drop Threshold < Pool state
+         else
+         {
+            // Drop Threshold > Pool state Drop Packet
+
+#pragma outofline ;
+            // Increment the packet drop counter (MTU drop counter)
+            // Return the buffer to the free buffer pool
+
+            // release the master key and terminate
+            F_ForwardingDropPacket(HOST_VIO_ERR_TYPE_GENERAL,
+                                   FBP_DROP_PACKETS,
+                                   DROP_WITH_STATISTCS);
+         }
+
+        L_MultiForwardingLevel:
+         /* Check whether there is a nested forwarding function */
+         if (mode0.MultiForwardingLevel)
+         {
+            /* Multi forwording mode is enable */
+            /* before going to next forwarding level,
+               optionally update previous flow's statistics */
+            if (status0.IWTUserInfo.STE)
+            {
+               /************************ update Flow Statistics Table ******************/
+               register struct S_TempReg           TempStatOffsetTable        = r10;
+               register struct S_TempReg           TempStatOffset             = r11;
+
+
+               // Increment the Forward Packetcounter
+               TempStatOffsetTable = InterworkingFlowNumber * sizeof(S_FlowStatisticsGT);
+#if FEATURE_IW_FLOW_BYTE_CNT || IW_FLOW_BYTE_CNT_EN
+               M_UpdateIwStatisticsByteCountAndForwardPacket(TempStatOffsetTable,
+                                                             L2FrameLength);
+#else
+               _mem(r0,B_IW_STATISTICS_GT[TempStatOffsetTable],STATISTICS_2_BUS) += 1;
+#endif
+            }
+
+            /* The multiforwarding macro identify the next forwarding level (Flow or System)
+               In case of System - the system info will be loaded and the macro will return
+               (change the JIR address) to the interworking module for Farther processing
+               In case of nested forwarding the next FIWT index will be loaded and the macro
+               will reenter to the forwarding module */
+
+            B_MultiForwardingLevel(mode0,
+                                   FIWT,
+                                   TxL2ProtocolType,
+                                   FirstParsingBlock,
+                                   FirstParsingBlockPtr,
+                                   InterworkingFlowNumber,
+                                   jir,
+                                   IwSystemId);
+
+         }// End of multi-forwarding
+      }// Forwarding function End
+}// End of Forwarding_Start section
+
+#ifndef _MODULE_PDCP_ENABLE_
+const L_PdcpReturn = 0;
+#endif
+#ifndef _MODULE_PDCP_TESTER_ENABLE_
+const L_PdcpTesterReturn = 0;
+#endif
+
+#endif  /* end of packege spliting tag _MODULE_INTERWORKING_ENABLE_ */
+
+
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2003, All rights reserved.
+ *****************************************************************************/

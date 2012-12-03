@@ -1,0 +1,37 @@
+/***               NPU SET FUNCTION                    ***/
+num       function                cmd       args...
+1.      NPU_RECONFIG              100       OpterateMode
+2.      NPU_SET_PVC_STATUS        111       stm1Id trunk group dlci pvc_status   
+                                            /* pvc_status 0 :PVC_ENABLE  1:PVC_DISABLE */
+3.      NPU_SET_LOG_DEBUG_LEVEL   112       debug_level
+                                            /*NPU_LOG_DEBUG=0;
+                                              NPU_LOG_INFO=1;
+                                              NPU_LOG_NOTICE=2;
+                                              NPU_LOG_WARNING=3;
+                                              NPU_LOG_ERR=4;
+                                              NPU_LOG_CRIT=5;
+                                              NPU_LOG_ARLERT=6;
+                                              NPU_LOG_EMERG=7;*/
+4.     NPU_SET_NS_BSSGP_STATICS_ZERO 113    0 stm1Id trunk group dlci /*FR MODE*/
+                                            1 UDPport                 /*IP MODE*/    
+                                                                                      
+/***               NPU GET FUNCTION                    ***/
+num       function                cmd       args...
+NOTE: stm1Id 1~2  trunk 1~N  group 0~N
+1.    NPU_GET_ETH_STATICS          0      EthNumber
+2     NPU_GET_UPI_GROUP_STATICS    1      stm1Id trunk group
+3.    NPU_GET_UPI_TRUNK_STATICS    2      stm1Id trunk
+4.    NPU_GET_RXFR_STATICS         3      stm1Id trunk group dlci
+5.    NPU_GET_TXFR_STATICS         4      stm1Id trunk group dlci
+6.    NPU_GET_CPU_STATICS          5      none
+7.    NPU_GET_UPI_STM1_STATICS     9      stm1Id
+
+/***              NPU DEBUG FUNCTION                   ***/
+num      function                 cmd        args...
+1.    NPU_GET_UFE_SYS              20      none
+2.    NPU_GET_UFE_LINE             21      trunk
+3.    NPU_GET_UFE_PHY              22      stm1Id trunk group dlci
+4.    NNPU_GET_FLOW_STATICS        23      0 stm1Id trunk group dlci /*FR MODE*/
+                                           1 UDPport                 /*IP MODE*/
+5.    NPU_DISPLAY_CONFIG_INFO      24      none
+
