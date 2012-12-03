@@ -1,0 +1,1193 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2003.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: ext_multi_phy2.dpl
+*
+* Description: This file implement the  DSP code for Extended Multi Phy
+*
+*
+*
+* Module Originator:  Igal Yanai
+* Creation Date:  Dec 10 , 2002
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* | 05.10.2009 |      Haime         | compatible with WP3
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+* / CVS information /
+*       $Id: ext_multi_phy2.dpl,v 1.40 2008/03/03 18:07:15 amitba Exp $
+****************************************************************************/
+
+/* Include Files */
+
+
+#pragma list raw;
+#include "config.h"
+
+#ifdef _MODULE_EX_MULTI_PHY2_ENABLE_
+
+#include "atm.h"
+#include "addrlookup.h"
+#include "ext_multi_phy.h"
+#include "shared.h"
+#include "order.h"
+#include "asu.h"
+#ifdef _WINPATH_REV_WP3_ENABLE_
+#include "psu.h"
+#include "pi_shared.h"
+#endif
+#include "../ima/ima_export.h"
+#include "../frame_relay/frame_relay.h"
+
+
+#define UFE_SIZE_WAIT_BYTE 1
+
+
+/* Global Definitions */
+global    L_Ext_Multi_Phy_Rx_Start;  /* Global label should be placed in PCT */
+global    L_Ext_Multi_Phy_Tx_Start;  /* Global label should be placed in PCT */
+/******************************************************************
+ *****                   EMPHY TX macros                      *****
+ ******************************************************************/
+
+/******************************************************************************
+ *
+ * Macro name: B_EmphyTx_Layer2()
+ *
+ * Description: This inline function Recognize the Layer2 protocol type of the packet.
+ *
+ * Inputs: EmpPortDescriptor - holds the protocol type
+ *
+ *
+ ******************************************************************************/
+inline func B_EmphyTx_Layer2(in EmpPortDescriptor)
+{
+   jir   = $reg(EmpPortDescriptor.VirtualPhyId);
+   mode0 = $reg(EmpPortDescriptor.VirtualPhyId);
+   switch (jir)
+   {
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      case EMPH_PROTOCOL_TYPE_ATM_CC:
+      {
+         /********************************************/
+         /***                 ATM Clear Channel    ***/
+         /********************************************/
+
+         // Local registers
+         register    SerialType = jir;
+         register    fmu_fifo_index = r18;
+
+         B_TxSerialNumGet(SerialType);
+
+#ifdef _MODULE_RATE_TABLE_ATM_HIER_SHAPING_ENABLE_
+         if ( mode0.U_PortDescriptor.Atm.HShaping)
+         {
+            /* set Emphy & Hierarchical indications bit in status0
+               VpShping bit (hierarchical shaping mode) in status0.
+               This bit is usually set in UPIG register and copied by the HW to status0.
+               But in EMPHY device this bit is not set in status0 because the device enabled
+               after the UPI port already enabled */
+            status0 |= ( M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.Emphy) |
+                         M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.PhyVpShaping) );
+         }
+         else
+#endif _MODULE_RATE_TABLE_ATM_HIER_SHAPING_ENABLE_
+         {
+            // set only Emphy indication bit in status0
+            status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.Emphy);
+         }
+
+         /* save the port descriptor in nonvolatile register*/
+         AsuPhy = EmpPortDescriptor.VirtualPhyId;
+         AsuGlobalStates &= ~SWQ_ENTRY_POINT; /* clear SW entry point -> use HW entry point */
+         AsuGlobalStates.FmuIndex = EmpPortDescriptor.status_info.FmuIndex;
+         AsuGlobalStates.FifoManager = 1;
+         AsuGlobalStates.FM_L2 = 1;  /* for ATM the FMU get is performed from L2 group */
+
+         goto ASU_Tx_UFE_FMU_Start;
+      }
+#endif /* _WINPATH_REV_WP3_ENABLE_*/
+      /* Recognize the Layer2 protocol type of the packet */
+      case EMPH_PROTOCOL_TYPE_ATM:
+      {
+         /********************************************/
+         /***                 ATM                  ***/
+         /********************************************/
+
+         // Local registers
+         register    SerialType = jir;
+
+         B_TxSerialNumGet(SerialType);
+
+#ifdef _MODULE_RATE_TABLE_ATM_HIER_SHAPING_ENABLE_
+         if ( mode0.U_PortDescriptor.Atm.HShaping)
+         {
+            /* set Emphy & Hierarchical indications bit in status0
+               VpShping bit (hierarchical shaping mode) in status0.
+               This bit is usually set in UPIG register and copied by the HW to status0.
+               But in EMPHY device this bit is not set in status0 because the device enabled
+               after the UPI port already enabled */
+            status0 |= ( M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.Emphy) |
+                         M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.PhyVpShaping) );
+         }
+         else
+#endif _MODULE_RATE_TABLE_ATM_HIER_SHAPING_ENABLE_
+         {
+            // set only Emphy indication bit in status0
+            status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.Emphy);
+         }
+
+         /* save the port descriptor in nonvolatile register*/
+         AsuPhy = EmpPortDescriptor.VirtualPhyId;
+         goto ASU_Tx_Emphy_Start;
+      }
+
+#ifdef _MODULE_FR_ENABLE_
+      case EMPH_PROTOCOL_TYPE_FR:
+      {
+         /********************************************/
+         /***                  FR                  ***/
+         /********************************************/
+         /* PhyID <- Virtual Phy number  (nonvolatile register)*/
+         POS_PHY =  EmpPortDescriptor.VirtualPhyId;
+
+         /* FR operation over UPI in EMPHY mode uses  *
+          * base region normally reserved for ATM TDI */
+         status0 &= ~M_Mask(S_Ufe2SerialStatusReg0.Base);
+         // set Emphy indication bit in status0  base ram fields
+         status0 |= (M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.U_bit12.Emphy)|
+                     EMPHY_HDLC_BASE_RAM);
+
+         /* The Emphy port descriptor would be copied into the data are used  *
+          * for prepering a POS packet, imidatly after the first 32 bytes of *
+          * data, later when data unit is prepered it would be shifted and   *
+          * EmpPortDescriptor would be copied back to the location defined   *
+          * for EMPHY data unit                                              */
+
+         goto FR_Tx_Start_POS_Emphy;
+      }
+#endif // #ifdef _MODULE_FR_ENABLE_
+
+#ifdef _MODULE_MFR_ENABLE_
+      case EMPH_PROTOCOL_TYPE_MFR:
+      {
+         /********************************************/
+         /***                 MFR                  ***/
+         /********************************************/
+         /* PhyID <- Virtual Phy number */
+         POS_PHY =  EmpPortDescriptor.VirtualPhyId;
+
+         /* MFR operation over UPI in EMPHY mode uses  *
+          * base region normally reserved for ATM TDI */
+         status0 &= ~M_Mask(S_Ufe2SerialStatusReg0.Base);
+         // set Emphy indication bit in status0  base ram fields
+         status0 |= (M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.U_bit12.Emphy)|
+                     EMPHY_HDLC_BASE_RAM);
+
+         /* The Emphy port descriptor would be copied into the data are used  *
+          * for preparing a POS packet, imidatly after the first 32 bytes of *
+          * data, later when data unit is prepered it would be shifted and   *
+          * EmpPortDescriptor would be copied back to the location defined   *
+          * for EMPHY data unit                                              */
+         goto L_MFR_Tx_Start_Emphy;
+      }
+#endif
+#ifdef _MODULE_HDLC_PPP_ENABLE_
+      case EMPH_PROTOCOL_TYPE_HDLC:
+      {
+         /********************************************/
+         /***               HDLC-PPP               ***/
+         /********************************************/
+         /* PhyID <- Virtual Phy number */
+         POS_PHY =  EmpPortDescriptor.VirtualPhyId;
+
+         /* HDLC operation over UPI in EMPHY mode uses  *
+          * base region normally reserved for ATM TDI */
+         status0 &= ~M_Mask(S_Ufe2SerialStatusReg0.Base);
+         // set Emphy indication bit in status0  base ram fields
+         status0 |= (M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.U_bit12.Emphy)|
+                     EMPHY_HDLC_BASE_RAM);
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+         status0 &= ~M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.CalcCrc);
+#endif
+         goto HDLC_Tx_Start_POS_Emphy;
+      }
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      case EMPH_PROTOCOL_TYPE_POS:
+      {
+         /********************************************/
+         /***               POS                    ***/
+         /********************************************/
+         /* PhyID <- Virtual Phy number */
+         POS_PHY =  EmpPortDescriptor.VirtualPhyId;
+
+         /* HDLC operation over UPI in EMPHY mode uses  *
+          * base region normally reserved for ATM TDI */
+         status0 &= ~M_Mask(S_Ufe2SerialStatusReg0.Base);
+         // set Emphy indication bit in status0  base ram fields
+         status0 |= (M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.U_bit12.Emphy)|
+                     EMPHY_HDLC_BASE_RAM);
+         status0 &= ~M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.CalcCrc);
+         PsuGlobalStates = EmpPortDescriptor.status_info;
+         goto HDLC_Tx_Start_POS_Emphy_Fast;
+      }
+#endif // #ifdef _WINPATH_REV_WP3_ENABLE_ POS
+#endif // #ifdef _MODULE_HDLC_PPP_ENABLE_
+
+#ifdef _MODULE_CUSTOM_IMH_ENABLE_
+      case EMPH_PROTOCOL_TYPE_IMH:
+      {
+         register imh_phy = r19;
+
+         // set Emphy indication bit in status0  base ram fields
+         status0 |= M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.U_bit12.Emphy);
+         /* The first 16 phys are for TDI and RTDI */
+         imh_phy = 16 + EmpPortDescriptor.VirtualPhyId;
+         goto imh_emphy_tx_start;
+      }
+#endif // #ifdef _MODULE_CUSTOM_IMH_ENABLE_
+
+#ifdef _MODULE_UFE2_GENERAL_TRANS_ENABLE_
+      case EMPH_PROTOCOL_TYPE_TRANS:
+      {
+         /********************************************/
+         /***  TRANSPARENT CES or PWE3 CESoPSN      ***/
+         /********************************************/
+         /* PhyID <- Virtual Phy number */
+         POS_PHY =  EmpPortDescriptor.VirtualPhyId;
+
+         /* HDLC operation over UPI in EMPHY mode uses  *
+          * base region normally reserved for ATM TDI */
+         status0 &= ~M_Mask(S_Ufe2SerialStatusReg0.Base);
+         // set Emphy indication bit in status0  base ram fields
+         status0 |= (M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.U_bit12.Emphy)|
+                     EMPHY_HDLC_BASE_RAM);
+
+
+
+         /* if the Rx bit disable is set terminate the thread. */
+         if(mode0.U_PortDescriptor.Transparent.TransTxDisable)
+         {
+            goto L_Ext_Multi_Phy_Tx_Wait;
+         }
+
+         goto L_Ufe2_Gen_Trans_Tx_Start;
+
+      }
+#endif // _MODULE_UFE2_GENERAL_TRANS_ENABLE_
+
+#ifdef _MODULE_IMA_ENABLE_
+#if IMA_SUPPORTS_UFE2
+      case EMPH_PROTOCOL_TYPE_IMA:
+         goto ima_ufe2_tx_normal;
+#endif
+#endif
+
+      case EMPH_PROTOCOL_TYPE_UNSUPPORTED:
+      default :
+      { /*protocol type is unsupported */
+      L_UnKnown_protocol_Tx:
+         /* Increment the Invalid Tx Port Error counter by 1,  & exit */
+         UniStatOffset =  INVALID_TX_PORT_OFFS;
+         _mem(r0,B_PHYSTATISTICS[status0][UniStatOffset],
+              _HALF_WORD |  UNI_STATISTICS_BUS) += 1;
+      }
+   }
+} //End of B_EmphyTx_Layer2
+
+/******************************************************************
+ *****                   EMPHY TX macros                      *****
+ ******************************************************************/
+
+/******************************************************************************
+ *
+ * Macro name: B_EmphyRx_GetPortDescriptor()
+ *
+ * Description: This inline function Recognize the Layer2 protocol type of the packet.
+ *
+ * Inputs: EmpPortDescriptor - holds the protocol type
+ *
+ *
+ ******************************************************************************/
+inline func B_EmphyRx_GetPortDescriptor()
+{
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+   /*Get Port Descriptor Offset*/
+   /*Read status1 to Port Descriptor Offset*/
+   /*Mask Phy Nymber MSB*/
+    /* In WP3 UFE3 32K channels can be supported (15 bit)         */
+    /* The phy number:                                       */
+
+    /*---------------------------------*/
+    /*      2        /       13        */
+    /*---------------------------------*/
+    /*  PhyNumberMSB / PhyNumberLSB    */
+    /*---------------------------------*/
+
+   PortDescripOffset = UfeWP3Status0_Rx & RX_PHY_MASK_MSB;
+
+   PortDescripOffset >>= 1;
+
+   PortDescripOffset |= UfeWP3Status0_Rx & RX_PHY_MASK_LSB;
+
+
+#else
+
+   /*Get Port Descriptor Offset*/
+   /*Read status1 to Port Descriptor Offset*/
+   /*Mask Phy Nymber MSB*/
+   PortDescripOffset = Ufe2Status1_Rx & RX_PHY_MASK_MSB;
+
+   /*Shift MSB*/
+   PortDescripOffset >>= M_ShiftRight(S_SerialStatusReg2_UFE2_Rx.PhyNumberMSB) - 8;
+
+   /*Place Phy Num LSB*/
+   _bf(PortDescripOffset,24,8) = Ufe2Status1_Rx.PhyNumberLSB;
+
+    /* In UFE2 2K channels can be supported (11 bit)         */
+    /* The phy number:                                       */
+
+    /*---------------------------------*/
+    /*      3        /       5         */
+    /*---------------------------------*/
+    /*  PhyNumberMSB / PhyNumberLSB    */
+    /*---------------------------------*/
+
+#ifdef _WINPATH_REV_WP2_OR_LATER_ENABLE_
+ if (Ufe2Status0.UfeDeviceRx)
+ {
+#pragma outofline;
+
+    /* In UFE3 8K channels can be supported (13 bit)         */
+    /* cmd0 and cmd1 are part of the phy number:             */
+
+    /*--------------------------------------------*/
+    /*   1  /   1  /      3       /       5       */
+    /*--------------------------------------------*/
+    /* Cmd1 / Cmd0 / PhyNumberMSB  / PhyNumberLSB */
+    /*--------------------------------------------*/
+
+    if (Ufe2Status0.U_SerialStatus_Ufe2.Rx.Ufe2Cmd0)
+    {/* add the dev as MSB of the Phy number*/
+#pragma outofline;
+       /* Set the bit of dev in the correct location */
+       /* Before the Shift to match the Ext Phy Number field */
+       PortDescripOffset|=(M_Mask(S_PortDescripOffset_Ufe2.ExtPhyNumberExt0) >>
+                           M_ShiftRight(S_PortDescripOffset_Ufe2.ExtPhyNumber));
+
+       Ufe2Status0.U_SerialStatus_Ufe2.Rx.Ufe2Cmd0 = 0;
+    }
+
+    if (Ufe2Status0.U_SerialStatus_Ufe2.Rx.Ufe2Cmd1)
+    {/* add the dev as MSB of the Phy number*/
+#pragma outofline;
+
+       /* Set the bit of cmd1 in the correct location */
+       /* Before the Shift to match the Ext Phy Number field */
+       PortDescripOffset|=(M_Mask(S_PortDescripOffset_Ufe2.ExtPhyNumberExt1) >>
+                           M_ShiftRight(S_PortDescripOffset_Ufe2.ExtPhyNumber));
+       Ufe2Status0.U_SerialStatus_Ufe2.Rx.Ufe2Cmd1= 0;
+    }
+ }
+#endif //_WINPATH_REV_WP2_OR_LATER_ENABLE_
+#endif /* _WINPATH_REV_WP3_ENABLE_ */
+
+} //End of B_EmphyRx_GetPortDescriptor
+
+/******************************************************************************
+ *
+ * Macro name: B_EmphyRx_Layer2()
+ *
+ * Description: This inline function Recognize the Layer2 protocol type of the packet.
+ *
+ * Inputs: EmpPortDescriptor - holds the protocol type
+ *
+ *
+ ******************************************************************************/
+inline func B_EmphyRx_Layer2(in EmpPortDescriptor)
+{
+      jir   = $reg(EmpPortDescriptor.VirtualPhyId);
+      mode0 = $reg(EmpPortDescriptor.VirtualPhyId);
+
+      switch (jir)
+      {
+         /* Recognize the Layer2 protocol type of the packet */
+         case EMPH_PROTOCOL_TYPE_ATM:
+#ifdef _WINPATH_REV_WP3_ENABLE_
+         case EMPH_PROTOCOL_TYPE_ATM_CC:
+#endif
+         {/* ATM */
+#pragma reserve r17;
+            register struct S_SerialStatusReg     status0             = r7   ;
+
+            /* PhyID <- Virtual Phy number */
+            PhyID = EmpPortDescriptor.VirtualPhyId;
+
+            /*
+             * noneed to clear the MNG and OAM bit because:
+             * OAM bit is on PosErr (only 1 if .GSE ==1)
+             * MNG bit is on FES = FIFO entry size: 1 - 32 bytes, 0 - 64 bytes.
+             * status0 &= ~(M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.U_MNG_OAM_CN.MNG)|
+             *          M_Mask(S_SerialStatusReg.OAM));
+             */
+
+            /* MNG - cleared because of: FIFO entry size  0 - 64 bytes.*/
+            if(CMD2)
+            {
+               status0.U_SerialStatus.RxSerialMode.U_MNG_OAM_CN.MNG = 1;
+            }
+
+            /* OAM - cleared because of: .GSE ==0 */
+            if(CMD1)
+            {
+               status0.OAM = 1;
+            }
+
+            /* Clear the  PTI, CLP, OAMFMEnable, CnEHM & ADDLM fields in the status0 reg
+             * this command CLEAR the Ufe2Cmd4 and Ufe2Cmd3 !!!*/
+            status0 &= (~(M_Mask(S_SerialStatusReg.CLP)|
+                          M_Mask(S_SerialStatusReg.PTI0)|
+                          M_Mask(S_SerialStatusReg.PTI1)|
+                          M_Mask(S_SerialStatusReg.PTI2)|
+                          M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.OAMFMEnable)|
+                          M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.CnEHM)|
+                          M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.ADDLM)));
+
+            /* By default - allow for HASH look-up, add VP Look-up if ADDLM = 1 */
+            /* Note: WDDI ensures HASH table is used for UFEx.                  */
+            status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.ADDLM);
+            if (mode0.U_PortDescriptor.Atm.Addlm)
+            {
+               status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.U_bit14.VPLookUp);
+            }
+
+            if (mode0.U_PortDescriptor.Atm.Epse)
+            {
+               status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.EPSE);
+            }
+
+            if (mode0.U_PortDescriptor.Atm.OAMFMEnable)
+            {
+               status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.OAMFMEnable);
+            }
+
+            if (mode0.U_PortDescriptor.Atm.CnEHM)
+            {
+               status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.CnEHM);
+            }
+
+            /* if "enter into sync" raise the statistics*/
+            if(CMD0)
+            {
+#pragma outofline;
+               UniStatOffset =  PhyID * sizeof(S_UNI_ST) + M_BitToByte(S_UNI_ST.U_L2Err.Atm.Ufe2EnterSync);
+
+               _mem(r0,B_PHYSTATISTICS[status0][UniStatOffset],
+                    _HALF_WORD |  UNI_STATISTICS_BUS) += 1;
+
+               UniStatOffset =  PhyID * sizeof(S_UNI_ST) + M_BitToByte(S_UNI_ST.U_L2Err.Atm.UFE2SyncState);
+
+               _mem(r0,B_PHYSTATISTICS[status0][UniStatOffset],
+                    _HIGH_WORD | UNI_STATISTICS_BUS) |= EMPHY_ATM_IN_SYNC_STATE;
+
+
+            }
+
+
+            /* Clear the UNI bit in the status
+             * this command CLEAR the  Ufe2Cmd2, Ufe2Cmd1 and Ufe2Cmd0 !!! */
+            status0 &= ~(M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.NI_Mode) |
+                         M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.Overrun) |
+                         M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.EHM)     |
+                         M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.PhyLookUp) |
+                         M_Mask(S_Ufe2SerialStatusReg0.U_SerialStatus_Ufe2.Rx.FrHashlkup)|
+                         M_Mask(S_Ufe2SerialStatusReg0.U_SerialStatus_Ufe2.Rx.Ufe2Cmd0));
+
+            /* copy the PTI0,1,2,CLP from ATM HEADER(4 LSB) to Status0 (4 MSB) */
+            status0 |= CellHeader << M_ShiftLeft(S_SerialStatusReg.CLP);
+
+            if (mode0.U_PortDescriptor.Atm.UNI)
+            {
+               status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.NI_Mode);
+            }
+
+            /* Check If Phy LookUp Is Enabled For This Phy */
+            if(mode0.U_PortDescriptor.Atm.PhyLookUp)
+            {
+               status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.PhyLookUp);
+            }
+
+            /* Check If Extended Phy Stats are enabled */
+            if(mode0.U_PortDescriptor.Atm.Epse)
+            {
+               status0 |= M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.EPSE);
+            }
+
+            /*  L_EMPH_AddresLookUp_Start label is protected with pragma sync to
+                optimise main flow, hence any restrictions would be handled
+                before jumping to label by using sync pragma */
+#pragma _sync;
+            goto L_EMPH_AddresLookUp_Start;
+
+         }
+#ifdef _MODULE_FR_ENABLE_
+         case EMPH_PROTOCOL_TYPE_FR:
+         {/* Frame Relay */
+
+            /* FR operation over UPI in EMPHY mode uses  *
+             * base region normally reserved for ATM TDI */
+
+            status0 &= ~(M_Mask(S_Ufe2SerialStatusReg0.Base) |
+                         M_Mask(S_FrSerialStatusReg0.U_SerialStatus.Rx.Addlm));
+            status0 |= EMPHY_HDLC_BASE_RAM;
+            // copy the hash lookup bit from port descriptor to rxstatus0
+//            status0 &= ~(M_Mask(S_SerialStatusReg.U_SerialStatus.Rx.Addlm));
+            if(mode0.U_PortDescriptor.HDLC_FR.Addlm)
+            {
+               status0 |= M_Mask(S_FrSerialStatusReg0.U_SerialStatus.Rx.Addlm);
+            }
+
+
+            /* PhyID <- Virtual Phy number */
+            PosRxPhyID =  EmpPortDescriptor.VirtualPhyId;
+
+            goto FR_Rx_Start_EMPHY;
+         }
+#endif /* _MODULE_FR_ENABLE_*/
+
+#ifdef _MODULE_MFR_ENABLE_
+         case EMPH_PROTOCOL_TYPE_MFR:
+         {
+           Emphy_Rx_MFR_Start:
+            status0 &= ~(M_Mask(S_Ufe2SerialStatusReg0.Base));
+            status0 |= EMPHY_HDLC_BASE_RAM;
+
+            PosRxPhyID =  EmpPortDescriptor.VirtualPhyId;
+            goto L_MFR_Rx_Start_EMPHY;
+         }
+
+
+#endif // _MODULE_MFR_ENABLE_
+
+#ifdef _MODULE_HDLC_PPP_ENABLE_
+         case EMPH_PROTOCOL_TYPE_HDLC:
+#ifdef _WINPATH_REV_WP3_ENABLE_
+         case EMPH_PROTOCOL_TYPE_POS:
+#endif
+         {/* HDLC-PPP */
+            PosRxPhyID =  EmpPortDescriptor.VirtualPhyId;
+
+            goto HDLC_Rx_Start_EMPHY;
+         }
+#endif /* _MODULE_HDLC_PPP_ENABLE_*/
+
+#ifdef _MODULE_CUSTOM_IMH_ENABLE_
+         case EMPH_PROTOCOL_TYPE_IMH:
+         {
+            register imh_phy = r18;
+            /* The first 16 phys are for TDI and RTDI */
+            imh_phy = 16 + EmpPortDescriptor.VirtualPhyId;
+            goto imh_emphy_rx_start;
+         }
+#endif /* _MODULE_CUSTOM_IMH_ENABLE_ */
+
+#ifdef _MODULE_UFE2_GENERAL_TRANS_ENABLE_
+         case EMPH_PROTOCOL_TYPE_TRANS:
+         {
+            /********************************************/
+            /***  TRANSPARENT CES or PWE3 CESoPSN      ***/
+            /********************************************/
+
+            /* PhyID <- Virtual Phy number */
+            POS_PHY =  EmpPortDescriptor.VirtualPhyId;
+
+            /* HDLC operation over UPI in EMPHY mode uses  *
+             * base region normally reserved for ATM TDI */
+            status0 &= ~M_Mask(S_Ufe2SerialStatusReg0.Base);
+
+            // set Emphy indication bit in status0  base ram fields
+            status0 |= EMPHY_HDLC_BASE_RAM;
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+            Ufe2Status0.U_SerialStatus_Ufe2.Rx.U_Ufe2Cmd2.Ufe2Cmd2 = UfeWP3Status0_Rx.UfeCmd0;
+            Ufe2Status0.U_Ufe2Cmd3.Ufe2Cmd3 = UfeWP3Status0_Rx.UfeCmd1;
+            Ufe2Status0.Ufe2Cmd4 = UfeWP3Status0_Rx.UfeCmd2;
+#endif /* _WINPATH_REV_WP3_ENABLE_ */
+
+
+            /* if the Rx bit disable is set terminate the thread. */
+            if(mode0.U_PortDescriptor.Transparent.TransRxDisable)
+            {
+               goto L_Terminate_Emphy;
+            }
+
+            goto L_Ufe2_Gen_Trans_Rx_Start;
+         }
+
+#endif //_MODULE_UFE2_GENERAL_TRANS_ENABLE_
+#ifdef _MODULE_IMA_ENABLE_
+#if IMA_SUPPORTS_UFE2
+         case EMPH_PROTOCOL_TYPE_IMA:
+            goto ima_ufe2_rx_normal;
+#endif
+#endif
+         case EMPH_PROTOCOL_TYPE_UNSUPPORTED:
+         default:
+         {
+           L_UnKnown_protocol_Rx:
+            /*ProtocolType is unsupported */
+            /* Increment the Invalid Rx Port Error counter by 1,  & exit */
+            /* release the serial master key */
+            UniStatOffset =  INVALID_RX_PORT_OFFS;
+            _mem(status1,B_PHYSTATISTICS[status0][UniStatOffset],
+                 _HALF_WORD | _ORDER_UNLOCK | _TERMINATE | UNI_STATISTICS_BUS) += 1;
+         }
+
+      }
+
+} //End of B_EmphyRx_Layer2
+
+/******************************************************************************
+ *
+ * Macro name: B_EmphyRx_GSE()
+ *
+ * Description: This inline function Recognize the Layer2 protocol type of the packet.
+ *
+ * Inputs: EmpPortDescriptor - holds the protocol type
+ *
+ *
+ ******************************************************************************/
+inline func B_EmphyRx_GSE(in Sop_Eop_Err, in ParityErr, in PosErr, in UfeCmd0, in UfeCmd1, in UfeCmd2)
+{
+
+
+   /* Start of packet end of packet Error */
+   if(Sop_Eop_Err)
+   {
+#pragma reserve r17;
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      //in WP3 the base is located in status2 and must be copied to status0
+      UfeWP3Status0_Rx.U_Base.Base = BaseFromStatus2;
+#endif //_WINPATH_REV_WP3_ENABLE_
+
+      /* Increment the Short Long counter by 1,
+         the offset is 0 from the beginning of the table */
+      UniStatOffset =  SHORT_LONG_CELL_OFFS;
+      _mem(status1,B_PHYSTATISTICS[Ufe2Status0][UniStatOffset],
+           _HALF_WORD | _ORDER_UNLOCK | _TERMINATE | UNI_STATISTICS_BUS) += 1;
+   }
+
+   if (ParityErr)
+   {
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      //in WP3 the base is located in status2 and must be copied to status0
+      UfeWP3Status0_Rx.U_Base.Base = BaseFromStatus2;
+#endif //_WINPATH_REV_WP3_ENABLE_
+
+      /* Increment the Parity Error counter by 1,  & exit */
+      /* release the serial master key */
+      UniStatOffset =  PAR_HEC_ERR_OFFS;
+      _mem(status1,B_PHYSTATISTICS[Ufe2Status0][UniStatOffset],
+           _HALF_WORD | _ORDER_UNLOCK | _TERMINATE | UNI_STATISTICS_BUS) += 1;
+   }
+
+#ifdef _MODULE_PWE3_CLOCK_RECOVERY_UFE_ENABLE_
+
+#ifndef _WINPATH_REV_WP3_ENABLE_
+      if (Ufe2Status0.UfeDeviceRx)
+      {
+         /* UFE3 selected compare cmd[4:2] to '111' & Data unit size is 4 bytes (Timestamp) .*/
+         if (UfeCmd0 &&
+             UfeCmd1 &&
+             UfeCmd2 &&
+             (Ufe2Status1_Rx.OCHL == UFE3_RX_TS_SIZE))
+         {
+            /* If dummy phy is used no pos error - terminate */
+            _task_switch(status1,_ORDER_UNLOCK | _TERMINATE);
+         }
+      }
+#else
+         if (UfeCmd0 &&
+             UfeCmd1 &&
+             UfeCmd2 &&
+             ((Ufe2Status1_Rx.OCHL == UFE3_RX_TS_SIZE) ||
+             (UfeWP3Status1_Rx.DataSize == UFE4_RX_TS_SIZE)))
+         {
+            /* If dummy phy is used no pos error - terminate */
+            _task_switch(status1,_ORDER_UNLOCK | _TERMINATE);
+         }
+#endif //_WINPATH_REV_WP3_ENABLE_
+
+#endif /* _MODULE_PWE3_CLOCK_RECOVERY_UFE_ENABLE_ */
+
+   /* PosErr error */
+   if(PosErr)
+   {
+      /*Shift to match the Ext Phy Number field*/
+      PortDescripOffset <<= M_ShiftRight(S_PortDescripOffset_Ufe2.ExtPhyNumber);
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      if (!UfeWP3Status0_Rx.U_Base.BaseBits.UfeVer) /* UFE4 = 0, UFE3 = 1 the same as for TX */
+      {
+         /* update the PortDescripOffset for UFE 4 to 8 bytes size */
+         PortDescripOffset <<= 1;
+      }
+
+      //in WP3 the base is located in status2 and must be copied to status0
+      UfeWP3Status0_Rx.U_Base.Base = BaseFromStatus2;
+#endif //_WINPATH_REV_WP3_ENABLE_
+
+      /* Read 4 byte PortDescriptor entry to r10 */
+      EmpPortDescriptor = _mem(r0,B_PORT_LOOKUP[Ufe2Status0][PortDescripOffset],
+                               sizeof(S_EmpPortDescriptor),PORT_LOOKUP_BUS);
+
+
+      /* Recognize the Layer2 protocol type of the packet */
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      if ( (ProtocolType = EmpPortDescriptor.ProtocolType) == EMPH_PROTOCOL_TYPE_ATM ||
+           ProtocolType == EMPH_PROTOCOL_TYPE_ATM_CC)
+#else
+      if ( (ProtocolType = EmpPortDescriptor.ProtocolType) == EMPH_PROTOCOL_TYPE_ATM)
+#endif
+      {/* ATM */
+         /*
+          * Collect the status bits 29,28 and 12 in order to analyze the UFE2 error type
+          *  ATM with Rx_ERR signal:
+          *       001 - HEC Error - in sync
+          *       011 - Hec Error - Transition out of sync.
+          *       100 - Overrun
+          */
+         UniStatOffset =  EmpPortDescriptor.VirtualPhyId * sizeof(S_UNI_ST);
+
+         if(UfeCmd2)
+         {/* 100 - Overrun */
+            UniStatOffset += M_BitToByte(S_UNI_ST.U_L2Err.Atm.Ufe2Overrun);
+         }
+         else if(UfeCmd1)
+         {/* 011 - Hec Error - Transition out of sync. */
+            register TmpUniStatOffset = r16;
+            TmpUniStatOffset = UniStatOffset + M_BitToByte(S_UNI_ST.U_L2Err.Atm.UFE2SyncState);
+
+            _mem(r0,B_PHYSTATISTICS[status0][TmpUniStatOffset],
+                 _HIGH_WORD | UNI_STATISTICS_BUS) &= ~(EMPHY_ATM_IN_SYNC_STATE);
+
+
+            UniStatOffset += M_BitToByte(S_UNI_ST.U_L2Err.Atm.Ufe2HecErrOutSync);
+
+         }
+         else
+         {/* 001 - HEC Error - in sync*/
+            UniStatOffset += M_BitToByte(S_UNI_ST.U_L2Err.Atm.Ufe2HecErrInSync);
+         }
+
+
+         _mem(status1,B_PHYSTATISTICS[status0][UniStatOffset],
+              _HALF_WORD | _ORDER_UNLOCK | _TERMINATE | UNI_STATISTICS_BUS) += 1;
+
+
+
+      }
+
+#ifdef _MODULE_FR_ENABLE_
+      if (ProtocolType == EMPH_PROTOCOL_TYPE_FR)
+      {
+         /* FR operation over UPI in EMPHY mode uses  *
+          * base region normally reserved for ATM TDI */
+
+         status0 &= ~(M_Mask(S_Ufe2SerialStatusReg0.Base));
+         status0 |= EMPHY_HDLC_BASE_RAM;
+
+         /* PhyID <- Virtual Phy number */
+         PosRxPhyID =  EmpPortDescriptor.VirtualPhyId;
+
+         goto FR_Rx_Start_EMPHY_Error;
+
+      }
+#endif /* _MODULE_FR_ENABLE_*/
+#ifdef _MODULE_MFR_ENABLE_
+      else if (ProtocolType == EMPH_PROTOCOL_TYPE_MFR)
+      {
+         /* Last bit is set for code compatibility, FR, MFR,HLDC-PPP modules assumes
+            that all error notifications arrive copuled with last indication. */
+         status0 |= M_Mask(S_PosSerialStatusReg0.Last);
+
+         goto Emphy_Rx_MFR_Start;
+      }
+#endif //  _MODULE_MFR_ENABLE_
+#ifdef _MODULE_HDLC_PPP_ENABLE_
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      else if (ProtocolType == EMPH_PROTOCOL_TYPE_HDLC || ProtocolType == EMPH_PROTOCOL_TYPE_POS)
+#else
+      else if (ProtocolType == EMPH_PROTOCOL_TYPE_HDLC)
+#endif
+      {
+         PosRxPhyID =  EmpPortDescriptor.VirtualPhyId;
+
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+
+         Ufe2Status0.U_SerialStatus_Ufe2.Rx.U_Ufe2Cmd2.Ufe2Cmd2 = UfeCmd0;
+         Ufe2Status0.U_Ufe2Cmd3.Ufe2Cmd3 = UfeCmd1;
+         Ufe2Status0.Ufe2Cmd4 = UfeCmd2;
+         UfeWP3Status0_Rx &= 0xFFF8FFFF;
+
+#endif
+
+         /* Last bit is set for code compatibility, FR, MFR,HLDC-PPP modules assumes
+            that all error notifications arrive copuled with last indication. */
+         status0 |= M_Mask(S_PosSerialStatusReg0.Last);
+
+         /*  ALL HDLC protocols */
+         /*
+          * HDLC with Rx_ERR signal:
+          * 000 - non octet
+          * 001 - Abort
+          * 010 - CRC error
+          * 100 - Overrun
+          */
+
+         goto HDLC_Rx_Error_Start_EMPHY;
+      }
+#endif //  _MODULE_HDLC_PPP_ENABLE_
+#ifdef _MODULE_CUSTOM_IMH_ENABLE_
+      else if (ProtocolType == EMPH_PROTOCOL_TYPE_IMH)
+      {
+         register imh_phy = r18;
+         /* The first 16 phys are for TDI and RTDI */
+         imh_phy = 16 + EmpPortDescriptor.VirtualPhyId;
+
+         /* Last bit is set for code compatibility, FR, MFR,HLDC-PPP modules assumes
+            that all error notifications arrive copuled with last indication. */
+         status0 |= M_Mask(S_PosSerialStatusReg0.Last);
+
+         /*  ALL HDLC protocols */
+         /*
+          * HDLC with Rx_ERR signal:
+          * 000 - non octet
+          * 001 - Abort
+          * 010 - CRC error
+          * 100 - Overrun
+          */
+
+         goto imh_emphy_rx_error_start;
+      }
+#endif //  _MODULE_CUSTOM_IMH_ENABLE_
+#ifdef _MODULE_UFE2_GENERAL_TRANS_ENABLE_
+
+      else if (ProtocolType == EMPH_PROTOCOL_TYPE_TRANS)
+      {
+         /********************************************/
+         /*** TRANSPARENT CES or PWE3 CESoPSN       ***/
+         /********************************************/
+
+         /* if the Rx bit disable is set terminate the thread.
+            Note: The mode0 is not storre with EmpPortDescriptor !!! */
+         if(EmpPortDescriptor.U_PortDescriptor.Transparent.TransRxDisable)
+         {
+            goto L_Terminate_Emphy;
+         }
+
+
+         /* PhyID <- Virtual Phy number */
+         POS_PHY =  EmpPortDescriptor.VirtualPhyId;
+
+         /* HDLC operation over UPI in EMPHY mode uses  *
+          * base region normally reserved for ATM TDI */
+         status0 &= ~M_Mask(S_Ufe2SerialStatusReg0.Base);
+         // set Emphy indication bit in status0  base ram fields
+         status0 |= (M_Mask(S_PosSerialStatusReg0.U_SerialStatus.Tx.U_bit12.Emphy)|
+                     EMPHY_HDLC_BASE_RAM);
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+         Ufe2Status0.U_SerialStatus_Ufe2.Rx.U_Ufe2Cmd2.Ufe2Cmd2 = UfeCmd0;
+         Ufe2Status0.U_Ufe2Cmd3.Ufe2Cmd3 = UfeCmd1;
+         Ufe2Status0.Ufe2Cmd4 = UfeCmd2;
+#endif /* _WINPATH_REV_WP3_ENABLE_ */
+
+         goto L_Ufe2_Gen_Trans_Rx_Start;
+
+      }
+#endif /* _MODULE_UFE2_GENERAL_TRANS_ENABLE_ */
+
+#ifdef _MODULE_IMA_ENABLE_
+#if IMA_SUPPORTS_UFE2
+      else if (ProtocolType == EMPH_PROTOCOL_TYPE_IMA)
+         goto ima_ufe2_rx_gse;
+#endif
+#endif
+
+      else
+         goto  L_UnKnown_protocol_Rx;
+   }/* End of Pos Error -Rx Error */
+
+} //End of B_EmphyRx_GSE
+
+
+/******************************************************************
+ *****           Extended Multi Phy Receiver                  *****
+ ******************************************************************/
+
+section SEC_Ext_Multi_Phy_Rx
+{
+#pragma _nosync;
+  L_Ext_Multi_Phy_Rx_Start:
+
+   register struct S_Ufe2SerialStatusReg0  Ufe2Status0  = r7;
+#ifdef _WINPATH_REV_WP3_ENABLE_
+   register status1 = r8;
+   /* In the base will be copy to Status0 later */
+   BaseFromStatus2 = UfeWP3Status2_Rx.Base;
+#endif
+
+   /***********************************************************/
+   /* Create offset from status info phy number + device number */
+   /***********************************************************/
+   B_EmphyRx_GetPortDescriptor();
+
+
+   /* Check If Global Serial Error was set */
+   if (!GSError)
+   {
+      register struct  S_EmpPortDescriptor     mode0  = MODE_REG  ; // Mode0 contain the EmpPortDescriptor
+
+     L_Ext_Multi_Phy_Rx_No_GSE:
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      if (!UfeWP3Status0_Rx.U_Base.BaseBits.UfeVer) /* UFE4 = 0, UFE3 = 1 the same as for TX */
+      {
+         /* in UFE4 there are up to 4K PHYs entires allocated. This code
+          * protect from entering the memory that is outside the port lookup
+          * table */
+         if (PortDescripOffset & ~UFE4_MAX_PHYS_MASK)
+         {
+            goto L_UnKnown_protocol_Rx;
+         }
+      }
+#endif
+
+#ifdef _MODULE_PWE3_CLOCK_RECOVERY_UFE_ENABLE_
+#ifdef _WINPATH_REV_WP3_ENABLE_
+
+         /* check Ufe command = '00111' and data unit size = 4 bytes for TS insertion */
+         /* Right now the command is actually only 3 bits, therefore bit 3 & 4 are not checked */
+         if (UfeWP3Status0_Rx.UfeCmd0 &&
+             UfeWP3Status0_Rx.UfeCmd1 &&
+             UfeWP3Status0_Rx.UfeCmd2 &&
+             ((UfeWP3Status1_Rx.DataSize == UFE3_RX_TS_SIZE)||
+              (UfeWP3Status1_Rx.DataSize == UFE4_RX_TS_SIZE)))
+         {
+
+            //in WP3 the base is located in status2 and must be copied to status0
+            UfeWP3Status0_Rx.U_Base.Base = BaseFromStatus2;
+
+            /* When in band rx timestamp is enable calculate input timestamp */
+            B_InputTimestampCalc(PortDescripOffset);
+         }
+
+#else
+         Ufe2Status0.UfeDeviceRx = 0;
+         /* UFE3 selected compare cmd[4:2] to '111' & Data unit size is 4 bytes (Timestamp) .*/
+         if (Ufe2Status0.Ufe2Cmd4 &&
+             Ufe2Status0.U_Ufe2Cmd3.Ufe2Cmd3 &&
+             Ufe2Status0.U_SerialStatus_Ufe2.Rx.U_Ufe2Cmd2.Ufe2Cmd2 &&
+             (Ufe2Status1_Rx.OCHL == UFE3_RX_TS_SIZE))
+         {
+            /* When in band rx timestamp is enable calculate input timestamp */
+            B_InputTimestampCalc(PortDescripOffset);
+         }
+
+#endif //_WINPATH_REV_WP3_ENABLE_
+#endif /* _MODULE_PWE3_CLOCK_RECOVERY_UFE_ENABLE_ */
+
+
+      /*Shift to match the Ext Phy Number field*/
+      PortDescripOffset <<= M_ShiftRight(S_PortDescripOffset_Ufe2.ExtPhyNumber);
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      if (!UfeWP3Status0_Rx.U_Base.BaseBits.UfeVer) /* UFE4 = 0, UFE3 = 1 the same as for TX */
+      {
+         /* update the PortDescripOffset for UFE 4 to 8 bytes size */
+         PortDescripOffset <<= 1;
+      }
+      //in WP3 the base is located in status2 and must be copied to status0
+      UfeWP3Status0_Rx.U_Base.Base = BaseFromStatus2;
+#endif //_WINPATH_REV_WP3_ENABLE_
+
+      /* Read 4 byte PortDescriptor entry to r10 */
+      EmpPortDescriptor = _mem(r0,B_PORT_LOOKUP[Ufe2Status0][PortDescripOffset],
+                               sizeof(S_EmpPortDescriptor),PORT_LOOKUP_BUS);
+      B_EmphyRx_Layer2(EmpPortDescriptor);
+
+   }/*not GSE*/
+   else
+   {/* Status0.U_SerialStatus_Ufe2.RxSerialMode.GSE */
+
+      register struct S_Ufe2SerialStatusReg0  Ufe2Status0  = r7;
+#ifdef _WINPATH_REV_WP3_ENABLE_
+      /* Parity error is unsupported for UFE. */
+      /* the following macro will disable the parity error bit */
+      /* and if there are no other errors - will disable the GSE bit as well*/
+      M_UpiParityErrorCheckIgnoreUpdateGSE(UfeWP3Status0_Rx,
+                                           GSError,
+                                           ParityError,
+                                           UFE_WP3_RX_STATUS0_GSE_NON_PE_ERRORS);
+      /*if GSE was raised only due to parity error - then ignore the error and continue*/
+      if (!GSError)
+         goto L_Ext_Multi_Phy_Rx_No_GSE;
+#endif
+      B_EmphyRx_GSE(SopEopError, ParityError, PosError,
+                    CMD0, CMD1, CMD2);
+   }/* End of Global Serial Error */
+
+
+  L_Terminate_Emphy:
+   /* It is a dummy request or Not a valid protocol type
+      quit with order unlock (do nothing request) */
+   _task_switch(status1,_ORDER_UNLOCK | _TERMINATE);
+}
+
+
+/******************************************************************
+ *****           Extended Multi Phy transmitter               *****
+ ******************************************************************/
+
+section SEC_Ext_Multi_Phy_Tx
+{
+#pragma _nosync;
+#pragma reserve r17;
+  L_Ext_Multi_Phy_Tx_Start:
+
+   register struct S_EmpPortDescriptor mode0  = MODE_REG  ; // Mode0 contain the EmpPortDescriptor
+#ifdef _WINPATH_REV_WP3_ENABLE_
+   register struct S_GeneralTxStatus2 status2 = STATUS2_REG; // r10
+#endif
+
+#ifdef _MODULE_PWE3_CLOCK_RECOVERY_UFE_ENABLE_
+/* This TS will be used in the clock recovery code when no external Tx TS is used */
+#ifdef _WINPATH_REV_WP3_ENABLE_
+/* WP3 */
+   CurrentOutputTsKey = _time_stamp_2();
+#else
+/* WP2 */
+   CurrentOutputTsKey = _time_stamp();
+#endif /*_WINPATH_REV_WP3_ENABLE_ */
+#endif /* _MODULE_PWE3_CLOCK_RECOVERY_UFE_ENABLE_ */
+
+   /* Initialize AsuGlobalStates */
+   AsuGlobalStates = SWQ_ENTRY_POINT;
+
+   /*Get Port Descriptor Offset*/
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+   /*If WP3, Read status0 to Port Descriptor Offset*/
+   PortDescripOffset = UfeWP3Status0_Tx.PhyNumber;
+   /*Copy the phy number to status1*/
+   UfeWP3Status1_Tx.PhyNumber = PortDescripOffset;
+
+   //Save status2 for ATM and HDLC to use them later when status2 (r10) is corrupted (emphy port descriptor is read to r10).
+   AsuGlobalStates.PortIndex = status2.PortIndex;
+   PsuGlobalStates = status2;
+
+   //Check Idle (if phy == All ones)
+   if(((PortDescripOffset == TX_PHY_MASK_32_BIT))||((PortDescripOffset == TX_PHY_MASK_16_BIT)&&(UfeWP3Status2_Tx.BW == BUS_16_BIT)))
+#else
+   /*Read status1 to Port Descriptor Offset*/
+   PortDescripOffset = Ufe2Status1_Tx & TX_PHY_MASK;
+   //Check Idle (if phy == All ones)
+   if((PortDescripOffset == TX_PHY_MASK))
+
+#endif /* _WINPATH_REV_WP3_ENABLE_ */
+   {
+#pragma outofline;
+      goto L_Ext_Multi_Phy_Tx_Wait;
+   }
+
+   /* 1) clear IMA mode (raised by UPI in emphy mode)
+    * 2) clear Extended header mode (POS raise the status0.EHM as  unused )
+    * 2) clear Gbond bit
+    * 3) clear the Dummy bit (reused for bundle statistics in ATM)
+    */
+   status0 &= (~M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.EHM)
+               & ~M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.IMA)
+	       & ~M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.Gbond)
+	       & ~M_Mask(S_SerialStatusReg.U_SerialStatus.TxSerialMode.U_bit8.DUM));
+
+
+#ifdef _MODULE_PWE3_CLOCK_RECOVERY_UFE_ENABLE_
+
+#ifndef _WINPATH_REV_WP3_ENABLE_
+   /* WINPATH2 selected */
+    /* In WP2 we can support UFE3 only (no support in UFE2 nor in UFE4),
+       therefore this bit can be always set to '1' */
+   UfeDevice = 1;
+   status0.U_SerialStatus.TxSerialMode.variant = 0;
+#endif  /*  _WINPATH_REV_WP3_ENABLE_ */
+#endif /* _MODULE_PWE3_CLOCK_RECOVERY_UFE_ENABLE_  */
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+   /* UFE3 = 1 , UFE4 = 0*/
+   UfeDevice = status0.U_SerialStatus.TxSerialMode.variant;
+   if (!UfeDevice)
+   {
+      /* in UFE4 there are up to 4K PHYs entires allocated. This code
+       * protect from entering the memory that is outside the port lookup
+       * table */
+      if (PortDescripOffset & ~UFE4_MAX_PHYS_MASK)
+      {
+         goto L_UnKnown_protocol_Tx;
+      }
+   }
+
+   /*Shift MSB to the location of ExtPhyNumber field*/
+   PortDescripOffset <<= M_ShiftLeft(S_PortDescripOffset.ExtPhyNumber);
+   if (!UfeDevice) /* UFE4 */
+      PortDescripOffset <<= 1; /* for UFE4 the entry lookup size is 8 bytes */
+#else
+   /*Shift MSB*/
+   PortDescripOffset >>= (M_ShiftRight(S_SerialStatusReg2_UFE2_Tx.PhyNumber) -
+                          M_ShiftRight(S_PortDescripOffset_Ufe2.ExtPhyNumber));
+#endif /* _WINPATH_REV_WP3_ENABLE_ */
+
+
+   EmpPortDescriptor = _mem(r0, B_PORT_LOOKUP[status0][PortDescripOffset],
+                            sizeof(S_EmpPortDescriptor),PORT_LOOKUP_BUS);
+
+   B_EmphyTx_Layer2(EmpPortDescriptor);
+
+  L_Ext_Multi_Phy_Tx_Wait:
+#ifdef _WINPATH_REV_WP3_ENABLE_
+         /* clear the msb of status1 bits  */
+         UfeWP3Status1_Tx.SC = 0;
+#endif
+
+   //In case of wait 1 dummy byte should be transmitted. Therefore, r96 initialized.
+   //this initialization is valid just for VERILOG simulation!!!
+   //r96 = UFE_DUMMY_DATA;
+
+   /*Issue UFE wait command command*/
+   _serial(r0,UFE_SIZE_WAIT_BYTE,
+           UFE_COMMAND_WAIT | FIRST_PACKET_CTRL_WORD |  LAST_PACKET_CTRL_WORD ,
+           _TERMINATE) = r96;
+
+}
+
+#endif /* _MODULE_EX_MULTI_PHY2_ENABLE_*/
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2003, All rights reserved.
+ *****************************************************************************/
