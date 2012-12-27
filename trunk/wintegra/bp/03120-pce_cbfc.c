@@ -32,16 +32,16 @@
 
 #include "api/wp_wddi.h"
 #include "api/wp_host_io.h"
-#include "wt_util.h"
+// #include "wt_util.h"
 #include "wt_partition_ecc_util.h"
 #include "wp_sim.h"
 
-#include "wpi_veneer.h"
+// #include "wpi_veneer.h"
 #include "wpx_app_data.h"
 #include "wpx_oc12_pmc5357.h"
 #include "wpx_gei_phy.h"
 #include "wpx_pin_mux_selector.h"
-#include "app_convert.h"
+// #include "app_convert.h"
 
 #include "wpx_enet_phy.h"
 
@@ -148,6 +148,57 @@ static WP_U32 IWF_Table[NUM_OF_FLOWS][11] = {
 #define APP_HOST_BUFFER_SIZE 1984
 
 static WP_U8 logTraceLevel = WPI_DEBUG_LEVEL_10;
+void App_TranslateAsciiToHex(WP_CHAR *Hex,WP_CHAR *Ascii,WP_U32 length);
+
+
+
+/****************************************************************************************************************************
+* Function name: App_Quit()
+* Description  :      
+ *
+*
+* Input  params: none
+* Output params: 
+ * Return val   : none
+*****************************************************************************************************************************/
+#define STRINGIFY(x) STRINGIFY_(x)
+#define STRINGIFY_(x) #x
+
+
+void WT_Start(WP_CHAR *app_name,WP_CHAR *trial_name,WP_CHAR *file_name)
+{
+#if WT_DEBUG_CALLBACK
+   WP_ControlRegister(WP_DEBUG_CALLBACK_FILE_LINE_ERROR, WT_DebugCallback);
+#endif
+   printf("Test Name " STRINGIFY(WDDI_TEST) "\n");
+   printf("Test Started %s", app_name);
+   if (trial_name)
+      printf(" %s", trial_name);
+   printf("\nTest Built " __DATE__ " " __TIME__ "\n");
+   printf("Test Options " STRINGIFY(TEST_OPTIONS) "\n");
+   printf("Test More Options " STRINGIFY(TEST_MORE_OPTIONS) "\n");
+}
+
+void WT_Reboot(void)
+{
+#if !defined(__linux__)
+/* 
+ * Rebooting is specific to board and target.  The test
+ * directory should not be concerned how this is done.
+ * Instead, it calls a board-specific function. 
+ */
+   if (WPI_REBOOT_ENABLE) {
+      printf("Test Rebooting winmon by WT_Reboot\nWinMon>\n");
+      WPX_Reboot();
+   }
+   else
+      printf("Not Rebooting with WT_Reboot\nWinMon>\n");
+#endif
+}
+
+
+
+
 
 typedef union StatField
 {
@@ -1317,6 +1368,43 @@ void DataUnitSetup (WP_data_unit * data_unit,
 #if TEST_LOOPBACK_MODE
 #endif
 
+
+
+
+void App_TranslateAsciiToHex(WP_CHAR *Hex,WP_CHAR *Ascii,WP_U32 length)
+{
+    WP_S32 i,first=0,second=0;
+
+   for (i=0;i<length;i++)
+     {
+
+          if ( Ascii[2*i] >= '0' &&  Ascii[2*i] <= '9')
+            first =  Ascii[2*i] - '0';
+
+          if ( Ascii[2*i] >= 'a' &&  Ascii[2*i] <= 'f')
+             first =  Ascii[2*i] - 'a' + 10;
+
+          if ( Ascii[2*i] >= 'A' &&  Ascii[2*i] <= 'F')
+             first =  Ascii[2*i] - 'A' + 10;
+
+          if ( Ascii[2*i+1] >= '0' &&  Ascii[2*i+1] <= '9')
+            second =  Ascii[2*i+1] - '0';
+          if ( Ascii[2*i+1] >= 'a' &&  Ascii[2*i+1] <= 'f')
+            second =  Ascii[2*i+1] - 'a' + 10;
+          if ( Ascii[2*i+1] >= 'A' &&  Ascii[2*i+1] <= 'F')
+            second =  Ascii[2*i+1] - 'A' + 10;
+
+          Hex[i]=(WP_CHAR )(first * 16 + second);
+     }
+    return;
+}
+
+
+
+
+
+
+
 WP_flow_class_ext_action action;
 WP_U8 action_type[3];
 WP_flow_class_action_info action_info[3];
@@ -1350,6 +1438,47 @@ WP_S32 main (WP_S32 argc, WP_CHAR ** argv)
 
    exit (0);
    return 1;
+}
+
+
+
+void WT_FailAndTerminate(void)
+{
+   printf("Test Failed\n");
+   WP_DriverRelease();
+#if USE_SOCKET
+   CleanUpSocket(5);
+#endif
+   exit(1);
+}
+
+
+void WT_Identify(void)
+{
+   WP_U32 p, w;
+   WP_CHAR *first_dps_found = NULL;
+   WP_U32 found_error = 0;
+   printf("Test Identity Version %s\n", WP_Identity.wddi_version);
+   printf("Test Identity Build %s\n", WP_Identity.wddi_build);
+   for (p = 0; p < WP_MAX_WINPATHS; p++) {
+      for (w = 0; w < WP_WINFARMS; w++) {
+         if (!WP_Identity.dps_in_wddi[p][w] ||
+             strlen(WP_Identity.dps_in_wddi[p][w]) == 0)
+            continue;
+         printf("Test Identity DPS WP%d WF%d in wddi %s in use %s\n", p, w,
+                WP_Identity.dps_in_wddi[p][w],
+                WP_Identity.dps_in_use[p][w]);
+         if (!first_dps_found)
+            first_dps_found = WP_Identity.dps_in_wddi[p][w];
+         if (strcmp(WP_Identity.dps_in_wddi[p][w], first_dps_found) ||
+            strcmp(WP_Identity.dps_in_use[p][w], first_dps_found))
+         found_error = 1;
+      }
+   }
+   if (found_error) {
+      printf("Test Abort DPS not uniform\n");
+      WT_FailAndTerminate();
+   }
 }
 
 void CLI_RunCommonConfig (void)
@@ -1439,6 +1568,7 @@ void CLI_RunCommonConfig (void)
       printf ("...\n");
       printf ("r: Rebot the system\n");
       printf ("a: show flowAgg info\n");
+      printf ("b: show WP_ChannelQDepth()\n");
       printf ("k: Exit to WinMon without WP_DriverRelease()\n");
       printf ("x: Exit to WinMon\n");
       cmd = getchar ();
@@ -1528,6 +1658,18 @@ void CLI_RunCommonConfig (void)
       if (cmd == 'a')
       {
          break;
+      }
+      if (cmd == 'b')
+      {
+	WP_U32 depth = 0;
+	WP_status status = 0;
+
+	if (WP_ERR_HANDLE == (status = WP_ChannelQDepth(gbe2_tx_ch_handle/*gbe1_rx_ch_handle*/, &depth)))
+	{
+		printf ("WP_ChannelQDepth() returns WP_ERR_HANDLE\n");
+	} else {
+		printf ("QDepth of  gbe1_rx_ch_handle(%x)\n", depth);
+	}
       }
       if (cmd == 'x')
       {
@@ -3136,5 +3278,5 @@ void WTI_TranslateHexToAscii (WP_CHAR * Ascii, WP_CHAR * Hex,
 #if TEST_LOOPBACK_MODE
 #endif
 
-#include "wt_util.c"
+// #include "wt_util.c"
 #include "wt_partition_ecc_util.c"
