@@ -6,6 +6,10 @@ echo skip uploading ...
 fi
 
 copy_to_tftpboot.sh
+cd bin
+mv 03120-pce_cbfc 03120-pce_cbfc.exe
+up 03120-pce_cbfc.exe bin
+cd ..
 
 sync
 echo syncing ...

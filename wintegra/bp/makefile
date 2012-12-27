@@ -3,8 +3,8 @@
 # By default this makefile assumes that the test directory reside under the WDDI root directory!
 # If you want to change it please redefine WDDI_DIR in this makefile!
 TEST_DIR = .
-#WPI_WDDS_DIR = ../..
-WPI_WDDS_DIR = ../..
+# WPI_WDDS_DIR = ../..
+WPI_WDDS_DIR = ../../..
 WPI_TARGET 	= mips_linux
 # WPI_TARGET 	= mips_winmon
 # WPI_WDDS_DIR = ../WDDS_4_2_GA_RC4_build_1468_ufe
@@ -20,7 +20,8 @@ UFE_TYPE        = ufe412
 # UFE_TYPE        = ufe4
 MY_UFE4_FPGA_DIR	= ufe4
 # DPS_IMAGE_NAME  = wpi_dps_image_backhaul
-DPS_IMAGE_NAME  = wpi_dps_image_winarrow
+DPS_IMAGE_NAME  = wpi_dps_image_wireline
+# DPS_IMAGE_NAME  = wpi_dps_image_winarrow
 PPS_IMAGE_NAME  = wpi_pps_image_iwgp_parser
 
 WDDS_OBJECTS = objects
@@ -86,8 +87,9 @@ UFE_FRAMER_INC = -I$(UFE_FRMR_DIR) -I$(UFE_FRMR_FLEXMUX_DIR) -I$(UFE_FRMR_FLEXMU
 #VENEER_TARGET_DIR = $(WDDI_DIR)/target/$(WPI_TARGET)/include
 VENEER_DIR = $(WDDI_DIR)/sources/veneer
 BOARD_DIR = $(WDDI_DIR)/board/$(WPI_BOARD)_$(HW_DEVICE)
+BOARD_DIR_2 = $(WDDI_DIR)/board/wds_common
 WINUTIL_DIR = $(WDDI_DIR)/sources/winutil/include/
-INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \
+INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(BOARD_DIR_2) -I$(WINUTIL_DIR) \
            -I$(BOARD_DIR)/.. -I$(WDDI_DIR)/phy -I$(WDDI_DIR)/sources -I$(WDDI_DIR)/sources/include \
 	   -I$(WPI_PLATFORM_DIR)/include -I$(WPI_WDDS_DIR)/include -I$(WPI_WDDS_DIR)/platform/include \
 	   -I$(WDDI_DIR)/tests/common -I$(API_DIR) -I$(PHY_DIR) 
@@ -132,19 +134,22 @@ include $(WPI_T_DIR)/$(WPI_HOST)_make.inc
 
 # Where to find wpi_wddi.a wpi_veneer.a
 WDDI_LIB_DIR = $(WPI_HT_DIR)/lib
+WDDI_LIB_DIR_2 = $(WPI_HT_DIR)/wds/lib
+# WDDI_LIB_DIR = $(WPI_HT_DIR)/wds/lib
 
 # Where to find wpx_phy.a and wpx_board.a
 PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)/$(WPI_BOARD)/lib
 
 WDDI_LIBS = $(WDDI_LIB_DIR)/wpi_wddi.a  \
-    $(WDDI_LIB_DIR)/wpi_hw_device.a  $(WDDI_LIB_DIR)/winutil.a \
+    $(WDDI_LIB_DIR)/wpi_hw_device.a  $(WDDI_LIB_DIR_2)/winutil.a \
 	$(WDDI_LIB_DIR)/platform.a \
 
 PHY_LIB = $(PHY_BOARD_LIB_DIR)/wpx_phy.a
-BOARD_LIB = $(PHY_BOARD_LIB_DIR)/wpx_board.a
+BOARD_LIB = $(WDDI_LIB_DIR_2)/wpx_board.a
+# BOARD_LIB = $(PHY_BOARD_LIB_DIR)/wpx_board.a
 
-WDDI_LIBS += $(PHY_LIB)
-WDDI_LIBS += $(UFE_LIB)
+# WDDI_LIBS += $(PHY_LIB)
+# WDDI_LIBS += $(UFE_LIB)
 WDDI_LIBS += $(BOARD_LIB)
 
 # DPS Image to use
@@ -200,7 +205,7 @@ ifneq "$(START_FILE)" ""
 	-cp $(WPI_START_FILE)/$(START_FILE) $(START_FILE)
 endif
 # Do the link	
-	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(PPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) \
+	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(PPS_IMAGE_OBJ) \
 	$(WDDI_LIBS) $(OTHER_LIB)
 
 # Clean up after everything that might have happened
