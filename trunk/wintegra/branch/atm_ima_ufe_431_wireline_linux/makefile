@@ -11,7 +11,6 @@ WPI_TARGET 	= mips_linux
 endif
 
 WPI_BOARD  	= wds
-WPI_BOARD_COMMON  	= wds_common
 WPI_HOST   	= linux
 UFE_TYPE        = ufe412
 DPS_IMAGE_NAME  = wpi_dps_image_backhaul
@@ -78,9 +77,8 @@ UFE_FRAMER_INC = -I$(UFE_FRMR_DIR)/flexmux -I$(UFE_FRMR_DIR) -I$(UFE_FRMR_FLEXMU
 #VENEER_TARGET_DIR = $(WDDI_DIR)/target/$(WPI_TARGET)/include
 VENEER_DIR = $(WDDI_DIR)/sources/veneer
 BOARD_DIR = $(WDDI_DIR)/board/$(WPI_BOARD)_$(HW_DEVICE)
-BOARD_DIR_COMMON = $(WDDI_DIR)/board/$(WPI_BOARD_COMMON)
 WINUTIL_DIR = $(WDDI_DIR)/sources/winutil/include/
-INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(BOARD_DIR_COMMON) -I$(WINUTIL_DIR) \
+INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \
            -I$(BOARD_DIR)/.. -I$(WDDI_DIR)/phy -I$(WDDI_DIR)/sources -I$(WDDI_DIR)/sources/include \
 	   -I$(WPI_PLATFORM_DIR)/include -I$(WPI_WDDS_DIR)/include -I$(WPI_WDDS_DIR)/platform/include \
 	   -I$(WDDI_DIR)/tests/common -I$(API_DIR) -I$(PHY_DIR) 

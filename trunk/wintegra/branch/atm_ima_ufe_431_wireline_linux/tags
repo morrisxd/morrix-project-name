@@ -73,7 +73,6 @@ B1_count	ufe_utility.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
 B2_count	ufe_utility.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
 BIN_DIR	makefile	/^BIN_DIR = $(TEST_DIR)\/bin$/;"	m
 BOARD_DIR	makefile	/^BOARD_DIR = $(WDDI_DIR)\/board\/$(WPI_BOARD)_$(HW_DEVICE)$/;"	m
-BOARD_DIR_COMMON	makefile	/^BOARD_DIR_COMMON = $(WDDI_DIR)\/board\/$(WPI_BOARD_COMMON)$/;"	m
 BOARD_LIB	makefile	/^BOARD_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_board.a$/;"	m
 BOARD_WP3	atm_ima_ufe.h	19;"	d
 DEFINE_WEB	makefile	/^DEFINE_WEB = -DWEB$/;"	m
@@ -83,7 +82,7 @@ ENABLE_EMPHY_BEFORE_UFE_INIT	atm_ima_ufe.c	45;"	d	file:
 ENET_HEADER_SIZE	atm_ima_ufe.h	947;"	d
 HW_DEVICE	makefile	/^HW_DEVICE       = winpath3$/;"	m
 IMA_DEBUG	atm_ima_ufe.h	21;"	d
-INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(BOARD_DIR_COMMON) -I$(WINUTIL_DIR) \\$/;"	m
+INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \\$/;"	m
 IP_CHECKSUM	atm_ima_ufe.h	955;"	d
 IP_DA	atm_ima_ufe.h	957;"	d
 IP_HEADER_SIZE	atm_ima_ufe.h	948;"	d
@@ -187,7 +186,6 @@ WDDI_SOURCES	makefile	/^WDDI_SOURCES = \/sources$/;"	m
 WDDS_OBJECTS	makefile	/^WDDS_OBJECTS = objects$/;"	m
 WINUTIL_DIR	makefile	/^WINUTIL_DIR = $(WDDI_DIR)\/sources\/winutil\/include\/$/;"	m
 WPI_BOARD	makefile	/^WPI_BOARD  	= wds$/;"	m
-WPI_BOARD_COMMON	makefile	/^WPI_BOARD_COMMON  	= wds_common$/;"	m
 WPI_HOST	makefile	/^WPI_HOST   	= linux$/;"	m
 WPI_HTB_DIR	makefile	/^WPI_HTB_DIR = $(WPI_HT_DIR)\/$(WPI_BOARD)$/;"	m
 WPI_HT_DIR	makefile	/^WPI_HT_DIR = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)$/;"	m
