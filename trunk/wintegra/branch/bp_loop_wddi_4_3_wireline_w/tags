@@ -1,0 +1,246 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ADDED_BY_MORRIS	03120-pce_cbfc.c	59;"	d	file:
+API_DIR	makefile	/^API_DIR = $(WDDI_DIR)$(WDDI_SOURCES)\/api$/;"	m
+APP_HOST_BUFFER_SIZE	03120-pce_cbfc.c	154;"	d	file:
+BIN_DIR	makefile	/^BIN_DIR = $(TEST_DIR)\/bin$/;"	m
+BOARD_DIR	makefile	/^BOARD_DIR = $(WDDI_DIR)\/board\/$(WPI_BOARD)_$(HW_DEVICE)$/;"	m
+BOARD_LIB	makefile	/^BOARD_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_board.a$/;"	m
+CLI_RunCommonConfig	03120-pce_cbfc.c	/^void CLI_RunCommonConfig (void)$/;"	f
+DEBUG	03120-pce_cbfc.c	69;"	d	file:
+DEFAULT_WPID	03120-pce_cbfc.c	58;"	d	file:
+DEFINE_WEB	makefile	/^DEFINE_WEB = -DWEB$/;"	m
+DPS_IMAGE_NAME	makefile	/^DPS_IMAGE_NAME  = wpi_dps_image_winarrow$/;"	m
+DPS_IMAGE_OBJ	makefile	/^DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/$(DPS_IMAGE_NAME).o$/;"	m
+DataUnitSetup	03120-pce_cbfc.c	/^void DataUnitSetup (WP_data_unit * data_unit,$/;"	f
+FlowCtrlDataUnitSetup	03120-pce_cbfc.c	/^void FlowCtrlDataUnitSetup (WP_data_unit * data_unit,$/;"	f
+HW_DEVICE	makefile	/^HW_DEVICE       = winpath3$/;"	m
+INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \\$/;"	m
+IWF_Table	03120-pce_cbfc.c	/^static WP_U32 IWF_Table[NUM_OF_FLOWS][11] = {$/;"	v	file:
+LDFLAGS2	makefile	/^LDFLAGS2	= -lpthread$/;"	m
+MAX_DATA_LENGTH	03120-pce_cbfc.c	153;"	d	file:
+MAX_FLOW_AGG	03120-pce_cbfc.c	101;"	d	file:
+MAX_IW_POLICERS	03120-pce_cbfc.c	100;"	d	file:
+MAX_IW_PROGRAMMABLE_FILTERS	03120-pce_cbfc.c	103;"	d	file:
+MAX_LPM_FLOWS	03120-pce_cbfc.c	72;"	d	file:
+MAX_NUM_OF_CHANNELS	03120-pce_cbfc.c	110;"	d	file:
+MAX_NUM_OF_PACKETS	03120-pce_cbfc.c	112;"	d	file:
+MY_UFE4_FPGA_DIR	makefile	/^MY_UFE4_FPGA_DIR	= ufe4$/;"	m
+MultiClass_Device_h	03120-pce_cbfc.c	/^WP_handle MultiClass_Device_h[NUM_OF_FLOWS];$/;"	v
+MultiClass_Tx_Channel_h	03120-pce_cbfc.c	/^WP_handle MultiClass_Tx_Channel_h[NUM_OF_FLOWS];$/;"	v
+NUM_DATA_FILTERS	03120-pce_cbfc.c	95;"	d	file:
+NUM_FLOW_CTRL_FILTERS	03120-pce_cbfc.c	96;"	d	file:
+NUM_OF_CHANNELS	03120-pce_cbfc.c	107;"	d	file:
+NUM_OF_FLOWS	03120-pce_cbfc.c	105;"	d	file:
+NUM_OF_PACKETS_PER_CHANNEL	03120-pce_cbfc.c	111;"	d	file:
+NUM_PQ_BLOCK	03120-pce_cbfc.c	108;"	d	file:
+OBJ_DIR	makefile	/^OBJ_DIR = $(TEST_DIR)\/bin$/;"	m
+PCE_DEBUG	03120-pce_cbfc.c	70;"	d	file:
+PCE_filter_data	03120-pce_cbfc.c	/^WP_handle PCE_filter_data[32];$/;"	v
+PCE_filter_flow_ctrl	03120-pce_cbfc.c	/^WP_handle PCE_filter_flow_ctrl[32];$/;"	v
+PCE_rule_data_h	03120-pce_cbfc.c	/^WP_handle PCE_rule_data_h[64];$/;"	v
+PCE_rule_flow_ctrl_h	03120-pce_cbfc.c	/^WP_handle PCE_rule_flow_ctrl_h[64];$/;"	v
+PHY_BOARD_LIB_DIR	makefile	/^PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)\/$(WPI_BOARD)\/lib$/;"	m
+PHY_DIR	makefile	/^PHY_DIR = $(WDDI_DIR)\/phy$/;"	m
+PHY_LIB	makefile	/^PHY_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_phy.a$/;"	m
+POOL_LIMIT	03120-pce_cbfc.c	102;"	d	file:
+PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_iwgp_parser$/;"	m
+PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/$(PPS_IMAGE_NAME).o$/;"	m
+QNCallback	03120-pce_cbfc.c	/^WP_S32 QNCallback (WP_S32 status)$/;"	f
+RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
+SINGLE_IMAGE	03120-pce_cbfc.c	60;"	d	file:
+SPECIAL_FLAG	makefile	/^SPECIAL_FLAG = -lpthread$/;"	m
+StatField	03120-pce_cbfc.c	/^typedef union StatField$/;"	u	file:
+TEST_CFLAGS	makefile	/^TEST_CFLAGS = -D$(TLOG_FUNCTION) -DWT_DEBUG_LEVEL=$(TLOG_LEVEL) $(DEFINE_WEB) \\$/;"	m
+TEST_DIR	makefile	/^TEST_DIR = .$/;"	m
+TEST_EXE	makefile	/^TEST_EXE = $(BIN_DIR)\/$(TEST_NAME)$(EXE)$/;"	m
+TEST_LOOPBACK_MODE	03120-pce_cbfc.c	86;"	d	file:
+TEST_NAME	makefile	/^TEST_NAME = $(basename $(TEST))$/;"	m
+TEST_OBJ	makefile	/^TEST_OBJ = $(patsubst %.c, $(OBJ_DIR)\/%.o, $(TEST_NAME).c)$/;"	m
+TLOG_FUNCTION	makefile	/^TLOG_FUNCTION = WT_LOG_PRINTF$/;"	m
+TLOG_LEVEL	makefile	/^TLOG_LEVEL=1$/;"	m
+UFE4_EVENTS_OBJ	makefile	/^UFE4_EVENTS_OBJ = $(WPI_UFE4_OBJ)\/wufei_events.o$/;"	m
+UFE4_FPGA_DIR	makefile	/^UFE4_FPGA_DIR = $(WPX_UFE_DIR)\/fpga\/$(MY_UFE4_FPGA_DIR)$/;"	m
+UFE_API_DIR	makefile	/^UFE_API_DIR = $(WPX_UFE_DIR)\/api$/;"	m
+UFE_FRAMER_INC	makefile	/^UFE_FRAMER_INC = -I$(UFE_FRMR_DIR) -I$(UFE_FRMR_FLEXMUX_DIR) -I$(UFE_FRMR_FLEXMUX_DIR)\/library\/00_api_layer\/inc -I$(UFE_FRMR_FLEXMUX_DIR)\/library\/04_low_level_comms_layer\/inc$/;"	m
+UFE_FRAMER_LIB	makefile	/^UFE_FRAMER_LIB = $(UFE_LIB_DIR)\/wpx_phy_ufe_framer.a$/;"	m
+UFE_FRMR_DIR	makefile	/^UFE_FRMR_DIR = $(WPX_UFE_DIR)\/wpx_frmr$/;"	m
+UFE_FRMR_FLEXMUX_DIR	makefile	/^UFE_FRMR_FLEXMUX_DIR = $(UFE_FRMR_DIR)\/flexmux$/;"	m
+UFE_INC	makefile	/^UFE_INC = -I$(UFE_API_DIR) -I$(UFE4_FPGA_DIR)$/;"	m
+UFE_LIB	makefile	/^UFE_LIB = $(UFE_LIB_DIR)\/wpx_ufe.a$/;"	m
+UFE_LIB_DIR	makefile	/^UFE_LIB_DIR = $(PHY_BOARD_LIB_DIR)\/..\/$(UFE_TYPE)\/lib$/;"	m
+UFE_TYPE	makefile	/^UFE_TYPE        = ufe412$/;"	m
+VENEER_DIR	makefile	/^VENEER_DIR = $(WDDI_DIR)\/sources\/veneer$/;"	m
+WDDI_DIR	makefile	/^WDDI_DIR = $(WPI_WDDS_DIR)\/wddi$/;"	m
+WDDI_LIBS	makefile	/^WDDI_LIBS = $(WDDI_LIB_DIR)\/wpi_wddi.a  \\$/;"	m
+WDDI_LIB_DIR	makefile	/^WDDI_LIB_DIR = $(WPI_HT_DIR)\/lib$/;"	m
+WDDI_SOURCES	makefile	/^WDDI_SOURCES = \/sources$/;"	m
+WDDS_OBJECTS	makefile	/^WDDS_OBJECTS = objects$/;"	m
+WINUTIL_DIR	makefile	/^WINUTIL_DIR = $(WDDI_DIR)\/sources\/winutil\/include\/$/;"	m
+WPE_ChannelsCreate	03120-pce_cbfc.c	/^static void WPE_ChannelsCreate (void)$/;"	f	file:
+WPE_CheckPceFilterStats	03120-pce_cbfc.c	/^void WPE_CheckPceFilterStats (WP_handle filter)$/;"	f
+WPE_CheckReceivedTraffic	03120-pce_cbfc.c	/^void WPE_CheckReceivedTraffic (WP_U32 expected_count)$/;"	f
+WPE_CreateDataPceFilterSets	03120-pce_cbfc.c	/^static void WPE_CreateDataPceFilterSets (void)$/;"	f	file:
+WPE_CreateDataPceFilters	03120-pce_cbfc.c	/^static void WPE_CreateDataPceFilters (void)$/;"	f	file:
+WPE_CreateDataPceRules	03120-pce_cbfc.c	/^static void WPE_CreateDataPceRules (void)$/;"	f	file:
+WPE_CreateDlPceRulesFiltersSets	03120-pce_cbfc.c	/^static void WPE_CreateDlPceRulesFiltersSets (WP_handle iw_sys)$/;"	f	file:
+WPE_CreateFlowCtrlPceFilterSets	03120-pce_cbfc.c	/^static void WPE_CreateFlowCtrlPceFilterSets (void)$/;"	f	file:
+WPE_CreateFlowCtrlPceFilters	03120-pce_cbfc.c	/^static void WPE_CreateFlowCtrlPceFilters (void)$/;"	f	file:
+WPE_CreateFlowCtrlPceRules	03120-pce_cbfc.c	/^static void WPE_CreateFlowCtrlPceRules (void)$/;"	f	file:
+WPE_DebugCallback	03120-pce_cbfc.c	/^WP_status WPE_DebugCallback (const WP_CHAR * file,$/;"	f
+WPE_DlForwardingTableCreate	03120-pce_cbfc.c	/^static void WPE_DlForwardingTableCreate (void)$/;"	f	file:
+WPE_DlPortsCreate	03120-pce_cbfc.c	/^static void WPE_DlPortsCreate (WP_handle iw_sys)$/;"	f	file:
+WPE_DlRxBindingCreate	03120-pce_cbfc.c	/^static void WPE_DlRxBindingCreate (WP_handle iw_sys)$/;"	f	file:
+WPE_HostSendFlowCtrl	03120-pce_cbfc.c	/^static void WPE_HostSendFlowCtrl ()$/;"	f	file:
+WPE_HostSendTraffic	03120-pce_cbfc.c	/^static void WPE_HostSendTraffic ()$/;"	f	file:
+WPE_LayerTwoSystemCreate	03120-pce_cbfc.c	/^static void WPE_LayerTwoSystemCreate (void)$/;"	f	file:
+WPE_PrintPceGlobalStats	03120-pce_cbfc.c	/^void WPE_PrintPceGlobalStats (void)$/;"	f
+WPE_ResetDataPceFilter	03120-pce_cbfc.c	/^void WPE_ResetDataPceFilter (void)$/;"	f
+WPE_ResetFlowCtrlPceFilter	03120-pce_cbfc.c	/^void WPE_ResetFlowCtrlPceFilter (void)$/;"	f
+WPE_ShapingGroupsCreate	03120-pce_cbfc.c	/^static void WPE_ShapingGroupsCreate (void)$/;"	f	file:
+WPE_SystemEnable	03120-pce_cbfc.c	/^static void WPE_SystemEnable (void)$/;"	f	file:
+WPI_BOARD	makefile	/^WPI_BOARD  	= wds$/;"	m
+WPI_HOST	makefile	/^WPI_HOST   	= linux$/;"	m
+WPI_HTB_DIR	makefile	/^WPI_HTB_DIR = $(WPI_HT_DIR)\/$(WPI_BOARD)$/;"	m
+WPI_HT_DIR	makefile	/^WPI_HT_DIR = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)$/;"	m
+WPI_PLATFORM_DIR	makefile	/^WPI_PLATFORM_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
+WPI_START_FILE	makefile	/^WPI_START_FILE = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib$/;"	m
+WPI_TARGET	makefile	/^WPI_TARGET 	= mips_linux_$(HW_DEVICE)$/;"	m
+WPI_TARGET	makefile	/^WPI_TARGET 	= mips_winmon$/;"	m
+WPI_TARGET	makefile	/^WPI_TARGET 	= mips_winmon_$(HW_DEVICE)$/;"	m
+WPI_T_DIR	makefile	/^WPI_T_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
+WPI_UFE4_DIR	makefile	/^WPI_UFE4_DIR = $(WPI_HTB_DIR)\/$(UFE_TYPE)$/;"	m
+WPI_UFE4_OBJ	makefile	/^WPI_UFE4_OBJ = $(WPI_UFE4_DIR)\/obj$/;"	m
+WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..$/;"	m
+WPT_DisplayRoutingPortStats	03120-pce_cbfc.c	/^void WPT_DisplayRoutingPortStats (WP_handle port_handle, WP_CHAR * type)$/;"	f
+WPT_FlowStatistics	03120-pce_cbfc.c	/^static void WPT_FlowStatistics (WP_handle agg)$/;"	f	file:
+WPT_LocalDisplayDeviceStats	03120-pce_cbfc.c	/^WP_U32 WPT_LocalDisplayDeviceStats (WP_handle enet_handle)$/;"	f
+WPT_StatField	03120-pce_cbfc.c	/^} WPT_StatField;$/;"	t	typeref:union:StatField	file:
+WPX_UFE_DIR	makefile	/^WPX_UFE_DIR = $(PHY_DIR)\/wpx_ufe$/;"	m
+WP_AppLog	03120-pce_cbfc.c	/^void WP_AppLog (WP_CHAR * s)$/;"	f
+WP_BOARD_NAME	makefile	/^WP_BOARD_NAME=WP_BOARD_WDS3$/;"	m
+WP_HW_WINPATHX	makefile	/^WP_HW_WINPATHX = WP_HW_WINPATH3$/;"	m
+WTI_GenerateRandomData	03120-pce_cbfc.c	/^void WTI_GenerateRandomData (WP_CHAR * Hex, WP_U8 pattern1, WP_U8 pattern2,$/;"	f
+WTI_IpChecksumCalc	03120-pce_cbfc.c	/^WP_U16 WTI_IpChecksumCalc (WP_U8 * buff, WP_U16 len)$/;"	f
+WTI_REGRESSION_MODE	03120-pce_cbfc.c	92;"	d	file:
+WTI_TranslateHexToAscii	03120-pce_cbfc.c	/^void WTI_TranslateHexToAscii (WP_CHAR * Ascii, WP_CHAR * Hex,$/;"	f
+WT_IPV4_DA_OFFSET	03120-pce_cbfc.c	77;"	d	file:
+WT_IPV4_HEADER_SIZE	03120-pce_cbfc.c	73;"	d	file:
+WT_IPV4_PROTOCOL_OFFSET	03120-pce_cbfc.c	78;"	d	file:
+WT_IPV4_SA_OFFSET	03120-pce_cbfc.c	76;"	d	file:
+WT_L4_DST_PORT_OFFSET	03120-pce_cbfc.c	79;"	d	file:
+WT_L4_HEADER_SIZE	03120-pce_cbfc.c	74;"	d	file:
+WT_L4_SRC_PORT_OFFSET	03120-pce_cbfc.c	80;"	d	file:
+WT_MAC_DA_OFFSET	03120-pce_cbfc.c	81;"	d	file:
+WT_MAC_HEADER_SIZE	03120-pce_cbfc.c	75;"	d	file:
+WT_MAC_SA_OFFSET	03120-pce_cbfc.c	82;"	d	file:
+WT_MAX_FRAME_SIZE	03120-pce_cbfc.c	151;"	d	file:
+WT_RX_LOOP_LIMIT	03120-pce_cbfc.c	98;"	d	file:
+WT_TRIAL_MASK	03120-pce_cbfc.c	57;"	d	file:
+action	03120-pce_cbfc.c	/^WP_flow_class_ext_action action;$/;"	v
+action_info	03120-pce_cbfc.c	/^WP_flow_class_action_info action_info[3];$/;"	v
+action_type	03120-pce_cbfc.c	/^WP_U8 action_type[3];$/;"	v
+appname	03120-pce_cbfc.c	/^WP_CHAR appname[] = "CBFC test";$/;"	v
+bport_host	03120-pce_cbfc.c	/^WP_handle bport_host;$/;"	v
+br_agg_gbe	03120-pce_cbfc.c	/^WP_iw_agg_bridging br_agg_gbe[1] = {$/;"	v
+buffer_data_144	03120-pce_cbfc.c	/^WP_pool_buffer_data buffer_data_144[1] = {$/;"	v
+buffer_data_2048	03120-pce_cbfc.c	/^WP_pool_buffer_data buffer_data_2048[] = {$/;"	v
+calendar	03120-pce_cbfc.c	/^WP_calendar_wheel calendar[3] = {$/;"	v
+ch_config_enet	03120-pce_cbfc.c	/^WP_ch_enet ch_config_enet[1] = {$/;"	v
+ch_config_fast_enet2	03120-pce_cbfc.c	/^WP_ch_enet ch_config_fast_enet2[1] = {$/;"	v
+ch_config_iw	03120-pce_cbfc.c	/^WP_ch_iw_rx ch_config_iw[1] = {$/;"	v
+context	03120-pce_cbfc.c	/^WP_context context[1] = {$/;"	v
+data_filter_set_lvl0_handle	03120-pce_cbfc.c	/^WP_handle data_filter_set_lvl0_handle;$/;"	v
+debug_error	03120-pce_cbfc.c	/^WP_U32 debug_error = 1;$/;"	v
+default_agg	03120-pce_cbfc.c	/^WP_handle default_agg;$/;"	v
+devhost	03120-pce_cbfc.c	/^WP_handle devhost;$/;"	v
+dfc_classifier_string	03120-pce_cbfc.c	/^WP_CHAR dfc_classifier_string[300];$/;"	v
+dfc_rout_sys_info	03120-pce_cbfc.c	/^WP_dfc_sys_info dfc_rout_sys_info[1] = {$/;"	v
+dl_iwsys_routing	03120-pce_cbfc.c	/^WP_handle dl_iwsys_routing;$/;"	v
+dl_tx_agg_gbe	03120-pce_cbfc.c	/^WP_iw_agg_directmap dl_tx_agg_gbe[1] = {$/;"	v
+enet_dev	03120-pce_cbfc.c	/^WP_device_enet enet_dev[1] = {$/;"	v
+enet_device_extended_config	03120-pce_cbfc.c	/^WP_device_enet_ex enet_device_extended_config[1] = {$/;"	v
+enet_multi_class_dev_cfg	03120-pce_cbfc.c	/^WP_device_enet_multi_class enet_multi_class_dev_cfg[1] = {$/;"	v
+enet_s	03120-pce_cbfc.c	/^WP_port_enet enet_s[1] = {$/;"	v
+enet_s_fast	03120-pce_cbfc.c	/^WP_port_enet enet_s_fast[1] = {$/;"	v
+expected_data	03120-pce_cbfc.c	/^WP_U8 expected_data[MAX_NUM_OF_CHANNELS][NUM_OF_PACKETS_PER_CHANNEL][3536];$/;"	v
+field	03120-pce_cbfc.c	/^        WP_U64 field;$/;"	m	union:StatField	file:
+filter_handle	03120-pce_cbfc.c	/^WP_handle filter_handle[NUM_OF_FLOWS];$/;"	v
+filter_stat	03120-pce_cbfc.c	/^WP_pce_filter_stat filter_stat;$/;"	v
+flow_agg_add_header	03120-pce_cbfc.c	/^WP_handle flow_agg_add_header[NUM_OF_FLOWS];$/;"	v
+flow_ctrl_filter_set_lvl0_handle	03120-pce_cbfc.c	/^WP_handle flow_ctrl_filter_set_lvl0_handle;$/;"	v
+forwarding_action	03120-pce_cbfc.c	/^WP_flow_class_forwarding_action forwarding_action;$/;"	v
+gbe1_rx_ch_handle	03120-pce_cbfc.c	/^WP_handle gbe1_rx_ch_handle, gbe1_tx_ch_handle;$/;"	v
+gbe1_tx_ch_handle	03120-pce_cbfc.c	/^WP_handle gbe1_rx_ch_handle, gbe1_tx_ch_handle;$/;"	v
+gbe2_rx_ch_handle	03120-pce_cbfc.c	/^WP_handle gbe2_rx_ch_handle, gbe2_tx_ch_handle;$/;"	v
+gbe2_tx_ch_handle	03120-pce_cbfc.c	/^WP_handle gbe2_rx_ch_handle, gbe2_tx_ch_handle;$/;"	v
+gbe_ch	03120-pce_cbfc.c	/^WP_ch_enet gbe_ch[2] = {$/;"	v
+gbe_dev1	03120-pce_cbfc.c	/^WP_handle gbe_port1, gbe_dev1, gbe_port3, gbe_port4;$/;"	v
+gbe_dev2	03120-pce_cbfc.c	/^WP_handle gbe_port2, gbe_dev2, gbe_dev3, gbe_dev4;$/;"	v
+gbe_dev3	03120-pce_cbfc.c	/^WP_handle gbe_port2, gbe_dev2, gbe_dev3, gbe_dev4;$/;"	v
+gbe_dev4	03120-pce_cbfc.c	/^WP_handle gbe_port2, gbe_dev2, gbe_dev3, gbe_dev4;$/;"	v
+gbe_port1	03120-pce_cbfc.c	/^WP_handle gbe_port1, gbe_dev1, gbe_port3, gbe_port4;$/;"	v
+gbe_port2	03120-pce_cbfc.c	/^WP_handle gbe_port2, gbe_dev2, gbe_dev3, gbe_dev4;$/;"	v
+gbe_port3	03120-pce_cbfc.c	/^WP_handle gbe_port1, gbe_dev1, gbe_port3, gbe_port4;$/;"	v
+gbe_port4	03120-pce_cbfc.c	/^WP_handle gbe_port1, gbe_dev1, gbe_port3, gbe_port4;$/;"	v
+global_failed	03120-pce_cbfc.c	/^WP_boolean global_failed = WP_FALSE, scenario_failed;$/;"	v
+h_iw_port_gbe_1	03120-pce_cbfc.c	/^WP_handle h_iw_port_gbe_1;$/;"	v
+high	03120-pce_cbfc.c	/^                WP_U32 high;$/;"	m	struct:StatField::__anon1	file:
+host_ch_cfg	03120-pce_cbfc.c	/^WP_ch_iw_rx host_ch_cfg[1] = {$/;"	v
+host_channel_psu_2	03120-pce_cbfc.c	/^WP_handle host_channel_psu_2[1];$/;"	v
+int_queue_tables	03120-pce_cbfc.c	/^WP_int_queue_table int_queue_tables =$/;"	v
+ip_dst	03120-pce_cbfc.c	/^WP_CHAR ip_dst[MAX_NUM_OF_CHANNELS][NUM_OF_PACKETS_PER_CHANNEL][100];$/;"	v
+ip_protocol	03120-pce_cbfc.c	/^WP_CHAR ip_protocol[MAX_NUM_OF_CHANNELS][NUM_OF_PACKETS_PER_CHANNEL][100];$/;"	v
+ip_src	03120-pce_cbfc.c	/^WP_CHAR ip_src[MAX_NUM_OF_CHANNELS][NUM_OF_PACKETS_PER_CHANNEL][100];$/;"	v
+ipv4_sys_one	03120-pce_cbfc.c	/^WP_iw_ipv4_sys_info ipv4_sys_one[1] = {$/;"	v
+iw_sys_one_routing	03120-pce_cbfc.c	/^WP_iw_sys_routing iw_sys_one_routing[1] = {$/;"	v
+iwhost_bport_config	03120-pce_cbfc.c	/^WP_bridge_port iwhost_bport_config[1] = {$/;"	v
+l1_group_h	03120-pce_cbfc.c	/^WP_handle l1_group_h[NUM_OF_FLOWS];$/;"	v
+l1_group_shaping_params	03120-pce_cbfc.c	/^WP_fmu_shaping_cir_eir l1_group_shaping_params[1];$/;"	v
+l2_group_h	03120-pce_cbfc.c	/^WP_handle l2_group_h[NUM_OF_FLOWS];$/;"	v
+l2_group_shaping_params	03120-pce_cbfc.c	/^WP_fmu_shaping_cir_eir l2_group_shaping_params[1];$/;"	v
+l2_l3_size	03120-pce_cbfc.c	/^WP_U32 l2_l3_size[MAX_NUM_OF_CHANNELS][NUM_OF_PACKETS_PER_CHANNEL];$/;"	v
+logCallBack	03120-pce_cbfc.c	/^WP_status logCallBack (WP_S32 level, const WP_CHAR * message)$/;"	f
+logTraceLevel	03120-pce_cbfc.c	/^static WP_U8 logTraceLevel = WPI_DEBUG_LEVEL_10;$/;"	v	file:
+loopback_mode	03120-pce_cbfc.c	/^WP_U32 loopback_mode;$/;"	v
+low	03120-pce_cbfc.c	/^                WP_U32 low;$/;"	m	struct:StatField::__anon1	file:
+main	03120-pce_cbfc.c	/^WP_S32 main (WP_S32 argc, WP_CHAR ** argv)$/;"	f
+max_iw	03120-pce_cbfc.c	/^WP_iw_global max_iw[1] = {$/;"	v
+multi_class_config	03120-pce_cbfc.c	/^WP_enet_multi_class_config multi_class_config[1] = {$/;"	v
+num_of_packets	03120-pce_cbfc.c	/^static WP_U32 num_of_packets = 0;$/;"	v	file:
+offset	03120-pce_cbfc.c	/^WP_U32 temp, offset;$/;"	v
+packet_group_l1_config	03120-pce_cbfc.c	/^WP_shaping_group_type_enet packet_group_l1_config[1];$/;"	v
+packet_group_l2_config	03120-pce_cbfc.c	/^WP_shaping_group_type_enet packet_group_l2_config[1];$/;"	v
+part	03120-pce_cbfc.c	/^        } part;$/;"	m	union:StatField	typeref:struct:StatField::__anon1	file:
+payload_size	03120-pce_cbfc.c	/^WP_U32 payload_size[MAX_NUM_OF_CHANNELS][NUM_OF_PACKETS_PER_CHANNEL];$/;"	v
+pce_global_stats	03120-pce_cbfc.c	/^WP_pce_global_stat pce_global_stats;$/;"	v
+pce_init	03120-pce_cbfc.c	/^WP_module_pce_init pce_init = {$/;"	v
+pce_parser_info	03120-pce_cbfc.c	/^WP_pce_parser_info pce_parser_info;$/;"	v
+pkt_ext	03120-pce_cbfc.c	/^WP_port_upi_packet_ext pkt_ext = {$/;"	v
+pkt_limits	03120-pce_cbfc.c	/^WP_port_pkt_limits pkt_limits = {$/;"	v
+pool_144	03120-pce_cbfc.c	/^WP_handle pool_2048, pool_144;$/;"	v
+pool_2048	03120-pce_cbfc.c	/^WP_handle pool_2048, pool_144;$/;"	v
+priority_action	03120-pce_cbfc.c	/^WP_flow_class_priority_action priority_action;$/;"	v
+qn_iw	03120-pce_cbfc.c	/^WP_qnode_iwq qn_iw[1] = {$/;"	v
+qniw	03120-pce_cbfc.c	/^WP_handle qniw;$/;"	v
+route_port_cfg	03120-pce_cbfc.c	/^WP_iw_route_port route_port_cfg = {$/;"	v
+rx_binding_enet_routing	03120-pce_cbfc.c	/^WP_rx_binding_routing rx_binding_enet_routing[1] = {$/;"	v
+rx_host_handle	03120-pce_cbfc.c	/^WP_handle rx_host_handle;$/;"	v
+scenario_failed	03120-pce_cbfc.c	/^WP_boolean global_failed = WP_FALSE, scenario_failed;$/;"	v
+scenario_number	03120-pce_cbfc.c	/^WP_U8 scenario_number = 1;$/;"	v
+shaping_params_cir_eir	03120-pce_cbfc.c	/^WP_pkt_shaping_cir_eir shaping_params_cir_eir[1] = {$/;"	v
+temp	03120-pce_cbfc.c	/^WP_U32 temp, offset;$/;"	v
+terminate	03120-pce_cbfc.c	/^static void terminate (WP_U32 line)$/;"	f	file:
+terminate_on_error	03120-pce_cbfc.c	/^static void terminate_on_error (WP_handle handle, WP_CHAR * s, WP_U32 line)$/;"	f	file:
+tx_binding_cfg	03120-pce_cbfc.c	/^WP_tx_binding tx_binding_cfg[1] = {$/;"	v
+tx_binding_iw	03120-pce_cbfc.c	/^WP_tx_binding tx_binding_iw[1] = {$/;"	v
+tx_binding_l2pi	03120-pce_cbfc.c	/^WP_tx_binding tx_binding_l2pi[1] = {$/;"	v
+ul_tx_agg_add_eth	03120-pce_cbfc.c	/^WP_iw_agg_directmap ul_tx_agg_add_eth[1] = {$/;"	v
+ul_tx_agg_gbe	03120-pce_cbfc.c	/^WP_iw_agg_directmap ul_tx_agg_gbe[1] = {$/;"	v
+upi_hspos_device	03120-pce_cbfc.c	/^WP_device_upi_hspos upi_hspos_device[1] = {$/;"	v
+wfq	03120-pce_cbfc.c	/^WP_pkt_shaping_wfq wfq[1] = { {$/;"	v
+wpe_test_failures	03120-pce_cbfc.c	/^WP_U16 wpe_test_failures = 0;$/;"	v
