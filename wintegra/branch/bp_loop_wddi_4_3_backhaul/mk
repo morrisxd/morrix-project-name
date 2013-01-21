@@ -1,0 +1,21 @@
+make TEST=03120-pce_cbfc.c 2>&1 | tee make.log
+if [ $? -eq 0 ]
+then
+# ~/bin/up bin/03120-pce_cbfc.exe bin
+echo skip uploading ...
+fi
+cd bin
+cp 03120-pce_cbfc morris_._bin_03120-pce_cbfc_loop.exe
+copy_to_tftpboot.sh
+# cd bin
+# mv 03120-pce_cbfc 03120-pce_cbfc.exe
+# up 03120-pce_cbfc.exe bin
+cd ..
+
+sync
+echo syncing ...
+sync
+echo syncing ...
+sync
+echo syncing ...
+
