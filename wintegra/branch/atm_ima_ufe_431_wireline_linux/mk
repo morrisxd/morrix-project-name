@@ -1,0 +1,3 @@
+ctags -R
+make TEST=atm_ima_ufe.c 2>&1 | tee make.log
+
