@@ -1,0 +1,15 @@
+
+Cleaning!
+mkdir -p ./bin
+rm -rf  ./bin/bp_cbfc.o ./bin/bp_cbfc.exe
+
+mips-sde-elf-gcc
+Compiling the test!
+mips-sde-elf-gcc -c -mips32 -G 0 -nostdinc -std=c99 -fno-builtin -fno-inline-functions -fsigned-char -fno-pic -msoft-float -Wall -Wpointer-arith -Wstrict-prototypes -Wformat -Wno-main  -Werror -pedantic -Wdeclaration-after-statement -O2 -DWT_LOG_PRINTF -DWT_DEBUG_LEVEL=1 -DWEB -DWDDI_TEST=bp_cbfc.c -DWP_HW_WINPATH3 -DWP_BOARD_WDS3 -DWP_HW_WINPATH3 -DMULTI_THREADED  -DWT_UFE_FRAMER -I. -I../../../wddi/sources/api -I../../../wddi/sources/veneer -I../../../wddi/board/wds_winpath3 -I../../../wddi/sources/winutil/include/ -I../../../wddi/board/wds_winpath3/.. -I../../../wddi/phy -I../../../wddi/sources -I../../../wddi/sources/include -I../../../platform/mips_winmon_winpath3/include -I../../../include -I../../../platform/include -I../../../wddi/tests/common -I../../../wddi/sources/api -I../../../wddi/phy  -I../../../wddi/phy/wpx_ufe/api -I../../../wddi/phy/wpx_ufe/fpga/ufe4 -I../../../wddi/phy/wpx_ufe/wpx_frmr -I../../../wddi/phy/wpx_ufe/wpx_frmr/flexmux -I../../../wddi/phy/wpx_ufe/wpx_frmr/flexmux/library/00_api_layer/inc -I../../../wddi/phy/wpx_ufe/wpx_frmr/flexmux/library/04_low_level_comms_layer/inc -o ./bin/bp_cbfc.o ./bp_cbfc.c
+
+Linking the test!
+cp ../../../objects/linux/mips_winmon_winpath3/lib/start.o start.o
+mips-sde-elf-gcc -mips32 -nostdlib -nostartfiles -fno-pic -msoft-float  -msoft-float -o ./bin/bp_cbfc.exe -T ../../../platform/mips_winmon_winpath3/link.xn  ./bin/bp_cbfc.o ../../../objects/linux/mips_winmon_winpath3/lib/wpi_dps_image_winarrow.o ../../../objects/linux/mips_winmon_winpath3/lib/wpi_pps_image_iwgp_parser.o ../../../objects/linux/mips_winmon_winpath3/wds/ufe412/obj/wufei_events.o \
+	../../../objects/linux/mips_winmon_winpath3/lib/wpi_wddi.a ../../../objects/linux/mips_winmon_winpath3/lib/wpi_hw_device.a  ../../../objects/linux/mips_winmon_winpath3/lib/winutil.a ../../../objects/linux/mips_winmon_winpath3/lib/platform.a  ../../../objects/linux/mips_winmon_winpath3/wds/lib/wpx_phy.a ../../../objects/linux/mips_winmon_winpath3/wds/lib/../ufe412/lib/wpx_ufe.a ../../../objects/linux/mips_winmon_winpath3/wds/lib/../ufe412/lib/wpx_phy_ufe_framer.a ../../../objects/linux/mips_winmon_winpath3/wds/lib/wpx_board.a ../../../platform/mips_winmon_winpath3/lib/mtlib.a ../../../platform/mips_winmon_winpath3/lib/libcsde.a
+
+Made ./bin/bp_cbfc.exe for target mips_winmon_winpath3
