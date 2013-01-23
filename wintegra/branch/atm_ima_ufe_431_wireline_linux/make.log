@@ -9,8 +9,9 @@ mips-sde-elf-gcc -c -mips32 -G 0 -nostdinc -std=c99 -fno-builtin -fno-inline-fun
 
 Linking the test!
 cp ../../../objects/linux/mips_winmon_winpath3/lib/start.o start.o
-mips-sde-elf-gcc -mips32 -nostdlib -nostartfiles -fno-pic -msoft-float  -msoft-float -o ./bin/atm_ima_ufe.exe -T ../../../platform/mips_winmon_winpath3/link.xn  ./bin/atm_ima_ufe.o ../../../objects/linux/mips_winmon_winpath3/lib/wpi_dps_image_wireline.o ../../../objects/linux/mips_winmon_winpath3/wds/ufe412/obj/wufei_events.o \
+mips-sde-elf-gcc -mips32 -nostdlib -nostartfiles -fno-pic -msoft-float  -msoft-float -o ./bin/atm_ima_ufe.exe -T ../../../platform/mips_winmon_winpath3/link.xn  ./bin/atm_ima_ufe.o ../../../objects/linux/mips_winmon_winpath3/lib/wpi_dps_image_backhaul.o ../../../objects/linux/mips_winmon_winpath3/wds/ufe412/obj/wufei_events.o \
 	../../../objects/linux/mips_winmon_winpath3/lib/wpi_wddi.a ../../../objects/linux/mips_winmon_winpath3/lib/wpi_hw_device.a  ../../../objects/linux/mips_winmon_winpath3/wds/lib/winutil.a ../../../objects/linux/mips_winmon_winpath3/lib/shared.a ../../../objects/linux/mips_winmon_winpath3/lib/platform.a   ../../../objects/linux/mips_winmon_winpath3/wds/lib/../ufe412/lib/wpx_ufe.a ../../../objects/linux/mips_winmon_winpath3/wds/lib/../ufe412/lib/wpx_phy_ufe_framer.a ../../../objects/linux/mips_winmon_winpath3/wds/lib/wpx_board.a ../../../platform/mips_winmon_winpath3/lib/mtlib.a ../../../platform/mips_winmon_winpath3/lib/libcsde.a
+mips-sde-elf-gcc: ../../../objects/linux/mips_winmon_winpath3/lib/wpi_dps_image_backhaul.o: No such file or directory
 mips-sde-elf-gcc: ../../../objects/linux/mips_winmon_winpath3/wds/ufe412/obj/wufei_events.o: No such file or directory
 mips-sde-elf-gcc: ../../../objects/linux/mips_winmon_winpath3/wds/lib/../ufe412/lib/wpx_ufe.a: No such file or directory
 mips-sde-elf-gcc: ../../../objects/linux/mips_winmon_winpath3/wds/lib/../ufe412/lib/wpx_phy_ufe_framer.a: No such file or directory
