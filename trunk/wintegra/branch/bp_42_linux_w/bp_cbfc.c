@@ -1175,7 +1175,7 @@ static void App_HostSendFlowCtrl ()
 
     for (temp_index = 0; temp_index < MAX_NUM_OF_PACKETS; temp_index++)
     {
-        printf ("data_unit(%p)seg(%p), temp_index(%d)\n", &data_unit, data_unit.segment, temp_index);
+        printf ("data_unit(%p)seg(%p), temp_index(%d)\n", (void *)&data_unit, (void *)&data_unit.segment, temp_index);
         FlowCtrlDataUnitSetup (&data_unit, &km_tx_buf[0], &km_data_ptr[0]);
 
         WP_MEM_BYTES_GET (tmp_buffer, data_unit.segment->data, data_unit.segment->data_size);

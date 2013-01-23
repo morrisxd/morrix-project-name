@@ -141,15 +141,15 @@ void App_CheckPceFilterStats (WP_handle filter)
 
     temp1 = filter_stat.denied_pkts;
     temp2 = filter_stat.denied_pkts >> 32;
-    printf ("denied_pkts            %08X %08X       diff %04X\n", temp2, temp1);
+    printf ("denied_pkts            %08X %08X       diff %04X\n", temp2, temp1, temp2-temp1);
 
     temp1 = filter_stat.matched_pkts;
     temp2 = filter_stat.matched_pkts >> 32;
-    printf ("matched_pkts           %08X %08X       diff %04X\n", temp2, temp1);
+    printf ("matched_pkts           %08X %08X       diff %04X\n", temp2, temp1, temp2 - temp1);
 
     temp1 = filter_stat.no_matched_pkts;
     temp2 = filter_stat.no_matched_pkts >> 32;
-    printf ("no_matched_pkts        %08X %08X       diff %04X\n", temp2, temp1);
+    printf ("no_matched_pkts        %08X %08X       diff %04X\n", temp2, temp1, temp2 - temp1);
 
     printf ("\n\n");
 }
