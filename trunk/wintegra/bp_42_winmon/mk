@@ -1,0 +1,11 @@
+
+ctags -R
+
+make TEST=bp_cbfc.c 2>&1 | tee make.log
+if [ $? -eq 0 ]
+then
+# ~/bin/up bin/03120-pce_cbfc.exe bin
+echo skip uploading ...
+fi
+
+copy_to_tftpboot.sh
