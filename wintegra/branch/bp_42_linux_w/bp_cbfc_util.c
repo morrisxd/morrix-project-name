@@ -362,7 +362,7 @@ void WTI_TranslateHexToAscii (WP_CHAR * Ascii, WP_CHAR * Hex, WP_U32 length)
 
     }
 
-    Ascii[2 * length] = NULL;
+    Ascii[2 * length] = '\0';
 
     return;
 }
