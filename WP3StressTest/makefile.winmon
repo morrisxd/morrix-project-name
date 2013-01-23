@@ -20,7 +20,7 @@ ifeq "$(EXAMPLE)" ""
 endif
 SRC_DIR = $(EXAMPLE)
 # user modify
-WDDS_DIR = ..
+WDDS_DIR = ../../..
  
 # Where to find wddi.  If building for vxworks on cygwin, make sure that
 # WDDI_DIR starts with "C:/" and NOT "/cygdrive/c/ otherwise the compiles fail
