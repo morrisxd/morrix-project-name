@@ -65,8 +65,13 @@ Full CLI Statistics
 #include "wpx_app_data.h"
 #include "wpx_board_if.h"
 #include "wpx_board_data.h"
+#include "wpl_platform.h"
+#include "wp_bus.h"
+#include "wpl_locks.h"
+
 
 #include "AlexR_3.0_Statistics.c"
+
 
 /********************************************************************************
  ***                                 DEFINES                                  ***
@@ -259,7 +264,7 @@ void terminate_on_error (WP_handle handle, WP_CHAR * s);
 
 // Host Send/Receive
 void WPE_Receive_HostData (WP_handle rx_channel, WP_data_type data_type);
-void WPE_Send_HostData (WP_handle tx_channel, WP_data_type data_type,
+static void WPE_Send_HostData (WP_handle tx_channel, WP_data_type data_type,
                         WP_U8 dst_mac[]);
 void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info);
 void WPE_IWSendReceive (WP_U32 packets, WP_U8 dst_mac[]);
@@ -284,20 +289,29 @@ static WP_U32 iii = 0;
 extern void usleep(WP_U32 period);
 WP_U32 g_callback = 0;
 
+WP_U32      eoam_lock;
+#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+
 void *LearningPoll(void*i)
 {
 
-   while (1)
-   {
-      if (g_flag)
-      {
-         g_flag = 0;
-         iii ++;
-         WPE_Receive_HostData_IRQ_X (g_tag, g_event, g_info);
-      }
-      usleep (100);
-      ;
-   }
+	while (1)
+   	{
+		WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
+      		if (g_flag)
+      		{
+         		g_flag = 0;
+         		iii ++;
+#if 0
+         		WPE_Receive_HostData_IRQ_X (g_tag, g_event, g_info);
+#endif
+#if 1
+			printf ("LearningPoll (%x)\n", iii);
+#endif
+      		}
+		WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
+		printf ("polling again\n");
+   	}
 }
 
 
@@ -367,7 +381,7 @@ int main (int argc, WP_CHAR ** argv)
 #if 1
       // callback
       status = WP_ControlRegister(WP_EVENT_RX_INDICATE, 
-                                       &WPE_Receive_HostData_IRQ);
+                                       &WPE_Receive_HostData_IRQ_X);
       terminate_on_error(status, "WP_ControlRegister WP_EVENT_RX_INDICATE ");
 
       status = WP_ControlRegister(WP_EVENT_QUEUE_OVERRUN, 
@@ -394,8 +408,18 @@ int main (int argc, WP_CHAR ** argv)
 
 
 #if 1
-   status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
-   terminate_on_error (status , "WPL_ThreadInit() learning");
+	printf ("before lock init\n");
+#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+	WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &eoam_lock);
+	printf ("after lock init\n");
+
+	learning_thread_id = 0;
+#if 0
+	status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
+	terminate_on_error (status , "WPL_ThreadInit() learning");
+	printf ("after Threadinit\n");
+#endif
+
 #endif
 
 
@@ -2010,6 +2034,9 @@ void WPE_SetStaticForwardRules ()
    forward_rule_config.bport_tag = BRIDGE_PORT_ENET_TAG;
    forward_rule_config.vlan_id = VLAN_TAG_1;
    forward_rule_config.aggregation = agg_enet[0];
+/*------------------------------------------------------------------*\
+	create DFC rules now !!!
+\*------------------------------------------------------------------*/
    status = WP_IwMacAddressInsert (iw_sys, &forward_rule_config);
    terminate_on_error (status, "WP_IwMacAddressInsert() to Enet");
 
@@ -2018,6 +2045,9 @@ void WPE_SetStaticForwardRules ()
    forward_rule_config.bport_tag = BRIDGE_PORT_ENET_TAG;
    forward_rule_config.vlan_id = VLAN_TAG_1;
    forward_rule_config.aggregation = agg_enet_change_mac;
+/*------------------------------------------------------------------*\
+	create DFC rules now !!!
+\*------------------------------------------------------------------*/
    status = WP_IwMacAddressInsert (iw_sys, &forward_rule_config);
    terminate_on_error (status,
                        "WP_IwMacAddressInsert() to Enet with change of MAC");
@@ -2037,6 +2067,9 @@ void WPE_SetStaticForwardRules ()
 
          {
             forward_rule_config.aggregation = agg_hier_enet[i][j][k];
+/*------------------------------------------------------------------*\
+	create DFC rules now !!!
+\*------------------------------------------------------------------*/
             status = WP_IwMacAddressInsert (iw_sys, &forward_rule_config);
             terminate_on_error (status,
                                 "WP_IwMacAddressInsert() -> HierarchicalEnet");
@@ -2048,12 +2081,13 @@ void WPE_SetStaticForwardRules ()
    }
 
 #if 0
-// -> Multicast to HierarchicalEnet
+   // -> Multicast to HierarchicalEnet
    memcpy (forward_rule_config.mac, hier_enet_mcast_dst_mac, 6);
    forward_rule_config.bport_tag = BRIDGE_PORT_MC_TAG;
    forward_rule_config.vlan_id = VLAN_TAG_1;
 
-   // Multicast group per VLAN (no gain if VLAN doesn't have hierarchicalple bports)
+   // Multicast group per VLAN 
+   // (no gain if VLAN doesn't have hierarchicalple bports)
    for (i = 0; i < NUM_OF_MC_GROUPS; i++)
 
    {
@@ -2420,6 +2454,8 @@ WP_U32 p_getnsend = 0;
 
 void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
 {
+     WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
+
    g_tag = tag;
    g_event = event;
    g_info = info;
@@ -2429,6 +2465,7 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
          {
             printf ("iii(%6d), callback(%6d)\r", iii, g_callback);
          }
+     WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
 }
 
 
@@ -2799,6 +2836,10 @@ void WPE_CLI (void)
 
       printf
          ("       packet control : \n \t\t\tp-send packets\n");
+      printf
+         ("       QDepth control : \n \t\t\tb-get WP_ChannelQDepth(tx_gbe_channel[0])\n");
+      printf
+         ("       All    control : \n \t\t\ta-get all statistics)\n");
 
 #if 0
       gets (InputBuf);
@@ -2858,6 +2899,13 @@ void WPE_CLI (void)
          printf
             ("********************* WP_DISPLAY **********************   \n");
          WP_Display (0, WP_DISPLAY_DEVICE, WP_DISPLAY_DEFAULT, 0);
+         break;
+      case 'b':
+	{
+	WP_U32 depth = 0;
+         WP_ChannelQDepth(tx_gbe_channel[0], &depth);
+	printf ("QDepth (%x)\n", depth);
+	}
          break;
       case 'f':
          printf
