@@ -1,0 +1,3 @@
+EXAMPLE_SRC=95099-pce_demo.c
+WDDI_DPS_IMAGE=wpi_dps_image_backhaul.o
+WDDI_PPS_IMAGE=wpi_pps_image_iwgp_parser.o
