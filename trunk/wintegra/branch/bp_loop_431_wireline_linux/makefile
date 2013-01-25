@@ -1,6 +1,7 @@
 ############################################################ Change this block only!  #############################################################
 
 WPI_WDDS_DIR = ../../..
+WPI_APP_TARGET     = mips_linux
 
 ifeq "$(WPI_TARGET)" "mips_winmon"
 WPI_APP_TARGET     = mips_winmon
@@ -141,9 +142,9 @@ ifneq "$(START_FILE)" ""
 	-cp $(WPI_START_FILE)/$(START_FILE) $(START_FILE)
 endif
 	$(CC) $(LDFLAGS) $(MY_LDFLAGS) -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(PPS_IMAGE_OBJ) \
-	$(WPI_HT_DIR)/lib/ws_common.a $(WPI_HT_DIR)/lib/wpi_wddi.a \
+	 $(WPI_HT_DIR)/lib/wpi_wddi.a \
 	$(WPI_HT_DIR)/$(WPI_APP_BOARD)/lib/winutil.a $(PHY_BOARD)/wpx_board.a $(WPI_HT_DIR)/lib/platform.a $(WPI_HT_DIR)/lib/wpi_hw_device.a $(OTHER_LIB) \
-	$(WPI_HT_DIR)/lib/wpi_pecs.a $(WPI_HT_DIR)/lib/ws_common.a $(WPI_HT_DIR)/lib/shared.a
+	$(WPI_HT_DIR)/lib/wpi_pecs.a $(WPI_HT_DIR)/lib/shared.a
 
 # Clean up after everything that might have happened
 	rm -rf $(START_FILE)
