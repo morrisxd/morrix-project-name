@@ -1,11 +1,11 @@
-make TEST=03120-pce_cbfc.c 2>&1 | tee make.log
+make TEST=03120-pce_cbfc.c WPI_API_TARGET=mips_linux 2>&1 | tee make.log
 if [ $? -eq 0 ]
 then
 # ~/bin/up bin/03120-pce_cbfc.exe bin
 echo skip uploading ...
 fi
 cd bin
-cp 03120-pce_cbfc morris_._bin_03120-pce_cbfc_loop.exe
+mv 03120-pce_cbfc bp_cbfc_loop_linux_431.exe
 copy_to_tftpboot.sh
 # cd bin
 # mv 03120-pce_cbfc 03120-pce_cbfc.exe
