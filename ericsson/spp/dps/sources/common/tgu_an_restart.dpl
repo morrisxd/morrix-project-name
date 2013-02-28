@@ -76,7 +76,7 @@ section TGU_AN_RESTART
 
    /* Initialize SW counter */
    TguCounter = SGMII_TGU_SW_COUNTER_INIT_VAL;
-   _mem(r0, B_DEBUG1[32], 4, DEBUG_BUS) = TguCounter;
+   _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset], 4) = TguCounter;
 
 
 
