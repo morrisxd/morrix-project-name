@@ -63,9 +63,10 @@ section TGU_AN_RESTART
        _task_switch(r0, _TERMINATE);
     }
 
-
-    TguCounter = _mem(r0, B_DEBUG1[32], 4, DEBUG_BUS);
-    _mem(r0, B_DEBUG1[32], 4, DEBUG_BUS) += 1;
+    CounterOffset = SGMII_TGU_SW_COUNTER_OFFSET; 
+    TguCounter =  _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset], 4);
+   
+   _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset]) += 1;
 
    /* TGU Period is extended to also address 1000BaseX_AN case, which requires longer period time (*8 than SGMII_AN)*/
    if ((TguCounter & SGMII_TGU_1000BaseX_DIV_FACTOR) != 0)
