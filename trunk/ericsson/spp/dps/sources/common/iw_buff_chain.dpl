@@ -1,0 +1,349 @@
+/***************************************************************************** 
+ * (C) Copyright Wintegra 2000-2010.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: iw_buff_chain.dpl
+*
+* Description: This file is used for all functions needed foe multi buffer.
+*
+*
+* Module Originator:  Elad Kaplan
+* Creation Date:  Fri Feb 14 2003
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+****************************************************************************/
+
+
+/* Include Files */
+#include "config.h"
+#include "shared.h"
+#include "order.h"
+
+#define BUFFER_CHAIN_DEBUG
+
+#if FEATURE_IW && FEATURE_MATRIX_BUFF_CHAIN
+
+/* Include Files */
+#include "iw_interface.h"
+#include "interworking.h"
+
+
+/******************************************************************************************
+ *
+ * Function:    F_BufchainReturnBds
+ *
+ * Description:
+ *
+ * Inputs:
+ *
+ *
+ * Outputs:
+ *
+ * Important Notes:
+ *
+ *****************************************************************************************/
+
+func F_BufchainReturnBds(in                    CurrentBDPointer       = r95,
+                         in struct S_LinkIwTBD DropBd                 = r80,
+                         in                    StopBdPointer          = r112,
+                         in                    TerminationMode        = r111)
+{
+
+   register AccFreeBufferPoolNumber = acc;
+
+   /* if the next BD pointer points to null or pointer */
+   while (DropBd.NextBDPtr != StopBdPointer)
+   {
+      /* Exteract Free pool number and the IWBT from the external control word(and shift)*/
+      AccFreeBufferPoolNumber = DropBd.FbpNumber;
+
+      /* fifo put --> release buffer */
+      _fifo(r0, AccFreeBufferPoolNumber, FBP_PARM_BUS) = CurrentBDPointer;
+
+      CurrentBDPointer=DropBd.NextBDPtr;
+      DropBd = _mem(r0, DropBd.NextBDPtr, sizeof(S_LinkIwTBD), FBP_PARM_BUS);
+   }
+
+   /* Extract Free pool number and the IWBT from the external control word(and shift)*/
+   if (TerminationMode == TERMINATION)
+   {
+      // fifo put --> release buffer
+      AccFreeBufferPoolNumber = DropBd.FbpNumber;
+      _fifo(r0, AccFreeBufferPoolNumber, FBP_PARM_BUS | _TERMINATE) = CurrentBDPointer;
+
+      // In Case of Accelerator error
+      _task_switch(r0, _TERMINATE);
+   }
+   else
+   {
+      /* No Termination Mode */
+
+      // fifo put --> release buffer
+      AccFreeBufferPoolNumber = DropBd.FbpNumber;
+      _fifo(r0, AccFreeBufferPoolNumber, FBP_PARM_BUS) = CurrentBDPointer;
+   }
+}
+/* F_BufchainReturnBds */
+
+
+func F_IwBufferChainDrop(in                   P_OrderKey            = r112,
+                         in                   P_FirstBdPtr          = r95,
+                         in                   P_FBPnum              = r113,
+                         in                   P_UNLOCK_TYPE         = r114,
+                         in                   P_MatrixBuffChainInfo = r115,
+                         in                   P_Termination_mode    = r111)
+{
+   register                              AccFifoNumber       = acc;
+   register                              TempPtr             = r10;
+   // in case of MatrixBd struct, second BD ptr is stored in a compressed format and should be extracted
+   register                              SecondBdPtr         = r13;
+   register                              SaveJir             = r13;
+   register struct S_LinkIwTBD           DropBd              = r80;
+   register struct S_MatrixBuffChainInfo MatrixBuffChainInfo = P_MatrixBuffChainInfo;
+   register struct S_IwSerialStatusReg status0               = STATUS0_REG;
+
+#ifdef _MODULE_MATRIX_BUFF_CHAIN_ENABLE_
+   if (status0.BuffChainPacket)
+   {
+      P_FirstBdPtr &= 0xfffffffe;
+
+      // calculate the pointer of the pointer of the second BD in the matrix buffer chain
+      M_MatrixBufChainCalcSecondBdPtr(MatrixBuffChainInfo,
+                                      P_FirstBdPtr,
+                                      SecondBdPtr);
+
+      // release first BD
+      AccFifoNumber = P_FBPnum;
+      _fifo(r0, acc, FBP_PARM_BUS) = P_FirstBdPtr;
+
+      if (P_UNLOCK_TYPE)
+         DropBd = _mem(P_OrderKey, SecondBdPtr, sizeof(S_LinkIwTBD), FBP_PARM_BUS | _ORDER_UNLOCK);
+      else
+    	 DropBd = _mem(r0, SecondBdPtr, sizeof(S_LinkIwTBD), FBP_PARM_BUS);
+
+      P_FirstBdPtr = SecondBdPtr;
+   }
+   else
+#endif
+   {
+	  if (P_UNLOCK_TYPE)
+         DropBd = _mem(P_OrderKey, P_FirstBdPtr, sizeof(S_LinkIwTBD), FBP_PARM_BUS | _ORDER_UNLOCK);
+	  else
+		 DropBd = _mem(r0, P_FirstBdPtr, sizeof(S_LinkIwTBD), FBP_PARM_BUS);
+   }
+
+   SaveJir = jir;
+   /* Return the rest of the BDs of the Packet */
+   F_BufchainReturnBds(P_FirstBdPtr,
+                       DropBd,
+                       NULL_POINTER,
+                       P_Termination_mode);
+   jir = SaveJir;
+
+}/* F_IwBufferChainDrop */
+
+
+/******************************************************************************************
+ *
+ * Function:      F_MatrixBufChainBack
+ *
+ * Description:   Getting a pointer to a buffer and splitting the data to MBC
+ *
+ * Inputs:        P_DataPtr         - pointer do an input buffer BD
+ *	          P_TotalLength     - total length of the data
+ *                P_ChainBufSize    - size of MBC buffers
+ *                P_ChainBufGapSize - gap size of MBC buffers
+ *                P_ChainBackFbp    - free buffer pool of MBC
+ *
+ *
+ * Outputs:       P_FirstMbcBd      - first BD of the created MBC
+ *                P_ReturnStatus    - err status
+ *
+ * Important Notes:
+ *
+ *****************************************************************************************/
+func F_MatrixBufChainBack(in                    P_DataPtr         = r26,
+                          in                    P_TotalLength     = r40,
+                          in                    P_ChainBufSize    = r16,
+                          in                    P_ChainBufGapSize = r15,
+                          in                    P_ChainBackFbp    = r14,
+                          in                    P_SAVE_TRS_MODE   = r23, //r39,
+                          out struct S_MatrixBd P_FirstMbcBd      = r17, //r35,
+                          out                   P_ReturnStatus    = r21)
+{
+   register                              T_Counter             = r10;
+   register                              T_TempBdPtr           = r10;
+   register                              T_SourceAddr          = r11;
+   register                              T_SaveJir             = r11;
+   register                              T_DestAddr            = r12;
+   register                              T_ChainLength         = r13;
+   register                              T_SaveFBPLinkPtr      = r23;
+   register                              T_TotalLength         = P_ReturnStatus;
+   register struct S_MatrixBd            T_MbcBd               = r112;
+   register struct S_MatrixBd            T_TempBd              = r116;
+   register struct S_IWModeFieldRout     mode0                 = MODE_REG;
+   register struct S_IwSerialStatusReg   status0               = STATUS0_REG;
+
+   T_TotalLength = P_TotalLength;
+   T_SourceAddr  = P_DataPtr;
+
+   /* taking care of the first and the second BDs in MBC */
+   
+   /* getting the first BD */ 
+   T_MbcBd = _fifo(NO_ORDER, P_ChainBackFbp, T_Counter, sizeof(S_MatrixBd), FBP_PARM_BUS);
+   if (status0.AccErr)
+   {
+      P_ReturnStatus = MATRIX_BUF_CHAIN_FAIL;
+      return;
+   }
+
+   /* Init the First BD */
+   T_MbcBd.DataPtr     &= IW_DATA_BUFFER_ALIGNMENT;
+   T_MbcBd.TotalLength  = P_TotalLength;
+
+   /* Set V bit, MTBD bit */
+   $reg(T_MbcBd.MatrixBdStatus.V) &= BD_STATUS_RESET_MASK;
+   $reg(T_MbcBd.MatrixBdStatus.V) |= (M_Mask(S_MatrixBd.MatrixBdStatus.V) | M_Mask(S_MatrixBd.MatrixBdStatus.MTBD));
+
+
+   if (P_SAVE_TRS_MODE == SAVE_TRS)
+   {
+      /* Save the IP Header to Buffer Gap */
+      mode0.DBT = T_MbcBd.MatrixBdStatus.DaBus;
+      _data_mem(r0, T_MbcBd.DataPtr, 64) = HEADER_REG;
+   }
+   T_MbcBd.DataPtr += P_ChainBufGapSize;
+
+   T_ChainLength = P_ChainBufSize - P_ChainBufGapSize;
+
+   /* If the output chained buffer contains a single BD, perform the copy and return */
+   if (P_TotalLength <= T_ChainLength)
+   {
+      /* Clear the matrix bd indication */
+      $reg(T_MbcBd.MatrixBdStatus.V) &= ~M_Mask(S_MatrixBd.MatrixBdStatus.MTBD);
+
+      /* Set the E bit of single buffer */
+      $reg(T_MbcBd.MatrixBdStatus.V) |= M_Mask(S_MatrixBd.MatrixBdStatus.E);      
+
+      /* copying the data to the first BD */
+      M_CopyChainBackChunks(T_ChainLength, T_MbcBd, T_TotalLength, T_SourceAddr, T_DestAddr);
+
+      /* saving the first BD */
+      _mem(r0, T_MbcBd, sizeof(S_MatrixBd), FBP_PARM_BUS) = *(&T_MbcBd);
+      _trscpy(&P_FirstMbcBd, &T_MbcBd, sizeof(S_MatrixBd));
+
+      P_ReturnStatus = MATRIX_BUF_CHAIN_SINGLE;
+      goto L_MatrixBufChainBackReturn;
+   }
+
+   /* getting the second BD */
+   T_TempBd = _fifo(NO_ORDER, P_ChainBackFbp, T_Counter, sizeof(S_MatrixBd), FBP_PARM_BUS);
+   if (status0.AccErr)
+   {
+      _fifo(NO_ORDER, P_ChainBackFbp, FBP_PARM_BUS) = T_MbcBd;
+      P_ReturnStatus = MATRIX_BUF_CHAIN_FAIL;
+      return;
+   }
+
+   /* updating the MatrixBuffChainInfo */
+   T_MbcBd.U_ProtocolSpecific.MatrixBuffChainInfo = 0;
+   M_MatrixBufChainPrepareBdInfo(T_MbcBd,
+                                 T_TempBd,
+                                 T_ChainLength,
+                                 T_MbcBd.U_ProtocolSpecific.MatrixBuffChainInfo,
+                                 T_DestAddr);
+
+   /* copying the data to the first BD */
+   M_CopyChainBackChunks(T_ChainLength, T_MbcBd, T_TotalLength, T_SourceAddr, T_DestAddr);
+
+   /* saving the first BD */
+   _mem(r0, T_MbcBd, sizeof(S_MatrixBd), FBP_PARM_BUS) = *(&T_MbcBd);
+   _trscpy(&P_FirstMbcBd, &T_MbcBd, sizeof(S_MatrixBd));
+
+   /* copying the data to the second BD */
+   T_ChainLength         = (P_ChainBufSize > T_TotalLength) ? T_TotalLength : P_ChainBufSize;
+   $reg(T_TempBd.MatrixBdStatus.V) &= BD_STATUS_RESET_MASK;
+   $reg(T_TempBd.MatrixBdStatus.V) |= M_Mask(S_MatrixBd.MatrixBdStatus.V);
+   T_TempBd.TotalLength  = T_ChainLength;
+   T_TempBd.DataPtr     &= IW_DATA_BUFFER_ALIGNMENT;
+   M_CopyChainBackChunks(T_ChainLength, T_TempBd, T_TotalLength, T_SourceAddr, T_DestAddr);
+
+   /* the rest of MBC */
+   while (T_TotalLength)
+   {
+      T_MbcBd = _fifo(NO_ORDER, P_ChainBackFbp, T_Counter, sizeof(S_MatrixBd), FBP_PARM_BUS);
+      if (status0.AccErr)
+      {
+         T_SaveFBPLinkPtr = r95;
+         
+         P_FirstMbcBd.NextBdPtr |= 1;
+         T_TempBdPtr         = T_TempBd.NextBdPtr;
+         T_TempBd.NextBdPtr  = 0;
+         _mem(NO_ORDER, T_TempBdPtr, sizeof(S_MatrixBd), FBP_PARM_BUS) = *(&T_TempBd);
+         T_SaveJir = jir;
+         F_IwBufferChainDrop(r0,
+                             P_FirstMbcBd,
+                             P_ChainBackFbp,
+                             0,
+                             P_FirstMbcBd.U_ProtocolSpecific.MatrixBuffChainInfo,
+                             0);
+         jir = T_SaveJir;
+         r95 = T_SaveFBPLinkPtr;
+
+         P_ReturnStatus = MATRIX_BUF_CHAIN_FAIL;
+         return;
+      }
+
+      /* updating and saving the previous BD */
+      T_TempBdPtr         = T_TempBd.NextBdPtr;
+      T_TempBd.NextBdPtr  = T_MbcBd.NextBdPtr;
+      _mem(NO_ORDER, T_TempBdPtr, sizeof(S_MatrixBd), FBP_PARM_BUS) = *(&T_TempBd);
+
+      /* copying the data */
+      T_ChainLength       = (P_ChainBufSize > T_TotalLength) ? T_TotalLength : P_ChainBufSize;
+      T_MbcBd.DataPtr    &= IW_DATA_BUFFER_ALIGNMENT;
+      _bf($reg(T_MbcBd.MatrixBdStatus.V), 0, 8) = _bf($reg(T_TempBd.MatrixBdStatus.V), 0, 8);
+      T_MbcBd.TotalLength = T_ChainLength;
+      M_CopyChainBackChunks(T_ChainLength, T_MbcBd, T_TotalLength, T_SourceAddr, T_DestAddr);
+      _trscpy(&T_TempBd, &T_MbcBd, sizeof(S_MatrixBd));
+   }
+
+   /* saving the last BD */
+   T_TempBdPtr = T_TempBd.NextBdPtr;
+   T_TempBd.NextBdPtr = 0;
+   T_TempBd.MatrixBdStatus.E         = 1;
+   _mem(NO_ORDER, T_TempBdPtr, sizeof(S_MatrixBd), FBP_PARM_BUS) = *(&T_TempBd);
+   mode0.DBT      = P_FirstMbcBd.MatrixBdStatus.DaBus;
+
+   P_ReturnStatus = MATRIX_BUF_CHAIN_OK;
+
+  L_MatrixBufChainBackReturn:
+   if (P_SAVE_TRS_MODE == SAVE_TRS)
+   {
+      register T_Offset   = r10;
+
+      /* Load the IP Header from the Buffer Gap */
+      T_Offset = P_FirstMbcBd.DataPtr & IW_DATA_BUFFER_ALIGNMENT;
+      HEADER_REG = _data_mem(r0, T_Offset, 64);
+   }
+}/* F_MatrixBufChainBack */
+
+
+#endif /* FEATURE_IW && (FEATURE_BUFF_CHAIN || FEATURE_MATRIX_BUFF_CHAIN)*/
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2010, All rights reserved.
+ *****************************************************************************/

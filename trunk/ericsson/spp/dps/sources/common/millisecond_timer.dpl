@@ -1,0 +1,216 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2009.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: millisecond_timer.dpl
+*
+* Description: This file implements a general-purpose millisecond service
+*              module.  Low-frequency clients register with a count, a limit,
+*              and a PC.  Every ms, a TGU starts a thread which 
+*              decrements the count for each client.  If a count becomes 0,
+*              the client code starting at pc is executed (it must return)
+*              and the count is reset to limit.  If a count is non-zero,
+*              then the client code is not executed.
+*
+* Module Originator:  Roger Smith
+* Creation Date:  Tue Mar 3, 2009
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+*
+****************************************************************************/
+/* Include Files */
+#include "shared.h"
+#include "token_thread.h"
+
+global E_MillisecondTimer;
+
+#ifndef _MODULE_MILLISECOND_TIMER_ENABLE_
+const E_MillisecondTimer = 0;
+#else
+
+#define MILLISECOND_TIMER_BUS _MASTER0
+
+#if FEATURE_WINFARM_1
+global E_MillisecondTimerContinue;
+#endif
+
+/*****************************************************************************
+ *
+ * Block Name: MillisecondTimer
+ *
+ * Description: This file implements a general-purpose millisecond service
+ *              module.  Low-frequency clients register with a count, a limit,
+ *              and a PC.  Every ms, a TGU starts a thread which is to provide
+ *              service to each client with limit != 0 and count = 0.
+ *
+ *              If count is 0, it is reset to limit - 1.
+ *              If count is non-zero, it is decremented.
+ *
+ *              Note:  this means client gets service every limit interrupts
+ *
+ *              E_MillisecondTimer            : Entry point for TGU
+ *              E_ContinueMillisecondTimer    : Return point from client code
+ *****************************************************************************/
+// pairs of global label, entry index
+#if FEATURE_WINFARM_1
+global L_MillisecondTimerWinfarm1;
+
+#if FEATURE_ROHC
+global E_RohcStandaloneFeedback;
+#endif
+
+#if FEATURE_LONGS_PEAK
+global E_PdcpMsLongsPeak;
+#endif
+
+#if FEATURE_PDCP
+global E_PdcpUlHo;
+global E_PdcpTimerDiscard;
+#endif
+
+#endif // FEATURE_WINFARM_1
+
+
+enum MsServiceClients{
+   MS_SERVICE_ROHC_STANDALONE = 0,
+   MS_SERVICE_PDCP_UL_HO,
+   MS_SERVICE_LONGS_PEAK,
+   MS_SERVICE_PDCP_TIMER_DISCARD,
+   MS_SERVICE_CLIENT_LAST
+};
+
+// end of pairs
+
+struct S_MillisecondTimerService {
+      _bit limit   : 16;
+      _bit count   : 16;
+      _bit service : 32;
+};
+
+struct S_MillisecondTimer {
+      _bit n_services : 32;
+      struct S_MillisecondTimerService service_0;
+      struct S_MillisecondTimerService service_1;
+      struct S_MillisecondTimerService service_2;
+      struct S_MillisecondTimerService service_3;
+};
+
+section millisecond_timer
+{   	
+
+  E_MillisecondTimer:
+
+   // Regardless of winfarm this thread starts on, use winfarm1 using token thread 1
+   {
+      register struct S_TokenThreadFifos fifo_data = r64;
+      register offset = r65;
+      register struct S_TguToken token = r72;
+      register struct S_GenStatus0 status0 = STATUS0_REG;
+      register status1 = STATUS1_REG;
+      register fifo = acc;
+
+      // Get fbp # & fifo # for token thread
+      offset = 0;
+      fifo_data = _mem(status1, B_TOKEN_THREAD[offset], 4, _ORDER_LOCK | _MASTER2);
+
+      // Get a token
+      fifo = fifo_data.Fbp_1;
+      token = _fifo(r0, fifo, r0, 4, FBP_PARM_BUS);
+      if (status0.AccErr)
+         _task_switch(status1, _ORDER_UNLOCK | _TERMINATE);
+
+      token.Client = TokenClient_MillisecondTimer;
+
+      // write token to memory
+      _mem(r0, token, sizeof(S_TguToken), FBP_PARM_BUS) = *(&token);
+
+      // Insert token in fifo and terminate
+      fifo = fifo_data.Fifo_1;
+      _fifo(status1, fifo, _ORDER_UNLOCK | FBP_PARM_BUS | _TERMINATE) = token;
+      if (status0.AccErr)
+         _task_switch(r0, _TERMINATE);
+   }
+
+   // Actual millisecond timer on winfarm 1
+   if (FEATURE_WINFARM_1)
+   {
+      // Registers which clients must preserve
+      register status1 = r8;
+      register service_id = r11;
+      register n_services = r12;
+      // Registers which are used but need not be preserved
+      register struct S_MillisecondTimerService service = r13; // r13-r14
+      register offset = r15;
+      register count = r16;
+
+     L_MillisecondTimerWinfarm1:
+
+      // Lock while reading n_services
+      offset = 0;
+      n_services = _mem(status1, B_MILLISECOND_TIMER[offset], 4, _ORDER_LOCK | MILLISECOND_TIMER_BUS);
+
+#if 1
+      for (service_id = 0; service_id < n_services; service_id++) {
+         // Get service
+         offset = 4 + sizeof(S_MillisecondTimerService) * service_id;
+         *(&service) = _mem(r0, B_MILLISECOND_TIMER[offset], sizeof(S_MillisecondTimerService), MILLISECOND_TIMER_BUS);
+
+         // Skip if limit is 0
+         if (service.limit == 0)
+            continue;
+
+         // Preserve original count, store decremented count
+         if ((count = service.count) == 0)
+            service.count = service.limit - 1;
+         else
+            service.count = count - 1;
+         _mem(r0, B_MILLISECOND_TIMER[offset], 4, MILLISECOND_TIMER_BUS) = *(&service);
+
+         // Execute service code
+         if (count == 0) {
+            if (FEATURE_PDCP && service.service == MS_SERVICE_PDCP_TIMER_DISCARD)
+               goto E_PdcpTimerDiscard;
+            if (FEATURE_PDCP && !FEATURE_LONGS_PEAK && service.service == MS_SERVICE_PDCP_UL_HO)
+               goto E_PdcpUlHo;
+            else if (FEATURE_ROHC && !FEATURE_HC_SUPPORT && service.service == MS_SERVICE_ROHC_STANDALONE)
+               goto E_RohcStandaloneFeedback;
+            else if (FEATURE_LONGS_PEAK && service.service == MS_SERVICE_LONGS_PEAK)
+               goto E_PdcpMsLongsPeak;
+            // else if ()
+            // ... the service code must branch back to the following label
+
+           E_MillisecondTimerContinue:
+            continue;
+         }
+      }
+#else
+     E_MillisecondTimerContinue:
+      offset = 8;
+      count = _mem(r0, B_MILLISECOND_TIMER[offset], 4, MILLISECOND_TIMER_BUS);
+      count = _time_stamp();
+      _mem(r0, B_MILLISECOND_TIMER[offset], 4, MILLISECOND_TIMER_BUS) = count;
+   
+#endif
+      // Unlock and terminate
+      _task_switch(status1, _ORDER_UNLOCK | _TERMINATE);
+   }
+}
+
+#endif
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2009, All rights reserved.
+ *****************************************************************************/

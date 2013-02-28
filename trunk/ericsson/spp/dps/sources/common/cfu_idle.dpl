@@ -1,0 +1,41 @@
+/*****************************************************************************
+ *
+ * Module: $RCSfile: cfu_idle.dpl,v $
+ *
+ * Purpose:
+ *    
+ *
+ * Module Originator:  Eran Katz  (Login Name: 'eranka')  
+ * Creation Date: 11/2007
+ *
+ * Change History: 
+ * +------------+--------------------+----------------------------------------
+ * | Date       | By                 | Description
+ * +------------+--------------------+----------------------------------------
+ * |            |                    |
+ * +------------+--------------------+----------------------------------------
+ * |            |                    |
+ * +------------+--------------------+----------------------------------------
+ *
+ * / CVS information /
+ * $Id: cfu_idle.dpl,v 1.2 2007/11/29 14:17:45 eranka Exp $
+ *****************************************************************************/
+
+#include "features.h"
+
+global L_WP3_CFU_Idle_Start;
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+
+section WP3_CFU_Idle
+{
+  L_WP3_CFU_Idle_Start:
+
+   _task_switch(r0, _TERMINATE);
+}
+
+#else
+
+const  L_WP3_CFU_Idle_Start = 0;
+
+#endif // _WINPATH_REV_WP3_ENABLE_
