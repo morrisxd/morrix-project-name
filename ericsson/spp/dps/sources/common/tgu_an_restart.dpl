@@ -48,6 +48,7 @@ section TGU_AN_RESTART
    register struct S_TandbgHwReg Tandbg = r15;
    register struct S_TcntrHwReg  Tcntr  = r16;
    register                      GroupOffset = r17;
+   register                      TguCounter = r19;
 
    global L_An_Restart_Tgu_Start;
    
@@ -62,9 +63,25 @@ section TGU_AN_RESTART
        _task_switch(r0, _TERMINATE);
     }
 
+
+    TguCounter = _mem(r0, B_DEBUG1[32], 4, DEBUG_BUS);
+    _mem(r0, B_DEBUG1[32], 4, DEBUG_BUS) += 1;
+
+   /* TGU Period is extended to also address 1000BaseX_AN case, which requires longer period time (*8 than SGMII_AN)*/
+   if ((TguCounter & SGMII_TGU_1000BaseX_DIV_FACTOR) != 0)
+   {
+      _task_switch(r0, _TERMINATE);
+   }
+
+   /* Initialize SW counter */
+   TguCounter = SGMII_TGU_SW_COUNTER_INIT_VAL;
+   _mem(r0, B_DEBUG1[32], 4, DEBUG_BUS) = TguCounter;
+
+
+
    EnetPortsMask = Tcr3;
       
-   while (EnetPortsMask > 0)
+   while (EnetPortsMask != 0)
    {
       /* get the next port index by _ffs command
        * Port Enet1 will be mapped to MSB bit and so on.
@@ -78,12 +95,14 @@ section TGU_AN_RESTART
       /* Obtain Tandbg register */
       RegOffset = SGMII_TGU_WINNET_0_TANDBG_REG_OFFSET + GroupOffset;
       
+      /* Clear Tandbg register and read right after to get Winnet state */
       Tandbg = 0;
       _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE) = Tandbg;
 
       Tandbg = _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE);
 
-      if (Tandbg == 0)
+      /* Check if Tandbg has link_ok or an_disabled_link_ok 'on'*/
+      if ((Tandbg & SGMII_TGU_TANDBG_STUCK_BIT_MASK) == 0)
       {
          /* Obtain Tcntr register */
          RegOffset = SGMII_TGU_WINNET_0_TCNTR_REG_OFFSET + GroupOffset;
@@ -93,9 +112,21 @@ section TGU_AN_RESTART
          /* Set Restart AN bit */
          Tcntr.RestartAn = 1;         
          _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE) = Tcntr;
+
+         /* In some unique cases, AN restart will not resolve the issue, so AN must be disabled and enabled again*/
+         /* This is done only for interfaced of AutoNegotioation type */
+         if (Tcntr.AnEnable)
+         {
+            /* Disable/Enable AN */
+            Tcntr.AnEnable = 0;
+            _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE) = Tcntr;
+            Tcntr.AnEnable = 1;
+            _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE) = Tcntr;
+         }         
       }   
    }
 
    _task_switch(r0, _TERMINATE);   
 }
+
 #endif //_WINPATH_REV_WP3_ENABLE_

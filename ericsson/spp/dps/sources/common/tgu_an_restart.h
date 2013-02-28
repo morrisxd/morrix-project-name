@@ -41,6 +41,10 @@
 #define SGMII_TGU_REG_SIZE 4
 
 #define SGMII_TGU_CLEAR_INDEX_FROM_PORT_MASK(PortMask, PortIndex) (PortMask &= ~(0x80000000 >> PortIndex))
+#define SGMII_TGU_TANDBG_STUCK_BIT_MASK 0x00000180
+#define SGMII_TGU_1000BaseX_DIV_FACTOR  7
+#define SGMII_TGU_SW_COUNTER_INIT_VAL   1
+
 
 struct S_TandbgHwReg
 {
