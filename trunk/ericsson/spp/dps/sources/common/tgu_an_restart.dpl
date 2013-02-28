@@ -48,7 +48,7 @@ section TGU_AN_RESTART
    register struct S_TandbgHwReg Tandbg = r15;
    register struct S_TcntrHwReg  Tcntr  = r16;
    register                      GroupOffset = r17;
-   register                      TguCounter = r19;
+   register                      CounterOffset = r19;
 
    global L_An_Restart_Tgu_Start;
    
