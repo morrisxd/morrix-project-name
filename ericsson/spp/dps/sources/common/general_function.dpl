@@ -1,0 +1,1002 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2002.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: general_function.dpl
+*
+* Description: Following the package split to Rx package and Tx package, this file is used
+*               in both packages. (Functions in this file are used in both Rx and Tx).
+*
+* Module Originator: Shaharh
+* Creation Date: Sept. 11, 2002
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+* / CVS information /
+* $Id: general_function.dpl,v 1.47 2008/07/24 09:32:39 liorb Exp $
+*****************************************************************************/
+
+
+#include "config.h"
+#include "shared.h"
+#include "order.h"
+#if (defined(_MODULE_ASU_ENABLE_)||defined(_MODULE_ADDRLOOKUP_ENABLE_)||\
+     defined(_MODULE_FMU_SCHEDULING_ENABLE_)||defined(_MODULE_FMU_PSU_ENABLE_))
+#include "atm.h"
+#endif
+#include "calendar.h"
+#include "scheduler.h"
+#include "asu.h"
+#ifndef DPS_LEVEL_0_TESTING_UTIL /*the following should not be compiled for the testing util*/
+
+#ifndef _GENERAL_FUNCTION_
+#define _GENERAL_FUNCTION_
+
+
+
+
+section general_function
+{
+#ifdef _MODULE_ATM_BUNDLE_STATISTICS_ENABLE_ 
+/********************************************************************
+ *  Function: F_Bundle_Statistics_Tx
+ *
+ *  Description:
+ *
+ * This Funtion updates the Bundle statistics for Tx events
+ *
+ *
+ *
+ ********************************************************************/
+func F_Bundle_Statistics_Tx(in  struct S_SerialStatusReg   status0     = r7,
+                            in  struct S_TempReg           BundleNum   = r97)
+
+      {
+         register struct S_TempReg       BundleOffset          = r112;
+         register struct S_TempReg       bundleStatOffset = r113;
+         register struct S_AtmCellHeader CellHeader         = r99 ;
+         register struct S_TempReg  VCI                     = r14 ;
+         const M_VCI = 0xFFFF ;
+         
+         /*set the pointer to the begginging of Bundle statistics (not Ext phy)*/
+         BundleNum += MAX_NUMBER_OF_PHY;
+         
+         //Calculate the bundle offset once
+         BundleOffset = BundleNum * sizeof(S_BundleStatistics);
+
+         /* check if CLP was set*/
+         if (CellHeader & M_Mask(S_AtmCellHeader.CLP))
+         {
+            /* set the offset to CLP1 offset */
+            bundleStatOffset = BundleOffset + M_BitToByte(S_BundleStatistics.TxClp1Cells);
+            /* Increment the the Bundle Tx CLP1 statistics */
+            _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][bundleStatOffset], PHY_BUNDLE_STATISTICS_BUS) += 1;
+         }
+         else
+         {
+            /* set the offset to CLP0 offset */
+            bundleStatOffset = BundleOffset + M_BitToByte(S_BundleStatistics.TxClp0Cells);
+            /* Increment the the Bundle Tx CLP0 statistics */
+            _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][bundleStatOffset], PHY_BUNDLE_STATISTICS_BUS) += 1;
+         }
+
+         /* check if EFCI is set */
+         if (CellHeader & M_Mask(S_AtmCellHeader.PTI_1)) // EFCI
+         {
+            /* not RM cell*/
+            if (!(CellHeader & M_Mask(S_AtmCellHeader.PTI_2)))
+            {
+               // Check the VC to make sure the cell is "user-cell"
+               VCI =  $reg(CellHeader.VCI) >> 4;
+               VCI &=M_VCI;
+               if (!((VCI < 16) && !((VCI==5) || (VCI==2)|| (VCI==1))))
+               {
+                  //Cell is "User-cell" EFCI statistics should be updated
+                  bundleStatOffset = BundleOffset +  M_BitToByte(S_BundleStatistics.TxEfciCells) ;
+                  _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][bundleStatOffset],PHY_BUNDLE_STATISTICS_BUS) += 1;
+               }
+            } // end of "if !PTI_2"
+         } // end of "if PTI_1"
+      } // end of "F_Bundle_Statistics_Tx"
+#endif /*_MODULE_ATM_BUNDLE_STATISTICS_ENABLE_ */
+
+
+#if (defined(_MODULE_ASU_ENABLE_)||defined(_MODULE_ADDRLOOKUP_ENABLE_))
+/********************************************************************
+ *  Function: F_TxIdleStat
+ *
+ *  Description:
+ *     This function updates the Extended phy statistics for Tx Idle
+ *
+ * Inputs:
+ *     status0
+ *     AsuPhy - Phy #
+ *
+ * Modified and saved registers:
+ *     r10 
+ *
+ ********************************************************************/
+func F_TxIdleStat(in struct S_SerialStatusReg status0 = r7,
+                  in struct S_TempReg         AsuPhy = r68)
+{
+   register IdleStatOffset = r10;
+
+   if (status0.U_SerialStatus.TxSerialMode.EPSE)
+   {
+      IdleStatOffset = AsuPhy * EXTENDED_PHY_STATISTICS_TABLE_SIZE;
+      IdleStatOffset += EPST_TX_IDLE_OFFSET;
+      _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][IdleStatOffset],
+           PHY_BUNDLE_STATISTICS_BUS) += 1;
+   }
+}
+#endif
+
+#if (defined(_MODULE_ASU_ENABLE_)||defined(_MODULE_ADDRLOOKUP_ENABLE_))
+/********************************************************************
+ *  Function: F_Extended_Phy_Statistics_Tx
+ *
+ *  Description:
+ *
+ * This Funtion updates the Extended phy statistics for Tx events
+ *
+ *
+ *
+ ********************************************************************/
+   func F_Extended_Phy_Statistics_Tx(in  struct S_SerialStatusReg   status0     = r7,
+                                     in  struct S_TempReg           AsuPhy      = r68)
+
+      {
+         register struct S_TempReg       PhyOffset          = r112;
+         register struct S_TempReg       ExtendedStatOffset = r113;
+         register struct S_AtmCellHeader CellHeader         = r99 ;
+         register struct S_TempReg  VCI                     = r14 ;
+         const M_VCI = 0xFFFF ;
+
+         //Calculate the phy offset once
+         PhyOffset = AsuPhy * EXTENDED_PHY_STATISTICS_TABLE_SIZE ;
+
+         if (CellHeader & M_Mask(S_AtmCellHeader.CLP))
+         {
+            ExtendedStatOffset = PhyOffset + EPST_TX_CLP1_CELLS_OFFSET ;
+            _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][ExtendedStatOffset], PHY_BUNDLE_STATISTICS_BUS) 
+               += 1;
+         }
+         else
+         {
+            ExtendedStatOffset = PhyOffset + EPST_TX_CLP0_CELLS_OFFSET ;
+            _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][ExtendedStatOffset], PHY_BUNDLE_STATISTICS_BUS)
+               += 1;
+         }
+
+         if (CellHeader & M_Mask(S_AtmCellHeader.PTI_1)) // EFCI or RM or OAM
+         {
+            if (!(CellHeader & M_Mask(S_AtmCellHeader.PTI_2)))
+            {/*if EFCI*/
+/*             /***************************************************/
+/*             /* Update EFCI even if it is non user cell         */ 
+/*             /***************************************************/
+/*               // Check the VC to make sure the cell is "user-cell"
+               VCI =  $reg(CellHeader.VCI) >> 4;
+               VCI &=M_VCI;
+               if (!((VCI < 16) && !((VCI==5) || (VCI==2)|| (VCI==1))))
+               //Cell is "User-cell" EFCI statistics should be updated
+*/
+               {
+                  ExtendedStatOffset = PhyOffset + EPST_EFCI_SET_TX_OFFSET ;
+                  _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][ExtendedStatOffset],
+                       PHY_BUNDLE_STATISTICS_BUS) += 1;
+               }
+            } // end of "if !PTI_2"
+         } // end of "if PTI_1"
+
+
+      } // end of "F_Extended_Phy_Statistics_Tx"
+#endif
+
+#if (defined(_MODULE_ASU_ENABLE_)||defined(_MODULE_ADDRLOOKUP_ENABLE_))
+/********************************************************************
+ *  Function: F_ExtPhy_Oam_Statistics_Tx
+ *
+ *  Description: This function updated bundle/extended phy statistics
+ *               RM and OAM cell counters.
+ * 
+ * This Funtion updates the Extended phy statistics for Tx events
+ *
+ * Input:  status0, P_tableOffs
+ *
+ ********************************************************************/
+   func F_ExtPhy_Oam_Statistics_Tx(in  struct S_SerialStatusReg   status0     = r7,
+                                   in  struct S_TempReg           AsuPhy      = r68)                                   
+
+      {
+         register struct S_TempReg       PhyOffset          = r112;
+         register struct S_TempReg       ExtendedStatOffset = r113;
+         register struct S_AtmCellHeader CellHeader         = r99 ;
+         register struct S_TempReg  VCI                     = r14 ;
+         const M_VCI = 0xFFFF ;
+
+         //Calculate the phy offset once
+         PhyOffset = AsuPhy * EXTENDED_PHY_STATISTICS_TABLE_SIZE ;
+
+       
+         // Check if OAM cell 
+         if (CellHeader & M_Mask(S_AtmCellHeader.PTI_2)) // EFCI or RM or OAM
+         {
+            if (!(CellHeader & M_Mask(S_AtmCellHeader.PTI_1)))
+            {
+            L_ExtOamSt_IncreamentOam_Cnt:                 
+                  ExtendedStatOffset = PhyOffset + EPST_TX_OAM_OFFSET;
+                  _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][ExtendedStatOffset],
+                       PHY_BUNDLE_STATISTICS_BUS) += 1;
+               
+            } // end of "if !PTI_2"
+            else
+            {
+               /************ PTI =6 **********************/
+               if (!(CellHeader & M_Mask(S_AtmCellHeader.PTI_0)))
+               {
+                   //Cell is RM  statistics should be updated
+                  ExtendedStatOffset = PhyOffset + EPST_TX_RM_OFFSET ;
+                  _mem(r0,B_PHY_BUNDLE_STATISTICS[status0][ExtendedStatOffset],
+                       PHY_BUNDLE_STATISTICS_BUS) += 1;
+               }               
+            }            
+         } // end of "if PTI_1"
+         else
+         {
+            // check if this is an OAM (F4) cell
+            VCI =  $reg(CellHeader.VCI) >> 4;
+            VCI &=M_VCI;
+            if ((VCI==3) || (VCI==4)) goto L_ExtOamSt_IncreamentOam_Cnt; 
+         }
+         
+      } // end of "F_ExtPhy_Oam_Statistics_Tx"
+
+#endif
+/****************************************************************
+ *  Function name:     F_TxEnable
+ *
+ *  Description:
+ *       This function inserts a channel/flow to the active list.
+ *       That means that the channel/flow is inserted into
+ *       the calendar according to the real pointer. From that
+ *       point it is enabled to transmit data cells/packets.
+ *       The function uses coherency locking and CoherencyTag
+ *       register (r127).
+ *
+ *  Input registers:
+ *       address - CTD/FTD table address
+ *       source - indicates whether it is called by host or
+ *                by a receiver.
+ *       mode - mode0 register where mode0[16:17] = TDBT.
+ ****************************************************************/
+   func F_TxEnable( in address = r10,
+                    in struct S_TxESourceType source = r11,
+                    in mode = MODE_REG )
+      {
+         register                            tmp       = r12;
+         register                            TmpPace   = r13;
+         register                            TempCR    = r13;
+         register                            TDContAdr = r13;
+         register struct S_CWPT              CWPT      = r14; /* r14-r17 */
+         register struct S_TrafficDescriptor TD        = r112;
+         register struct S_CTD               CTD       = r112;
+         register struct S_TdModeReg         TdMode    = mode;
+	 register                            BurstTolerance = r18;
+	 register                            BurstTolTemp   = r11;
+         register                            TptOffset = r11;
+         register                            Diff      = r11;
+         register struct S_TPT               TPT       = r12; /* r12 - r21 */
+            
+         // TxE is set only in memory - need to set in TRS
+         TD.ModeField.TxE = 1;
+         if ( !(source.HOST) ) /* read more from TD into TRS */
+         { // first 8 bytes were read by TXE test and set
+           // need to read 16 more bytes for pcr,scr
+            TDContAdr = address + TD_READ_SIZE_IN_CALENDAR;   
+            *(&TD+TD_READ_SIZE_IN_CALENDAR) = _param_mem(r0, TDContAdr, TD_READ_SIZE, 0);
+         }
+
+
+         if (!(TD.ModeField.U_Bit11.EndOfQueue)) 
+         {
+
+            /* extract the calendar number and shift it to be the calendar table offset */
+            tmp = $reg(TD.ModeField.CalendarNumber) &
+               M_Mask(S_TrafficDescriptor.ModeField.CalendarNumber);
+            tmp >>= (M_ShiftRight(S_TrafficDescriptor.ModeField.CalendarNumber) - $log2(sizeof(S_CWPT)));
+            
+            /* read CWPT and lock */
+            M_ReadCwpt(tmp, CWPT);
+
+            if (TdMode.U_Bit10.AutoDInLast)    
+            {
+               
+               Diff = TD.U_TdInfo1.PaceCounter - CWPT.SlotCounter; 
+               if (Diff >= 0)
+               { // diff < 0 --> wrap of calendar slot counter occured
+                  if (TD.ModeField.U_Mode1.CtdMode.ScrShaping)
+                     TempCR = CTD.scr; 
+                  else
+                     TempCR = CTD.pcr; 
+                  if (Diff <= TempCR)
+                  {  // diff > PCR(SCR) --> wrap of slot counter occured
+                     M_PutChannelToNextSlotInCalendar(CWPT, tmp, TD, 16,
+                                                      address, UNKNOWN_BUS);
+                     return;
+                  }
+                  else if (TD.ModeField.U_Mode1.CtdMode.ScrShaping)
+                  {
+                     
+                     BurstTolerance = $reg(CTD.BurstToleranceLow) & M_Mask(S_CTD.BurstToleranceLow);
+                     BurstTolerance <<= BURST_TOLERANCE_FACTOR;
+                     BurstTolTemp = $reg(CTD.BurstToleranceHigh) & M_Mask(S_CTD.BurstToleranceHigh);
+                     BurstTolTemp <<= ((15 + BURST_TOLERANCE_FACTOR) - M_ShiftRight(S_CTD.BurstToleranceHigh));
+                     BurstTolerance |= BurstTolTemp;
+                     CTD.LeakyBucketState= CWPT.SlotCounter - BurstTolerance;
+
+                  }
+               }
+            }
+            /* "reset" the pacecounter to be the same as the calendar slotcounter */
+            /* when channel de-activation is done on first TX , the channel was scheduled for transmission
+               but had nothing to transmit (BNR). Therefore, when reactivating the channel
+               can be immediately scheduled for transmission - it is returned to the queue
+               and the pacecounter is synchronized to the slotcounter */
+               {
+                  TD.U_TdInfo1.PaceCounter = CWPT.SlotCounter;
+                  /* save TD back in the external memory */
+                  _param_mem(CwtKey, address, 20, _UNLOCK) = *(&TD);
+                  goto L_Put_End_Of_Queue_After_Save_TD;
+               }
+         }
+         else /* To End of queue mode */
+         {
+           Put_End_Of_Queue:
+            /* clear link field in CTD only */
+            TD.link = 0;
+            _param_mem(r0, address, TD_WRITE_SIZE, 0) = *(&TD);
+
+           L_Put_End_Of_Queue_After_Save_TD:
+            /* clear the EHPBus bit in the CTD/FTD mode field */
+            tmp = TD.ModeField;
+            tmp &= TD_MODE_MASK;
+            TdMode.U_Bit10.AutoDInLast = 0; 
+            TdMode |= tmp;
+
+            /* reads TPT offset from CTD */
+            TptOffset = TD.ModeField.TptOffset;
+            /* shift the TPT index by 6 (TPT size is 64) to get TPT offset */
+            TptOffset *= sizeof(S_TPT);
+            
+            if ( TdMode.HwQueues ) /* PUT TO HW OUTPUT QUEUE */
+            {
+               register queue = TptOffset;
+#ifdef _WINPATH_REV_WP3_ENABLE_
+               /* FMU - WMM transactions order workaround */
+               *(&TD) = _param_mem(r0, address, TD_READ_SIZE, 0);
+#endif //_WINPATH_REV_WP3_ENABLE_
+
+               M_HwQueuePut(SHARED_SHAPING, queue, UNKNOWN_BUS, TdMode, queue, address);
+            }
+            else /* PUT TO SW OUTPUT QUEUE */
+            {
+               /* NOTE: in case of ATM hiershaping, a call to M_SwQueuePut macro may activate F_AsuHierActivate function
+                  which reactivates the TPT. The function does not return to this code, but jumps back to the code from
+                  which F_TxEnable was called */
+          
+	       M_SwQueuePut(UNKNOWN_BUS, TdMode, TptOffset, address, priority1, priority2_FM, 
+			   ASU_HIER_ACTIVATION_FROM_FUNCTION);
+            }
+         }
+      }
+
+#ifdef _MODULE_NEW_ATM_HIERARCHICAL_SHAPING_ENABLE_
+
+/****************************************************************
+ *  Function name:     F_AsuHierActivate
+ *
+ *  Description:
+ *       This function activates a hierarchical shaping group CTD.
+ *       The CTD gets de-activated when the group has nothing to transmit and 
+ *       re-activated when the group TPT changes state from empty to non empty.
+ *       The CTD is inserted into the calendar according to the calendar real time pointer,
+ *        or to the output queue if the calendar real time pointer passed (rate compensattion)
+ *        or if the CTD is in EndOfQueue mode.
+ *
+ *       The function is called from the macro M_SwQueuePut, which is called
+ *       from multiple places: calendar.dpl, F_AsuReschedules, F_TxEnable.
+ * 
+ *  Input registers:
+ *       CtdAddress - address of the group CTD to be activated
+ ****************************************************************/
+   func F_AsuHierActivate( in CtdAddress = r10 )
+      {
+         register struct S_TdModeReg         TdMode         = MODE_REG;
+         register                            tmp            = r12;
+         register                            ChannelWeight  = r12;
+         register                            TempWeight     = r13;
+         register                            TmpPace        = r13;
+         register struct S_CWPT              CWPT           = r14; /* r14-r17 */
+         register struct S_TrafficDescriptor TD             = r112;
+         register                            TmpSaveModeReg = r119;
+
+         /* in case of hiershaping, need to read more of the CTD, to get the PCR parameter */
+         *(&TD) = _mem(r0, CtdAddress, sizeof(S_CTD), SCHEDULER_ASU_TXQUEUE_BUS);
+         
+         /* save the mode register - code parts that call this function may assume
+            that it is not modified */
+         /* Note1: it must be made sure that r119 is not modified until mode register is restored */
+         /* Note2: r119 is the last reg of the CTD. Make sure it is not needed/saved to memory */
+         TmpSaveModeReg = TdMode;
+            
+         /* load CTD mode bits to mode register - used in M_HwQueuePut,M_SwQueuePut */
+         TdMode = TD.ModeField;
+
+         /* update weight parameters when it is used, otherwise skip this block. */
+         if (ChannelWeight = ($reg(TD.ModeField.U_Mode1.CtdMode.weight) &
+                              M_Mask(S_TdModeReg.U_Mode1.CtdMode.weight)))
+         {
+#pragma outofline;
+            /* reads the weight counter value and check if it is 0 */
+            if (TempWeight = $reg(TD.ModeField.U_Mode1.CtdMode.U_CtdModeBits.WeightCount) &
+                M_Mask(S_TdModeReg.U_Mode1.CtdMode.U_CtdModeBits.WeightCount))
+            {
+               /* if the previous weight is not 0, decrement 1 */
+               $reg(TD.ModeField.U_Mode1.CtdMode.U_CtdModeBits.WeightCount) -= 
+                  (1 << M_ShiftRight(S_TdModeReg.U_Mode1.CtdMode.U_CtdModeBits.WeightCount));
+            }
+            else
+            {
+               /* if the previous weight is 0, restart the weight count */
+               TempWeight = ChannelWeight << M_ShiftRight(S_TdModeReg.U_Mode1.CtdMode.U_CtdModeBits.WeightCount);
+               $reg(TD.ModeField.U_Mode1.CtdMode.U_CtdModeBits.WeightCount) |= TempWeight;
+            }
+            
+            /* save CTD back in the external memory */
+            /* save only 2 regs */
+            _mem(r0, CtdAddress, 8, SCHEDULER_ASU_TXQUEUE_BUS) = *(&TD);
+
+            /* if the updated weight value is not 0, go to outputqueue,
+             else, continue regular calendar processing */
+            if ($reg(TD.ModeField.U_Mode1.CtdMode.U_CtdModeBits.WeightCount) &
+                M_Mask(S_TdModeReg.U_Mode1.CtdMode.U_CtdModeBits.WeightCount))
+               goto L_AsuHierActivate_Put_End_Of_Queue;
+         }
+
+         if ( !TdMode.U_Bit11.EndOfQueue) 
+         {
+            /* in case of hiershaping the rescheduling has to be done after
+               calculating the next conformance time - the group
+               was deactivated upon transmitting the last cell */
+            /* only PCR scheduling is done for groups */
+            /* B_PcrResched macro uses r15 */
+            M_PcrResched(TD, TmpPace);
+            
+            /* advance the PaceCounter field according to the computed pace */
+            TD.U_TdInfo1.PaceCounter += TmpPace;
+            
+            /* extract the calendar number and shift it to be the calendar table offset */
+            tmp = $reg(TD.ModeField.CalendarNumber) &
+               M_Mask(S_TrafficDescriptor.ModeField.CalendarNumber);
+            tmp >>= (M_ShiftRight(S_TrafficDescriptor.ModeField.CalendarNumber) - $log2(sizeof(S_CWPT)));
+            
+            /* read CWPT and lock */
+            M_ReadCwpt(tmp, CWPT);
+
+            /* if the CTD's PaceCounter is greater than the calendar SlotCounter,
+               then the CTD is not conforming yet, and it has to be scheduled in 
+               a future calendar slot. */
+            /* if the CTD's PaceCounter is smaller than the calendar SlotCounter,
+               then the CTD is already conforming, and it is scheduled to the 
+               output queue */
+            if ( (tmp = TD.U_TdInfo1.PaceCounter - CWPT.SlotCounter) >= 0)
+            {
+                  
+               /* The number of slots in which the PaceCounter is ahead of the 
+                  CWPT.SlotCounter must be less than the calendar size.
+                  There may be an error case if the channel did not transmit 
+                  for a long time and the SlotCounter wrapped during this time. 
+                  To protect from this error, the pacecounter is forced to be
+                  less than (calendar size) slots ahead of the SlotCounter */
+               TD.U_TdInfo1.PaceCounter = CWPT.SlotCounter + (tmp & CWPT.Size);
+
+               /* put the traffic descriptor in the calendar, save the traffic descriptor,
+                  and release the calender coherency lock */
+               /* tmp is used in the macro to store the address of the calendar slot - NextSlotPtr */
+               M_PutChannelToNextSlotInCalendar(CWPT, tmp, TD, CTD_WRITE_SIZE_NO_LEAKY_BUCKET,
+                                                CtdAddress, SCHEDULER_ASU_TXQUEUE_BUS);
+            }
+            else
+            {
+               /* the channel is already conforming - reset the PaceCounter to be the
+                  same as the CWPT SlotCounter */
+               /* put the channel in the output queue */
+               TD.U_TdInfo1.PaceCounter = CWPT.SlotCounter;
+
+               /* save CTD back in the external memory */
+               TD.link = 0;
+               _mem(CwtKey, CtdAddress, CTD_WRITE_SIZE_NO_LEAKY_BUCKET,
+                    _UNLOCK|SCHEDULER_ASU_TXQUEUE_BUS) = *(&TD);
+
+               goto L_AsuHierActivate_Put_End_Of_Queue;
+            }
+         }
+         else /* To End of queue mode */
+         {
+#pragma outofline;            
+            register                    TptOffset       = r11;
+            register struct S_TPT       TPT             = r12; /* r12 - r21 */
+            
+           L_AsuHierActivate_Put_End_Of_Queue:
+
+            /* reads TPT offset from CTD  */
+            TptOffset = TD.ModeField.TptOffset * sizeof(S_TPT) ;
+            
+            /* check HWQ or SWQ */
+            if ( TdMode.HwQueues ) /* PUT TO HW OUTPUT QUEUE */
+            {
+               register queue = TptOffset;
+	    
+               /* if the current weight value is not 0 (can happen only when weight is used) */
+               if ( TD.ModeField.U_Mode1.CtdMode.U_CtdModeBits.WeightCount )                    
+               {
+                 
+		 if(TD.ModeField.U_AsuPsuInfo.ChangePri)
+		     /* increase priority (index already shifeted by
+			TPT size so decrement should also use shifted
+			value  */		   
+		     queue -= (1* sizeof(S_TPT));
+
+	       }
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+               /* FMU - WMM transactions order workaround */
+               *(&TD) = _mem(r0, CtdAddress, 4, SCHEDULER_ASU_TXQUEUE_BUS);
+#endif //_WINPATH_REV_WP3_ENABLE_
+	       M_HwQueuePut(ASU_VP_SHAPING, queue,
+			    SCHEDULER_ASU_TXQUEUE_BUS,
+			    TdMode,queue, CtdAddress);
+	       
+            }
+            else /* PUT TO SW OUTPUT QUEUE */
+            {
+               if ( TD.ModeField.U_Mode1.CtdMode.U_CtdModeBits.WeightCount ) 
+                   
+               {
+                  /* shift the weight priority bits to the place of the priority bits */
+                  /* other bits in mode are not used inside M_SwQueuePut */
+                  if(TD.ModeField.U_AsuPsuInfo.ChangePri)
+                  {
+                     /* substruct 1 from priority */
+                      $reg(TdMode.priority1) -= ( 0x1 << SHIFT_LEFT_TO_PRIORITY_LOCATION ) ;
+                  }
+                  
+               }
+
+               /* no need to check hiershaping - can not be multiple level of hiershaping activation */
+                  
+                   M_SwQueuePut(SCHEDULER_ASU_TXQUEUE_BUS, TdMode, TptOffset,
+                            CtdAddress,priority1,priority2_FM, NO_ASU_HIER_ACTIVATION);
+
+            }
+
+         }
+         /* reconstruct saved mode register from r119 */
+         TdMode = TmpSaveModeReg;
+      }
+
+#endif _MODULE_NEW_ATM_HIERARCHICAL_SHAPING_ENABLE_
+
+
+
+
+
+/*************************************************************************************
+ *  Function: F_TurnBack_AtmCells 
+
+ *  Description:
+ * 
+ *            This function turn  around received ATM cell.
+ *            the function will verify if turn around functionality
+ *            is selected for this connection. If so it will
+ *            release existing keys, get a new RCPT key,
+ *            read an appropriate ATM SW RCPT table and update
+ *            TurnAround bit in P_TA_Disicon (Function assumes that
+ *            bit has been previously cleared).
+ *
+ * inputs:             P_Cell_Type, P_PmKey, P_UpcKey,  P_RcptOAMKey, 
+ *
+ * modified registers: P_RcptKey, P_TA_Disicon, P_status0, P_RCPT, P_AtmChannelNumber
+ *                     P_ATM_header
+ *
+ * outputs:            P_32AtmChannelNumber
+ * 
+ ************************************************************************************/
+
+/* Function is currently only used by PM module, if other functionalitiess should use
+   it then ifdef statment should be updated */
+#ifdef _MODULE_ATM_TURN_AROUND_ENABLE_
+func F_TurnBack_AtmCells(in                               P_Cell_Type = r112,
+                         in                               P_PmKey = r124,
+                         in                               P_UpcKey = r123 ,
+                         in                               P_RcptOAMKey = r122,
+                         inout                            P_RcptKey = r121,
+                         inout struct S_AtmRxGlobalModes  P_TA_Disicon = r47,
+                         inout struct S_SerialStatusReg   P_status0 = r7,
+                         inout struct S_GeneralRcpt       P_RCPT = r56,
+                         inout                            P_AtmChannelNumber = r41,
+                         inout                            P_ATM_header = r99,
+                         out                              P_32AtmChannelNumber = r42)
+{
+  /* local contants */
+  const TACN_VALID_CN = 0xffff;
+
+  /* Local voletile registers */
+  register                  GlobalParamOffs  = r113;
+  register struct S_TACNPtr TACNPtr          = r113;
+  register                  TARcptKey        = r114;
+  register struct S_Tancnt  TACNT            = r115;
+  register                  TAChannelNumber  = r117;
+
+  /* Get Turn Around Channel Number Table pointer */
+  GlobalParamOffs = S_Ext_Global_Param_Table.TACNPtr/8;
+  TACNPtr =  _mem(r0,B_GlobalParamTable[GlobalParamOffs],4, GLOBAL_PARAM_TABLE_BUS);
+  
+  /* check if Turn Around functionality is enabled for Winpath*/
+  if (!TACNPtr.En)
+    {
+      /* Read Turn Around ATM SW connection's channel number */
+      TACNPtr = TACNPtr + P_AtmChannelNumber*sizeof(S_Tancnt);
+      *(&TACNT) = _mem(r0,TACNPtr ,sizeof(S_Tancnt),TACN_BUS);
+
+      
+      /* check if specific Turn Around functionality is 
+         enabled for this connection */
+      if ((P_Cell_Type == ATM_CELL_TYPE_PM_FPM) && (TACNT.TA_FPM))
+        {
+          TAChannelNumber = TACNT.TAChannelNumber;
+
+          /* Indication bit is used after returning from this function
+             indiacting if noraml flow of cd should be resumed or ATM-SW
+             (when cell is turned around */
+          P_TA_Disicon.TurnAround =1;
+
+          /* Release original RCPT key, and fetch a new one
+             according to Turn Around channle number */
+          TARcptKey = ((LABEL_TAG_LABEL_ATM_RCPT<<8) |
+                       M_Mask(S_Tag.U_TagFields.LabelTag.LabelMode));
+          _bf(TARcptKey,0,16) = TAChannelNumber;  
+          _get_key(RcptKey,TARcptKey,1,_ORDER_UNLOCK);
+          P_RcptKey = TARcptKey;                   
+
+          /* Replace ATM Header (CLP and PTI value of existing cell are retained */
+          if (!TACNT.VpLkUp)
+            P_ATM_header &= ~(M_Mask(S_AtmCellHeader.VPI)|
+                              M_Mask(S_AtmCellHeader.VCI));
+          else
+            P_ATM_header &= ~(M_Mask(S_AtmCellHeader.VPI)); 
+          P_ATM_header |= TACNT.ATM_Header;
+          
+
+          /* Release the RcptOAMKey */
+          if (status0.OAM)
+            _task_switch(P_RcptOAMKey,_ORDER_UNLOCK);
+                    
+         
+          /* Release UPC key  */
+          if ($reg(P_RCPT.UPC) & M_Mask(S_GeneralRcpt.UPC))
+            _task_switch(P_UpcKey, _ORDER_UNLOCK);
+                              
+        /* Release PM key if PM enabled and this is not a PM cell 
+             (if this is a FPM cell key was already released by PM 
+             module) */
+          if ((status0.U_SerialStatus.CptUserInfo.U_Cpt.RcptUserInfo.PME)&&
+              (P_Cell_Type != ATM_CELL_TYPE_PM_FPM))
+            _task_switch(P_PmKey, _ORDER_UNLOCK);
+          
+         
+
+          /* read new RCPT */
+          P_AtmChannelNumber = TAChannelNumber;
+          P_32AtmChannelNumber =   P_AtmChannelNumber* sizeof(S_GeneralRcpt);
+          *(&P_RCPT) = _mem(P_RcptKey,B_RCPT[status0][P_32AtmChannelNumber],32, 
+                          _ORDER_LOCK  | CPT_BUS);       
+
+          /*  OAM & MNG bit are cleared, ATM-SW module should tread this cell as a 
+              normal user data cell */
+          status0 &= ~(M_Mask(S_SerialStatusReg.OAM) |
+                       M_Mask(S_SerialStatusReg.U_SerialStatus.RxSerialMode.U_MNG_OAM_CN.MNG));
+                   
+                
+          // Reload ATM SW connectio's status field
+          status0.U_SerialStatus.CptUserInfo.U_Cpt.RcptUserInfo = P_RCPT.RcptUserInfo;           
+        }      
+    }
+}
+#endif // _MODULE_ATM_TURN_AROUND_ENABLE_
+
+
+/* section general_function end */
+}
+
+#endif  /* GENERAL_FUNCTION*/
+#endif /*DPS_LEVEL_0_TESTING_UTIL*/
+
+#if defined (_MODULE_EPST_AAL5_FRAMES_BYTES_COUNTERS_) && defined (_MODULE_AAL5_ENABLE_)
+/*********************************************************************
+  *  Section: ASU_EPST_Reset
+  *
+  *  Description:
+  *      This section implements host command that reset 
+  *      the AAL5 statistics in the extended Phy statistics.
+  *      This host command will be use only when _MODULE_EPST_AAL5_FRAMES_BYTES_COUNTERS_ 
+  *      is enabled. 
+  *
+  *      Registers used in this section are:
+  *      r10,r11,r12,r13,r127, status0, status1.
+  ********************************************************************/
+section ASU_EPST_Reset
+{
+
+/* lock the Statistics Table */
+   register struct S_OrderTag  AAL5StatCoherencyTag         = r127; 
+
+   /*  r10, r11 are used for statistics */
+   register struct S_AAL5FramesBytesStat   AAL5FramesBytesStat   = r10;
+   register struct S_EPSTStatus0HostCmd    EPSTSCmdStatus0       = STATUS0_REG;   
+   register struct S_EPSTStatus1HostCmd    EPSTSCmdStatus1       = STATUS1_REG; 
+   register                                EPSTOffset            = r12;
+   register                                EPSTStatAAL5Offset    = r13;   
+
+   global L_EPST_Reset;
+  L_EPST_Reset:
+
+/* prepare coherency tag for the statistics entry */
+   AAL5StatCoherencyTag = M_Serial_Tag(SERIAL_TAG_LABEL_EPST_AAL5);
+   AAL5StatCoherencyTag.U_TagOrKey.Tag.U_TagFields.SerialTag.SerialNumber = EPSTSCmdStatus1.RxSC;
+   AAL5StatCoherencyTag.U_TagOrKey.Tag.U_TagFields.SerialTag.Offset       = EPSTSCmdStatus1.PhyID;
+
+         
+   /* calc the EPST offset */
+   EPSTOffset = EPSTSCmdStatus1.PhyID * EXTENDED_PHY_STATISTICS_TABLE_SIZE ;   
+ 
+   /* Calc the AAL5 Rx Frames and bytes Counters statistics add. */
+   EPSTStatAAL5Offset = EPSTOffset + EPST_AAL5_RX_FRAME_COUNTER_OFFSET ;
+
+   /* Clear the AAL5 Frames and bytes Counters statistics */
+   AAL5FramesBytesStat.FrameCounter = 0;
+   AAL5FramesBytesStat.BytesCounter = 0;
+
+ 
+
+    _task_switch(AAL5StatCoherencyTag,_LOCK );
+
+   // reset statistics for AAL5 Rx in extended phy statistics
+   _mem(AAL5StatCoherencyTag,B_PHY_BUNDLE_STATISTICS[status0][EPSTStatAAL5Offset],
+        FRAMES_AND_BYTES_STATISTICS_SIZE,STATISTICS_BUS | _UNLOCK  ) = AAL5FramesBytesStat;
+
+
+
+
+   AAL5StatCoherencyTag.U_TagOrKey.Tag.U_TagFields.SerialTag.SerialNumber = EPSTSCmdStatus1.TxSC;
+
+   /* Calc the AAL5 Tx Frames and bytes Counters statistics add. */   
+   EPSTStatAAL5Offset = EPSTOffset + EPST_AAL5_TX_FRAME_COUNTER_OFFSET ;
+
+   _task_switch(AAL5StatCoherencyTag,_LOCK );
+
+   // reset statistics for AAL5 Rx in extended phy statistics
+   _mem(AAL5StatCoherencyTag,B_PHY_BUNDLE_STATISTICS[status0][EPSTStatAAL5Offset],
+        FRAMES_AND_BYTES_STATISTICS_SIZE,STATISTICS_BUS | _UNLOCK | _TERMINATE ) = AAL5FramesBytesStat;
+   
+
+   
+}
+#endif   // _MODULE_EPST_AAL5_FRAMES_BYTES_COUNTERS_ && _MODULE_AAL5_ENABLE_
+
+#if defined (_MODULE_MULTI_Q_DRR_MODE_ENABLE_)
+/*********************************************************************
+  *  Section: MQ_Change_Weight
+  *
+  *  Description:
+  *      This section implements host command that change 
+  *      the AAL5/AAL0 channel weight when the channel connected to DRR MQ.
+  *      This host command will be use only when _MODULE_MULTI_Q_DRR_MODE_ENABLE_ 
+  *      is enabled. 
+  *
+  *      Registers used in this section are:
+  *      r10,r11,r12,r13,r127, status0, status1.
+  ********************************************************************/
+section MQ_Change_Weight
+{
+
+
+   register struct S_MQWeightStatus0HostCmd  MQWeightCmdStatus0  = STATUS0_REG;   
+   register struct S_MQWeightStatus1HostCmd  MQWeightCmdStatus1  = STATUS1_REG; 
+   register                                  TcptOffset          = r11;
+   register                                  ChannelNum          = r12;
+   register struct S_TcptQuantomCredit       TcptQuantomCredit   = r13;
+   
+   
+   global L_Change_Weight_In_MQ;
+  L_Change_Weight_In_MQ:
+
+/* prepare coherency tag for the TCPT */
+   TcptKey = MQWeightCmdStatus1.ChannelNum << 16;
+   TcptKey |= M_Label_Tag(LABEL_TAG_LABEL_ATM_TCPT);     
+
+   _get_key(r0,TcptKey, 1);
+   
+/* prepare the offset to the right TCPT*/
+   ChannelNum = MQWeightCmdStatus1.ChannelNum;
+   TcptOffset = ChannelNum*TCPT_SIZE;
+/* forward the offset to the drr params location */
+   TcptOffset += OFFSET_TCPT_DDR_PARAMETERS;     
+ 
+
+   TcptQuantomCredit = _mem(TcptKey,B_TCPT[status0][TcptOffset],4,
+                            CPT_BUS| _ORDER_LOCK);
+   
+/* update the new quantom */   
+   TcptQuantomCredit.Quantom = MQWeightCmdStatus1.Quantom;
+   
+/* write back the TCPT */
+   _mem(TcptKey,B_TCPT[status0][TcptOffset],4,CPT_BUS | _ORDER_UNLOCK | _TERMINATE) = TcptQuantomCredit;
+
+}
+#endif // _MODULE_MULTI_Q_DRR_MODE_ENABLE_
+
+section UPI_FMU_Flush_HostCommand
+{
+#if defined(_MODULE_FMU_SCHEDULING_ENABLE_) || defined (_MODULE_FMU_PSU_ENABLE_)
+
+ 
+
+   struct S_UpiHostFmuStatusReg1
+   {
+         _bit                  : 16;
+         _bit FMuFifoNu        : 16; 
+   };
+
+
+   struct S_FMuFlushResult
+   {    
+         _bit Counter          : 32; 
+         _bit TdPtr           : 32;
+   };
+       
+   
+   register struct  S_UpiHostFmuStatusReg1   FmuFifoNu      = STATUS1_REG;
+   register                                  TxEOffset      = r11;
+   register struct  S_FMuFlushResult         FmuFlushResult = r12;
+
+   global L_UPI_Fmu_HostCmd;
+
+  L_UPI_Fmu_HostCmd:
+
+   /* Excute Fifo flush command (FLush writes result to TdPtr
+      register and register imidiatleay preceding it */
+#ifndef _WINPATH_REV_WP3_ENABLE_ 
+   *(&FmuFlushResult.TdPtr) = _fmu_fifo(r0, FmuFifoNu, SCHEDULER_ASU_TXQUEUE_BUS | _FIFO_FLUSH);
+#else
+   *(&FmuFlushResult) = _fmu_fifo(r0, FmuFifoNu, SCHEDULER_ASU_TXQUEUE_BUS | _FIFO_FLUSH);
+#endif
+      
+   if ( !status0.AccErr && FmuFlushResult.Counter > 0 )
+   {
+      /* Run through all TD untill counter has expired 
+         clearing TxE bit in each one */
+     L_FmuFlushNextTd:
+      if (FmuFlushResult.Counter > 1 )
+      {
+         FmuFlushResult.Counter -=1;
+	
+         /* Clear TxE bit in TD - Since this command is of 64bit, TxE is in the Low Word offset */
+         _mem(r0,FmuFlushResult.TdPtr , SCHEDULER_ASU_TXQUEUE_BUS)
+            &= ~M_Mask(S_TrafficDescriptor.ModeField.TxE);
+	
+
+	
+         /* Read next TD address */
+         FmuFlushResult.TdPtr = _mem(r0, FmuFlushResult.TdPtr , sizeof(S_TrafficDescriptor.link), 
+                                      SCHEDULER_ASU_TXQUEUE_BUS);
+         goto L_FmuFlushNextTd;
+      }
+    
+      else 
+      {
+         /* Last TD in Fifo */
+         /* else if Counter ===1 */
+         /* Clear TxE bit in TD - Since this command is of 64bit, TxE is in the Low Word offset */
+         _mem(r0,FmuFlushResult.TdPtr , SCHEDULER_ASU_TXQUEUE_BUS | _TERMINATE) 	
+            &= ~M_Mask(S_TrafficDescriptor.ModeField.TxE);
+      }
+   }
+   else
+   {
+      /* fifo was empty */
+      _task_switch(r0, _TERMINATE);
+   }
+
+   
+#endif 
+}
+
+/*********************************************************************
+ *  Section: TDI_Tx_Rx_Lookup
+ *
+ *  Description:
+ *      This section uses look up table preconfigured by WDDI.
+ *      It will use phy number to lookup the relevant PC for the protocol specified over this TDI.
+ *      
+ *      Registers used in this section are:
+ *      r 11,r12 ,r13 ,r14 ,r5 , status1(to extract serial ID) ,status2(to extract Phy num)
+ ********************************************************************/
+section TDI_Tx_Rx_Lookup
+{
+   global L_TDI_Rx_Tx_Start;
+   
+#ifdef _WINPATH_REV_WP3_ENABLE_
+
+   /*TDI lookup table*/
+   struct S_TdiLookupEntry
+   {    
+         _bit PcValue          : 32; 
+   };
+  
+   struct S_TdiCommonStatus2Reg
+   {
+         _bit PhyNum           : 8;
+         _bit PE               : 1;
+         _bit                  : 7; //reserved
+         
+         _bit                  : 2;
+         _bit TxMode           : 1;
+         _bit                  : 13;
+   };
+    
+   register struct S_TdiCommonStatus2Reg status2 = STATUS2_REG;
+   register struct S_TdiLookupEntry      LookupTable= r12;
+   register offset = r14;
+   register TdiLabelPc  = jir; 
+
+  L_TDI_Rx_Tx_Start:
+
+   if(status2.TxMode)
+   {
+      //TX section
+      register struct S_GeneralTxStatus2 status2 = STATUS2_REG;//in shared.h
+      offset = status2.PhyNum * sizeof(S_TdiLookupEntry);
+   }
+   else /*RX*/
+   {
+      //RX section
+      register struct S_GeneralRxStatus2 status2 = STATUS2_REG;
+      offset = (((status2.PhyNum) + TDI_WA_PCT_TABLE_RX_OFFSET)*sizeof(S_TdiLookupEntry));
+   }
+   LookupTable = _mem(r0,B_TDI_LOOKUP_TABLE[offset],sizeof(S_TdiLookupEntry));
+   TdiLabelPc  = LookupTable.PcValue;
+   goto TdiLabelPc;   
+#else
+   const L_TDI_Rx_Tx_Start = 0;
+#endif // _WINPATH_REV_WP3_ENABLE_
+}
+
+
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000 - 2002, All rights reserved.
+ *****************************************************************************/

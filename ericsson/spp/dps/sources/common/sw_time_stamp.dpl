@@ -1,0 +1,77 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2003.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: sw_time_stamp.dpl
+*
+* Description: This file implemens a sw time stamp.
+*              A TGU configured to work with a BRG at the required rate,
+*
+* Module Originator:  Ronen Weiss
+* Creation Date:  Fri Aug 15 2003
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* / CVS information /
+*       $Id: sw_time_stamp.dpl,v 
+*
+*
+****************************************************************************/
+
+
+/* Include Files */
+#include "config.h"
+
+
+/*****************************************************************************
+ *
+ * Block Name: SwTimeStamp
+ *
+ * Description: This module increaments a SW counter. 
+ *              each time the module is trigered it will 
+ *              increament an external memory counter by 1.
+ *              The module is trigered by a TGU that is set to
+ *              work with a BRG at the required rate.
+ *
+ * Input interfaces: status0 and status1 are updated by TGU.
+ *                   (both receive null values)
+ *
+ * Output interfaces: external memory counter is increamented
+ *
+ *****************************************************************************/
+
+section sw_time_stamp
+{   	
+ // Non Volitile Registers
+   register                              SwTimeStmpOffs     = r10;
+
+ // Global labels
+   global L_Sw_Time_Stamp;
+
+  /**********************************************************************
+    **********************************************************************
+    **********        Main body of code - sw time stamp       ************
+    **********************************************************************
+    **********************************************************************/
+ L_Sw_Time_Stamp:
+
+   SwTimeStmpOffs = 0;
+   _mem(r0,B_SwTmstmp[SwTimeStmpOffs],SW_TMSTMP_BUS | _TERMINATE) +=1;
+} /*End of section sw_time_stamp */
+
+ 
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2003, All rights reserved.
+ *****************************************************************************/

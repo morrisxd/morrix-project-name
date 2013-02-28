@@ -1,0 +1,217 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2009.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ ****************************************************************************/
+/*****************************************************************************
+ *
+ *  File: token_thread.dpl
+ *
+ *  Description: This file implements functions for Token thread processing
+ *
+ *  Module Originator: Priyadarshan Kolte
+ *  Creation Date:  February 28, 2008
+ *
+ *  Change History:
+ *  +------------+--------------------+---------------------------------------
+ *  | Date       | By                 | Description
+ *  +------------+--------------------+---------------------------------------
+ *  |            |                    |
+ *  +------------+--------------------+---------------------------------------
+ *  |            |                    |
+ *  +------------+--------------------+---------------------------------------
+ *
+ *
+ ****************************************************************************/
+
+/* Include Files */
+#include "interworking.h"
+#include "interworking_regs.h"
+#include "hostcmd.h"
+#include "order.h"
+#include "irq.h"
+#include "token_thread.h"
+
+global E_TokenThreadDequeue;
+global E_TokenThreadDequeue2;
+#if !FEATURE_WINFARM_0
+const E_TokenThreadDequeue = 0;
+#endif
+#if !FEATURE_WINFARM_1
+const E_TokenThreadDequeue2 = 0;
+#endif
+
+#if FEATURE_HC_SUPPORT
+global L_HcCL3TokenReceived;
+global L_HcDL3TokenReceived;
+#endif
+
+#ifdef _MODULE_PDCP_ENABLE_
+global L_Pdcp_Serialization;
+#if FEATURE_WINFARM_1
+global L_Pdcp_UlHoPlayout;
+global L_Pdcp_Ul_Winfarm_Swap;
+global L_Pdcp_HostCommand_Winfarm_Swap;
+#endif
+#endif
+#if FEATURE_ROHC && FEATURE_WINFARM_0
+global E_RohcTokenStandaloneFeedback;
+#endif
+#ifdef _MODULE_IW_IP_FRAGMENTATION_ENABLE_
+global L_IpFragmentationDequeueToken;
+#endif
+
+#if FEATURE_MILLISECOND_TIMER && FEATURE_WINFARM_1
+global L_MillisecondTimerWinfarm1;
+#endif
+
+section token_thread
+{
+   register struct S_TguToken TguTokenLarge = r10; // r10-r17
+   register struct S_TokenThreadTcr1 Tcr1 = r18;
+   register TempReg = r19;
+   register Counter = r20;
+   register Client = r21;
+
+#if FEATURE_WINFARM_0
+  E_TokenThreadDequeue:
+#endif
+#if FEATURE_WINFARM_1
+  E_TokenThreadDequeue2:
+#endif
+
+// debug
+   if (0) {
+#if FEATURE_WINFARM_0
+      TempReg = 0x0e000048;
+      _mem(r0, TempReg, _MASTER1) += 1;
+#endif
+#if FEATURE_WINFARM_1
+      TempReg = 0x0e00004c;
+      _mem(r0, TempReg, _MASTER1) += 1;
+#endif
+   }
+// end debug
+
+   Tcr1 = STATUS0_REG;
+   status0 = 0;
+
+   /* Get the token from the TGU fifo into TRS. */
+   TempReg = Tcr1.FifoNumber;
+   TguTokenLarge = _fifo(r0, TempReg, Counter, sizeof(S_TguTokenLarge), TOKEN_THREAD_BUS);
+
+   if (status0.AccErr)
+   {
+      _task_switch(status1, _ORDER_UNLOCK | _TERMINATE);
+   }
+
+   /* Load jir with client */
+   jir = TguTokenLarge.Client;
+// debug
+   if (0) {
+      Client = TguTokenLarge.Client;
+#if FEATURE_WINFARM_0
+      TempReg = 0x0e000050;
+      _mem(r0, TempReg, 4, _MASTER1) = Client;
+#endif
+#if FEATURE_WINFARM_1
+      TempReg = 0x0e000054;
+      _mem(r0, TempReg, 4, _MASTER1) = Client;
+#endif
+   }
+// end debug
+
+   /* Return the token to FBP. */
+   TempReg = Tcr1.FbpNumber;
+   _fifo(r0, TempReg, TOKEN_THREAD_BUS) = TguTokenLarge;
+   if (status0.AccErr)
+   {
+      _task_switch(status1, _ORDER_UNLOCK | _TERMINATE);
+   }
+
+   /* Go to the appropriate client with the token information in r10-r17. */
+   switch(jir) {
+      case TokenClient_PdcpSerialization:
+#if FEATURE_PDCP
+         goto L_Pdcp_Serialization;
+#if FEATURE_LONGS_PEAK
+#else
+      case TokenClient_PdcpUlHoPlayout:
+#if FEATURE_WINFARM_1
+         goto L_Pdcp_UlHoPlayout;
+#else
+         break;
+#endif
+#endif
+
+      case TokenClient_PdcpUlWinfarmSwap:
+#if FEATURE_WINFARM_1
+         goto L_Pdcp_Ul_Winfarm_Swap;
+#else
+         break;
+#endif
+
+      case TokenClient_PdcpHostCommandWinfarmSwap:
+#if FEATURE_WINFARM_1
+         goto L_Pdcp_HostCommand_Winfarm_Swap;
+#else
+         break;
+#endif
+
+      case TokenClient_MillisecondTimer:
+#if FEATURE_MILLISECOND_TIMER && FEATURE_WINFARM_1
+         goto L_MillisecondTimerWinfarm1;
+#else
+         break;
+#endif
+
+#else
+         break;
+#endif // FEATURE_PDCP
+
+      case TokenClient_StandaloneFeedback:
+#if FEATURE_ROHC && FEATURE_WINFARM_0 && !FEATURE_HC_SUPPORT
+         goto E_RohcTokenStandaloneFeedback;
+#else
+         break;
+#endif
+
+      case TokenClient_IpFragmentation:
+#ifdef _MODULE_IW_IP_FRAGMENTATION_ENABLE_
+         goto L_IpFragmentationDequeueToken;
+#else
+         break;
+#endif
+
+      case TokenClient_PdcpTester:
+#ifdef _MODULE_PDCP_TESTER_ENABLE_
+         goto L_Pdcp_Tester_Exec_Command;
+#else
+         break;
+#endif
+
+      case TokenClient_HcCompression:
+#if FEATURE_HC_SUPPORT
+         goto L_HcCL3TokenReceived;
+#else
+         break;
+#endif
+
+      case TokenClient_HcDecompression:
+#if FEATURE_HC_SUPPORT
+         goto L_HcDL3TokenReceived;
+#else
+         break;
+#endif
+
+      default:
+         break;
+   }
+   _task_switch(status1, _ORDER_UNLOCK | _TERMINATE);
+}
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2009, All rights reserved.
+ ****************************************************************************/

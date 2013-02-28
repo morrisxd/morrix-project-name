@@ -1,0 +1,153 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2002.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: tgu_sgmii_an.dpl
+*
+* Description: This file holds the code section of TGU that handles AutoNegotiation
+*              For SGMII devices.
+*
+* Module Originator: Elad Jacob
+* Creation Date: August 9, 2011
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+*****************************************************************************/
+
+#include "tgu_sgmii_an.h"
+#include "shared.h"
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+
+section SGMII_TGU_AN
+{
+   register struct S_Tcr2Reg    Tcr2       = STATUS1_REG;
+   register                     Tcr3       = STATUS2_REG;
+   register                     TguCounter = r12;
+   register struct S_Mac1HwReg  Mac1       = r12;
+   register                     DivFactor  = r13;
+   register struct S_TstatHwReg Tstat      = r13;
+   register struct S_Wnc2HwReg  Wnc2       = r13;
+   register struct S_TanlHwReg  Tanl       = r14;
+   register                     PortIndex  = r15;
+   register                     RegOffset  = r16;
+   register                     Wnc2Offset = r17;
+   register                     TanlOffset = r18;
+   register                     EnetPortsMask = r19;
+   
+   global L_Sgmii_An_Wa_Tgu_Start;
+   
+  L_Sgmii_An_Wa_Tgu_Start:
+   
+   TguCounter = Tcr2.CyclicCounter; /* get the current counter from the TGU */
+   DivFactor = Tcr2.DivFactor;
+   
+   /* check next slot only when Counter reaches div_factor */
+   if ( (TguCounter & DivFactor )!= 0)
+   {
+      _task_switch(r0, _TERMINATE);
+   }
+   
+   EnetPortsMask = Tcr3;
+      
+   while (EnetPortsMask > 0)
+   {
+      /* get the next port index */
+      PortIndex = _ffs(EnetPortsMask);
+      EnetPortsMask &= ~(0x80000000 >> PortIndex);
+      
+      /* Obtain Tstat register */
+      RegOffset = SGMII_TGU_AN_WINNET_0_TSTAT_REG_OFFSET;
+      RegOffset += (PortIndex / 2) * SGMII_TGU_AN_NEXT_WINNET_OFFSET;
+      RegOffset += (PortIndex % 2) * SGMII_TGU_AN_NEXT_ENET_IN_WINNET_GROUP_TSTAT_OFFSET;
+
+      Tstat = _mem(r0, B_RIF[RegOffset], SGMII_TGU_AN_REG_SIZE);
+
+      /* Obtain Mac1 register */
+      RegOffset = SGMII_TGU_AN_WINNET_0_PHY_0_MAC1_REG_OFFSET;
+      RegOffset += (PortIndex / 2) * SGMII_TGU_AN_NEXT_WINNET_OFFSET;
+      RegOffset += (PortIndex % 2) * SGMII_TGU_AN_NEXT_ENET_IN_WINNET_GROUP_MAC1_OFFSET;
+      
+      Mac1 = _mem(r0, B_RIF[RegOffset], SGMII_TGU_AN_REG_SIZE);
+
+      if (!Tstat.AutoNegComplete)
+      {
+         if (Mac1.RxEnable)
+         {
+            /* in the middle of Auto negotiation - disable the device (RX side) */
+            Mac1.RxEnable = 0;
+            _mem(r0, B_RIF[RegOffset], SGMII_TGU_AN_REG_SIZE) = Mac1;
+         }
+      }
+      else
+      {
+         /* Completed Auto Negotiation
+            Check if device is disabled (RX side) and if so - 
+            change Mii mode and enable the device */
+         if (!Mac1.RxEnable)
+         {
+            /* First, get Tanl and Wnc2 HW registers */
+            Wnc2Offset = SGMII_TGU_AN_WINNET_0_WNC_2_REG_OFFSET;
+            Wnc2Offset += (PortIndex / 2) * SGMII_TGU_AN_NEXT_WINNET_OFFSET;
+            Wnc2 = _mem(r0, B_RIF[Wnc2Offset], SGMII_TGU_AN_REG_SIZE);
+            
+            TanlOffset = SGMII_TGU_AN_WINNET_0_TANL_REG_OFFSET;
+            TanlOffset += (PortIndex / 2) * SGMII_TGU_AN_NEXT_WINNET_OFFSET;
+            TanlOffset += (PortIndex % 2) * SGMII_TGU_AN_NEXT_ENET_IN_WINNET_GROUP_TANL_OFFSET;
+            Tanl = _mem(r0, B_RIF[TanlOffset], SGMII_TGU_AN_REG_SIZE);
+            
+            /* Now check if MiiMode needs to be updated after AutoNegotiation*/
+            if (PortIndex % 2)
+            {
+               /* Group 1 */
+               if ((Wnc2.MiiModeGroup1 == SGMII_TGU_AN_WNC2_GMII_MODE) && (Tanl.DuplexMode == SGMII_TGU_AN_TANL_SGMII_DUPLEX_HALF))
+               {
+                  Wnc2.MiiModeGroup1 = SGMII_TGU_AN_WNC2_MII_MODE;
+               }
+               else
+               {
+                  if ((Wnc2.MiiModeGroup1 == SGMII_TGU_AN_WNC2_MII_MODE) && (Tanl.Speed == SGMII_TGU_AN_TANL_SGMII_SPEED_1000))
+                  {
+                     Wnc2.MiiModeGroup1 = SGMII_TGU_AN_WNC2_GMII_MODE;
+                  }
+               }
+            }
+            else
+            {
+               /* Group 0 */
+               if ((Wnc2.MiiModeGroup0 == SGMII_TGU_AN_WNC2_GMII_MODE) && (Tanl.DuplexMode == SGMII_TGU_AN_TANL_SGMII_DUPLEX_HALF))
+               {
+                  Wnc2.MiiModeGroup0 = SGMII_TGU_AN_WNC2_MII_MODE;
+               }
+               else
+               {
+                  if ((Wnc2.MiiModeGroup0 == SGMII_TGU_AN_WNC2_MII_MODE) && (Tanl.Speed == SGMII_TGU_AN_TANL_SGMII_SPEED_1000))
+                  {
+                     Wnc2.MiiModeGroup0 = SGMII_TGU_AN_WNC2_GMII_MODE;
+                  }
+               }
+            }
+            _mem(r0, B_RIF[Wnc2Offset], SGMII_TGU_AN_REG_SIZE) = Wnc2;
+            
+            /* Enable the device (RX side) */
+            Mac1.RxEnable = 1;
+            _mem(r0, B_RIF[RegOffset], SGMII_TGU_AN_REG_SIZE) = Mac1;
+         }
+      } 
+   }
+
+   _task_switch(r0, _TERMINATE);   
+}
+#endif //_WINPATH_REV_WP3_ENABLE_

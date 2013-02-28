@@ -1,0 +1,277 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2009.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File:dps_features.h
+*
+* Description: Constructs dps feature list
+*
+* Module Originator: Roger Smith
+* Creation Date: Mar. 31, 2009
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+*****************************************************************************/
+
+#include "features.h"
+#include "feature_list.h"
+
+   // word 0
+   dcl FEATURE_SPLIT_TX |
+      (FEATURE_SPLIT_RX << 1) |
+      (FEATURE_HOST_CMD << 2) |
+      (FEATURE_EXT_FIFO << 3) |
+      (FEATURE_DEBUG << 4) |
+      (FEATURE_WMM_HOST_CMD << 5) |
+      (FEATURE_ADDR_LOOKUP << 6) |
+      (FEATURE_MAC_LOOKUP << 7) |
+      (FEATURE_ATM_TC << 8) |
+      (FEATURE_ASU << 9) |
+      (FEATURE_PSU << 10) |
+      (FEATURE_MULTI_Q_VC << 11) |
+      (FEATURE_AAL0 << 12) |
+      (FEATURE_AAL0_IW << 13) |
+      (FEATURE_AAL1 << 14) |
+      (FEATURE_AAL2 << 15) |
+      (FEATURE_AAL2_SSSXX << 16) |
+      (FEATURE_AAL2_IW << 17) |
+      (FEATURE_AAL5 << 18) |
+      (FEATURE_ABR << 19) |
+      (FEATURE_ATM_SW << 20) |
+      (FEATURE_CQ_ATM_SW << 21) |
+      (FEATURE_PM << 22) |
+      (FEATURE_IMA << 23) |
+      (FEATURE_CES << 24) |
+      (FEATURE_TRANSPARENT << 25) |
+      (FEATURE_ETHERNET << 26) |
+      (FEATURE_ETHERNET_SINGLE_FLOW << 27) |
+      (FEATURE_HDLC_PPP << 28) |
+      (FEATURE_FR << 29) |
+      (FEATURE_FR_WRR << 30) |
+      (FEATURE_FR_FRAG << 31);
+   // word 1
+   dcl
+      FEATURE_HSPI |
+      (FEATURE_MC_HDLC << 1) |
+      (FEATURE_ML_PPP << 2) |
+      (FEATURE_IW << 3) |
+      (FEATURE_FR_APC << 4) |
+      (FEATURE_MPLS << 5) |
+      (FEATURE_ROUTING << 6) |
+      (FEATURE_SWITCHING << 7) |
+      (FEATURE_BRIDGING << 8) |
+      (FEATURE_HOST_TERMINATION << 9) |
+      (FEATURE_POLICER << 10) |
+      (FEATURE_PARSER << 11) |
+      (FEATURE_LPM << 12) |
+      (FEATURE_CLASSIFIER << 13) |
+      (FEATURE_WRED << 14) |
+      (FEATURE_CONG_BYTE_TH << 15) |
+      (FEATURE_IW_BG << 16) |
+      (FEATURE_HOST_INTERFACE << 17) |
+      (FEATURE_COMPRESSION << 18) |
+      (FEATURE_BULK_MEMORY << 19) |
+      (FEATURE_EMPHY << 20) |
+      (FEATURE_ATM_BUNDLE_STATS << 21) |
+      (FEATURE_NAT << 22) |
+      (FEATURE_OAM_FM << 23) |
+      (FEATURE_L4_CHECKSUM << 24) |
+      (FEATURE_BUFF_CHAIN << 25) |
+      (FEATURE_CUT_THROUGH_FR_ATM << 26) |
+      (FEATURE_MULTICAST << 27) |
+      (FEATURE_DFC_BRIDGING << 28) |
+      (FEATURE_DFC_ROUTIING << 29) |
+      (FEATURE_OAM_FM_LB << 30) |
+      (FEATURE_HSPI_MULTI_ENET_PORTS << 31);
+   // word 2
+   dcl FEATURE_CES_CAS_UPDATE |
+      (FEATURE_POLICER_FCS_CORRECTION << 1) |
+      (FEATURE_TPT_16_128_84 << 2) |
+      (FEATURE_WP_A1 << 3) |
+      (FEATURE_WP_B0 << 4) |
+      (FEATURE_CUSTOM_SII << 5) |
+      (FEATURE_CES_ADAPTIVE_SRTS << 6) |
+      (FEATURE_MPLS_CLP_PTI_PRESERVE << 7) |
+      (FEATURE_EMPHY2 << 8) |
+      (FEATURE_OAM_GENERAL << 9) |
+      (FEATURE_MTP2 << 10) |
+      (FEATURE_GTP << 11) |
+      (FEATURE_LCN << 12) |
+      (FEATURE_LOW_LEVEL_DEBUG << 13) |
+      (FEATURE_MFR << 14) |
+      (FEATURE_EMPHY_DEVICE_REQ << 15) |
+      (FEATURE_CUT_THROUGH_FR_TDI << 16) |
+      (FEATURE_DEBUG_BD_VIOLATION << 17) |
+      (FEATURE_AAL2_SSSXX_IW << 18) |
+      (FEATURE_ATM_TURNAROUND << 19) |
+      (FEATURE_ATM_POLICER << 20) |
+      (FEATURE_ENHANCED_VLAN_STACKING << 21) |
+      (FEATURE_MC_ML_PPP << 22) |
+      (FEATURE_PPPSW << 23) |
+      (FEATURE_MLPPP_PPPMUX << 24) |
+      (FEATURE_MLPPP_FRAG_DISABLED_CREDIT_DISABLED << 25) |
+      (FEATURE_CUSTOM_FIGARO << 26) |
+      (FEATURE_CUSTOM_SWAN_LAKE << 27) |
+      (FEATURE_PWE3_CESOPSN_UFE2 << 28) |
+      (FEATURE_UFE2_CES_TRANS << 29) |
+      (FEATURE_ABIS << 30) |
+      (FEATURE_CUSTOM_MFR << 31);
+   // word 3
+   dcl FEATURE_EMPHY_84 |
+      (FEATURE_ATM_HIERARCHICAL_SHAPING << 1) |
+      (FEATURE_CUSTOM_MLPPP << 2) |
+      (FEATURE_ABR_FORESIGHT << 3) |
+      (FEATURE_WINARROW << 4) |
+      (FEATURE_UFE2_GENERAL_TRANS << 5) |
+      (FEATURE_PWE3_CESOPSN_TDI << 6) |
+      (FEATURE_ATM_TIME_OUT << 7) |
+      (FEATURE_CUSTOM_IMH << 8) |
+      (FEATURE_TRANS_TDI_REDIRECT << 9) |
+      (FEATURE_GBOND_ATM << 10) |
+      (FEATURE_FMU_SCHEDULING << 11) |
+      (FEATURE_FMU_TX_QUEUE << 12) |
+      (FEATURE_RATE_TABLE_ATM_HIER_SHAPING << 13) |
+      (FEATURE_EGRESS_BP << 14) |
+      (FEATURE_PPPSW_LCP_FORWARDING << 15) |
+      (FEATURE_CUSTOM_WILLIAM_TELL << 16) |
+      (FEATURE_UPI_ATM_PER_PHY << 17) |
+      (FEATURE_SECURITY << 18) |
+      (FEATURE_IPSEC << 19) |
+      (FEATURE_IPSEC_AH << 20) |
+      (FEATURE_PROMISCUOUS_CID_SWITCHING << 21) |
+      (FEATURE_WP_2 << 22) |
+      (FEATURE_POS_PER_PHY << 23) |
+      (FEATURE_POS_PER_PHY_MIB << 24) |
+      (FEATURE_MCHFM << 25) |
+      (FEATURE_IP_FRAGMENTATION << 26) |
+      (FEATURE_IMA_RESTRICTED_RECONNECT << 27) |
+      (FEATURE_IMA_STRICT_RECONNECT << 28) |
+      (FEATURE_WIMAX << 29) |
+      (FEATURE_PWE3_CLOCK_RECOVERY_UFE << 30) |
+      (FEATURE_ITDM_125u << 31);
+   // word 3
+   dcl FEATURE_AAL5_PSU_TX |
+      (FEATURE_PWE_ATM << 1) |
+      (FEATURE_PWE_HDLC << 2) |
+      (FEATURE_PWE3_CLOCK_RECOVERY_TDI << 3) |
+      (FEATURE_AAL2U_SW << 4) |
+      (FEATURE_AAL2U_SSSAR << 5) |
+      (FEATURE_PSU_PHY_RATE_LIMITER << 6) |
+      (FEATURE_HSPOS_FORWARDED_BYTE_STATS << 7) |
+      (FEATURE_PSU_IDLE_WAIT << 8) |
+      (FEATURE_WIMAX_PHS << 9) |
+      (FEATURE_TDM_SWITCH << 10) |
+      (FEATURE_WIMAX_TRANSPORT << 11) |
+      (FEATURE_TPT_128IMA_336EMPHY << 12) |
+      (FEATURE_SECONDARY_FBP << 13) |
+      (FEATURE_HSPI_MULTI_FIFO << 14) |
+      (FEATURE_MULTI_Q_DRR_MODE << 15) |
+      (FEATURE_L2PI_TIMESTAMP_ENABLE << 16) |
+      (FEATURE_CUSTOM_WHITE_RABBIT << 17) |
+      (FEATURE_IPV6 << 18) |
+      (FEATURE_ATM_TIMEOUT_CW << 19) |
+      (FEATURE_EPST_AAL5_FRAMES_BYTES_COUNTERS << 20) |
+      (FEATURE_MATRIX_BUFF_CHAIN << 21) |
+      (FEATURE_FCS_PRESERVED << 22) |
+      (FEATURE_IPHC_AUTO_CID << 23) |
+      (FEATURE_PWE3_CLOCK_RECOVERY_SAVED_2 << 24) |
+      (FEATURE_PCE_RESULT << 25) |
+      (FEATURE_REG_ALLOC_256B_TRANS_MODE << 26) |
+      (FEATURE_BD_BG_USE << 27) |
+      (FEATURE_HSPI256 << 28) |
+      (FEATURE_ << 29) |
+      (FEATURE_WIMAX_SECURITY << 30) |
+      (FEATURE_CFU_STATUS << 31);
+   // word 4
+   dcl FEATURE_WINNET_RX_TIMESTAMP |
+      (FEATURE_WP_3 << 1) |
+      (FEATURE_BRIDGE_DFC_MPLS_PARSING << 2) |
+      (FEATURE_FORWARDING_PREFIX_REMARKING << 3) |
+      (FEATURE_HSPI_GEMID << 4) |
+      (FEATURE_WIMAX_HARQ << 5) |
+      (FEATURE_CUSTOM_BRIDGE_MINIMUM_60BYTE_PADDING << 6) |
+      (FEATURE_IPSEC_NAT_T << 7) |
+      (FEATURE_GPON_MAC << 8) |
+      (FEATURE_HW_CLASSIFIER << 9) |
+      (FEATURE_FMU_SHAPING_HSPI << 10) |
+      (FEATURE_CUSTOM_TIGERMILK_QUEUE_PROTECT << 11) |
+      (FEATURE_HW_ENQUEUEING_WRED << 12) |
+      (FEATURE_EIGHT_QOS << 13) |
+      (FEATURE_EFM_BOND << 14) |
+      (FEATURE_CUSTOM_TIGERMILK_PROFILE_MARKING << 15) |
+      (FEATURE_WIMAX_COR_2 << 16) |
+      (FEATURE_PWE3_ATM_ALADDIN << 17) |
+      (FEATURE_PWE3_ATM_ALADDIN_IMA_MODE << 18) |
+      (FEATURE_PPPSW_DIRECTMAP_HDLC_FORWARDED_BYTE_STATS << 19) |
+      (FEATURE_GIGE_RX_CACHE << 20) |
+      (FEATURE_CUSTOM_PWE_MLPPP << 21) |
+      (FEATURE_OAM_LB_LLID_DETECT << 22) |
+      (FEATURE_POS_PER_PHY_SIX_BYTE_HEADER << 23) |
+      (FEATURE_BRIDGE_DFC_IP_TCP_ICMP_ENHANCEMENT << 24) |
+      (FEATURE_ETHERNET_OAM << 25) |
+      (FEATURE_BFD << 26) |
+      (FEATURE_ROHC << 27) |
+      (FEATURE_PDCP << 28) |
+      (FEATURE_PDCP_SECURITY << 29) |
+      (FEATURE_FLOW_BYTE_CNT << 30) |
+      (FEATURE_BRIDGE_ENHANCMENT_FOR_PWE3 << 31);
+   // word 5
+   dcl FEATURE_PTP |
+      (FEATURE_EBS << 1) |
+      (FEATURE_ESE << 2) |
+      (FEATURE_MULTICAST_COS << 3) |
+      (FEATURE_L2PI << 4) |
+      (FEATURE_CUSTOM_HEADER_ADD_CHECK << 5) |
+      (FEATURE_WINFARM_0 << 6) |
+      (FEATURE_WINFARM_1 << 7) |
+      (FEATURE_WINFARM_2 << 8) |
+      (FEATURE_AAL5_SHORT_FRAME_PADD << 9) |
+      (FEATURE_FORWARDING_DFC_LAYER2_REMARKING << 10) |
+      (FEATURE_IWGS << 11) |
+      (FEATURE_FLOW_CLASS_RULE_STAT << 12) |
+      (FEATURE_DFC_INDIRECT_ACTION << 13) |
+      (FEATURE_DFC_BRIDGE_LOGGING << 14) |
+      (FEATURE_ETHERNET_RX << 15) |
+      (FEATURE_DFC_IPV4_HEADER_VALIDATION << 16) |
+      (FEATURE_RECORD_MAX_QUEUE_SIZE << 17) |
+      (FEATURE_FMU_PSU << 18) |
+      (FEATURE_PWE3_CESOPSN_OUT_OF_BAND_CAS << 19) |
+      (FEATURE_LINK_AGGREGATION << 20) |
+      (FEATURE_BRIDGE_TIME_STAMP << 21) |
+      (FEATURE_512_BYTES_ALIGNMENT << 22) |
+      (FEATURE_ROHC_PERFORMANCE << 23) |
+      (FEATURE_WIMAX_LINK_ADAPTATION << 24) |
+      (FEATURE_ROHC_DEBUG << 25) |
+      (FEATURE_MILLISECOND_TIMER << 26) |
+      (FEATURE_EFMBOND_L2PI << 27);
+   // word 6
+   dcl 0;
+   // word 7
+   dcl 0;
+   // word 8
+   dcl 0;
+   // word 9
+   dcl 0;
+   // word 10
+   dcl 0;
+   // word 11
+   dcl 0;
+   // word 12
+   dcl 0;
+   // word 13
+   dcl 0;
+
+/*****************************************************************************
+ * (C) Copyright Wintegra 2009. All rights reserved.
+ *****************************************************************************/
