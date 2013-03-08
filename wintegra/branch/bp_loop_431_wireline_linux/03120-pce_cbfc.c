@@ -181,7 +181,8 @@ void WT_Start(WP_CHAR *app_name,WP_CHAR *trial_name,WP_CHAR *file_name)
 
 void WT_Reboot(void)
 {
-#if !defined(__linux__)
+#if 1
+// #if !defined(__linux__)
 /* 
  * Rebooting is specific to board and target.  The test
  * directory should not be concerned how this is done.
@@ -1572,7 +1573,19 @@ void CLI_RunCommonConfig (void)
       printf ("c: show WP_QueueStatus()\n");
       printf ("k: Exit to WinMon without WP_DriverRelease()\n");
       printf ("x: Exit to WinMon\n");
-      cmd = getchar ();
+
+
+	do {
+		cmd = getchar ();
+#if 0
+		printf ("You press (%x)\n", cmd);
+		cmd =	getchar ();
+		printf ("You press (%x)\n", cmd);
+#endif 
+	}
+	while (10 == cmd || 13 == cmd);
+
+
 
       if (cmd == '3')
          WPT_DisplayRoutingPortStats (h_iw_port_gbe_1, "GBE1");
