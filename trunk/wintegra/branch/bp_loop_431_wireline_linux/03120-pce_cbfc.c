@@ -1569,6 +1569,7 @@ void CLI_RunCommonConfig (void)
       printf ("r: Rebot the system\n");
       printf ("a: show flowAgg info\n");
       printf ("b: show WP_ChannelQDepth()\n");
+      printf ("c: show WP_QueueStatus()\n");
       printf ("k: Exit to WinMon without WP_DriverRelease()\n");
       printf ("x: Exit to WinMon\n");
       cmd = getchar ();
@@ -1671,6 +1672,28 @@ void CLI_RunCommonConfig (void)
 		printf ("QDepth of  gbe1_rx_ch_handle(%x)\n", depth);
 	}
       }
+
+
+
+
+      if (cmd == 'c')
+      {
+	WP_U32 status = 0;
+	WP_qnode_hier_status depth[1];
+#if 1
+	if (WP_OK == (status = WP_QNodeStatus (qniw, WP_QNODE_STATUS_FIFO, depth)))
+	{
+		printf ("WP_QNodeStatus of qniw (%x)\n", depth->count[0][0]);
+	} else {
+		printf ("WP_QNodeStatus() return WP_ERR_HANDLE\n");
+	}
+#endif
+      }
+
+
+
+
+
       if (cmd == 'x')
       {
          WP_DriverRelease ();
