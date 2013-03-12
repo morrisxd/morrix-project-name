@@ -2827,6 +2827,7 @@ void WPE_CLI (void)
 
    {
       printf ("\n\n\n");
+	printf ("MENU\n");
       printf
          ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev,       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
@@ -2844,7 +2845,10 @@ void WPE_CLI (void)
 #if 0
       gets (InputBuf);
 #else
-      InputBuf[0] = getchar ();
+	do {
+	      InputBuf[0] = getchar ();
+	}
+	while (10 == InputBuf[0] || 13 == InputBuf[0]);
 #endif
       switch (InputBuf[0])
 
