@@ -41,7 +41,8 @@ WPI_APP_BOARD  	?= wds
 
 WPI_HOST   	= linux
 UFE_TYPE        = ufe412
-DPS_IMAGE_NAME  = wpi_dps_image_backhaul
+DPS_IMAGE_NAME  = wpi_dps_image_wireline
+# DPS_IMAGE_NAME  = wpi_dps_image_backhaul
 
 WDDS_OBJECTS = objects
 WDDI_SOURCES = /sources
