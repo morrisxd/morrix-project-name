@@ -78,7 +78,7 @@ Full CLI Statistics
  *******************************************************************************/
 
 // Misc
-#define ENABLE_TRANSFER          (1)
+#define ENABLE_TRANSFER          (0)
 #define MAX_MACS                 4
 #define N_QNODES                 3
 #define N_POOLS                  4
@@ -1130,7 +1130,11 @@ void WPE_CreateFastEnetPortDevice ()
       NUM_OF_FAST_ENET_TX_CHANNELS;
    enet_port_config.pkt_limits.max_rx_channels =
       NUM_OF_FAST_ENET_RX_CHANNELS;
+#if 1
    enet_port_config.flowmode = WP_FLOWMODE_FAST;   /* this is the key point --- morris */
+#else
+   enet_port_config.flowmode = WP_FLOWMODE_MULTI;   /* this is the key point --- morris */
+#endif
    port_enet =
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7, &enet_port_config);
    terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
@@ -2044,7 +2048,11 @@ void WPE_SetStaticForwardRules ()
    memcpy (forward_rule_config.mac, enet_change_dst_mac, 6);
    forward_rule_config.bport_tag = BRIDGE_PORT_ENET_TAG;
    forward_rule_config.vlan_id = VLAN_TAG_1;
+#if 1
    forward_rule_config.aggregation = agg_enet_change_mac;
+#else
+   forward_rule_config.aggregation = agg_host;
+#endif
 /*------------------------------------------------------------------*\
 	create DFC rules now !!!
 \*------------------------------------------------------------------*/
@@ -2496,7 +2504,7 @@ WP_U32 i;
          terminate_on_error (status, "WP_HostReceive Error()");
    }
    p_got ++;
-#define DISPLAY_MATRIX  (5000)
+#define DISPLAY_MATRIX  (1)
 #if 1
    if (0 == (p_got % DISPLAY_MATRIX))
    {
@@ -2848,7 +2856,8 @@ void WPE_CLI (void)
 	do {
 	      InputBuf[0] = getchar ();
 	}
-	while (10 == InputBuf[0] || 13 == InputBuf[0]);
+	while ('0' > InputBuf[0] || ('a' > InputBuf[0] && '9' < InputBuf[0]) || 'z' < InputBuf[0]);
+	printf ("you have press %c\n", InputBuf[0]);
 #endif
       switch (InputBuf[0])
 
@@ -2870,6 +2879,10 @@ void WPE_CLI (void)
          printf
             ("************************* HierarchicalEnet FlowAgg[0] Stats ********************** \n");
          WPE_DisplayFlowAggStats (agg_hier_enet[0][0][0]);
+
+         printf
+            ("************************* agg_enet_change_mac: Stats ******************************** \n");
+         WPE_DisplayFlowAggStats (agg_enet_change_mac);
          break;
       case '4':
          printf
