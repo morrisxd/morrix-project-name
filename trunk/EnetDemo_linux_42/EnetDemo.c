@@ -77,7 +77,10 @@ Full CLI Statistics
  ***                                 DEFINES                                  ***
  *******************************************************************************/
 
-// Misc
+#undef LOCK_AT_START
+
+#define WPL_THREAD_LOCK_KEY \
+   WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
 #define DELAY_COUNT	(200000*10)
 #define ENABLE_TRANSFER          (1)
 #define MAX_MACS                 4
@@ -298,22 +301,13 @@ void *LearningPoll(void*i)
 
 	while (1)
    	{
-		WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
-      		if (g_flag)
-      		{
-         		g_flag = 0;
-         		iii ++;
-#if 0
-         		WPE_Receive_HostData_IRQ_X (g_tag, g_event, g_info);
-#endif
-#if 1
-			WPL_Delay(DELAY_COUNT);
-			printf ("LearningPoll (%x)\n", iii);
-#endif
-      		}
-		WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
 		WPL_Delay(DELAY_COUNT);
-		printf ("polling again\n");
+
+		WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
+
+		printf ("polling again(%d), press enter to show the MENU\n", iii++);
+
+		WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
    	}
 }
 
@@ -412,9 +406,17 @@ int main (int argc, WP_CHAR ** argv)
 
 #if 1
 	printf ("before lock init\n");
-#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+
 	WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &eoam_lock);
 	printf ("after lock init\n");
+
+
+
+
+#ifdef LOCK_AT_START
+	WPL_Lock(WPL_THREAD_LOCK_KEY, &eoam_lock);
+#endif
+
 
 	learning_thread_id = 0;
 #if 1
