@@ -78,6 +78,7 @@ Full CLI Statistics
  *******************************************************************************/
 
 // Misc
+#define DELAY_COUNT	(200000*10)
 #define ENABLE_TRANSFER          (1)
 #define MAX_MACS                 4
 #define N_QNODES                 3
@@ -306,10 +307,12 @@ void *LearningPoll(void*i)
          		WPE_Receive_HostData_IRQ_X (g_tag, g_event, g_info);
 #endif
 #if 1
+			WPL_Delay(DELAY_COUNT);
 			printf ("LearningPoll (%x)\n", iii);
 #endif
       		}
 		WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
+		WPL_Delay(DELAY_COUNT);
 		printf ("polling again\n");
    	}
 }
@@ -414,7 +417,7 @@ int main (int argc, WP_CHAR ** argv)
 	printf ("after lock init\n");
 
 	learning_thread_id = 0;
-#if 0
+#if 1
 	status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
 	terminate_on_error (status , "WPL_ThreadInit() learning");
 	printf ("after Threadinit\n");
