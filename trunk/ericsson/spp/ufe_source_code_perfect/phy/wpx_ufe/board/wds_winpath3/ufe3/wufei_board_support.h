@@ -1,0 +1,445 @@
+/*****************************************************************************
+ * (C) Copyright 2000-2006, Wintegra. All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ ****************************************************************************/
+
+/*****************************************************************************
+ *
+ * File: wufei_board_support.h
+ *
+ * Purpose: the UFE3 board support registers map and board support defines
+ *
+ ****************************************************************************/
+#ifndef WUFEI_BOARD_SUPPORT_H
+#define WUFEI_BOARD_SUPPORT_H
+
+#ifndef WUFE_TYPES_H
+#include "wufe_types.h"
+#endif
+
+#ifndef WUFEI_HW_TYPES_H
+#include "wufei_hw_types.h"
+#endif
+
+#define WUFEI_BS_N_STATUS 2
+#define WUFEI_BS_N_GLOBAL_CFG 16
+#define WUFEI_UFE412_CHIP_SELECT  4 //valid values are 0-7
+typedef struct
+{/*HW confiuration*/
+      WUFEI_reg_space release_id;
+      WUFEI_reg_space secondary_release_id;
+      WUFEI_reg_space reset;
+      WUFEI_reg_space reserved1[13];
+      WUFEI_reg_space interrupt;
+      WUFEI_reg_space interrupt_mask;
+      WUFEI_reg_space reserved2[14];
+      WUFEI_reg_space status[WUFEI_BS_N_STATUS];
+      WUFEI_reg_space reserved3[14];
+      WUFEI_reg_space global_cfg[WUFEI_BS_N_GLOBAL_CFG];
+      WUFEI_reg_space fo_transmit;
+      WUFEI_reg_space reserved5[15];
+      WUFEI_reg_space gpled;
+      WUFEI_reg_space reserved6[15];
+      WUFEI_reg_space cr_active[4];
+}WUFEI_hw_bs;
+
+/*used by PllLock check*/
+#define WUFEI_PLL_LOCK_TIMEOUT 0x1000
+#define WUFEI_PLL_LOCK_DELAY 100
+
+#define WUFE_BOARD_SUPPORT_ENABLE  0
+#define WUFE_BOARD_SUPPORT_DISABLE 1
+
+/* CR CAD defines */
+#define WUFE_CLK_REC_UNITS_IN_CORE 32
+#define WUFE_CLK_REC_UNITS_IN_REG  16
+
+/***************************** SW reset ****************************************/
+/*active switch 1->0*/
+#define WUFEI_BS_RESET_SW_S (0)
+#define WUFEI_BS_RESET_SW_W (1)
+#define WUFEI_BS_RESET_SW_F(v) WUFEI_FIELD(v, WUFEI_BS_RESET_SW_S)
+#define WUFEI_BS_RESET_SW_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_RESET_SW_S, WUFEI_BS_RESET_SW_W)
+#define WUFEI_BS_RESET_SW_M \
+        WUFEI_MASK(WUFEI_BS_RESET_SW_S, WUFEI_BS_RESET_SW_W)
+
+/***************************** interrupt ****************************************/
+/*active switch 1->0*/
+#define WUFEI_BS_INTERRUPT_INTT_S (0)
+#define WUFEI_BS_INTERRUPT_INTT_W (1)
+#define WUFEI_BS_INTERRUPT_INTT_F(v) WUFEI_FIELD(v, WUFEI_BS_INTERRUPT_INTT_S)
+#define WUFEI_BS_INTERRUPT_INTT_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_INTERRUPT_INTT_S, WUFEI_BS_INTERRUPT_INTT_W)
+#define WUFEI_BS_INTERRUPT_INTT_M \
+        WUFEI_MASK(WUFEI_BS_INTERRUPT_INTT_S, WUFEI_BS_INTERRUPT_INTT_W)
+
+#define WUFEI_BS_INTERRUPT_INTO_S (1)
+#define WUFEI_BS_INTERRUPT_INTO_W (1)
+#define WUFEI_BS_INTERRUPT_INTO_F(v) WUFEI_FIELD(v, WUFEI_BS_INTERRUPT_INTO_S)
+#define WUFEI_BS_INTERRUPT_INTO_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_INTERRUPT_INTO_S, WUFEI_BS_INTERRUPT_INTO_W)
+#define WUFEI_BS_INTERRUPT_INTO_M \
+        WUFEI_MASK(WUFEI_BS_INTERRUPT_INTO_S, WUFEI_BS_INTERRUPT_INTO_W)
+
+#define WUFEI_BS_INTERRUPT_INTU_S (2)
+#define WUFEI_BS_INTERRUPT_INTU_W (1)
+#define WUFEI_BS_INTERRUPT_INTU_F(v) WUFEI_FIELD(v, WUFEI_BS_INTERRUPT_INTU_S)
+#define WUFEI_BS_INTERRUPT_INTU_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_INTERRUPT_INTU_S, WUFEI_BS_INTERRUPT_INTU_W)
+#define WUFEI_BS_INTERRUPT_INTU_M \
+        WUFEI_MASK(WUFEI_BS_INTERRUPT_INTU_S, WUFEI_BS_INTERRUPT_INTU_W)
+
+#define WUFEI_BS_INTERRUPT_MASKT_S (0)
+#define WUFEI_BS_INTERRUPT_MASKT_W (1)
+#define WUFEI_BS_INTERRUPT_MASKT_F(v) WUFEI_FIELD(v, WUFEI_BS_INTERRUPT_MASKT_S)
+#define WUFEI_BS_INTERRUPT_MASKT_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_INTERRUPT_MASKT_S, WUFEI_BS_INTERRUPT_MASKT_W)
+#define WUFEI_BS_INTERRUPT_MASKT_M \
+        WUFEI_MASK(WUFEI_BS_INTERRUPT_MASKT_S, WUFEI_BS_INTERRUPT_MASKT_W)
+
+#define WUFEI_BS_INTERRUPT_MASKO_S (1)
+#define WUFEI_BS_INTERRUPT_MASKO_W (1)
+#define WUFEI_BS_INTERRUPT_MASKO_F(v) WUFEI_FIELD(v, WUFEI_BS_INTERRUPT_MASKO_S)
+#define WUFEI_BS_INTERRUPT_MASKO_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_INTERRUPT_MASKO_S, WUFEI_BS_INTERRUPT_MASKO_W)
+#define WUFEI_BS_INTERRUPT_MASKO_M \
+        WUFEI_MASK(WUFEI_BS_INTERRUPT_MASKO_S, WUFEI_BS_INTERRUPT_MASKO_W)
+
+#define WUFEI_BS_INTERRUPT_MASKU_S (2)
+#define WUFEI_BS_INTERRUPT_MASKU_W (1)
+#define WUFEI_BS_INTERRUPT_MASKU_F(v) WUFEI_FIELD(v, WUFEI_BS_INTERRUPT_MASKU_S)
+#define WUFEI_BS_INTERRUPT_MASKU_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_INTERRUPT_MASKU_S, WUFEI_BS_INTERRUPT_MASKU_W)
+#define WUFEI_BS_INTERRUPT_MASKU_M \
+        WUFEI_MASK(WUFEI_BS_INTERRUPT_MASKU_S, WUFEI_BS_INTERRUPT_MASKU_W)
+
+/***************************** Status 0 ****************************************/
+/* 1-lock*/
+#define WUFEI_BS_STATUS_0_LOCK_SYS_S (0)
+#define WUFEI_BS_STATUS_0_LOCK_SYS_W (1)
+#define WUFEI_BS_STATUS_0_LOCK_SYS_F(v) WUFEI_FIELD(v, WUFEI_BS_STATUS_0_LOCK_SYS_S)
+#define WUFEI_BS_STATUS_0_LOCK_SYS_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_STATUS_0_LOCK_SYS_S, WUFEI_BS_STATUS_0_LOCK_SYS_W)
+#define WUFEI_BS_STATUS_0_LOCK_SYS_M \
+        WUFEI_MASK(WUFEI_BS_STATUS_0_LOCK_SYS_S, WUFEI_BS_STATUS_0_LOCK_SYS_W)
+
+/* 1-lock*/
+#define WUFEI_BS_STATUS_0_LOCK_ZBT_S (1)
+#define WUFEI_BS_STATUS_0_LOCK_ZBT_W (1)
+#define WUFEI_BS_STATUS_0_LOCK_ZBT_F(v) WUFEI_FIELD(v, WUFEI_BS_STATUS_0_LOCK_ZBT_S)
+#define WUFEI_BS_STATUS_0_LOCK_ZBT_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_STATUS_0_LOCK_ZBT_S, WUFEI_BS_STATUS_0_LOCK_ZBT_W)
+#define WUFEI_BS_STATUS_0_LOCK_ZBT_M \
+        WUFEI_MASK(WUFEI_BS_STATUS_0_LOCK_ZBT_S, WUFEI_BS_STATUS_0_LOCK_ZBT_W)
+
+/* 1-lock*/
+#define WUFEI_BS_STATUS_0_LOCK_SBI_S (2)
+#define WUFEI_BS_STATUS_0_LOCK_SBI_W (1)
+#define WUFEI_BS_STATUS_0_LOCK_SBI_F(v) WUFEI_FIELD(v, WUFEI_BS_STATUS_0_LOCK_SBI_S)
+#define WUFEI_BS_STATUS_0_LOCK_SBI_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_STATUS_0_LOCK_SBI_S, WUFEI_BS_STATUS_0_LOCK_SBI_W)
+#define WUFEI_BS_STATUS_0_LOCK_SBI_M \
+        WUFEI_MASK(WUFEI_BS_STATUS_0_LOCK_SBI_S, WUFEI_BS_STATUS_0_LOCK_SBI_W)
+
+/* 1-lock*/
+#define WUFEI_BS_STATUS_0_LOCK_HMVIP_S (3)
+#define WUFEI_BS_STATUS_0_LOCK_HMVIP_W (1)
+#define WUFEI_BS_STATUS_0_LOCK_HMVIP_F(v) WUFEI_FIELD(v, WUFEI_BS_STATUS_0_LOCK_HMVIP_S)
+#define WUFEI_BS_STATUS_0_LOCK_HMVIP_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_STATUS_0_LOCK_HMVIP_S, WUFEI_BS_STATUS_0_LOCK_HMVIP_W)
+#define WUFEI_BS_STATUS_0_LOCK_HMVIP_M \
+        WUFEI_MASK(WUFEI_BS_STATUS_0_LOCK_HMVIP_S, WUFEI_BS_STATUS_0_LOCK_HMVIP_W)
+
+/***************************** Status 1 ****************************************/
+/* 1-lock*/
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SYS_S (0)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SYS_W (1)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SYS_F(v) WUFEI_FIELD(v, WUFEI_BS_STATUS_1_PLL_ACLK_SYS_S)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SYS_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_STATUS_1_PLL_ACLK_SYS_S, WUFEI_BS_STATUS_1_PLL_ACLK_SYS_W)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SYS_M \
+        WUFEI_MASK(WUFEI_BS_STATUS_1_PLL_ACLK_SYS_S, WUFEI_BS_STATUS_1_PLL_ACLK_SYS_W)
+
+/* 1-lock*/
+#define WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_S (1)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_W (1)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_F(v) WUFEI_FIELD(v, WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_S)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_S, WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_W)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_M \
+        WUFEI_MASK(WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_S, WUFEI_BS_STATUS_1_PLL_ACLK_ZBT_W)
+
+/* 1-lock*/
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SBI_S (2)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SBI_W (1)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SBI_F(v) WUFEI_FIELD(v, WUFEI_BS_STATUS_1_PLL_ACLK_SBI_S)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SBI_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_STATUS_1_PLL_ACLK_SBI_S, WUFEI_BS_STATUS_1_PLL_ACLK_SBI_W)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_SBI_M \
+        WUFEI_MASK(WUFEI_BS_STATUS_1_PLL_ACLK_SBI_S, WUFEI_BS_STATUS_1_PLL_ACLK_SBI_W)
+
+/* 1-lock*/
+#define WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_S (3)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_W (1)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_F(v) WUFEI_FIELD(v, WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_S)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_S, WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_W)
+#define WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_M \
+        WUFEI_MASK(WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_S, WUFEI_BS_STATUS_1_PLL_ACLK_HMVIP_W)
+
+/***************************** global configuration 0 ****************************************/
+/* 1-source clock is the TEMUX's, 0-source clock is output of 77.76MHz crystal*/
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_S (2)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_W (1)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_S)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_S, WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_W)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_S, WUFEI_BS_GLOBAL_CFG_0_CSW_SBI_W)
+
+/* 1-source clock is the TEMUX's, 0-source clock is output of 77.76MHz crystal*/
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_S (1)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_W (1)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_S)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_S, WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_W)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_S, WUFEI_BS_GLOBAL_CFG_0_CSW_ZBT_W)
+
+/* 1-source clock is the TEMUX's, 0-source clock is output of 77.76MHz crystal*/
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_S (0)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_W (1)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_S)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_S, WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_W)
+#define WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_S, WUFEI_BS_GLOBAL_CFG_0_CSW_SYS_W)
+
+
+/***************************** global configuration 1 ****************************************/
+/* 0 - 34.368MHz, 1 - 44.736MHz*/
+#define WUFEI_BS_GLOBAL_CFG_1_TICLK_S (4)
+#define WUFEI_BS_GLOBAL_CFG_1_TICLK_W (3)
+#define WUFEI_BS_GLOBAL_CFG_1_TICLK_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_1_TICLK_S)
+#define WUFEI_BS_GLOBAL_CFG_1_TICLK_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_1_TICLK_S, WUFEI_BS_GLOBAL_CFG_1_TICLK_W)
+#define WUFEI_BS_GLOBAL_CFG_1_TICLK_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_1_TICLK_S, WUFEI_BS_GLOBAL_CFG_1_TICLK_W)
+
+#define WUFEI_BS_GLOBAL_CFG_1_TICLK_SPE_0 1
+#define WUFEI_BS_GLOBAL_CFG_1_TICLK_SPE_1
+/* 0 - 500us, 1 - 6ms*/
+#define WUFEI_BS_GLOBAL_CFG_1_SAC1FP_S (2)
+#define WUFEI_BS_GLOBAL_CFG_1_SAC1FP_W (1)
+#define WUFEI_BS_GLOBAL_CFG_1_SAC1FP_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_1_SAC1FP_S)
+#define WUFEI_BS_GLOBAL_CFG_1_SAC1FP_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_1_SAC1FP_S, WUFEI_BS_GLOBAL_CFG_1_SAC1FP_W)
+#define WUFEI_BS_GLOBAL_CFG_1_SAC1FP_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_1_SAC1FP_S, WUFEI_BS_GLOBAL_CFG_1_SAC1FP_W)
+
+/* 0 - 500us, 1 - 6ms*/
+#define WUFEI_BS_GLOBAL_CFG_1_SDC1FP_S (1)
+#define WUFEI_BS_GLOBAL_CFG_1_SDC1FP_W (1)
+#define WUFEI_BS_GLOBAL_CFG_1_SDC1FP_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_1_SDC1FP_S)
+#define WUFEI_BS_GLOBAL_CFG_1_SDC1FP_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_1_SDC1FP_S, WUFEI_BS_GLOBAL_CFG_1_SDC1FP_W)
+#define WUFEI_BS_GLOBAL_CFG_1_SDC1FP_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_1_SDC1FP_S, WUFEI_BS_GLOBAL_CFG_1_SDC1FP_W)
+
+/* 0 - 500us, 1 - 6ms*/
+#define WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_S (0)
+#define WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_W (1)
+#define WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_S)
+#define WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_S, WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_W)
+#define WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_S, WUFEI_BS_GLOBAL_CFG_1_CMVFPB_MD_W)
+
+/***************************** global configuration 2 ****************************************/
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_S (0)
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_W (1)
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_S)
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_S, WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_W)
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_S, WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_0_W)
+
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_S (1)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_W (1)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_S)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_S, WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_W)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_S, WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_0_W)
+
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_S (2)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_W (3)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_S)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_S, WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_W)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_S, WUFEI_BS_GLOBAL_CFG_2_FP_DATA_0_W)
+
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_S (5)
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_W (1)
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_S)
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_S, WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_W)
+#define WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_S, WUFEI_BS_GLOBAL_CFG_2_DATA_SAMP_1_W)
+
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_S (6)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_W (1)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_S)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_S, WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_W)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_S, WUFEI_BS_GLOBAL_CFG_2_FP_SAMP_1_W)
+
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_S (7)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_W (3)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_S)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_S, WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_W)
+#define WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_S, WUFEI_BS_GLOBAL_CFG_2_FP_DATA_1_W)
+
+/***************************** global configuration 3 ****************************************/
+/* 1-Extended differential, 0-Adaptive / regular differential */
+#define WUFEI_BS_GLOBAL_CFG_3_MUXSEL_S(cadid) (cadid)
+#define WUFEI_BS_GLOBAL_CFG_3_MUXSEL_W (1)
+#define WUFEI_BS_GLOBAL_CFG_3_MUXSEL_F(v, cadid) \
+WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_3_MUXSEL_S(cadid))
+#define WUFEI_BS_GLOBAL_CFG_3_MUXSEL_V(f, cadid) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_3_MUXSEL_S(cadid), WUFEI_BS_GLOBAL_CFG_3_MUXSEL_W)
+#define WUFEI_BS_GLOBAL_CFG_3_MUXSEL_M(cadid) \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_3_MUXSEL_S(cadid), WUFEI_BS_GLOBAL_CFG_3_MUXSEL_W)
+
+/***************************** global configuration 4 ****************************************/
+/* 1-Extended differential, 0-Adaptive / regular differential */
+#define WUFEI_BS_GLOBAL_CFG_4_MUXSEL_S(cadid) (cadid)
+#define WUFEI_BS_GLOBAL_CFG_4_MUXSEL_W (1)
+#define WUFEI_BS_GLOBAL_CFG_4_MUXSEL_F(v, cadid) \
+WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_4_MUXSEL_S(cadid))
+#define WUFEI_BS_GLOBAL_CFG_4_MUXSEL_V(f, cadid) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_4_MUXSEL_S(cadid), WUFEI_BS_GLOBAL_CFG_4_MUXSEL_W)
+#define WUFEI_BS_GLOBAL_CFG_4_MUXSEL_M(cadid) \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_4_MUXSEL_S(cadid), WUFEI_BS_GLOBAL_CFG_4_MUXSEL_W)
+
+/***************************** global configuration 5 ****************************************/
+/* wufei_bs_global_cfg_5_dc1fp_delay enum values*/
+#define WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_S (0)
+#define WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_W (2)
+#define WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_S)
+#define WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_S, WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_W)
+#define WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_S, WUFEI_BS_GLOBAL_CFG_5_DC1FP_DELAY_W)
+
+/* wufei_bs_global_cfg_5_ac1fp_delay enum values*/
+#define WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_S (2)
+#define WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_W (2)
+#define WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_F(v) WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_S)
+#define WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_S, WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_W)
+#define WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_M \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_S, WUFEI_BS_GLOBAL_CFG_5_AC1FP_DELAY_W)
+
+
+/***************************** global configuration 6,7,8 *************************************/
+/**/
+#define WUFEI_BS_GLOBAL_CFG_TICLK_SEL_N 3
+/* WUFEI_BS_JAT_OUTPUT_N(i) or TICLK_SEL*/
+#define WUFEI_BS_GLOBAL_CFG_TICLK_SEL_START(i) (i*4)
+#define WUFEI_BS_GLOBAL_CFG_TICLK_SEL_S(i) WUFEI_BS_GLOBAL_CFG_TICLK_SEL_START(i)
+#define WUFEI_BS_GLOBAL_CFG_TICLK_SEL_W (4)
+#define WUFEI_BS_GLOBAL_CFG_TICLK_SEL_F(v, i) \
+        WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_TICLK_SEL_S(i))
+#define WUFEI_BS_GLOBAL_CFG_TICLK_SEL_V(f, i) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_TICLK_SEL_S(i), WUFEI_BS_GLOBAL_CFG_TICLK_SEL_W)
+#define WUFEI_BS_GLOBAL_CFG_TICLK_SEL_M(i) \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_TICLK_SEL_S(i), WUFEI_BS_GLOBAL_CFG_TICLK_SEL_W)
+
+
+/***************************** global configuration 9,0xa,0xb *********************************/
+/***************************** Unused configuration registers *********************************/
+
+/***************************** global configuration 0xc ****************************************/
+/* 1-Extended differential, 0-Adaptive / regular differential */
+#define WUFEI_BS_GLOBAL_CFG_C_MUXSEL_S(cadid) (cadid)
+#define WUFEI_BS_GLOBAL_CFG_C_MUXSEL_W (1)
+#define WUFEI_BS_GLOBAL_CFG_C_MUXSEL_F(v, cadid) \
+WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_C_MUXSEL_S(cadid))
+#define WUFEI_BS_GLOBAL_CFG_C_MUXSEL_V(f, cadid) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_C_MUXSEL_S(cadid), WUFEI_BS_GLOBAL_CFG_C_MUXSEL_W)
+#define WUFEI_BS_GLOBAL_CFG_C_MUXSEL_M(cadid) \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_C_MUXSEL_S(cadid), WUFEI_BS_GLOBAL_CFG_C_MUXSEL_W)
+
+/***************************** global configuration 0xd ****************************************/
+/* 1-Extended differential, 0-Adaptive / regular differential */
+#define WUFEI_BS_GLOBAL_CFG_D_MUXSEL_S(cadid) (cadid)
+#define WUFEI_BS_GLOBAL_CFG_D_MUXSEL_W (1)
+#define WUFEI_BS_GLOBAL_CFG_D_MUXSEL_F(v, cadid) \
+WUFEI_FIELD(v, WUFEI_BS_GLOBAL_CFG_D_MUXSEL_S(cadid))
+#define WUFEI_BS_GLOBAL_CFG_D_MUXSEL_V(f, cadid) \
+        WUFEI_VALUE(f, WUFEI_BS_GLOBAL_CFG_D_MUXSEL_S(cadid), WUFEI_BS_GLOBAL_CFG_D_MUXSEL_W)
+#define WUFEI_BS_GLOBAL_CFG_D_MUXSEL_M(cadid) \
+        WUFEI_MASK(WUFEI_BS_GLOBAL_CFG_D_MUXSEL_S(cadid), WUFEI_BS_GLOBAL_CFG_D_MUXSEL_W)
+
+
+/***************************** global configuration 0xe,0xf *********************************/
+/**************************** Unused configuration registers ********************************/
+
+/***************************** FO transmit register ****************************************/
+/* 1-fiber optic transmit disable, 0-fiber optic transmit enable*/
+#define WUFEI_BS_FO_TX_DISABLE_S (0)
+#define WUFEI_BS_FO_TX_DISABLE_W (1)
+#define WUFEI_BS_FO_TX_DISABLE_F(v) WUFEI_FIELD(v, WUFEI_BS_FO_TX_DISABLE_S)
+#define WUFEI_BS_FO_TX_DISABLE_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_FO_TX_DISABLE_S, WUFEI_BS_FO_TX_DISABLE_W)
+#define WUFEI_BS_FO_TX_DISABLE_M \
+        WUFEI_MASK(WUFEI_BS_FO_TX_DISABLE_S, WUFEI_BS_FO_TX_DISABLE_W)
+
+/***************************** GPLED register ***********************************************/
+/* 1-led is off, 0-led is on*/
+#define WUFEI_BS_GPLED_OFF_S (0)
+#define WUFEI_BS_GPLED_OFF_W (3)
+#define WUFEI_BS_GPLED_OFF_F(v) WUFEI_FIELD(v, WUFEI_BS_GPLED_OFF_S)
+#define WUFEI_BS_GPLED_OFF_V(f) \
+        WUFEI_VALUE(f, WUFEI_BS_GPLED_OFF_S, WUFEI_BS_GPLED_OFF_W)
+#define WUFEI_BS_GPLED_OFF_M \
+        WUFEI_MASK(WUFEI_BS_GPLED_OFF_S, WUFEI_BS_GPLED_OFF_W)
+
+
+typedef enum
+{
+   WUFEI_BS_DC1FP_DELAY_NONE = 0,
+   WUFEI_BS_DC1FP_DELAY_1_CYCLE,
+   WUFEI_BS_DC1FP_DELAY_2_CYCLE,
+   WUFEI_BS_DC1FP_DELAY_3_CYCLE
+}wufei_bs_global_cfg_5_dc1fp_delay;
+
+typedef enum
+{
+   WUFEI_BS_AC1FP_DELAY_NONE = 0,
+   WUFEI_BS_AC1FP_DELAY_1_CYCLE,
+   WUFEI_BS_AC1FP_DELAY_2_CYCLE,
+   WUFEI_BS_AC1FP_DELAY_3_CYCLE
+}wufei_bs_global_cfg_5_ac1fp_delay;
+
+
+/* used for global configuration registers6,7,8 */
+#define WUFEI_BS_MAX_N_JAT_OUTPUT 12
+
+#define WUFEI_BS_JAT_OUTPUT_N(i) (i>=WUFEI_BS_MAX_N_JAT_OUTPUT) ? 0 : i
+
+#define WUFEI_BS_TICLK_SEL_DS3 1101
+#define WUFEI_BS_TICLK_SEL_E3  1100
+
+
+
+#endif /* WUFEI_BOARD_SUPPORT_H*/

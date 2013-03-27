@@ -1,0 +1,559 @@
+/*--------------------------------------------------------------------------*/
+/*                                                                          */
+/*        Copyright (c) 2010  Omiino Ltd                                    */
+/*                                                                          */
+/*        All rights reserved.                                              */
+/*        This code is provided under license and or Non-disclosure         */
+/*        Agreement and must be used solely for the purpose for which it    */
+/*        was provided. It must not be passed to any third party without    */
+/*        the written permission of Omiino Ltd.                             */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
+
+
+#include "WO_FRMR_private.h"
+			
+
+U32 OMIINO_DEVICE_PERSONALITY_MaxSocketClients(U8 iDevice)
+{
+	U32 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:		
+			Result=168;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:
+
+			Result=336;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:			
+			Result=1344;
+			break;
+		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:	
+
+                   Result=1008;/*valid values are 0-335 , 672-1007 */
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+
+
+U8 OMIINO_DEVICE_PERSONALITY_SupportsPortRate(U8 iDevice, U8 PortRate)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:
+			switch(PortRate)
+			{
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_OFF:
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_STM1:
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_OC3:
+						Result=1;
+						break;
+
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_STM4:
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_OC12:
+						Result=0;
+						break;
+
+				default:
+						Result=0;
+						break;
+			}
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:			
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:			
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+			switch(PortRate)
+			{
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_OFF:
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_STM1:
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_OC3:
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_STM4:
+				case	WPX_UFE_FRAMER_LINE_PORT_RATE_OC12:
+						Result=1;
+						break;
+
+				default:
+						Result=0;
+						break;
+			}
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:				
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+
+
+
+U8 OMIINO_DEVICE_PERSONALITY_NumberOfLinePorts(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:
+			Result=16;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:			
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:			
+			Result=8;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:			
+			Result=6;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:			
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:			
+			Result=4;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+			Result=2;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:				
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+U8 OMIINO_DEVICE_PERSONALITY_Max_SONET_LineBandwidthPerPort(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:			
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:
+			Result=WPX_UFE_FRAMER_BUILD_OPTION_MAX_U_PER_PORT;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:										
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:		
+			Result=3;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:			
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+U8 OMIINO_DEVICE_PERSONALITY_Max_SDH_LineBandwidthPerPort(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:
+			Result=WPX_UFE_FRAMER_BUILD_OPTION_MAX_J_PER_PORT;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:										
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:			
+			Result=1;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+
+
+U8 OMIINO_DEVICE_PERSONALITY_SupportsClientType(U8 iDevice, U8 ClientType)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:							
+			switch(ClientType)
+			{   
+				case    WPX_UFE_FRAMER_CLIENT_E1: 
+				case    WPX_UFE_FRAMER_CLIENT_T1:
+				case    WPX_UFE_FRAMER_CLIENT_C4_4C:
+				case    WPX_UFE_FRAMER_CLIENT_C4:
+				case    WPX_UFE_FRAMER_CLIENT_C3:
+				case    WPX_UFE_FRAMER_CLIENT_E3:
+				case    WPX_UFE_FRAMER_CLIENT_T3:
+						Result=1;
+						break;
+	
+				case    WPX_UFE_FRAMER_CLIENT_C12:	
+				case    WPX_UFE_FRAMER_CLIENT_C11:	
+						Result=0;
+						break;
+
+				default:
+						OMIINO_FRAMER_RSE(ClientType);
+						break;
+			}
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:										
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:	
+			Result=0; /* TODO Update as personalities added */
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+
+
+
+
+
+
+U8 OMIINO_DEVICE_PERSONALITY_SupportsSONETSDH(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:								
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:		
+			Result=1;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+
+U8 OMIINO_API_DEVICE_PERSONALITY_SupportsLineProtection(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:			
+			Result=1;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:												
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=0;
+			break;
+
+		default:
+			Result=0;
+			break;
+	}
+
+    return Result;
+}
+
+U8 OMIINO_DEVICE_PERSONALITY_SupportsCardProtection(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:
+			Result=1;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+U8 OMIINO_DEVICE_PERSONALITY_SupportsNeitherLineNorCardProtection(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:	
+			Result=0;
+			break;
+
+											
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=1;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+U8 OMIINO_DEVICE_PERSONALITY_SupportsLineProtection(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:			
+			Result=1;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:												
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+U8 OMIINO_DEVICE_PERSONALITY_SupportsDiscreteClientE1T1(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:													
+			Result=0;
+			break;
+
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:			
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=1;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+U8 OMIINO_DEVICE_PERSONALITY_SupportsVCAT(U8 iDevice)
+{
+	U8 Result=0;
+
+	switch(OMIINO_RAM.Device[iDevice].BuildPersonality)
+	{
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3_OC12:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12:
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_4_PLUS_4_OC3:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3:					
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_OC3:													
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12_32_DISCRETE:	
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_32_DISCRETE:		
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_64_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_32_DISCRETE_ONLY:				
+		case WPX_UFE_FRAMER_BUILD_PERSONALITY_16_DISCRETE_ONLY:		
+			Result=0;
+			break;
+
+		default:
+			OMIINO_FRAMER_RSE(OMIINO_RAM.Device[iDevice].BuildPersonality);
+			break;
+	}
+
+    return Result;
+}
+
+
+U8 OMIINO_DEVICE_PERSONALITY_IsDefined(U8 iDevice)
+{
+    return WPX_UFE_FRAMER_BUILD_PERSONALITY_UNDEFINED!=OMIINO_RAM.Device[iDevice].BuildPersonality;
+}
+
+
+
+
+void OMIINO_DEVICE_PERSONALITY_Initialize(OMIINO_FRAMER_DEVICE_TYPE * pDeviceRAM)
+{
+    U32 i;
+
+    for(i=0;i<WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES;i++)
+    {
+		pDeviceRAM[i].BuildPersonality=WPX_UFE_FRAMER_BUILD_PERSONALITY_UNDEFINED;
+    }
+}
+
+
+

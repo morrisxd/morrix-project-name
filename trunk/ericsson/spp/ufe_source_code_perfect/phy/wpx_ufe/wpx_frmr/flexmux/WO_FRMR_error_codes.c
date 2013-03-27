@@ -1,0 +1,446 @@
+/*--------------------------------------------------------------------------*/
+/*                                                                          */
+/*        Copyright (c) 2010  Omiino Ltd                                    */
+/*                                                                          */
+/*        All rights reserved.                                              */
+/*        This code is provided under license and or Non-disclosure         */
+/*        Agreement and must be used solely for the purpose for which it    */
+/*        was provided. It must not be passed to any third party without    */
+/*        the written permission of Omiino Ltd.                             */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
+
+
+#include "WO_FRMR_private.h"
+
+
+char * OMIINO_FRAMER_ErrorCodeToTxt(U32 ErrorCode)
+{
+	 char * Result;
+
+	 switch(ErrorCode)
+	 {
+		 case WPX_UFE_FRAMER_OK:
+			Result="FRAMER_OK";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_OUT_OF_RANGE:
+			Result="DEVICE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_LINE_PORT_OUT_OF_RANGE:
+			Result="LINE_PORT_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_DISCRETE_CLIENT_PORT_OUT_OF_RANGE:
+			Result="DISCRETE_CLIENT_PORT_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_SOCKET_CLIENT_PORT_OUT_OF_RANGE:	
+			Result="SOCKET_CLIENT_PORT_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BANDWIDTH_OUT_OF_RANGE:
+			Result="BANDWIDTH_OUT_OF_RANGE";
+			break;
+		 
+		 case WPX_UFE_FRAMER_ERROR_iJ_OUT_OF_RANGE:											
+			Result="iJ_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_iK_OUT_OF_RANGE:											
+			Result="iK_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_iL_OUT_OF_RANGE:											
+			Result="iL_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_iM_OUT_OF_RANGE:											
+			Result="iM_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_iU_OUT_OF_RANGE:											
+			Result="iU_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_iV_OUT_OF_RANGE:											
+			Result="iV_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_iW_OUT_OF_RANGE:											
+			Result="iW_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_MODE_OUT_OF_RANGE:									
+			Result="DEVICE_MODE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_PORT_RATE_OUT_OF_RANGE:										
+			Result="PORT_RATE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_TOO_MANY_CHARS_IN_STRING:									
+			Result="TOO_MANY_CHARS_IN_STRING";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BANDWIDTH_NOT_SUPPORTED:									
+			Result="BANDWIDTH_NOT_SUPPORTED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_DOES_NOT_EXIST:									
+			Result="FACILITY_DOES_NOT_EXIST";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_ALREADY_EXISTS:									
+			Result="FACILITY_ALREADY_EXISTS";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_INVALID_FACILITY:											
+			Result="INVALID_FACILITY";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_PART_OF_CONNECTION:								
+			Result="FACILITY_PART_OF_CONNECTION";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CONNECTION_BLOCKED_BY_PARENT:								
+			Result="CONNECTION_BLOCKED_BY_PARENT";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CONNECTION_BLOCKED_BY_CHILD:								
+			Result="CONNECTION_BLOCKED_BY_CHILD";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CONNECTION_FACILITY_MISMATCH:								
+			Result="CONNECTION_FACILITY_MISMATCH";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CONNECTION_ALREADY_EXISTS:									
+			Result="CONNECTION_ALREADY_EXISTS";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CONNECTION_DOES_NOT_EXIST:									
+			Result="CONNECTION_DOES_NOT_EXIST";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CONNECTION_FACILITY_ALREADY_CONNECTED:						
+			Result="CONNECTION_FACILITY_ALREADY_CONNECTED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CONNECTION_FACILITY_NOT_CONNECTED:							
+			Result="CONNECTION_FACILITY_NOT_CONNECTED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_C2_VALUE_OUT_OF_RANGE:										
+			Result="C2_VALUE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_S1_VALUE_OUT_OF_RANGE:										
+			Result="S1_VALUE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_K1_VALUE_OUT_OF_RANGE:										
+			Result="K1_VALUE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_K2_VALUE_OUT_OF_RANGE:										
+			Result="K2_VALUE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BIP_THRESHOLD_OUT_OF_RANGE:									
+			Result="BIP_THRESHOLD_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_PATH_TRACE_OUT_OF_RANGE:									
+			Result="PATH_TRACE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_PRBS_PATTERN_TYPE_OUT_OF_RANGE:								
+			Result="PRBS_PATTERN_TYPE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_TYPE_OUT_OF_RANGE:									
+			Result="CLIENT_TYPE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_FRAMING_OUT_OF_RANGE:								
+			Result="CLIENT_FRAMING_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_MAPPING_OUT_OF_RANGE:								
+			Result="CLIENT_MAPPING_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE:										
+			Result="PARAMETER_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_CAPABILITY_NOT_DEFINED:  
+			Result="DEVICE_CAPABILITY_NOT_DEFINED";
+			break;
+		 
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_CAPABILITY_DOES_NOT_SUPPORT_DISCRETE_CLIENT_E1T1:	
+			Result="DEVICE_CAPABILITY_DOES_NOT_SUPPORT_DISCRETE_CLIENT_E1T1";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_ALARM_CATEGORY_OUT_OF_RANGE:								
+			Result="ALARM_CATEGORY_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_NOT_READY:                                          
+			Result="DEVICE_NOT_READY";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_VC4_4C_J_INCORRECT:                                        
+			Result="VC4_4C_J_INCORRECT";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_BLOCKED_BY_PEER:                                  
+			Result="FACILITY_BLOCKED_BY_PEER";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_BLOCKED_BY_PARENT:                                
+			Result="FACILITY_BLOCKED_BY_PARENT";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_BLOCKED_BY_CHILD:                                 
+			Result="FACILITY_BLOCKED_BY_CHILD";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_PARENT_DOES_NOT_EXIST:                            
+			Result="FACILITY_PARENT_DOES_NOT_EXIST";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_PARENT_IS_CONNECTED:                              
+			Result="FACILITY_PARENT_IS_CONNECTED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_STS_U_INCORRECT:                                           
+			Result="STS_U_INCORRECT";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BUILD_OPTION_PREVENTS_FACILITY_CREATION:                   
+			Result="BUILD_OPTION_PREVENTS_FACILITY_CREATION";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITY_BANDWIDTH_MISMATCH:                               
+			Result="FACILITY_BANDWIDTH_MISMATCH";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BANDWIDTH_NOT_SUPPORTED_IN_DEVICE_MODE:						
+			Result="BANDWIDTH_NOT_SUPPORTED_IN_DEVICE_MODE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_RATE_NOT_SUPPORTED_IN_DEVICE_MODE:							
+			Result="RATE_NOT_SUPPORTED_IN_DEVICE_MODE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_PORT_RATE_NOT_CONFIGURED:									
+			Result="PORT_RATE_NOT_CONFIGURED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BANDWIDTH_EXCEEDS_PORT_RATE:								
+			Result="BANDWIDTH_EXCEEDS_PORT_RATE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_CAPABILITY_DOES_NOT_SUPPORT_SONET_SDH:				
+			Result="DEVICE_CAPABILITY_DOES_NOT_SUPPORT_SONET_SDH";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FEATURE_NOT_SUPPORTED:                                     
+			Result="FEATURE_NOT_SUPPORTED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_COMMON_INTERFACE:                                          
+			Result="COMMON_INTERFACE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_FRAMING_INVALID_FOR_CLIENT_TYPE:						
+			Result="CLIENT_FRAMING_INVALID_FOR_CLIENT_TYPE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_MAPPING_INVALID_FOR_CLIENT_TYPE:						
+			Result="CLIENT_MAPPING_INVALID_FOR_CLIENT_TYPE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLOCK_RECOVERY_MODE_OUT_OF_RANGE:							
+			Result="CLOCK_RECOVERY_MODE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLOCK_RECOVERY_MODE_INVALID_FOR_DISCRETE_CLIENT:			
+			Result="CLOCK_RECOVERY_MODE_INVALID_FOR_DISCRETE_CLIENT";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_POINT_OUT_OF_RANGE:											
+			Result="POINT_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_NOT_IMPLEMENTED:											
+			Result="NOT_IMPLEMENTED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_APPLICATION_OUT_OF_RANGE:							
+			Result="CLIENT_APPLICATION_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_FRAMING_INVALID_FOR_CLIENT_APPLICATION_MODE:			
+			Result="CLIENT_FRAMING_INVALID_FOR_CLIENT_APPLICATION_MODE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_MAPPING_INVALID_FOR_CLIENT_APPLICATION_MODE:			
+			Result="CLIENT_MAPPING_INVALID_FOR_CLIENT_APPLICATION_MODE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CAS_INVALID_FOR_CLIENT_APPLICATION_MODE:					
+			Result="CAS_INVALID_FOR_CLIENT_APPLICATION_MODE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_API_NO_LONGER_SUPPORTED:								   
+			Result="API_NO_LONGER_SUPPORTED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_PORT_HAS_FACILITIES:										
+			Result="PORT_HAS_FACILITIES";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_TIMESTAMP_BYTE_COUNT_OUT_OF_RANGE:					
+			Result="CLIENT_TIMESTAMP_BYTE_COUNT_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BUILD_PERSONALITY_UNDEFINED:								
+			Result="BUILD_PERSONALITY_UNDEFINED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BUILD_PERSONALITY_NOT_RECOGNISED:							
+			Result="BUILD_PERSONALITY_NOT_RECOGNISED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BUILD_PERSONALITY_INCONSISTENT_WITH_BUILD_VARIANT:			
+			Result="BUILD_PERSONALITY_INCONSISTENT_WITH_BUILD_VARIANT";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_BUILD_VARIANT_UNDEFINED:									
+			Result="BUILD_VARIANT_UNDEFINED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_FACILITIES_EXIST:											
+			Result="FACILITIES_EXIST";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_PROTECTION_PORT_CANNOT_BE_CONFIGURED:                      
+			Result="PROTECTION_PORT_CANNOT_BE_CONFIGURED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_V5_LABEL_VALUE_OUT_OF_RANGE:								
+			Result="V5_LABEL_VALUE_OUT_OF_RANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_POINT_IS_ALREADY_MONITORED:									
+			Result="POINT_IS_ALREADY_MONITORED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_POINT_IS_NOT_MONITORED:										
+			Result="POINT_IS_NOT_MONITORED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_REQUEST_NOT_SUPPORTED_FOR_FRAMED_CLIENTS:			
+			Result="CLIENT_REQUEST_NOT_SUPPORTED_FOR_FRAMED_CLIENTS";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_CLIENT_PORT_NOT_MAPPED_TO_LINE_ENDPOINT:					
+			Result="CLIENT_PORT_NOT_MAPPED_TO_LINE_ENDPOINT";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_PORT_THIS_PORT_RATE_ALREADY_CONFIGURED:						
+			Result="PORT_THIS_PORT_RATE_ALREADY_CONFIGURED";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_THROUGH_CONNECTED_ENDPOINT_PREVENTS_CONFIGURATION_CHANGE:	
+			Result="THROUGH_CONNECTED_ENDPOINT_PREVENTS_CONFIGURATION_CHANGE";
+			break;
+
+		 case WPX_UFE_FRAMER_ERROR_TIMESTAMP_GAIN_OUT_OF_RANGE:
+			Result="TIMESTAMP_GAIN_OUT_OF_RANGE";
+			break;
+		 
+		 case WPX_UFE_FRAMER_ERROR_SOCKET_CLIENT_OUTPUT_SELECTOR_OUT_OF_RANGE:
+			 Result="SOCKET_CLIENT_OUTPUT_SELECTOR_OUT_OF_RANGE";
+			 break;
+
+		 case WPX_UFE_FRAMER_ERROR_PM_POINT_UNAVAILABLE:
+			 Result="PM_POINT_UNAVAILABLE";
+			 break;
+
+		 case WPX_UFE_FRAMER_PM_M_OF_N_LIMIT_REACHED:
+				Result="PM_M_OF_N_LIMIT_REACHED";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_PM_TABLE_INDEX_OUT_OF_RANGE:
+				Result="PM_TABLE_INDEX_OUT_OF_RANGE";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_PROTECTION_MODE_OUT_OF_RANGE:
+				Result="DEVICE_PROTECTION_MODE_OUT_OF_RANGE";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_PROTECTION_MODE_NOT_COMPATIBLE_WITH_PERSONALITY:
+			    Result="DEVICE_PROTECTION_MODE_NOT_COMPATIBLE_WITH_PERSONALITY";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_PORT_RATE_IS_CONFIGURED:
+			    Result="WPX_UFE_FRAMER_ERROR_PORT_RATE_IS_CONFIGURED";
+				break;
+					
+		 case WPX_UFE_FRAMER_ERROR_PERSONALITY_PREVENTS_PORT_RATE:
+				Result="PERSONALITY_PREVENTS_PORT_RATE";
+				break;
+
+		 case	WPX_UFE_FRAMER_ERROR_SOCKET_CLIENT_RATE_PARAMETER_OUT_OF_RANGE:
+				Result="SOCKET_CLIENT_RATE_PARAMETER_OUT_OF_RANGE";
+				break;
+
+		 case	WPX_UFE_FRAMER_ERROR_UNABLE_TO_MAP_LINE_PORT:
+				Result="UNABLE_TO_MAP_LINE_PORT";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_SDH_OUTPUT_SELECTOR_OUT_OF_RANGE:
+				Result="SDH_OUTPUT_SELECTOR_OUT_OF_RANGE";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_MODE_PREVENTS_REQUEST:
+				Result="DEVICE_MODE_PREVENTS_REQUEST";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_DCC_SETTING_OUT_OF_RANGE:
+				Result="DCC_SETTING_OUT_OF_RANGE";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_CARD_PROTECTION_OPERATING_MODE_OUT_OF_RANGE:
+				Result="DEVICE_CARD_PROTECTION_OPERATING_MODE_OUT_OF_RANGE";
+				break;
+
+		 case WPX_UFE_FRAMER_ERROR_DEVICE_CARD_PROTECTION_OPERATING_MODE_NOT_APPLICABLE:
+				Result="DEVICE_CARD_PROTECTION_OPERATING_MODE_NOT_APPLICABLE";
+				break;
+		 case WPX_UFE_FRAMER_ERROR_RDI_MODE_OUT_OF_RANGE:
+			 Result="RDI_MODE_OUT_OF_RANGE";
+			 break;
+
+		 case WPX_UFE_FRAMER_ERROR_PDH_RDI_NOT_SUPPORTED_FOR_UNFRAMED_CLIENTS:
+			 Result="CLIENT_PDH_RDI_NOT_SUPPORTED_FOR_UNFRAMED_CLIENTS";
+			 break;
+		 case WPX_UFE_FRAMER_ERROR_SQUELCH_MODE_OUT_OF_RANGE:
+			 Result="SQUELCH_MODE_OUT_OF_RANGE";
+			 break;
+		 default:
+			 Result="Unrecognised Error Code";
+			 break;
+
+	 }
+
+	 return Result;
+}
+
+
