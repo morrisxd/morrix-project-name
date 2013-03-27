@@ -1,0 +1,3803 @@
+/*****************************************************************************
+ * (C) Copyright Wintegra 2000-2007.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: l2pi_rx.dpl
+*
+* Description: L2PI Receive Routine
+*
+* Module Originator:  Lior Y. Benjamin
+* Creation Date: March, 2008
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+****************************************************************************/
+
+/* Global Definitions */
+global L_L2pi_Rx_Start, L_L2piRx_BG_Dequeue_Interface;
+global L_L2pi_Rx_PCE_Start,L_Rx_AtmOverPos_start;
+global L_L2pi_Ts_LoopBack_Rx_Start;
+global L_L2pi_Rx_G999_Start;
+global L_L2pi_Rx_Start_Pce_Workaround;
+
+#include "stack.h"
+#include "shared.h"
+#include "buffer_chain.h"
+#include "l2pi_rx.h"
+#include "iwgp_macros.h"
+#include "l2pi_timestamp.h"
+#include "irq.h" /* Must only be included in DPL files, not H files */
+#include "g999.h"
+#ifdef _MODULE_EFMBOND_L2PI_ENABLE_ 
+#include "efmbond.h"
+#include "efmbond_rx.h"
+#endif
+#include "iwgp_ingress_macros.h"
+#include "iwgp_policer.h"
+#include "iwgp_ingress_mirror_drop_short_packet.h"
+#include "sw_logs_assert/sw_log.h"
+#include "sw_logs_assert/assertions.h"
+#include "sw_logs_assert/sw_log_assert_testing.h"
+#ifdef _MODULE_L2PI_ENABLE_
+
+/***************************************************************************************
+ * Macro Name: M_L2piRxUpdateStatistics
+ *
+ * Description:
+ *     This block updates the statistics table.
+ *
+ * Inputs:
+ *     status0
+ *     P_KEY        - key to use for lock or unlock
+ *     P_STE        - Statistics Enable bit (usually in mode0)
+ *                    also used to define the exact error to be updated
+ *     PhyNum     - PhyNum for exact table offset
+ *     P_FIELD      - Exact counter to be updated
+ *     P_ATTR       - special attributes for _mem command
+ * Outputs:
+ *
+ *
+ **************************************************************************************/
+inline func M_L2piRxUpdateStatistics(in P_KEY,
+                                     in status0,
+                                     in P_STE,
+                                     in PhyNum,
+                                     in P_Offset,
+                                     in P_ATTR)
+{
+   L2piEntryOffset = PhyNum * sizeof(S_L2piRxStat);
+   if(P_STE)
+   {
+      /* update statistics table */
+      L2piEntryOffset += P_Offset;
+
+      /*Increment Rx FBP Underrun counter */
+      _mem(P_KEY,
+           B_L2PI_RX_STATISTICS[status0][L2piEntryOffset],
+           STATISTICS_BUS | P_ATTR) += 1;
+   }
+
+} /* M_L2piRxUpdateStatistics */
+
+
+/***************************************************************************************
+ * Macro Name: B_AtmOverG999
+ *
+ * Description:
+ *     interface to ATM Addrlookup.dpl
+ *     This macro copy the cell to r99 and set status0.
+ *
+ * Inputs:
+ *     AtmOverG99Status0   - status0
+ *     G999Rspt            -   Rspt table,
+ *     mode0
+ *     PayloadPtrTar0      - pointer to the ATM header
+ *     PayloadPtrTar1      - pointer to r96
+ * Outputs:
+ *
+ *Call by:
+ **************************************************************************************/
+#ifdef _MODULE_G999_ENABLE_
+inline func B_AtmOverG999(out    AtmOverG99Status0,
+                          in     VirtualPhyNum,
+                          out    G999Rspt,
+                          in     mode0,
+                          inout  PayloadPtrTar0,
+                          out    PayloadPtrTar1)
+{
+   register vci                        =  r12;
+   register SaveStatus1                =  r13;
+   register TempAtmHeader              =  r13;
+   register crc_read                   =  r14;
+   register crc_comp                   =  r16;
+   register PhyOffset                  =  r17;
+   register AtmHeader                  =  r99;
+
+
+   PayloadPtrTar1 = &r100;
+   /* For ADSL phys, read the RSPT without locks. */
+   PhyOffset = VirtualPhyNum * sizeof (S_G999Rspt);
+   *(&G999Rspt) = _mem(r0,
+                       B_G999_RSPT[status0][PhyOffset],
+                       G999_RSPT_READ_SIZE);
+
+
+   /*read status0 from RSPT, this status0 is correspond to ATM */
+   AtmOverG99Status0 = G999Rspt.U_StatusReg.ATMRxStatus0;
+   TempAtmHeader = _bf(*PayloadPtrTar0,0,32);
+
+
+   /* an additional byte was added to the ATM header to make it work better with
+    * 16 bit buses. Compatibility with Utopia 16 bits. */
+   if (G999Rspt.RsptMode.G999SixBytesHeaderMode)
+         PayloadPtrTar0+=6;
+   else
+         PayloadPtrTar0+=5;
+
+   // Compute PTI2...CLP
+   AtmOverG99Status0 |= TempAtmHeader << PTI_OFFSET;
+
+   // Compute OAM and MAN
+  vci = (TempAtmHeader >> 4);
+  vci &= 0xffff;
+
+   /*copy ATM cell to r99. Remove the HEC from the cell header */
+   if (mode0.G999EnetEncap)
+   {
+      r100 = PayloadPtrTar0[0];
+      r101 = PayloadPtrTar0[4];
+      r102 = PayloadPtrTar0[8];
+      r103 = PayloadPtrTar0[12];
+      r104 = PayloadPtrTar0[16];
+      r105 = PayloadPtrTar0[20];
+      r106 = PayloadPtrTar0[24];
+      r107 = PayloadPtrTar0[28];
+      r108 = PayloadPtrTar0[32];
+      r109 = PayloadPtrTar0[36];
+      r110 = PayloadPtrTar0[40];
+      r111 = PayloadPtrTar0[44];
+
+   }
+   else /*native mode, G.999 header is in size of 4 or 2 bytes */
+   {
+      /* explanation :
+          _bf(*PayloadPtrTar0,
+              ( data_size-byte_to_copy * byte_offset_from_the_end_of_the_cell )*num_of_bit_in_byte,
+              num_of_data_to_copy)
+      */
+         r111 = _bf(*PayloadPtrTar0, (48- 4*1)*8, 32);
+         r110 = _bf(*PayloadPtrTar0, (48- 4*2)*8, 32);
+         r109 = _bf(*PayloadPtrTar0, (48- 4*3)*8, 32);
+         r108 = _bf(*PayloadPtrTar0, (48- 4*4)*8, 32);
+         r107 = _bf(*PayloadPtrTar0, (48- 4*5)*8, 32);
+         r106 = _bf(*PayloadPtrTar0, (48- 4*6)*8, 32);
+         r105 = _bf(*PayloadPtrTar0, (48- 4*7)*8, 32);
+         r104 = _bf(*PayloadPtrTar0, (48- 4*8)*8, 32);
+         r103 = _bf(*PayloadPtrTar0, (48- 4*9)*8, 32);
+         r102 = _bf(*PayloadPtrTar0, (48- 4*10)*8, 32);
+         r101 = _bf(*PayloadPtrTar0, (48- 4*11)*8, 32);
+         r100 = _bf(*PayloadPtrTar0, (48- 4*12)*8, 32);
+         r99  = _bf(*PayloadPtrTar0, 0, 32);
+   }
+
+   AtmHeader = TempAtmHeader;
+
+   if (AtmOverG99Status0 & ATM_OVER_G999_PTI_BSB_MASK || ((vci - 3) & ~1) == 0) /*OAM bit is Set if VCI=3 || VCI=4 or PTI =1xx */
+   {   // Both OAM and MAN
+      AtmOverG99Status0 |= ATM_OVER_G999_OAM_MASK | ATM_OVER_G999_MNG_MASK;
+      /*calc CRC-10 in case of OAM cell*/
+#pragma strict;
+      SaveStatus1 = status1;
+      _serial(r0, 64, 0, _BIP | _CRC10 | _TRS_ADDRESS | _DELAY) = r96;
+      status1 = DUMMY_SERIAL_ADDR; // Set the serial address for doing crc-10
+      crc_read = _bf(r111, 16, 16);
+      crc_comp = _bf(r9, 0, 16);
+      status1 = SaveStatus1;
+
+#pragma nonstrict;
+      if (crc_read != crc_comp)
+      {
+         status0 |= G999_OAM_CRC10_ERR_MASK;
+         if (G999Rspt.RsptMode.G999DiscardAtmOamCrc10Err)
+         {
+            PhyOffset = VirtualPhyNum * sizeof(S_G999Statistics);
+            PhyOffset += M_BitToByte(S_G999Statistics.RxAtmOamCrc10Err);
+            _mem(r0, B_G999_STATISTICS[status0][PhyOffset], _HALF_WORD) += 1;
+            _task_switch(status1, _ORDER_UNLOCK | _TERMINATE);
+         }
+      }
+   }
+   else
+   {
+      vci -= 7;
+      if_unsigned_lt(vci, 25)
+         // Management cell only (MNG BIT), VC in range [7,31]
+         AtmOverG99Status0 |= ATM_OVER_G999_MNG_MASK;
+   }
+}/*B_AtmOverG999*/
+#endif /* _MODULE_G999_ENABLE_ */
+
+#ifdef _MODULE_G999_ENABLE_
+inline func B_EnetOverG999 (out status0,
+                            inout status1,
+                            out status2,
+                            out status3,
+                            in Tci,
+                            in VirtualPhyNum,
+                            in PayloadPtrTar0,
+                            in PayloadPtrTar1,
+                            out L2piRsptKey,
+                            out L2piG999ReservedRcptKey,
+                            out PhyOffset,
+                            out G999Rspt)
+{
+   register TrsCopyCounter = PhyOffset;
+   /* check fragment offset (first, middle, last) and */
+   /* set the status0 register appropriately; */
+   status0.First = 0;
+   status0.Last = 0;
+
+   /*"First" or "First+Last"*/
+   if (Tci.SoF)
+   {
+      status0.First = 1;
+   }
+
+   /*"Last" or "First+Last"*/
+   if (Tci.EoF)
+   {
+      status0.Last = 1;
+   }
+   /******************************************************************/
+   /* Lost / corrupted fragments protection (Except middle fragments)*/
+   /******************************************************************/
+
+   /*****************************/
+   /* Read RSPT with order lock */
+   /*****************************/
+   /* Get RSPT order key */
+   L2piRsptKey = VirtualPhyNum << 16; /* Offset tag */
+
+   /* Label tag & Serial mode tag */
+   L2piRsptKey |= ( (G999_RSPT_BASE << M_ShiftRight(S_Tag.U_TagFields.BaseTag.BaseNumber)) |
+                    G999_RSPT_KEYID_0 |
+                    M_Mask(S_Tag.U_TagFields.BaseTag.BaseMode) );
+   L2piG999ReservedRcptKey = VirtualPhyNum << 16; /* Offset tag */
+   L2piG999ReservedRcptKey |= ( (G999_RCPT_BASE << M_ShiftRight(S_Tag.U_TagFields.BaseTag.BaseNumber) |
+                                 G999_RCPT_KEYID_0 |
+                                 M_Mask(S_Tag.U_TagFields.BaseTag.BaseMode) ) );
+   /************************************************************
+    * We allocate another key in order to transfer it          *
+    * to the RCPT lock code (the regular l2pi code),           *
+    * since we are about to release the master key in status1. *
+    *                                                          *
+    * Total of 2 keys: PacketTagKey6 + PacketTagKey7           *
+    ***********************************************************/
+   _get_key(status1, L2piRsptKey, 2, _ORDER_UNLOCK);
+
+   /* Lock and read stream specific table */
+   PhyOffset = VirtualPhyNum * sizeof (S_G999Rspt);
+   *(&G999Rspt) = _mem(L2piRsptKey,
+                       B_G999_RSPT[status0][PhyOffset],
+                       G999_RSPT_READ_SIZE,
+                       _ORDER_LOCK);
+   status2 = G999Rspt.U_StatusReg.EnetRxStatus2;
+   PhyOffset += M_BitToByte(S_G999Rspt.RsptMode);
+   if (G999Rspt.RsptMode.G999InPacket)
+   {
+      if (status0.First) /*"First" or "First+Last"*/
+      {
+         /*********/
+         /* Error */
+         /*********/
+
+         /* if "First+Last" then clear the "In-Frame" bit */
+         if (status0.Last)
+         {
+            G999Rspt.RsptMode.G999InPacket = 0;
+
+            _mem(L2piRsptKey, B_G999_RSPT[status0][PhyOffset], G999_RSPT_WRITE_SIZE, _ORDER_UNLOCK)
+               = $reg(G999Rspt.RsptMode);
+         }
+         else
+         {
+            /* Release RSPT order lock */
+            _task_switch(L2piRsptKey, _ORDER_UNLOCK);
+         }
+
+         /* Update status0 to First + MiddleDrop */
+         status3.MD = 1;
+         status0.GSE = 1;
+
+         /* raise rx errored fragment statistics */
+         PhyOffset = VirtualPhyNum * sizeof(S_G999Statistics);
+         PhyOffset += M_BitToByte(S_G999Statistics.RxErroredFragments);
+         _mem(r0, B_G999_STATISTICS[status0][PhyOffset], _HALF_WORD) += 1;
+
+         /* Continue to release the so-far-received frame &
+          *  Start receive the new frame */
+      }
+      else /*"Middle" or "Last"*/
+      {
+         /* if "Last" then clear the "In-Frame" bit */
+         if (status0.Last)
+         {
+            G999Rspt.RsptMode.G999InPacket = 0;
+
+            _mem(L2piRsptKey, B_G999_RSPT[status0][PhyOffset], G999_RSPT_WRITE_SIZE, _ORDER_UNLOCK)
+               = $reg(G999Rspt.RsptMode);
+         }
+         else
+         {
+            /* Release RSPT order lock */
+            _task_switch(L2piRsptKey, _ORDER_UNLOCK);
+         }
+      }
+   }
+   else /* (!G999Rspt.RsptMode.G999InPacket) */
+   {
+      if (!status0.First) /*"Middle" or "Last"*/
+      {
+         /*********/
+         /* Error */
+         /*********/
+
+         /* Release RSPT order lock */
+         _task_switch(L2piRsptKey, _ORDER_UNLOCK);
+
+         /* raise rx errored fragment statistics */
+         PhyOffset = VirtualPhyNum * sizeof(S_G999Statistics);
+         PhyOffset += M_BitToByte(S_G999Statistics.RxErroredFragments);
+         _mem(r0, B_G999_STATISTICS[status0][PhyOffset], _HALF_WORD) += 1;
+
+         /*Drop frame*/
+         _task_switch(L2piG999ReservedRcptKey, _ORDER_UNLOCK | _TERMINATE);
+
+      }
+      else /*"First" or "First+Last"*/
+      {
+         /* if "First" then set the "In-Frame" bit */
+         if (!status0.Last)
+         {
+            G999Rspt.RsptMode.G999InPacket = 1;
+
+            _mem(L2piRsptKey, B_G999_RSPT[status0][PhyOffset], G999_RSPT_WRITE_SIZE, _ORDER_UNLOCK)
+               = $reg(G999Rspt.RsptMode);
+         }
+         else
+         {
+            /* Release RSPT order lock*/
+            _task_switch(L2piRsptKey, _ORDER_UNLOCK);
+         }
+      }
+   }
+   if (status0.Last)
+   {
+      if ( ! status2.Status2RxMode.RemoveFCS )
+      {
+         /* In G999 this bit indicates to remove the
+          * entire frame FCS, if this bit is not set, it means
+          * that the entire frame does not have a FCS. */
+         /* status1.Size for the last fragment add
+          * the FCS back to the frame size, this
+          * will be removed by later general code
+          * using RemoveFCS. */
+         status2.Status2RxMode.RemoveFCS = 1;
+         status1 += FCS_SIZE;
+      }
+   }
+   TrsCopyCounter = status1.Size;
+   /* Move the data back to r96 to fit the rest of the L2pi Rx code. */
+   /* The copying is done in chunks of 64 byte to save code space. */
+   do
+   {
+      _trscpy(PayloadPtrTar1, PayloadPtrTar0, 64);
+      PayloadPtrTar0 += 64;
+      PayloadPtrTar1 += 64;
+      TrsCopyCounter -= 64;
+   } while (TrsCopyCounter > 0);
+} /* B_EnetOverG999 */
+#endif /* _MODULE_G999_ENABLE_ */
+
+/*****************************************************************************
+ * Macro Name: B_G999InterfaceRx
+ *
+ * Description:
+ *     This macro looks at the G999 TCI header and sets the First / Last bits
+ *     accordingly, it also shifts (copies registers)  the rest of the packet up so that it will
+ *     resemble a packet that just arrived from the L2
+ * Inputs:
+ *     status0      - get the G999 Port info.
+ *     L2piRxPacket - The TCI field is taken from the packet header.
+ * Outputs:
+ *     status0      - set the first / last bits, according to the TCI header.
+ *     L2piRxPacket - After the TCI is extracted, the TCI is removed from the
+ *                    packet header and the whole packet is shifted to resemble
+ *                    a packet arriving from the L2.
+ *
+ *****************************************************************************/
+#ifdef _MODULE_G999_ENABLE_
+inline func B_G999InterfaceRx(inout status0,
+                              out   mode0reg,
+                              inout status2,
+                              inout L2piRxPacket)
+{
+//       register  ProtocolTypeSwitch = jir; // currently not used, since there is support only for Enet streams
+   register struct S_G999TciReg Tci         = r12;
+   register struct S_PceResultMode PceResultMode = r12;
+//   register                  Status1Size    = r22;
+   register                  Sid            = r13;
+   register                  PceResRemFieldType  = r14;
+   register                  G999Length     = r15;
+   register                  VirtualPhyNum  = r15;
+   register                  PauseFrameCheck= r16;
+   register                  PhyOffset      = r17;
+   register                  PayloadPtrTar0 = tar0;//point on payload
+   register                  PayloadPtrTar1 = tar1; //r96
+   register struct S_L2piRxSerialStatus2ModeG999 mode0 = mode0reg;
+
+   PL.PacketLength = status1.Size;
+   if ( ! (status0.First && status0.Last) )
+   {
+      /* All G999 fragments MUST fit into a First+Last DPS thread */
+      PhyOffset = M_BitToByte(S_G999Statistics.RxLengthError);
+      goto L_L2piRx_G999ErroredFragment;
+   }
+   /* clear the Pause frame bit, which is set by the Winnet
+    * because the Ethernet type is 0x8808
+    * in G999 we want these frames to terminate to the host for further inspection. */
+   status0.U_SerialInfo.WnetInfo.Pause = 0;
+
+   _bf(mode0, 0, 16) = status2.Status2RxMode;
+#ifdef _MODULE_PCEA_CFU_WORKAROUND_ENABLE_
+   if(status2.Status2RxMode.U_BTBits.Volatile.PceResultAvailable)
+   {      /* get the CFU RX port number */
+
+      if(status0.GSE)
+      {
+#pragma outofline;
+         if ( ! mode0.G999EnetEncap)
+         {
+            if (status0.U_SerialInfo.WnetInfo.USO)
+            {
+               status0.GSE = 0;
+               status0.U_SerialInfo.WnetInfo.USO = 0;
+            }
+            else
+            {
+               PhyOffset = M_BitToByte(S_G999Statistics.RxErroredFragments);
+               goto L_L2piRx_G999ErroredFragment;
+            }
+         }
+         else
+         {
+            PhyOffset = M_BitToByte(S_G999Statistics.RxErroredFragments);
+            goto L_L2piRx_G999ErroredFragment;
+         }
+      }
+      CfuRxPortNum = status3.CfuPort;
+      M_L2piRxSendPacketToPceaWorkAround(CfuRxPortNum,
+                                         PL.PacketLength,
+                                         PceResult);
+      PceResultMode = PceResult.PceResultMode;
+      if (PceResultMode.Discard)
+      {
+         PhyOffset = M_BitToByte(S_G999Statistics.RxErroredFragments);
+         goto L_L2piRx_G999ErroredFragment;
+      }
+   }
+#endif /* _MODULE_PCEA_CFU_WORKAROUND_ENABLE_ */
+
+   Tci = _bf(L2piRxPacket, G999_ENET_HEADER_TCI_OFFSET_BITS, G999_TCI_SIZE_BITS);
+   PayloadPtrTar1 = &L2piRxPacket;
+   PL.PacketLength -= FCS_SIZE; /* remove the fragment FCS field. each fragment has an FCS. */
+   if ( ! mode0.G999EnetEncap)
+   { /* G999 native mode */
+      if (mode0.G999LengthEnable)
+      { /* G999 native mode with Length enabled. */
+         G999Length = _bf(L2piRxPacket, 16, 16);
+         PayloadPtrTar0 = &L2piRxPacket + G999_NO_ENET_HEADER_PAYLOAD_OFFSET_WITH_LENGTH_BYTES;
+         PL.PacketLength -= G999_NO_ENET_HEADER_PAYLOAD_OFFSET_WITH_LENGTH_BYTES;
+
+         /* hardware bug override, in case of G999 native mode there can be a case where the hardware
+          * recognizes part of the frame as flow control Ethernet type of 0x8808, and raises the GSE bit.
+          * in such a case we clear the GSE bit so that the fragment will not be dropped.
+          * this check also exists in the PCE parser. */
+         /* hardware bug override 2, in case of G999 native mode and the fragment size is only 6 bytes,
+          * the frame size is 14 bytes, 4 G999+length, 6 data fragment, 4 FCS - the hardware raises the GSE
+          * in case the FCS at offset 12 bytes is 0x88. */
+         if (status0.GSE)
+         {
+            if (status0.U_SerialInfo.WnetInfo.USO)
+            {
+               status0.GSE = 0;
+               status0.U_SerialInfo.WnetInfo.USO = 0;
+            }
+         }
+      }
+      else
+      {
+         PayloadPtrTar0 = &L2piRxPacket + G999_NO_ENET_HEADER_PAYLOAD_OFFSET_BYTES;
+         PL.PacketLength -=  G999_NO_ENET_HEADER_PAYLOAD_OFFSET_BYTES;
+         G999Length = PL.PacketLength;
+      }
+      Tci = _bf(L2piRxPacket, G999_NO_ENET_HEADER_TCI_OFFSET_BITS, G999_TCI_SIZE_BITS);
+   }
+   else /*G999EnetEncap*/
+   { /* G999 with Ethernet Encapsulation */
+      if (status0.U_SerialInfo.CommonInfo.DSF)
+      {
+         if (PL.PacketLength < (ETHERNET_MINIMUM_FRAME_LENGTH-FCS_SIZE))
+         {
+            PhyOffset = M_BitToByte(S_G999Statistics.RxLengthError);
+            goto L_L2piRx_G999ErroredFragment;
+         }
+      }
+      G999Length = _bf(L2piRxPacket, 128, 16);
+      PayloadPtrTar0 = &L2piRxPacket + G999_ENET_HEADER_PAYLOAD_OFFSET_BYTES;
+      PL.PacketLength -= G999_ENET_HEADER_PAYLOAD_OFFSET_BYTES;
+   }
+//    Sid = Tci & G999_TCI_SID_MASK;
+
+   PceResRemFieldType = PceResult.RemarkedFieldType;
+   if (PceResRemFieldType == WPI_PCE_RESULT_REMARKING_TYPE_PHY_NUMBER)
+   {
+      if (! (Tci & 0x2000) )
+      {
+         /* Physical Device statistics  */
+         /* erankd - bug fix, check that the 0x2000 bit is set in the TCI, which means that it is a
+          * valid fragment
+          * this bug should be fixed in the PCE parser code. */
+         PhyOffset = M_BitToByte(S_G999Statistics.RxErroredFragments);
+         goto L_L2piRx_G999ErroredFragment;
+      }
+      if ( (PL.PacketLength < G999Length) || (G999Length == 0) )
+      {
+         /* Physical Device statistics  */
+         PhyOffset = M_BitToByte(S_G999Statistics.RxLengthError);
+         goto L_L2piRx_G999ErroredFragment;
+      }
+
+      status1.Size = G999Length;
+      VirtualPhyNum = $reg(PceResult.U_PceRemarkVals.PceRemarkedValue.byte1);
+      VirtualPhyNum &= 0xFFFF;
+      status2.PhyNum = VirtualPhyNum;
+   }
+   else
+   {
+      /* host terminate on an Rx channel of the physical device and raise statistics */
+      if ( ! mode0.G999EnetEncap)
+      {
+         PauseFrameCheck = _bf(*PayloadPtrTar1, 0, MAC_OPCODE_LENGTH_BITS);
+         if (PauseFrameCheck == MAC_OPCODE_FOR_PAUSE_FRAME)
+         { /* PauseFrameCheck == 0x0001 */
+            PhyOffset = M_BitToByte(S_G999Statistics.RxPauseFrames);
+         }
+         else
+         {
+            PhyOffset = M_BitToByte(S_G999Statistics.RxErroredFragments);
+         }
+      }
+      else
+      {
+         /* check for pause Ethernet Type 0x8808 */
+         PauseFrameCheck = _bf(*PayloadPtrTar1,
+                               ENET_HEADER_ETHERNET_TYPE_OFFSET_BITS,
+                               (ENET_HEADER_ETHERNET_TYPE_LENGTH_BITS + MAC_OPCODE_LENGTH_BITS));
+         if (PauseFrameCheck == ((ETHERNET_PAUSE_TYPE << MAC_OPCODE_LENGTH_BITS) | MAC_OPCODE_FOR_PAUSE_FRAME))
+         { /* PauseFrameCheck == 0x88080001 */
+            PhyOffset = M_BitToByte(S_G999Statistics.RxPauseFrames);
+         }
+         else
+         {
+            PhyOffset = M_BitToByte(S_G999Statistics.RxErroredFragments);
+         }
+      }
+     L_L2piRx_G999ErroredFragment:
+      PhyNum = status2.PhyNum;
+      PhyNum *= sizeof (S_G999Statistics);
+      PhyOffset += PhyNum;
+      /* Physical Device statistics  */
+      _mem(r0, B_G999_STATISTICS[status0][PhyOffset], _HALF_WORD) += 1;
+      /* In order to treat the fragment drop as it would have been
+       * in regular flow (non G999), we disable the G999 bit
+       * (so status1 master key will be released
+       *  in M_L2piRxOrderRcptDataIwMk2Key) */
+      status0.U_SerialInfo.WnetInfo.G999Enable = 0;
+      /* The following status2 "Logical OR" performs:
+       * --------------------------------------------
+       * G999 frames can only come from the WINNET,
+       * so the following assumptions are made to reuse the status2 bits.
+       *
+       * status2.Status2RxMode.Enet = 1; // S_L2piRxSerialStatus2ModeG999.G999FragEnable
+       * status2.Status2RxMode.WNet = 1; // S_L2piRxSerialStatus2ModeG999.G999ContinueTo
+       *
+       * Always remove the G999 FCS.
+       * NOTE: the original frame FCS may still be present, but it cannot be determined
+       *
+       * status2.Status2RxMode.RemoveFCS = 1; // S_L2piRxSerialStatus2ModeG999.G999LengthEnable
+       * status2.Status2RxMode.AAEn = 1; // S_L2piRxSerialStatus2ModeG999.G999EnetEncap
+       */
+      status2 |= (M_Mask(S_L2piRxSerialStatus2.Status2RxMode.Enet) |
+                  M_Mask(S_L2piRxSerialStatus2.Status2RxMode.WNet) |
+                  M_Mask(S_L2piRxSerialStatus2.Status2RxMode.RemoveFCS) |
+                  M_Mask(S_L2piRxSerialStatus2.Status2RxMode.AAEn) );
+      return;
+   }
+   /* G999RxProtocolType = PceResult.RemarkedValue */
+   if (PceResult.RemarkedValue == G999_STREAM_ENET)
+   {
+      B_EnetOverG999(status0,
+                     status1,
+                     status2,
+                     status3,
+                     Tci,
+                     VirtualPhyNum,
+                     PayloadPtrTar0,
+                     PayloadPtrTar1,
+                     L2piRsptKey,
+                     L2piG999ReservedRcptKey,
+                     PhyOffset,
+                     G999Rspt);
+      if (mode0.STE)
+      {
+         /* erankd - raise RxBytes statistics.
+          * need to add a lock for byte statistics */
+         /* raise rx fragment statistics. */
+         PhyOffset = VirtualPhyNum * sizeof (S_G999Statistics);
+         PhyOffset += M_BitToByte(S_G999Statistics.RxFragments);
+         _mem(r0, B_G999_STATISTICS[status0][PhyOffset], 0) += 1;
+      }
+
+   }
+   else /* if (G999RxProtocolType == G999_STREAM_ATM) */
+   { /* ATM cell */
+      B_AtmOverG999(status0,
+                    VirtualPhyNum,
+                    G999Rspt,
+                    mode0,
+                    PayloadPtrTar0,
+                    PayloadPtrTar1);
+      _bf(status2, 0, 8) = status2.PhyNum;
+
+      if (mode0.STE)
+      {
+         /* raise rx byte statistics.
+          * need to add a lock for byte statistics */
+         /* raise rx fragment statistics. */
+         PhyOffset = VirtualPhyNum * sizeof (S_G999Statistics);
+         PhyOffset += M_BitToByte(S_G999Statistics.RxFragments);
+         _mem(r0, B_G999_STATISTICS[status0][PhyOffset], 0) += 1;
+      }
+      goto AddresLookUp_Start;
+   }
+
+} /* B_G999InterfaceRx */
+#endif /* _MODULE_G999_ENABLE_ */
+/*****************************************************************************
+ * Macro Name: B_L2piRxOrderRcptDataIwMk2Key
+ *
+ * Description:
+ *     This Macro order keys RCPT, Data and IW keys as required:
+ *     If First + Last:
+ *           Only Data key and Iw key ordered. RCPT is not read
+ *           in this case
+ *     If not Last:
+ *           RCPT and Data keys ordered.
+ *     If Last:
+ *           RCPT, Data and Iw keys ordered.
+ *
+ * Inputs:
+ *     PhyNum       - Phy Number used to build the tag for the keys.
+ *     status0      - Get serial info (Last indication).
+ *     status1      - Get serial number from there.
+ * Outputs:
+ *     L2piRcptKey  - key for locking RCPT table
+ *     L2piDataKey  - key for ordering copying data to the external memory
+ *     L2piIwKey    - key for ordering Iw.
+ *
+ *****************************************************************************/
+inline func M_L2piRxOrderRcptDataIwMk2Key(in status0,
+                                          in status1,
+                                          in P_MD_BIT,
+                                          in PhyNum,
+                                          out L2piRcptKey,
+                                          out L2piDataKey,
+                                          out L2piIwKey,
+                                          in P_MIDDLE_DROP_CHECK)
+{
+
+   L2piRcptKey = PhyNum << 16;
+   _bf(L2piRcptKey, 16, 8) = status1.SC;
+
+   if(status0.Last)
+   {
+      L2piIwKey = L2piRcptKey | ((SERIAL_TAG_LABEL_TYPE_L2PI_MK2 << 2)
+                                 | M_Mask(S_Tag.U_TagFields.SerialTag.SerialMode));
+      
+      if(P_MIDDLE_DROP_CHECK == MIDDLE_DROP_CHECK)
+      {
+         /* pre-compiled case */
+         if(P_MD_BIT)
+            /* MD only appears with FIRST indication, but RCPT should be
+               fetched in order to clear WFF state */
+            goto L_L2piRx_Get3Keys;
+      }
+      
+      if(status0.First)
+      {
+         /* Iw key only should be ordered */
+         if (FEATURE_G999 && status0.U_SerialInfo.WnetInfo.G999Enable)
+         {
+            /* Use the key which was already received at the G999 rx code*/
+            _get_key(L2piG999ReservedRcptKey, L2piIwKey, 1, _ORDER_UNLOCK);
+         }
+         else
+         {
+            _get_key(status1, L2piIwKey, 1, _ORDER_UNLOCK);
+         }
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_GET_1_KEY,
+                 "L2PI IW key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+         return;
+      }
+
+     L_L2piRx_Get3Keys:
+      /* RCPT, Data & Iw keys should be ordered */
+      L2piDataKey = L2piRcptKey | ((SERIAL_TAG_LABEL_TYPE_L2PI_RXDATA <<2)
+                                   | M_Mask(S_Tag.U_TagFields.SerialTag.SerialMode) );
+      L2piRcptKey |= ((SERIAL_TAG_LABEL_TYPE_L2PI_RCPT << 2)
+                      | M_Mask(S_Tag.U_TagFields.SerialTag.SerialMode) );
+
+      DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_GET_3_KEYS);
+      if (FEATURE_G999 && status0.U_SerialInfo.WnetInfo.G999Enable)
+      {
+        /* Use the key which was already received at the G999 rx code*/
+         _get_key(L2piG999ReservedRcptKey, L2piRcptKey, 3, _ORDER_UNLOCK);
+      }
+      else
+      {
+         _get_key(status1, L2piRcptKey, 3, _ORDER_UNLOCK);
+      }
+   }
+   else
+   {
+      /* RCPT & Data keys should be ordered */
+      L2piDataKey = L2piRcptKey | ((SERIAL_TAG_LABEL_TYPE_L2PI_RXDATA <<2)
+                                   | M_Mask(S_Tag.U_TagFields.SerialTag.SerialMode) );
+      L2piRcptKey |= ((SERIAL_TAG_LABEL_TYPE_L2PI_RCPT << 2)
+                      | M_Mask(S_Tag.U_TagFields.SerialTag.SerialMode) );
+      DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_GET_2_KEYS);
+      if (FEATURE_G999 && status0.U_SerialInfo.WnetInfo.G999Enable)
+      {
+        /* Use the key which was already received at the G999 rx code*/
+         _get_key(L2piG999ReservedRcptKey, L2piRcptKey, 2, _ORDER_UNLOCK);
+         
+      }
+      else
+      {
+
+         _get_key(status1, L2piRcptKey, 2, _ORDER_UNLOCK);
+      }     
+   }
+   DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_GET_KEYS,
+           "L2PI RCPT key", L2piRcptKey, DPS_SW_LOG_4_BYTES,
+           "L2PI DATA key", L2piDataKey, DPS_SW_LOG_4_BYTES,
+           "L2PI IW key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+
+
+} /* func M_L2piRxOrderRcptDataIwMk2Key */
+
+
+/*****************************************************************************
+ * Macro Name: InverseBDBTCopy
+ *
+ * Description:
+ *
+ * Inputs:
+ *
+ * Outputs:
+ *
+ *****************************************************************************/
+inline func InverseBDBTCopy(in SrcReg,
+                            in tmpReg,
+                            out mode0)
+{
+
+   mode0 &= ~M_Mask(S_L2piRxMode.Status2RxMode.U_BTBits.BusTypes.BDBT);
+   tmpReg = (~SrcReg) >> M_ShiftRight(S_MatrixBd.MatrixBdStatus.BDBT);
+   mode0 |= tmpReg & M_Mask(S_L2piRxMode.Status2RxMode.U_BTBits.BusTypes.BDBT);
+
+}
+
+/*****************************************************************************
+ * Macro Name: M_L2piRxMatrixChainRelease
+ *
+ * Description:
+ *   This block relases a packet stored in matrix schemed chained buffers
+ *
+ * Inputs:
+ *     mode0
+ *     DroppedBd      - The first BD in chain (Matrix schemed) - should be
+ *                      available in TRS already.
+ *
+ * Outputs:
+ *
+ *****************************************************************************/
+inline func M_L2piRxMatrixChainRelease(in any_structured_mode0,
+                                       in DroppedBd,
+                                       in P_TERMINATION)
+{
+   register                         FifoNum          = r17;
+   register                         tmpOffset        = r18;
+   register                         tmpBDBT          = r18;
+   register                         NextBdPtr        = r18;
+   register                         CurrentBdPtr     = r19;
+
+   register struct S_MatrixBd       MatrixDroppedBd  = DroppedBd;
+   register struct S_L2piRxMode     mode0            = any_structured_mode0;
+
+
+   CurrentBdPtr = MatrixDroppedBd.NextBdPtr;
+
+   if(!mode0.RcptMode.MBF)
+      goto L_L2piRx_ReleaseLastBd;
+
+   tmpOffset = MatrixDroppedBd.U_ProtocolSpecific.MatrixBuffChainInfo.DiffPtr*16;
+   if(MatrixDroppedBd.U_ProtocolSpecific.MatrixBuffChainInfo.Sign == 0)
+   {
+      MatrixDroppedBd.NextBdPtr += tmpOffset;
+   }
+   else
+   {
+      MatrixDroppedBd.NextBdPtr -= tmpOffset;
+   }
+
+   InverseBDBTCopy($reg(MatrixDroppedBd.MatrixBdStatus.BDBT),
+                   tmpBDBT,
+                   mode0);
+
+   FifoNum = M_FmuFbpNum(MatrixDroppedBd);
+
+   do
+   {
+      NextBdPtr = MatrixDroppedBd.NextBdPtr;
+
+      if(mode0.RcptMode.FMU)
+      {
+         FMU_FBP_PUT("BD_CORRUPTION_L2PI",
+                     BD_CORRUPTION_L2PI_RX_DROP_FMU_BD,
+                     CurrentBdPtr,
+                     r0,
+                     FifoNum,
+                     _FBP);
+
+         MatrixDroppedBd = _param_mem(r0,
+                                      NextBdPtr,
+                                      L2PI_BD_HEAD_SIZE);
+
+      }
+      else
+      {
+#pragma outofline;
+         FifoNum &= 0xF;
+         WMM_FBP_PUT("BD_CORRUPTION_L2PI",
+                     BD_CORRUPTION_L2PI_RX_DROP_WMM_BD,
+                     CurrentBdPtr,
+                     r0,
+                     FifoNum,
+                     FBP_PARM_BUS);
+
+         MatrixDroppedBd = _mem(r0,
+                                NextBdPtr,
+                                L2PI_BD_HEAD_SIZE,
+                                FBP_PARM_BUS);
+      }
+
+      CurrentBdPtr = NextBdPtr;
+
+   }
+   while(MatrixDroppedBd.NextBdPtr != NULL_POINTER);
+
+  L_L2piRx_ReleaseLastBd:
+
+   FifoNum = M_FmuFbpNum(MatrixDroppedBd);
+   if(mode0.RcptMode.FMU)
+   {
+      FMU_FBP_PUT("BD_CORRUPTION_L2PI",
+                  BD_CORRUPTION_L2PI_RX_DROP_FMU_BD_LAST,
+                  CurrentBdPtr,
+                  r0,
+                  FifoNum,
+                  _FBP);
+
+   }
+   else
+   {
+#pragma outofline;
+      FifoNum &= 0xF;
+      WMM_FBP_PUT("BD_CORRUPTION_L2PI",
+                  BD_CORRUPTION_L2PI_RX_DROP_WMM_BD_LAST,
+                  CurrentBdPtr,
+                  r0,
+                  FifoNum,
+                  FBP_PARM_BUS);
+   }
+
+   if (P_TERMINATION == TERMINATION)
+   {
+      _task_switch(r0, _TERMINATE);
+   }
+
+} /* M_L2piRxMatrixChainRelease */
+
+#if FEATURE_PDCP_XXL_SDUS 
+/*****************************************************************************
+ * Macro Name: M_AllocateXxlBd
+ *
+ * Description:
+ *   This block overwrites the FBPNum with the xxl fbp number and increments
+ *   a debug counter.
+ *     
+ * Inputs:
+ * 
+ * Outputs:
+ *   FBPNum
+ *****************************************************************************/
+inline func M_GetXxlFbp(out FBPNum, inout P_tmp_offset)
+{
+   /* Read xxl fifo num from global parameter table. */
+   P_tmp_offset = M_BitToByte(S_Ext_Global_Param_Table.pdcp_xxl_fifo);
+   FBPNum = _mem(r0,B_GlobalParamTable[P_tmp_offset], 4, GLOBAL_PARAM_TABLE_BUS);
+
+   /* Increment pdcp_xxl_count_enet_rx */
+   P_tmp_offset = M_BitToByte(S_Ext_Global_Param_Table.pdcp_xxl_count_enet_rx);
+   _mem(r0, B_GlobalParamTable[P_tmp_offset], GLOBAL_PARAM_TABLE_BUS) += 1;
+}
+
+/*****************************************************************************
+ * Macro Name: B_PdcpXxlEnetFrameLength
+ *
+ * Description:
+ *    Return Ipv4 or Ipv6 packet length (with single vlan tag if present).
+ *    Return 0 if first and last chunk or if packet header not parseable.
+ *     
+ * Inputs:
+ *    status0.Last
+ *
+ * Outputs:
+ *    PacketLength
+ *****************************************************************************/
+inline func B_PdcpXxlEnetFrameLength(in status0, out PacketLength, inout ethertype)
+{
+   PacketLength = 0;
+   if (!status0.Last)
+   {
+      register struct S_EthHeader EthHeader = L2piRxPacket;
+      ethertype = EthHeader.EtherType;
+      if (ethertype == ETHER_TYPE_IPv4)
+         PacketLength = EthHeader.u_ethnextheader.eth_ipv4.PacketLength;
+      else if (ethertype ==  ETHER_TYPE_IPv6)
+         PacketLength = EthHeader.u_ethnextheader.eth_ipv6.PacketLength + 40; // adding ipv6 header len
+      else if (ethertype == VLAN_TYPE)
+      {
+         ethertype = EthHeader.u_ethnextheader.eth_vlan_tag.vlan_ethertype;
+         if (ethertype == ETHER_TYPE_IPv4)
+            PacketLength = EthHeader.u_ethnextheader.eth_vlan_tag.u_vlannextheader.eth_vlan_ipv4.PacketLength;
+         else if (ethertype == ETHER_TYPE_IPv6)
+            PacketLength = EthHeader.u_ethnextheader.eth_vlan_tag.u_vlannextheader.eth_vlan_ipv6.PacketLength + 40;
+      }
+   }
+}
+#endif
+
+/*****************************************************************************
+ * Macro Name: M_L2piRxGetNewBd
+ *
+ * Description:
+ *   Get new BD from WMM FIFO or from FBP FIFO, according to mode0 bits
+ *
+ * Inputs:
+ *     mode0
+ *     FbpNum           - FBP number for BD's to be taken from
+ *
+ * Outputs:
+ *     P_BdPtr            - fetched BD ptr
+ *     P_GetBdResult      - The output result of the fifo command
+ *
+ *****************************************************************************/
+inline func M_L2piRxGetNewBd(in mode0,
+                             in status0,
+                             in FbpNum,
+                             out P_BdPtr,
+                             out P_GetBdResult,
+                             in P_IS_FIRST)
+{
+
+   register                  tmpFbpNum        = r17; // will be overriden by P_GetBdResult
+   register                  tempxxl          = P_GetBdResult; // will be overriden by P_GetBdResult
+   register                  PacketLength     = r17;
+
+    DPS_LOG("L2PI_RX_FLOW_DATA_UNIT",
+            L2PI_RX_GET_NEW_BD);
+   tmpFbpNum = FbpNum;
+   if(mode0.Status2RxMode.HierFmuMode)
+   {
+      /* using Hierarchical FMU FBP */
+      if(P_IS_FIRST)
+      {
+         if(status0.Last)
+         {
+            /* FIRST + LAST case - take from highest hierarchy */
+            /* The FbpNum received in STATUS2 holds the index of the lower hierarchy used
+               The higher hierarcy is taken from the 2MSB*/
+            tmpFbpNum &= 3;
+
+            if(mode0.Status2RxMode.FMU1)
+               tmpFbpNum |= FMU_INDIRECT_GET_L1;
+            else // if(mode0.Status2RxMode.FMU2)
+            {
+               tmpFbpNum = FbpNum >> 2;
+               tmpFbpNum |= FMU_INDIRECT_GET_L2;
+
+            }
+         }
+         else
+         {
+#pragma outofline;
+
+   /* First but not last - long packet - take from lower hierarchy */
+            if(mode0.Status2RxMode.FMU1)
+               /* if L1 is configured --> lower hierarchy is L2 */
+               tmpFbpNum |= FMU_INDIRECT_GET_L2;
+            else //  if(mode0.Status2RxMode.FMU2)
+               /* if L1 is not configured means L2 is configured --> lower hierarchy is L3 */
+               tmpFbpNum |= FMU_INDIRECT_GET_L3;
+         }
+      }
+      else
+      {
+         /* Long packets - middle case - take from lower hierarchy */
+         if(mode0.Status2RxMode.FMU1)
+            /* if L1 is configured --> lower hierarchy is L2 */
+            tmpFbpNum |= FMU_INDIRECT_GET_L2;
+         else // if(mode0.Status2RxMode.FMU2)
+            /* if L1 is not configured means L2 is configured --> lower hierarchy is L3 */
+            tmpFbpNum |= FMU_INDIRECT_GET_L3;
+      }
+
+   }
+   else
+   {
+      /* no hierarchical mode --> use as is from status2 */
+      if(mode0.Status2RxMode.FMU1)
+      {
+         tmpFbpNum |= FMU_INDIRECT_GET_L1;
+         if(mode0.Status2RxMode.FMU2)
+            tmpFbpNum |= FMU_INDIRECT_GET_L3;
+      }
+      else if(mode0.Status2RxMode.FMU2)
+         tmpFbpNum |= FMU_INDIRECT_GET_L2;
+      else
+      {
+#if FEATURE_PDCP_XXL_SDUS 
+         B_PdcpXxlEnetFrameLength(status0, PacketLength, tempxxl);
+         if (PacketLength > PDCP_MIN_XXL_PDU_SIZE)
+         {
+            M_GetXxlFbp(FbpNum, PacketLength);
+         }
+#endif
+         /* Get BD from WMM FBP */
+         WMM_FBP_GET("BD_CORRUPTION_L2PI",
+                     BD_CORRUPTION_L2PI_RX_WMM_GET_BD,
+                     P_BdPtr,
+                     r0,
+                     FbpNum,
+                     P_GetBdResult,
+                     sizeof(S_MatrixBd),
+                     FBP_PARM_BUS);
+
+         goto L_GetIsDone;
+      }
+
+   }
+
+   FMU_FBP_GET("BD_CORRUPTION_L2PI",
+               BD_CORRUPTION_L2PI_RX_FMU_GET_BD,
+               P_BdPtr,
+               r0,
+               tmpFbpNum,
+               P_GetBdResult,
+               sizeof(S_MatrixBd),
+               _FBP | _INDIRECT_SRC);
+   
+
+  L_GetIsDone:
+   $reg(((struct S_MatrixBd)P_BdPtr).MatrixBdStatus.V) &= BD_STATUS_RESET_MASK; // clear status bits
+   $reg(((struct S_MatrixBd)P_BdPtr).MatrixBdStatus.V) |= M_Mask(S_MatrixBd.MatrixBdStatus.V) | M_Mask(S_MatrixBd.MatrixBdStatus.E); // set E
+
+
+} /* M_L2piRxGetNewBd */
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxIwgpHandling
+ *
+ * Description:
+ *   This block handles IWGP discard + iw port statistics and IWGP ingress policer.
+ *
+ * Inputs:
+ *     mode0
+ *     status0
+ *     status1
+ *     PhyNum           - PhyNum for tables fetch
+ *     L2piRcptKey      - RCPT key
+ *     L2piDataKey      - DATA key
+ *     L2piIwKey        - Interworking key
+ *
+ * Outputs:
+ *     RcptPhyOffset    - Base RCPT offset
+ *     P_L2piRCPT         - RCPT
+ *
+ *****************************************************************************/
+inline func B_L2piRxIwgpHandling(inout iwgp_mode0,
+                                 inout iwgp_mode1,
+                                 inout iwgp_status0,
+                                 inout iwgp_status1,
+                                 in IwgpKey,
+                                 in PacketLength,
+                                 in FetchedBd)
+{
+
+   register struct S_PceIwSystemInfo PceIwSystemInfo = r18;
+   register struct S_ParserResult       ParserResult = r17;
+   register callee_1 = r11;
+   /* Note that iwgp_mode1 is loaded for PceResultAvailable case only.
+      Otherwise, it is not being used. */
+   iwgp_mode1 = PceResult.PceResultMode;
+
+   M_IwgpPceMarkAsDiscardWa(iwgp_mode1);
+
+    /* policer input color should be copied, to ensure the register
+      holds a value in case of going to GCFI / GCSI */
+   PL.PolicerCurrentColor = PceResult.ClassifierResult.InPolicerInColor;
+
+   PL.InputPort = PceResult.InputPort;
+   PceIwSystemInfo = PceResult.PceIwSystemInfo<<16;
+
+   /* raise PCE result statistics for short Packets  */
+   if(iwgp_mode1.FCB.ResultStatistics)
+   {
+      M_IwgpResultStatistics(call_stack, stack_limit);
+   }
+
+//   PL.IwgpControl = 0;
+   if(iwgp_mode1.Discard)
+   {
+#pragma outofline;
+      register TempSavedMode0       = r16;
+
+      TempSavedMode0 = iwgp_mode0;
+
+      /*if it is OAM frame, policer will be done after OAM handling, if needed*/    
+      ParserResult = PceResult.ParserResult;
+      TempSavedMode0 = iwgp_mode0;
+      /* initialize HW reg to the value in the start of iwgp.dpl */
+      iwgp_status0.PceIwSystemMode = PceResult.PceIwSystemInfo.PceIwSystemMode;
+      iwgp_mode0.ParserFlags = PceResult.ParserResult.Flags;
+
+      Submodule_IwgpIngressMirrorDropShortPacket(iwgp_status0.PceIwSystemMode.IwPortExt,call_stack, stack_limit);
+      
+
+      /*if it is OAM frame, policer will be done after OAM handling, if needed*/
+      if (!ParserResult.Flags.OAM)
+      {
+         M_IwPortPceFilterStatsUpdate(iwgp_mode1,
+                                      PceIwSystemInfo.PceIwSystemMode.IwPSE,
+                                      call_stack, stack_limit);
+         DPS_LOG("L2PI_RX_LOCKS",
+                 L2PI_RX_IWGP_HANDLING_DISCARD_UNLOCK_IW_KEY,
+                 "Unlock IW key", IwgpKey, DPS_SW_LOG_4_BYTES);
+    
+         _task_switch(IwgpKey, _ORDER_UNLOCK | _TERMINATE);
+      }
+
+      /*return to the original valuse */
+      iwgp_mode0 = TempSavedMode0;
+
+      /*no need to "mirror" the packet again - extention bit to 0*/
+      $reg(PceResult.PceIwSystemInfo.PceIwSystemMode.IwPortExt) &= ~M_Mask(S_PceResult.PceIwSystemInfo.PceIwSystemMode.IwPortExt)/*IW_EXTENTION_BIT*/;
+      iwgp_status0.PceIwSystemMode.IwPortExt = 0;
+      $reg(PceResult.ClassifierResult.MirrorFlow) &= ~(M_Mask(S_ClassifierResult.MirrorFlow));
+
+   }
+
+   if(iwgp_mode1.FCB.InPolicer)
+   {
+      /*if it is OAM frame, policer will be done after OAM handling, if needed*/      
+      ParserResult = PceResult.ParserResult;
+      if (!ParserResult.Flags.OAM)
+      {
+         Submodule_IwgpPolicer(PceResult.ClasRes9ClasRes10.InPolicerIdx,
+                               iwgp_mode1.FCB.InPapt,
+                               iwgp_mode1.FMB.LengthCorrection,
+                               PceResult.ClasRes9ClasRes10.U_PceClasRes.InPaptIdx,
+                               FirstBd,
+                               IwgpKey,
+                               iwgp_status0,
+                               iwgp_mode1,
+                               call_stack, stack_limit);
+         if (iwgp_mode1.Discard) {
+#pragma outofline;
+            if (PceIwSystemInfo.PceIwSystemMode.IwPSE)
+               M_PolicerUpdateIngressStatistics(call_stack, stack_limit);
+            DPS_LOG("L2PI_RX_LOCKS",
+                    L2PI_RX_IWGP_HANDLING_DISCARD_UNLOCK_POLICER,
+                    "Unlock IW key", IwgpKey, DPS_SW_LOG_4_BYTES);
+
+            _task_switch(IwgpKey, _ORDER_UNLOCK | _TERMINATE);
+         }
+      }
+   }
+
+} /* B_L2piRxIwgpHandling */
+
+
+/***************************************************************************************
+ * Macro Name: M_L2piRxSendPacketToPceaWorkAround
+ *
+ * Description:
+ *     This macro sends packet to PCEA (instead of CFU-PCE) - the PCEA workaround for REVB
+ *     assumptions: 
+ *
+ * Inputs:
+ *     CfuPort
+ *     PacketSize
+ * Outputs:
+ *     PceResult
+ *
+ **************************************************************************************/
+inline func M_L2piRxSendPacketToPceaWorkAround(in    CfuPort,
+                                               in    PacketSize,
+                                               out   PceResult)
+{
+   register                             EntryOffset           = r11;
+   register                             PCEAPT_WA             = r12;
+   register                             PceaPTOffset          = EntryOffset;
+   register                             HeaderSize            = r20;
+
+
+   PceaPTOffset = CfuPort * sizeof(S_PCEAPT);
+   PCEAPT_WA = _mem(r0,
+                    B_PCEA_WA_PARAM_TABLE[PceaPTOffset],
+                    IWGP_PCEAPT_READ_SIZE);
+
+   /* read first 64 bytes of header */
+   if(PacketSize  < IWGP_PCEA_HEADER_READ_SIZE)
+      HeaderSize = PacketSize;
+   else
+      HeaderSize = IWGP_PCEA_HEADER_READ_SIZE;
+
+   PceResult = _pce(r0,
+                    PCEAPT_WA,
+                    IWGP_HEADER_START_REG,
+                    HeaderSize);
+
+} /* M_IwgpSendPacketToPceaWorkAround */
+
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxFirstLastProc
+ *
+ * Description:
+ *   This block handles IWGP discard + iw port statistics and IWGP ingress policer.
+ *
+ * Inputs:
+ *     mode0
+ *     status0
+ *     status1
+ *     PhyNum           - PhyNum for tables fetch
+ *     L2piRcptKey      - RCPT key
+ *     L2piDataKey      - DATA key
+ *     L2piIwKey        - Interworking key
+ *
+ * Outputs:
+ *     RcptPhyOffset    - Base RCPT offset
+ *     P_L2piRCPT         - RCPT
+ *
+ *****************************************************************************/
+inline func B_L2piRxFirstLastProc(in IwgpKey,
+                                   in L2piPacketSize,
+                                   in FirstBd)
+{
+
+   register struct S_IwgpModeReg        iwgp_mode0   = MODE_REG;
+   register struct S_PceResultMode      iwgp_mode1   = MODE1_REG;
+   register struct S_IwgpStatusReg      iwgp_status0 = STATUS0_REG;
+   register struct S_IwSerialStatusReg2 iwgp_status1 = STATUS1_REG;
+
+   register                             EthMinFrameLength = r19;
+   
+   
+
+
+   if(mode0.Status2RxMode.RemoveFCS)
+      PL.PacketLength -= FCS_SIZE;
+
+   if(FEATURE_IWGP && status0.PceResultAvailable)
+   {
+      B_L2piRxIwgpHandling(iwgp_mode0,
+                           iwgp_mode1,
+                           iwgp_status0,
+                           iwgp_status1,
+                           IwgpKey,
+                           PL.PacketLength,
+                           FetchedBd /* L2piRCPT */);
+   }
+   else
+   {
+      /* PCE not connected case */
+      /* NOTE: in case of G999, the PCE is accessed in a second round. */
+#pragma outofline;
+
+      EthMinFrameLength = ETHERNET_MINIMUM_FRAME_LENGTH;
+      if (status0.U_SerialInfo.CommonInfo.DSF)
+      {
+         if(mode0.Status2RxMode.RemoveFCS)
+            EthMinFrameLength -= FCS_SIZE;
+
+         if (PL.PacketLength < EthMinFrameLength)
+         {
+            /* Discard packet */
+#pragma outofline;
+            DPS_LOG("L2PI_RX_LOCKS",
+                    L2PI_RX_PACKET_LENGTH_DISCARD,
+                    "Unlock IW key", IwgpKey, DPS_SW_LOG_4_BYTES);
+
+            _task_switch(IwgpKey, _ORDER_UNLOCK | _TERMINATE);
+         }
+      }
+      
+   }
+   
+} /* B_L2piRxFirstLastProc */
+
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxFirstDataUnitProc
+ *
+ * Description:
+ *   This block handles the reception of the first data unit of the packet. It
+ *   gets a buffer from the Free Buffer Pool and writes the received
+ *   data on the data buffer.
+ *
+ * Inputs:
+ *     mode0
+ *     status0
+ *     status1
+ *     PhyNum           - PhyNum for tables fetch
+ *     FbpNum           - FBP number for BD's to be taken from
+ *     RcptPhyOffset    - Base RCPT offset
+ *     L2piRcptKey      - RCPT key
+ *     L2piDataKey      - DATA key
+ *     L2piRxPacket     - Data received from serial/CFU
+ *     L2piIwBufferGap   
+ *
+ * Outputs:
+ *     FbpCounterCopy
+ *     FetchedBd        - The BD fetched from FBP (located on same regs as RCPT)
+ *     P_L2piRCPT         - RCPT (if read)
+ *     P_PacketSize  - Total packet length to be updated
+ *
+ *****************************************************************************/
+inline func B_L2piRxFirstDataUnitProc(in mode0,
+                                      in status0,
+                                      in status1,
+                                      in PhyNum,
+                                      in FbpNum,
+                                      in RcptPhyOffset,
+                                      in L2piRcptKey,
+                                      in L2piDataKey,
+                                      in L2piIwKey,
+                                      in L2piRxPacket,
+                                      in L2piIwBufferGap,
+                                      out FbpCounterCopy,
+                                      out FetchedBd,
+                                      out L2piRCPT,
+                                      out L2piPacketSize,
+                                      in TempInputTimeStamp)
+{
+   register                         accSize          = acc;
+   register struct S_FMUGetResult   GetBdResult      = r12; // uses two registers
+   register                         tmpBDBT          = r13;
+   /* Temp registers for CR */
+   register                         TempTsPtr        = tar0;
+
+   register                         TimestampToGap1    = r84;  /* timestamp starts from MSB regardless of its length */
+   register                         TimestampToGap2    = r85;
+   register                         TimestampToGap3    = r86;  /* r87 is  TempInputTimeStamp*/
+  
+
+
+   PL.PacketLength = status1.Size;
+
+   if(status0.Last)
+   {
+      DPS_LOG("L2PI_RX_FLOW_DATA_UNIT",L2PI_RX_FIRST_PLUS_LAST);
+      B_L2piRxFirstLastProc(L2piIwKey,
+                            $reg(PL.PacketLength),
+                            FetchedBd);
+   }
+   
+   /* The BD is read on the first 16 bytes of the RCPT. */
+   M_L2piRxGetNewBd(mode0,
+                    status0,
+                    FbpNum,
+                    FetchedBd,
+                    GetBdResult,
+                    TRUE);
+
+   InverseBDBTCopy($reg(L2piRCPT.L2piRxMode),
+                   tmpBDBT,
+                   mode0);
+
+   mode0.Status2RxMode.U_BTBits.BusTypes.DBT = L2piRCPT.L2piRxMode.DaBus;
+   mode0.RcptMode = _bf($reg(FetchedBd.MatrixBdStatus.V), 0, 16);
+
+   if(status0.AccErr)
+   {
+#pragma outofline;
+
+      M_L2piRxUpdateStatistics(r0,
+                               status0,
+                               ENABLED,   //  mode0.Status2RxMode.STE,
+                               PhyNum,
+                               M_BitToByte(S_L2piRxStat.RxFbpUnderrun),
+                               _HALF_WORD);
+      // TODO: what should be done about UpdateRCPT_to_HuntMode --> in discard;
+
+      goto L_L2piRx_DiscardPacket;
+   }
+
+   L2piRCPT.U_RcptMatrixReg.RcptReg.FbpCounter = GetBdResult.Counter;
+   FbpCounterCopy = GetBdResult.Counter;
+
+   if(status0.Last)
+   {
+      /*********************************************************************
+       *                  First + Last case (Short Packet)                  *
+       *********************************************************************/
+      /* IWBufferGap is in 64 byte, and located in corresponding bits in mode0 */
+      /* Mask the 8 lsb of the Data Buffer Pointer and then add the RCPT IW
+         Buffer Gap Size. */
+
+      /* Align data pointer and add gap */
+      _bf(L2piRCPT.DataPtr, IW_DATA_BUFFER_ALIGNMENT_OFFSET, IW_DATA_BUFFER_ALIGNMENT_SIZE)
+         = L2piIwBufferGap;
+
+      if(FEATURE_L2PI_TIMESTAMP && mode0.Status2RxMode.RxTimeStamp)
+      {
+         /* This code deals with first + last. Extract timestamp from the packet's tail (80bits), save it
+            in the data GAP. Another 32bit timestamp that is taken at the begining of this thread  
+            is saved right after (TempInputTimeStamp). Timestamps will be used later by different apps. */
+#pragma outofline;
+         /*This macro, copies the timestamp from the end of the frame to registers and updates , updates the data pointer 
+           (L2piRCPT.DataPtr) to to copy the buffer gap along with the packet and updates PL.PacketLength accordingly */
+         B_L2piRx_TSCopy(status0,TempTsPtr,L2piRxPacket,PL.PacketLength,
+                         L2piRCPT,TimestampToGap1,TimestampToGap2,TimestampToGap3);
+         /* Note !!! , this macro changes PL.PacketLength  & DataPtr*/
+      }
+
+      /* clear MBF bit & WFF bit */
+      mode0 &= ~((M_Mask(S_L2piRxMode.RcptMode.MBF))
+                 | (M_Mask(S_L2piRxMode.RcptMode.WFF)));
+
+      /* write data to buffer */
+      if(FEATURE_L2PI_TIMESTAMP && mode0.Status2RxMode.RxTimeStamp)
+      {
+#pragma outofline;
+         if(status0.TimestampHW)
+         {
+         /* HW timestamp inserted , "packet" starts at register r84 and not r96 */
+         _data_mem(r0, 
+                   L2piRCPT.DataPtr,
+                   PL.PacketLength) = TimestampToGap1;
+
+         /* update back packet size and pointer */
+         PL.PacketLength -= HW_TS_OFFSET_IN_GAP;
+         L2piRCPT.DataPtr += HW_TS_OFFSET_IN_GAP;
+         }
+         else
+         {
+            /* only SW timestamp inserted (32bit) , "packet" starts at register r87 and not r96 */
+            /* "packet" starts at register r84 and not r96 */
+            DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_WRITE_DATA_SW_TS, 
+                    "Write size", L2piPacketSize, DPS_SW_LOG_4_BYTES);
+
+            _data_mem(r0, 
+                      L2piRCPT.DataPtr,
+                      PL.PacketLength) = TempInputTimeStamp;
+            /* update back packet size and pointer */
+            PL.PacketLength -= WG_TS_OFFSET_IN_GAP;
+            L2piRCPT.DataPtr += WG_TS_OFFSET_IN_GAP;
+         }
+      }
+      else
+      {
+         DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_WRITE_DATA, 
+                 "Write size", L2piPacketSize, DPS_SW_LOG_4_BYTES);
+
+         _data_mem(r0, 
+                   L2piRCPT.DataPtr,
+                   PL.PacketLength) = L2piRxPacket;
+      }
+   }
+   else
+   {
+      /*********************************************************************
+       *                          First only case                          *
+       *********************************************************************/
+
+#pragma outofline;
+
+      /* Align data pointer and add gap */
+      _bf(L2piRCPT.DataPtr, IW_DATA_BUFFER_ALIGNMENT_OFFSET, IW_DATA_BUFFER_ALIGNMENT_SIZE)
+         = L2piIwBufferGap;
+
+      $reg(L2piRCPT.L2piRxMode.WFF) &= ~((M_Mask(S_L2piRxMode.RcptMode.MBF))
+                                         | (M_Mask(S_L2piRxMode.RcptMode.WFF)));
+
+      /* CurrentBdCnt in RCPT should add the BufferGap */
+      L2piRCPT.CurrentBdCnt = PL.PacketLength;
+      L2piRCPT.U_RcptMatrixReg.RcptReg.PacketSize = PL.PacketLength;
+
+      /* First 32 bytes of RCPT should be written to memory, holding the
+         First BD, ordered by RcptKey    */
+      DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",
+              L2PI_RX_WRITE_RCPT_UNLOCK_RCPT_KEY, 
+              "RCPT", L2piRCPT, L2PI_RCPT_FIRST_WRITE_SIZE);
+      
+      DPS_LOG("L2PI_RX_LOCKS",
+              L2PI_RX_FIRST_ONLY_UNLOCK_RCPT_KEY,
+              "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+      _mem(L2piRcptKey,
+           B_RCPT[status0][RcptPhyOffset],
+           L2PI_RCPT_FIRST_WRITE_SIZE,
+           _ORDER_UNLOCK | EHP_CPT_BUS) = *(&L2piRCPT);
+
+      /* write data to buffer, ordered by DataKey and terminate thread*/
+      accSize = PL.PacketLength; // relevant for non RxTimeStamp case only.
+
+      if(FEATURE_L2PI_TIMESTAMP && mode0.Status2RxMode.RxTimeStamp)
+      {
+#pragma outofline;
+         /* 32bits timestamp is already in its place for the gap (r87). */
+         /* Update packet size will happen on "last"  and start pointer. */
+
+         L2piRCPT.DataPtr -= WG_TS_OFFSET_IN_GAP;
+         accSize = PL.PacketLength + WG_TS_OFFSET_IN_GAP;
+         DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",
+                 L2PI_RX_WRITE_DATA_TS_UNLOCK_DATA_KEY, 
+                 "Write size", accSize, DPS_SW_LOG_4_BYTES);
+
+         DPS_LOG("L2PI_RX_LOCKS",
+                 L2PI_RX_FIRST_ONLY_UNLOCK_DATA_KEY,
+                 "Unlock data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+         _data_mem(L2piDataKey, 
+                   L2piRCPT.DataPtr, 
+                   accSize, 
+                   _ORDER_UNLOCK | _TERMINATE) = TempInputTimeStamp;
+
+      }
+      else
+      {
+         DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_WRITE_DATA_UNLOCK_DATA_KEY1, 
+                 "Write size", accSize, DPS_SW_LOG_4_BYTES);
+         
+         DPS_LOG("L2PI_RX_LOCKS",
+                 L2PI_RX_FIRST_ONLY_UNLOCK_DATA_KEY2,
+                 "Unlock data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+         
+         _data_mem(L2piDataKey,
+                   L2piRCPT.DataPtr,
+                   accSize,
+                   _ORDER_UNLOCK | _TERMINATE) = L2piRxPacket;
+      }
+   }
+
+
+} /* B_L2piRxFirstDataUnitProc */
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxBuildFirstBdParams
+ *
+ * Description:
+ *   This block builds the First BD parameters in the RCPT struct
+ *
+ * Inputs:
+ *     status0
+ *     RcptPhyOffset    - Offset for RCPT start ptr
+ *     L2piRxBd         - BD struct as first BD
+ *     FirstBdPtr       - Bd pointer of first BD
+ *     FirstDataPtr     - Data pointer of first BD
+ * Inputs & Outputs:
+ *     P_CurBufCounter    - Current Buffer Counter
+ *     L2piRCPT         - RCPT
+ *
+ *****************************************************************************/
+inline func B_L2piRxBuildFirstBdParams(in status0,
+                                       in RcptPhyOffset,
+                                       in EndingBdPtr,
+                                       in L2piRxBd,
+                                       in L2piIwBufferGap,
+                                       inout L2piRCPT)
+{
+   register                         TmpTotalSize     = r19;
+
+   L2piRCPT.FirstBdPtr = EndingBdPtr;
+   L2piRCPT.FirstBufDataPtr = L2piRxBd.DataPtr;
+   L2piRCPT.FirstVbits = $reg(L2piRxBd.MatrixBdStatus.V) | M_Mask(S_MatrixBd.MatrixBdStatus.MTBD);
+   TmpTotalSize = L2piRxBd.TotalLength;
+
+   if(($reg(L2piRCPT.U_PiRcptWord.MatrixBuffChainInfo) = L2piRCPT.BdPtr - L2piRCPT.FirstBdPtr) < 0)
+   {
+      $reg(L2piRCPT.U_PiRcptWord.MatrixBuffChainInfo) = L2piRCPT.FirstBdPtr - L2piRCPT.BdPtr;
+      TmpTotalSize |= M_Mask(S_MatrixBuffChainInfo.Sign);
+   }
+   /* shift left by 12 and divide by 16 (shr 4) */
+   $reg(L2piRCPT.U_PiRcptWord.MatrixBuffChainInfo) <<= 8;
+   $reg(L2piRCPT.U_PiRcptWord.MatrixBuffChainInfo) |= TmpTotalSize;
+
+} /* B_L2piRxBuildFirstBdParams */
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxMatrixBufferChainingCtrl
+ *
+ * Description:
+ *   This block checks if an extra buffer is neede to handle the current
+ *   received packet, and takes a new one from the FBP if needed.
+ *
+ * Inputs:
+ *     mode0
+ *     status0
+ *     FbpNum           - FBP number for BD's to be taken from
+ *     RcptPhyOffset    - Base RCPT offset
+ *     L2piRcptKey      - RCPT key
+ *     L2piDataKey      - DATA key
+ *     L2piRCPT         - RCPT
+ *     P_CurrentChunkSize - Data Unit size
+ *     L2piRxBd         - Extra BD struct for BD switch
+ *     BytesOffset      - the offset of current chunk in buffer
+ *
+ * Outputs:
+ *     FbpCounterCopy
+ *     P_WriteDataPtr     - Pointer in memory to write the current received DU
+ *
+ *****************************************************************************/
+inline func B_L2piRxMatrixBufferChainingCtrl(in mode0,
+                                             in status0,
+                                             in PhyNum,
+                                             in FbpNum,
+                                             in RcptPhyOffset,
+                                             in L2piRcptKey,
+                                             in L2piDataKey,
+                                             in L2piIwBufferGap,
+                                             in L2piPacketSize,
+                                             inout L2piRCPT,
+                                             inout CurrentChunkSize,
+                                             inout L2piRxBd,
+                                             inout BytesOffset,
+                                             out FbpCounterCopy,
+                                             out WriteDataPtr)
+{
+   register                         accFbpNum        = acc;
+   register                         EndingBdPtr      = r13;
+   register                         CurBufCounter    = r15;
+   register                         ByteResRBS       = r16;
+   register struct S_FMUGetResult   GetBdResult      = r16; // uses two registers
+   register struct S_MatrixBd       FirstBd          = L2piRCPT.FirstBdPtr;
+
+   /* maybe not a must , but for safety , before zero the protocol specific , backup the value there */
+   register                         tempBackupProtocolSpecific = WriteDataPtr;
+
+   /* Calculate received bytes for current buffer */
+   CurBufCounter = L2piRCPT.CurrentBdCnt + CurrentChunkSize;
+   
+#ifdef _MODULE_MATRIX_BUFF_CHAIN_ENABLE_
+   /* Parse Receive Buffer Size from RCPT */
+   ByteResRBS = L2piRCPT.RBS * L2PI_RBS_RES;
+
+   /* if it is the first buffer, then the RBS should be decreased by the size of BufferGap */
+   if(!mode0.RcptMode.MBF)
+   {
+      ByteResRBS -= L2piIwBufferGap;
+#ifdef _MODULE_SECURITY_ENABLE_
+      /* The WSE is writing Trailer data on the packet, if we send to WSE packet with size of less than 
+         (Buffer Size - Buff Gap) and more then (Buffer Size - Buff Gap - WSE_MAX_TRAILER), it should also split 
+         to buffer chains so we have space for the WSE Trailer */
+      ByteResRBS -= WSE_MAX_TRAILER;
+#endif
+   }
+   DPS_LOG("L2PI_RX_FLOW_DATA_UNIT",
+           L2PI_RX_MATRIX_BUFFER_CHAINING);
+   if(CurBufCounter > ByteResRBS)
+   {
+      /* After adding the Current Chunk Size to the Current Buffer Counter
+         realizing that the Receive Buffer Size is exceeded, and a new buffer
+         should be opened */
+
+      /* store ending BD info for later use */
+      EndingBdPtr = L2piRCPT.BdPtr;
+      L2piRxBd.DataPtr = L2piRCPT.DataPtr;
+      /* includes the mode bits and the buffer length  */
+      $reg(L2piRxBd.MatrixBdStatus.V) = $reg(L2piRCPT.L2piRxMode) &
+         ~M_Mask(S_MatrixBd.MatrixBdStatus.E) &
+         ~M_Mask(S_MatrixBd.MatrixBdStatus.MTBD) &
+         ~M_Mask(S_L2piRcptMode.WFF);
+
+      M_L2piRxGetNewBd(mode0,
+                       status0,
+                       FbpNum,
+                       L2piRCPT.BdPtr,
+                       GetBdResult,
+                       FALSE);
+
+      L2piRxBd.NextBdPtr = L2piRCPT.BdPtr;
+      L2piRCPT.U_RcptMatrixReg.RcptReg.FbpCounter = GetBdResult.Counter;
+      FbpCounterCopy = GetBdResult.Counter;
+
+      if(status0.AccErr)
+      {
+#pragma outofline;
+
+         M_L2piRxUpdateStatistics(r0,
+                                  status0,
+                                  ENABLED, // mode0.Status2RxMode.STE,
+                                  PhyNum,
+                                  M_BitToByte(S_L2piRxStat.RxFbpUnderrun),
+                                  _HALF_WORD);
+
+         goto L_L2piRx_DiscardPacket;
+      }
+
+      /* set MBF bit to indicate more then single buffer used for current packet */
+      L2piRCPT.L2piRxMode.MBF = 1;
+      L2piRCPT.DataPtr &= IW_DATA_BUFFER_ALIGNMENT;
+
+      L2piRCPT.CurrentBdCnt = CurrentChunkSize;
+      L2piRCPT.U_RcptMatrixReg.RcptReg.PacketSize = PL.PacketLength;
+      if(!status0.Last)
+      {
+         DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",
+                 L2PI_RX_MATRIX_WRITE_RCPT_UNLOCK, 
+                 "RCPT", L2piRCPT, L2PI_RCPT_MIDDLE_WRITE_SIZE);
+         
+         DPS_LOG("L2PI_RX_LOCKS",
+                 L2PI_RX_MATRIX_WRITE_RCPT_UNLOCK2, 
+                 "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+         /* RCPT should be written back to memory with new BD parameters */
+         _mem(L2piRcptKey,
+              B_RCPT[status0][RcptPhyOffset],
+              L2PI_RCPT_MIDDLE_WRITE_SIZE,
+              _ORDER_UNLOCK | EHP_CPT_BUS) = L2piRCPT;
+
+      }
+
+      L2piRCPT.U_PiRcptWord.MatrixBuffChainInfo = 0;
+      if(!mode0.RcptMode.MBF)
+      {
+
+         /* if MBF bit is not set in mode0 register, means that this is the
+            first buffer switch made for this packet, and the First BD parameters
+            should be saved in RCPT   */
+         B_L2piRxBuildFirstBdParams(status0,
+                                    RcptPhyOffset,
+                                    EndingBdPtr,
+                                    L2piRxBd,
+                                    L2piIwBufferGap,
+                                    L2piRCPT);
+        
+         /* store first Bd parameters in RCPT only if not Last data chunk */
+         if(!status0.Last)
+         {
+            L2piEntryOffset = RcptPhyOffset + L2PI_RCPT_FIRST_BD_PARAMS_OFFSET;
+            DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",
+                    L2PI_RX_MATRIX_WRITE_RCPT_LOCK_DATA, 
+                    "RCPT", L2piRCPT, L2PI_RCPT_FIRST_BD_PARAMS_SIZE);
+            
+            DPS_LOG("L2PI_RX_LOCKS",
+                    L2PI_RX_MATRIX_WRITE_RCPT_LOCK_DATA2,
+                    "Unlock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+
+            _mem(L2piDataKey,
+                 B_RCPT[status0][L2piEntryOffset],
+                 L2PI_RCPT_FIRST_BD_PARAMS_SIZE,
+                 _ORDER_LOCK | EHP_CPT_BUS) = L2piRCPT.FirstBdPtr;
+         }
+
+      } /* if(!mode0.RcptMode.MBF) */
+      else
+      {
+         /* if MBF bit is set in mode0 register, means that this is not the
+            first buffer switch made for this packet, and the full buffers' BD
+            should be saved   */
+
+         /* clear MBF bit in the last BD  */
+         L2piRCPT.L2piRxMode.MBF = 0;
+
+
+         /* backup the protocol specific in case someone needs it (not sure someone does) */
+         tempBackupProtocolSpecific = L2piRxBd.U_ProtocolSpecific.ProtocolSpecific;
+
+         /* some protocols look on the protocol specific bits, and need them cleared in case
+            no info should be transfered */
+         L2piRxBd.U_ProtocolSpecific.ProtocolSpecific = 0;
+
+         if(mode0.RcptMode.FMU)
+         {
+            _param_mem(r0,
+                       EndingBdPtr,
+                       sizeof(S_MatrixBd)) = L2piRxBd.NextBdPtr;
+         }
+         else
+         {
+#pragma outofline;
+            _mem(r0,
+                 EndingBdPtr,
+                 sizeof(S_MatrixBd),
+                 FBP_PARM_BUS) = L2piRxBd.NextBdPtr;
+         }
+         DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_MATRIX_WRITE_NEW_BD, 
+                 "BD", L2piRxBd.NextBdPtr, DPS_SW_LOG_16_BYTES);
+
+         /* restore the protocol specific, in case someone indeed needs it */
+         L2piRxBd.U_ProtocolSpecific.ProtocolSpecific = tempBackupProtocolSpecific;
+
+         L2piRCPT.L2piRxMode.MBF = 1;
+
+     } /* if(!mode0.RcptMode.MBF) --> else */
+
+      WriteDataPtr = L2piRCPT.DataPtr;
+   } /* Not enough space in current buffer case */
+   else
+#endif
+   {
+
+     L_L2piRx_DontOpenNewBd:
+      /* if we are in the first buffer, the CurrentBdCnt holds the Buffer Gap*/
+      WriteDataPtr = L2piRCPT.DataPtr + BytesOffset;
+      DPS_LOG("L2PI_RX_FLOW_DATA_UNIT",L2PI_RX_MATRIX_DONT_OPEN_NEW_BD);
+      L2piRCPT.CurrentBdCnt = CurBufCounter;
+      /* store first Bd parameters in RCPT only if not Last data chunk */
+      if(!status0.Last)
+      {
+         DPS_LOG("L2PI_RX_LOCKS",
+                 L2PI_RX_MATRIX_DONT_OPEN_NEW_BD_WRITE_RCPT_AND_UNLOCK,
+                 "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+         _mem(L2piRcptKey,
+              B_RCPT[status0][RcptPhyOffset],
+              L2PI_RCPT_MIDDLE_WRITE_SIZE,
+              _ORDER_UNLOCK | EHP_CPT_BUS) = L2piRCPT;
+      }
+      
+   } /* enough space in current buffer */
+
+} /* B_L2piRxMatrixBufferChainingCtrl */
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxLongPacketProc
+ *
+ * Description:
+ *   This block handles the reception a data unit other then the first one.
+ *
+ * Inputs:
+ *     mode0
+ *     status0
+ *     status1
+ *     PhyNum           - PhyNum for tables fetch
+ *     FbpNum           - FBP number for BD's to be taken from
+ *     RcptPhyOffset    - Base RCPT offset
+ *     L2piRcptKey      - RCPT key
+ *     L2piDataKey      - DATA key
+ *     L2piIwKey        - Interworking key
+ *     L2piRxPacket     - Data received from serial/CFU
+ *     L2piIwBufferGap  - Buffer Gap to be used
+ *
+ * Outputs:
+ *     FbpCounterCopy
+ *     L2piRxBd         - Extra BD struct for BD switch
+ *     L2piRCPT         - RCPT
+ *     PL.PacketLength  - Updated packet length
+ *
+ *****************************************************************************/
+inline func B_L2piRxLongPacketProc(in mode0,
+                                   in status0,
+                                   in status1,
+                                   in PhyNum,
+                                   in FbpNum,
+                                   in RcptPhyOffset,
+                                   in L2piRcptKey,
+                                   in L2piDataKey,
+                                   in L2piIwKey,
+                                   in L2piRxPacket,
+                                   in L2piIwBufferGap,
+                                   in TimestampSize,
+                                   out FbpCounterCopy,
+                                   out L2piRxBd,
+                                   out L2piRCPT,
+                                   out L2piPacketSize)
+{
+
+   register                         accSize          = acc;
+   register                         CurrentChunkSize = r11; // erankd: why is status3 being overrun?
+   register                         BytesOffset      = r12;
+   register                         DecValue         = r13;
+   register                         WriteDataPtr     = r14;
+   /* The following variables are used only after the call for
+      B_L2piRxMatrixBufferChainingCtrl block
+      and therfore these registers can be used inside the above
+      mentioned block*/
+   register                         tmpBDBT          = r15;
+   register                         tmpBdPtr         = r15;
+   
+   /* Temp CR register */   
+   register                         TempTsPtr          = tar0;
+   register                         TempDataKeyReg     = r83; /* This register is used in case the 
+                                                                 timestamp is spreaded on 2 different chunks.
+                                                              */
+   register                         SecLocationInGap   = r84;
+   register                         NanoLocationInGap  = r85;
+
+   /* Read RCPT:
+      -> in case of not last data unit, RCPT would be saved back, so read is done
+      with _ORDER_LOCK
+      -> in case of last data unit, no further use of RCPT key, and read is done
+      with _ORDER_UNLOCK  (WFF bit can stay cleared)            */
+   CurrentChunkSize = status1.Size;
+   DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_READ_RCPT, 
+           "RCPT", L2piRCPT , L2PI_RCPT_MIDDLE_READ_SIZE);
+      
+   if(!status0.Last)
+   {
+      DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_READ_RCPT_LOCK, 
+              "Lock Rcpt Key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+      L2piRCPT = _mem(L2piRcptKey,
+                      B_RCPT[status0][RcptPhyOffset],
+                      L2PI_RCPT_MIDDLE_READ_SIZE,
+                      _ORDER_LOCK | EHP_CPT_BUS);
+   }
+   else
+   {
+      DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_READ_RCPT_UNLOCK, 
+              "Unlock Rcpt Key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+      L2piRCPT = _mem(L2piRcptKey,
+                      B_RCPT[status0][RcptPhyOffset],
+                      L2PI_RCPT_MIDDLE_READ_SIZE,
+                      _ORDER_UNLOCK | EHP_CPT_BUS);
+   }
+   
+   InverseBDBTCopy($reg(L2piRCPT.L2piRxMode),
+                   tmpBDBT,
+                   mode0);
+
+   
+   FbpCounterCopy = L2piRCPT.U_RcptMatrixReg.RcptReg.FbpCounter;
+
+   if(!L2piRCPT.L2piRxMode.WFF)
+   {
+      /* Load mode0 with the RCPT mode field */
+      mode0.RcptMode = L2piRCPT.L2piRxMode;
+      DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_NOT_WFF);
+
+      if(status0.Last)
+      {
+
+         DecValue = 0;
+         if(mode0.Status2RxMode.RemoveFCS)
+         {
+            DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_REMOVE_FCS);
+            DecValue += FCS_SIZE;
+         }
+
+         if (FEATURE_L2PI_TIMESTAMP && mode0.Status2RxMode.RxTimeStamp)
+         {
+            if(status0.TimestampHW)
+            {
+               DecValue += TS_80BIT_SIZE;
+               if(status0.TimstampSize == TS_64)
+                  DecValue -= (TS_80BIT_SIZE - TS_64BIT_SIZE);
+            }
+         }
+
+         if((CurrentChunkSize -= DecValue) <= 0)
+         {
+#pragma outofline;
+
+            /* If current Chunk contains only FCS leftovers, means that previous chunk
+               contains a part of the FCS and it should be removed
+               if so, CurrentChunkSize is a negative value now */
+            $reg(L2piRCPT.U_RcptMatrixReg.RcptReg.PacketSize) += CurrentChunkSize;
+
+            /* Also decrement size in previous BD */
+            $reg(L2piRCPT.CurrentBdCnt) += CurrentChunkSize;
+
+            /* PacketSize in RCPT is obviously a larger the FCS_SIZE
+               This is the only case where RCPT needs a different update
+               in any other case, the RCPT corrected size would be received by
+               the update of CurrentChunkSize */
+            
+            CurrentChunkSize = 0;
+            PL.PacketLength = L2piRCPT.U_RcptMatrixReg.RcptReg.PacketSize;
+            goto L_L2piRx_ChunkZeroSkip;
+
+         }
+      }
+
+      /* Advance the Received Bytes Coutner in RCPT by current chunk size
+	 for next thread*/
+      $reg(L2piRCPT.U_RcptMatrixReg.RcptReg.PacketSize) += CurrentChunkSize;
+
+      /* Parse the Received Bytes Count to be used as the Offset to the
+         data ptr and to the Max SDU check */
+      BytesOffset = L2piRCPT.CurrentBdCnt;
+      PL.PacketLength = L2piRCPT.U_RcptMatrixReg.RcptReg.PacketSize;
+
+      /* Check packet length for SDU violation. */
+      if(PL.PacketLength > L2piRCPT.MaxSdu)
+      {
+#pragma outofline;
+         M_L2piRxUpdateStatistics(r0,
+                                  status0,
+                                  ENABLED, // mode0.Status2RxMode.STE,
+                                  PhyNum,
+                                  M_BitToByte(S_L2piRxStat.RxMaxSduErr),
+                                  _HALF_WORD);
+
+         goto L_L2piRx_DiscardPacket;
+      }
+
+      B_L2piRxMatrixBufferChainingCtrl(mode0,
+                                       status0,
+                                       PhyNum,
+                                       FbpNum,
+                                       RcptPhyOffset,
+                                       L2piRcptKey,
+                                       L2piDataKey,
+                                       L2piIwBufferGap,
+                                       PL.PacketLength,
+                                       L2piRCPT,
+                                       CurrentChunkSize,
+                                       L2piRxBd,
+                                       BytesOffset,
+                                       FbpCounterCopy,
+                                       WriteDataPtr);
+
+     L_L2piRx_ChunkZeroSkip:
+
+      mode0.Status2RxMode.U_BTBits.BusTypes.DBT = L2piRCPT.L2piRxMode.DaBus;
+      
+      if(status0.Last)
+      {
+         /* if it the last Data Unit, First buffer params should be held in TRS */
+         L2piEntryOffset = RcptPhyOffset + L2PI_RCPT_FIRST_BD_PARAMS_OFFSET;
+
+         /* if the MBF bit in mode0 is cleared, then either no MBF is used or
+            the second buffer was opened in current thread, and the params
+            are already held in TRS - no need to read them from memory */
+         if(mode0.RcptMode.MBF)
+         {
+            DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_READ_BD_LOCK_DATA_KEY,
+                    "Lock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+            L2piRCPT.FirstBdPtr = _mem(L2piDataKey,
+                                       B_RCPT[status0][L2piEntryOffset],
+                                       L2PI_RCPT_FIRST_BD_PARAMS_SIZE,
+                                       _ORDER_LOCK | EHP_CPT_BUS);
+
+         }
+      }
+
+      if(CurrentChunkSize != 0)
+      {
+         /* if the size is legal - write data to external buffer */
+         accSize = CurrentChunkSize;
+         DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_WRITE_DATA_UNLOCK_DATA_KEY2, 
+                 "Current chunk size", CurrentChunkSize, DPS_SW_LOG_4_BYTES);
+
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_DATA_UNLOCK_DATA_KEY,
+                 "Unlock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+
+         
+         if (!status0.Last)
+         {
+            _data_mem(L2piDataKey,
+                      WriteDataPtr,
+                      accSize,
+                      _ORDER_UNLOCK | _TERMINATE) = L2piRxPacket;
+         }
+         else
+         {
+            _data_mem(L2piDataKey,
+                      WriteDataPtr,
+                      accSize,
+                      _ORDER_UNLOCK) = L2piRxPacket;
+         }
+
+
+      }
+      else
+      {
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_WRITE_DATA_UNLOCK_DATA_KEY3, 
+                 "Unlock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+
+         _task_switch(L2piDataKey, _ORDER_UNLOCK);
+      }
+
+      if(!L2piRCPT.L2piRxMode.MBF)
+         /* if not Multi Buffered Packet - end block */
+         return;
+
+      /* if it is a multi buffered packet, last BD should be saved and First
+         BD should be saved the first registers of the RCPT holds the entire
+         last BD */
+      tmpBdPtr = L2piRCPT.BdPtr;
+      L2piRCPT.BdPtr = NULL_POINTER;
+      /* clear MBF bit in the last BD  */  //TOCH: Can be avoided. if not first BD, don't care if MTBD or not.
+      L2piRCPT.L2piRxMode.MBF = 0;
+      $reg(L2piRCPT.L2piRxMode.V) |= M_Mask(S_L2piRxMode.RcptMode.V) | M_Mask(S_L2piRxMode.RcptMode.E);
+
+      /* zero the protocol specific , some protocols like FR and AAL5 are sensitive to the info there */
+      $reg(L2piRCPT.U_RcptMatrixReg.RcptReg.FbpCounter) = 0;
+
+      if(mode0.RcptMode.FMU)
+      {
+         _param_mem(r0,
+                    tmpBdPtr,
+                    sizeof(S_MatrixBd)) = L2piRCPT;
+      }
+      else
+      {
+#pragma outofline;
+         _mem(r0,
+              tmpBdPtr,
+              sizeof(S_MatrixBd),
+              FBP_PARM_BUS) = L2piRCPT;
+      }
+      DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_WRITE_BD, 
+              "BD", L2piRCPT, DPS_SW_LOG_16_BYTES);
+
+      $reg(L2piRCPT.L2piRxMode) = L2piRCPT.FirstVbits & (~M_Mask(S_MatrixBd.TotalLength));
+      $reg(L2piRCPT.L2piRxMode) |= PL.PacketLength;
+      L2piRCPT.BdPtr = L2piRCPT.FirstBdPtr;
+      L2piRCPT.DataPtr = L2piRCPT.FirstBufDataPtr;
+      tmpBdPtr = L2piRCPT.BdPtr + M_BitToByte(S_MatrixBd.MatrixBdStatus.V);
+      $reg(L2piRCPT.U_RcptMatrixReg.RcptReg.FbpCounter) = L2piRCPT.U_PiRcptWord.MatrixBuffChainInfo;
+      /* store the Vbits and the MatrixBuffChainInfo of the first BD in external memory */
+      if(mode0.RcptMode.FMU)
+      {
+         _param_mem(r0,
+                    tmpBdPtr,
+                    L2PI_FIRST_BD_WRITE_SIZE) = $reg(L2piRCPT.L2piRxMode);
+      }
+      else
+      {
+#pragma outofline;
+         _mem(r0,
+              tmpBdPtr,
+              L2PI_FIRST_BD_WRITE_SIZE,
+              FBP_PARM_BUS) = $reg(L2piRCPT.L2piRxMode);
+      }
+       DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_WRITE_LAST_8_BYTES_OF_FIRST_BD, 
+               "RCPT", $reg(L2piRCPT.L2piRxMode), DPS_SW_LOG_8_BYTES);
+      /* save the DBT to get the first DU later from the correct bus */
+      mode0.Status2RxMode.U_BTBits.BusTypes.DBT = L2piRCPT.L2piRxMode.DaBus;
+
+   } /* not WFF case --> normal flow */
+   else
+   {
+#pragma outofline;
+
+      /* release all keys and terminate the thread */
+      if(!status0.Last)
+      {
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_UNLOCK_RCPT_KEY_TERMINATE1,
+                 "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+         _task_switch(L2piRcptKey, _ORDER_UNLOCK);
+      }
+      else
+      {
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_UNLOCK_RCPT_KEY_TERMINATE2,
+                 "Unlock IW key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+         _task_switch(L2piIwKey, _ORDER_UNLOCK);
+      }
+      DPS_LOG("L2PI_RX_LOCKS",L2PI_RX_UNLOCK_DATA_KEY_TERMINATE,
+              "Unlock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+      
+      _task_switch(L2piDataKey, _ORDER_UNLOCK | _TERMINATE);
+
+   } /* WFF case */
+
+
+} /* B_L2piRxLongPacketProc */
+
+
+/******************************************************************************
+ * Macro Name: B_L2pi_BackgroundDequeueInterface
+ *
+ * Description:
+ *   This block restores L2PI specific data from packet handler after dequeue
+ *
+ * Inputs:
+ *   BDHandler - packet handler from BD Adress
+ * Outputs:
+ *   restored RCPT data
+ *   restored PhyNum
+ *   restored RcptPhyOffset
+ *   restored FbpCounter
+ *
+ *****************************************************************************/
+
+inline func B_L2pi_BackgroundDequeueInterface(out mode0,
+                                              out status0,
+                                              out status1,
+                                              out RcptPhyOffset,
+                                              out L2piRCPT,
+                                              out PhyNum,
+                                              out FbpCounterCopy,
+                                              out FBPNum,
+                                              out L2piPacketSize,
+                                              out MatrixBd)
+
+{
+   register                                   TempBdPtr            = r11;
+
+/************************************************************************
+ *                     Using regular packet handler                     *
+ ************************************************************************/
+   // keeping coherency with available code;
+   register struct S_L2piIWBGHandlerBlock L2piIWBGPacketHandlerBlock = PACKET_HANDLER_REG;
+
+   L2piRCPT.BdPtr = L2piIWBGPacketHandlerBlock.BdPtr;
+   L2piRCPT.DataPtr = L2piIWBGPacketHandlerBlock.DataPtr;
+   FbpCounterCopy = L2piIWBGPacketHandlerBlock.FbpCounter;
+
+   mode0 = L2piIWBGPacketHandlerBlock.Mode0;
+   PhyNum = L2piIWBGPacketHandlerBlock.PhyNum;
+   L2piRCPT.L2piRxMode.FbpNum = L2piIWBGPacketHandlerBlock.FbpNum;
+   status0 = L2piIWBGPacketHandlerBlock.Status0;
+   status1.SC = L2piIWBGPacketHandlerBlock.status1_SC;
+   status1.SO = L2piIWBGPacketHandlerBlock.status1_SO;
+
+   L2piPacketSize = L2piIWBGPacketHandlerBlock.PacketLength;
+
+   // restore ParserResult in BD gap
+   if(FEATURE_HW_CLASSIFIER && status0.PceResultAvailable)
+   {
+      GeneralParserResult =_data_mem(r0, L2piRCPT.DataPtr, sizeof(S_GeneralParserResult));
+      L2piRCPT.DataPtr += sizeof(S_GeneralParserResult);
+   }
+
+   /* restore tar0 to the begining of the packet */
+   tar0 = ETHERNET_FRAME_START_ADDR;
+   if(mode0.RcptMode.MBF)
+   {
+      TempBdPtr = L2piRCPT.BdPtr + M_BitToByte(S_MatrixBd.MatrixBdStatus.V);
+      $reg(L2piRCPT.L2piRxMode) = _mem(r0, TempBdPtr, 8, FBP_PARM_BUS);
+   }
+
+   L2piRCPT.L2piRxMode = mode0.RcptMode;
+
+   RcptPhyOffset = PhyNum * sizeof(S_L2piRCPT);
+
+} // B_L2pi_BackgroundDequeueInterface
+
+
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxIwgpInterface
+ *
+ * Description:
+ *
+ * Inputs:
+ *
+ * Outputs:
+ *
+ *****************************************************************************/
+inline func B_L2piRxIwgpInterface(in mode0,
+                                  in L2piIwKey,
+                                  PceWaEntry)
+{
+
+   if (mode0.Status2RxMode.STE)
+   {
+      /* Increment IW Good Packets counter */
+      L2piEntryOffset = PhyNum * sizeof(S_L2piRxStat);
+      L2piEntryOffset += M_BitToByte(S_L2piRxStat.RxIwGoodPackets);
+      _mem(r0, B_STATISTICS[status0][L2piEntryOffset], STATISTICS_BUS) += 1;
+   }
+
+   /***********************
+    Set common registers
+    ***********************/
+   PL.IwgpKey = L2piIwKey;
+   /* 1. copy Remove FCS to the IWGP field:
+         ((struct S_IwgpModeReg)mode0).IwgpGeneralFlags.RemoveFcs = mode0.Status2RxMode.RemoveFCS;
+      2. Clear IwgpGeneralFlags except RemoveFcs */
+   _bf(mode0, 0, 16) = _bf(mode0, 16, 16);
+   mode0 &= (M_Mask(S_IwgpModeReg.IwgpGeneralFlags.RemoveFcs) |
+             M_Mask(S_IwgpModeReg.ParserFlags) |
+             M_Mask(S_IwgpModeReg.U_Mode.BtBits) );
+
+   PL.IwgpDynamicPacketStart = &IWGP_HEADER_START_REG;
+   PL.IwgpPceLastRoundExtractionSize = 0;
+   PL.IwgpControl = 0;
+   PH.L2piStatus0 = status0;
+   /*statuso.EthOamGenerated = 0; No need to clear this bit, already clear, GSE bit in L2PI.
+   PL.PhyNum,PL.PacketLength, PL.PacketFirstBd are already set*/
+
+
+   if (FEATURE_G999 && status0.U_SerialInfo.WnetInfo.G999Enable)
+   {
+      if(PL.PacketLength < IWGP_PCEA_HEADER_READ_SIZE)
+         HeaderSizeForPceapt = PL.PacketLength;
+      else
+         HeaderSizeForPceapt = IWGP_PCEA_HEADER_READ_SIZE;
+
+      if(!status0.First)
+      {
+         PacketHeader = _data_mem(r0,
+                                  L2piRCPT.DataPtr,
+                                  HeaderSizeForPceapt);
+      }
+      L2piEntryOffset = G999Rspt.PceaptIndex * sizeof(S_PCEAPT);
+      G999Pceapt = _mem(r0,
+                        B_PCEA_PARAM_TABLE_NEXT_ROUND[L2piEntryOffset],
+                        IWGP_PCEAPT_READ_SIZE);
+      PceResult = _pce(r0,
+                       G999Pceapt,
+                       IWGP_HEADER_START_REG,
+                       HeaderSizeForPceapt);
+
+      PL.CurrentFiwtIndex = PceResult.ForwardingFiwtIdx;
+      mode1 = PceResult.PceResultMode;
+
+      goto Module_IwgpIngressCommon;
+   }
+   else
+   {
+      PL.CurrentFiwtIndex = PceResult.ForwardingFiwtIdx;
+
+      if(status0.First)
+      {
+#pragma reserve r15;
+         ((struct S_IwgpModeReg)mode0).ParserFlags = PceResult.ParserResult.Flags;
+         ((struct S_IwgpStatusReg)status0).PceIwSystemMode = PceResult.PceIwSystemInfo.PceIwSystemMode;
+         /*PL.InputPort, PL.PolicerCurrentColor, mode1 -  are already set */
+         goto Module_IwgpIngressShortPacket;
+      }
+      else
+      {
+#ifdef _MODULE_PCEA_CFU_WORKAROUND_ENABLE_   
+         if( PceWaEntry.UsePceWa)
+         {
+            status0.First = 1;
+         }
+#endif
+
+         mode1 = PceResult.PceResultMode;
+         goto Module_IwgpIngressCommon;
+      }
+   }
+} /* B_L2piRxIwgpInterface */
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxL2HostTermination
+ *
+ * Description:
+ *   This block handles Termination of Packets in L2. It Creates the Host BD
+ *   (Similar to the IW BD Creation) and put the BD in the Host Termination
+ *   HW Fifo according to the order of arrival.
+ *
+ * Inputs:
+ *     mode0
+ *     status0
+ *     PhyNum           - PhyNum for tables fetch
+ *     L2piIwKey        - Interworking Key
+ *     RcptPhyOffset    - Base RCPT offset
+ *     L2piRCPT         - RCPT
+ *     P_PacketLength      - Packet length to write in Host BD.
+ *
+ * Outputs:
+ *
+ *****************************************************************************/
+inline func B_L2piRxL2HostTermination(in mode0,
+                                      in status0,
+                                      in PhyNum,
+                                      in L2piIwKey,
+                                      in RcptPhyOffset,
+                                      in L2piRCPT,
+                                      in L2piPacketSize,
+                                      in L2piHostQueueTable)
+{
+
+   register                         tmpFifo          = r14;
+   register                         tmpBdPtr         = r15;
+   register                         tmpMode          = r16;
+   register                         tmpBDBT          = r17;
+
+   /* prepare first (or only) packets' BD */
+
+   InverseBDBTCopy($reg(L2piRCPT.L2piRxMode),
+                   tmpBDBT,
+                   mode0);
+   tmpBdPtr = L2piRCPT.BdPtr;
+   L2piRCPT.BdPtr = NULL_POINTER;
+   L2piRCPT.CurrentBdCnt = PL.PacketLength;
+   if(mode0.Status2RxMode.Enet) 
+      if(!mode0.Status2RxMode.RemoveFCS)
+         L2piRCPT.CurrentBdCnt -= FCS_SIZE;
+   
+   /* write first packets' BD to memory */
+   if(mode0.RcptMode.FMU)
+   {
+      _param_mem(r0,
+                 tmpBdPtr,
+                 sizeof(S_MatrixBd)) = L2piRCPT;
+   }
+   else
+   {
+#pragma outofline;
+      _mem(r0,
+           tmpBdPtr,
+           sizeof(S_MatrixBd),
+           FBP_PARM_BUS) = L2piRCPT;
+   }
+
+   L2piRCPT.BdPtr = tmpBdPtr;
+
+   L2piEntryOffset = RcptPhyOffset + M_BitToByte(S_L2piRCPT.StationMacLow);
+
+   /* The RCPT is always read to get HostTermHwFifo, as there as some flows in which it does not
+    *   reside in TRS (short packet,after iwbg) */
+   *(&L2piRCPT.StationMacLow) = _mem(r0,
+                                     B_RCPT[status0][L2piEntryOffset],
+                                     4,
+                                     EHP_CPT_BUS);
+
+
+   if(L2piRCPT.HostTermHwFifo) 
+   {
+      /* Load Host Hw Fifo */
+      L2piEntryOffset = RcptPhyOffset + M_BitToByte(S_L2piRCPT.HwFifoNum);
+      DPS_LOG("L2PI_RX_LOCKS",L2PI_HOST_TERM_HW_FIFO,
+              "Unlock Iw key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+
+      *(&L2piRCPT.HwFifoNum) = _mem(L2piIwKey,
+                                    B_RCPT[status0][L2piEntryOffset],
+                                    4,
+                                    _ORDER_UNLOCK | EHP_CPT_BUS);
+   
+      tmpFifo = L2piRCPT.HwFifoNum;
+
+      /* Send Descriptor to Host term HW Fifo */
+      _fifo(r0, tmpFifo, FBP_PARM_BUS) = L2piRCPT.BdPtr;
+   }
+   else
+   {
+      L2piEntryOffset = RcptPhyOffset + M_BitToByte(S_L2piRCPT.HostQueueTableIndex);
+      /* The RCPT is always read, as there as some flows in which it does not
+       *  reside in TRS (short packet,after iwbg), including the HostQueue
+         parameters */
+
+      *(&L2piRCPT.HostQueueTableIndex) = _mem(r0,
+                                              B_RCPT[status0][L2piEntryOffset],
+                                              L2PI_HOST_QUEUE_READ_SIZE,
+                                              EHP_CPT_BUS);
+
+
+      L2piEntryOffset = L2piRCPT.HostQueueTableIndex * sizeof(S_L2piHostQueueTable);
+      DPS_LOG("L2PI_RX_LOCKS",L2PI_READ_HOST_QUEUE_TABLE,
+              "Lock Iw key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+
+      L2piHostQueueTable = _mem(L2piIwKey,
+                                B_HostQueueTable[status0][L2piEntryOffset],
+                                sizeof(S_L2piHostQueueTable),
+                                HOST_QUEUE_BUS | _ORDER_LOCK );
+
+      if(L2piHostQueueTable.LinkListCounter < L2piHostQueueTable.MaxQueueSize)
+      {
+         /* store LastBD Pointerand BusType for later update */
+         tmpMode = ~L2piHostQueueTable.BDBT &
+            M_Mask(S_L2piRxMode.Status2RxMode.U_BTBits.BusTypes.BDBT);
+         tmpBdPtr = L2piHostQueueTable.LastBDPtr;
+
+         L2piHostQueueTable.LinkListCounter += 1;
+         L2piHostQueueTable.LastBDPtr = L2piRCPT.BdPtr;
+         tmpBDBT = L2piRCPT.L2piRxMode.BDBT;
+         L2piHostQueueTable.BDBT = tmpBDBT;
+
+         /* write updated HOST table */
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_WRITE_HOST_TABLE,
+                 "Unlock Iw key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+
+         _mem(L2piIwKey,
+              B_HostQueueTable[status0][L2piEntryOffset],
+              sizeof(S_L2piHostQueueTable),
+              HOST_QUEUE_BUS | _ORDER_UNLOCK) = L2piHostQueueTable;
+
+
+         mode0.Status2RxMode.U_BTBits.BusTypes.BDBT = 0;
+         if(mode0.RcptMode.FMU)
+         {
+            $reg(mode0.Status2RxMode.U_BTBits.BusTypes.BDBT) |= tmpMode;
+
+            /* concatenate New BD to host list (prevLast->NextBdPtr = NewBdPtr) */
+            _param_mem(r0,
+                       tmpBdPtr,
+                       sizeof(S_L2piHostQueueTable.LastBDPtr)) = L2piRCPT.BdPtr;
+         }
+         else
+         {
+#pragma outofline;
+            /* concatenate New BD to host list (prevLast->NextBdPtr = NewBdPtr) */
+            _mem(r0,
+                 tmpBdPtr,
+                 sizeof(S_L2piHostQueueTable.LastBDPtr),
+                 FBP_PARM_BUS) = L2piRCPT.BdPtr;
+         }
+
+
+      }
+      else
+      {
+         /* queue is full - discard packet and release IwKey */
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_HOST_QUEUE_FULL,
+                 "Unlock Iw key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+
+         _task_switch(L2piIwKey, _ORDER_UNLOCK);
+
+         M_L2piRxUpdateStatistics(r0,
+                                  status0,
+                                  ENABLE, // mode0.Status2RxMode.STE,
+                                  PhyNum,
+                                  M_BitToByte(S_L2piRxStat.RxHostFifoFull),
+                                  _HALF_WORD);
+
+         M_L2piRxMatrixChainRelease(mode0,
+                                    L2piRCPT,
+                                    TERMINATION);
+      }
+
+      L2piEntryOffset = RcptPhyOffset + M_BitToByte(S_L2piRCPT.StationMacLow);
+      $reg(L2piRCPT.IntM) = _mem(r0,
+                                 B_RCPT[status0][L2piEntryOffset],
+                                 L2PI_RCPT_INT_READ,
+                                 EHP_CPT_BUS);
+
+      _bf(status0, 24, 8) = _bf($reg(L2piRCPT.IntM), 24, 8);
+
+      if(L2piRCPT.IntM)
+      {
+         M_Interrupt(status1,
+                     PROTOCOL_TYPE_L2PI,
+                     RxE,
+                     PhyNum,
+                     NULL_CID);
+      }
+   }
+
+   M_L2piRxUpdateStatistics(r0,
+                            status0,
+                            mode0.Status2RxMode.STE,
+                            PhyNum,
+                            M_BitToByte(S_L2piRxStat.RxHostGoodPackets),
+                            _HALF_WORD | _TERMINATE);
+
+   _task_switch(r0, _TERMINATE);
+
+
+} /* B_L2piRxL2HostTermination */
+
+
+/*****************************************************************************
+ * Macro Name: B_L2piRxSerialErrorHandling
+ *
+ * Description:
+ *   This block handles Termination of Packets in L2. It Creates the Host BD
+ *   (Similar to the IW BD Creation) and put the BD in the Host Termination
+ *   HW Fifo according to the order of arrival.
+ *
+ * Inputs:
+ *     mode0
+ *     status0
+ *     status1
+ *     PhyNum           - PhyNum for tables fetch
+ *     L2piRcptKey      - RCPT key
+ *     L2piDataKey      - DATA key
+ *     L2piIwKey        - Interworking key
+ *
+ * Outputs:
+ *     RcptPhyOffset    - Base RCPT offset
+ *     L2piRCPT         - RCPT
+ *
+ *****************************************************************************/
+inline func B_L2piRxSerialErrorHandling(in mode0,
+                                        in status0,
+                                        in PhyNum,
+                                        inout L2piRcptKey,
+                                        inout L2piDataKey,
+                                        inout L2piIwKey,
+                                        out L2piRCPT,
+                                        out RcptPhyOffset)
+{
+
+
+   /*    in case of GSE, RCPT should be read.
+         The possible bits combinations are:
+         F | L | MD |
+         ---|---|----|----------------------------------------------
+         0 | 0 |  0 | Discard packet, update WFF bit (RD + WR RCPT)
+         0 | 0 |  1 | Unavailable case
+         0 | 1 |  0 | Discard packet (RD RCPT ONLY)
+         0 | 1 |  1 | Unavailable case
+         1 | 0 |  0 | Discard packet, update WFF bit (WR RCPT)
+         1 | 0 |  1 | Middle drop. Discard previous packet,
+           |   |    | and start receive new one (RD RCPT ->
+           |   |    | with _ORDER_LOCK for later update)
+         1 | 1 |  0 | Discard current packet - no RD nor WR
+         1 | 1 |  1 | Middle drop. Discard previous packet,
+         and receive new one (short)
+         RD RCPT with _ORDER_UNLOCK (no need
+         for later update                      */
+
+   /* get the relevant needed keys */
+   M_L2piRxOrderRcptDataIwMk2Key(status0,
+                                 status1,
+                                 status3copy.MD,
+                                 PhyNum,
+                                 L2piRcptKey,
+                                 L2piDataKey,
+                                 L2piIwKey,
+                                 MIDDLE_DROP_CHECK);
+
+   RcptPhyOffset = PhyNum * sizeof(S_L2piRCPT);
+
+//   if(mode0.Status2RxMode.STE)
+   /* Bad statistics must always be updated */
+   {
+      if(mode0.Status2RxMode.WNet)
+      {
+         /* WNet Serial Erorr case */
+         M_L2piRxUpdateStatistics(r0,
+                                  status0,
+                                  status0.U_SerialInfo.WnetInfo.OV,
+                                  PhyNum,
+                                  M_BitToByte(S_L2piRxStat.U_Serial.WnetStat.WnetRxOverrun),
+                                  _HALF_WORD);
+      }
+      else
+      {
+         /* UPI Global Serial Error (GSE) case */
+         M_L2piRxUpdateStatistics(r0,
+                                  status0,
+                                  status0.RxErr,
+                                  PhyNum,
+                                  M_BitToByte(S_L2piRxStat.U_Serial.UpiStat.UpiRxRxErr),
+                                  _HALF_WORD);
+         M_L2piRxUpdateStatistics(r0,
+                                  status0,
+                                  status0.U_SerialInfo.UpiInfo.StmErr,
+                                  PhyNum,
+                                  M_BitToByte(S_L2piRxStat.U_Serial.UpiStat.UpiRxStmErr),
+                                  _HALF_WORD);
+         M_L2piRxUpdateStatistics(r0,
+                                  status0,
+                                  status0.U_SerialInfo.UpiInfo.PE,
+                                  PhyNum,
+                                  M_BitToByte(S_L2piRxStat.U_Serial.UpiStat.UpiRxPosParityErr),
+                                  _HALF_WORD);
+      }
+   }
+
+
+   if(!status0.First)
+   {
+      /* in case not FIRST, RCPT is expected to be available in the DROP routine */
+      if(status0.Last)
+      {
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_SERIAL_ERROR_LAST,
+                 "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+         L2piRCPT = _mem(L2piRcptKey,
+                         B_RCPT[status0][RcptPhyOffset],
+                         L2PI_RCPT_MIDDLE_READ_SIZE,
+                         _ORDER_UNLOCK | EHP_CPT_BUS);
+
+         if(L2piRCPT.L2piRxMode.WFF)
+         {
+            /* relevant case of WFF and GSE turned-on could be only at LAST without FIRST case.
+               At this case there is need to terminate because the packet has been already dropped
+               (at the thread that has turned-on the WFF bit). */
+
+            _task_switch(L2piIwKey, _ORDER_UNLOCK);
+            DPS_LOG("L2PI_RX_LOCKS",L2PI_SERIAL_ERROR_LAST_WFF,
+                    "Unlock IW key:", L2piIwKey, DPS_SW_LOG_4_BYTES,
+                    "Unlock Data key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+            _task_switch(L2piDataKey, _ORDER_UNLOCK | _TERMINATE);
+         }
+      }
+      else
+      {
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_SERIAL_ERROR,
+                 "Lock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+         L2piRCPT = _mem(L2piRcptKey,
+                         B_RCPT[status0][RcptPhyOffset],
+                         L2PI_RCPT_MIDDLE_READ_SIZE,
+                         _ORDER_LOCK | EHP_CPT_BUS);
+      }
+
+      mode0.RcptMode = L2piRCPT.L2piRxMode;
+   }
+
+} /* B_L2piRxSerialErrorHandling */
+
+
+/******************************************************************************
+ * Macro Name: B_L2piRxDiscardPacket
+ *
+ * Description:
+ *   This block handle packets which should be dropped, return BD to FBP and release
+ *   the keys.
+ * This Macro is acheived in the following cases:
+ * GSE (Global Serial Error) bit is set:
+ *            `MD` (Middle Drop) bit is set:
+ *                In this case, `First` must be set, to indicate the start
+ *                of a new packet. The previous packet (never ended packet)
+ *                should be discard, without releasing the relevant keys,
+ *                and then jump back to receive the new packet.
+ *            `MD` bit is clreaed:
+ *                In this case, `Last` bit must be set, current thread
+ *                contains invalid data. The ended packet should be discarded
+ *                releasing all keys and terminating thread.
+ * GSE bit is cleared:
+ *            Packet should be discarded due to FBP error (FBP is empty)
+ *            or packet size exceeded MaxSdu value. These cases can occure
+ *            with either `First` or `Last` (or both) bits set. The ended
+ *            packet should be discarded releasing all keys and terminating
+ *            thread.
+ *
+ * All cases should be treated equally, besides the case where `MD` is set.
+ * The `MD` bit would never be set if GSE is cleared.
+ *
+ * AVIALABE KEYS:
+ *
+ *           |    !FIRST     |     FIRST
+ *           |  !L   |   L   |  !L   |   L
+ * ----------|-------|-------|-------|--------
+ *           |       |       |       |
+ *  RCPT Key |   L   |   U   |   L   | NA(L)
+ *           |       |       |       |
+ *  DATA Key |   F   |   F   |   F   | NA(F)
+ *           |       |       |       |
+ *  IW   Key |  NA   |   F   |  NA   |   F
+ *           |       |       |       |
+ *
+ *  or in an other view:
+ *
+ *           |    !LAST      |     LAST
+ *           |  !F   |   F   |  !F   |   F
+ * ----------|-------|-------|-------|--------
+ *           |       |       |       |
+ *  RCPT Key |   L   |   L   |   U   | NA(L)
+ *           |       |       |       |
+ *  DATA Key |   F   |   F   |   F   | NA(F)
+ *           |       |       |       |
+ *  IW   Key |  NA   |  NA   |   F   |   F
+ *           |       |       |       |
+ *
+ *
+ *  F = Free(fetched but not used yet)
+ *  L = Locked  ;  U = UnLocked
+ *  NA = Not Available
+ *  () = Middle drop case (if different)
+ *
+ *
+ * Inputs:
+ *     mode0
+ *     status0
+ *     P_MiddleDrop       - Bit indicating weather it is a CFU Middle Drop case
+ *     RcptPhyOffset    - Base RCPT offset
+ *     L2piRcptKey      - RCPT key
+ *     L2piDataKey      - DATA key
+ *     L2piIwKey        - Interworking key
+ *     L2piRCPT         - RCPT
+ *
+ * Outputs:
+ *     L2piRCPT         - RCPT (updated)
+ *
+ *****************************************************************************/
+inline func B_L2piRxDiscardPacket(in mode0,
+                                  in status0,
+                                  in P_MiddleDrop,
+                                  in RcptPhyOffset,
+                                  in L2piRcptKey,
+                                  in L2piDataKey,
+                                  in L2piIwKey,
+                                  inout L2piRCPT)
+{
+   register                         accFifoNum       =  r4;
+   register                         tmpBdPtr         = r13;
+   register                         tmpBDBT          = r14;
+
+
+   if((!P_MiddleDrop) ||
+      ((P_MiddleDrop) && (status0.U_SerialInfo.CommonInfo.PD)))
+   {
+      L2piEntryOffset = RcptPhyOffset + L2PI_DISCARD_OFFSET;
+      if(!status0.Last)
+      {
+         /* set the WFF bit in RCPT for later threads and release RCPT key */
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_DISCARD_PACKET1,
+                 "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+         
+         _mem(L2piRcptKey,
+              B_RCPT[status0][L2piEntryOffset],
+              _ORDER_UNLOCK | _HIGH_WORD | EHP_CPT_BUS) |= M_Mask(S_L2piRCPT.L2piRxMode.WFF);
+      }
+      else
+      {
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_DISCARD_PACKET2,
+                 "Unlock IW key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+
+         _task_switch(L2piIwKey, _ORDER_UNLOCK);
+      }
+      
+      L2piEntryOffset = RcptPhyOffset + L2PI_RCPT_FIRST_BD_PARAMS_OFFSET;
+      if(!status0.First)
+      {
+         /* most of RCPT already available in TRS, only the FirstBdData missing
+            even if not really available, the task switch is need in order to
+            release the DATA KEY */
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_DISCARD_PACKET3,
+                 "Unlock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+
+         L2piRCPT.FirstBdPtr = _mem(L2piDataKey,
+                                    B_RCPT[status0][L2piEntryOffset],
+                                    L2PI_RCPT_FIRST_BD_PARAMS_SIZE,
+                                    _ORDER_UNLOCK | EHP_CPT_BUS);
+      }
+      else /* first */
+      {
+         if(!status0.Last)
+         {
+            DPS_LOG("L2PI_RX_LOCKS",L2PI_DISCARD_PACKET4,
+                    "Unlock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES);
+
+            _task_switch(L2piDataKey, _ORDER_UNLOCK);
+         }
+         else if (P_MiddleDrop)
+         {
+            DPS_LOG("L2PI_RX_LOCKS",L2PI_DISCARD_PACKET5,
+                    "Unlock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES,
+                    "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+            L2piRCPT = _mem(L2piRcptKey,
+                            B_RCPT[status0][RcptPhyOffset],
+                            sizeof(S_L2piRCPT),
+                            _ORDER_UNLOCK | EHP_CPT_BUS);
+            _task_switch(L2piDataKey, _ORDER_UNLOCK);
+         }
+      }
+
+   }
+   else
+   {
+      L2piEntryOffset = RcptPhyOffset + L2PI_DISCARD_OFFSET;
+      if(status0.First)
+      {
+         if(status0.Last)
+         {
+            DPS_LOG("L2PI_RX_LOCKS",L2PI_DISCARD_PACKET6,
+                    "Unlock Data key", L2piDataKey, DPS_SW_LOG_4_BYTES,
+                    "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+            L2piRCPT = _mem(L2piRcptKey,
+                            B_RCPT[status0][RcptPhyOffset],
+                            sizeof(S_L2piRCPT),
+                            _ORDER_UNLOCK | EHP_CPT_BUS);
+            _task_switch(L2piDataKey, _ORDER_UNLOCK);
+         }
+         else
+         {
+            DPS_LOG("L2PI_RX_LOCKS",L2PI_DISCARD_PACKET7,
+                    "Unlock Rcpt key", L2piRcptKey, DPS_SW_LOG_4_BYTES);
+
+            L2piRCPT = _mem(L2piRcptKey,
+                            B_RCPT[status0][RcptPhyOffset],
+                            sizeof(S_L2piRCPT),
+                            _ORDER_LOCK | EHP_CPT_BUS);
+         }
+
+         mode0.RcptMode = L2piRCPT.L2piRxMode;
+      }
+
+   }
+
+   if((!status0.First) ||
+      ((status0.First) && (P_MiddleDrop)))
+   {
+      if (!L2piRCPT.L2piRxMode.WFF)
+      {
+         InverseBDBTCopy($reg(L2piRCPT.L2piRxMode),
+                         tmpBDBT,
+                         mode0);
+         /* buffers should be dismissed */
+         if(mode0.RcptMode.MBF)
+         {
+            /* RCPT currently holds the last available BD. This BD should be
+               written to point for NULL_POINTER for proper chain release. */
+            tmpBdPtr = L2piRCPT.BdPtr;
+            L2piRCPT.BdPtr = NULL_POINTER;
+            /* mode0 holds the current BD's BDBT bits */
+            if(mode0.RcptMode.FMU)
+            {
+               _param_mem(r0,
+                          tmpBdPtr,
+                          sizeof(L2piRCPT.BdPtr)) = L2piRCPT;
+            }
+            else
+            {
+#pragma outofline;
+               _mem(r0,
+                    tmpBdPtr,
+                    sizeof(L2piRCPT.BdPtr),
+                    FBP_PARM_BUS) = L2piRCPT;
+            }
+            
+            M_L2piRxMatrixChainRelease(mode0,
+                                       L2piRCPT.FirstBdPtr,
+                                       NO_TERMINATION);
+         }
+         else
+         {
+            /* single buffer case */
+            accFifoNum = M_FmuFbpNum(((struct S_MatrixBd)L2piRCPT));
+            if(mode0.RcptMode.FMU)
+            {
+               FMU_FBP_PUT("BD_CORRUPTION_L2PI",
+                           BD_CORRUPTION_L2PI_RX_MIDDLE_DROP_FMU_BD,
+                           L2piRCPT.BdPtr,
+                           r0,
+                           accFifoNum,
+                           _FBP);
+            }
+            else
+            {
+               accFifoNum &= 0xF;
+               WMM_FBP_PUT("BD_CORRUPTION_L2PI",
+                           BD_CORRUPTION_L2PI_RX_MIDDLE_DROP_WMM_BD,
+                           L2piRCPT.BdPtr,
+                           r0,
+                           accFifoNum,
+                           FBP_PARM_BUS);
+            }
+         }
+      }
+   }
+   
+   L2piEntryOffset = RcptPhyOffset + M_BitToByte(S_L2piRCPT.StationMacLow);
+   if(status0.U_SerialInfo.CommonInfo.PD)
+   {
+      /* Port Disable case */
+      $reg(L2piRCPT.IntM) = _mem(r0,
+                                 B_RCPT[status0][L2piEntryOffset],
+                                 L2PI_RCPT_INT_READ,
+                                 EHP_CPT_BUS);
+
+      _bf(status0, 24, 8) = _bf($reg(L2piRCPT.IntM), 24, 8);
+
+      if(L2piRCPT.IntM)
+      {
+         M_Interrupt(status1,
+                     PROTOCOL_TYPE_L2PI,
+                     RxPD,
+                     PhyNum,
+                     NULL_CID);
+      }
+   }
+   else if(P_MiddleDrop)
+   {
+      /* Note: MiddleDrop only appears with FIRST indication (of the new packet) */
+
+      if(status0.Last)
+      {
+         /* There is need to check if the new packet has a serial error. 
+            Note: the GSE indication at this thread is relevant for the previous packet that has been
+            discarded by "middle-drop" case. */
+         DPS_LOG("L2PI_RX_LOCKS",L2PI_DISCARD_PACKET8,
+                 "Unlock IW key", L2piIwKey, DPS_SW_LOG_4_BYTES);
+         
+         if(mode0.Status2RxMode.WNet)
+         {
+            /* Check if there is WNet Serial Error case */
+            if (status0 & L2PI_WINNET_STATUS0_ERROR_MASK)
+               _task_switch(L2piIwKey, _ORDER_UNLOCK | _TERMINATE); 
+         }
+         else
+         {
+            /* Check if there is UPI Serial Error case */
+            if (status0 & L2PI_UPI_STATUS0_ERROR_MASK)
+               _task_switch(L2piIwKey, _ORDER_UNLOCK | _TERMINATE);
+         }
+      }
+      
+      goto L_L2piRx_StartNewPacket;
+   }
+
+   _task_switch(r0, _TERMINATE);
+
+
+} /* B_L2piRxDiscardPacket */
+
+#ifdef _MODULE_EFMBOND_L2PI_ENABLE_ 
+/******************************************************************************
+ * Macro Name: B_L2piEFMRx
+ *
+ * Description:
+ *   This block handle packetsfor the EFM Bonded links/streams
+ *
+ * This Macro is acheived in the following cases:
+ *  a. EFMBEn bit is set for the Status2RxMode register for non G999 links or
+ *  b. EFMBEn bit is set for the RSPT for G999 links
+ *
+ * All cases should be treated equally,
+ *
+ * Inputs: TODO
+ *     status0
+ *     L2piEntryOffset  - Bit indicating weather it is a CFU Middle Drop case
+ *     RcptPhyOffset    - Base RCPT offset
+ *     L2piRcptKey      - RCPT key
+ *     PhyNum           - PhyNum for accessing tables
+ *     L2piRxPacket     - Packet data
+ *     L2piIwKey        - Interworking key
+ *     FetchedBd        - Packet BD
+ *     PL.PacketLength   - Packet size
+ *
+ * Outputs:
+ *     FetchedBd        - Packet BD (updated)
+ *     PL.PacketLength   - Packet size (updated)
+ *****************************************************************************/
+inline func B_L2piEFMRx(in status0,
+                        in L2piEntryOffset,
+                        in RcptPhyOffset,
+                        in L2piRcptKey,
+                        in PhyNum,
+                        in L2piRxPacket,
+                        in L2piIwKey,
+                        inout FetchedBd,
+                        inout L2piPacketSize)
+{
+#pragma reserve r18;
+   register                               RxRequestAddr = r68;
+   register struct S_EFM_BONDRxRequest    RxRequest     = r68;
+   register                               ReqPayloadPtr = r19;
+   register                               ReqPtr        = r10;
+   register                               TmpPtr        = r11;
+   register struct S_BaseTag              EFM_BONDRbntKey= TagKey1;
+   register                               RbntOffset    = r29;
+   register struct S_EFM_BONDReasmMode0   mode0         = MODE_REG;
+   register                               mode1         = MODE1_REG;  
+   register                               BundleId      = r42;
+
+   register struct S_RCPTEFMBLinkInfo     LinkInfo      = r31;
+   register                               accFifoNum    = r4;
+
+   /* Read the Link info from the RCPT */
+   L2piEntryOffset = RcptPhyOffset + RCPT_EFM_LINK_INFO_OFFSET;
+   LinkInfo = _mem(r0,
+                   B_RCPT[status0][L2piEntryOffset],
+                   sizeof(S_RCPTEFMBLinkInfo),
+                   EHP_CPT_BUS);
+
+   if(!LinkInfo.EFMRxLinkEn)
+   {
+      // TODO Drop the packet, update RCPT
+#if 1
+       /* single buffer case */
+         accFifoNum = M_FmuFbpNum(((struct S_MatrixBd)L2piRCPT));
+
+         accFifoNum &= 0xF;
+         WMM_FBP_PUT("BD_CORRUPTION_L2PI",
+                     BD_CORRUPTION_L2PI_EFM_RX_LINK_EN_DROP_WMM_BD,
+                     L2piRCPT.BdPtr,
+                     L2piIwKey,
+                     accFifoNum,
+                     _ORDER_UNLOCK | FBP_PARM_BUS | _TERMINATE);
+
+#else
+      goto L_L2piRx_DiscardPacket;
+#endif
+   }
+
+   
+   /* Modify the length to extract header */
+   PL.PacketLength = PL.PacketLength - LinkInfo.EFMBHdrLen - EFM_HDR_LEN;
+
+   FetchedBd.TotalLength = PL.PacketLength;
+
+   if(status0.Last)
+   {
+      register Temp = r37;
+      Temp = FetchedBd.DataPtr+LinkInfo.EFMBHdrLen;
+      L2piRxPacket = _data_mem(r0,Temp,8,NO_ATTRIBUTE);
+   }
+
+   /* Ignore the link specific header */
+   FetchedBd.DataPtr += LinkInfo.EFMBHdrLen + 2;
+
+   /* Create the EFM Rx Request */
+   ReqPayloadPtr = (FetchedBd.DataPtr - (EFM_BOND_RX_REQUEST_OFFSET))  & (0xFFFFFFFC); //Alignment
+
+   //RxRequestAddr = FetchedBd;
+   //RxRequest.ReqAddress    = FetchedBd;
+   RxRequest.FragSize      = FetchedBd.TotalLength;
+   RxRequest.BdPtr         = FetchedBd;
+   RxRequest.CRC           = 0;     /*TODO: CRC validation support */
+   RxRequest.FirstDataPtr  = FetchedBd.DataPtr ;
+   RxRequest.BundleId      = LinkInfo.EFMBGrpId;
+   RxRequest.LinkId        = LinkInfo.EFMBLinkId;
+   RxRequest.PhyNum        = PhyNum;
+   RxRequest.PhyType       = EFM_BOND_TYPE_ENET;
+   /* Copy the EFM Hdr to the Rx Req */
+   tar0 = &L2piRxPacket;
+   tar0 += LinkInfo.EFMBHdrLen;
+   tar1 = &(RxRequest.SeqNum);
+   _bf(*tar1,0,16) = _bf(*tar0,0,16);
+
+   ReqPtr = ReqPayloadPtr;// - EFM_BOND_PTR_SIZE;
+
+   /* Store the BD address to update contents later */
+   TmpPtr = FetchedBd;
+   FetchedBd.NextBdPtr = 0x0;
+
+   /*  Update the BD */
+   _mem(r0,TmpPtr,16,FBP_PARM_BUS) = FetchedBd;
+
+      RxRequestAddr = ReqPtr;
+      RxRequest.ReqAddress = RxRequestAddr;
+#if 0
+   if(LinkInfo.EFMReasmBgEn) // Ressembly BG mode support
+   {
+      // Copy the EFM Rx req
+      _mem(r0,ReqPayloadPtr,sizeof(S_EFM_BONDRxRequest),FBP_DATA_BUS) = RxRequest;
+
+      // Enqueue request and terminate
+      _fifo(L2piIwKey,EFM_BOND_RX_REQ_FIFO ,EFM_BOND_RX_FIFO_BUS|_ORDER_UNLOCK | _TERMINATE) = ReqPtr;
+
+   }
+   else     // Ressembly Non-BG mode support
+#endif
+   {
+      mode1 = 0;
+      mode0 = 0;
+      mode0 |= M_Mask(S_EFM_BONDReasmMode0.BGDis);
+
+      BundleId = LinkInfo.EFMBGrpId;
+      EFM_BONDRbntKey = ((EFM_BOND_RBNT_BASE <<8) | M_Mask(S_BaseTag.BaseMode));// insert base nuber and mode  
+      RbntOffset =  BundleId* sizeof(S_EFM_BONDRbnt);
+
+      // generate key according to the bundle ID
+      EFM_BONDRbntKey.Offset = RbntOffset;
+      _get_key(L2piIwKey,EFM_BONDRbntKey,1,_ORDER_UNLOCK);
+      //_get_key(L2piRcptKey,EFM_BONDRbntKey,1);
+
+     if ( status2.Status2RxMode.STE )
+     {
+        M_EFMBond_UpdateRxByteStats2(EFM_BOND_RX_BYTES, PL.PacketLength, 0,PhyNum);
+        M_EFMBond_UpdateRxByteStats2(EFM_BOND_RX_FRAGS, 1, 0,PhyNum);
+     }
+
+      _mem(r0,RxRequestAddr,EFM_BOND_RX_REQ_WRITE_SIZE+EFM_BOND_PTR_SIZE,
+           FBP_DATA_BUS) = RxRequest;  
+
+      goto L_EFM_BOND_Reassembly_NoFifo;
+   }
+
+} /* B_L2piEFMRx */
+#endif
+
+/*****************************************************************************
+ * Module: L2PI Receiver
+ *
+ * Description:
+ *   This code handles the L2PI Rx Packet Buffering and Forwarding.
+ *   DPS can support either various packet sizes from serial according
+ *   to size recieved in status1.
+ *
+ * Input interfaces:
+ *   L_L2pi_Rx_Start - L2PI Rx Entry point
+ *
+ * Output interfaces:
+ *
+ *****************************************************************************/
+
+section L2pi_Rx
+{
+
+   register struct S_L2piRxMode            mode0                 = MODE_REG;
+   register struct S_L2piCommonRxMode      ComMode0              = MODE_REG;
+   register struct S_RxMode1               mode1                 = MODE1_REG;
+   register struct S_L2piRxSerialStatus0   status0               = STATUS0_REG;
+   register struct S_L2piRxSerialStatus1   status1               = STATUS1_REG;
+   register struct S_L2piRxSerialStatus2   status2               = STATUS2_REG;
+   register struct S_CfuRxStatus3          status3               = STATUS3_REG;
+
+   register                                L2piRcptKey           = PacketRcptKey;
+   register                                L2piDataKey           = PacketDataKey;
+   register                                L2piIwKey             = PacketIwMasterKey2;
+   register                                L2piRsptKey           = PacketTagKey5;
+   register                                L2piG999ReservedRcptKey = PacketTagKey6; /* Stores the key
+                                                                                       to use in RCPT lock
+                                                                                       when using G999 */
+
+
+   register                                CfuRxPortNum          = r91; // cfu port number 
+   register struct S_PceWaEntry            PceWaEntry            = r91; // the same register as cfu rx port number, used for long packets only
+
+   register                                FBPNum                = r21;
+//   register                                L2piPacketSize        = r22; // IWGP_PACKET_LENGTH_REG
+
+   register                                PhyNum                = IWGP_PHY_NUM_REG;//was r23;
+   register                                RcptPhyOffset         = r24;
+   register                                HeaderSizeForPceapt   = r24;
+   register                                L2piEntryOffset       = r26;
+   register struct S_L2piRCPT              L2piRCPT              = L2PI_FIWT_REG;  /* 12 registers reserved for RCPT data */
+   register struct S_MatrixBd              FetchedBd             = IWGP_PACKET_BD_REG;
+
+   register                                L2piIwBufferGap       = r43; //uses in several macros
+   register struct S_MatrixBd              L2piRxBd              = r30; //long packet
+   register struct S_CfuRxStatus3          status3copy           = r44;
+   register                                FbpCounterCopy        = r45;
+
+   register struct S_L2piHostQueueTable    L2piHostQueueTable    = r92;
+
+   register                                L2piRxPacket          = r96;
+
+   /*  Global variables (used later on and expected to be in the following registers  */
+
+   register                                L2ParsingSize         = r25;   /*local reg*/
+   register                                EthernetType          = r29;  //Ethernet Type (for IW usage) /*local reg IWCP interface*/
+   register                                Vid                   = r31;  //VLAN Identifier /*local reg IWCP interface*/
+
+   register struct S_PCEAPT                G999Pceapt            = r80; /* r80, r81, r82, r83, r84, r85, r86, r87 */
+   register struct S_G999Rspt              G999Rspt              = r92; /* r92, r93 */
+   register struct S_L2IWT                 L2IWT                 = r92;  //Layer 2 Interworking Table(16 bytes)
+   register struct S_IWExControlWord       IWExControlWord       = r92;  //IW External Ctrl Word(16 bytes)
+   register struct S_IWInControlWord       IWInControlWord       = r80;  //IW Internal Ctrl Word(16 bytes)
+   register                                IwPacketLength        = r81;  //Packet Length(4 bytes)
+   register union  U_IWExtentionWord       IWExtentionWord       = r88;  // IW External Ctrl Word Extention for GIGE (16 bytes)
+
+   /* Temp register for timestamp. Can be overwrite after B_L2piRxFirstDataUnitProc */
+   /* Saved directly in the GAP */
+   register                                TempInputTimeStamp    = r87;
+   register                                TimestampSize         = r87;  /* used after TempInputTimeStamp is writen in "first" */
+
+   // This provides a stack of 12 words from r35 to r47, used in IwgpHandling
+   register                               call_stack             = r39; // first (highest) word of stack
+   register                               stack_limit            = r27; // last (lowest) word of stack
+
+  L_L2pi_Rx_G999_Start:
+   if (FEATURE_G999)
+   {
+      status0.U_SerialInfo.WnetInfo.G999Enable = 1;
+      B_G999InterfaceRx(status0,
+                        mode0,
+                        status2,
+                        L2piRxPacket);
+      
+      /* after the removal of the G999 header, the frame might be
+       * short, but it is acceptable. */
+      status0.U_SerialInfo.CommonInfo.DSF = 0;
+   }
+
+   goto L_L2pi_Rx_Start;
+
+
+  L_Rx_AtmOverPos_start:
+
+#ifdef _MODULE_GPON_MAC_ENABLE_
+
+   if (status2 & 0x00000200)
+   {
+      status0 |= 0x00800000;
+      goto AddresLookUp_Start;
+   }
+
+#endif
+
+#ifdef _MODULE_PCEA_CFU_WORKAROUND_ENABLE_   
+  L_L2pi_Rx_Start_Pce_Workaround:
+   
+#ifdef _MODULE_L2PI_TIMESTAMP_ENABLE_
+   /* Take Wingine timestamp (arrival time). saved directly to its location in the GAP. */
+   TempInputTimeStamp = _time_stamp_2();
+   //copy the HW TS bit and TS size from status2 to status0
+   /*In order to save clocks these bits clearing (TimestampHW & TimstampSize) should be removed
+     after checking that the WNC2 bits are cleared by WDDI */
+   status0.TimestampHW = 0;
+   if(status2.Status2RxMode.U_BTBits.Volatile.HwTimeStamp)
+   {
+      status0.TimestampHW  = 1;
+      status0.TimstampSize = 0;
+      if (status2.TimestampSize)
+         status0.TimstampSize = 1;
+   }
+
+#endif
+
+   status3copy = status3;
+
+   PhyNum = status2.PhyNum;
+   FBPNum = status2.FBPNum;
+
+   if(status2.Status2RxMode.U_BTBits.Volatile.PceResultAvailable)
+   {
+      if(status0.Last)
+      {
+         if(!status0.First)
+         {
+#pragma outofline;
+            PceWaEntry.CfuPortNum = status3.CfuPort;
+            PceWaEntry.UsePceWa   = 1;
+         }
+         else
+         {
+            if(status0.GSE)
+            {
+               if(mode0.Status2RxMode.WNet)
+               {
+                  goto L_L2piRx_SerialError;
+               }
+               else
+               {
+                  if(status0.U_SerialInfo.UpiInfo.PEI && status0.U_SerialInfo.UpiInfo.PE)
+                  {
+                    M_UpiParityErrorCheckIgnoreUpdateGSE(status0,
+                                                         status0.GSE,
+                                                         status0.U_SerialInfo.UpiInfo.PE,
+                                                         L2PI_RX_SERIAL_STATUS0_GSE_NON_PE_ERRORS);
+
+                     if(status0.GSE)
+                        goto L_L2piRx_SerialError;
+                  }
+                  else
+                     goto L_L2piRx_SerialError;
+               }
+            }
+            
+            PL.PacketLength = status1.Size;
+            /* get the CFU RX port number */
+            CfuRxPortNum = status3.CfuPort;
+            M_L2piRxSendPacketToPceaWorkAround(CfuRxPortNum,
+                                               PL.PacketLength,
+                                               PceResult);
+         }
+      }
+
+      status0.PceResultAvailable = 1;
+   }
+   goto L_L2pi_Rx_Common_Start;
+#endif
+
+  L_L2pi_Rx_PCE_Start:
+
+   if (FEATURE_HW_CLASSIFIER) {
+      status0.PceResultAvailable = 1;
+      acc = 0;
+      PceResult.PceResultMode = acc;
+   }
+
+  L_L2pi_Rx_Start:
+   if (FEATURE_L2PI_TIMESTAMP) {
+   /* Take Wingine timestamp (arrival time). saved directly to its location in the GAP. */
+      TempInputTimeStamp = _time_stamp_2();
+      //copy the HW TS bit and TS size from status2 to status0
+      /*In order to save clocks these bits clearing (TimestampHW & TimstampSize) should be removed
+        after checking that the WNC2 bits are cleared by WDDI */
+      status0.TimestampHW = 0;
+      if(status2.Status2RxMode.U_BTBits.Volatile.HwTimeStamp)
+      {
+         status0.TimestampHW  = 1;
+         status0.TimstampSize = 0;
+         if (status2.TimestampSize)
+            status0.TimstampSize = 1;
+      }
+
+   }
+
+   status3copy = status3;
+   
+   DPS_LOG("L2PI_RX_FLOW_DATA_UNIT", L2PI_RX_START,
+           "Status0", status0, DPS_SW_LOG_4_BYTES,
+           "Status1", status1, DPS_SW_LOG_4_BYTES,
+           "Status2, Status3", status2, DPS_SW_LOG_8_BYTES /* status2 and status3 */);
+
+   if(status2.Status2RxMode.U_BTBits.Volatile.PceResultAvailable)
+   {
+      status0.PceResultAvailable = 1;
+      
+#ifdef _MODULE_PCEA_CFU_WORKAROUND_ENABLE_   
+      PceWaEntry = 0;
+#endif
+   }
+
+ 
+   PhyNum = status2.PhyNum;
+   FBPNum = status2.FBPNum;
+
+  L_L2pi_Rx_Common_Start:
+
+   B_DPS_LOG_TESTING_SCENARIOS_PREPERATION();
+
+//  DPS_BOUNDARY_CHECK("DEBUG_BOUNDARY_CHECK",DEBUG_BOUNDARY_CHECK_EVENT1,0xbaaaaaaa,0xaaaaaaaa,0xbbbbbbbb);
+  //DPS_BOUNDARY_CHECK("DEBUG_BOUNDARY_CHECK",DEBUG_BOUNDARY_CHECK_EVENT1,0,0xaaaaaaaa,0xbbbbbbbb);
+
+   if(status0.U_SerialInfo.WnetInfo.Pause)
+   {
+#pragma outofline;
+      /* NOTE: in case of G999 this bit is always cleared. */
+      /* Pause frames should be discarded */
+      _task_switch(status1, _ORDER_UNLOCK | _TERMINATE);
+   }
+
+   //DPS_BOUNDARY_CHECK("DEBUG_BOUNDARY_CHECK",DEBUG_BOUNDARY_CHECK_EVENT2,0xaaaaaaaa);
+
+   DPS_LOG("L2PI_RX_FLOW_DATA_UNIT", L2PI_RX_START_PACKET,
+           "Packet header", L2piRxPacket, DPS_SW_LOG_64_BYTES);
+
+   B_DPS_LOG_TESTING_SCENARIOS();
+
+   /* decode IW buffer gap - 00 - 64bytes, 01 - 128bytes, 10 - 192bytes, 11 - 256bytes */
+   L2piIwBufferGap = status2 & M_Mask(S_L2piRxSerialStatus2.Status2RxMode.U_BTBits.Volatile.U_UP.IWBufferGap);
+   L2piIwBufferGap >>= L2PI_IW_BUFFER_GAP_SHIFT;
+   L2piIwBufferGap += L2PI_IW_BUFFER_GAP_INT_VAL;
+
+   //DPS_BOUNDARY_CHECK("DEBUG_BOUNDARY_CHECK",DEBUG_BOUNDARY_CHECK_EVENT3,0xaaaaaaaa);
+
+   /* The following copy command is done in the following way in order to clear the 16MSB bits.
+    * Note that the shift is 0, so that this could have been written
+    * mode0 = status2.Status2RxMode; */
+   $reg(mode0.Status2RxMode) = status2.Status2RxMode >> M_ShiftRight(S_L2piRxMode.Status2RxMode) ;
+
+   if(status0.GSE)
+   {
+      if(FEATURE_EFMBOND_L2PI &&
+         (status2.Status2RxMode.EFMBEn) &&
+         (!status2.Status2RxMode.RemoveFCS) &&
+         (status0.U_SerialInfo.WnetInfo.FCSErr))
+      {
+         status0.GSE = 0;
+      }
+      else
+      {
+         if(mode0.Status2RxMode.WNet)
+            goto L_L2piRx_SerialError;
+         else
+         {
+            if(status0.U_SerialInfo.UpiInfo.PE && status0.U_SerialInfo.UpiInfo.PEI)
+            {
+               M_UpiParityErrorCheckIgnoreUpdateGSE(status0,
+                                                    status0.GSE,
+                                                    status0.U_SerialInfo.UpiInfo.PE,
+                                                    L2PI_RX_SERIAL_STATUS0_GSE_NON_PE_ERRORS);
+               if(status0.GSE)
+                  goto L_L2piRx_SerialError;
+            }
+            else
+               goto L_L2piRx_SerialError;
+         }
+      }
+   }
+   
+
+
+   /* get the relevant needed keys */
+   M_L2piRxOrderRcptDataIwMk2Key(status0,
+                                 status1,
+                                 status3copy.MD,
+                                 PhyNum,
+                                 L2piRcptKey,
+                                 L2piDataKey,
+                                 L2piIwKey,
+                                 ~MIDDLE_DROP_CHECK);
+
+   RcptPhyOffset = PhyNum * sizeof(S_L2piRCPT);
+   if(status0.First)
+   {
+     L_L2piRx_StartNewPacket:
+      DPS_LOG("L2PI_RX_FLOW_PACKET",L2PI_RX_FIRST);
+
+      B_L2piRxFirstDataUnitProc(mode0,
+                                status0,
+                                status1,
+                                PhyNum,
+                                FBPNum,
+                                RcptPhyOffset,
+                                L2piRcptKey,
+                                L2piDataKey,
+                                L2piIwKey,
+                                L2piRxPacket,
+                                L2piIwBufferGap,
+                                FbpCounterCopy,
+                                FetchedBd,
+                                L2piRCPT,
+                                PL.PacketLength,
+                                TempInputTimeStamp);
+   }
+   else
+   {
+#pragma outofline;
+      DPS_LOG("L2PI_RX_FLOW_DATA_UNIT",L2PI_RX_NOT_FIRST);
+      B_L2piRxLongPacketProc(mode0,
+                             status0,
+                             status1,
+                             PhyNum,
+                             FBPNum,
+                             RcptPhyOffset,
+                             L2piRcptKey,
+                             L2piDataKey,
+                             L2piIwKey,
+                             L2piRxPacket,
+                             L2piIwBufferGap,
+                             TimestampSize,
+                             FbpCounterCopy,
+                             L2piRxBd,
+                             L2piRCPT,
+                             PL.PacketLength);
+
+
+#ifdef _MODULE_PCEA_CFU_WORKAROUND_ENABLE_   
+      if(status0.PceResultAvailable)
+      {
+         if(PceWaEntry.UsePceWa)
+         {
+            /* Here it is always last, no need to check if it is last */
+            /* if(status0.Last) */
+            {
+               /* if 'First' indication is not set, then the header is not in TRS
+                  and should be read to TRS */
+
+               PacketHeader = _data_mem(r0,
+                                        FetchedBd.DataPtr /*PacketFirstBd.DataPtr*/,
+                                        IWGP_PCEA_HEADER_READ_SIZE);
+
+               CfuRxPortNum = PceWaEntry.CfuPortNum;
+               M_L2piRxSendPacketToPceaWorkAround(CfuRxPortNum,
+                                                  IWGP_PCEA_HEADER_READ_SIZE,
+                                                  PceResult);
+               PceWaEntry.UsePceWa=1;
+            }
+         }
+      }
+#endif
+   }
+   
+   /*  EFM RX Reassembly interface */
+   /* check for EFM LINK */
+   if (FEATURE_EFMBOND_L2PI) {
+      if((status2.Status2RxMode.EFMBEn) ||
+         ((status0.U_SerialInfo.WnetInfo.G999Enable) && (G999Rspt.RsptMode.EFMBEn)))
+      {
+         B_L2piEFMRx(status0,
+                     L2piEntryOffset,
+                     RcptPhyOffset,
+                     L2piRcptKey,
+                     PhyNum,
+                     L2piRxPacket,
+                     L2piIwKey,
+                     FetchedBd,
+                     PL.PacketLength);
+      }
+   }
+
+  L_L2piRx_IwInterface:
+   tar0 = ETHERNET_FRAME_START_ADDR;
+
+   if(mode0.Status2RxMode.IWM)
+   {
+      if(FEATURE_IWGP && status0.PceResultAvailable)
+      {
+         /* G999Rspt is passed into this macro as well. */
+        L_L2piRx_G999PceInterface:
+         DPS_LOG("L2PI_RX_FLOW_PACKET",L2PI_RX_START_PCE_RESULT,
+                 "Pce result", PceResult, DPS_SW_LOG_64_BYTES);
+      
+         B_L2piRxIwgpInterface(mode0,
+                               L2piIwKey,
+                               PceWaEntry);
+      }
+      else
+      {
+         if (FEATURE_G999 && status0.U_SerialInfo.WnetInfo.G999Enable)
+         {
+            if (G999Rspt.RsptMode.G999ContinueToPce)
+            {
+               status0.PceResultAvailable = 1;
+               goto L_L2piRx_G999PceInterface;
+            }
+         }
+         DPS_LOG("L2PI_RX_FLOW_PACKET",L2PI_RX_GOTO_IWCP);
+         B_L2piRxIwcpInterface(status0,
+                               status1,
+                               mode0,
+                               ComMode0,
+                               mode1,
+                               tar0,
+                               PhyNum,
+                               FBPNum,
+                               PL.PacketLength,
+                               IwPacketLength,
+                               L2piIwKey,
+                               IwMasterKey3,
+                               L2IWT,
+                               EthernetType,
+                               L2ParsingSize,
+                               Vid,
+                               IWExControlWord,
+                               IWExtentionWord,
+                               IWInControlWord,
+                               RcptPhyOffset,
+                               L2piRCPT,
+                               FbpCounterCopy,
+                               mode0.Status2RxMode.STE,
+                               L_L2piRx_L2HostTermination,
+                               L_L2piRx_DiscardPacket);
+      }
+   }
+   else
+   {
+#pragma outofline;
+      DPS_LOG("L2PI_RX_FLOW_DATA_UNIT",L2PI_RX_IW_MODE_DISABLE);
+      if (mode0.Status2RxMode.WNet)
+      {
+         DPS_LOG("L2PI_RX_FLOW_LOW_LEVEL",L2PI_RX_MAC_ADDRESS_FILTER);
+         M_MacAddressFilter(ComMode0,
+                            tar0,
+                            status0,
+                            L2piRCPT,
+                            L2_RX_PROTOCOL_TYPE_L2PI_ENET,
+                            END_STATION_MODE,
+                            mode0.Status2RxMode.STE,
+                            M_BitToByte(S_L2piRxStat.RxUnknownMacAddr),
+                            L_L2piRx_L2HostTermination,
+                            L_L2piL2IwDiscardPacket,
+                            PhyNum);
+      }
+   }
+
+
+  L_L2piRx_L2HostTermination:
+
+   DPS_LOG("L2PI_RX_FLOW_PACKET",L2PI_RX_HOST_TERMINATION);
+   B_L2piRxL2HostTermination(mode0,
+                             status0,
+                             PhyNum,
+                             L2piIwKey,
+                             RcptPhyOffset,
+                             L2piRCPT,
+                             PL.PacketLength,
+                             L2piHostQueueTable);
+
+   
+   
+  L_L2piRx_SerialError:
+   DPS_LOG("L2PI_RX_FLOW_PACKET",L2PI_RX_SERIAL_ERROR);
+   B_L2piRxSerialErrorHandling(mode0,
+                               status0,
+                               PhyNum,
+                               L2piRcptKey,
+                               L2piDataKey,
+                               L2piIwKey,
+                               L2piRCPT,
+                               RcptPhyOffset);
+
+
+  L_L2piRx_DiscardPacket:
+   DPS_LOG("L2PI_RX_FLOW_PACKET",L2PI_RX_DISCARD_ERROR);
+   B_L2piRxDiscardPacket(mode0,
+                         status0,
+                         status3copy.MD,
+                         RcptPhyOffset,
+                         L2piRcptKey,
+                         L2piDataKey,
+                         L2piIwKey,
+                         L2piRCPT);
+
+}
+
+
+
+
+/*****************************************************************************
+ * Module: L2PI Timestamp Loopback Receiver
+ *
+ * Description:
+ *   This code handles the L2PI Rx timestamp loopback threads opened as a result of  L2PI 
+ *   Tx frame with timestamp and loopback enabled.
+ *   
+ *
+ * Input interfaces:
+ *   L_L2pi_Ts_LoopBack_Rx_Start - L2PI Rx Ts LB  Entry point
+ *
+ * Output interfaces:
+ *
+ *****************************************************************************/
+section L2pi_Rx_Ts_LB
+
+{
+   register struct S_IWModeField           mode0                 = MODE_REG;  
+   register struct S_L2piRxSerialStatus0   status0               = STATUS0_REG;
+   register struct S_L2piRxSerialStatus1   status1               = STATUS1_REG;
+   register struct S_L2piRxLBSerialStatus2 status2               = STATUS2_REG;
+   register struct S_TsLbRegs              TsLbRegs              = r96;  /*r96 - r99  */
+
+  L_L2pi_Ts_LoopBack_Rx_Start:
+
+#ifdef _MODULE_L2PI_TIMESTAMP_ENABLE_
+   /* This block terminates */
+   if (status2.TcMode)
+   {
+      //Transparent Clock handling
+      B_L2piRxTcLbProc(status0,status1,status2);
+   }
+   
+   else
+   {
+      //Master/Slave handling
+      B_L2piRxTsLbProc(mode0,status0,status1,status2,TsLbRegs);
+   }
+#else
+   _task_switch(status1,_ORDER_UNLOCK | _TERMINATE);
+#endif /* _MODULE_L2PI_TIMESTAMP_ENABLE_ */
+   
+}
+
+
+
+#ifndef _MODULE_PCEA_CFU_WORKAROUND_ENABLE_   
+const L_L2pi_Rx_Start_Pce_Workaround = 0;
+#endif
+
+#else
+
+const L_L2pi_Rx_Start = 0;
+const L_L2piRx_BG_Dequeue_Interface = 0;
+const L_L2pi_Rx_PCE_Start = 0;
+const L_L2pi_Ts_LoopBack_Rx_Start = 0;
+const L_L2pi_Rx_G999_Start = 0;
+const L_Rx_AtmOverPos_start = 0;
+const L_L2pi_Rx_Start_Pce_Workaround = 0;
+
+#endif /* _MODULE_L2PI_ENABLE_ */
