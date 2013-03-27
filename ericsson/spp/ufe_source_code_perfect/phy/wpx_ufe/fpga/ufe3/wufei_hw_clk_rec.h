@@ -1,0 +1,565 @@
+/*****************************************************************************
+ * (C) Copyright 2000-2006, Wintegra. All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ ****************************************************************************/
+
+/*****************************************************************************
+ *
+ * File: wufei_hw_clk_rec.h
+ *
+ * Purpose: the UFE3 Clock Recovery type macro and structures
+ *
+ ****************************************************************************/
+#ifndef WUFEI_HW_CLK_REC_H
+#define WUFEI_HW_CLK_REC_H
+
+#ifndef WUFEI_HW_TYPES_H
+#include "wufei_hw_types.h"
+#endif
+
+/***********************************************************************
+ *                   Clock Recovery direct memory space
+ **********************************************************************/
+
+#define WUFEI_HW_CLK_REC_MAX_N_CLK_MUX 12
+#define WUFEI_HW_CLK_REC_MAX_N_UNITS   64
+#define WUFEI_HW_CLK_REC_MAX_UNSHAPED_N_UNITS 336
+#define WUFEI_HW_CLK_TRANSLATOR_MAX_N_UNITS 64
+#define WUFEI_HW_CLK_TRANSLATOR_EXT_DIFF_MAX_N_UNITS 336
+#define WUFEI_HW_CLK_TRANSLATOR_TOTAL_N_UNITS WUFEI_HW_CLK_TRANSLATOR_MAX_N_UNITS + \
+                                              WUFEI_HW_CLK_TRANSLATOR_EXT_DIFF_MAX_N_UNITS
+#define WUFEI_HW_CLK_TRANSLATOR_MAX_N_EVENTS  WUFEI_HW_CLK_TRANSLATOR_MAX_N_UNITS/16
+
+/* general mode configuration memory map */
+typedef struct
+{
+   WUFEI_reg_space blocks; /*indication for CR main sub-blocks*/
+   WUFEI_reg_space units_tx_diff;/*indication for diff CR TX units number*/
+   WUFEI_reg_space units_tx_adap;/*indication for adap CR TX units number*/
+   WUFEI_reg_space units_rx_diff;/*indication for diff CR RX units number*/
+   WUFEI_reg_space units_rx_adap;/*indication for adap CR RX units number*/
+   WUFEI_reg_space reserved[0xb];
+}WUFEI_hw_clk_rec_general_cfg;
+
+/* DCO memory map*/
+typedef struct
+{
+   WUFEI_reg_space clk_mux[WUFEI_HW_CLK_REC_MAX_N_CLK_MUX];
+   WUFEI_reg_space reserved1[0x2f4];
+   WUFEI_reg_space dco_mux[WUFEI_HW_CLK_REC_MAX_N_CLK_MUX];
+   WUFEI_reg_space reserved2[0x14];
+}WUFEI_hw_clk_rec_mux;
+
+/* DCO memory map*/
+typedef struct
+{
+   WUFEI_reg_space mode; /* used in CAD mode only */
+   WUFEI_reg_space integer;
+   WUFEI_reg_space remainder_msb;
+   WUFEI_reg_space remainder_lsb;
+   WUFEI_reg_space reserved[0x4];
+}WUFEI_hw_clk_rec_dco;
+
+/* RX timestamp memory map*/
+typedef struct
+{
+   WUFEI_reg_space mode;
+   WUFEI_reg_space timestamp_msb;
+   WUFEI_reg_space timestamp_lsb;
+   WUFEI_reg_space reserved[0x1];
+}WUFEI_hw_clk_rec_timestamp_rx;
+
+typedef struct
+{
+   WUFEI_reg_space ts_rx_ext_diff_buf_size;
+}WUFEI_hw_clk_rec_ts_rx_ext_diff_buff_size;
+
+/* TX timestamp memory map*/
+typedef struct
+{
+   WUFEI_reg_space mode;
+   WUFEI_reg_space timestamp_msb;
+   WUFEI_reg_space timestamp_lsb;
+   WUFEI_reg_space buffer_size;
+}WUFEI_hw_clk_rec_timestamp_tx;
+
+/* Timestamp memory map*/
+typedef struct
+{
+   WUFEI_reg_space reserved0[0x360]; /* In used by the DCO memory space for 64 reg + 336 ext */
+   WUFEI_reg_space ts_gen_config;
+   WUFEI_reg_space reserved1[0x3ff];
+   WUFEI_hw_clk_rec_timestamp_rx rx[WUFEI_HW_CLK_REC_MAX_N_UNITS];
+   WUFEI_hw_clk_rec_ts_rx_ext_diff_buff_size rx_buff_size[WUFEI_HW_CLK_REC_MAX_UNSHAPED_N_UNITS];
+   WUFEI_reg_space reserved3[0x5b0];
+   WUFEI_hw_clk_rec_timestamp_tx tx[WUFEI_HW_CLK_REC_MAX_N_UNITS];
+   WUFEI_reg_space reserved4[0xf00];
+}WUFEI_hw_clk_rec_timestamp;
+
+/* Clock Translator memory map*/
+typedef struct
+{
+   WUFEI_reg_space mode_reg;
+   WUFEI_reg_space res[0x3];
+}WUFEI_hw_clk_translator_mode;
+
+typedef struct
+{
+   WUFEI_reg_space event_reg[WUFEI_HW_CLK_TRANSLATOR_MAX_N_EVENTS];
+   WUFEI_reg_space reserved1[0xfc];
+   WUFEI_reg_space event_mask_reg[WUFEI_HW_CLK_TRANSLATOR_MAX_N_EVENTS];
+   WUFEI_reg_space reserved2[0x2fc];
+   WUFEI_hw_clk_translator_mode mode[WUFEI_HW_CLK_TRANSLATOR_TOTAL_N_UNITS];
+}WUFEI_hw_clk_rec_clk_translator;
+
+/* Clock Recovery memory map*/
+typedef struct
+{
+   WUFEI_reg_space indla;
+   WUFEI_reg_space indha;
+   WUFEI_reg_space inddat;
+   WUFEI_reg_space reserved1[0xd];
+   WUFEI_hw_clk_rec_general_cfg general_cfg;
+   WUFEI_reg_space event_reg;
+   WUFEI_reg_space event_mask_reg;
+   WUFEI_reg_space reserved2[0xde];
+   WUFEI_hw_clk_rec_mux mux;
+   WUFEI_hw_clk_rec_dco dco[WUFEI_HW_CLK_REC_MAX_N_UNITS+WUFEI_HW_CLK_REC_MAX_UNSHAPED_N_UNITS];
+   WUFEI_hw_clk_rec_timestamp timestamp;
+   WUFEI_hw_clk_rec_clk_translator clk_translator;
+}WUFEI_hw_clk_rec;
+
+/* general mode configuration register masks */
+/*
+** Clock recovery block indication register
+*/
+#define WUFEI_HW_CLK_REC_DCO_EN_S (0)
+#define WUFEI_HW_CLK_REC_DCO_EN_W (1)
+#define WUFEI_HW_CLK_REC_DCO_EN_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_DCO_EN_S)
+#define WUFEI_HW_CLK_REC_DCO_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_EN_S, WUFEI_HW_CLK_REC_DCO_EN_W)
+#define WUFEI_HW_CLK_REC_DCO_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_EN_S, WUFEI_HW_CLK_REC_DCO_EN_W)
+
+#define WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_S (1)
+#define WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_W (1)
+#define WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_S)
+#define WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_S, WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_W)
+#define WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_S, WUFEI_HW_CLK_REC_CLK_TRANSLATOR_EN_W)
+
+#define WUFEI_HW_CLK_REC_CGEN_EN_S (2)
+#define WUFEI_HW_CLK_REC_CGEN_EN_W (1)
+#define WUFEI_HW_CLK_REC_CGEN_EN_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_CGEN_EN_S)
+#define WUFEI_HW_CLK_REC_CGEN_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_CGEN_EN_S, WUFEI_HW_CLK_REC_CGEN_EN_W)
+#define WUFEI_HW_CLK_REC_CGEN_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_CGEN_EN_S, WUFEI_HW_CLK_REC_CGEN_EN_W)
+
+#define WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_S (3)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_W (1)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_S)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_S, WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_W)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_S, WUFEI_HW_CLK_REC_TIMESTAMP_TX_EN_W)
+
+#define WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_S (4)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_W (1)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_S)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_S, WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_W)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_S, WUFEI_HW_CLK_REC_TIMESTAMP_RX_EN_W)
+
+/*
+** Clock recovery TX number of units
+*/
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_S (0)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_W (16)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_S)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_S, \
+        WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_W)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_S, \
+        WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_TX_W)
+
+/*
+** Clock recovery RX number of units
+*/
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_S (0)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_W (16)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_S)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_S, \
+        WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_W)
+#define WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_S, \
+        WUFEI_HW_CLK_REC_TIMESTAMP_UNITS_N_RX_W)
+
+/*
+** Clock mux register
+*/
+/* '1' - E3, '0' - DS3 */
+#define WUFEI_HW_CLK_REC_MUX_MODE_S (0)
+#define WUFEI_HW_CLK_REC_MUX_MODE_W (1)
+#define WUFEI_HW_CLK_REC_MUX_MODE_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_MUX_MODE_S)
+#define WUFEI_HW_CLK_REC_MUX_MODE_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_MUX_MODE_S, WUFEI_HW_CLK_REC_MUX_MODE_W)
+#define WUFEI_HW_CLK_REC_MUX_MODE_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_MUX_MODE_S, WUFEI_HW_CLK_REC_MUX_MODE_W)
+
+/* '1' - framed, '0' - unframed */
+#define WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_S (1)
+#define WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_W (1)
+#define WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_S)
+#define WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_S, WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_W)
+#define WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_S, WUFEI_HW_CLK_REC_MUX_MODE_FRAMED_W)
+
+/* '0' - TX serial clock from DCO, '1' - TX serial clock from Jitter Attenuator*/
+#define WUFEI_HW_CLK_REC_MUX_INCLK_SEL_S (2)
+#define WUFEI_HW_CLK_REC_MUX_INCLK_SEL_W (1)
+#define WUFEI_HW_CLK_REC_MUX_INCLK_SEL_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_MUX_INCLK_SEL_S)
+#define WUFEI_HW_CLK_REC_MUX_INCLK_SEL_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_MUX_INCLK_SEL_S, WUFEI_HW_CLK_REC_MUX_INCLK_SEL_W)
+#define WUFEI_HW_CLK_REC_MUX_INCLK_SEL_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_MUX_INCLK_SEL_S, WUFEI_HW_CLK_REC_MUX_INCLK_SEL_W)
+
+/*
+** DCO mux register - divisor configuration
+*/
+#define WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_S (0)
+#define WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_W (2)
+#define WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_S)
+#define WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_S, WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_W)
+#define WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_S, WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_W)
+
+/*
+** DCO mode registers - divisor configuration
+*/
+/* '1' - enabled */
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_S (0)
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_W (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_DCO_MODE_EN_S)
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_MODE_EN_S, WUFEI_HW_CLK_REC_DCO_MODE_EN_W)
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_MODE_EN_S, WUFEI_HW_CLK_REC_DCO_MODE_EN_W)
+
+/**/
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_S (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_W (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_DCO_MODE_E1T1_S)
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_MODE_E1T1_S, WUFEI_HW_CLK_REC_DCO_MODE_E1T1_W)
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_MODE_E1T1_S, WUFEI_HW_CLK_REC_DCO_MODE_E1T1_W)
+
+/**/
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_S (2)
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_W (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_S)
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_S, \
+        WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_W)
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_S, \
+        WUFEI_HW_CLK_REC_DCO_MODE_SYNC_ACTIVE_W)
+
+/**/
+#define WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_S (3)
+#define WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_W (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_F(v) WUFEI_FIELD(v, \
+        WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_S)
+#define WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_S, WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_W)
+#define WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_S, WUFEI_HW_CLK_REC_DCO_MODE_NEG_POS_W)
+
+typedef enum
+{
+   WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_0 = 0,
+   WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_32,
+   WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_1074,
+   WUFEI_HW_CLK_REC_MUX_INCLK_DIV_SEL_1398
+}WUFEI_hw_clk_rec_mux_inclk_div_sel;
+
+/*
+** Clock Recovery General configuration register
+*/
+/* Clock Recovery Method 0 - adaptive/ 1 differential*/
+#define WUFEI_HW_CLK_REC_METHOD_S (0)
+#define WUFEI_HW_CLK_REC_METHOD_W (1)
+#define WUFEI_HW_CLK_REC_METHOD_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_METHOD_S)
+#define WUFEI_HW_CLK_REC_METHOD_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_METHOD_S, WUFEI_HW_CLK_REC_METHOD_W)
+#define WUFEI_HW_CLK_REC_METHOD_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_METHOD_S, WUFEI_HW_CLK_REC_METHOD_W)
+
+typedef enum
+{
+   WUFEI_HW_CLK_REC_METHOD_ADAPTIVE,
+   WUFEI_HW_CLK_REC_METHOD_DIFFERENTIAL
+}wufei_hw_clk_rec_method;
+
+
+/*
+** Clock Recovery RX timestamp registers
+** One Register Set is defined per line
+*/
+/* Clock Recovery enable indicator*/
+#define WUFEI_HW_CLK_REC_RX_MODE_EN_S (0)
+#define WUFEI_HW_CLK_REC_RX_MODE_EN_W (1)
+#define WUFEI_HW_CLK_REC_RX_MODE_EN_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_MODE_EN_S)
+#define WUFEI_HW_CLK_REC_RX_MODE_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_MODE_EN_S, WUFEI_HW_CLK_REC_RX_MODE_EN_W)
+#define WUFEI_HW_CLK_REC_RX_MODE_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_MODE_EN_S, WUFEI_HW_CLK_REC_RX_MODE_EN_W)
+
+/* 1-Mask RAM is used as extension for the Port RAM  */
+#define WUFEI_HW_CLK_REC_RX_NO_MASK_S (1)
+#define WUFEI_HW_CLK_REC_RX_NO_MASK_W (1)
+#define WUFEI_HW_CLK_REC_RX_NO_MASK_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_NO_MASK_S)
+#define WUFEI_HW_CLK_REC_RX_NO_MASK_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_NO_MASK_S, WUFEI_HW_CLK_REC_RX_NO_MASK_W)
+#define WUFEI_HW_CLK_REC_RX_NO_MASK_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_NO_MASK_S, WUFEI_HW_CLK_REC_RX_NO_MASK_W)
+
+/* for CAD only  */
+#define WUFEI_HW_CLK_REC_RX_FAST_PORT_S (2)
+#define WUFEI_HW_CLK_REC_RX_FAST_PORT_W (1)
+#define WUFEI_HW_CLK_REC_RX_FAST_PORT_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_FAST_PORT_S)
+#define WUFEI_HW_CLK_REC_RX_FAST_PORT_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_FAST_PORT_S, WUFEI_HW_CLK_REC_RX_FAST_PORT_W)
+#define WUFEI_HW_CLK_REC_RX_FAST_PORT_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_FAST_PORT_S, WUFEI_HW_CLK_REC_RX_FAST_PORT_W)
+
+/*Port RAM entry*/
+#define WUFEI_HW_CLK_REC_RX_PORT_EN_S (15)
+#define WUFEI_HW_CLK_REC_RX_PORT_EN_W (1)
+#define WUFEI_HW_CLK_REC_RX_PORT_EN_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_PORT_EN_S)
+#define WUFEI_HW_CLK_REC_RX_PORT_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_PORT_EN_S, WUFEI_HW_CLK_REC_RX_PORT_EN_W)
+#define WUFEI_HW_CLK_REC_RX_PORT_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_PORT_EN_S, WUFEI_HW_CLK_REC_RX_PORT_EN_W)
+
+#define WUFEI_HW_CLK_REC_RX_PORT_LAST_S (14)
+#define WUFEI_HW_CLK_REC_RX_PORT_LAST_W (1)
+#define WUFEI_HW_CLK_REC_RX_PORT_LAST_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_PORT_LAST_S)
+#define WUFEI_HW_CLK_REC_RX_PORT_LAST_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_PORT_LAST_S, WUFEI_HW_CLK_REC_RX_PORT_LAST_W)
+#define WUFEI_HW_CLK_REC_RX_PORT_LAST_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_PORT_LAST_S, WUFEI_HW_CLK_REC_RX_PORT_LAST_W)
+
+#define WUFEI_HW_CLK_REC_RX_CORE_ID_S (13)
+#define WUFEI_HW_CLK_REC_RX_CORE_ID_W (1)
+#define WUFEI_HW_CLK_REC_RX_CORE_ID_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_CORE_ID_S)
+#define WUFEI_HW_CLK_REC_RX_CORE_ID_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_CORE_ID_S, WUFEI_HW_CLK_REC_RX_CORE_ID_W)
+#define WUFEI_HW_CLK_REC_RX_CORE_ID_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_CORE_ID_S, WUFEI_HW_CLK_REC_RX_CORE_ID_W)
+
+#define WUFEI_HW_CLK_REC_RX_PORT_ID_S (0)
+#define WUFEI_HW_CLK_REC_RX_PORT_ID_W (12)
+#define WUFEI_HW_CLK_REC_RX_PORT_ID_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_PORT_ID_S)
+#define WUFEI_HW_CLK_REC_RX_PORT_ID_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_PORT_ID_S, WUFEI_HW_CLK_REC_RX_PORT_ID_W)
+#define WUFEI_HW_CLK_REC_RX_PORT_ID_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_PORT_ID_S, WUFEI_HW_CLK_REC_RX_PORT_ID_W)
+
+#define WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_S (8)
+#define WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_W (6)
+#define WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_S)
+#define WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_S, WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_W)
+#define WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_S, WUFEI_HW_CLK_REC_RX_MASK_LOAD_VAL_W)
+
+#define WUFEI_HW_CLK_REC_RX_MASK_CNT_S (0)
+#define WUFEI_HW_CLK_REC_RX_MASK_CNT_W (6)
+#define WUFEI_HW_CLK_REC_RX_MASK_CNT_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_MASK_CNT_S)
+#define WUFEI_HW_CLK_REC_RX_MASK_CNT_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_MASK_CNT_S, WUFEI_HW_CLK_REC_RX_MASK_CNT_W)
+#define WUFEI_HW_CLK_REC_RX_MASK_CNT_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_MASK_CNT_S, WUFEI_HW_CLK_REC_RX_MASK_CNT_W)
+
+#define WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_S (0)
+#define WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_W (9)
+#define WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_S)
+#define WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_S, WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_W)
+#define WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_S, WUFEI_HW_CLK_REC_RX_BUFFER_SIZE_W)
+
+#define WUFEI_HW_CLK_REC_RX_TS_EN_S (15)
+#define WUFEI_HW_CLK_REC_RX_TS_EN_W (1)
+#define WUFEI_HW_CLK_REC_RX_TS_EN_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_RX_TS_EN_S)
+#define WUFEI_HW_CLK_REC_RX_TS_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_RX_TS_EN_S, WUFEI_HW_CLK_REC_RX_TS_EN_W)
+#define WUFEI_HW_CLK_REC_RX_TS_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_RX_TS_EN_S, WUFEI_HW_CLK_REC_RX_TS_EN_W)
+
+/*
+** Clock Recovery TX timestamp register
+** One Register Set is defined per line
+*/
+/* Clock Recovery enable indicator*/
+#define WUFEI_HW_CLK_REC_TX_MODE_EN_S (0)
+#define WUFEI_HW_CLK_REC_TX_MODE_EN_W (1)
+#define WUFEI_HW_CLK_REC_TX_MODE_EN_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_TX_MODE_EN_S)
+#define WUFEI_HW_CLK_REC_TX_MODE_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_TX_MODE_EN_S, WUFEI_HW_CLK_REC_TX_MODE_EN_W)
+#define WUFEI_HW_CLK_REC_TX_MODE_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_TX_MODE_EN_S, WUFEI_HW_CLK_REC_TX_MODE_EN_W)
+
+/* buffer_size = num_of_slots_in_MasterPHY/data_unit_size
+                 * num_of_bits_tributary [256 E1, 192-T1 frm, 193-T1 unfrm]  */
+#define WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_S (0)
+#define WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_W (14)
+#define WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_S)
+#define WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_S, WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_W)
+#define WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_S, WUFEI_HW_CLK_REC_TX_BUFFER_SIZE_W)
+
+/*
+** Clock Recovery RAM RX Clock Generator registers
+*/
+
+/*Clock recovery generator id 0-31 */
+#define WUFEI_HW_CLK_REC_CGENRX_ID_S (0)
+#define WUFEI_HW_CLK_REC_CGENRX_ID_W (9)
+#define WUFEI_HW_CLK_REC_CGENRX_ID_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_CGENRX_ID_S)
+#define WUFEI_HW_CLK_REC_CGENRX_ID_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_CGENRX_ID_S, WUFEI_HW_CLK_REC_CGENRX_ID_W)
+#define WUFEI_HW_CLK_REC_CGENRX_ID_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_CGENRX_ID_S, WUFEI_HW_CLK_REC_CGENRX_ID_W)
+
+/*Tributary last received phase */
+#define WUFEI_HW_CLK_REC_CGENRX_PHASE_S (9)
+#define WUFEI_HW_CLK_REC_CGENRX_PHASE_W (4)
+#define WUFEI_HW_CLK_REC_CGENRX_PHASE_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_CGENRX_PHASE_S)
+#define WUFEI_HW_CLK_REC_CGENRX_PHASE_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_CGENRX_PHASE_S, WUFEI_HW_CLK_REC_CGENRX_PHASE_W)
+#define WUFEI_HW_CLK_REC_CGENRX_PHASE_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_CGENRX_PHASE_S, WUFEI_HW_CLK_REC_CGENRX_PHASE_W)
+
+/* 0 - DS3/E3; 1 - E1/T1  */
+#define WUFEI_HW_CLK_REC_CGENRX_EN_S (15)
+#define WUFEI_HW_CLK_REC_CGENRX_EN_W (1)
+#define WUFEI_HW_CLK_REC_CGENRX_EN_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_CGENRX_EN_S)
+#define WUFEI_HW_CLK_REC_CGENRX_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_CGENRX_EN_S, WUFEI_HW_CLK_REC_CGENRX_EN_W)
+#define WUFEI_HW_CLK_REC_CGENRX_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_CGENRX_EN_S, WUFEI_HW_CLK_REC_CGENRX_EN_W)
+
+#define WUFEI_HW_CLK_REC_CGENRX_VALID_S (14)
+#define WUFEI_HW_CLK_REC_CGENRX_VALID_W (1)
+#define WUFEI_HW_CLK_REC_CGENRX_VALID_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_CGENRX_VALID_S)
+#define WUFEI_HW_CLK_REC_CGENRX_VALID_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_CGENRX_VALID_S, WUFEI_HW_CLK_REC_CGENRX_VALID_W)
+#define WUFEI_HW_CLK_REC_CGENRX_VALID_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_CGENRX_VALID_S, WUFEI_HW_CLK_REC_CGENRX_VALID_W)
+
+/* this define is in shared code but used for UFE2 only */
+#define WUFEI_HW_CLK_REC_CGENRX_LINK_RATE_M 0
+
+/*
+** Clock recovery DCO register configuration
+*/
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_S (0)
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_W (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_DCO_MODE_EN_S)
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_MODE_EN_S, WUFEI_HW_CLK_REC_DCO_MODE_EN_W)
+#define WUFEI_HW_CLK_REC_DCO_MODE_EN_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_MODE_EN_S, WUFEI_HW_CLK_REC_DCO_MODE_EN_W)
+
+#define WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_S (2)
+#define WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_W (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_S)
+#define WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_S, WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_W)
+#define WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_S, WUFEI_HW_CLK_REC_DCO_MODE_ACTIVE_W)
+
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_S (3)
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_W (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_DCO_MODE_SYNC_S)
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_MODE_SYNC_S, WUFEI_HW_CLK_REC_DCO_MODE_SYNC_W)
+#define WUFEI_HW_CLK_REC_DCO_MODE_SYNC_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_MODE_SYNC_S, WUFEI_HW_CLK_REC_DCO_MODE_SYNC_W)
+
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_S (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_W (1)
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_DCO_MODE_E1T1_S)
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_DCO_MODE_E1T1_S, WUFEI_HW_CLK_REC_DCO_MODE_E1T1_W)
+#define WUFEI_HW_CLK_REC_DCO_MODE_E1T1_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_DCO_MODE_E1T1_S, WUFEI_HW_CLK_REC_DCO_MODE_E1T1_W)
+
+/***********************************************************************
+ *                   Clock Recovery indirect memory space
+ **********************************************************************/
+#define WUFEI_MAX_N_HW_PORT_RAM_SLOT 256
+#define WUFEI_MAX_N_HW_MASK_RAM_SLOT 256
+
+typedef struct
+{
+   WP_U8 slot[WUFEI_MAX_N_HW_PORT_RAM_SLOT];
+}WUFEI_hw_clk_rec_ts_port_ram;
+
+typedef struct
+{
+   WP_U8 slot[WUFEI_MAX_N_HW_PORT_RAM_SLOT];
+}WUFEI_hw_clk_rec_ts_mask_ram;
+
+typedef struct
+{
+   WP_U16 cgen_rx;/* Clock Generator config. register */
+
+}WUFEI_hw_clk_rec_cgen_rx_ram;
+
+/* UFE2 Obsolete */
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_S (0)
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_W (0)
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_S)
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_S, WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_W)
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_S, WUFEI_HW_CLK_REC_TX_SUB_CONST_LSB_W)
+
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_S (0)
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_W (0)
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_F(v) WUFEI_FIELD(v, WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_S)
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_V(f) \
+        WUFEI_VALUE(f, WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_S, WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_W)
+#define WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_M \
+        WUFEI_MASK(WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_S, WUFEI_HW_CLK_REC_TX_SUB_CONST_MSB_W)
+
+
+#endif /* WUFEI_HW_CLK_REC_H*/

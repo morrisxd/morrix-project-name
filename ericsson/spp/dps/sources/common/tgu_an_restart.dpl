@@ -62,11 +62,24 @@ section TGU_AN_RESTART
     {
        _task_switch(r0, _TERMINATE);
     }
-
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
     CounterOffset = SGMII_TGU_SW_COUNTER_OFFSET; 
-    TguCounter =  _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset], 4);
+#if 0
+    TguCounter = _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset], 4);
+#else
+    TguCounter = _mem(r0, B_DEBUG1[CounterOffset], 4);
+#endif
    
+#if 0
    _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset]) += 1;
+#else
+	TguCounter = _mem(r0, B_DEBUG1[CounterOffset], 4);
+    TguCounter += 1;
+	_mem(r0, B_DEBUG1[CounterOffset], 4) = TguCounter;
+    TguCounter -= 1;
+#endif
 
    /* TGU Period is extended to also address 1000BaseX_AN case, which requires longer period time (*8 than SGMII_AN)*/
    if ((TguCounter & SGMII_TGU_1000BaseX_DIV_FACTOR) != 0)
@@ -76,8 +89,12 @@ section TGU_AN_RESTART
 
    /* Initialize SW counter */
    TguCounter = SGMII_TGU_SW_COUNTER_INIT_VAL;
+#if 0
    _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset], 4) = TguCounter;
+#else
+    _mem(r0, B_DEBUG1[CounterOffset], 4) = TguCounter;
 
+#endif
 
 
    EnetPortsMask = Tcr3;

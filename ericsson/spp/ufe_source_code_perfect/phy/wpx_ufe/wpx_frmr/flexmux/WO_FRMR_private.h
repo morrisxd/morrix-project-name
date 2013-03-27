@@ -1,0 +1,3281 @@
+#ifndef  _OMIINO_FRAMER_PRIVATE_
+#define  _OMIINO_FRAMER_PRIVATE_
+
+
+/*
+	About: Copyright
+
+	Copyright (c) 2010  Omiino Ltd
+
+	All rights reserved.  
+
+	This code is provided under license and or Non-disclosure     
+	Agreement and must be used solely for the purpose for which it
+	was provided. 
+
+	It must not be passed to any third party without
+	the written permission of Omiino Ltd.   
+
+	Visit <http://www.omiino.com> or send messages to support@omiino.com.
+
+
+*/
+
+
+
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+
+
+#include "WO_FRMR_API_public.h"
+#include "WO_FRMR_low_level_comms_api.h"
+#include "WO_FRMR_LLC_MessageCatalogue_public.h"
+#include "WO_FRMR_Auxiliary_MessageCatalogue_public.h"
+#include "WO_FRMR_qc_public.h"
+#include <wpl_mem_access.h>
+
+
+void Environment_Screen_PM_Port_Header(char * pAnyMessage, U32 AnyValue);
+
+#define OMIINO_REMOVE_COMPILER_WARNING(_ANY) OMIINO_RAM.RemoveCompilerWarning=(int)(_ANY)
+	
+
+#define MAX_PM_LINE_PORT_COUNTS_PER_MESSAGE												(17)
+#define MAX_HO_COUNTS_PER_MESSAGE														(25)
+#define MAX_LO_COUNTS_PER_MESSAGE														(25)
+
+#define WPX_UFE_FRAMER_MAX_ALARM_REPORTS_PER_MESSAGE                                    (25)
+#define WPX_UFE_FRAMER_MAX_CHARS_IN_MAILBOX												(128)
+#define WPX_UFE_FRAMER_MAX_WORDS_IN_MESSAGE                                             (WPX_UFE_FRAMER_MAX_CHARS_IN_MAILBOX/4)
+#define WPX_UFE_FRAMER_MAX_CHARS_IN_16_BYTE_PATH_TRACE									(16)
+#define WPX_UFE_FRAMER_MAX_CHARS_IN_64_BYTE_PATH_TRACE									(64)
+
+
+
+
+
+
+#define WPX_UFE_FRAMER_FACILITY_STATE_DOES_NOT_EXIST									(0)
+#define WPX_UFE_FRAMER_FACILITY_STATE_CREATED_FREE										(1)
+#define WPX_UFE_FRAMER_FACILITY_STATE_CONNECTED											(2)
+
+
+
+#define WPX_UFE_FRAMER_CONNECTION_TYPE_NONE                                                     (0)
+#define WPX_UFE_FRAMER_CONNECTION_TYPE_THROUGH                                                  (1)
+#define WPX_UFE_FRAMER_CONNECTION_TYPE_LINE_TO_SOCKET_CLIENT									(2)
+#define WPX_UFE_FRAMER_CONNECTION_TYPE_DISCRETE_CLIENT_TO_SOCKET_CLIENT							(3)
+
+
+
+/*
+ *
+ * DEVICE DRIVER STATUS
+ *
+ */
+
+
+#define OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_SONET_SDH_PORT                     (0)
+#define OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_SONET_SDH_HO                       (1)
+#define OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_SONET_SDH_LO                       (2)
+#define OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_DISCRETE_CLIENT                    (3)
+#define OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_PDH								(4)
+#define OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MAX_KEYS                           (5)
+
+
+
+typedef struct OMIINO_FRAMER_PM_ENGINE_ELEMENT_TYPE
+{
+    U8                                                                              iCurrent;
+    U8                                                                              MaxDepth;
+    U32                                                                             DataItemsFiled;
+
+} OMIINO_FRAMER_PM_ENGINE_ELEMENT_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_PM_ENGINE_TYPE
+{
+    OMIINO_FRAMER_PM_ENGINE_ELEMENT_TYPE                                            Element[OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MAX_KEYS];
+
+} OMIINO_FRAMER_PM_ENGINE_TYPE;
+
+
+typedef struct OMIINO_FRAMER_PM_KEY_SONET_SDH_PORT_TYPE
+{
+    U8                                                                              iPort;
+    U8                                                                              iDataPointIdentifier;
+
+} OMIINO_FRAMER_PM_KEY_SONET_SDH_PORT_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_PM_KEY_SONET_SDH_HO_TYPE   
+{
+    WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE                                                  LineEndpoint;
+    U8                                                                              iDataPointIdentifier;
+
+} OMIINO_FRAMER_PM_KEY_SONET_SDH_HO_TYPE;
+
+
+typedef struct OMIINO_FRAMER_PM_KEY_SONET_SDH_LO_TYPE   
+{
+    WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE                                                  LineEndpoint;
+    U8                                                                              iDataPointIdentifier;
+
+} OMIINO_FRAMER_PM_KEY_SONET_SDH_LO_TYPE;
+
+
+typedef struct OMIINO_FRAMER_PM_KEY_PDH_TYPE
+{
+    U32																				iPDHPort;
+    U8																				iDataPointIdentifier;
+
+} OMIINO_FRAMER_PM_KEY_PDH_TYPE;
+
+typedef struct OMIINO_FRAMER_PM_KEY_DISCRETE_CLIENT_TYPE
+{
+    U8                                                                              iPort;
+    U8                                                                              iDataPointIdentifier;
+
+} OMIINO_FRAMER_PM_KEY_DISCRETE_CLIENT_TYPE;
+
+typedef struct OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE
+{
+    U8                                                                              KeyType;
+    union
+    {
+        OMIINO_FRAMER_PM_KEY_SONET_SDH_PORT_TYPE                                    LinePort;
+        OMIINO_FRAMER_PM_KEY_SONET_SDH_HO_TYPE                                      HO;
+        OMIINO_FRAMER_PM_KEY_SONET_SDH_LO_TYPE                                      LO;
+        OMIINO_FRAMER_PM_KEY_DISCRETE_CLIENT_TYPE                                   DiscreteClient;
+		OMIINO_FRAMER_PM_KEY_PDH_TYPE												PDH;
+    } u;
+
+} OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE;
+
+
+
+#define OMIINO_FRAMER_MAX_STATUS_SONET_SDH_MAX_ALARM_TYPES_PER_NODE				(6)
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE
+{
+	U32																			Key[OMIINO_FRAMER_MAX_STATUS_SONET_SDH_MAX_ALARM_TYPES_PER_NODE];
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_ALARM_TYPE
+{
+	U32																			Key[WPX_UFE_FRAMER_DISCRETE_CLIENT_MAX_ALARM_CATEGORIES];
+
+} OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_ALARM_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE
+{
+	U8																			RX;
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE
+{
+    char																		RX[WPX_UFE_FRAMER_MAX_CHARS_IN_16_BYTE_PATH_TRACE+1];
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE;
+
+
+
+
+
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_LO_PATH_BANDWIDTH_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_LO_PATH_BANDWIDTH_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE
+{
+    char																		RX[WPX_UFE_FRAMER_MAX_CHARS_IN_64_BYTE_PATH_TRACE+1];
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE;
+
+
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE;
+
+
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_K1K2_TYPE
+{
+	WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE                                 RX;
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_K1K2_TYPE;
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_S1_TYPE
+{
+	U8																			RX;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_S1_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_PORT_SECTION_J0_TYPE
+{
+    char																		RX[WPX_UFE_FRAMER_MAX_CHARS_IN_64_BYTE_PATH_TRACE+1];
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_PORT_SECTION_J0_TYPE;
+
+
+
+#define OMIINO_FRAMER_MAX_CHARS_IN_DEVICE_INFORMATION_FIELD						(64)
+
+#define OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_PRODUCT_NAME_FIELD                  (16)
+#define OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_VERSION_FIELD						(16)
+#define OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_DATE_FIELD							(16)
+#define OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_TIME_FIELD							(16)
+
+#define OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_PRODUCT_NAME_FIELD                  (16)
+#define OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_DATE_TIME_FIELD						(32)
+#define OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_VERSION_FIELD						(8)
+
+
+typedef struct OMIINO_FRAMER_HARDWARE_INFORMATION_TYPE
+{
+    char                                                                        ProductName[OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_PRODUCT_NAME_FIELD+1];
+    char                                                                        Version[OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_VERSION_FIELD+1];
+    char                                                                        Date[OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_DATE_FIELD+1];
+    char                                                                        Time[OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_TIME_FIELD+1];
+
+} OMIINO_FRAMER_HARDWARE_INFORMATION_TYPE;
+
+
+typedef struct OMIINO_FRAMER_FIRMWARE_INFORMATION_TYPE
+{
+    char                                                                        ProductName[OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_PRODUCT_NAME_FIELD+1];
+    char                                                                        DateTime[OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_DATE_TIME_FIELD+1];
+    char                                                                        Version[OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_VERSION_FIELD+1];
+
+} OMIINO_FRAMER_FIRMWARE_INFORMATION_TYPE;
+
+
+typedef struct OMIINO_FRAMER_STATUS_DEVICE_TYPE
+{
+    OMIINO_FRAMER_FIRMWARE_INFORMATION_TYPE                                     FirmwareInformation;
+    OMIINO_FRAMER_HARDWARE_INFORMATION_TYPE										HardwareInformation;
+    U8                                                                          HardwareVariant;
+
+} OMIINO_FRAMER_STATUS_DEVICE_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_SECTION_A1A2_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_SECTION_A1A2_TYPE;
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_M1_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_M1_TYPE;
+
+
+typedef struct OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_AIS_LOP_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_ALARM_TYPE									Alarms;
+
+} OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_AIS_LOP_TYPE;
+
+
+
+/*
+ *
+ * DEVICE DRIVER MODEL
+ *
+ */
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_THROUGH_TYPE                                
+{
+    WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE                                                                              LineEndpoint;
+
+}   OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_THROUGH_TYPE;
+
+
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_LINE_TO_SOCKET_CLIENT_TYPE      
+{
+    WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE                                                                              LineEndpoint;
+    U32                                                                                                         iSocketClient;
+
+}   OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_LINE_TO_SOCKET_CLIENT_TYPE;
+
+
+
+
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_DISCRETE_CLIENT_TO_SOCKET_CLIENT_TYPE
+{
+    U8                                                                                                          iDiscreteClient;
+    U32                                                                                                         iSocketClient;
+
+}   OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_DISCRETE_CLIENT_TO_SOCKET_CLIENT_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_TYPE
+{
+    U8																											ConnectionType;
+
+    union
+    {
+        OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_THROUGH_TYPE                                         Through;
+        OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_LINE_TO_SOCKET_CLIENT_TYPE               UnProtectedLineToSocketClient;
+        OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_DISCRETE_CLIENT_TO_SOCKET_CLIENT_TYPE    UnProtectedDiscreteClientToSocketClient;
+
+    } u;
+
+} OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE
+{
+    U8																			ShallowIsEnabled;	
+    U8																			DeepIsEnabled;	
+
+} OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE
+{
+    U8																			TowardsLineIsEnabled;	
+    U8																			TowardsSocketIsEnabled;	
+
+} OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_RDI_CONTROL_TYPE
+{
+    U8																			TowardsLineIsEnabled;
+} OMIINO_FRAMER_CONFIGURATION_RDI_CONTROL_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE
+{
+	U8																			ExcessiveThreshold;
+	U8																			SignalDegradeThreshold;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE;
+
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE
+{
+	U8																			TX;
+	U8																			EX;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE			Configuration;
+	OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE					Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE;
+
+
+
+
+
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE			Configuration;
+	OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE					Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE;
+
+
+	
+
+
+/*
+ *
+ * DEVICE DRIVER MODEL SOCKET CLIENT PDH
+ *
+ */
+
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_SOCKET_CLIENT_ALARM_TYPE
+{
+	U32																			Key[WPX_UFE_FRAMER_SOCKET_CLIENT_MAX_ALARM_CATEGORIES];
+
+} OMIINO_FRAMER_STATUS_SOCKET_CLIENT_ALARM_TYPE;
+
+
+typedef struct OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE
+{
+    U8																			Ingress_PRBS_State;	
+    U8																			Egress_PRBS_State;	
+	OMIINO_FRAMER_STATUS_SOCKET_CLIENT_ALARM_TYPE								Alarms;
+
+} OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE
+{
+    U8																			Ingress_Term_PRBS_Pattern;	
+    U8																			Ingress_Gen_PRBS_Pattern;	
+    U8																			Egress_Term_PRBS_Pattern;	
+    U8																			Egress_Gen_PRBS_Pattern;	
+    OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE						Loopback;	
+
+} OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_CLIENT_PM_TYPE
+{
+	U8																			PM_State[WPX_UFE_FRAMER_MAX_PDH_MONITORED_POINTS_PER_PDH_ELEMENT];
+	U16																			PM_CompressedKey[WPX_UFE_FRAMER_MAX_PDH_MONITORED_POINTS_PER_PDH_ELEMENT];
+
+} OMIINO_FRAMER_CLIENT_PM_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_TYPE                     Connection;
+    U8                                                                          FacilityState;
+    U8																			ClientType;	
+    U8																			Framing;	
+    U8																			Mapping;	
+    U8																			CAS_IsEnabled;	
+    U8																			ClockRecovery;
+	U8																			TimestampingIsEnabled;
+	U32																			Gain;
+	U8																			TimestampByteCount;
+
+	OMIINO_FRAMER_CLIENT_PM_TYPE												PM;
+
+	OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE				Diagnostic;
+	OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE								AIS_Control;
+	OMIINO_FRAMER_CONFIGURATION_RDI_CONTROL_TYPE								RDI_Control;
+
+} OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE;
+
+
+
+	
+typedef struct OMIINO_FRAMER_HIERARCHY_SOCKET_CLIENT_PDH_ELEMENT_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE					Configuration;
+    OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE							Status;
+
+} OMIINO_FRAMER_HIERARCHY_SOCKET_CLIENT_PDH_ELEMENT_TYPE;
+
+
+
+
+/*
+ *
+ * DEVICE DRIVER MODEL DISCRETE CLIENT
+ *
+ */
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_DIAGNOSTIC_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE						Loopback;	
+
+} OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_DIAGNOSTIC_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_TYPE
+{
+	OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_ALARM_TYPE								Alarms;
+
+} OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_TYPE                     Connection;
+    U8                                                                          FacilityState;
+    U8																			ClientType;	
+    U8																			Framing;	
+    U8																			Mapping;	
+    U8																			CAS_IsEnabled;	
+    U8																			ClockRecovery;
+	OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_DIAGNOSTIC_TYPE					Diagnostic;
+	OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE								AIS_Control;
+
+} OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_DISCRETE_CLIENT_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE							Configuration;
+    OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_TYPE									Status;
+
+} OMIINO_FRAMER_HIERARCHY_DISCRETE_CLIENT_TYPE;
+
+
+
+
+/*
+ *
+ * DEVICE DRIVER MODEL SONET SDH LO PATH
+ *
+ */
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE
+{
+	U8																			Mode;
+    char																		TX[WPX_UFE_FRAMER_MAX_CHARS_IN_16_BYTE_PATH_TRACE+1];
+    char																		EX[WPX_UFE_FRAMER_MAX_CHARS_IN_16_BYTE_PATH_TRACE+1];
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE				Configuration;
+	OMIINO_FRAMER_STATUS_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE						Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_TYPE
+{
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE					J2;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE				V5_BIP2;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE				V5_SignalLabel;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_TYPE;
+
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_BANDWIDTH_TYPE
+{    
+    U8                                                                          Payload;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_BANDWIDTH_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_BANDWIDTH_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_BANDWIDTH_TYPE				Configuration;	
+    OMIINO_FRAMER_STATUS_SONET_SDH_LO_PATH_BANDWIDTH_TYPE						Status;	
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_BANDWIDTH_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_DIAGNOSTIC_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE						Loopback;	
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_DIAGNOSTIC_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_ELEMENT_TYPE
+{
+    U8                                                                          FacilityState;
+    OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_TYPE                     Connection;
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_DIAGNOSTIC_TYPE					Diagnostic;
+	U8																			PM_State[WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_LO_PATH];
+	U16																			PM_CompressedKey[WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_LO_PATH];
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_ELEMENT_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_ELEMENT_TYPE					Configuration;
+    OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_BANDWIDTH_TYPE					Bandwidth;	
+    OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_TYPE						Overhead;	
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_TYPE
+{
+    OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE						Element[WPX_UFE_FRAMER_BUILD_OPTION_MAX_L][WPX_UFE_FRAMER_BUILD_OPTION_MAX_M];
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_TYPE;
+
+
+
+
+
+/*
+ *
+ * DEVICE DRIVER MODEL SONET SDH HO PATH
+ *
+ */
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE
+{
+	U8																			Mode;
+    char																		TX[WPX_UFE_FRAMER_MAX_CHARS_IN_64_BYTE_PATH_TRACE+1];
+    char																		EX[WPX_UFE_FRAMER_MAX_CHARS_IN_64_BYTE_PATH_TRACE+1];
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE				Configuration;
+	OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE						Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE			Configuration;
+	OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE						Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE					Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE						Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_TYPE
+{
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE				B3;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE				C2;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE					J1;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE					G1;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE				H1H2H3;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE					H4;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_TYPE;
+
+
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_BANDWIDTH_TYPE
+{
+    U8                                                                          Payload;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_BANDWIDTH_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_BANDWIDTH_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_BANDWIDTH_TYPE				Configuration;	
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_BANDWIDTH_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_DIAGNOSTIC_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE						Loopback;	
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_DIAGNOSTIC_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_TYPE
+{
+    U32                                                                         iLow;
+    U8                                                                          FacilityState;
+    OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_TYPE                     Connection;
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_DIAGNOSTIC_TYPE					Diagnostic;
+	U8																			PM_State[WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_HO_PATH];
+	U16																			PM_CompressedKey[WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_HO_PATH];
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_TYPE							Configuration;
+    OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_BANDWIDTH_TYPE					Bandwidth;	
+    OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_TYPE						Overhead;	
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_VC4_VC3_PATH_TYPE
+{
+    OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE                          VC4;
+    OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE                          VC3[WPX_UFE_FRAMER_BUILD_OPTION_MAX_K];
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_VC4_VC3_PATH_TYPE;
+
+
+
+
+
+/*
+ *
+ * DEVICE DRIVER MODEL SONET SDH PORT LINE
+ *
+ */
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_M1_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_M1_TYPE							Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_M1_TYPE;
+
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_K1K2_TYPE
+{
+	WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE                                 TX;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_K1K2_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_S1_TYPE
+{
+	U8																			TX;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_S1_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_S1_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_S1_TYPE						Configuration;
+	OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_S1_TYPE							Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_S1_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_K1K2_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_K1K2_TYPE				    Configuration;
+	OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_K1K2_TYPE							Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_K1K2_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_TYPE
+{
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_K1K2_TYPE						K1K2;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_S1_TYPE						    S1;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE			    B2;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_M1_TYPE						    M1;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_TYPE;
+
+
+
+
+
+/*
+ *
+ * DEVICE DRIVER MODEL SONET SDH PORT SECTION
+ *
+ */
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE
+{
+	U8																			Mode;
+    char																		TX[WPX_UFE_FRAMER_MAX_CHARS_IN_64_BYTE_PATH_TRACE+1];
+    char																		EX[WPX_UFE_FRAMER_MAX_CHARS_IN_64_BYTE_PATH_TRACE+1];
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_J0_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE					Configuration;
+	OMIINO_FRAMER_STATUS_SONET_SDH_PORT_SECTION_J0_TYPE							Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_J0_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_A1A2_TYPE
+{
+	OMIINO_FRAMER_STATUS_SONET_SDH_SECTION_A1A2_TYPE							Status;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_A1A2_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_TYPE
+{
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE				B1;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_J0_TYPE						J0;
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_A1A2_TYPE					A1A2;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_DIAGNOSTIC_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE						Loopback;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_DIAGNOSTIC_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_PROTECTION_TYPE
+{
+	U8																			Force;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_PROTECTION_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_DCC_TYPE
+{
+	U8																			State;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_DCC_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE
+{
+    U8																			Rate;	
+    U8																			ScramblingIsEnabled;
+    U8                                                                          PortMode;
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_DCC_TYPE							DCC[WPX_UFE_FRAMER_DCC_MAX];
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_DIAGNOSTIC_TYPE					Diagnostic;
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_PROTECTION_TYPE					Protection;
+
+} OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE
+{
+	OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE								Configuration;
+
+    U32																			Firewall_Configuration_SonetSdh_A;
+
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_TYPE							Section;
+
+    U32																			Firewall_Configuration_SonetSdh_B;
+
+
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_LINE_TYPE							Line;
+
+    U32																			Firewall_Configuration_SonetSdh_C;
+
+
+    union
+    {
+        OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_VC4_VC3_PATH_TYPE					sdh_HO_Path     [WPX_UFE_FRAMER_BUILD_OPTION_MAX_J_PER_PORT];
+
+        OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE							sonet_HO_Path   [WPX_UFE_FRAMER_BUILD_OPTION_MAX_U_PER_PORT];
+    } u;
+
+} OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_TYPE
+{
+    U32                                                                        iDriveRecovered_SocketClient_Clock[MAX_SOCKET_CLIENT_RECOVERED_CLOCKS]; 
+	U32																		   DriveRecovered_SocketClient_RateParameter[MAX_SOCKET_CLIENT_RECOVERED_CLOCKS]; 
+} OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_TYPE;
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_SOCKET_CLIENT_PDH_TYPE
+{
+    OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_TYPE							Configuration;                                                             
+	OMIINO_FRAMER_HIERARCHY_SOCKET_CLIENT_PDH_ELEMENT_TYPE						Element[WPX_UFE_FRAMER_BUILD_OPTION_MAX_SOCKET_CLIENT_PDH_PORTS];
+
+} OMIINO_FRAMER_HIERARCHY_SOCKET_CLIENT_PDH_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_ALARM_CATEGORY_REPORTING_TYPE
+{
+    U8																			IsEnabled;                                                                        
+
+} OMIINO_FRAMER_CONFIGURATION_ALARM_CATEGORY_REPORTING_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_DEVICE_DIAGNOSTIC_TYPE
+{
+	U8																			iLinePort_DriveRecoveredClock[MAX_SONET_SDH_RECOVERED_CLOCKS];
+	U8																			SquelchRecoveredClock[MAX_SONET_SDH_RECOVERED_CLOCKS];
+
+} OMIINO_FRAMER_CONFIGURATION_DEVICE_DIAGNOSTIC_TYPE;
+
+
+typedef struct OMIINO_FRAMER_CONFIGURATION_DEVICE_TYPE
+{
+    U8																			Mode;
+	
+	U8																			ProtectionMode;
+
+	U8																			CardProtectionOperatingMode;
+
+	U8																			AIS_InsertionMode;
+
+	U16																			FrameAlignmentOffset;
+
+	OMIINO_FRAMER_CONFIGURATION_DEVICE_DIAGNOSTIC_TYPE							Diagnostic;
+
+} OMIINO_FRAMER_CONFIGURATION_DEVICE_TYPE;
+
+
+
+#define MAX_ALARM_MANAGER_NODE_ELEMENTS											(25400+(8*1344)) /* 4+4 OC3/OC12 + 32 Discrete + 4*1344 Socket Client */
+
+
+typedef struct OMIINO_ALARM_MANAGER_INSTANCE_TYPE
+{
+	union
+	{
+		U8																		iLinePort;
+		U8																		iDiscreteClientPort;
+		U32																		iSocketClientPDH;
+		WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE									Endpoint;
+	} u;      
+      
+} OMIINO_ALARM_MANAGER_INSTANCE_TYPE;
+
+typedef struct OMIINO_ALARM_MANAGER_ELEMENT_TYPE
+{
+    U8																			IsActive;
+    U8																			AlarmCategory;
+    U8																			IsAsserted;
+    U32                                                                         Next;
+    U32                                                                         Prev;
+	U8																			InstanceType;
+	OMIINO_ALARM_MANAGER_INSTANCE_TYPE											Instance;
+
+} OMIINO_ALARM_MANAGER_ELEMENT_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE
+{
+    U32                                                                         NextFree;
+    OMIINO_ALARM_MANAGER_ELEMENT_TYPE                                           Element[MAX_ALARM_MANAGER_NODE_ELEMENTS];
+	void																		(*AnnounceKeyStored)(U8 iDevice, U32 NodeKey, U8 AlarmCategory, OMIINO_ALARM_MANAGER_INSTANCE_TYPE * pInstance, U8 InstanceType);
+	void																		(*AnnounceKeyRemoved)(U8 iDevice, U32 NodeKey);
+
+
+
+
+} OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE;
+
+
+
+#define MAX_PERFORMANCE_MONITORING_KEY_MANAGER_NODE_ELEMENTS					(10*1024)	/* TODO Determine MAX PM Keys */
+
+
+typedef struct OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_ELEMENT_TYPE
+{
+    U8																			IsActive;
+    U16                                                                         Next;
+    U16                                                                         Prev;
+	OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE								KeyNode;
+
+} OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_ELEMENT_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_TYPE
+{
+    U16                                                                         NextFree;
+    OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_ELEMENT_TYPE				Element[MAX_PERFORMANCE_MONITORING_KEY_MANAGER_NODE_ELEMENTS]; 
+
+
+} OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_TYPE;
+
+
+
+#define WPX_UFE_FRAMER_SONET_SDH_LO_PATH_MAX_ILOW_ELEMENTS								(WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_PORTS*WPX_UFE_FRAMER_BUILD_OPTION_MAX_J_PER_PORT*WPX_UFE_FRAMER_BUILD_OPTION_MAX_K)
+
+
+
+typedef struct OMIINO_FRAMER_HIERARCHY_TYPE
+{
+
+    OMIINO_FRAMER_CONFIGURATION_DEVICE_TYPE										Configuration;
+
+    U32																			Firewall_Configuration_A;
+
+    OMIINO_FRAMER_STATUS_DEVICE_TYPE                                            Status;
+
+    U32																			Firewall_Configuration_B;
+
+	OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE									SONET_SDH_Port[WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_PORTS];
+	
+    U32																			Firewall_Configuration_C;
+
+    OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_TYPE								SONET_SDH_LO_Path[WPX_UFE_FRAMER_SONET_SDH_LO_PATH_MAX_ILOW_ELEMENTS];
+	
+    U32																			Firewall_Configuration_D;
+
+    OMIINO_FRAMER_HIERARCHY_SOCKET_CLIENT_PDH_TYPE								SocketClient;
+
+    U32																			Firewall_Configuration_E;
+
+	OMIINO_FRAMER_HIERARCHY_DISCRETE_CLIENT_TYPE								DiscreteClient[WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_DISCRETE_CLIENT_PORTS];
+
+    U32																			Firewall_Configuration_F;
+
+	OMIINO_FRAMER_CONFIGURATION_ALARM_CATEGORY_REPORTING_TYPE					SONET_SDH_AlarmCategoryReporting[WPX_UFE_FRAMER_SONET_SDH_MAX_ALARM_CATEGORIES];
+
+	U32																			Firewall_Configuration_G;
+
+	OMIINO_FRAMER_CONFIGURATION_ALARM_CATEGORY_REPORTING_TYPE					SOCKET_CLIENT_AlarmCategoryReporting[WPX_UFE_FRAMER_SOCKET_CLIENT_MAX_ALARM_CATEGORIES];
+	OMIINO_FRAMER_CONFIGURATION_ALARM_CATEGORY_REPORTING_TYPE					DISCRETE_CLIENT_AlarmCategoryReporting[WPX_UFE_FRAMER_DISCRETE_CLIENT_MAX_ALARM_CATEGORIES];
+
+	U32																			Firewall_Configuration_H;
+
+	OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE										Alarms;
+
+    U32																			Firewall_Configuration_I;
+
+    OMIINO_FRAMER_PM_ENGINE_TYPE                                                PerformanceMonitoring;
+
+    U32																			Firewall_Configuration_J;
+
+    OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_TYPE                       PerformanceMonitoringKeyManager;
+
+    U32																			Firewall_Configuration_K;
+
+} OMIINO_FRAMER_HIERARCHY_TYPE;
+
+
+
+
+
+typedef struct OMIINO_FRAMER_PERFORMANCE_MONITORING_TYPE
+{
+    WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE                             PerformanceMonitoringDeviceTable;
+
+} OMIINO_FRAMER_PERFORMANCE_MONITORING_TYPE;
+
+
+
+#define OMIINO_MAGIC                                                            (0x00311300)
+typedef struct OMIINO_FRAMER_ENVIRONMENT_WRAPPER_TABLE_TYPE
+{
+    U8                                                                          DeviceDriverHandle;
+    U32                                                                         Magic;
+    WPX_UFE_FRAMER_ENVIRONMENT_TABLE_TYPE                                        EnvironmentTable;
+
+
+} OMIINO_FRAMER_ENVIRONMENT_WRAPPER_TABLE_TYPE;
+
+
+
+
+
+
+#define OMIINO_FIREWALL_PATTERN                                                 (0x12345678)
+#define MAX_FIREWALL_ELEMENTS			                                        (256)
+
+
+typedef struct OMIINO_FIREWALL_ELEMENT_TYPE
+{
+    	U32                                                                     Address;
+        U32                                                                     Signature;
+} OMIINO_FIREWALL_ELEMENT_TYPE;
+
+
+typedef struct OMIINO_FRAMER_FIREWALL_DATA_TYPE
+{
+    U32                                                                         NextFree;
+    OMIINO_FIREWALL_ELEMENT_TYPE                                                Element[MAX_FIREWALL_ELEMENTS];
+
+
+} OMIINO_FRAMER_FIREWALL_DATA_TYPE;
+
+
+
+
+
+
+
+typedef struct OMIINO_LOW_LEVEL_COMMS_RAM_TYPE
+{
+    U32																			Firewall_TOP;
+    U8                                                                          Length;
+    U32                                                                         Buffer[1+(WPX_UFE_FRAMER_MAX_CHARS_IN_MAILBOX/4)]; /* DMCC - allow one extra int for mailbox copies */
+    U32																			Firewall_BOT;
+
+} OMIINO_LOW_LEVEL_COMMS_RAM_TYPE;
+
+
+typedef struct OMIINO_PRODUCT_CABILITY_TYPE
+{
+    U8                                                                          IsDefined;
+
+} OMIINO_PRODUCT_CABILITY_TYPE;
+
+
+#define S_RESET_MODEL_INIT		(0)
+#define S_IN_BOOTLOADER			(1)
+#define S_IN_FIRMWARE			(2)
+#define S_BACK_TO_BOOTLOADER	(3)
+#define S_TEST_MODE				(4)
+
+#define E_FIRMWARE_HELLO		(0)
+#define E_BOOTLOADER_HELLO		(1)
+
+typedef struct OMIINO_MODEL_CONTROL_FSM_TYPE
+{
+	U8							State;
+	U8							iDevice;
+
+} OMIINO_MODEL_CONTROL_FSM_TYPE;
+
+
+typedef struct OMIINO_FRAMER_PERFORMANCE_MONITORING_M_OF_N_TYPE
+{
+	int																			Limit;
+	int																			Current;
+
+} OMIINO_FRAMER_PERFORMANCE_MONITORING_M_OF_N_TYPE;
+
+
+
+
+typedef struct OMIINO_PORT_MAP_TYPE
+{
+	U8 LogicalToPresentation[WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_PORTS];
+	U8 PresentationToLogical[WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_PORTS];
+	U8 LogicalProtectionPartner[WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_PORTS];
+
+} OMIINO_PORT_MAP_TYPE;
+
+
+
+typedef struct OMIINO_FRAMER_DEVICE_TYPE
+{    
+	U8																			BuildPersonality;
+
+	U8																			LLC_AccessIsPermitted;
+
+	U8																			TestMode;
+
+    OMIINO_FRAMER_HIERARCHY_TYPE												Hierarchy;
+    
+    U32																			Firewall_Device_A;
+
+	OMIINO_MODEL_CONTROL_FSM_TYPE												ModelControl_FSM;
+
+    U32																			Firewall_Device_B;
+            
+    OMIINO_FRAMER_PERFORMANCE_MONITORING_TYPE                                   PerformanceMonitoring;
+
+	OMIINO_FRAMER_PERFORMANCE_MONITORING_M_OF_N_TYPE							M_of_N;
+    
+    U32																			Firewall_Device_C;
+    
+    WPX_UFE_FRAMER_MAILBOX_MEMORY_MAP_TYPE										MemoryMap;
+    
+    U32																			Firewall_Device_D;
+    
+    OMIINO_LOW_LEVEL_COMMS_RAM_TYPE                                             LLC;
+
+	OMIINO_LOW_LEVEL_COMMS_RAM_TYPE                                             LLC_NorthboundBuffer;
+
+	OMIINO_PORT_MAP_TYPE														PortMap;
+
+
+} OMIINO_FRAMER_DEVICE_TYPE;
+
+
+
+
+
+
+
+
+typedef struct OMIINO_API_ELEMENT_TYPE
+{
+    U32                                                                                         In;
+    U32                                                                                         Out;
+} OMIINO_API_ELEMENT_TYPE;
+
+
+
+
+#define WPX_UFE_FRAMER_MAX_CHARS_IN_ASSERT_BUFFER                                                       (1024)
+typedef struct OMIINO_UTILITY_RAM_TYPE
+{
+    OMIINO_FRAMER_FIREWALL_DATA_TYPE                                                            Firewall;
+    OMIINO_API_ELEMENT_TYPE                                                                     API[MAX_APIS];
+    char                                                                                        AssertBuffer[WPX_UFE_FRAMER_MAX_CHARS_IN_ASSERT_BUFFER];
+
+} OMIINO_UTILITY_RAM_TYPE;
+
+
+
+typedef struct OMIINO_DEVICE_DIAGNOSTIC_PRIVATE_ANNOUNCE_TYPE
+{
+    U32                                                     UnBoundCalls;
+    U32                                                     EnterCount;
+    WPX_UFE_FRAMER_DEVICE_DIAGNOSTIC_ANNOUNCE_TYPE	    Callback;
+    U32                                                     ExitCount;
+
+    U8 DeviceIsReadyReported[WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES];
+
+    WPX_UFE_FRAMER_DEVICE_READY_ANNOUNCE_TYPE	            DeviceReady;
+    WPX_UFE_FRAMER_FIRMWARE_RESTART_ANNOUNCE_TYPE	    FirmwareRestart;
+    WPX_UFE_FRAMER_PEEK_RESPONSE_ANNOUNCE_TYPE              PeekResponse;
+    WPX_UFE_FRAMER_BLOCK_POKE_VERIFY_RESPONSE_ANNOUNCE_TYPE BlockPokeVerifyResponse;
+    WPX_UFE_FRAMER_ALARM_MAP_RESPONSE_ANNOUNCE_TYPE         AlarmMapResponse;
+    WPX_UFE_FRAMER_SS_BITS_ANNOUNCE_TYPE                    SSBitsGetRxResponse;
+
+} OMIINO_DEVICE_DIAGNOSTIC_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+
+typedef struct WPX_UFE_FRAMER_SONET_SDH_PORT_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_SONET_SDH_PORT_PERFORMANCE_MONITORING_ANNOUNCE_TYPE							Callback;
+    U32                                                                                         ExitCount;
+
+} WPX_UFE_FRAMER_SONET_SDH_PORT_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+
+typedef struct WPX_UFE_FRAMER_SONET_SDH_HO_PATH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_SONET_SDH_HO_PATH_PERFORMANCE_MONITORING_ANNOUNCE_TYPE						Callback;
+    U32                                                                                         ExitCount;
+
+} WPX_UFE_FRAMER_SONET_SDH_HO_PATH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+
+
+typedef struct WPX_UFE_FRAMER_SONET_SDH_LO_PATH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_SONET_SDH_LO_PATH_PERFORMANCE_MONITORING_ANNOUNCE_TYPE						Callback;
+    U32                                                                                         ExitCount;
+
+} WPX_UFE_FRAMER_SONET_SDH_LO_PATH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+
+
+typedef struct OMIINO_API_DISCRETE_CLIENT_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE	
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_DISCRETE_CLIENT_PERFORMANCE_MONITORING_ANNOUNCE_TYPE							Callback;
+    U32                                                                                         ExitCount;
+} OMIINO_API_DISCRETE_CLIENT_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+
+typedef struct WPX_UFE_FRAMER_PDH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE	
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_PDH_PERFORMANCE_MONITORING_ANNOUNCE_TYPE										Callback;
+    U32                                                                                         ExitCount;
+} WPX_UFE_FRAMER_PDH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+typedef struct WPX_UFE_FRAMER_SONET_SDH_PORT_ALARM_PRIVATE_ANNOUNCE_TYPE		
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_SONET_SDH_PORT_ALARM_ANNOUNCE_TYPE											Callback;
+    U32                                                                                         ExitCount;
+} WPX_UFE_FRAMER_SONET_SDH_PORT_ALARM_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+
+
+typedef struct WPX_UFE_FRAMER_SONET_SDH_PATH_ALARM_PRIVATE_ANNOUNCE_TYPE		
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_SONET_SDH_PATH_ALARM_ANNOUNCE_TYPE											Callback;
+    U32                                                                                         ExitCount;
+} WPX_UFE_FRAMER_SONET_SDH_PATH_ALARM_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+
+typedef struct OMIINO_DISCRETE_CLIENT_PORT_ALARM_PRIVATE_ANNOUNCE_TYPE	
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_DISCRETE_CLIENT_PORT_ALARM_ANNOUNCE_TYPE										Callback;
+    U32                                                                                         ExitCount;
+} OMIINO_DISCRETE_CLIENT_PORT_ALARM_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+
+typedef struct OMIINO_SOCKET_CLIENT_PDH_ALARM_PRIVATE_ANNOUNCE_TYPE	
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_SOCKET_CLIENT_PDH_ALARM_ANNOUNCE_TYPE										Callback;
+    U32                                                                                         ExitCount;
+} OMIINO_SOCKET_CLIENT_PDH_ALARM_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+typedef struct WPX_UFE_FRAMER_SONET_SDH_SECTION_K1K2_PRIVATE_ANNOUNCE_TYPE	
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_SONET_SDH_SECTION_K1K2_ANNOUNCE_TYPE											Callback;
+    U32                                                                                         ExitCount;
+} WPX_UFE_FRAMER_SONET_SDH_SECTION_K1K2_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+typedef struct WPX_UFE_FRAMER_SONET_SDH_SECTION_S1_PRIVATE_ANNOUNCE_TYPE	
+{
+    U32                                                                                         UnBoundCalls;
+    U32                                                                                         EnterCount;
+    WPX_UFE_FRAMER_SONET_SDH_SECTION_S1_ANNOUNCE_TYPE											Callback;
+    U32                                                                                         ExitCount;
+
+} WPX_UFE_FRAMER_SONET_SDH_SECTION_S1_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+typedef struct OMIINO_PERFORMANCE_MONITORING_TABLE_PRIVATE_ANNOUNCE_TYPE
+{
+	WPX_UFE_FRAMER_SONET_SDH_PORT_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE				SONET_SDH_PrivatePortPerformanceMonitoringAnnounce;
+	WPX_UFE_FRAMER_SONET_SDH_HO_PATH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE			SONET_SDH_PrivateHighOrderPathPerformanceMonitoringAnnounce;
+	WPX_UFE_FRAMER_SONET_SDH_LO_PATH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE			SONET_SDH_PrivateLowOrderPathPerformanceMonitoringAnnounce;
+	OMIINO_API_DISCRETE_CLIENT_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE					DiscreteClientPortPrivatePerformanceMonitoringAnnounce;
+	WPX_UFE_FRAMER_PDH_PERFORMANCE_MONITORING_PRIVATE_ANNOUNCE_TYPE							PDH_PrivatePerformanceMonitoringAnnounce;
+
+} OMIINO_PERFORMANCE_MONITORING_TABLE_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+typedef struct OMIINO_ALARM_OUTPUT_TABLE_PRIVATE_ANNOUNCE_TYPE
+{
+	WPX_UFE_FRAMER_SONET_SDH_PORT_ALARM_PRIVATE_ANNOUNCE_TYPE								SONET_SDH_PrivatePortAlarmAnnounce;
+	WPX_UFE_FRAMER_SONET_SDH_PATH_ALARM_PRIVATE_ANNOUNCE_TYPE								SONET_SDH_PrivatePathAlarmAnnounce;
+	OMIINO_DISCRETE_CLIENT_PORT_ALARM_PRIVATE_ANNOUNCE_TYPE									DiscreteClientPrivatePortAlarmAnnounce;
+	OMIINO_SOCKET_CLIENT_PDH_ALARM_PRIVATE_ANNOUNCE_TYPE									SocketClientSidePrivatePortAlarmAnnounce;
+
+} OMIINO_ALARM_OUTPUT_TABLE_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+typedef struct OMIINO_SIGNALLING_TABLE_PRIVATE_ANNOUNCE_TYPE
+{
+	WPX_UFE_FRAMER_SONET_SDH_SECTION_K1K2_PRIVATE_ANNOUNCE_TYPE								LineSidePrivateSectionK1K2Announce;
+	WPX_UFE_FRAMER_SONET_SDH_SECTION_S1_PRIVATE_ANNOUNCE_TYPE								LineSidePrivateSectionS1Announce;
+
+} OMIINO_SIGNALLING_TABLE_PRIVATE_ANNOUNCE_TYPE;
+
+
+
+
+typedef struct OMIINO_AUTONOMOUS_OUTPUT_PRIVATE_TABLE_TYPE
+{
+	OMIINO_ALARM_OUTPUT_TABLE_PRIVATE_ANNOUNCE_TYPE									AutonomousPrivateAlarmTable;
+	OMIINO_PERFORMANCE_MONITORING_TABLE_PRIVATE_ANNOUNCE_TYPE						AutonomousPrivatePerformanceMonitoringTable;
+	OMIINO_SIGNALLING_TABLE_PRIVATE_ANNOUNCE_TYPE									AutonomousPrivateSignallingTable;
+	
+
+} OMIINO_AUTONOMOUS_OUTPUT_PRIVATE_TABLE_TYPE;
+
+
+#define OMIINO_FRAMER_MAX_CHARS_IN_DRIVER_INFORMATION_FIELD                         (32)
+typedef struct OMIINO_DEVICE_DRIVER_RAM_TYPE
+{
+    char                                                                           ProductReleaseStr[OMIINO_FRAMER_MAX_CHARS_IN_DRIVER_INFORMATION_FIELD+1];
+    char                                                                           SoftwareBuildDateTimeStr[OMIINO_FRAMER_MAX_CHARS_IN_DRIVER_INFORMATION_FIELD+1];
+    char                                                                           SoftwareBuildVersionStr[OMIINO_FRAMER_MAX_CHARS_IN_DRIVER_INFORMATION_FIELD+1];
+
+} OMIINO_DEVICE_DRIVER_RAM_TYPE;
+
+
+
+
+typedef struct OMNISPY_TABLE_TYPE
+{
+	 void (*Parser[OMIINO_NORTHBOUND_MESSAGE_CATALOGUE_OMNISPY_MAX_MESSAGES])(U8 iDevice);
+
+} OMNISPY_TABLE_TYPE;
+
+
+typedef struct OMNISPY_PM_TABLE_TYPE
+{
+    void (*Parser[OMIINO_NORTHBOUND_MESSAGE_CATALOGUE_PERFORMANCE_MONITORING_MAX_MESSAGES])(U32 MessageIdentifier, U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchyRAM, U8 * pMessage, U8 Length);
+
+} OMNISPY_PM_TABLE_TYPE;
+
+
+typedef struct OMNISPY_STATUS_TABLE_TYPE
+{
+    void (*Parser[OMIINO_NORTHBOUND_MESSAGE_CATALOGUE_STATUS_MAX_MESSAGES])(U32 MessageIdentifier, U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchyRAM, U8 * pMessage, U8 Length);
+
+} OMNISPY_STATUS_TABLE_TYPE;
+
+
+typedef struct OMNISPY_SIGNALLING_TABLE_TYPE
+{
+    void (*Parser[OMIINO_NORTHBOUND_MESSAGE_CATALOGUE_SIGNALLING_MAX_MESSAGES])(U32 MessageIdentifier, U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchyRAM, U8 * pMessage, U8 Length);
+
+} OMNISPY_SIGNALLING_TABLE_TYPE;
+
+
+typedef struct OMNISPY_AUXILIARY_TABLE_TYPE
+{
+    void (*Parser[MAX_APIS])(U32 MessageIdentifier, U8 iDevice, U8 * pMessage, U8 Length);
+
+} OMNISPY_AUXILIARY_TABLE_TYPE;
+
+typedef struct OMIINO_OMNISPY_RAM_TYPE
+{
+    WPX_UFE_FRAMER_OMNISPY_TABLE_TYPE                                                       AutonomousOutputTable;
+    
+} OMIINO_OMNISPY_RAM_TYPE;
+
+
+
+
+typedef struct OMIINO_FRAMER_NORTHBOUND_LLC_PARSER_TABLE_TYPE
+{
+    OMNISPY_AUXILIARY_TABLE_TYPE                                                    AuxiliaryTable;
+    OMNISPY_SIGNALLING_TABLE_TYPE                                                   SignallingTable;
+    OMNISPY_STATUS_TABLE_TYPE                                                       StatusTable;
+    OMNISPY_PM_TABLE_TYPE                                                           PerformanceMonitoringTable;
+	OMNISPY_TABLE_TYPE																OmnispyTable;
+
+} OMIINO_FRAMER_NORTHBOUND_LLC_PARSER_TABLE_TYPE;
+
+typedef enum {
+	OMIINO_FRAMER_FIRMWARE_DOWNLOAD_WAITING_ON_HELLO,
+	OMIINO_FRAMER_FIRMWARE_DOWNLOAD_WAITING_ON_ACK,
+	OMIINO_FRAMER_FIRMWARE_DOWNLOAD_PENDING,
+	OMIINO_FRAMER_FIRMWARE_DOWNLOAD_RUNNING,
+	OMIINO_FRAMER_TEST_MODE_NO_FIRMWARE_BOOTLOADER_RUNNING
+} OMIINO_FRAMER_FIRMWARE_DOWNLOAD_STATE;
+
+typedef struct {
+	OMIINO_FRAMER_FIRMWARE_DOWNLOAD_STATE CurrentState;
+	U32 LastBootHelloCount;
+	U32 LastFirmwareHelloCount;
+	U32 LastPacketCount;
+    U32 SuspectPacketCount;
+	U32 Buffer[1+(WPX_UFE_FRAMER_MAX_CHARS_IN_MAILBOX/4)]; /* DMCC - allow an extra int for copies */
+} OMIINO_FRAMER_FIRMWARE_DOWNLOAD_INFO;
+
+typedef struct OMNISPY_SOCKET_DYNAMIC_RULE_RAM_ELEMENT_TYPE
+{
+	U8																				ErrorCode;
+	
+	U8																				iExpectedPort;
+	
+	U8																				iExpected_J;
+	U8																				iExpected_K;
+	U8																				iExpected_L;
+	U8																				iExpected_M;
+
+	U8																				iExpected_U;
+	U8																				iExpected_V;
+	U8																				iExpected_W;
+
+} OMNISPY_SOCKET_DYNAMIC_RULE_RAM_ELEMENT_TYPE;
+
+typedef struct OMNISPY_SOCKET_DYNAMIC_RULE_RAM_TYPE
+{
+	OMNISPY_SOCKET_DYNAMIC_RULE_RAM_ELEMENT_TYPE									Element[WPX_UFE_FRAMER_BUILD_OPTION_MAX_SOCKET_CLIENT_PDH_PORTS];
+} OMNISPY_SOCKET_DYNAMIC_RULE_RAM_TYPE;
+
+
+
+
+
+typedef struct OMIINO_FRAMER_RAM_TYPE
+{
+    U32																			    Firewall_TOP;
+
+    OMIINO_FRAMER_DEVICE_TYPE                                                       Device[WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES];
+    U32																			    Firewall_M1;
+    OMIINO_FRAMER_ENVIRONMENT_WRAPPER_TABLE_TYPE                                    EnvironmentWrapper;
+    U32																			    Firewall_M2;
+    OMIINO_AUTONOMOUS_OUTPUT_PRIVATE_TABLE_TYPE                                     AutonomousOutputTable;
+    U32																			    Firewall_M3;
+    OMIINO_DEVICE_DIAGNOSTIC_PRIVATE_ANNOUNCE_TYPE                                  DeviceLevelDiagnosticTable;
+    U32																			    Firewall_M4;
+    WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE                                 PerformanceMonitoringDeviceTable;
+    U32																			    Firewall_M5;
+    OMIINO_UTILITY_RAM_TYPE                                                         Utility;
+    U32																			    Firewall_M6;
+    OMIINO_DEVICE_DRIVER_RAM_TYPE                                                   Driver;
+	OMNISPY_SOCKET_DYNAMIC_RULE_RAM_TYPE											SocketDynamicRule[WPX_UFE_FRAMER_BUILD_PERSONALITY_MAX][WPX_UFE_MAX_DEVICE_PROTECTION_MODES];
+    U32																			    Firewall_M7;
+    OMIINO_OMNISPY_RAM_TYPE                                                         OmniSpy_RAM;
+    U32																			    Firewall_M8;
+    OMIINO_FRAMER_NORTHBOUND_LLC_PARSER_TABLE_TYPE                                  LLC_Table;  
+	U32																				QC[QC_MAX];
+	U32																				Firewall_M9;
+	OMIINO_FRAMER_FIRMWARE_DOWNLOAD_INFO											FirmwareDownload[WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES];
+    U32																			    Firewall_BOT;
+	volatile int																	RemoveCompilerWarning;
+
+} OMIINO_FRAMER_RAM_TYPE;
+
+
+
+extern OMIINO_FRAMER_RAM_TYPE OMIINO_RAM;
+
+
+void OMIINO_FRAMER_SONET_SDH_Port_List_Facilities(U8 iDevice, U8 iLinePort);
+void OMIINO_FRAMER_List_SDH_LO_FacilitiesForParent(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pParentContainerEndpoint);
+void OMIINO_FRAMER_List_SONET_LO_FacilitiesForParent(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pParentContainerEndpoint);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_FacilitiesForDevice(U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice);
+
+
+/*
+ *
+ * ENVIROMENT WRAPPERS
+ *
+ */
+
+void OMIINO_FRAMER_ENVIRONMENT_WRAPPER_CriticalRegionCreateHandle(U8 *pNewHandle, char * pHandleName);
+void OMIINO_FRAMER_ENVIRONMENT_WRAPPER_EnterCriticalRegion(U8 AnyHandle);
+void OMIINO_FRAMER_ENVIRONMENT_WRAPPER_LeaveCriticalRegion(U8 AnyHandle);
+void OMIINO_FRAMER_ENVIRONMENT_WRAPPER_FatalErrorHandler(char *pTraceMessage);
+void OMIINO_FRAMER_ENVIRONMENT_WRAPPER_Trace(char *pTraceMessage);
+void OMIINO_FRAMER_ENVIRONMENT_WRAPPER_BindEnvironment(OMIINO_FRAMER_RAM_TYPE *pRAM, WPX_UFE_FRAMER_ENVIRONMENT_TABLE_TYPE *pEnvironment);
+
+
+
+
+
+/*
+ *
+ * Signalling WRAPPERS
+ *
+ */
+void OMIINO_SIGNALLING_WRAPPER_BindCallbacks(OMIINO_SIGNALLING_TABLE_PRIVATE_ANNOUNCE_TYPE * pTo, WPX_UFE_FRAMER_SIGNALLING_TABLE_ANNOUNCE_TYPE * pFrom);
+void OMIINO_SIGNALLING_WRAPPER_SONET_SDH_SECTION_K1K2_ANNOUNCE_TYPE(U8 iDevice, U8 iLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE *pRX_K1K2);
+void OMIINO_SIGNALLING_WRAPPER_SONET_SDH_SECTION_S1_ANNOUNCE_TYPE(U8 iDevice, U8 iLinePort, U8 S1);
+
+
+
+
+
+
+/*
+ *
+ * Alarm WRAPPERS
+ *
+ */
+void OMIINO_ALARM_WRAPPER_BindCallbacks(OMIINO_ALARM_OUTPUT_TABLE_PRIVATE_ANNOUNCE_TYPE *pTo, WPX_UFE_FRAMER_ALARM_OUTPUT_TABLE_ANNOUNCE_TYPE *pFrom);
+void OMIINO_ALARM_WRAPPER_SONET_SDH_PORT_ALARM_ANNOUNCE_TYPE(U8 iDevice, U8 iLinePort, U8 AlarmCategory, U8 IsAsserted, U8 IsForced);
+void OMIINO_ALARM_WRAPPER_SONET_SDH_PATH_ALARM_ANNOUNCE_TYPE(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 AlarmCategory, U8 IsAsserted);
+void OMIINO_ALARM_WRAPPER_DISCRETE_CLIENT_PORT_ALARM_ANNOUNCE_TYPE(U8 iDevice, U8 iDiscreteClientPort, U8 AlarmCategory, U8 IsAsserted);
+void OMIINO_ALARM_WRAPPER_SOCKET_CLIENT_PDH_ALARM_ANNOUNCE_TYPE(U8 iDevice, U32 iSocketClientPDH, U8 AlarmCategory, U8 IsAsserted);
+
+
+
+
+/*
+ *
+ * Performance Monitoring WRAPPERS
+ *
+ */
+void OMIINO_PERFORMANCE_MONITORING_WRAPPER_BindCallbacks(OMIINO_PERFORMANCE_MONITORING_TABLE_PRIVATE_ANNOUNCE_TYPE *pTo, WPX_UFE_FRAMER_PERFORMANCE_MONITORING_TABLE_ANNOUNCE_TYPE *pFrom);
+void OMIINO_PERFORMANCE_MONITORING_WRAPPER_SONET_SDH_PORT_PERFORMANCE_MONITORING_ANNOUNCE_TYPE(U8 iDevice, U8 iTableIndex, U32 TimeStamp);
+void OMIINO_PERFORMANCE_MONITORING_WRAPPER_API_SONET_SDH_HO_PATH_PERFORMANCE_MONITORING_ANNOUNCE_TYPE(U8 iDevice, U8 iTableIndex, U32 TimeStamp);
+void OMIINO_PERFORMANCE_MONITORING_WRAPPER_API_SONET_SDH_LO_PATH_PERFORMANCE_MONITORING_ANNOUNCE_TYPE(U8 iDevice, U8 iTableIndex, U32 TimeStamp);
+void OMIINO_PERFORMANCE_MONITORING_WRAPPER_API_DISCRETE_CLIENT_PERFORMANCE_MONITORING_ANNOUNCE_TYPE(U8 iDevice, U8 iTableIndex, U32 TimeStamp);
+void OMIINO_PERFORMANCE_MONITORING_WRAPPER_API_PDH_PERFORMANCE_MONITORING_ANNOUNCE_TYPE(U8 iDevice, U8 iTableIndex, U32 TimeStamp);
+
+
+/*
+ *
+ * Diagnostic WRAPPERS
+ *
+ */
+void OMIINO_DIAGNOSTIC_WRAPPER_BindCallbacks(OMIINO_DEVICE_DIAGNOSTIC_PRIVATE_ANNOUNCE_TYPE *pTo, WPX_UFE_FRAMER_DEVICE_LEVEL_DIAGNOSTIC_TABLE_TYPE *pFrom);
+void OMIINO_DIAGNOSTIC_WRAPPER_ANNOUNCE_DEVICE_READY(U8 iDevice, unsigned char Reported_HardwareBuildVariant);
+void OMIINO_DIAGNOSTIC_WRAPPER_ANNOUNCE_FIRMWARE_RESTART(U8 iDevice, unsigned char Reported_HardwareBuildVariant);
+void OMIINO_DIAGNOSTIC_WRAPPER_ANNOUNCE_PEEK_RESPONSE(U8 iDevice, U32 Address, U32 Value);
+void OMIINO_DIAGNOSTIC_WRAPPER_ANNOUNCE_BLOCK_POKE_VERIFY_RESPONSE(U8 iDevice, U32 VerifyResult);
+void OMIINO_DIAGNOSTIC_WRAPPER_ANNOUNCE_ALARM_MAP_RESPONSE(U8 iDevice);
+void OMIINO_DIAGNOSTIC_WRAPPER_ANNOUNCE_SS_BITS_RESPONSE(U8 iDevice, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *pCommon_SDH_SONET_LineEndpointType,U8 Value);
+
+
+
+/*
+ *
+ * Memory Map
+ *
+ */
+volatile int * OMIINO_FRAMER_GivenMailboxBaseGetAnyMailbox(WPX_UFE_FRAMER_MAILBOX_MEMORY_MAP_TYPE * pMailboxMemoryMap, U8 iMailbox);
+
+void OMIINO_FRAMER_BindMemoryMap(OMIINO_FRAMER_RAM_TYPE *pRAM,
+                                 WPX_UFE_FRAMER_MAILBOX_MEMORY_MAP_TYPE (*pMailboxMemoryMap)[WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES]);
+
+
+/*
+ *
+ * UTILITIES
+ *
+ */
+
+
+/* Aligned with ufe4_fw.h */
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_POKE																							(22)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_BEGIN_ATOMIC_SEQUENCE_MESSAGE														(24)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_2X_MESSAGE																		(25)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_3X_MESSAGE																		(26)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_4X_MESSAGE																		(27)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_8X_MESSAGE																		(28)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_GRAPHIC_CHAR_MESSAGE																(29)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_GRAPHIC_STR_MESSAGE																(30)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_VAR_TRACE_MESSAGE																	(31)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_CLEAR_SCREEN_MESSAGE																(32)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_SCREEN_TEMPLATE_MESSAGE															(33)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VIRTUAL_VGA_END_ATOMIC_SEQUENCE_MESSAGE														(34)
+
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_QC_BEGIN																						(39)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_QC_ITEM																						(40)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_QC_END																						(41)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_FACILITY_EXISTS																				(45)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_CLIENT_FACILITY_EXISTS																		(46)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VERIFICATION_ON																				(47)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_VERIFICATION_OFF																				(48)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_DEMO_ONLY_CONFIGURE_GTP_CLOCK_SOURCE															(49)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_PEEK																							(50)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_DEVICE_DIAGNOSTIC_POKE																		(51)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_DEVICE_DIAGNOSTIC_PEEK																		(52)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_DEVICE_DIAGNOSTIC_BLOCK_POKE																	(53)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_BLOCK_POKE																					(54)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_DEVICE_DIAGNOSTIC_BLOCK_POKE_VERIFY															(55)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_BLOCK_POKE_VERIFY																				(56)
+#define MESSAGE_ID_OMNISPY_SOUTHBOUND_AND_RELAY_MAX_MESSAGES																		(57)
+
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_EncodeHeader(U32 * pFormattedMessage, U32 Field_SouthboundMessageID, U32 Field_TransactionIdentifier, U32 Field_PayloadLength, U32 Field_Attributes);
+void OMIINO_LLC_SOUTHBOUND_FORMATTER_GivenOverallLengthSetHeaderLengthField(U32 *pHeader, U8 OverallLength);
+
+
+
+
+
+
+
+
+
+void OMIINO_FRAMER_ASSERT_Failure( U32 ReasonCode, U32 TheLine, char * TheFile, char * AssertionText );
+
+
+#if WPX_UFE_FRAMER_DEBUG == 1
+#define OMIINO_FRAMER_ASSERT(EXPRESSION,REASONCODE)			((void) ((EXPRESSION) ? (void) 0 : OMIINO_FRAMER_ASSERT_Failure( REASONCODE, __LINE__, __FILE__, #EXPRESSION )))
+#define OMIINO_FRAMER_RSE(REASONCODE)						OMIINO_FRAMER_ASSERT_Failure( REASONCODE, __LINE__, __FILE__, "")
+#define OMIINO_FRAMER_RSE_LF(REASONCODE,THELINE,THEFILE)	OMIINO_FRAMER_ASSERT_Failure( REASONCODE, THELINE, THEFILE, "")
+#define OMIINO_HOUSEKEEPING_ENTRY(API)                      OMIINO_FRAMER_HOUSEKEEPING_Entry(API)
+#define OMIINO_HOUSEKEEPING_EXIT(API)                       OMIINO_FRAMER_HOUSEKEEPING_Exit(API)
+#else
+#define OMIINO_FRAMER_ASSERT(EXPRESSION,REASONCODE)			((void) (0))
+#define OMIINO_FRAMER_RSE(REASONCODE)			            ((void) (0))
+#define OMIINO_FRAMER_RSE_LF(REASONCODE,THELINE,THEFILE)	((void) (0))
+#define OMIINO_HOUSEKEEPING_ENTRY(API)                      ((void) (0)) 
+#define OMIINO_HOUSEKEEPING_EXIT(API)			            ((void) (0))  
+#endif
+
+#ifdef VIRTUAL_VGA_ENABLED
+void VGA_DrawVariableTrace(char *pStr, unsigned int AnyValue);
+#define VGA_VAR_TRACE(S,V) VGA_DrawVariableTrace((S),(V));
+#else
+#define VGA_VAR_TRACE(S,V)	((void) (0))
+#endif
+
+/*
+ *
+ * CAPABILITY
+ *
+ */
+U8 OMIINO_DEVICE_PERSONALITY_SupportsClientType(U8 iDevice, U8 ClientType);
+U32 OMIINO_DEVICE_PERSONALITY_MaxSocketClients(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_SupportsPortRate(U8 iDevice, U8 PortRate);
+U8 OMIINO_DEVICE_PERSONALITY_NumberOfLinePorts(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_Max_SONET_LineBandwidthPerPort(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_Max_SDH_LineBandwidthPerPort(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_SupportsSONETSDH(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_SupportsLineProtection(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_SupportsCardProtection(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_SupportsNeitherLineNorCardProtection(U8 iDevice);
+U8 OMIINO_API_DEVICE_PERSONALITY_SupportsLineProtection(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_SupportsDiscreteClientE1T1(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_SupportsVCAT(U8 iDevice);
+U8 OMIINO_DEVICE_PERSONALITY_IsDefined(U8 iDevice);
+void OMIINO_DEVICE_PERSONALITY_SetNumberOfUnProtectedLinePorts(U8 iDevice, U8 NumberOfUnProtectedLinePorts);
+void OMIINO_DEVICE_PERSONALITY_SetMaxLineBandwidthPerPort(U8 iDevice, U8 MaxLineBandwidthPerPort);
+void OMIINO_DEVICE_PERSONALITY_SetSupportsSONETSDH(U8 iDevice, U8 SupportsSONETSDH);
+void OMIINO_DEVICE_PERSONALITY_SetSupportsLineProtection(U8 iDevice, U8 SupportsLineProtection);
+void OMIINO_DEVICE_PERSONALITY_SetSupportsDiscreteClientE1T1(U8 iDevice, U8 SupportsDiscreteClientE1T1);
+void OMIINO_DEVICE_PERSONALITY_SetSupportsVCAT(U8 iDevice, U8 SupportsVCAT);
+
+char * OMIINO_FRAMER_ErrorCodeToTxt(U32 ErrorCode);
+
+void WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_ToTxt(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * AnyEndpoint, char * pBuffer);
+
+void OMIINO_FRAMER_UTILITIES_Initialize(OMIINO_UTILITY_RAM_TYPE *pUtilityRAM);
+
+void OMIINO_FRAMER_SONET_SDH_ENDPOINT_Clone(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pTo, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFrom);
+U8 OMIINO_FRAMER_SONET_ENDPOINTS_AreIdentical(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirst, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecond);
+U8 OMIINO_FRAMER_SDH_ENDPOINTS_AreIdentical(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirst, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecond);
+U8 OMIINO_FRAMER_SONET_SDH_ENDPOINTS_AreIdentical(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirst, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecond);
+
+void OMIINO_FRAMER_HOUSEKEEPING_Entry(U32 iAPI);
+void OMIINO_FRAMER_HOUSEKEEPING_Exit(U32 iAPI);
+
+
+void OMIINO_FRAMER_FIREWALL_AddItemToObservationList(OMIINO_FRAMER_FIREWALL_DATA_TYPE *pFirewallRAM, U32 AnyAddress, U32 AnySignature);
+void OMIINO_FRAMER_FIREWALL_Verify(OMIINO_FRAMER_FIREWALL_DATA_TYPE *pFirewallRAM);
+void OMIINO_FRAMER_FIREWALL_Initialize(OMIINO_FRAMER_FIREWALL_DATA_TYPE *pFirewallRAM);
+
+
+void OMIINO_FRAMER_API_COUNT_Initialize(OMIINO_API_ELEMENT_TYPE * pAPI_CountRAM);
+void OMIINO_FRAMER_API_COUNT_IncIn(OMIINO_API_ELEMENT_TYPE * pAPI_CountRAM, U32 iAPI);
+void OMIINO_FRAMER_API_COUNT_IncOut(OMIINO_API_ELEMENT_TYPE * pAPI_CountRAM, U32 iAPI);
+
+void OMIINO_FRAMER_DeviceDriverHandleCreate( OMIINO_FRAMER_ENVIRONMENT_WRAPPER_TABLE_TYPE * pEnvionmentWrapperTable, char *pHandleName);
+U8 OMIINO_FRAMER_DeviceDriverHandleGet(void);
+
+
+
+U8 OMIINO_FRAMER_SONET_HIERARCHY_Given_STS1_Get_STS3c(U8 iSTS1);
+U8 OMIINO_FRAMER_SONET_HIERARCHY_Given_STS3c_Get_STS12c(U8 iSTS3c);
+U8 OMIINO_FRAMER_SONET_HIERARCHY_Given_STS12c_Get_STS48c(U8 iSTS12c);
+
+
+void OMIINO_FRAMER_ALARM_MANAGER_ALARM_STATUS_CHANGE(U8 iDevice, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM, U32 NodeKey, U8 IsAsserted, U8 IsForced, OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy);
+U32 OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(U8 iDevice, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM, U8 AlarmCategory, U8 iLinePort);
+U32 OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(U8 iDevice, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM, U8 AlarmCategory, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint);
+U32 OMIINO_FRAMER_ALARM_MANAGER_DISCRETE_CLIENT_GetNodeKey(U8 iDevice, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM, U8 AlarmCategory, U8 iDiscreteClientPort);
+U32 OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(U8 iDevice, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM, U8 AlarmCategory, U32 iSocketClient);
+void OMIINO_FRAMER_ALARM_MANAGER_FreeNode(U8 iDevice, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE *pAlarmMangerRAM, U32 NodeKey);
+void OMIINO_FRAMER_ALARM_MANAGER_Initialize(OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE *pAlarmMangerRAM);
+void OMIINO_FRAMER_ALARM_MANAGER_PreInitialize(OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM);
+void OMIINO_FRAMER_ALARM_MANAGER_ALARM_ANNOUNCE_CHANGE(U8 iDevice, U8 IsForced, OMIINO_ALARM_MANAGER_ELEMENT_TYPE * pAlarmElement);
+
+void OMIINO_FRAMER_Add_CRC7_ToTraceString(U8 Mode, char * pTraceString);
+
+/*
+ *
+ * RULES LAYER
+ *
+ */
+
+U8 OMIINO_FRAMER_DeviceStaticRule_FunctionalityNotImplemented_TODO(void);
+
+U8 OMIINO_FRAMER_DeviceStaticRule_ParamterInRange(U8 * pAnyParameter);
+U8 OMIINO_FRAMER_DeviceStaticRule_BuildPersonalityInRange(U8 AnyPersonality);
+U8 OMIINO_FRAMER_DeviceStaticRule_BuildPersonalitySupported(U8 AnyPersonality);
+U8 OMIINO_FRAMER_DeviceDynamicRule_DeviceProtectionMode(U8 AnyPersonality, U8 DeviceProtectionMode);
+U8 OMIINO_FRAMER_DeviceDynamicRule_DeviceInNormalMode(U8 iDevice);
+U8 OMIINO_FRAMER_DeviceDynamicRule_DeviceInTestMode(U8 iDevice);
+
+U8 OMIINO_FRAMER_DeviceStaticRule_DeviceCardProtectionOperatingModeInRange(U8 CardProtectionOperatingMode);
+U8 OMIINO_FRAMER_DeviceStaticRule_DeviceProtectionModeInRange(U8 AnyDeviceProtectionMode);
+U8 OMIINO_FRAMER_DeviceStaticRule_DeviceInRange(U8 iDevice);
+U8 OMIINO_FRAMER_DeviceStaticRule_DeviceModeInRange(U8 DeviceMode);
+
+U8 OMIINO_FRAMER_SONET_SDH_Port_StaticRule_PortInRange(U8 iLinePort);
+U8 OMIINO_FRAMER_SONET_SDH_Port_StaticRule_RateInRange(U8 PortRate);
+U8 OMIINO_FRAMER_SONET_SDH_Port_StaticRule_SFP_StateInRange(U8 SfpState);
+U8 OMIINO_FRAMER_SONET_SDH_StaticRule_OutputSelectorInRange(U8 OutputSelector);
+U8 OMIINO_FRAMER_SONET_SDH_StaticRule_SquelchModeInRange(U8 Squelch_Mode);
+U8 OMIINO_FRAMER_SONET_SDH_Port_StaticRule_DCC_InRange(U8 DCC_Mode);
+
+U8 OMIINO_FRAMER_DeviceStaticRule_SONET_SDH_AlarmCategoryInRange(U8 AlarmCategory);
+U8 OMIINO_FRAMER_DeviceStaticRule_SOCKET_CLIENT_AlarmCategoryInRange(U8 AlarmCategory);
+U8 OMIINO_FRAMER_DeviceStaticRule_DISCRETE_CLIENT_AlarmCategoryInRange(U8 AlarmCategory);
+
+
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortStaticRule_PortInRange(U8 iDiscreteClientPort);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortStaticRule_TypeInRange(U8 Type);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortStaticRule_MappingInRange(U8 Mapping);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortStaticRule_FramingInRange(U8 Framing);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortStaticRule_ClockRecoveryModeInRange(U8 ClockRecoveryMode);
+
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_GainInRange(U32 Gain);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_SocketInRange(U32 iSocketClientPDH);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_OutputSelectorInRange(U8 OutputSelector);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_RateParameterInRange(U32 RateParameter);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_TypeInRange(U8 Type);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_SocketIsCompatibleWithType(U32 iSocketClientPDH, U8 ClientType);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_MappingInRange(U8 Mapping);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_FramingInRange(U8 Framing);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_StaticRule_TimestampByteCountInRange(U8 AnyTimestampByteCount);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PortStaticRule_ClockRecoveryModeInRange(U8 ClockRecoveryMode);
+
+
+U8 OMIINO_FRAMER_SONET_SDH_LineEndpointStaticRule_EndpointInRange(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_LineEndpointStaticRule_BandwidthInRange(U8 Bandwidth);
+U8 OMIINO_FRAMER_SONET_SDH_Endpoint_BandwidthIsHighOrder(U8 Bandwidth);
+U8 OMIINO_FRAMER_SONET_SDH_Endpoint_BandwidthIsLowOrder(U8 Bandwidth);
+
+
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SDH_VC4_4C(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);        
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SDH_VC4(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SDH_VC3_HI(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SONET_STS48C(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SONET_STS12C(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SONET_STS3C(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SONET_STS1(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SDH_VC3_LO(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SDH_LO(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_CreateFacility_SONET_LO(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+
+
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SDH_VC4_4C(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);        
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SDH_VC4(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SDH_VC3_HI(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SONET_STS48C(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SONET_STS12C(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SONET_STS3C(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SONET_STS1(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SDH_VC3_LO(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SDH_LO(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_DeleteFacility_SONET_LO(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+
+
+
+
+
+
+
+
+
+
+U8 OMIINO_FRAMER_Is_SDH_Endpoint(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint);
+U8 OMIINO_FRAMER_Is_SONET_Endpoint(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint);
+
+U8 OMIINO_FRAMER_SONET_SDH_Overhead_StaticRule_TraceStringValid(char * pTraceString);
+
+
+U8 OMIINO_FRAMER_SONET_SDH_SectionOverhead_StaticRule_PathTraceModeInRange(U8 Mode);
+U8 OMIINO_FRAMER_SONET_SDH_SectionOverhead_StaticRule_J0_ModeInRange(U8 Mode);
+U8 OMIINO_FRAMER_SONET_SDH_SectionOverhead_StaticRule_B1_ExcessiveThresholdInRange(U8 Threshold);
+U8 OMIINO_FRAMER_SONET_SDH_SectionOverhead_StaticRule_B1_DegradeThresholdInRange(U8 Threshold);
+
+U8 OMIINO_FRAMER_SONET_SDH_LineOverhead_StaticRule_B2_ExcessiveThresholdInRange(U8 Threshold);
+U8 OMIINO_FRAMER_SONET_SDH_LineOverhead_StaticRule_B2_DegradeThresholdInRange(U8 Threshold);
+
+U8 OMIINO_FRAMER_SONET_SDH_HO_Overhead_StaticRule_J1_ModeInRange(U8 Mode);
+U8 OMIINO_FRAMER_SONET_SDH_HO_Overhead_StaticRule_B3_ExcessiveThresholdInRange(U8 Threshold);
+U8 OMIINO_FRAMER_SONET_SDH_HO_Overhead_StaticRule_B3_DegradeThresholdInRange(U8 Threshold);
+
+U8 OMIINO_FRAMER_SONET_SDH_HO_Overhead_StaticRule_G1_ThresholdInRange(U8 Threshold);
+U8 OMIINO_FRAMER_SONET_SDH_HO_Overhead_StaticRule_G1_ErdiModeInRange(U8 Mode);
+U8 OMIINO_FRAMER_SONET_SDH_HO_Overhead_StaticRule_SS_BITS_TxValueInRange(U8 Mode);
+U8 OMIINO_FRAMER_SONET_SDH_V5_StaticRule_InRange(U8 Any_V5_Label);
+U8 OMIINO_FRAMER_SONET_SDH_LO_Overhead_StaticRule_J2_ModeInRange(U8 Mode);
+U8 OMIINO_FRAMER_SONET_SDH_LO_Overhead_StaticRule_V5_BIP2_ThresholdInRange(U8 Threshold);
+
+U8 OMIINO_FRAMER_Diagnostic_StaticRule_PRBS_PatternInRange(U8 PRBS_Pattern);
+
+
+U8 OMIINO_FRAMER_DeviceDynamicRule_SDH_HighOrderIndexMatch(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pEndpoint);
+U8 OMIINO_FRAMER_DeviceDynamicRule_SONET_HighOrderIndexMatch(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pEndpoint);
+U8 OMIINO_FRAMER_DeviceDynamicRule_HighOrderIndexMatch(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pEndpoint);
+U8 OMIINO_FRAMER_DeviceDynamicRule_AlarmCategoryMatchesMode(U8 DeviceMode, U8 AlarmCategory);
+
+
+U8 OMIINO_FRAMER_DeviceDynamicRule_DevicePerformanceMonitoring_M_of_N_OK(U8 iDevice);
+U8 OMIINO_FRAMER_DeviceDynamicRule_DeviceCapabilitySupports_PortRateCanBeConfigured(U8 iDevice, U8 iLinePort);
+U8 OMIINO_FRAMER_DeviceDynamicRule_DeviceCapabilityIsDefined(U8 iDevice);
+U8 OMIINO_FRAMER_DeviceDynamicRule_DeviceCapabilitySupportsDiscreteClientE1T1(U8 iDevice);
+U8 OMIINO_FRAMER_DeviceDynamicRule_DeviceCapabilitySupports_SONET_SDH(U8 iDevice);
+
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_ThroughConnectionPreventsConfigurationChange(OMIINO_FRAMER_CONFIGURATION_CONNECTION_FOREIGN_KEY_TYPE *pConnectionInformation);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_HO_FacilityExists(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pAnyLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_HO_FacilityDoesNotExist(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_LO_FacilityExists(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pAnyLineEndpoint);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_LO_FacilityDoesNotExist(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path);
+
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortDynamicRule_FacilityExists(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortDynamicRule_FacilityDoesNotExist(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_DynamicRule_MappingInRange(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient, U8 Mapping);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_DynamicRule_FramingInRange(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient, U8 Framing);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortDynamicRule_IsFree(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_PortDynamicRule_IsConnected(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+
+
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_PortDynamicRule_DeepLineLoopbackOnlySupportedForUnFramedClients(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_PortDynamicRule_RdiTowardsLineOnlySupportedForFramedClients(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_PortDynamicRule_FacilityExists(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_E1T1_CRC_IsAvailable(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+   U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_E3T3_PM_IsAvailable(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient, U8 iPoint);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_PortDynamicRule_FacilityDoesNotExist(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_SocketIsCompatibleWithPeers(U8 iDevice, U32 iSocketClientPDH, U8 ClientType);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_SocketIsBlockedByOther(U8 iDevice, U32 iSocketClientPDH, U8 ClientType);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_MappingInRange(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient, U8 Mapping);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_FramingInRange(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient, U8 Framing);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_PortDynamicRule_IsFree(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_PortDynamicRule_IsConnected(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_PortDynamicRule_Supports_CAS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_SocketInRange(U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_SocketInRangeForConfiguredLinePortBandwidth(U8 iDevice, U32 iSocketClientPDH);
+
+U8 OMIINO_FRAMER_SONET_SDH_Port_DynamicRule_PortInRange(U8 iDevice, U8 iLinePort);
+U8 OMIINO_FRAMER_SONET_SDH_Port_DynamicRule_SupportsBandwidthType(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 Bandwidth);
+U8 OMIINO_FRAMER_SONET_SDH_Port_DynamicRule_SupportsRequiredBandwidth(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 Bandwidth);
+U8 OMIINO_FRAMER_SONET_SDH_Port_DynamicRule_ModeSupportsRate(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 PortRate);
+U8 OMIINO_FRAMER_SONET_SDH_Port_DynamicRule_RateIsConfigured(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_iJ_Valid_ForConfiguredPort(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 Any_iJ);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_iU_Valid_ForConfiguredPort(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 Any_iU);
+U8 OMIINO_FRAMER_SONET_SDH_DynamicRule_Get_MAX_M_For_LO_BandwidthType( WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint);
+
+void OMIINO_DEVICE_PERSONALITY_Initialize(OMIINO_FRAMER_DEVICE_TYPE * pDeviceRAM);
+U8 OMIINO_FRAMER_HardwareVariantPermitsPersonalityDynamicRule(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pRAM, U8 AnyPersonality);
+
+
+U8 OMIINO_FRAMER_ConnectionsStaticRule_SONET_SDH_EndpointIsLowOrder(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pAnyEndpoint);
+U8 OMIINO_FRAMER_ConnectionsStaticRule_SONET_SDH_EndpointsAreDifferent(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecondLineEndpoint);
+U8 OMIINO_FRAMER_ConnectionsStaticRule_SONET_SDH_EndpointsAreSameType(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecondLineEndpoint);
+U8 OMIINO_FRAMER_ConnectionsStaticRule_SONET_SDH_EndpointsAreSame_JKLM_UVW(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirst, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecond);
+U8 OMIINO_FRAMER_ConnectionsStaticRule_SONET_SDH_EndpointsArePortPairs(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirst, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecond);
+
+U8 OMIINO_FRAMER_ConnectionsDynamicRule_SONET_SDH_EndpointIsFree(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pAnyEndpoint);
+U8 OMIINO_FRAMER_ConnectionsDynamicRule_SONET_SDH_EndpointIsConnected(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pAnyEndpoint);
+U8 OMIINO_FRAMER_ConnectionsDynamicRule_EndpointsAreCompatible(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pAnyEndpoint, OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient);
+
+
+U8 OMIINO_FRAMER_PerformanceMonitoringStaticRule_PortPointInRange(U8 iPoint);
+U8 OMIINO_FRAMER_PerformanceMonitoringStaticRule_HoPointInRange(U8 iPoint);
+U8 OMIINO_FRAMER_PerformanceMonitoringStaticRule_LoPointInRange(U8 iPoint);
+U8 OMIINO_FRAMER_PerformanceMonitoringStaticRule_DiscretePortPointInRange(U8 iPoint);
+
+/*
+ *
+ * MODEL LAYER - Status
+ *
+ */
+
+
+OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_TYPE * OMIINO_FRAMER_GetStatusRAMForDiscreteClientPort(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, U8 iDiscreteClientPort);
+OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE * OMIINO_FRAMER_GetStatusRAMForSocketClientPDH_Element(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, U32 iSocketClientPDH);
+
+void OMIINO_FRAMER_STATUS_DeviceDriver_GetProductReleaseStr(OMIINO_DEVICE_DRIVER_RAM_TYPE * pDriverRAM, char * pProductReleaseStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_GetSoftwareBuildDateTimeStr(OMIINO_DEVICE_DRIVER_RAM_TYPE * pDriverRAM, char * pSoftwareBuildDateTimeStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_GetSoftwareBuildVersionStr(OMIINO_DEVICE_DRIVER_RAM_TYPE * pDriverRAM, char * pSoftwareBuildVersionStr);
+
+
+void OMIINO_FRAMER_STATUS_DeviceDriver_GetHardwareVersionStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pHardwareVersionStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_SetHardwareProductNameStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pProductNameStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_SetHardwareVersionStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pHardwareVersionStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_SetHardwareDateStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pDateStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_SetHardwareTimeStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pTimeStr);
+
+void OMIINO_FRAMER_STATUS_DeviceDriver_GetFirmwareVersionStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pFirmwareVersionStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_SetFirmwareProductNameStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pProductNameStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_SetFirmwareVersionStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pVersionStr);
+void OMIINO_FRAMER_STATUS_DeviceDriver_SetFirmwareDateTimeStr(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, char * pDateTimeStr);
+
+void OMIINO_FRAMER_STATUS_DeviceDriver_GetHardwareVariant(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, U8 * pHardwareVariant);
+void OMIINO_FRAMER_STATUS_DeviceDriver_SetHardwareVariant(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pStatus, U8 HardwareVariant);
+
+
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_SetRX(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_J0_TYPE * pPortHierarchy, char * pJ0_RX);
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_GetRX(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_J0_TYPE * pPortHierarchy, char * pJ0_RX);
+void OMIINO_FRAMER_SONET_SDH_Port_Line_K1K2_SetRX(OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_K1K2_TYPE * pStatusK1K2, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE * pRX_K1K2);
+void OMIINO_FRAMER_SONET_SDH_Port_Line_K1K2_GetRX(OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_K1K2_TYPE * pStatusK1K2, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE *pRX_K1K2);
+void OMIINO_FRAMER_SONET_SDH_Port_Line_S1_SetRX(OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_S1_TYPE * pStatusS1, U8 S1_RX);
+void OMIINO_FRAMER_SONET_SDH_Port_Line_S1_GetRX(OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_S1_TYPE * pStatusS1, U8 *pS1_RX);
+
+
+
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_SetRX(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPortHierarchy, char * pJ1_RX);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_GetRX(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPortHierarchy, char * pJ1_RX);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_C2_SetRX(OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, U8 C2_RX);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_C2_GetRX(OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, U8 * pC2_RX);
+
+
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_SetRX(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPortHierarchy, char * pJ2_RX);
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_GetRX(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPortHierarchy, char * pJ2_RX);
+void OMIINO_FRAMER_SONET_SDH_LO_PATH_V5_SIGNAL_LABEL_SetRX(OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, U8 V5_SignalLabel_RX);
+void OMIINO_FRAMER_SONET_SDH_LO_PATH_V5_SIGNAL_LABEL_GetRX(OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, U8 * pV5_SignalLabel_RX);
+
+
+
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Set_Diagnostic_Ingress_Term_PRBS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE * pClient, U8 PRBS_Pattern);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Get_Diagnostic_Ingress_Term_PRBS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE * pClient, U8 *pPRBS_Pattern);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Set_Diagnostic_Ingress_Gen_PRBS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE * pClient, U8 PRBS_Pattern);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Get_Diagnostic_Ingress_Gen_PRBS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE * pClient, U8 *pPRBS_Pattern);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Set_Diagnostic_Egress_Term_PRBS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE * pClient, U8 PRBS_Pattern);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Get_Diagnostic_Egress_Term_PRBS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE * pClient, U8 *pPRBS_Pattern);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Set_Diagnostic_Egress_Gen_PRBS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE * pClient, U8 PRBS_Pattern);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Get_Diagnostic_Egress_Gen_PRBS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_DIAGNOSTIC_TYPE * pClient, U8 *pPRBS_Pattern);
+
+
+
+/*
+ *
+ * MODEL LAYER - Hierarchy
+ *
+ */
+
+
+void OMIINO_FRAMER_CONNECTIONS_MakeThrough(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pSecondLineEndpoint);
+void OMIINO_FRAMER_CONNECTIONS_BreakThrough(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pSecondLineEndpoint);
+void OMIINO_FRAMER_CONNECTIONS_MakeUnProtectedLineToClientSocket(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint, U32 iSocketClient);
+void OMIINO_FRAMER_CONNECTIONS_BreakUnProtectedLineToClientSocket(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint, U32 iSocketClient);
+void OMIINO_FRAMER_CONNECTIONS_MakeProtectedLineToClientSocket(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pSecondLineEndpoint, U32 iSocketClient);
+void OMIINO_FRAMER_CONNECTIONS_BreakProtectedLineToClientSocket(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pSecondLineEndpoint, U32 iSocketClient);
+void OMIINO_FRAMER_CONNECTIONS_MakeUnProtectedDiscreteClientToClientSocket(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, U8 iDiscreteClient, U32 iSocketClient);
+void OMIINO_FRAMER_CONNECTIONS_BreakUnProtectedDiscreteClientToClientSocket(OMIINO_FRAMER_HIERARCHY_TYPE * pDeviceRAM, U8 iDiscreteClient, U32 iSocketClient);
+
+
+
+void OMIINO_FRAMER_CONFIGURATION_ModelInitialize(OMIINO_FRAMER_RAM_TYPE *pRAM, U8 TestMode);
+void OMIINO_FRAMER_CONFIGURATION_InitializeFor_SONET_SDH_Port(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort);
+void OMIINO_FRAMER_CONFIGURATION_Initialize_SONET_SDH_HO_PATH_OverheadiLow(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_TYPE * pHO_Path);
+U8 OMIINO_FRAMER_CONFIGURATION_Calculate_SONET_SDH_HO_PATH_OverheadiLow(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint);
+void OMIINO_FRAMER_SONET_SDH_InitializePort_LO_PATH_Overhead(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_TYPE * pLO_PathOverhead);
+void OMIINO_FRAMER_STATUS_ModelInitialize(OMIINO_FRAMER_RAM_TYPE *pRAM);
+void OMIINO_FRAMER_STATUS_Initialize_SONET_SDH_HO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE * pHO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM);
+void OMIINO_FRAMER_STATUS_Initialize_SONET_SDH_LO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE * pLO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM);
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM);
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE * pHO_Path, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM);
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_LO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE * pLO_Path, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM);
+
+
+
+OMIINO_FRAMER_DEVICE_TYPE * OMIINO_FRAMER_GetRAMForDevice(OMIINO_FRAMER_RAM_TYPE *pRAM, U8 iDevice);
+OMIINO_FRAMER_HIERARCHY_TYPE * OMIINO_FRAMER_GetHierarchyRAMForDevice(OMIINO_FRAMER_RAM_TYPE *pRAM, U8 iDevice);
+
+OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * OMIINO_FRAMER_GetHierarchyNodeForLinePortRAM(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, U8 iLinePort);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * OMIINO_FRAMER_GetConfigurationRAMForLinePortJ0(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * OMIINO_FRAMER_GetConfigurationRAMForLinePortB1(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * OMIINO_FRAMER_GetConfigurationRAMForLinePortB2(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_S1_TYPE * OMIINO_FRAMER_GetConfigurationRAMForLinePortS1(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_K1K2_TYPE * OMIINO_FRAMER_GetConfigurationRAMForLinePortK1K2(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort);
+
+OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE * OMIINO_FRAMER_GetConfigurationRAMForHO_Path(OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pConfigurationRAMForPort, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pEndpoint);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * OMIINO_FRAMER_GetConfigurationRAMFor_HO_Path_B3(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_TYPE * pConfigurationRAMForHO_Path);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * OMIINO_FRAMER_GetConfigurationRAMFor_HO_Path_C2(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_TYPE * pConfigurationRAMForHO_Path);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * OMIINO_FRAMER_GetConfigurationRAMFor_HO_Path_J1(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_TYPE * pConfigurationRAMForHO_Path);
+
+U8 OMIINO_FRAMER_GetConfigurationRAMForLO_Path_Exists(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pEndpoint);
+OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE * OMIINO_FRAMER_GetConfigurationRAMForLO_Path(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pEndpoint);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * OMIINO_FRAMER_GetConfigurationRAMFor_LO_Path_J2(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_TYPE * pConfigurationRAMForLO_Path);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * OMIINO_FRAMER_GetConfigurationRAMFor_LO_Path_V5_SignalLabel(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_TYPE * pConfigurationRAMForLO_Path);
+OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * OMIINO_FRAMER_GetConfigurationRAMFor_LO_Path_V5_BIP2(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_TYPE * pConfigurationRAMForLO_Path);
+
+OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * OMIINO_FRAMER_GetConfigurationRAMForDiscreteClientPort(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, U8 iDiscreteClientPort);
+OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_TYPE * OMIINO_FRAMER_GetConfigurationRAMForSocketClientPDH(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice);
+OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * OMIINO_FRAMER_GetConfigurationRAMForSocketClientPDH_Element(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, U32 iSocketClientPDH);
+
+
+void OMIINO_FRAMER_DIAGNOSTIC_LOOPBACK_LIB_EnableShallow(OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE * pAnyLoopbackConfigurationNode);
+void OMIINO_FRAMER_DIAGNOSTIC_LOOPBACK_LIB_DisableShallow(OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE * pAnyLoopbackConfigurationNode);
+void OMIINO_FRAMER_DIAGNOSTIC_LOOPBACK_LIB_GetShallowState(OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE * pAnyLoopbackConfigurationNode, U8 * pLoopbackIsEnabled);
+void OMIINO_FRAMER_DIAGNOSTIC_LOOPBACK_LIB_EnableDeep(OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE * pAnyLoopbackConfigurationNode);
+void OMIINO_FRAMER_DIAGNOSTIC_LOOPBACK_LIB_DisableDeep(OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE * pAnyLoopbackConfigurationNode);
+void OMIINO_FRAMER_DIAGNOSTIC_LOOPBACK_LIB_GetDeepState(OMIINO_FRAMER_CONFIGURATION_DIAGNOSTIC_LOOPBACK_TYPE * pAnyLoopbackConfigurationNode, U8 * pLoopbackIsEnabled);
+
+void OMIINO_FRAMER_SONET_SDH_SIGNAL_LABEL_LIB_SetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pAnySignalLabelConfigurationNode, U8 SignalLabel_TX);
+void OMIINO_FRAMER_SONET_SDH_SIGNAL_LABEL_LIB_GetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pAnySignalLabelConfigurationNode, U8 * pSignalLabel_TX);
+void OMIINO_FRAMER_SONET_SDH_SIGNAL_LABEL_LIB_SetEX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pAnySignalLabelConfigurationNode, U8 SignalLabel_EX);
+void OMIINO_FRAMER_SONET_SDH_SIGNAL_LABEL_LIB_GetEX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pAnySignalLabelConfigurationNode, U8 * pSignalLabel_EX);
+
+void OMIINO_FRAMER_SONET_SDH_BIP_THRESHOLD_LIB_SetSignalDegradeThreshold(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pAnyThresholdConfigurationNode, U8 Threshold);
+void OMIINO_FRAMER_SONET_SDH_BIP_THRESHOLD_LIB_GetSignalDegradeThreshold(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pAnyThresholdConfigurationNode, U8 *pThreshold);
+void OMIINO_FRAMER_SONET_SDH_BIP_THRESHOLD_LIB_SetExcessiveThreshold(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pAnyThresholdConfigurationNode, U8 Threshold);
+void OMIINO_FRAMER_SONET_SDH_BIP_THRESHOLD_LIB_GetExcessiveThreshold(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pAnyThresholdConfigurationNode, U8 *pThreshold);
+
+
+void OMIINO_FRAMER_AIS_CONTROL_LIB_EnableTowardsLine(OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE * pAnyAISConfigurationNode);
+void OMIINO_FRAMER_AIS_CONTROL_LIB_DisableTowardsLine(OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE * pAnyAISConfigurationNode);
+void OMIINO_FRAMER_AIS_CONTROL_LIB_GetTowardsLineState(OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE * pAnyAISConfigurationNode, U8 * pLoopbackIsEnabled);
+void OMIINO_FRAMER_AIS_CONTROL_LIB_EnableTowardsSocket(OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE * pAnyAISConfigurationNode);
+void OMIINO_FRAMER_AIS_CONTROL_LIB_DisableTowardsSocket(OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE * pAnyAISConfigurationNode);
+void OMIINO_FRAMER_AIS_CONTROL_LIB_GetTowardsSocketState(OMIINO_FRAMER_CONFIGURATION_AIS_CONTROL_TYPE * pAnyAISConfigurationNode, U8 * pLoopbackIsEnabled);
+
+void OMIINO_FRAMER_RDI_CONTROL_LIB_EnableTowardsLine(OMIINO_FRAMER_CONFIGURATION_RDI_CONTROL_TYPE * pAnyRDIConfigurationNode);
+void OMIINO_FRAMER_RDI_CONTROL_LIB_DisableTowardsLine(OMIINO_FRAMER_CONFIGURATION_RDI_CONTROL_TYPE * pAnyRDIConfigurationNode);
+void OMIINO_FRAMER_RDI_CONTROL_LIB_GetTowardsLineState(OMIINO_FRAMER_CONFIGURATION_RDI_CONTROL_TYPE * pAnyRDIConfigurationNode, U8 * pLoopbackIsEnabled);
+
+
+void OMIINO_FRAMER_InitializeDeviceParameters(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 DeviceMode, U8 DeviceProtectionMode, U8 DeviceCardProtectionOperatingMode, U8 AIS_InsertionMode);
+
+
+void OMIINO_FRAMER_Device_SetCardProtectionOperatingMode(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AnyCardProtectionOperatingMode);
+void OMIINO_FRAMER_Device_GetCardProtectionOperatingMode(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 * pAnyCardProtectionOperatingMode);
+void OMIINO_FRAMER_Device_SetProtectionMode(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AnyDeviceProtectionMode);
+void OMIINO_FRAMER_Device_GetProtectionMode(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 * pAnyDeviceProtectionMode);
+void OMIINO_FRAMER_Device_SetBuildPersonality(OMIINO_FRAMER_DEVICE_TYPE *pDeviceRAM, U8 BuildPersonality);
+void OMIINO_FRAMER_Device_GetBuildPersonality(OMIINO_FRAMER_DEVICE_TYPE *pDeviceRAM, U8 * pBuildPersonality);
+void OMIINO_FRAMER_Device_SetTestMode(OMIINO_FRAMER_DEVICE_TYPE *pDeviceRAM, U8 TestMode);
+
+void OMIINO_FRAMER_Device_SetMode(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 DeviceMode);
+void OMIINO_FRAMER_Device_GetMode(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 * pDeviceMode);
+void OMIINO_FRAMER_Device_Set_AIS_Insertion(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AIS_InsertionMode);
+void OMIINO_FRAMER_Device_Get_AIS_Insertion(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 * pAIS_InsertionMode);
+
+void OMIINO_FRAMER_Device_SONET_SDH_EnableAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory);
+void OMIINO_FRAMER_Device_SONET_SDH_DisableAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory);
+void OMIINO_FRAMER_Device_SONET_SDH_GetAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory, U8 * pIsEnabled);
+
+void OMIINO_FRAMER_Device_SOCKET_CLIENT_EnableAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory);
+void OMIINO_FRAMER_Device_SOCKET_CLIENT_DisableAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory);
+void OMIINO_FRAMER_Device_SOCKET_CLIENT_GetAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory, U8 * pIsEnabled);
+
+void OMIINO_FRAMER_Device_DISCRETE_CLIENT_EnableAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory);
+void OMIINO_FRAMER_Device_DISCRETE_CLIENT_DisableAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory);
+void OMIINO_FRAMER_Device_DISCRETE_CLIENT_GetAlarmCategoryReporting(OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchy, U8 AlarmCategory, U8 * pIsEnabled);
+
+void OMIINO_FRAMER_DEVICE_Diagnostic_SetDriveRecoveredClock(OMIINO_FRAMER_CONFIGURATION_DEVICE_DIAGNOSTIC_TYPE * pDeviceDiagnostic, U8 iLinePort, U8 OutputSelector);
+void OMIINO_FRAMER_DEVICE_Diagnostic_GetDriveRecoveredClock(OMIINO_FRAMER_CONFIGURATION_DEVICE_DIAGNOSTIC_TYPE * pDeviceDiagnostic, U8 * piLinePort, U8 OutputSelector);
+
+void OMIINO_FRAMER_DEVICE_SetSquelchRecoveredClock(OMIINO_FRAMER_CONFIGURATION_DEVICE_DIAGNOSTIC_TYPE * pDeviceDiagnostic,U8 Squelch_Mode, U8 OutputSelector);
+void OMIINO_FRAMER_DEVICE_GetSquelchRecoveredClock(OMIINO_FRAMER_CONFIGURATION_DEVICE_DIAGNOSTIC_TYPE * pDeviceDiagnostic,U8* pSquelch_Mode, U8 OutputSelector);
+void OMIINO_FRAMER_SONET_SDH_Port_SetMode(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 PortMode);
+void OMIINO_FRAMER_SONET_SDH_Port_GetMode(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 *pPortMode);
+
+U8 OMIINO_FRAMER_SONET_SDH_Port_Has_Facilities(U8 iDevice, U8 iLinePort);
+U8 OMIINO_FRAMER_DeviceIsFreeOfLineSideFacilities(U8 iDevice);
+U8 OMIINO_FRAMER_DeviceIsFreeOfPortConfiguration(U8 iDevice);
+
+
+void OMIINO_FRAMER_SONET_SDH_Port_Set_DCC(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 DCC_Mode, U8 DCC_State);
+void OMIINO_FRAMER_SONET_SDH_Port_Get_DCC(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 DCC_Mode, U8 * pDCC_State);
+
+
+void OMIINO_FRAMER_SONET_SDH_Port_SetRate(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 PortRate);
+void OMIINO_FRAMER_SONET_SDH_Port_GetRate(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 *pPortRate);
+U8 OMIINO_FRAMER_SONET_SDH_Port_Get_Max_Configured_HO_Paths_ForPort(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy);
+
+void OMIINO_FRAMER_SONET_SDH_Port_EnableScrambling(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy);
+void OMIINO_FRAMER_SONET_SDH_Port_DisableScrambling(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy);
+void OMIINO_FRAMER_SONET_SDH_Port_GetScrambling(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_TYPE * pPortHierarchy, U8 *pScramblingIsEnabled);
+
+void OMIINO_FRAMER_SONET_SDH_Port_Force_A(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_PROTECTION_TYPE * pPortProtection);
+void OMIINO_FRAMER_SONET_SDH_Port_Force_B(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_PROTECTION_TYPE * pPortProtection);
+void OMIINO_FRAMER_SONET_SDH_Port_GetForceState(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_PROTECTION_TYPE * pPortProtection, U8 *pForceSide);
+
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_SetMode(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * pPortConfiguration, U8 J0_Mode);
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_GetMode(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * pPortConfiguration, U8 *pJ0_Mode);
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_SetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * pPortConfiguration, char * pJ0_TX);
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_SetEX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * pPortConfiguration, char * pJ0_EX);
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_GetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * pPortConfiguration, char * pJ0_TX);
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_GetTX_WithCRC(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * pPortConfiguration, char * pJ0_TX);
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_GetEX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * pPortConfiguration, char * pJ0_EX);
+void OMIINO_FRAMER_SONET_SDH_Port_Section_J0_GetEX_WithCRC(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_SECTION_J0_TYPE * pPortConfiguration, char * pJ0_EX);
+
+
+void OMIINO_FRAMER_SONET_SDH_Port_Line_S1_SetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_S1_TYPE * pPortConfigurationS1, U8 S1_TX);
+void OMIINO_FRAMER_SONET_SDH_Port_Line_S1_GetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_S1_TYPE * pPortConfigurationS1, U8 *pS1_TX);
+
+
+void OMIINO_FRAMER_SONET_SDH_Port_Line_K1K2_SetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_K1K2_TYPE * pPortConfigurationK1K2, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE * pTX_K1K2);
+void OMIINO_FRAMER_SONET_SDH_Port_Line_K1K2_GetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_PORT_LINE_K1K2_TYPE * pPortConfigurationK1K2, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE *pTX_K1K2);
+
+
+
+
+void OMIINO_FRAMER_SONET_SDH_HO_Facility_Create(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path, U8 AnyBandwidth, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+void OMIINO_FRAMER_SONET_SDH_HO_Facility_Delete(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path);
+void OMIINO_FRAMER_SONET_SDH_HO_Facility_MakeConnected(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path);
+void OMIINO_FRAMER_SONET_SDH_HO_Facility_MakeUnConnected(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_HO_Facility_GetState(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_HO_Facility_IsConnected(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_HO_Facility_IsFree(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_HO_Facility_Exists(OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE *pHO_Path);
+
+void OMIINO_FRAMER_SONET_SDH_LO_Facility_Create(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path, U8 AnyBandwidth);
+void OMIINO_FRAMER_SONET_SDH_LO_Facility_Delete(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path);
+void OMIINO_FRAMER_SONET_SDH_LO_Facility_MakeConnected(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path);
+void OMIINO_FRAMER_SONET_SDH_LO_Facility_MakeUnConnected(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_LO_Facility_GetState(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_LO_Facility_IsConnected(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_LO_Facility_IsFree(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path);
+U8 OMIINO_FRAMER_SONET_SDH_LO_Facility_Exists(OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE *pLO_Path);
+
+
+void OMIINO_FRAMER_DISCRETE_CLIENT_Facility_Create(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient, U8 AnyClientType);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Facility_Delete(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Facility_MakeConnected(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Facility_MakeUnConnected(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_Facility_GetState(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_Facility_IsConnected(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_Facility_IsFree(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+U8 OMIINO_FRAMER_DISCRETE_CLIENT_Facility_Exists(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE *pClient);
+
+
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Facility_Create(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient, U8 AnyClientType);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Facility_Delete(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Facility_MakeConnected(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Facility_MakeUnConnected(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_Facility_GetState(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_Facility_IsConnected(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_Facility_IsFree(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_Facility_Exists(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE *pClient);
+
+
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_SetMode(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPathConfiguration, U8 J1_Mode);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_GetMode(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPathConfiguration, U8 *pJ1_Mode);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_SetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPathConfiguration, char * pJ1_TX);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_GetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPathConfiguration, char * pJ1_TX);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_GetTX_WithCRC(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPathConfiguration, char * pJ1_TX);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_SetEX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPathConfiguration, char * pJ1_EX);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_GetEX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPathConfiguration, char * pJ1_EX);
+void OMIINO_FRAMER_SONET_SDH_HO_Path_J1_GetEX_WithCRC(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPathConfiguration, char * pJ1_EX);
+
+
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_SetMode(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPathConfiguration, U8 J2_Mode);
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_GetMode(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPathConfiguration, U8 *pJ2_Mode);
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_SetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPathConfiguration, char * pJ2_TX);
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_GetTX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPathConfiguration, char * pJ2_TX);
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_GetTX_WithCRC(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPathConfiguration, char * pJ2_TX);
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_SetEX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPathConfiguration, char * pJ2_EX);
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_GetEX(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPathConfiguration, char * pJ2_EX);
+void OMIINO_FRAMER_SONET_SDH_LO_Path_J2_GetEX_WithCRC(OMIINO_FRAMER_CONFIGURATION_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPathConfiguration, char * pJ2_EX);
+
+
+
+
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_SetClientType(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pPortConfiguration, U8 ClientType);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_GetClientType(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pPortConfiguration, U8 *pClientType);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_SetFraming(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient, U8 Framing);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_GetFraming(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient, U8 *pFraming);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_SetMapping(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient, U8 Mapping);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_GetMapping(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient, U8 *pMapping);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_Enable_CAS(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_Disable_CAS(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_Get_CAS_State(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient, U8 *pCAS_IsEnabled);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_SetClockRecovery(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient, U8 ClockRecovery);
+void OMIINO_FRAMER_DISCRETE_CLIENT_Port_GetClockRecovery(OMIINO_FRAMER_CONFIGURATION_DISCRETE_CLIENT_TYPE * pClient, U8 *pClockRecovery);
+
+
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_SetEnableTimestamping(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U32 Gain);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_SetDisableTimestamping(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_GetTimestamping(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 * pTimeStamping_IsEnabled);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_GetTimestampByteCount(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 * pAnyTimestampByteCount);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_SetTimestampByteCount(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 AnyTimestampByteCount);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_SetClientType(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pPortConfiguration, U8 ClientType);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_GetClientType(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pPortConfiguration, U8 *pClientType);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_SetFraming(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 Framing);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_GetFraming(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 *pFraming);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_SetMapping(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 Mapping);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_GetMapping(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 *pMapping);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Enable_CAS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Disable_CAS(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Get_CAS_State(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 *pCAS_IsEnabled);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_SetClockRecovery(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 ClockRecovery);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_GetClockRecovery(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 *pClockRecovery);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Set_Diagnostic_Ingress_PRBS_State(OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 PRBS_State);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Get_Diagnostic_Ingress_PRBS_State(OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 *pPRBS_State);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Set_Diagnostic_Egress_PRBS_State(OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 PRBS_State);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Get_Diagnostic_Egress_PRBS_State(OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U8 *pPRBS_State);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Diagnostic_SetDriveRecoveredClock(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_TYPE * pClient, U8 OutputSelector, U32 iSocketClientPDH, U32 RateParameter);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Diagnostic_GetDriveRecoveredClock(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_TYPE * pClient, U8 OutputSelector, U32 * piSocketClientPDH);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_Diagnostic_GetDriveRecoveredClockRateParameterFOrOutputSelector(OMIINO_FRAMER_CONFIGURATION_SOCKET_CLIENT_PDH_TYPE * pClient, U8 OutputSelector, U32 * pRateParameter);
+
+
+
+int OMIINO_FRAMER_PerformanceMonitoring_KeyManager_Given_CompressedKey_Get_PM_EngineKey(OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_TYPE * pPM_KeyManagerRAM, U16 CompressedKey, OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE *pPM_Engine_Key);
+void OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_Initialize(OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_TYPE * pPM_KeyManagerRAM);
+U16 OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_GetNodeKey(OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_TYPE * pPM_KeyManagerRAM, OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pPM_Engine_Key);
+void OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_FreeNode(OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_TYPE * pPM_KeyManagerRAM, U16 CompressedKey);
+int OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_GivenNodeKeyGetCompressedKey(OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_MANAGER_TYPE * pPM_KeyManagerRAM, OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pPM_Engine_Key, U16 * pCompressedKey);
+
+/*
+ *
+ * MODEL LAYER - Performance Monitoring
+ *
+ */
+U8 OMIINO_FRAMER_PerformanceMonitoringEngine_GetMonitor_LinePortPoint(	U8 iDevice,
+																		WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE *   pPM_Device_RAM,
+																		OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pKey);
+
+
+void OMIINO_FRAMER_PerformanceMonitoring_M_of_N_SetCurrent(OMIINO_FRAMER_PERFORMANCE_MONITORING_M_OF_N_TYPE * pM_of_N);
+
+void OMIINO_FRAMER_PerformanceMonitoring_M_of_N_SetLimit(OMIINO_FRAMER_PERFORMANCE_MONITORING_M_OF_N_TYPE * pM_of_N, int AnyLimit);
+
+void OMIINO_FRAMER_PerformanceMonitoring_M_of_N_Inc(OMIINO_FRAMER_PERFORMANCE_MONITORING_M_OF_N_TYPE * pM_of_N);
+
+void OMIINO_FRAMER_PerformanceMonitoring_M_of_N_Dec(OMIINO_FRAMER_PERFORMANCE_MONITORING_M_OF_N_TYPE * pM_of_N);
+
+
+void OMIINO_FRAMER_PerformanceMonitoringEngine_Monitor_LinePortPoint(			U8 iDevice,
+																				WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE *   pPM_Device_RAM,
+																				OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pKey);
+
+void OMIINO_FRAMER_PerformanceMonitoringEngine_UnMonitor_LinePoint(				U8 iDevice,
+																				WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE *   pPM_Device_RAM,
+																				OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pKey);
+
+void OMIINO_FRAMER_PerformanceMonitoringEngine_DiscreteClient_DataPointAnnounce(U8 iDevice, 
+                                                                                WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE * pPM_Device_RAM,
+                                                                                OMIINO_FRAMER_PM_ENGINE_TYPE * pPM_Engine_RAM,
+                                                                                U32 TimeStamp,
+                                                                                OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pKey,
+                                                                                U16 Count);
+
+void OMIINO_FRAMER_PerformanceMonitoringEngine_PDH_DataPointAnnounce(U8 iDevice, 
+                                                                                WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE * pPM_Device_RAM,
+                                                                                OMIINO_FRAMER_PM_ENGINE_TYPE * pPM_Engine_RAM,
+                                                                                U32 TimeStamp,
+                                                                                OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pKey,
+                                                                                U16 Count);
+
+void OMIINO_FRAMER_PerformanceMonitoringEngine_HO_DataPointAnnounce(            U8 iDevice, 
+                                                                                WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE * pPM_Device_RAM,
+                                                                                OMIINO_FRAMER_PM_ENGINE_TYPE * pPM_Engine_RAM,
+                                                                                U32 TimeStamp,
+                                                                                OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pKey,
+                                                                                U16 Count);
+
+void OMIINO_FRAMER_PerformanceMonitoringEngine_LO_DataPointAnnounce(            U8 iDevice, 
+                                                                                WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE * pPM_Device_RAM,
+                                                                                OMIINO_FRAMER_PM_ENGINE_TYPE * pPM_Engine_RAM,
+                                                                                U32 TimeStamp,
+                                                                                OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pKey,
+                                                                                U16 Count);
+
+void OMIINO_FRAMER_PerformanceMonitoringEngine_LinePort_DataPointAnnounce(      U8 iDevice, 
+                                                                                WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE * pPM_Device_RAM,
+                                                                                OMIINO_FRAMER_PM_ENGINE_TYPE * pPM_Engine_RAM,
+                                                                                U32 TimeStamp,
+                                                                                OMIINO_FRAMER_PERFORMANCE_MONITORING_KEY_TYPE * pKey,
+                                                                                U32 Count);
+
+void OMIINO_FRAMER_PerformanceMonitoringEngine_Initialize(OMIINO_FRAMER_PM_ENGINE_TYPE * pPM_Engine_RAM);
+void OMIINO_FRAMER_PerformanceMonitoringEngine_SetMaxDepth(OMIINO_FRAMER_PM_ENGINE_TYPE * pPM_Engine_RAM, int iElement, U8 AnyMaxDepth);
+
+/*
+ *
+ * Data Layer
+ *
+ */
+
+OMIINO_FRAMER_STATUS_DEVICE_TYPE * OMIINO_FRAMER_GetStatusRAMForDevice(OMIINO_FRAMER_RAM_TYPE *pRAM, U8 iDevice);
+
+void OMIINO_PERFORMANCE_MONITORING_BindDataTable(WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE * pTo, WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE * pFrom);
+
+
+
+
+/*
+ *
+ * Low Level Comms LAYER
+ *
+ */
+void OMIINO_LLC_HandleNorthboundMessagesForDevice(U8 iDevice, OMIINO_FRAMER_RAM_TYPE * pFramerRAM);
+void OMIINO_LLC_Northbound_StatusMessage(U8 iDevice, OMIINO_FRAMER_RAM_TYPE * pFramerRAM);
+void OMIINO_LLC_Northbound_PerformanceMonitoringMessage(U8 iDevice, OMIINO_FRAMER_RAM_TYPE * pFramerRAM);
+
+void OMIINO_LLC_Northbound_OmniSpyMessage(U8 iDevice, OMIINO_FRAMER_RAM_TYPE * pFramerRAM);
+void OMIINO_LLC_Northbound_AuxiliaryOmniSpyMessage(U8 iDevice, OMIINO_FRAMER_RAM_TYPE * pFramerRAM);
+void OMIINO_LLC_Northbound_Auxiliary_ErrorHandler(U32 MessageIdentifier, U8 iDevice, U8 * pMessage, U8 Length, U32 AnyLine, char * AnyFile);
+
+U8 OMIINO_LLC_Northbound_Utility_Encode_SONET_SDH_LineEndpoint(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE  * pLineEndpoint, U8 * pEncodedLineEndpoint);
+U8 OMIINO_LLC_Northbound_Utility_Parse_SONET_SDH_LineEndpoint(U8 * pMessage, U8 BytesRemaining, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE  * pLineEndpoint, U8 * pBytesParsed);
+U8 OMIINO_LLC_Northbound_Utility_Parse_PathTrace(U8 * pMessage, U8 BytesRemaining, char * pTo, U8 * pBytesParsed);
+
+void OMIINO_LLC_Northbound_Signalling_ErrorHandler(U32 MessageIdentifier, U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchyRAM, U8 * pMessage, U8 Length, U32 AnyLine, char * AnyFile);
+void OMIINO_LLC_Northbound_Status_ErrorHandler(U32 MessageIdentifier, U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchyRAM, U8 * pMessage, U8 Length, U32 AnyLine, char * AnyFile);
+void OMIINO_LLC_Northbound_PerformanceMonitoring_ErrorHandler(U32 MessageIdentifier, U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchyRAM, U8 * pMessage, U8 Length, U32 AnyLine, char * AnyFile);
+void OMIINO_LLC_Northbound_SignallingMessage(U8 iDevice,  OMIINO_FRAMER_RAM_TYPE * pFramerRAM);
+
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_PROGRESS_REPORT(U32 CatalogueID, U32 Iteration, U32 TotalIterations, char * pMessage, U8 MessageLength, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DRIVER_ProductRelease(U32 TransactionIdentifier, char * pAnyStr, U8 AnyStrLength, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DRIVER_SoftwareBuildDate(U32 TransactionIdentifier, char * pAnyStr, U8 AnyStrLength, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DRIVER_SoftwareBuildVersion(U32 TransactionIdentifier, char * pAnyStr, U8 AnyStrLength, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_AUX_RESP_WithPayload(U32 TransactionIdentifier, U8 API_Result, U32 CatalogueID, char *pUnFormattedMessage, U8 PayloadLength, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_AUX_RESP(U32 TransactionIdentifier, U8 API_Result, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_SetBuildPersonality(U32 TransactionIdentifier, U8 BuildPersonality, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_SetMode(U32 TransactionIdentifier, U8 DeviceMode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_Set_AIS_Insertion(U32 TransactionIdentifier, U8 AIS_InsertionMode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_SetProtectionMode(U32 TransactionIdentifier, U8 DeviceProtectionMode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_SetCardProtectionOperatingMode(U32 TransactionIdentifier, U8 DeviceCardProtectionOperatingMode, U32 * pFormattedMessage);
+void OMIINO_LLC_SOUTHBOUND_FORMATTER_DEVICE_DIAGNOSTIC_Poke(U8 iDevice, U32 TransactionIdentifier, U32 Address, U32 Value, U32 * pFormattedMessage);
+void OMIINO_LLC_SOUTHBOUND_FORMATTER_DEVICE_DIAGNOSTIC_Peek(U8 iDevice, U32 TransactionIdentifier, U32 Address,  U32 * pFormattedMessage);
+void OMIINO_LLC_SOUTHBOUND_FORMATTER_DEVICE_DIAGNOSTIC_BlockPoke(U8 iDevice, U32 TransactionIdentifier, U32 StartAddress, U32 NumberOfU32AddressesToBeWritten,	U32 Value,  U32 * pFormattedMessage);
+void OMIINO_LLC_SOUTHBOUND_FORMATTER_DEVICE_DIAGNOSTIC_BlockPokeVerify(U8 iDevice, U32 TransactionIdentifier, U32 StartAddress, U32 NumberOfU32AddressesToBeWritten,	U32 Value,  U32 * pFormattedMessage);
+void OMIINO_LLC_SOUTHBOUND_FORMATTER_DEMO_ONLY_CONFIGURE_GTP_CLOCK_SOURCE_MESSAGE(U8 iDevice);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_CreateFacility(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_SONET_SDH_PathAlarmKey(U32 TransactionIdentifier, U8 AlarmCategory, U32 Key, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_SONET_SDH_PortAlarmKey(U32 TransactionIdentifier, U8 AlarmCategory, U32 Key, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_CreateFacility(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 ClientType, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_SocketClientAlarmKey(U32 TransactionIdentifier, U8 AlarmCategory, U32 iSocketClientPDH, U32 AlarmKey, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_CreateFacility(U32 TransactionIdentifier, U8 iDiscreteClientPort, U8 ClientType, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_DeleteFacility(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DeleteFacility(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 ClientType, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DeleteFacility(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SFP_SetTxState(U32 TransactionIdentifier, U8 iLinePort,U8 Tx_State, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SetRate(U32 TransactionIdentifier, U8 iLinePort, U8 PortRate,U8 Tx_Enable, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DCC_Enable(U32 TransactionIdentifier, U8 iLinePort, U8 DCC_Mode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DCC_Disable(U32 TransactionIdentifier, U8 iLinePort, U8 DCC_Mode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_EnableScrambling(U32 TransactionIdentifier, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DisableScrambling(U32 TransactionIdentifier, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_Force_A(U32 TransactionIdentifier, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_Force_B(U32 TransactionIdentifier, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_DIAGNOSTIC_LOOPBACK_Enable(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_DIAGNOSTIC_LOOPBACK_Disable(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_EnableShallow(U32 TransactionIdentifier, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_DisableShallow(U32 TransactionIdentifier, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_EnableDeep(U32 TransactionIdentifier, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_DriveRecoveredClock_Set(U32 TransactionIdentifier, U8 iLinePort, U8 OutputSelector, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SquelchRecoveredClock_Set(U32 TransactionIdentifier, U8 Squelch_Mode, U8 OutputSelector, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_DisableDeep(U32 TransactionIdentifier, U8 iLinePort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_SetMode(U32 TransactionIdentifier, U8 iLinePort, U8 Mode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_SetTX(U32 TransactionIdentifier, U8 iLinePort, char * pTX_TraceString, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_SetEX(U32 TransactionIdentifier, U8 iLinePort, char * pEX_TraceString, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_B1_SetExcessiveThreshold(U32 TransactionIdentifier, U8 iLinePort, U8 Threshold, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_B1_SetSignalDegradeThreshold(U32 TransactionIdentifier, U8 iLinePort, U8 Threshold, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_K1K2_SetTX(U32 TransactionIdentifier, U8 iLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE * pTX_K1K2, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_S1_SetTX(U32 TransactionIdentifier, U8 iLinePort, U8 TX_S1, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_B2_SetExcessiveThreshold(U32 TransactionIdentifier, U8 iLinePort, U8 Threshold, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_B2_SetSignalDegradeThreshold(U32 TransactionIdentifier, U8 iLinePort, U8 Threshold, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_SetMode(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Mode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_SetTX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_SetEX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_SetRdiMode(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 ERDI_MODE, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_SS_BITS_SetTX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Value, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_SS_BITS_GetRX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_C2_SetTX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 TX_C2, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_C2_SetEX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 EX_C2, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_B3_SetExcessiveThreshold(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_B3_SetSignalDegradeThreshold(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_J2_SetTX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_J2_SetEX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_SignalLabel_SetTX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 TX_V5_SignalLabel, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_SignalLabel_SetEX(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 EX_V5_SignalLabel, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_BIP2_SetExcessiveThreshold(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_BIP2_SetSignalDegradeThreshold(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SONET_SDH_BANDWIDTH_DIAGNOSTIC_PRBS_Set(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pAnyEndpoint, U8 PRBS_Pattern, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_SetFraming(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 Framing, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_SetMapping(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 Mapping, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_SetClockRecovery(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 ClockRecoveryMode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_E3T3_SetFEAC(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 Code, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_EnableCAS(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DisableCAS(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_EnableTowardsSocket(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_DisableTowardsSocket(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_EnableTowardsLine(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_DisableTowardsLine(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_RDI_CONTROL_EnableTowardsLine(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_RDI_CONTROL_DisableTowardsLine(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_DriveRecoveredClock_Set(U32 TransactionIdentifier, U8 OutputSelector, U32 iSocketClientPDH, U32 RateParameter, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_EnableShallow(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_DisableShallow(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_EnableDeep(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_DisableDeep(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Ingress_Term_PRBS_Set(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 PRBS_Pattern, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Ingress_Gen_PRBS_Set(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 PRBS_Pattern, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Egress_Term_PRBS_Set(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 PRBS_Pattern, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Egress_Gen_PRBS_Set(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 PRBS_Pattern, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_SetFraming(U32 TransactionIdentifier, U8 iDiscreteClientPort, U8 Framing, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_SetMapping(U32 TransactionIdentifier, U8 iDiscreteClientPort, U8 Mapping, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_SetClockRecovery(U32 TransactionIdentifier, U8 iDiscreteClientPort, U8 ClockRecoveryMode, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_EnableCAS(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DisableCAS(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_EnableTowardsSocket(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_DisableTowardsSocket(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_EnableTowardsLine(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_DisableTowardsLine(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_EnableShallow(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_DisableShallow(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_EnableDeep(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_DisableDeep(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_CONNECTIONS_THROUGH_CreateConnection(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pSecondLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_CONNECTIONS_THROUGH_DeleteConnection(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pSecondLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_CreateConnection(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_DeleteConnection(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_CONNECTIONS_ADD_DROP_DISCRETE_CLIENT_TO_CLIENT_SOCKET_CreateConnection(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_CONNECTIONS_ADD_DROP_DISCRETE_CLIENT_TO_CLIENT_SOCKET_DeleteConnection(U32 TransactionIdentifier, U8 iDiscreteClientPort, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_DRIVER_SONET_SDH_EnableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_DRIVER_SONET_SDH_EnableAlarmReportingForAlarmCategoryForEndpoint(U32 TransactionIdentifier, U8 AlarmCategory, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_DRIVER_SONET_SDH_DisableAlarmReportingForAlarmCategoryForEndpoint(U32 TransactionIdentifier, U8 AlarmCategory, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_DRIVER_SONET_SDH_DisableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_DRIVER_SOCKET_CLIENT_EnableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_DEVICE_DRIVER_SOCKET_CLIENT_DisableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_BOOTLOADER_DATA_PACKET_Send(U32 TransactionIdentifier, U32 *pMessageData, U8 Length, U32 *pFormattedMessage) ;
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_BOOTLOADER_START_FIRMWARE_Send(U32 TransactionIdentifier, U32 *pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_SOUTHBOUND_MESSAGE_CATALOGUE_CONFIGURATION_RESET(U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_SetTimestampByteCount(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 AnyTimestampByteCount, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_EnableTimestamping(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 Gain, U8 ClientType, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DisableTimestamping(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 ClientType, U32 * pFormattedMessage);
+
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_Port_EnableMonitoring(U32 TransactionIdentifier, U8 iLinePort, U8 iPoint, U16 CompressedKey, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_Port_DisableMonitoring(U32 TransactionIdentifier, U8 iLinePort, U8 iPoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_HighOrderPath_EnableMonitoring(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U16 CompressedKey, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_HighOrderPath_DisableMonitoring(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_LowOrderPath_EnableMonitoring(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U16 CompressedKey, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_LowOrderPath_DisableMonitoring(U32 TransactionIdentifier, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U32 * pFormattedMessage);
+
+
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_PM_E1_ENABLE_MONITORING_CRC(U32 TransactionIdentifier, U32 iSocketClientPDH, U16 CompressedKey, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_PM_T1_ENABLE_MONITORING_CRC(U32 TransactionIdentifier, U32 iSocketClientPDH, U16 CompressedKey, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_PM_E1_DISABLE_MONITORING_CRC(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_PM_T1_DISABLE_MONITORING_CRC(U32 TransactionIdentifier, U32 iSocketClientPDH, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_PM_E3T3_ENABLE_MONITORING(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 iPoint, U16 CompressedKey, U32 * pFormattedMessage);
+U8 OMIINO_LLC_SOUTHBOUND_FORMATTER_PM_E3T3_DISABLE_MONITORING(U32 TransactionIdentifier, U32 iSocketClientPDH, U8 iPoint, U32 * pFormattedMessage);
+
+
+
+void OMIINO_LLC_API_Intialize(OMIINO_FRAMER_RAM_TYPE * pFramerRAM);
+void OMIINO_LLC_Northbound_AuxiliaryOmniSpyTableInitialize(OMNISPY_AUXILIARY_TABLE_TYPE * pAuxiliaryTable);
+void OMIINO_LLC_Northbound_SignallingTableInitialize(OMNISPY_SIGNALLING_TABLE_TYPE * pSignallingTable);
+void OMIINO_LLC_Northbound_StatusTableInitialize(OMNISPY_STATUS_TABLE_TYPE * pStatusTable);
+void OMIINO_LLC_NorthboundIntialize(OMIINO_FRAMER_RAM_TYPE * pFramerRAM);
+void OMIINO_LLC_Northbound_PerformanceMonitoringTableInitialize(OMNISPY_PM_TABLE_TYPE * pPerformanceMonitoringTable);
+void OMIINO_LLC_Northbound_OmnispyTableInitialize(OMNISPY_TABLE_TYPE * pOmnispyTable);
+
+void OMIINO_LLC_Northbound_Status_OMIINO_NORTHBOUND_MESSAGE_CATALOGUE_STATUS_ALARM(U32 MessageIdentifier, U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pHierarchyRAM, U8 * pMessage, U8 Length);
+
+/*
+ *
+ * Product
+ *
+ */
+void OMIINO_Product_Initialize(		WPX_UFE_FRAMER_MAILBOX_MEMORY_MAP_TYPE							(*pMailboxMemoryMap)[WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES],
+								    WPX_UFE_FRAMER_ENVIRONMENT_TABLE_TYPE					*		pEnvironmentTable,
+								    WPX_UFE_FRAMER_AUTONOMOUS_OUTPUT_TABLE_TYPE				*		pAutonomousOutputTable,
+								    WPX_UFE_FRAMER_PERFORMANCE_MONITORING_DEVICE_TABLE_TYPE	*		pPerformanceMonitoringDeviceTable,
+                                    WPX_UFE_FRAMER_DEVICE_LEVEL_DIAGNOSTIC_TABLE_TYPE       *       pDeviceLevelDiagnosticTable,
+                                    WPX_UFE_FRAMER_OMNISPY_TABLE_TYPE                       *       pOmniSpyTable,
+									U8																TestMode);
+
+void OMIINO_ProductConfiguration_SendBuildSelectionToFirmware(U8 iDevice);
+
+void OMIINO_FRAMER_DefineBuildInformation(void);
+
+
+
+
+
+/*
+ *
+ * OMNISPY
+ *
+ *
+ */
+
+U8 OMIINO_OMNISPY_SouthboundMessage(U8 iDevice, U32 * pMessage, U8 Length);
+void OMIINO_OMNISPY_BindCallbacks(WPX_UFE_FRAMER_OMNISPY_TABLE_TYPE *pTo, WPX_UFE_FRAMER_OMNISPY_TABLE_TYPE *pFrom);
+void OMIINO_OMNISPY_WRAPPER_NorthboundAnnounce(U8 iDevice, U32 * pMessage, U32 Length);
+
+
+
+
+
+U32 UtilityGetU32(U8 * pCharArray);
+void UtilityPutU32(U32 AnyInt, U8 * pCharArray);
+void UtilityPutU16(U16 AnyShort, U8 * pCharArray);
+U16 UtilityGetU16(U8 * pCharArray);
+
+
+
+void LowLevelComms_DefineAccess(void);
+void OMIINO_DefaultAllPortsForDevice(U8 iDevice);
+U8 OMIINO_API_INTERNAL_MACRO_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SetRate(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 PortRate,U8 Tx_Enable);
+U8 OMIINO_API_INTERNAL_MACRO_CONFIGURATION_FACILITIES_SONET_SDH_CreateFacility(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+
+void OMIINO_BULK_Default_WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE_For_SONET(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iLinePort, U8 AnyBandwidth);
+void OMIINO_BULK_Default_WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE_For_SDH(WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iLinePort, U8 AnyBandwidth);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC4_4C_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC4_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC3_HI_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC3_LO_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC12_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC11_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_STS48C_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_STS12C_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_STS3C_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_STS1_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VT2_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VT15_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_CreateFacility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+
+
+U8 OMIINO_API_INTERNAL_BULK_ALARM_ENABLE_LINE(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_BULK_ALARM_DISABLE_LINE(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_BULK_ALARM_ENABLE_HO(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_BULK_ALARM_DISABLE_HO(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_BULK_ALARM_ENABLE_LO(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_BULK_ALARM_DISABLE_LO(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_BULK_ALARM_ENABLE_ALL(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_BULK_ALARM_DISABLE_ALL(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_BULK_ALARM_LIST_ALL_ACTIVE(U8 iDevice);
+void OMIINO_API_INTERNAL_BULK_SDH_ALARM_FetchReportingStateForAll(U8 * pReportingState);
+void OMIINO_API_INTERNAL_BULK_SDH_ALARM_SetReportingStateForAll(U8 * pNewReportingState);
+
+
+void OMIINO_API_INTERNAL_BULK_PM_Disable_Ho_SDH(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_PM_Enable_Ho_SDH(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_PM_Disable_Ho_SONET(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_PM_Enable_Ho_SONET(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+
+void OMIINO_API_INTERNAL_BULK_PM_Enable_LO_For_Port(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_PM_Disable_LO_For_Port(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+
+void OMIINO_API_INTERNAL_BULK_PM_Enable_HO_For_Port(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_PM_Disable_HO_For_Port(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_PM_ENABLE_HO(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_PM_DISABLE_HO(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+
+
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC4_4C_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC4_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC3_HI_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC3_LO_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC12_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC11_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_STS48C_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_STS12C_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_STS3C_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_STS1_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VT2_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VT15_Facility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_DeleteFacility(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+void OMIINO_FRAMER_STATUS_RefreshAlarmReportingFor_ThisAlarmForSocketIfRequired(U32 TransactionIdentifier, U8 iDevice, U8 AnySocketAlarmCategory, U32 iSocketClientPDH);
+
+U8 OMIINO_API_INTERNAL_BULK_PM_ENABLE_LINE(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_PM_DISABLE_LINE(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_PM_ENABLE_HO(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_PM_DISABLE_HO(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_PM_ENABLE_LO(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_PM_DISABLE_LO(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC4_4C_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC4_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC3_HI_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC3_LO_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC12_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VC11_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_STS48C_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_STS12C_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_STS3C_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_STS1_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VT2_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Create_VT15_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_CreateConnection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+
+
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC4_4C_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC4_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC3_HI_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC3_LO_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC12_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VC11_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_STS48C_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_STS12C_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_STS3C_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_STS1_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VT2_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+void OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_Delete_VT15_Connection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_FACILITIES_SONET_SDH_DeleteConnection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+
+
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_CreateConnection_SDH(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_CreateConnection_SONET(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_DeleteConnection_SDH(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_DeleteConnection_SONET(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+
+void QC(void);
+void QC_API_Internal_Initialize(void);
+void OMIINO_API_INTERNAL_Reset(void);
+void OMIINO_API_INTERNAL_ISR(U8 iDevice);
+U8 OMIINO_API_INTERNAL_SetDeviceProtectionMode(U32 TransactionIdentifier, U8 iDevice, U8 DeviceProtectionMode);
+U8 OMIINO_API_INTERNAL_GetDeviceProtectionMode(U8 iDevice, U8 * pDeviceProtectionMode);
+U8 OMIINO_API_INTERNAL_SetDeviceCardProtectionOperatingMode(U32 TransactionIdentifier, U8 iDevice, U8 CardProtectionOperatingMode);
+U8 OMIINO_API_INTERNAL_GetDeviceCardProtectionOperatingMode(U8 iDevice, U8 * pCardProtectionOperatingMode);
+U8 OMIINO_API_INTERNAL_DeviceIsReady(U8 iDevice);
+U8 OMIINO_API_INTERNAL_DEVICE_DIAGNOSTIC_Poke(U32 TransactionIdentifier, U8 iDevice, U32 Address, U32 Value);
+U8 OMIINO_API_INTERNAL_DEVICE_DIAGNOSTIC_Peek(U8 iDevice, U32 Address);
+U8 OMIINO_API_INTERNAL_DEVICE_DIAGNOSTIC_BlockPoke(U32 TransactionIdentifier, U8 iDevice, U32 StartAddress, U32 NumberOfU32AddressesToBeWritten, U32 Value);
+U8 OMIINO_API_INTERNAL_DEVICE_DIAGNOSTIC_BlockPokeVerify(U32 TransactionIdentifier, U8 iDevice, U32 StartAddress, U32 NumberOfU32AddressesToBeWritten, U32 Value);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_LOW_LEVEL_COMMS_DISABLE_ACCESS(U8 iDevice);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_LOW_LEVEL_COMMS_ENABLE_ACCESS(U8 iDevice);
+U8 OMIINO_API_INTERNAL_OMNISPY_SouthboundMessage(U8 iDevice, U32 * pMessage, U8 Length);
+U8 OMIINO_API_INTERNAL_ServiceNorthboundLowLevelComms(U8 iDevice);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_GetBuildPersonality(U8 iDevice, U8 * pBuildPersonality);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_SetBuildPersonality(U8 iDevice, U8 BuildPersonality);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_SetMode(U32 TransactionIdentifier, U8 iDevice, U8 DeviceMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_GetMode(U8 iDevice, U8 * pDeviceMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_Enable_AIS_Insertion(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_Disable_AIS_Insertion(U32 TransactionIdentifier, U8 iDevice);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_Get_AIS_Insertion(U8 iDevice, U8 *pAIS_InsertionMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DEVICE_DIAGNOSTIC_DriveRecoveredClock_Set(U32 TransactionIdentifier, U8 iDevice, U8 OutputSelector, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DEVICE_DIAGNOSTIC_DriveRecoveredClock_Get(U8 iDevice, U8 OutputSelector, U8 * piLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DEVICE_SquelchRecoveredClock_Set(U32 TransactionIdentifier, U8 iDevice, U8 OutputSelector, U8 Squelch_Mode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DEVICE_SquelchRecoveredClock_Get(U8 iDevice, U8 OutputSelector, U8* pSquelch_Mode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_CreateFacility(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_CreateFacility(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 ClientType);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_CreateFacility(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort, U8 ClientType);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_DeleteFacility(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DeleteFacility(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DeleteFacility(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SFP_SetTxState(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort,U8 Tx_State);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SetRate(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 PortRate,U8 Tx_Enable);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_GetRate(U8 iDevice, U8 iLinePort, U8 * pPortRate);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DCC_Enable(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 DCC_Mode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DCC_Disable(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 DCC_Mode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DCC_Get(U8 iDevice, U8 iLinePort, U8 DCC_Mode, U8 * pDCC_State);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_EnableScrambling(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DisableScrambling(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_GetScramblingState(U8 iDevice, U8 iLinePort, U8 * pScramblingIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_Force_A(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_Force_B(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_GetForceState(U8 iDevice, U8 iLinePort, U8 * pForceSide);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_SetMode(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Mode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_GetMode(U8 iDevice, U8 iLinePort, U8 * pMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_SetTX(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, char * pTX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_SetEX(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, char * pEX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_GetTX(U8 iDevice, U8 iLinePort, char * pTX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_J0_GetEX(U8 iDevice, U8 iLinePort, char * pEX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_B1_SetExcessiveThreshold(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Threshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_B1_SetSignalDegradeThreshold(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Threshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_B1_GetExcessive(U8 iDevice, U8 iLinePort, U8 * pThreshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_SECTION_B1_GetSignalDegradeThreshold(U8 iDevice, U8 iLinePort, U8 * pThreshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_K1K2_SetTX(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE * pTX_K1K2);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_K1K2_GetTX(U8 iDevice, U8 iLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE * pTX_K1K2);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_S1_SetTX(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 TX_S1);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_S1_GetTX(U8 iDevice, U8 iLinePort, U8 * pTX_S1);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_B2_SetExcessiveThreshold(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Threshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_B2_SetSignalDegradeThreshold(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Threshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_B2_GetExcessive(U8 iDevice, U8 iLinePort, U8 * pThreshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_LINE_B2_GetSignalDegradeThreshold(U8 iDevice, U8 iLinePort, U8 * pThreshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_SetMode(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Mode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_GetMode(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_SetTX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_SetEX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_GetTX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_J1_GetEX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_SetRdiMode(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 ERDI_MODE);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_SS_BITS_SET_TX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Value);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_SS_BITS_GET_RX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_C2_SetTX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 TX_C2);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_C2_SetEX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 EX_C2);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_C2_GetTX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pTX_C2);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_C2_GetEX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pEX_C2);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_B3_SetExcessiveThreshold(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_B3_SetSignalDegradeThreshold(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_B3_GetExcessiveThreshold(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pThreshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_HO_PATH_B3_GetSignalDegradeThreshold(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pThreshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_J2_SetTX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_J2_SetEX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_J2_GetTX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_J2_GetEX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_SignalLabel_SetTX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 TX_V5_SignalLabel);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_SignalLabel_SetEX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 EX_V5_SignalLabel);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_SignalLabel_GetTX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pTX_V5_SignalLabel);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_SignalLabel_GetEX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pEX_V5_SignalLabel);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_BIP2_SetExcessiveThreshold(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_BIP2_SetSignalDegradeThreshold(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_BIP2_GetExcessiveThreshold(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pThreshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_LO_PATH_V5_BIP2_GetSignalDegradeThreshold(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pThreshold);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_GetClientType(U8 iDevice, U32 iSocketClientPDH, U8 * pClientType);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_SetFraming(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 Framing);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_GetFraming(U8 iDevice, U32 iSocketClientPDH, U8 * pFraming);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_SetMapping(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 Mapping);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_GetMapping(U8 iDevice, U32 iSocketClientPDH, U8 * pMapping);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_SetClockRecoveryMode(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 ClockRecoveryMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_E3T3_SetFEAC(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 Code);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_GetClockRecoveryMode(U8 iDevice, U32 iSocketClientPDH, U8 * pClockRecoveryMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_EnableCAS(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DisableCAS(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_Get_CAS_State(U8 iDevice, U32 iSocketClientPDH, U8 * pCAS_IsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_EnableTowardsSocket(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_DisableTowardsSocket(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_GetTowardsSocketState(U8 iDevice, U32 iSocketClientPDH, U8 * pAIS_IsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_EnableTowardsLine(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_DisableTowardsLine(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_AIS_CONTROL_GetTowardsLineState(U8 iDevice, U32 iSocketClientPDH, U8 * pAIS_IsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_RDI_CONTROL_EnableTowardsLine(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_RDI_CONTROL_DisableTowardsLine(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_RDI_CONTROL_GetTowardsLineState(U8 iDevice, U32 iSocketClientPDH, U8 * pAIS_IsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_DriveRecoveredClock_Set(U32 TransactionIdentifier, U8 iDevice, U8 OutputSelector, U32 iSocketClientPDH, U32 RateParameter);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_DriveRecoveredClock_Get(U8 iDevice, U8 OutputSelector, U32 * piSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_DriveRecoveredClock_RateGet(U8 iDevice, U8 OutputSelector, U32 * piSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Ingress_Term_PRBS_Set(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 PRBS_Pattern);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Ingress_Term_PRBS_Get(U8 iDevice, U32 iSocketClientPDH, U8 * pPRBS_Pattern);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Ingress_Gen_PRBS_Set(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 PRBS_Pattern);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Ingress_Gen_PRBS_Get(U8 iDevice, U32 iSocketClientPDH, U8 * pPRBS_Pattern);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Egress_Term_PRBS_Set(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 PRBS_Pattern);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Egress_Term_PRBS_Get(U8 iDevice, U32 iSocketClientPDH, U8 * pPRBS_Pattern);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Egress_Gen_PRBS_Set(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 PRBS_Pattern);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Egress_Gen_PRBS_Get(U8 iDevice, U32 iSocketClientPDH, U8 * pPRBS_Pattern);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_GetClientType(U8 iDevice, U8 iDiscreteClientPort, U8 * pClientType);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_SetFraming(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort, U8 Framing);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_GetFraming(U8 iDevice, U8 iDiscreteClientPort, U8 * pFraming);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_SetMapping(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort, U8 Mapping);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_GetMapping(U8 iDevice, U8 iDiscreteClientPort, U8 * pMapping);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_SetClockRecovery(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort, U8 ClockRecoveryMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_GetClockRecovery(U8 iDevice, U8 iDiscreteClientPort, U8 * pClockRecoveryMode);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_EnableCAS(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DisableCAS(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_Get_CAS_State(U8 iDevice, U8 iDiscreteClientPort, U8 * pCAS_IsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_EnableTowardsSocket(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_DisableTowardsSocket(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_GetTowardsSocketState(U8 iDevice, U8 iDiscreteClientPort, U8 * pAIS_IsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_EnableTowardsLine(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_DisableTowardsLine(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_AIS_CONTROL_GetTowardsLineState(U8 iDevice, U8 iDiscreteClientPort, U8 * pAIS_IsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_EnableShallow(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_DisableShallow(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_GetShallowState(U8 iDevice, U8 iDiscreteClientPort, U8 * pLoopbackIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_EnableDeep(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_DisableDeep(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_DISCRETE_CLIENT_DIAGNOSTIC_LOOPBACK_GetDeepState(U8 iDevice, U8 iDiscreteClientPort, U8 * pLoopbackIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_CONNECTIONS_THROUGH_CreateConnection(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pSecondLineEndpoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_CONNECTIONS_THROUGH_DeleteConnection(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pSecondLineEndpoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_CreateConnection(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_DeleteConnection(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_CONNECTIONS_ADD_DROP_DISCRETE_CLIENT_TO_CLIENT_SOCKET_CreateConnection(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_CONNECTIONS_ADD_DROP_DISCRETE_CLIENT_TO_CLIENT_SOCKET_DeleteConnection(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_SONET_SDH_EnableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_SONET_SDH_DisableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_SONET_SDH_GetAlarmReportingForAlarmCategory(U8 AlarmCategory, U8 * pIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_SOCKET_CLIENT_EnableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_SOCKET_CLIENT_DisableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_SOCKET_CLIENT_GetAlarmReportingForAlarmCategory(U8 AlarmCategory, U8 * pIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_DISCRETE_CLIENT_EnableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_DISCRETE_CLIENT_DisableAlarmReportingForAlarmCategory(U32 TransactionIdentifier, U8 AlarmCategory);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_DEVICE_DRIVER_DISCRETE_CLIENT_GetAlarmReportingForAlarmCategory(U8 AlarmCategory, U8 * pIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_EnableShallowLine(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_DisableShallowLine(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_GetShallowLineState(U8 iDevice, U8 iLinePort, U8 * pLoopbackIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_EnableDeepSystem(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_DisableDeepSystem(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_PORT_DIAGNOSTIC_LOOPBACK_GetDeepSystemState(U8 iDevice, U8 iLinePort, U8 * pLoopbackIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_EnableShallowSystem(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_DisableShallowSystem(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_GetShallowSystemState(U8 iDevice, U32 iSocketClientPDH, U8 * pLoopbackIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_EnableDeepLine(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_DisableDeepLine(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_LOOPBACK_GetDeepLineState(U8 iDevice, U32 iSocketClientPDH, U8 * pLoopbackIsEnabled);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_DIAGNOSTIC_LOOPBACK_Enable(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_DIAGNOSTIC_LOOPBACK_Disable(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SONET_SDH_DIAGNOSTIC_LOOPBACK_GetState(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pLoopbackIsEnabled);
+U8 OMIINO_API_INTERNAL_STATUS_DEVICE_DRIVER_VERSION_GetInformation(char *pDeviceDriverInformation);
+U8 OMIINO_API_INTERNAL_STATUS_DEVICE_VERSION_GetFirmwareInformation(U8 iDevice, char *pFirmwareInformation);
+U8 OMIINO_API_INTERNAL_STATUS_DEVICE_VERSION_GetHardwareInformation(U8 iDevice, char *pHardwareInformation);
+U8 OMIINO_API_INTERNAL_STATUS_DEVICE_BUILD_GetHardwareVariant(U8 iDevice, U8 * pHardwareBuildVariant);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SONET_SDH_PORT_SECTION_J0_GetRX(U8 iDevice, U8 iLinePort, char * pRX_TraceString);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SONET_SDH_PORT_LINE_S1_GetRX(U8 iDevice, U8 iLinePort, U8 * pRX_S1);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SONET_SDH_PORT_LINE_K1K2_GetRX(U8 iDevice, U8 iLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE *pRX_K1K2);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SONET_SDH_HO_PATH_J1_GetRX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pRX_TraceString);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SONET_SDH_HO_PATH_C2_GetRX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pRX_C2);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SONET_SDH_LO_PATH_J2_GetRX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pRX_TraceString);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SONET_SDH_LO_PATH_V5_SignalLabel_GetRX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pRX_V5_SignalLabel);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Ingress_PRBS_GetState(U8 iDevice, U32 iSocketClientPDH, U8 * pPRBS_State);
+U8 OMIINO_API_INTERNAL_STATUS_FACILITIES_SOCKET_CLIENT_PDH_DIAGNOSTIC_Egress_PRBS_GetState(U8 iDevice, U32 iSocketClientPDH, U8 * pPRBS_State);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_Port_EnableMonitoring(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 iPoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_Port_DisableMonitoring(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 iPoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_HighOrderPath_EnableMonitoring(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_HighOrderPath_DisableMonitoring(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_LowOrderPath_EnableMonitoring(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_LowOrderPath_DisableMonitoring(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_DiscretePort_EnableMonitoring(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort, U8 iPoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_DiscretePort_DisableMonitoring(U32 TransactionIdentifier, U8 iDevice, U8 iDiscreteClientPort, U8 iPoint);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_SetTimestampByteCount(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 AnyTimestampByteCount);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_GetTimestampByteCount(U8 iDevice, U32 iSocketClientPDH, U8 * pAnyTimestampByteCount);
+
+U8 OMIINO_API_INTERNAL_PM_E1_ENABLE_MONITORING_CRC(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_PM_E1_DISABLE_MONITORING_CRC(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_PM_T1_ENABLE_MONITORING_CRC(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_PM_T1_DISABLE_MONITORING_CRC(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_PM_E3T3_ENABLE_MONITORING(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 iPoint);
+U8 OMIINO_API_INTERNAL_PM_E3T3_DISABLE_MONITORING(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U8 iPoint);
+
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_DisableTimestamping(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_EnableTimestamping(U32 TransactionIdentifier, U8 iDevice, U32 iSocketClientPDH, U32 Gain);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_FACILITIES_SOCKET_CLIENT_PDH_GetTimeStamping(U8 iDevice, U32 iSocketClientPDH, U8 * pTimeStamping_IsEnabled);
+
+U8 OMIINO_API_INTERNAL_BULK_SOCKET_CLIENT_PDH_Facility_Create(U32 TransactionIdentifier, U8 iDevice, U8 AnyClientType, U8 Framing, U8 Mapping, U8 ClockRecoveryMode, U8 AnyTimestampByteCount);
+U8 OMIINO_API_INTERNAL_BULK_SOCKET_CLIENT_PDH_Facility_Delete(U32 TransactionIdentifier, U8 iDevice);
+
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_CONNECTIONS_THROUGH_CreateConnection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_CONNECTIONS_THROUGH_DeleteConnection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_DeleteConnection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+U8 OMIINO_API_INTERNAL_BULK_CONFIGURATION_CONNECTIONS_ADD_DROP_LINE_TO_CLIENT_SOCKET_CreateConnection(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 Bandwidth);
+
+
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_ClientAndLineEndpointMappingIsCorrect(U8 iDevice, U8 iProtectionMode, U32 iSocketClientPDH, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_ClientOkForPortRate(U8 iDevice, U8 BuildPersonality, U8 iProtectionMode, U32 iSocketClientPDH);
+void OMIINO_FRAMER_SOCKET_CLIENT_PDH_DynamicRule_ClientAndLineEndpointMapping_Initialize(void);
+
+
+U8 OMIINO_API_INTERNAL_BULK_SOCKET_INGRESS_SET_PRBS_TERM(U32 TransactionIdentifier, U8 iDevice, U8 PRBS_Pattern);
+U8 OMIINO_API_INTERNAL_BULK_SOCKET_INGRESS_SET_PRBS_GEN(U32 TransactionIdentifier, U8 iDevice, U8 PRBS_Pattern);
+U8 OMIINO_API_INTERNAL_BULK_SOCKET_EGRESS_SET_PRBS_TERM(U32 TransactionIdentifier, U8 iDevice, U8 PRBS_Pattern);
+U8 OMIINO_API_INTERNAL_BULK_SOCKET_EGRESS_SET_PRBS_GEN(U32 TransactionIdentifier, U8 iDevice, U8 PRBS_Pattern);
+
+
+
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_Port_GetMonitoringState(U8 iDevice, U8 iLinePort, U8 iPoint, U8 *pState);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_HighOrderPath_GetMonitoringState(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U8 *pState);
+U8 OMIINO_API_INTERNAL_CONFIGURATION_PERFORMANCE_MONITORING_SONET_SDH_LowOrderPath_GetMonitoringState(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U8 *pState);
+U8 OMIINO_API_INTERNAL_PM_E1_GET_MONITORING_CRC_State(U8 iDevice, U32 iSocketClientPDH, U8 * pState);
+U8 OMIINO_API_INTERNAL_PM_T1_GET_MONITORING_CRC_State(U8 iDevice, U32 iSocketClientPDH, U8 * pState);
+U8 OMIINO_API_INTERNAL_PM_E3T3_GET_MONITORING_State(U8 iDevice, U32 iSocketClientPDH, U8 iPoint, U8 * pState);
+
+
+
+
+/*
+ *
+ * Porting
+ *
+ *
+ */
+
+U8 WPX_UFE_FRAMER_PORTING_MAP_SONET_SDH_EndpointToPresentation(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pTo, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *pFrom);
+U8 WPX_UFE_FRAMER_PORTING_MAP_SONET_SDH_PresentationEndpointToExternal(U8 iDevice, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE  *pTo, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pFrom);
+U8 WPX_UFE_FRAMER_PORTING_CommonEndpointsAreIdentical(WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *pFirstCommonEndpoint, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *pSecondCommonEndpoint);
+
+/*
+ * Firmware download wrappers
+ */
+void OMIINO_FRAMER_FIRMWARE_DOWNLOAD_Initialize(U8 TestMode);
+U8 OMIINO_FRAMER_FIRMWARE_DOWNLOAD_Process_Bootloader_Hello(U8 iDevice, U32 count) ;
+U8 OMIINO_FRAMER_FIRMWARE_DOWNLOAD_Process_Firmware_Hello(U8 iDevice, U32 count) ;
+U8 OMIINO_FRAMER_FIRMWARE_DOWNLOAD_Process_Ack(U8 iDevice, U32 count);
+U8 OMIINO_FRAMER_FIRMWARE_DOWNLOAD_Process_Nak(U8 iDevice);
+U8 OMIINO_FRAMER_FIRMWARE_DOWNLOAD_Firmware_Running(U8 iDevice);
+
+
+void OMIINO_AUX_Response(U8 iDevice, U32 TransactionIdentifier, U8 API_Result);
+void OMIINO_AUX_ResponseWithPayload(U8 iDevice, U32 TransactionIdentifier, U8 API_Result, U32 CatalogueID, char * pData, U8 PayloadLength);
+void OMIINO_AUX_ResponseProgressReport(U8 iDevice, U32 CatalogueID, U32 Iteration, U32 TotalIterations, char * pMessage, U8 MessageLength);
+
+
+#define MAX_FATAL_ERROR_MESSAGE_BYTES_PER_SEGMENT	(32)
+int IsFinalSegment(int BytesTransmitted, int BytesToTransmit);
+int TransmitFinalSegment(char * pAnyMessageSegment, int BytesToTransmit);
+int TransmitNextSegment(char * pAnyMessageSegment);
+void OMIINO_FRAMER_TransmitMessageTo_OMNISHELL(char * pAnyMessage);
+void OMIINO_FRAMER_Binary_TransmitMessageTo_OMNISHELL(char * pAnyMessage, int Length);
+
+
+
+/*
+ * Reset Model FSM
+ */
+
+void OMIINO_FRAMER_InitializeStatusForDevice(U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pRAM_Hierarchy);
+void OMIINO_FRAMER_InitializeConfigurationForDevice(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice);
+
+
+void OMIINO_MODEL_CONTROL_FSM_Initialize(OMIINO_MODEL_CONTROL_FSM_TYPE * pFSM, U8 iDevice, U8 TestMode);
+void OMIINO_MODEL_CONTROL_FSM_Announce_FirmwareHelloFor(U8 iDevice);
+void OMIINO_MODEL_CONTROL_FSM_Announce_BootloaderHelloFor(U8 iDevice);
+
+
+
+
+
+
+
+/*
+ *
+ * Section: Status PERFORMANCE MONITORING Data Collection
+ *
+ */
+
+U8 OMIINO_API_INTERNAL_STATUS_PERFORMANCE_MONITORING_SONET_SDH_Port_ReadData(U8 iDevice, U8 iTableIndex, U8 iLinePort, U8 iPoint, U32 * pCount);
+U8 OMIINO_API_INTERNAL_STATUS_PERFORMANCE_MONITORING_SONET_SDH_HO_PATH_ReadData(U8 iDevice, U8 iTableIndex, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint, U8 iPoint, U32 * pCount);
+U8 OMIINO_API_INTERNAL_STATUS_PERFORMANCE_MONITORING_SONET_SDH_LO_PATH_ReadData(U8 iDevice, U8 iTableIndex, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE *pLineEndpoint, U8 iPoint, U32 * pCount);
+U8 OMIINO_API_INTERNAL_STATUS_PERFORMANCE_MONITORING_DiscreteClientPort_ReadData(U8 iDevice, U8 iTableIndex, U8 iDiscreteClientPort, U8 iPoint, U32 * pCount);
+U8 OMIINO_API_INTERNAL_STATUS_PERFORMANCE_MONITORING_SocketClientPort_PDH_E1T1_ReadData(U8 iDevice, U8 iTableIndex, U32 iSocketClientPDH, U8 iPoint, U32 * pCount);
+U8 OMIINO_API_INTERNAL_STATUS_PERFORMANCE_MONITORING_SocketClientPort_PDH_E3T3_ReadData(U8 iDevice, U8 iTableIndex, U32 iSocketClientPDH, U8 iPoint, U32 * pCount);
+
+
+
+
+
+
+
+
+
+
+/*
+ *
+ * Section: Presentation<->Logical Port Maps
+ *
+ */
+
+void OMIINO_FRAMER_DEVICE_PortMap_Initialize(OMIINO_FRAMER_DEVICE_TYPE * pDeviceRAM);
+U8 OMIINO_FRAMER_PortMap_Define(OMIINO_FRAMER_DEVICE_TYPE *pDeviceRAM, U8 AnyPersonality, U8 DeviceProtectionMode);
+U8 OMIINO_FRAMER_PortMap_Presentation_iLinePort_To_Presentation_ProtectionPartner_iLinePort(OMIINO_PORT_MAP_TYPE *pPortMap, U8 iPresentationLinePort, U8 * pPresentation_ProtectionPartner_iLinePort);
+U8 OMIINO_FRAMER_PortMap_Logical_iLinePort_To_Logical_ProtectionPartner_iLinePort(OMIINO_PORT_MAP_TYPE *pPortMap, U8 iLogicalLinePort, U8 *pLogical_ProtectionPartner_iLinePort);
+U8 OMIINO_FRAMER_PortMap_Presentation_iLinePort_To_Presentation_ProtectionPartner_iLinePort(OMIINO_PORT_MAP_TYPE *pPortMap, U8 iPresentationLinePort, U8 *pPresentation_ProtectionPartner_iLinePort);
+U8 OMIINO_FRAMER_PortMap_Presentation_iLinePort_To_Logical_iLinePort(OMIINO_PORT_MAP_TYPE *pPortMap, U8 iPresentationLinePort, U8 *piLogicalLinePort);
+U8 OMIINO_FRAMER_PortMap_Logical_iLinePort_To_Presentation_iLinePort(OMIINO_PORT_MAP_TYPE *pPortMap, U8 iLogicalLinePort, U8 *pPresentationLinePort);
+U8 OMIINO_FRAMER_PortMap_Logical_iLinePort_Logical_Side_A_iLinePort(OMIINO_PORT_MAP_TYPE *pPortMap, U8 iLogicalLinePort, U8 *pLogical_Side_A_iLinePort);
+
+
+
+
+
+
+
+
+/*
+ *
+ * Section: Presentation<->Logical Mapping Layer (SDH SONET)
+ *
+ */
+
+U8 WPX_FRMR_PL_PM_SONET_SDH_Port_GetMonitoringState(U8 iDevice, U8 iPresentationLinePort, U8 iPoint, U8 *pState);
+U8 WPX_FRMR_PL_PM_SONET_SDH_HO_Path_GetMonitoringState(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U8 *pState);
+U8 WPX_FRMR_PL_PM_SONET_SDH_LO_Path_GetMonitoringState(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U8 *pState);
+
+U8 WPX_FRMR_PL_PM_SONET_SDH_Port_EnableMonitoring(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 iPoint);
+U8 WPX_FRMR_PL_PM_SONET_SDH_Port_DisableMonitoring(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 iPoint);
+U8 WPX_FRMR_PL_PM_SONET_SDH_HO_Path_EnableMonitoring(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint);
+U8 WPX_FRMR_PL_PM_SONET_SDH_HO_Path_DisableMonitoring(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint);
+U8 WPX_FRMR_PL_PM_SONET_SDH_LO_Path_EnableMonitoring(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint);
+U8 WPX_FRMR_PL_PM_SONET_SDH_LO_Path_DisableMonitoring(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint);
+U8 WPX_FRMR_PL_DEV_DIAG_DRV_RecClkSet(U32 TransactionIdentifier, U8 iDevice, U8 OutputSelector, U8 iPresentationLinePort);
+U8 WPX_FRMR_PL_DEV_DIAG_DRV_RecClkGet(U8 iDevice, U8 OutputSelector, U8 * piPresentationLinePort);
+U8 WPX_FRMR_PL_DEV_SQUELCH_RecClkSet(U32 TransactionIdentifier, U8 iDevice, U8 OutputSelector, U8 Squelch_Mode);
+U8 WPX_FRMR_PL_DEV_SQUELCH_RecClkGet(U8 iDevice, U8 OutputSelector, U8* pSquelch_Mode);
+U8 WPX_FRMR_PL_SONET_SDH_CreateFacility(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 WPX_FRMR_PL_SONET_SDH_DeleteFacility(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SFP_SetTxState(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort,U8 Tx_State);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SetRate(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 PortRate,U8 Tx_Enable);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_GetRate(U8 iDevice, U8 iPresentationLinePort, U8 * pPortRate);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DCC_Enable(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 DCC_Mode);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DCC_Disable(U32 TransactionIdentifier, U8 iDevice, U8 iLinePort, U8 DCC_Mode);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DCC_Get(U8 iDevice, U8 iLinePort, U8 DCC_Mode, U8 * pDCC_State);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_J0_SetMode(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 Mode);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_J0_GetMode(U8 iDevice, U8 iPresentationLinePort, U8 * pMode);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_J0_SetTX(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, char * pTX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_J0_SetEX(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, char * pEX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_J0_GetTX(U8 iDevice, U8 iPresentationLinePort, char * pTX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_J0_GetEX(U8 iDevice, U8 iPresentationLinePort, char * pEX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_B1_SetExcessiveTh(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 Threshold);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_B1_SetSignalDegradeTh(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 Threshold);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_B1_GetExcessiveTh(U8 iDevice, U8 iPresentationLinePort, U8 * pThreshold);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_SEC_B1_GetSigDegradeTh(U8 iDevice, U8 iPresentationLinePort, U8 * pThreshold);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_LINE_K1K2_SetTx(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE * pTX_K1K2);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_LINE_K1K2_GetTx(U8 iDevice, U8 iPresentationLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE * pTX_K1K2);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_LINE_S1_SetTx(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 TX_S1);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_LINE_S1_GetTx(U8 iDevice, U8 iPresentationLinePort, U8 * pTX_S1);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_LINE_B2_SetExcessiveTh(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 Threshold);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_LINE_B2_SetSigDegradeTh(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort, U8 Threshold);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_LINE_B2_GetExcessiveTh(U8 iDevice, U8 iPresentationLinePort, U8 * pThreshold);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_LINE_B2_GetSigDegradeTh(U8 iDevice, U8 iPresentationLinePort, U8 * pThreshold);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_J1_SetMode(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Mode);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_J1_GetMode(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pMode);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_J1_SetTX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_J1_SetEX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_J1_GetTX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_J1_GetEX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_SetRdiMode(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 ERDI_MODE);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_SS_BITS_SET_TX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Value);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_SS_BITS_GET_RX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_C2_SetTX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 TX_C2);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_C2_SetEX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 EX_C2);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_C2_GetTX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pTX_C2);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_C2_GetEX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pEX_C2);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_B3_SetExcessiveTh(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_B3_SetSigDegradeTh(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_B3_GetExcessiveTh(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pThreshold);
+U8 WPX_FRMR_PL_SONET_SDH_HO_PATH_B3_GetSigDegradeTh(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pThreshold);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_J2_SetTX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_J2_SetEX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_J2_GetTX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pTX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_J2_GetEX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pEX_TraceString);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_V5_SigLabel_SetTX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 TX_V5_SignalLabel);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_V5_SigLabel_SetEX(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 EX_V5_SignalLabel);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_V5_SigLabel_GetTX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pTX_V5_SignalLabel);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_V5_SigLabel_GetEX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pEX_V5_SignalLabel);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_V5_BIP2_SetExcessiveTh(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_V5_BIP2_SetSigDegradeTh(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 Threshold);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_V5_BIP2_GetExcessiveTh(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pThreshold);
+U8 WPX_FRMR_PL_SONET_SDH_LO_PATH_V5_BIP2_GetSigDegradeTh(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pThreshold);
+U8 WPX_FRMR_PL_CONNECTIONS_ThroughCreate(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecondLineEndpoint);
+U8 WPX_FRMR_PL_CONNECTIONS_ThroughDelete(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pFirstLineEndpoint, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pSecondLineEndpoint);
+U8 WPX_FRMR_PL_CONNECTIONS_AddDropLineToSocketCreate(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 iSocketClientPDH);
+U8 WPX_FRMR_PL_CONNECTIONS_AddDropLineToSocketDelete(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U32 iSocketClientPDH);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_ForceA(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_ForceB(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_GetForceState(U8 iDevice, U8 iPresentationLinePort, U8 * pForceSide);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DIAG_LpbkEnableShallowLine(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DIAG_LpbkDisableShallowLine(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DIAG_LpbkGetShallowLineState(U8 iDevice, U8 iPresentationLinePort, U8 * pLoopbackIsEnabled);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DIAG_LpbkEnableDeepSystem(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DIAG_LpbkDisableDeepSystem(U32 TransactionIdentifier, U8 iDevice, U8 iPresentationLinePort);
+U8 WPX_FRMR_PL_SONET_SDH_PORT_DIAG_LpbkGetDeepSystemState(U8 iDevice, U8 iPresentationLinePort, U8 * pLoopbackIsEnabled);
+U8 WPX_FRMR_PL_SONET_SDH_DIAG_LpbkEnable(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 WPX_FRMR_PL_SONET_SDH_DIAG_LpbkDisable(U32 TransactionIdentifier, U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint);
+U8 WPX_FRMR_PL_SONET_SDH_DIAG_LpbkGetState(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pLoopbackIsEnabled);
+U8 WPX_FRMR_PL_STATUS_SONET_SDH_PORT_SEC_J0_GetRX(U8 iDevice, U8 iPresentationLinePort, char * pRX_TraceString);
+U8 WPX_FRMR_PL_STATUS_SONET_SDH_PORT_LINE_S1_GetRX(U8 iDevice, U8 iPresentationLinePort, U8 * pRX_S1);
+U8 WPX_FRMR_PL_STATUS_SONET_SDH_PORT_LINE_K1K2_GetRX(U8 iDevice, U8 iPresentationLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE *pRX_K1K2);
+U8 WPX_FRMR_PL_STATUS_SONET_SDH_HO_PATH_J1_GetRX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pRX_TraceString);
+U8 WPX_FRMR_PL_STATUS_SONET_SDH_HO_PATH_C2_GetRX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pRX_C2);
+U8 WPX_FRMR_PL_STATUS_SONET_SDH_LO_PATH_J2_GetRX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, char * pRX_TraceString);
+U8 WPX_FRMR_PL_STATUS_SONET_SDH_LO_PATH_V5_SigLabelGetRX(U8 iDevice, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 * pRX_V5_SignalLabel);
+U8 WPX_FRMR_PL_STATUS_PM_SONET_SDH_Port_ReadData(U8 iDevice, U8 iTableIndex, U8 iPresentationLinePort, U8 iPoint, U32 * pCount);
+U8 WPX_FRMR_PL_STATUS_PM_SONET_SDH_HO_PATH_ReadData(U8 iDevice, U8 iTableIndex, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U32 * pCount);
+U8 WPX_FRMR_PL_STATUS_PM_SONET_SDH_LO_PATH_ReadData(U8 iDevice, U8 iTableIndex, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pLineEndpoint, U8 iPoint, U32 * pCount);
+
+
+
+/* This API needs to be called for the DEMO BOARD ONLY - after set build personality */ 
+void OMIINO_API_INTERNAL_DEMO_ONLY_Configure_GTP_ClockSource(U8 iDevice);
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
+
+#endif /* _OMIINO_FRAMER_PRIVATE_ */

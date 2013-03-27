@@ -1,0 +1,857 @@
+/*--------------------------------------------------------------------------*/
+/*                                                                          */
+/*        Copyright (c) 2010  Omiino Ltd                                    */
+/*                                                                          */
+/*        All rights reserved.                                              */
+/*        This code is provided under license and or Non-disclosure         */
+/*        Agreement and must be used solely for the purpose for which it    */
+/*        was provided. It must not be passed to any third party without    */
+/*        the written permission of Omiino Ltd.                             */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+
+
+
+#include "WO_FRMR_private.h"
+#include "WO_FRMR_configuration_defaults_private.h"
+
+
+
+OMIINO_FRAMER_STATUS_DEVICE_TYPE * OMIINO_FRAMER_GetStatusRAMForDevice(OMIINO_FRAMER_RAM_TYPE *pRAM, U8 iDevice)
+{
+	OMIINO_FRAMER_ASSERT(NULL!=pRAM,0);
+	OMIINO_FRAMER_ASSERT(WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES>iDevice,iDevice);
+    return &(pRAM->Device[iDevice].Hierarchy.Status);
+}
+
+
+
+
+
+OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_TYPE * OMIINO_FRAMER_GetStatusRAMForDiscreteClientPort(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, U8 iDiscreteClientPort)
+{
+	OMIINO_FRAMER_ASSERT(NULL!=pConfigurationRAMForDevice,0);
+	OMIINO_FRAMER_ASSERT(WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_DISCRETE_CLIENT_PORTS>iDiscreteClientPort,iDiscreteClientPort);
+	return &(pConfigurationRAMForDevice->DiscreteClient[iDiscreteClientPort].Status);
+}
+
+
+
+
+
+OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE * OMIINO_FRAMER_GetStatusRAMForSocketClientPDH_Element(OMIINO_FRAMER_HIERARCHY_TYPE * pConfigurationRAMForDevice, U32 iSocketClientPDH)
+{
+	OMIINO_FRAMER_ASSERT(NULL!=pConfigurationRAMForDevice,0);
+	OMIINO_FRAMER_ASSERT(WPX_UFE_FRAMER_BUILD_OPTION_MAX_SOCKET_CLIENT_PDH_PORTS>iSocketClientPDH,iSocketClientPDH);
+	return &(pConfigurationRAMForDevice->SocketClient.Element[iSocketClientPDH].Status);
+}
+
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_LO_PATH_J2(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPortHierarchy, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pPortHierarchy->Status.Alarms.Key[0]);
+
+	pPortHierarchy->Status.Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_BIP_Threshold_V5_BIP2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[2]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[3]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[4]);
+
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[2]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[3]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[4]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+
+}
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_LO_PATH_V5_SignalLabel(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+
+}
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_LO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE * pLO_Path, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+ 	OMIINO_FRAMER_ASSERT(NULL!=pLO_Path,0);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_LO_PATH_J2(iDevice, &(pLO_Path->Overhead.J2), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_BIP_Threshold_V5_BIP2(iDevice, &(pLO_Path->Overhead.V5_BIP2.Status), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_LO_PATH_V5_SignalLabel(iDevice, &(pLO_Path->Overhead.V5_SignalLabel.Status), pAlarmMangerRAM);
+}
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_J1(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPortHierarchy, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pPortHierarchy->Status.Alarms.Key[0]);
+
+	pPortHierarchy->Status.Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_BIP_Threshold_B3(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_G1(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_C2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+
+}
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_H1H2H3(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+
+}
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_H4(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE * pHO_Path, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+ 	OMIINO_FRAMER_ASSERT(NULL!=pHO_Path,0);
+
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_G1(iDevice, &(pHO_Path->Overhead.G1.Status), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_BIP_Threshold_B3(iDevice, &(pHO_Path->Overhead.B3.Status),pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_J1(iDevice, &(pHO_Path->Overhead.J1), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_C2(iDevice, &(pHO_Path->Overhead.C2.Status), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_H1H2H3(iDevice, &(pHO_Path->Overhead.H1H2H3.Status), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_HO_PATH_H4(iDevice, &(pHO_Path->Overhead.H4.Status), pAlarmMangerRAM);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port_Section_A1A2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_SECTION_A1A2_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[2]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[2]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+
+}
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port_Section_J0(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_J0_TYPE * pPortHierarchy, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pPortHierarchy->Status.Alarms.Key[0]);
+
+	pPortHierarchy->Status.Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_BIP_Threshold_B1(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+
+}
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_BIP_Threshold_B2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port_Line_K1K2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_K1K2_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port_Line_M1(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_M1_TYPE * pStatus, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ALARM_MANAGER_FreeNode(iDevice, pAlarmMangerRAM, pStatus->Alarms.Key[1]);
+
+	pStatus->Alarms.Key[0]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+	pStatus->Alarms.Key[1]=MAX_ALARM_MANAGER_NODE_ELEMENTS;
+}
+
+
+
+
+void OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port_Section_A1A2(iDevice, &(pRAM->Section.A1A2.Status), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port_Section_J0(iDevice, &(pRAM->Section.J0), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_BIP_Threshold_B1(iDevice, &(pRAM->Section.B1.Status), pAlarmMangerRAM);
+
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_BIP_Threshold_B2(iDevice, &(pRAM->Line.B2.Status), pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_FreeAlarmKeysFor_SONET_SDH_Port_Line_K1K2(iDevice, &(pRAM->Line.K1K2.Status), pAlarmMangerRAM);
+}
+
+
+
+
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_LO_PATH_J2(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPortHierarchy, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_LO_Path_J2_SetRX(pPortHierarchy, OMIINO_DEFAULT_SONET_SDH_LO_PATH_J2_RX);
+	pPortHierarchy->Status.Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_LP_TIM, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pPortHierarchy->Status.Alarms.Key[0],pPortHierarchy->Status.Alarms.Key[0]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_LO_PATH_J2(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_OVERHEAD_J2_TYPE * pPortHierarchy, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_LO_Path_J2_SetRX(pPortHierarchy, OMIINO_DEFAULT_SONET_SDH_LO_PATH_J2_RX);
+	pPortHierarchy->Status.Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_TIM_P, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pPortHierarchy->Status.Alarms.Key[0],pPortHierarchy->Status.Alarms.Key[0]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_BIP_Threshold_V5_BIP2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_LP_EXC, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_LP_DEG, pEndpoint);
+	pStatus->Alarms.Key[2] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_LP_RDI, pEndpoint);
+	pStatus->Alarms.Key[3] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_TU_AIS, pEndpoint);
+	pStatus->Alarms.Key[4] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_TU_LOP, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[2],pStatus->Alarms.Key[2]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[3],pStatus->Alarms.Key[3]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[4],pStatus->Alarms.Key[4]);
+}
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_BIP_Threshold_V5_BIP2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_EXC_V, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_DEG_V, pEndpoint);
+	pStatus->Alarms.Key[2] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_RDI_V, pEndpoint);
+	pStatus->Alarms.Key[3] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_AIS_V, pEndpoint);
+	pStatus->Alarms.Key[4] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_LOP_V, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[2],pStatus->Alarms.Key[2]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[3],pStatus->Alarms.Key[3]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[4],pStatus->Alarms.Key[4]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_LO_PATH_V5_SignalLabel(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_LO_PATH_V5_SIGNAL_LABEL_SetRX(pStatus, OMIINO_DEFAULT_SONET_SDH_LO_PATH_SIGNAL_LABEL_RX);
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_LP_PLM, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_LP_UNEQ, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_LO_PATH_V5_SignalLabel(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_LO_PATH_V5_SIGNAL_LABEL_SetRX(pStatus, OMIINO_DEFAULT_SONET_SDH_LO_PATH_SIGNAL_LABEL_RX);
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_PLM_V, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_UNEQ_V, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_LO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE * pLO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+ 	OMIINO_FRAMER_ASSERT(NULL!=pLO_Path,0);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_LO_PATH_J2(iDevice, &(pLO_Path->Overhead.J2), pEndpoint,  pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_BIP_Threshold_V5_BIP2(iDevice, &(pLO_Path->Overhead.V5_BIP2.Status),pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_LO_PATH_V5_SignalLabel(iDevice, &(pLO_Path->Overhead.V5_SignalLabel.Status), pEndpoint, pAlarmMangerRAM);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_LO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE * pLO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+ 	OMIINO_FRAMER_ASSERT(NULL!=pLO_Path,0);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_LO_PATH_J2(iDevice, &(pLO_Path->Overhead.J2), pEndpoint,  pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_BIP_Threshold_V5_BIP2(iDevice, &(pLO_Path->Overhead.V5_BIP2.Status),pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_LO_PATH_V5_SignalLabel(iDevice, &(pLO_Path->Overhead.V5_SignalLabel.Status), pEndpoint, pAlarmMangerRAM);
+}
+
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_SDH_LO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, OMIINO_FRAMER_HIERARCHY_SONET_SDH_LO_PATH_ELEMENT_TYPE * pLO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+    U8 PortMode;
+
+ 	OMIINO_FRAMER_ASSERT(NULL!=pRAM,0);
+
+	OMIINO_FRAMER_SONET_SDH_Port_GetMode(&(pRAM->Configuration), &PortMode);
+
+    switch(PortMode)
+    {
+        case WPX_UFE_FRAMER_DEVICE_MODE_SDH:
+			OMIINO_FRAMER_STATUS_Initialize_SDH_LO_PATH(iDevice, pLO_Path, pEndpoint, pAlarmMangerRAM);
+            break;
+
+        case WPX_UFE_FRAMER_DEVICE_MODE_SONET:
+			OMIINO_FRAMER_STATUS_Initialize_SONET_LO_PATH(iDevice, pLO_Path, pEndpoint, pAlarmMangerRAM);
+            break;
+
+        default:
+            OMIINO_FRAMER_RSE(PortMode);
+            break;
+    }	
+}
+
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_J1(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPortHierarchy, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_HO_Path_J1_SetRX(pPortHierarchy, OMIINO_DEFAULT_SONET_SDH_HO_PATH_J1_RX);
+	pPortHierarchy->Status.Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_HP_TIM, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pPortHierarchy->Status.Alarms.Key[0],pPortHierarchy->Status.Alarms.Key[0]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_J1(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_OVERHEAD_J1_TYPE * pPortHierarchy, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_HO_Path_J1_SetRX(pPortHierarchy, OMIINO_DEFAULT_SONET_SDH_HO_PATH_J1_RX);
+	pPortHierarchy->Status.Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_TIM_P, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pPortHierarchy->Status.Alarms.Key[0],pPortHierarchy->Status.Alarms.Key[0]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_BIP_Threshold_B3(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_HP_EXC, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_HP_DEG, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_BIP_Threshold_B3(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus,WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_EXC_P, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_DEG_P, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_G1(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_HP_RDI, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_G1(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_G1_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_RDI_P, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_C2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_HO_Path_C2_SetRX(pStatus, OMIINO_DEFAULT_SONET_SDH_HO_PATH_C2_RX);
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_HP_PLM, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_HP_UNEQ, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_C2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_SIGNAL_LABEL_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_PLM_P, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_UNEQ_P, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_H1H2H3(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_AU_AIS, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_AU_LOP, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_H1H2H3(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H1H2H3_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_AIS_P, pEndpoint);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_LOP_P, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_H4(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_HP_LOM, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_H4(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_HO_PATH_OVERHEAD_H4_TYPE * pStatus, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PATH_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_LOM_P, pEndpoint);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+}
+
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE * pHO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+ 	OMIINO_FRAMER_ASSERT(NULL!=pHO_Path,0);
+
+	OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_G1(iDevice, &(pHO_Path->Overhead.G1.Status), pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_BIP_Threshold_B3(iDevice, &(pHO_Path->Overhead.B3.Status),pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_J1(iDevice, &(pHO_Path->Overhead.J1), pEndpoint,  pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_C2(iDevice, &(pHO_Path->Overhead.C2.Status), pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_H1H2H3(iDevice, &(pHO_Path->Overhead.H1H2H3.Status), pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH_H4(iDevice, &(pHO_Path->Overhead.H4.Status), pEndpoint, pAlarmMangerRAM);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE * pHO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+ 	OMIINO_FRAMER_ASSERT(NULL!=pHO_Path,0);
+
+	OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_G1(iDevice, &(pHO_Path->Overhead.G1.Status), pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_BIP_Threshold_B3(iDevice, &(pHO_Path->Overhead.B3.Status),pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_J1(iDevice, &(pHO_Path->Overhead.J1), pEndpoint,  pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_C2(iDevice, &(pHO_Path->Overhead.C2.Status), pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_H1H2H3(iDevice, &(pHO_Path->Overhead.H1H2H3.Status), pEndpoint, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH_H4(iDevice, &(pHO_Path->Overhead.H4.Status), pEndpoint, pAlarmMangerRAM);
+}
+
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_SDH_HO_PATH(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, OMIINO_FRAMER_HIERARCHY_SONET_SDH_HO_PATH_TYPE * pHO_Path, WPX_UFE_FRAMER_SONET_SDH_ENDPOINT_TYPE * pEndpoint, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+    U8 PortMode;
+
+ 	OMIINO_FRAMER_ASSERT(NULL!=pRAM,0);
+
+	OMIINO_FRAMER_SONET_SDH_Port_GetMode(&(pRAM->Configuration), &PortMode);
+
+    switch(PortMode)
+    {
+        case WPX_UFE_FRAMER_DEVICE_MODE_SDH:
+			OMIINO_FRAMER_STATUS_Initialize_SDH_HO_PATH(iDevice, pHO_Path, pEndpoint, pAlarmMangerRAM);
+            break;
+
+        case WPX_UFE_FRAMER_DEVICE_MODE_SONET:
+			OMIINO_FRAMER_STATUS_Initialize_SONET_HO_PATH(iDevice, pHO_Path, pEndpoint, pAlarmMangerRAM);
+            break;
+
+        default:
+            OMIINO_FRAMER_RSE(PortMode);
+            break;
+    }	
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_Port_Section_A1A2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_SECTION_A1A2_TYPE * pStatus, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_LOS, iLinePort);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_LOF, iLinePort);
+	pStatus->Alarms.Key[2] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_OOF, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[2],pStatus->Alarms.Key[2]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_Port_Section_A1A2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_SECTION_A1A2_TYPE * pStatus, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_LOS, iLinePort);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_LOF, iLinePort);
+	pStatus->Alarms.Key[2] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_OOF, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[2],pStatus->Alarms.Key[2]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_Port_Section_J0(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_J0_TYPE * pPortHierarchy, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_Port_Section_J0_SetRX(pPortHierarchy, OMIINO_DEFAULT_SONET_SDH_LINE_PORT_SECTION_J0_RX);
+	pPortHierarchy->Status.Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_RS_TIM, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pPortHierarchy->Status.Alarms.Key[0],pPortHierarchy->Status.Alarms.Key[0]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_Port_Section_J0(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_SECTION_J0_TYPE * pPortHierarchy, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_SONET_SDH_Port_Section_J0_SetRX(pPortHierarchy, OMIINO_DEFAULT_SONET_SDH_LINE_PORT_SECTION_J0_RX);
+	pPortHierarchy->Status.Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_TIM_S, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pPortHierarchy->Status.Alarms.Key[0],pPortHierarchy->Status.Alarms.Key[0]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_BIP_Threshold_B1(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_RS_EXC, iLinePort);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_RS_DEG, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_BIP_Threshold_B1(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_EXC_S, iLinePort);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_DEG_S, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_BIP_Threshold_B2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_MS_EXC, iLinePort);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_MS_DEG, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_BIP_Threshold_B2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_OVERHEAD_BIP_THRESHOLD_TYPE * pStatus, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_EXC_L, iLinePort);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_DEG_L, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_Port_Line_S1(OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_S1_TYPE * pStatus)
+{
+	OMIINO_FRAMER_SONET_SDH_Port_Line_S1_SetRX(pStatus, OMIINO_DEFAULT_SONET_SDH_LINE_PORT_LINE_S1_RX);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_Port_Line_S1(OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_S1_TYPE * pStatus)
+{
+	OMIINO_FRAMER_SONET_SDH_Port_Line_S1_SetRX(pStatus, OMIINO_DEFAULT_SONET_SDH_LINE_PORT_LINE_S1_RX);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_Port_Line_K1K2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_K1K2_TYPE * pStatus, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE RX;
+	RX.K1=OMIINO_DEFAULT_SONET_SDH_LINE_PORT_LINE_K1_RX;
+	RX.K2=OMIINO_DEFAULT_SONET_SDH_LINE_PORT_LINE_K2_RX;
+
+	OMIINO_FRAMER_SONET_SDH_Port_Line_K1K2_SetRX(pStatus, &RX);
+
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_MS_AIS, iLinePort);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SDH_MS_RDI, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_Port_Line_K1K2(U8 iDevice, OMIINO_FRAMER_STATUS_SONET_SDH_PORT_LINE_K1K2_TYPE * pStatus, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE RX;
+	RX.K1=OMIINO_DEFAULT_SONET_SDH_LINE_PORT_LINE_K1_RX;
+	RX.K2=OMIINO_DEFAULT_SONET_SDH_LINE_PORT_LINE_K2_RX;
+
+	OMIINO_FRAMER_SONET_SDH_Port_Line_K1K2_SetRX(pStatus, &RX);
+
+	pStatus->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_AIS_L, iLinePort);
+	pStatus->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_SONET_SDH_PORT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SONET_RDI_L, iLinePort);
+
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[0],pStatus->Alarms.Key[0]);
+	OMIINO_FRAMER_ASSERT(MAX_ALARM_MANAGER_NODE_ELEMENTS!=pStatus->Alarms.Key[1],pStatus->Alarms.Key[1]);
+}
+
+
+
+
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SDH_Port(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_STATUS_Initialize_SDH_Port_Section_A1A2(iDevice, &(pRAM->Section.A1A2.Status), iLinePort, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_Port_Section_J0(iDevice, &(pRAM->Section.J0), iLinePort, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_BIP_Threshold_B1(iDevice, &(pRAM->Section.B1.Status), iLinePort, pAlarmMangerRAM);
+
+	OMIINO_FRAMER_STATUS_Initialize_SDH_Port_Line_S1(&(pRAM->Line.S1.Status));
+	OMIINO_FRAMER_STATUS_Initialize_SDH_Port_Line_K1K2(iDevice, &(pRAM->Line.K1K2.Status), iLinePort, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SDH_BIP_Threshold_B2(iDevice, &(pRAM->Line.B2.Status), iLinePort, pAlarmMangerRAM);
+}
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_Port(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_STATUS_Initialize_SONET_Port_Section_A1A2(iDevice, &(pRAM->Section.A1A2.Status), iLinePort, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_Port_Section_J0(iDevice, &(pRAM->Section.J0), iLinePort, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_BIP_Threshold_B1(iDevice, &(pRAM->Section.B1.Status), iLinePort, pAlarmMangerRAM);
+
+	OMIINO_FRAMER_STATUS_Initialize_SONET_Port_Line_S1(&(pRAM->Line.S1.Status));
+	OMIINO_FRAMER_STATUS_Initialize_SONET_Port_Line_K1K2(iDevice, &(pRAM->Line.K1K2.Status), iLinePort, pAlarmMangerRAM);
+	OMIINO_FRAMER_STATUS_Initialize_SONET_BIP_Threshold_B2(iDevice, &(pRAM->Line.B2.Status), iLinePort, pAlarmMangerRAM);
+}
+
+
+
+void OMIINO_FRAMER_STATUS_Initialize_SONET_SDH_Port(U8 iDevice, OMIINO_FRAMER_HIERARCHY_SONET_SDH_PORT_TYPE * pRAM, U8 iLinePort, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+    U8 PortMode;
+
+ 	OMIINO_FRAMER_ASSERT(NULL!=pRAM,0);
+
+	OMIINO_FRAMER_SONET_SDH_Port_GetMode(&(pRAM->Configuration), &PortMode);
+
+    switch(PortMode)
+    {
+        case WPX_UFE_FRAMER_DEVICE_MODE_SDH:
+			OMIINO_FRAMER_STATUS_Initialize_SDH_Port(iDevice, pRAM, iLinePort, pAlarmMangerRAM);
+            break;
+
+        case WPX_UFE_FRAMER_DEVICE_MODE_SONET:
+			OMIINO_FRAMER_STATUS_Initialize_SONET_Port(iDevice, pRAM, iLinePort, pAlarmMangerRAM);
+            break;
+
+        default:
+            OMIINO_FRAMER_RSE(PortMode);
+            break;
+    }	
+}
+
+
+
+void OMIINO_FRAMER_InitializeStatusForSocketClientPDH_Element(U8 iDevice, OMIINO_FRAMER_STATUS_SOCKET_CLIENT_PDH_ELEMENT_TYPE * pClient, U32 iSocketClient, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ASSERT(NULL!=pClient,0);
+
+	OMIINO_FRAMER_SOCKET_CLIENT_PDH_Set_Diagnostic_Ingress_PRBS_State(pClient, WPX_UFE_FRAMER_PRBS_STATE_INACTIVE);
+	OMIINO_FRAMER_SOCKET_CLIENT_PDH_Set_Diagnostic_Egress_PRBS_State(pClient, WPX_UFE_FRAMER_PRBS_STATE_INACTIVE);
+
+        pClient->Alarms.Key[0]=OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SOCKET_CLIENT_E_RFI, iSocketClient);
+        pClient->Alarms.Key[1]=OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SOCKET_CLIENT_A_RAI, iSocketClient);	
+        pClient->Alarms.Key[2]=OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SOCKET_CLIENT_LOS_AIS, iSocketClient);
+        pClient->Alarms.Key[3]=OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SOCKET_CLIENT_OOF_LOF, iSocketClient);
+        pClient->Alarms.Key[4]=OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SOCKET_CLIENT_E3T3_XA, iSocketClient);
+        pClient->Alarms.Key[5]=OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SOCKET_CLIENT_E3T3_AIS, iSocketClient);
+        pClient->Alarms.Key[6]=OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SOCKET_CLIENT_E3T3_LOF, iSocketClient);
+        pClient->Alarms.Key[7]=OMIINO_FRAMER_ALARM_MANAGER_SOCKET_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_SOCKET_CLIENT_E3T3_FEAC, iSocketClient);
+}
+
+
+
+
+
+
+void OMIINO_FRAMER_InitializeStatusForDiscreteClientPort(U8 iDevice, OMIINO_FRAMER_STATUS_DISCRETE_CLIENT_TYPE * pClient, U8 iDiscreteClient, OMIINO_FRAMER_ALARM_MANAGER_DATA_TYPE * pAlarmMangerRAM)
+{
+	OMIINO_FRAMER_ASSERT(NULL!=pClient,0);
+
+	pClient->Alarms.Key[0] = OMIINO_FRAMER_ALARM_MANAGER_DISCRETE_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_DISCRETE_CLIENT_LOS, iDiscreteClient);
+	pClient->Alarms.Key[1] = OMIINO_FRAMER_ALARM_MANAGER_DISCRETE_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_DISCRETE_CLIENT_LOF, iDiscreteClient);
+	pClient->Alarms.Key[2] = OMIINO_FRAMER_ALARM_MANAGER_DISCRETE_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_DISCRETE_CLIENT_AIS, iDiscreteClient);
+	pClient->Alarms.Key[3] = OMIINO_FRAMER_ALARM_MANAGER_DISCRETE_CLIENT_GetNodeKey(iDevice, pAlarmMangerRAM, WPX_UFE_FRAMER_DISCRETE_CLIENT_RAI, iDiscreteClient);
+
+}
+
+
+
+
+void OMIINO_FRAMER_InitializeDeviceVersionStatus(OMIINO_FRAMER_STATUS_DEVICE_TYPE * pRAM)
+{
+	memset(pRAM->FirmwareInformation.ProductName,'\0',OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_PRODUCT_NAME_FIELD+1);
+	memset(pRAM->FirmwareInformation.Version,'\0',OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_VERSION_FIELD+1);
+	memset(pRAM->FirmwareInformation.DateTime,'\0',OMIINO_FRAMER_MAX_CHARS_IN_SOFTWARE_DATE_TIME_FIELD+1);
+	memset(pRAM->HardwareInformation.ProductName,'\0',OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_PRODUCT_NAME_FIELD+1);
+	memset(pRAM->HardwareInformation.Version,'\0',OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_VERSION_FIELD+1);
+	memset(pRAM->HardwareInformation.Date,'\0',OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_DATE_FIELD+1);
+	memset(pRAM->HardwareInformation.Time,'\0',OMIINO_FRAMER_MAX_CHARS_IN_HARDWARE_TIME_FIELD+1);
+	pRAM->HardwareVariant=WPX_UFE_FRAMER_HARDWARE_BUILD_UNDEFINED;
+}
+
+
+void OMIINO_FRAMER_InitializeStatusForDevice(U8 iDevice, OMIINO_FRAMER_HIERARCHY_TYPE * pRAM_Hierarchy)
+{
+	U32 i=0;
+
+	OMIINO_FRAMER_ASSERT(NULL!=pRAM_Hierarchy,0);
+
+	OMIINO_FRAMER_ALARM_MANAGER_Initialize(&(pRAM_Hierarchy->Alarms));
+    OMIINO_FRAMER_PerformanceMonitoringEngine_Initialize(&(pRAM_Hierarchy->PerformanceMonitoring));
+
+	OMIINO_FRAMER_InitializeDeviceVersionStatus(&(pRAM_Hierarchy->Status));
+
+	for(i=0; i<WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_PORTS; i++)
+	{
+		OMIINO_FRAMER_STATUS_Initialize_SONET_SDH_Port(iDevice, OMIINO_FRAMER_GetHierarchyNodeForLinePortRAM(pRAM_Hierarchy, (U8)i), (U8)i, (&pRAM_Hierarchy->Alarms));
+	}
+
+	for(i=0; i<WPX_UFE_FRAMER_BUILD_OPTION_MAX_LINE_SIDE_DISCRETE_CLIENT_PORTS; i++)
+	{
+		OMIINO_FRAMER_InitializeStatusForDiscreteClientPort(iDevice, OMIINO_FRAMER_GetStatusRAMForDiscreteClientPort(pRAM_Hierarchy, (U8)i), (U8)i, (&pRAM_Hierarchy->Alarms));
+	}
+
+	for(i=0; i<WPX_UFE_FRAMER_BUILD_OPTION_MAX_SOCKET_CLIENT_PDH_PORTS; i++)
+	{	
+		OMIINO_FRAMER_InitializeStatusForSocketClientPDH_Element(iDevice, OMIINO_FRAMER_GetStatusRAMForSocketClientPDH_Element(pRAM_Hierarchy, i), i, (&pRAM_Hierarchy->Alarms));
+	}
+}
+
+
+
+
+void OMIINO_FRAMER_STATUS_ModelInitialize(OMIINO_FRAMER_RAM_TYPE *pRAM)
+{
+	U8 i=0;
+
+	OMIINO_FRAMER_ASSERT(NULL!=pRAM,0);
+
+	for(i=0; i<WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES; i++)
+	{
+		OMIINO_FRAMER_InitializeStatusForDevice(i, OMIINO_FRAMER_GetHierarchyRAMForDevice(pRAM, i));
+	}
+}
+
+
