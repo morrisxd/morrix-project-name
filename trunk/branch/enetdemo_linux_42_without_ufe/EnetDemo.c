@@ -77,8 +77,12 @@ Full CLI Statistics
  ***                                 DEFINES                                  ***
  *******************************************************************************/
 
-// Misc
-#define ENABLE_TRANSFER          (0)
+#undef LOCK_AT_START
+
+#define WPL_THREAD_LOCK_KEY \
+   WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
+#define DELAY_COUNT	(200000*10)
+#define ENABLE_TRANSFER          (1)
 #define MAX_MACS                 4
 #define N_QNODES                 3
 #define N_POOLS                  4
@@ -297,20 +301,13 @@ void *LearningPoll(void*i)
 
 	while (1)
    	{
+		WPL_Delay(DELAY_COUNT);
+
 		WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
-      		if (g_flag)
-      		{
-         		g_flag = 0;
-         		iii ++;
-#if 0
-         		WPE_Receive_HostData_IRQ_X (g_tag, g_event, g_info);
-#endif
-#if 1
-			printf ("LearningPoll (%x)\n", iii);
-#endif
-      		}
+
+		printf ("polling again(%d), press enter to show the MENU\n", iii++);
+
 		WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
-		printf ("polling again\n");
    	}
 }
 
@@ -323,7 +320,6 @@ int main (int argc, WP_CHAR ** argv)
    WP_THREAD_ID learning_thread_id;
    WP_handle status;
    WP_U32 i;
-   WP_U32 t1, t2, t3, t4;
 
    WPE_RegisterLogCbFunc ();
 
@@ -408,38 +404,39 @@ int main (int argc, WP_CHAR ** argv)
    WPE_EnableSystem ();
 
 
-	learning_thread_id = 0;
-#if 0
+#if 1
 	printf ("before lock init\n");
-#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+
 	WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &eoam_lock);
 	printf ("after lock init\n");
 
+
+
+
+#ifdef LOCK_AT_START
+	WPL_Lock(WPL_THREAD_LOCK_KEY, &eoam_lock);
+#endif
+
+
 	learning_thread_id = 0;
-#if 0
+#if 1
 	status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
 	terminate_on_error (status , "WPL_ThreadInit() learning");
 	printf ("after Threadinit\n");
 #endif
 
 #endif
-i = 0;
 
-   t1 = t2 = t3 = t4 = 0;
 
-   t1 = WP_TimeRead();
+
    for (i = 0; i < 10; i++)
 
    {
-      t3 = WP_TimeRead();
+
       WPE_Send_HostData(tx_host_channel, WP_DATA_IW, 
                               /*enet_change_dst_mac*/enet_dst_mac);
       //WPE_IWSendReceive (1, enet_change_dst_mac);
-      t4 = WP_TimeRead();
-      printf ("time comsuption of Send_HostData()=(%d)(%d)\n", WP_TimeDelta(t3, t4), WP_TimeDelta(t4, t3));
    }
-   t2 = WP_TimeRead();
-   printf ("delta(t2-t1)=(%d)\n", WP_TimeDelta(t1, t2));
    WPE_CLI ();
    printf ("Test Passed \n");
    return 0;
@@ -1138,11 +1135,7 @@ void WPE_CreateFastEnetPortDevice ()
       NUM_OF_FAST_ENET_TX_CHANNELS;
    enet_port_config.pkt_limits.max_rx_channels =
       NUM_OF_FAST_ENET_RX_CHANNELS;
-#if 1
    enet_port_config.flowmode = WP_FLOWMODE_FAST;   /* this is the key point --- morris */
-#else
-   enet_port_config.flowmode = WP_FLOWMODE_MULTI;   /* this is the key point --- morris */
-#endif
    port_enet =
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7, &enet_port_config);
    terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
@@ -2056,11 +2049,7 @@ void WPE_SetStaticForwardRules ()
    memcpy (forward_rule_config.mac, enet_change_dst_mac, 6);
    forward_rule_config.bport_tag = BRIDGE_PORT_ENET_TAG;
    forward_rule_config.vlan_id = VLAN_TAG_1;
-#if 1
    forward_rule_config.aggregation = agg_enet_change_mac;
-#else
-   forward_rule_config.aggregation = agg_host;
-#endif
 /*------------------------------------------------------------------*\
 	create DFC rules now !!!
 \*------------------------------------------------------------------*/
@@ -2512,7 +2501,7 @@ WP_U32 i;
          terminate_on_error (status, "WP_HostReceive Error()");
    }
    p_got ++;
-#define DISPLAY_MATRIX  (1)
+#define DISPLAY_MATRIX  (5000)
 #if 1
    if (0 == (p_got % DISPLAY_MATRIX))
    {
@@ -2843,7 +2832,6 @@ void WPE_CLI (void)
 
    {
       printf ("\n\n\n");
-	printf ("MENU\n");
       printf
          ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev,       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
@@ -2861,11 +2849,7 @@ void WPE_CLI (void)
 #if 0
       gets (InputBuf);
 #else
-	do {
-	      InputBuf[0] = getchar ();
-	}
-	while ('0' > InputBuf[0] || ('a' > InputBuf[0] && '9' < InputBuf[0]) || 'z' < InputBuf[0]);
-	printf ("you have press %c\n", InputBuf[0]);
+      InputBuf[0] = getchar ();
 #endif
       switch (InputBuf[0])
 
@@ -2887,10 +2871,6 @@ void WPE_CLI (void)
          printf
             ("************************* HierarchicalEnet FlowAgg[0] Stats ********************** \n");
          WPE_DisplayFlowAggStats (agg_hier_enet[0][0][0]);
-
-         printf
-            ("************************* agg_enet_change_mac: Stats ******************************** \n");
-         WPE_DisplayFlowAggStats (agg_enet_change_mac);
          break;
       case '4':
          printf
