@@ -426,9 +426,9 @@ int main (int argc, WP_CHAR ** argv)
 #endif
 
 #endif
+	i = 0;
 
-
-
+#if 0
    for (i = 0; i < 10; i++)
 
    {
@@ -437,6 +437,7 @@ int main (int argc, WP_CHAR ** argv)
                               /*enet_change_dst_mac*/enet_dst_mac);
       //WPE_IWSendReceive (1, enet_change_dst_mac);
    }
+#endif
    WPE_CLI ();
    printf ("Test Passed \n");
    return 0;
