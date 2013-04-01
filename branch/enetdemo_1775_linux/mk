@@ -1,0 +1,8 @@
+ctags -R
+make TEST=EnetDemo
+# copy_to_tftpboot.sh
+cp bin/EnetDemo /tftpboot/enetdemo_linux_422.exe
+# cd bin
+# mv EnetDemo EnetDemo_lin.exe 
+# up EnetDemo_lin.exe bin
+
