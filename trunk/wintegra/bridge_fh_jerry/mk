@@ -1,7 +1,10 @@
 ctags -R
 make TEST=provider_bridge.c 2>&1 | tee make.log
-# ~/bin/copy_to_tftpboot.sh
-cp ./bin/provider_bridge /tftpboot
+
+mv ./bin/provider_bridge ./bin/provider_bridge.exe
+
+~/bin/copy_to_tftpboot.sh
+# cp ./bin/provider_bridge /tftpboot
 
 
 

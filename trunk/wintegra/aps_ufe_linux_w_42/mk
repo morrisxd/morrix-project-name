@@ -1,0 +1,4 @@
+#!/bin/bash
+make TEST=aps_ufe.c 2>&1 | tee make.log
+mv bin/aps_ufe bin/aps_ufe.exe
+copy_to_tftpboot.sh

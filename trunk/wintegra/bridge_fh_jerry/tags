@@ -77,7 +77,7 @@ DEFAULT_WPID	provider_bridge.h	39;"	d
 DEFAULT_WPID	provider_bridge_util.h	37;"	d
 DEFINE_WEB	makefile	/^DEFINE_WEB = -DWEB$/;"	m
 DEMO_LOCK_KEY	provider_bridge.h	43;"	d
-DPS_IMAGE_NAME	makefile	/^DPS_IMAGE_NAME  = wpi_dps_image_backhaul$/;"	m
+DPS_IMAGE_NAME	makefile	/^DPS_IMAGE_NAME  = wpi_dps_image_wireline$/;"	m
 DPS_IMAGE_OBJ	makefile	/^DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/$(DPS_IMAGE_NAME).o$/;"	m
 Desc	provider_bridge_menu.h	/^        char *Desc;$/;"	m	struct:__anon5
 ERROR	provider_bridge_menu.h	16;"	d
@@ -175,7 +175,7 @@ PMTest_delta	provider_bridge.c	/^WP_U32 PMTest_delta = 0;$/;"	v
 PMTest_enable	provider_bridge.c	/^WP_U32 PMTest_enable = 0;$/;"	v
 PMTest_vid	provider_bridge.c	/^WP_U32 PMTest_vid = 0;$/;"	v
 POOL_LIMIT	provider_bridge.h	52;"	d
-PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_backhaul$/;"	m
+PPS_IMAGE_NAME	makefile	/^PPS_IMAGE_NAME  = wpi_pps_image_wireline$/;"	m
 PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/wpi_pps_image_iwgp_parser.o$/;"	m
 Performance_menu	provider_bridge_menu.c	/^Y_MenuEntry Performance_menu[] = {$/;"	v
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m

@@ -276,7 +276,11 @@ WP_port_enet port_enet_cfg =
 		/* emphy_devices*/   0,
 	},
 	/* flowmode               */ WP_FLOWMODE_FAST,
+#if 0
 	/* interface_mode */ WP_ENET_SGMII_1000,
+#else
+	/* interface_mode */ WP_ENET_1000_BASE_X,
+#endif
 	/* rx_iw_bkgnd            */ WP_IW_BKGND_NOT_USED,
 };
 

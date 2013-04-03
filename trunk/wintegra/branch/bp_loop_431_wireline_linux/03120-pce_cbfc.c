@@ -1671,7 +1671,7 @@ void CLI_RunCommonConfig (void)
       }
       if (cmd == 'a')
       {
-         break;
+         printf ("not implemented\n");
       }
       if (cmd == 'b')
       {
