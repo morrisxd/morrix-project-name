@@ -80,20 +80,20 @@ DEFINE_WEB	makefile	/^DEFINE_WEB = -DWEB$/;"	m
 DPS_IMAGE_NAME	makefile	/^DPS_IMAGE_NAME  = wpi_dps_image_backhaul$/;"	m
 DPS_IMAGE_OBJ	makefile	/^DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/$(DPS_IMAGE_NAME).o$/;"	m
 ENABLE_EMPHY_BEFORE_UFE_INIT	atm_ima_ufe.c	45;"	d	file:
-ENET_HEADER_SIZE	atm_ima_ufe.h	947;"	d
+ENET_HEADER_SIZE	atm_ima_ufe.h	951;"	d
 HW_DEVICE	makefile	/^HW_DEVICE       = winpath3$/;"	m
 IMA_DEBUG	atm_ima_ufe.h	21;"	d
 INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(BOARD_DIR_COMMON) -I$(WINUTIL_DIR) \\$/;"	m
-IP_CHECKSUM	atm_ima_ufe.h	955;"	d
-IP_DA	atm_ima_ufe.h	957;"	d
-IP_HEADER_SIZE	atm_ima_ufe.h	948;"	d
-IP_LENGTH	atm_ima_ufe.h	952;"	d
-IP_PROTOCOL	atm_ima_ufe.h	954;"	d
-IP_SA	atm_ima_ufe.h	956;"	d
-IP_SER_TYPE	atm_ima_ufe.h	951;"	d
-IP_TTL	atm_ima_ufe.h	953;"	d
-IP_VER_HLEN	atm_ima_ufe.h	950;"	d
-IRQ_TASK_LIST_SIZE	atm_ima_ufe.h	879;"	d
+IP_CHECKSUM	atm_ima_ufe.h	959;"	d
+IP_DA	atm_ima_ufe.h	961;"	d
+IP_HEADER_SIZE	atm_ima_ufe.h	952;"	d
+IP_LENGTH	atm_ima_ufe.h	956;"	d
+IP_PROTOCOL	atm_ima_ufe.h	958;"	d
+IP_SA	atm_ima_ufe.h	960;"	d
+IP_SER_TYPE	atm_ima_ufe.h	955;"	d
+IP_TTL	atm_ima_ufe.h	957;"	d
+IP_VER_HLEN	atm_ima_ufe.h	954;"	d
+IRQ_TASK_LIST_SIZE	atm_ima_ufe.h	883;"	d
 K1K2_SIGNAL_TYPE	ufe_utility.c	76;"	d	file:
 LDFLAGS2	makefile	/^LDFLAGS2	= -lpthread$/;"	m
 M1_count	ufe_utility.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
@@ -159,11 +159,11 @@ TEST_OBJ	makefile	/^TEST_OBJ = $(patsubst %.c, $(OBJ_DIR)\/%.o, $(TEST_NAME).c)$
 TICKS_PER_SECOND	atm_ima_ufe.c	43;"	d	file:
 TLOG_FUNCTION	makefile	/^TLOG_FUNCTION = WT_LOG_PRINTF$/;"	m
 TLOG_LEVEL	makefile	/^TLOG_LEVEL=1$/;"	m
-UDP_CHECKSUM	atm_ima_ufe.h	963;"	d
-UDP_DST_PORT	atm_ima_ufe.h	961;"	d
-UDP_HEADER_SIZE	atm_ima_ufe.h	959;"	d
-UDP_LENGTH	atm_ima_ufe.h	962;"	d
-UDP_SRC_PORT	atm_ima_ufe.h	960;"	d
+UDP_CHECKSUM	atm_ima_ufe.h	967;"	d
+UDP_DST_PORT	atm_ima_ufe.h	965;"	d
+UDP_HEADER_SIZE	atm_ima_ufe.h	963;"	d
+UDP_LENGTH	atm_ima_ufe.h	966;"	d
+UDP_SRC_PORT	atm_ima_ufe.h	964;"	d
 UFE4_EVENTS_OBJ	makefile	/^UFE4_EVENTS_OBJ = $(WPI_UFE4_OBJ)\/wufei_events.o$/;"	m
 UFE4_FPGA_DIR	makefile	/^UFE4_FPGA_DIR = $(WPX_UFE_DIR)\/fpga\/ufe4$/;"	m
 UFE_API_DIR	makefile	/^UFE_API_DIR = $(WPX_UFE_DIR)\/api$/;"	m

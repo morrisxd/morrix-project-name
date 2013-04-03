@@ -218,7 +218,12 @@ int main (int argc, char *argv[])
          printf ("c. clear events\n");
          printf ("r. Reboot\n");
          printf ("x. Exit\n");
-         comm = getchar ();
+
+	do {
+		comm = getchar ();
+	}
+        while (comm == 0x10 || comm == 0x13);
+
          switch (comm)
          {
          case 'a':
@@ -1034,6 +1039,9 @@ void App_enableEmphyPort (void)
    /* Enable the EMPHY port */
    status = WP_PortEnable (emphy_port, WP_DIRECTION_DUPLEX);
    App_TerminateOnError (status, "WP_PortEnable() emphy_port");
+
+	WP_Delay(100000);
+   WPX_Ufe4HwReset (0, WP_PORT_UPI1);
 }
 
 /*****************************************************************************

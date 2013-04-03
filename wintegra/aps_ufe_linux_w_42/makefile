@@ -1,21 +1,22 @@
 ############################################################ Change this block only!  #############################################################
 
+WPI_TARGET 	= mips_linux
+
+
+
 # By default this makefile assumes that the test directory reside under the WDDI root directory!
 # If you want to change it please redefine WDDI_DIR in this makefile!
 TEST_DIR = .
 WPI_WDDS_DIR = ../../..
 WDDI_DIR = $(WPI_WDDS_DIR)/wddi
 ifeq "$(WPI_TARGET)" ""
-WPI_TARGET 	= mips_linux
+WPI_TARGET 	= mips_winmon
 endif
 
 WPI_BOARD  	= wds
 WPI_HOST   	= linux
 UFE_TYPE        = ufe412
-# DPS_IMAGE_NAME  = wpi_dps_image_backhaul
-# PPS_IMAGE_NAME  = wpi_pps_image_backhaul
-DPS_IMAGE_NAME  = wpi_dps_image_wireline
-PPS_IMAGE_NAME  = wpi_pps_image_wireline
+DPS_IMAGE_NAME  = wpi_dps_image_backhaul
 
 WDDS_OBJECTS = objects
 WDDI_SOURCES = /sources
@@ -29,7 +30,7 @@ WPI_START_FILE = $(WPI_WDDS_DIR)/$(WDDS_OBJECTS)/$(WPI_HOST)/$(WPI_TARGET)/lib
 ######################################################## Do not change!!! ########################################################
 
 ifeq "$(WPI_TARGET)" "mips_linux"
-LDFLAGS2	= -lpthread -lrt
+LDFLAGS2	= -lpthread
 endif
 
 ifeq "$(WPI_TARGET)" "mips_winmon"
@@ -69,28 +70,21 @@ WPI_UFE4_OBJ = $(WPI_UFE4_DIR)/obj
 # The includes
 API_DIR = $(WDDI_DIR)$(WDDI_SOURCES)/api
 PHY_DIR = $(WDDI_DIR)/phy
-WPX_UFE_DIR = $(WPI_WDDS_DIR)/ufe
+WPX_UFE_DIR = $(PHY_DIR)/wpx_ufe
 UFE_API_DIR = $(WPX_UFE_DIR)/api
-UFE_FRAMER_DIR = $(WPX_UFE_DIR)/wpx_frmr/device_driver
-UFE_FRAMER_INC = -I$(UFE_FRAMER_DIR) -I$(UFE_FRAMER_DIR)/library/00_api_layer/inc -I$(UFE_FRAMER_DIR)/library/04_low_level_comms_layer/inc -I$(UFE_FRAMER_DIR)/common/inc
-
+UFE_FRMR_DIR = $(WPX_UFE_DIR)/wpx_frmr
 UFE4_FPGA_DIR = $(WPX_UFE_DIR)/fpga/ufe4
 UFE_FRMR_FLEXMUX_DIR = $(UFE_FRMR_DIR)/device_driver
 UFE_INC = -I$(UFE_API_DIR) -I$(UFE4_FPGA_DIR)
+UFE_FRAMER_INC = -I$(UFE_FRMR_DIR)/flexmux -I$(UFE_FRMR_DIR) -I$(UFE_FRMR_FLEXMUX_DIR) -I$(UFE_FRMR_FLEXMUX_DIR)/common/inc -I$(UFE_FRMR_FLEXMUX_DIR)/library/00_api_layer/inc -I$(UFE_FRMR_FLEXMUX_DIR)/library/04_low_level_comms_layer/inc
 #VENEER_TARGET_DIR = $(WDDI_DIR)/target/$(WPI_TARGET)/include
 VENEER_DIR = $(WDDI_DIR)/sources/veneer
 BOARD_DIR = $(WDDI_DIR)/board/$(WPI_BOARD)_$(HW_DEVICE)
-BOARD_WDS_COMMON_DIR = $(WDDI_DIR)/board/wds_common
-
 WINUTIL_DIR = $(WDDI_DIR)/sources/winutil/include/
-INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(BOARD_WDS_COMMON_DIR) -I$(WINUTIL_DIR) \
+INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \
            -I$(BOARD_DIR)/.. -I$(WDDI_DIR)/phy -I$(WDDI_DIR)/sources -I$(WDDI_DIR)/sources/include \
 	   -I$(WPI_PLATFORM_DIR)/include -I$(WPI_WDDS_DIR)/include -I$(WPI_WDDS_DIR)/platform/include \
-	   -I$(API_DIR) -I$(PHY_DIR) -I$(WPX_UFE_DIR)/wpx_frmr/flexmux/ \
-	   -I$(WDDI_DIR)/../gpe/util/sources/api/ \
-	   -I$(WDDI_DIR)/sources/winutil/api/include/winpath3/ \
-	   -I$(WDDI_DIR)/sources/winutil/include/winpath3/ \
-	   -I$(WDDI_DIR)/../shared/sources/include/
+	   -I$(WDDI_DIR)/tests/common -I$(API_DIR) -I$(PHY_DIR) 
 
 TEST_CFLAGS = -D$(TLOG_FUNCTION) -DWT_DEBUG_LEVEL=$(TLOG_LEVEL) $(DEFINE_WEB) \
               -DWDDI_TEST=$(TEST) -D$(WP_HW_WINPATHX) -D$(WP_BOARD_NAME) \
@@ -98,10 +92,10 @@ TEST_CFLAGS = -D$(TLOG_FUNCTION) -DWT_DEBUG_LEVEL=$(TLOG_LEVEL) $(DEFINE_WEB) \
 
 
 # UFE settings
-UFE_DIR = $(WPI_WDDS_DIR)/ufe
+UFE_DIR = $(WDDI_DIR)/phy/wpx_ufe
 
 ifeq "$(UFE_TYPE)" "ufe412"
-#UFE_FRAMER_DIR = $(UFE_DIR)/wpx_frmr/device_driver
+UFE_FRAMER_DIR = $(UFE_DIR)/wpx_frmr/flexmux
 TEST_CFLAGS += -D__WT_UFE4__ -DWUFE_UFE4
 TEST_CFLAGS += -D__WT_UFE412__ -DWUFE_UFE4
 endif
@@ -111,7 +105,7 @@ endif
 # Add the UFE libraries
 # ---------------------
 UFE_LIB_DIR = $(PHY_BOARD_LIB_DIR)/../$(UFE_TYPE)/lib
-UFE_LIB = #$(UFE_LIB_DIR)/wpx_ufe.a
+UFE_LIB = $(UFE_LIB_DIR)/wpx_ufe.a
 #UFE_LIB_EXIST := $(shell if [ -f $(UFE_LIB) ]; then echo 1; else echo 0; fi)
 #ifeq "$(UFE_LIB_EXIST)" "1"
 INCLUDES += $(UFE_INC)
@@ -119,7 +113,7 @@ INCLUDES += $(UFE_INC)
 #UFE_LIB =
 #endif
 
-UFE_FRAMER_LIB = #$(UFE_LIB_DIR)/wpx_phy_ufe_framer.a
+UFE_FRAMER_LIB = $(UFE_LIB_DIR)/wpx_phy_ufe_framer.a
 #UFE_FRAMER_LIB_EXIST := $(shell if [ -f $(UFE_FRAMER_LIB) ]; then echo 1; else echo 0; fi)
 #ifeq "$(UFE_FRAMER_LIB_EXIST)" "1"
 INCLUDES += $(UFE_FRAMER_INC)
@@ -131,7 +125,7 @@ UFE_LIB += $(UFE_FRAMER_LIB)
 
 # UFE4 events object file:
 #-------------------------
-UFE4_EVENTS_OBJ = #$(WPI_UFE4_OBJ)/wufei_events.o
+UFE4_EVENTS_OBJ = $(WPI_UFE4_OBJ)/wufei_events.o
 
 # Get the host-target specific defines
 include $(WPI_T_DIR)/$(WPI_HOST)_make.inc
@@ -143,13 +137,10 @@ WDDI_LIB_DIR = $(WPI_HT_DIR)/lib
 PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)/$(WPI_BOARD)/lib
 
 WDDI_LIBS = $(WDDI_LIB_DIR)/wpi_wddi.a  \
-    $(WDDI_LIB_DIR)/wpi_hw_device.a  $(PHY_BOARD_LIB_DIR)/winutil.a $(WDDI_LIB_DIR)/shared.a \
+    $(WDDI_LIB_DIR)/wpi_hw_device.a  $(WDDI_LIB_DIR)/winutil.a \
 	$(WDDI_LIB_DIR)/platform.a \
-	$(WPI_WDDS_DIR)/$(WDDS_OBJECTS)/$(WPI_HOST)/$(WPI_TARGET)/lib/wpi_pecs.a \
 
-#	$(WDDI_LIB_DIR)/../objects/linux/mips_winmon_winpath3/lib/wpi_pecs.a
-
-#PHY_LIB = $(PHY_BOARD_LIB_DIR)/wpx_phy.a
+PHY_LIB = $(PHY_BOARD_LIB_DIR)/wpx_phy.a
 BOARD_LIB = $(PHY_BOARD_LIB_DIR)/wpx_board.a
 
 WDDI_LIBS += $(PHY_LIB)
@@ -158,11 +149,10 @@ WDDI_LIBS += $(BOARD_LIB)
 
 # DPS Image to use
 DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)/$(WDDS_OBJECTS)/$(WPI_HOST)/$(WPI_TARGET)/lib/$(DPS_IMAGE_NAME).o
-PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)/objects/$(WPI_HOST)/$(WPI_TARGET)/lib/wpi_pps_image_iwgp_parser.o
 
 #setting special flag for linux compilation
 ifeq "$(WPI_TARGET)" "mips_linux"
-SPECIAL_FLAG = -lpthread -lrt
+SPECIAL_FLAG = -lpthread
 endif
 
 TLOG_FUNCTION = WT_LOG_PRINTF
@@ -183,7 +173,6 @@ endif
 TEST_NAME = $(basename $(TEST))
 TEST_OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(TEST_NAME).c)
 TEST_EXE = $(BIN_DIR)/$(TEST_NAME)$(EXE)
-TEST_OBJ += $(OBJ_DIR)/os_timer.o
 
 all:    clean $(TEST_EXE)
 	@echo 
@@ -200,7 +189,7 @@ clean:
 #$(TEST_EXE): $(TEST_OBJ)
 #	@echo 
 #	@echo Linking the test!
-#	$(CC) $(LDFLAGS) -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(WDDI_LIB_DIR)/wpi_wddi.a $(WDDI_LIB_DIR)/wpi_veneer.a  $(PHY_BOARD)/wpx_board.a $(WPI_HT_DIR)/$(HW_DEVICE)/lib/wpi_hw_device.a $(WIN_UTILS) $(OTHER_LIB) $(SPECIAL_FLAG)
+#	$(CC) $(LDFLAGS) -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(WDDI_LIB_DIR)/wpi_wddi.a $(WDDI_LIB_DIR)/wpi_veneer.a $(PHY_BOARD)/wpx_phy.a $(PHY_BOARD)/wpx_board.a $(WPI_HT_DIR)/$(HW_DEVICE)/lib/wpi_hw_device.a $(WIN_UTILS) $(OTHER_LIB) $(SPECIAL_FLAG)
 
 $(TEST_EXE): $(TEST_OBJ)
 # If the linker needs a start file, copy it to the local directory
@@ -210,18 +199,15 @@ ifneq "$(START_FILE)" ""
 	-cp $(WPI_START_FILE)/$(START_FILE) $(START_FILE)
 endif
 # Do the link	
-	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(PPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) \
+	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) \
 	$(WDDI_LIBS) $(OTHER_LIB)
 
 # Clean up after everything that might have happened
 	rm -rf $(START_FILE)
+
 
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.c
 	@echo 
 	@echo $(CC)
 	@echo Compiling the test!
 	$(CC) $(CFLAGS) $(TEST_CFLAGS) $(INCLUDES) -o $(OBJ_DIR)/$*.o $(TEST_DIR)/$*.c
-
-$(OBJ_DIR)/os_timer.o: $(TEST_DIR)/os_timer.c
-	$(CC) $(TEST_CFLAGS) $(INCLUDES) -c -o $@ $<
-
