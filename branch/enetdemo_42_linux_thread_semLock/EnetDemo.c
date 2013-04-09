@@ -296,20 +296,10 @@ WP_U32 g_callback = 0;
 WP_U32      eoam_lock;
 #define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
 
-void *LearningPoll(void*i)
-{
+WP_U32 interface_mode = 0;
 
-	while (1)
-   	{
-		WPL_Delay(DELAY_COUNT);
+void *LearningPoll(void *i);
 
-		WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
-
-		printf ("polling again(%d), press enter to show the MENU\n", iii++);
-
-		WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
-   	}
-}
 
 
 /********************************************************************************
@@ -428,7 +418,7 @@ int main (int argc, WP_CHAR ** argv)
 #endif
 	i = 0;
 
-#if 0
+#if 1
    for (i = 0; i < 10; i++)
 
    {
@@ -1086,7 +1076,11 @@ void WPE_CreateFastEnetPortDevice ()
        /* emphy_devices */ WP_UNUSED
        },
       /* flowmode */ WP_FLOWMODE_FAST,
+#if 0
       /* interface_mode */ WP_ENET_SGMII_1000,
+#else
+      /* interface_mode */ WP_ENET_1000_BASE_X,
+#endif
       /* rx_iw_bkgnd */ 0,
    };
 
@@ -1175,7 +1169,12 @@ void WPE_CreateHierEnetPortDevice ()
        /* emphy_devices */ WP_UNUSED
        },
       /* flowmode */ WP_FLOWMODE_FAST,
-      /* interface_mode */ WP_ENET_SGMII_1000,
+#if 0
+      // /* interface_mode */ WP_ENET_SGMII_1000,
+	WP_ENET_SGMII_AN,
+#else
+      /* interface_mode */ WP_ENET_1000_BASE_X,
+#endif
       /* rx_iw_bkgnd */ 0,
    };
 
@@ -2850,7 +2849,10 @@ void WPE_CLI (void)
 #if 0
       gets (InputBuf);
 #else
+	do {
       InputBuf[0] = getchar ();
+	}
+	while (!('a' <=  InputBuf[0]  && 'z' >= InputBuf[0]) &&  !('0' <= InputBuf[0] && '9' >= InputBuf[0]));
 #endif
       switch (InputBuf[0])
 
@@ -2947,7 +2949,7 @@ void WPE_CLI (void)
             ("************************* Exiting Driver Still Running! ******************* \n");
          break;
       default:
-         printf ("Wrong Key.\n\n");
+         printf ("Wrong Key(%x).\n\n", InputBuf[0]);
          break;
       }
    }
@@ -3014,4 +3016,84 @@ void terminate_on_error (WP_handle handle, WP_CHAR * s)
 
 #endif /*  */
    }
+}
+
+
+extern void WPI_HwWinnetSgmiiAnProceed(WP_U32 wpid, WP_U32 event_bits);
+
+void *LearningPoll(void *i)
+{
+	WP_U8 iii = 0;
+	WP_U8 jjj = 5;
+	WP_handle status = 0;
+	WP_U8 max_ch_tx = 0;
+	WP_U8 max_ch_rx = 0;
+
+   WP_port_enet my_enet_port_config = {
+      {
+       		/* max_tx_channels */ 1,
+       		/* max_rx_channels */ 1,
+       		/* pq_block_size */ 0,
+       		/* n_pq_blocks */ 0,
+       		/* emphy_devices */ WP_UNUSED
+       },
+      /* flowmode */ WP_FLOWMODE_FAST,
+      /* interface_mode */ WP_ENET_1000_BASE_X,
+      /* rx_iw_bkgnd */ 0,
+   	};
+
+
+	max_ch_tx = NUM_OF_FAST_ENET_TX_CHANNELS;
+	max_ch_rx = NUM_OF_FAST_ENET_RX_CHANNELS;
+   	my_enet_port_config.pkt_limits.max_tx_channels = max_ch_tx;
+   	my_enet_port_config.pkt_limits.max_rx_channels = max_ch_rx;
+   	my_enet_port_config.flowmode = WP_FLOWMODE_FAST;   
+
+
+	while (1)
+   	{
+		if (WP_ENET_SGMII_AN == interface_mode)
+		{
+			interface_mode = WP_ENET_1000_BASE_X;
+		} else {
+			interface_mode = WP_ENET_SGMII_AN;
+		}
+   		my_enet_port_config.interface_mode = interface_mode;
+
+		for (iii = 0; iii < jjj; iii ++)
+		{
+			WPL_Delay(DELAY_COUNT);
+		}
+
+		printf ("change to (%s)\n", (WP_ENET_SGMII_AN==interface_mode)?"WP_ENET_SGMII_AN":"WP_ENET_1000_BASE_X_AN");
+
+		if (WP_ENET_SGMII_AN == interface_mode)
+		{
+			WPL_IntConnect(0, WPL_SgmiiAn, NULL, 
+				WPI_HwWinnetSgmiiAnProceed);
+			WPL_IntEnable (0, WPL_SgmiiAn);
+			printf ("enable SgmiiAn interrupt\n");
+		} else {
+			WPL_IntDisable (0, WPL_SgmiiAn);
+			printf ("disable SgmiiAn interrupt\n");
+		}
+		WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
+
+		printf ("polling again(%d), enter to show the MENU\n", 
+				iii++);
+		status = WP_DeviceDisable(dev_enet,WP_DIRECTION_DUPLEX);
+   		terminate_on_error (status, "WP_DeviceDisable");
+		status = WP_PortDisable(port_enet, WP_DIRECTION_DUPLEX);
+   		terminate_on_error (status, "WP_PortDisable");
+
+		status = WP_PortModify(port_enet, WP_PORT_MOD_ENET_INTERFACE_MODE, &my_enet_port_config);
+   		terminate_on_error (status, "WP_PortModify");
+
+		status = WP_PortEnable(port_enet, WP_DIRECTION_DUPLEX);
+   		terminate_on_error (status, "WP_PortEnable Enet");
+		status = WP_DeviceEnable(dev_enet, WP_DIRECTION_DUPLEX);
+   		terminate_on_error (status, "WP_DeviceEnable Enet");
+
+		WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
+   	}
 }
