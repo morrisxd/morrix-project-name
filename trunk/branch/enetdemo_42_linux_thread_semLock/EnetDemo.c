@@ -384,7 +384,7 @@ int main (int argc, WP_CHAR ** argv)
    /*---------------------------------------------------*\
 		IMPORTANT !
    \*---------------------------------------------------*/
-#if 0
+#if 1
    WPE_SetStaticForwardRules ();
 #endif
 
@@ -1074,11 +1074,9 @@ void WPE_CreateIwBportHost ()
 
 void WPE_CreateFastEnetPortDevice ()
 {
-   WP_port_enet enet_port_config = {   /* we need both port & deivce created, this is the port -- morris */
-
+   WP_port_enet enet_port_config = {
       /* pkt_limits */
       {
-
        /* max_tx_channels */ 1,
        /* max_rx_channels */ 1,
        /* pq_block_size */ 0,
@@ -1226,9 +1224,9 @@ void WPE_CreateHierEnetPortDevice ()
       /* extended_params */ NULL
          // Must be NULL at device creation
    };
-   enet_port_config.pkt_limits.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;   /* key point -- morris */
-   enet_port_config.pkt_limits.max_rx_channels = NUM_OF_HIER_ENET_RX_CHANNELS;   /* key point -- morris */
-   enet_port_config.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;   /* this is the key point --- morris */
+   enet_port_config.pkt_limits.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;
+   enet_port_config.pkt_limits.max_rx_channels = NUM_OF_HIER_ENET_RX_CHANNELS;
+   enet_port_config.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
    port_hier_enet =
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET8, &enet_port_config);
    terminate_on_error (port_hier_enet,
@@ -2495,7 +2493,7 @@ WP_U32 i;
          terminate_on_error (status, "WP_HostReceive Error()");
    }
    p_got ++;
-#define DISPLAY_MATRIX  (5000)
+#define DISPLAY_MATRIX  (50)
 #if 1
    if (0 == (p_got % DISPLAY_MATRIX))
    {
