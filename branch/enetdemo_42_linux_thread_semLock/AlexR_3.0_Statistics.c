@@ -234,6 +234,8 @@ void WPE_App_print_stats_enet (WP_stats_enet *var_ptr)
    WPE_App_print_U64 ("rx_err_overrun", &var_ptr->rx_err_overrun);
 //   WPE_App_print_U64 ("tx_frames", &var_ptr->tx_frames);
 
+   WPE_App_print_U64 ("rx_packets", &var_ptr->rx_packets);
+   WPE_App_print_U64 ("tx_packets", &var_ptr->tx_packets);
    return;
 }
 
@@ -556,6 +558,9 @@ void WPE_DisplayFlowAggStats(WP_handle agg)
    printf( "Bad Policer Packets:     %08x%08x\n",
            ((WPE_StatField*)&iw_flow_stats.policer_non_conforming_packets)->part.high,
            ((WPE_StatField*)&iw_flow_stats.policer_non_conforming_packets)->part.low);
+   printf ("Forward Packet:          %08x%08x\n",
+           ((WPE_StatField*)&iw_flow_stats.forward_packet)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.forward_packet)->part.low);
 
    printf("\n");
 }
