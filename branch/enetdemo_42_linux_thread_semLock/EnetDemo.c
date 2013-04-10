@@ -82,7 +82,7 @@ Full CLI Statistics
 #define WPL_THREAD_LOCK_KEY \
    WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
 #define DELAY_COUNT	(200000*10)
-#define ENABLE_TRANSFER          (1)
+#define ENABLE_TRANSFER          (0)
 #define MAX_MACS                 4
 #define N_QNODES                 3
 #define N_POOLS                  4
@@ -384,7 +384,9 @@ int main (int argc, WP_CHAR ** argv)
    /*---------------------------------------------------*\
 		IMPORTANT !
    \*---------------------------------------------------*/
+#if 0
    WPE_SetStaticForwardRules ();
+#endif
 
    //WPE_AddBasicFilters();
    //WPE_AddBasicRules();
@@ -418,7 +420,7 @@ int main (int argc, WP_CHAR ** argv)
 #endif
 	i = 0;
 
-#if 1
+#if 0
    for (i = 0; i < 10; i++)
 
    {
@@ -990,7 +992,11 @@ void WPE_CreateHostTermFlowAgg ()
       /*forw_dscp_remark */ WP_DISABLE,
       /*dscp_remark_offset; */ 0
    };
+#if 1
    agg_host_config.txfunc = rx_host_channel;
+#else
+   agg_host_config.txfunc = tx_gbe_channel[0];
+#endif
    agg_host =
       WP_IwFlowAggregationCreate (WP_WINPATH (0),
                                   WP_IW_TRANS_BRIDGING_MODE,
@@ -1049,7 +1055,11 @@ void WPE_CreateIwBportHost ()
          /**enet_oam_params*/ NULL,
       /* dfc_log_mode */ 0
    };
+#if 1
    iwhost_bport_config.flow_agg = agg_host;  // default flow agg
+#else
+   iwhost_bport_config.flow_agg = agg_enet[0];  // default flow agg
+#endif
    bport_host = WP_IwPortCreate (iw_sys, &iwhost_bport_config);
    terminate_on_error (bport_host, " WPE_CreateIwBportHost ");
 
@@ -1244,29 +1254,22 @@ void WPE_CreateFastEnetIwBport ()
       /* vlan_param */
       {
 
-       /* vlan_acceptance_mode */
-       WP_IW_ACCEPT_TAGGED_UNTAGGED,
+       /* vlan_acceptance_mode */ WP_IW_ACCEPT_TAGGED_UNTAGGED,
        /* default_vlan_tag */ VLAN_TAG_1,
-       /* vlan_tunnel;     */
-       WP_IW_VLAN_TUNNEL_1Q_IN_1Q_DISABLE,
-       /* vlan_pri_enforce_mode */
-       WP_IW_VLAN_PRIORITY_ENFORCE_DISABLED},
+       /* vlan_tunnel;     */ WP_IW_VLAN_TUNNEL_1Q_IN_1Q_DISABLE,
+       /* vlan_pri_enforce_mode */ WP_IW_VLAN_PRIORITY_ENFORCE_DISABLED},
       /*max_mac_addresses */ 2000,
       /*group_tag */ WP_IW_BRIDGEALL_GROUP_FILTER,
-      /*group_filtering_mode */
-      WP_IW_GROUP_FILTER_DISABLE,
-      /*unk_mac_sa_filter */
-      WP_IW_UNK_MACSA_FILTER_DISABLE,
+      /*group_filtering_mode */ WP_IW_GROUP_FILTER_DISABLE,
+      /*unk_mac_sa_filter */ WP_IW_UNK_MACSA_FILTER_DISABLE,
       /*unk_mc_mode; */ WP_IW_UNK_MC_HT,
       /*bc_ht_mode; */ WP_IW_BC_HT_DISABLE,
       /*input_filters_mask */ 0,
       /*output_filters_mask */ 0,
       /*statmode */ WP_IW_PORT_STAT_ENABLE,
       /*unk_uc_mode; */ WP_IW_UNK_UC_SR_ENABLE,
-      /*classification_flag */
-      WP_IW_BPORT_CLASSIFICATION_ENABLED,
-      /*adv_unk_lookup_mode */
-      WP_IW_ADV_UNK_LOOKUP_DISABLED,
+      /*classification_flag */ WP_IW_BPORT_CLASSIFICATION_ENABLED,
+      /*adv_unk_lookup_mode */ WP_IW_ADV_UNK_LOOKUP_DISABLED,
       /*cfi_ht_mode; */ WP_IW_CFI_HT_DISABLE,
       /*reserved_mc_ht_mode */ WP_IW_RES_MC_HT_DISABLE,
       /*predefined_ht_mode */ WP_DISABLE,
@@ -1277,12 +1280,13 @@ void WPE_CreateFastEnetIwBport ()
       /* dfc_log_mode */ 0
    };
 
-   // Only one bPort is possible for one Enet device because only one RX channel is possible
-   enet_bport_config.tag = BRIDGE_PORT_ENET_TAG;   /*the only different is the tag -- morris */
+   enet_bport_config.tag = BRIDGE_PORT_ENET_TAG;   
    enet_bport_config.input_filters_mask = 0x00000000;
-
-   //enet_bport_config.predefined_ht_mode = WP_IW_PPPOE_DISCOVERY_HT_ENABLE | WP_IW_ARP_HT_ENABLE | WP_IW_IGMP_HT_ENABLE;
+#if 1
    enet_bport_config.flow_agg = agg_host; // default flow agg
+#else
+   enet_bport_config.flow_agg = agg_enet[0]; // default flow agg
+#endif
    bport_enet = WP_IwPortCreate (iw_sys, &enet_bport_config);
    terminate_on_error (bport_enet, " WPE_CreateIwBportEnet Fast");
 }  
@@ -1301,29 +1305,22 @@ void WPE_CreateHierEnetIwBport ()
       /* vlan_param */
       {
 
-       /* vlan_acceptance_mode */
-       WP_IW_ACCEPT_TAGGED_UNTAGGED,
+       /* vlan_acceptance_mode */ WP_IW_ACCEPT_TAGGED_UNTAGGED,
        /* default_vlan_tag */ VLAN_TAG_1,
-       /* vlan_tunnel;     */
-       WP_IW_VLAN_TUNNEL_1Q_IN_1Q_DISABLE,
-       /* vlan_pri_enforce_mode */
-       WP_IW_VLAN_PRIORITY_ENFORCE_DISABLED},
+       /* vlan_tunnel;     */ WP_IW_VLAN_TUNNEL_1Q_IN_1Q_DISABLE,
+       /* vlan_pri_enforce_mode */ WP_IW_VLAN_PRIORITY_ENFORCE_DISABLED},
       /*max_mac_addresses */ 2000,
       /*group_tag */ WP_IW_BRIDGEALL_GROUP_FILTER,
-      /*group_filtering_mode */
-      WP_IW_GROUP_FILTER_DISABLE,
-      /*unk_mac_sa_filter */
-      WP_IW_UNK_MACSA_FILTER_DISABLE,
+      /*group_filtering_mode */ WP_IW_GROUP_FILTER_DISABLE,
+      /*unk_mac_sa_filter */ WP_IW_UNK_MACSA_FILTER_DISABLE,
       /*unk_mc_mode; */ WP_IW_UNK_MC_HT,
       /*bc_ht_mode; */ WP_IW_BC_HT_DISABLE,
       /*input_filters_mask */ 0,
       /*output_filters_mask */ 0,
       /*statmode */ WP_IW_PORT_STAT_ENABLE,
       /*unk_uc_mode; */ WP_IW_UNK_UC_SR_ENABLE,
-      /*classification_flag */
-      WP_IW_BPORT_CLASSIFICATION_ENABLED,
-      /*adv_unk_lookup_mode */
-      WP_IW_ADV_UNK_LOOKUP_DISABLED,
+      /*classification_flag */ WP_IW_BPORT_CLASSIFICATION_ENABLED,
+      /*adv_unk_lookup_mode */ WP_IW_ADV_UNK_LOOKUP_DISABLED,
       /*cfi_ht_mode; */ WP_IW_CFI_HT_DISABLE,
       /*reserved_mc_ht_mode */ WP_IW_RES_MC_HT_DISABLE,
       /*predefined_ht_mode */ WP_DISABLE,
@@ -1346,7 +1343,9 @@ void WPE_CreateHierEnetIwBport ()
 
 void WPE_CreateFastEnetFlowAgg ()
 {
+   WP_handle status;
    WP_U32 i;
+   WP_bridge_port bport_enet_config = {0};
 
 #if 0
    WP_policer_slb_config slb_config = {
@@ -1417,17 +1416,14 @@ void WPE_CreateFastEnetFlowAgg ()
       /* mac replace mode -- morris */
       /*new_dst_mac[6]; */
       {
-       0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
-      /* dst mac address -- morris */
+       0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 
       /*new_src_mac[6]; */
       {
        0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
-      /* src mac address -- morris */
       /*hier_cong_prof; */ WP_DISABLE,
       /*extraction_length; */ 0,
       /*policer_handle; */ 0,
-      /*vpmt_accessing_mode */
-      WP_IW_VPMT_ACCESSING_EGRESS_EXTERNAL,
+      /*vpmt_accessing_mode */ WP_IW_VPMT_ACCESSING_EGRESS_EXTERNAL,
       /*prefix_rmrk_fields */ 0,
       /*prefix_rmrk_offst */
       {
@@ -1442,7 +1438,7 @@ void WPE_CreateFastEnetFlowAgg ()
       agg_enet_config.iw_port = bport_enet;
       agg_enet_config.l2_header_insert_mode = WP_IW_L2H_INSERT_ENABLE;
       agg_enet_config.mac_replace_mode = WP_IW_REPLACE_DST_MAC;
-      memcpy (agg_enet_config.new_dst_mac, hier_enet_dst_mac, 6); /* this mac = mac_inside_flow_rules in the following code -- morris */
+      memcpy (agg_enet_config.new_dst_mac, hier_enet_dst_mac, 6); 
 
       //agg_enet_config.policer_enable = WP_IW_POLICER_ENABLE;
       //agg_enet_config.policer_config = &policer_config;
@@ -1465,7 +1461,13 @@ void WPE_CreateFastEnetFlowAgg ()
                                   WP_IW_VLAN_AWARE_BRIDGING_MODE,
                                   &agg_enet_config);
    terminate_on_error (agg_enet_change_mac,
-                       "WPE_CreateEnetIwFlowAgg Replace MAC()");
+                       "WP_IwFlowAggregationCreate Replace MAC()");
+
+
+   bport_enet_config.flow_agg =  agg_enet_change_mac;
+   status = WP_IwPortModify(bport_enet, WP_IW_PORT_MODIFY_FLOW_AGG, &bport_enet_config );
+   terminate_on_error (status,
+                       "WP_IwPortModify Replace MAC()");
 }
 
 void WPE_CreateHierEnetFlowAgg ()
@@ -1570,10 +1572,7 @@ void WPE_CreateHierEnetFlowAgg ()
 
             //agg_enet_config.policer_enable = WP_IW_POLICER_ENABLE;
             //agg_enet_config.policer_config = &policer_config;
-            agg_hier_enet[i][j][k] =
-               WP_IwFlowAggregationCreate
-               (WP_WINPATH (0),
-                WP_IW_VLAN_AWARE_BRIDGING_MODE, &agg_enet_config);
+            agg_hier_enet[i][j][k] = WP_IwFlowAggregationCreate (WP_WINPATH (0), WP_IW_VLAN_AWARE_BRIDGING_MODE, &agg_enet_config);
             terminate_on_error (agg_hier_enet[i][j]
                                 [k],
                                 "WPE_CreateEnetIwFlowAgg Hierarchical()");
@@ -1626,7 +1625,7 @@ void WPE_CreateHierEnetRxTxBinding ()
       // Not Used in Enet
       /*  mru; */ MTU_SIZE,
       /*  vcfcs; */ 0,
-      /*  input_port; */ bport_enet
+      /*  input_port; */ bport_hier_enet
    };
    WP_tx_binding tx_binding_enet_config = {
 
@@ -2039,9 +2038,6 @@ void WPE_SetStaticForwardRules ()
    forward_rule_config.bport_tag = BRIDGE_PORT_ENET_TAG;
    forward_rule_config.vlan_id = VLAN_TAG_1;
    forward_rule_config.aggregation = agg_enet[0];
-/*------------------------------------------------------------------*\
-	create DFC rules now !!!
-\*------------------------------------------------------------------*/
    status = WP_IwMacAddressInsert (iw_sys, &forward_rule_config);
    terminate_on_error (status, "WP_IwMacAddressInsert() to Enet");
 
@@ -2049,10 +2045,11 @@ void WPE_SetStaticForwardRules ()
    memcpy (forward_rule_config.mac, enet_change_dst_mac, 6);
    forward_rule_config.bport_tag = BRIDGE_PORT_ENET_TAG;
    forward_rule_config.vlan_id = VLAN_TAG_1;
+#if 0
    forward_rule_config.aggregation = agg_enet_change_mac;
-/*------------------------------------------------------------------*\
-	create DFC rules now !!!
-\*------------------------------------------------------------------*/
+#else
+   forward_rule_config.aggregation = agg_enet[0];
+#endif
    status = WP_IwMacAddressInsert (iw_sys, &forward_rule_config);
    terminate_on_error (status,
                        "WP_IwMacAddressInsert() to Enet with change of MAC");
@@ -2072,9 +2069,6 @@ void WPE_SetStaticForwardRules ()
 
          {
             forward_rule_config.aggregation = agg_hier_enet[i][j][k];
-/*------------------------------------------------------------------*\
-	create DFC rules now !!!
-\*------------------------------------------------------------------*/
             status = WP_IwMacAddressInsert (iw_sys, &forward_rule_config);
             terminate_on_error (status,
                                 "WP_IwMacAddressInsert() -> HierarchicalEnet");
@@ -2874,6 +2868,9 @@ void WPE_CLI (void)
          printf
             ("************************* HierarchicalEnet FlowAgg[0] Stats ********************** \n");
          WPE_DisplayFlowAggStats (agg_hier_enet[0][0][0]);
+printf ("agg_enet_change_mac statics\n");
+         WPE_DisplayFlowAggStats (agg_enet_change_mac);
+
          break;
       case '4':
          printf
@@ -3050,6 +3047,8 @@ void *LearningPoll(void *i)
    	my_enet_port_config.flowmode = WP_FLOWMODE_FAST;   
 
 
+	WPL_IntConnect(0, WPL_SgmiiAn, NULL, 
+				WPI_HwWinnetSgmiiAnProceed);
 	while (1)
    	{
 		if (WP_ENET_SGMII_AN == interface_mode)
@@ -3057,6 +3056,7 @@ void *LearningPoll(void *i)
 			interface_mode = WP_ENET_1000_BASE_X;
 		} else {
 			interface_mode = WP_ENET_SGMII_AN;
+		// 	interface_mode = WP_ENET_1000_BASE_X_AN;
 		}
    		my_enet_port_config.interface_mode = interface_mode;
 
@@ -3065,12 +3065,12 @@ void *LearningPoll(void *i)
 			WPL_Delay(DELAY_COUNT);
 		}
 
-		printf ("change to (%s)\n", (WP_ENET_SGMII_AN==interface_mode)?"WP_ENET_SGMII_AN":"WP_ENET_1000_BASE_X_AN");
+		continue;
+
+		printf ("change to (%s)\n", (WP_ENET_SGMII_AN==interface_mode)?"WP_ENET_SGMII_AN":"WP_ENET_1000_BASE_X");
 
 		if (WP_ENET_SGMII_AN == interface_mode)
 		{
-			WPL_IntConnect(0, WPL_SgmiiAn, NULL, 
-				WPI_HwWinnetSgmiiAnProceed);
 			WPL_IntEnable (0, WPL_SgmiiAn);
 			printf ("enable SgmiiAn interrupt\n");
 		} else {
