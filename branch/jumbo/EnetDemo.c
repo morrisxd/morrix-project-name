@@ -87,9 +87,16 @@ Full CLI Statistics
 #define N_QNODES                 3
 #define N_POOLS                  4
 #define MAXT_SIZE                255
+
+#if 0
 #define MTU_SIZE                 1536
 #define SDU_SIZE                 2048  // Must be > MTU_SIZE + 48
-#define PACKET_SIZE              6400
+#else
+#define MTU_SIZE                 6536
+#define SDU_SIZE                 7048  // Must be > MTU_SIZE + 48
+#endif
+
+#define PACKET_SIZE              2500
 
 // Main Defines
 #define USE_SW_CHANNELS 0
@@ -138,7 +145,7 @@ Full CLI Statistics
 #define BRIDGE_PORT_MC_TAG          15
 
 #define VLAN_TAG_1                  1
-#define VLAN_TAG_2                  2  /* no use -- morris */
+#define VLAN_TAG_2                  2 
 
 // Multicast
 #define NUM_OF_MC_GROUPS            1  // Must be ALWAYS 1 for this Test
@@ -147,6 +154,54 @@ Full CLI Statistics
 /********************************************************************************
  ***                               Global Variables                           ***
  *******************************************************************************/
+
+   WP_enet_filters my_rx_filters = {
+
+      /* rx_ucfilter; */ WP_ENET_FILTER_PROCESS,
+      /* rx_bcfilter; */ WP_ENET_FILTER_PROCESS,
+      /* rx_mcfilter; */ WP_ENET_FILTER_PROCESS
+   };
+
+   WP_device_enet_ex my_enet_dev_ext_params_config = {
+
+      /* duplexmode; */ WP_ENET_FULLDUPLEX,
+      /* rx_maclookup_mode */ WP_DISABLE,
+      /* rx_flowcontrol; */ WP_ENET_FLOW_ENABLE,
+      /* tx_flowcontrol; */ WP_ENET_FLOW_ENABLE,
+      /* rx_addrmode; */ WP_ENET_ADDR_ACCEPTALL,
+      /* phystatmode; */ WP_ENET_STAT_ENABLE,
+      /* tx_statmode; */ WP_ENET_STAT_ENABLE,
+      /* rx_statmode; */ WP_ENET_STAT_ENABLE,
+      /* tx_duplicate; */ WP_DISABLE,
+      /* rx_filters; */ &my_rx_filters,
+      /* rx_timestamp; */ 0
+   };
+
+   WP_device_enet my_enet_dev_config = {
+
+      /* max_tx_channels */ 1,
+      /* tx_maxsdu */ SDU_SIZE,
+      /* operating_speed */ WP_UNUSED,
+      // Valid for RMII, RGMII only
+      /* mac_addr */
+      {
+       0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa}, // MAC of this device
+      /* tx_bit_rate */ 1000000000,
+      /* loopbackmode */ WP_ENET_NORMAL,
+#if 0
+      /* extended_params */ NULL
+#else
+	&my_enet_dev_ext_params_config 
+#endif
+         // Must be NULL at device creation
+   };
+
+
+
+
+
+
+
 WP_handle iw_sys;
 WP_handle iw_qnode, qnode_host, qnode_mc;
 WP_handle adjunct_buffer_pool, pool_host, pool_ring_host;
@@ -323,11 +378,22 @@ int main (int argc, WP_CHAR ** argv)
 
    //WPE_PolicerInit();
    //WPE_CreateSchedulingUnit();
-   WPE_CreateFastEnetPortDevice (); /* -- see page 73 (wddi programmer's guide), LOOPBACK here -- morris */
-   WPE_CreateHierEnetPortDevice (); /* -- see page 73 -- morris */
-   WPE_CreateHostPortDevice (); /* -- see page 73 -- morris *//* --- simple -- morris */
-   status = WP_SysCommit ();    /* -- see page 73 -- morris */
+   WPE_CreateFastEnetPortDevice (); 
+   WPE_CreateHierEnetPortDevice ();
+   WPE_CreateHostPortDevice (); 
+   status = WP_SysCommit ();   
    terminate_on_error (status, "WP_SysCommit");
+
+
+
+#if 0
+   my_enet_dev_config.extended_params = &my_enet_dev_ext_params_config;
+   status = WP_DeviceModify (dev_enet, WP_DEV_MOD_ENET_DUPLEXMODE, &my_enet_dev_config);
+
+   terminate_on_error (status, "my_WP_DeviceModify () Fast Enet");
+   printf ("DeviceModify() ok\n");
+#endif
+
 
    /*
     * the following 2 lines of creating shaping group is written according to the code above, 
@@ -444,18 +510,13 @@ void WPE_SysInit (void)
    extern WP_U32 dps_ProgramImage[];
    extern WP_U16 dps_PC_Table_Init[];
 
-/* Interrupt queue configuration used with WP_SysInit */
    WP_int_queue_table int_queue_tables = {
       {                         /*size, rate */
 
-       {
-        10, 1},                 /* WP_IRQT0  highest */
-       {
-        10, 1},                 /* WP_IRQT1 */
-       {
-        10, 1},                 /* WP_IRQT2 */
-       {
-        10, 1}                  /* WP_IRQT3  lowest */
+       { 10, 1},                 /* WP_IRQT0  highest */
+       { 10, 1},                 /* WP_IRQT1 */
+       { 10, 1},                 /* WP_IRQT2 */
+       { 10, 1}                  /* WP_IRQT3  lowest */
        }
    };
    WP_iw_global max_iw = {
@@ -479,31 +540,20 @@ void WPE_SysInit (void)
        /* max_tx_groups */ 0
        },
       /* mpls_config */
-      {
-       0, 0},
+      { 0, 0},
       /* iw_modes */
-      {                         /* policer_mode */
-       WP_IW_POLICER_ENABLE,
-       /* statistics_bundle_stat_mode */
-       WP_IW_STATISTICS_BUNDLE_STAT_ENABLE,
-       /* l2_prefix_ext_mode; */
-       WP_IW_L2_HEADER_EXTENSION_DISABLE,
-       /* enhanced_flow_stat_mode; */
-       WP_IW_ENHANCED_FLOW_STAT_ENABLE,
-       /* flow_stat_mode; */
-       WP_IW_FLOW_STAT_ENABLE,
-       /* fr_tx_flow_stat_mode */
-       WP_IW_FR_TX_FLOW_STAT_DISABLE,
-       /* mfc_alloc_mode; */
-       WP_IW_MFC_ALLOC_ENABLE,
-       /* learning_queue_mode */
-       WP_IW_LEARNING_ENABLE,
-       /* port_filtering_mode */
-       WP_IW_PORT_FILTERING_ENABLE,
-       /* lpm_alloc_mode */
-       WP_IW_LPM_ALLOC_DISABLE,
-       /* enhanced_mc_member_stat_mode */
-       WP_DISABLE,
+      {
+	/* policer_mode */ WP_IW_POLICER_ENABLE,
+  /* statistics_bundle_stat_mode */ WP_IW_STATISTICS_BUNDLE_STAT_ENABLE,
+       /* l2_prefix_ext_mode; */ WP_IW_L2_HEADER_EXTENSION_DISABLE,
+       /* enhanced_flow_stat_mode; */ WP_IW_ENHANCED_FLOW_STAT_ENABLE,
+       /* flow_stat_mode; */ WP_IW_FLOW_STAT_ENABLE,
+       /* fr_tx_flow_stat_mode */ WP_IW_FR_TX_FLOW_STAT_DISABLE,
+       /* mfc_alloc_mode; */ WP_IW_MFC_ALLOC_ENABLE,
+       /* learning_queue_mode */ WP_IW_LEARNING_ENABLE,
+       /* port_filtering_mode */ WP_IW_PORT_FILTERING_ENABLE,
+       /* lpm_alloc_mode */ WP_IW_LPM_ALLOC_DISABLE,
+       /* enhanced_mc_member_stat_mode */ WP_DISABLE,
        /* routing_alloc_modes */ 0,
        /* res_mc_addresses_table_mode */ 0,
        /* port_stag_etype_mode */ 0,
@@ -516,23 +566,19 @@ void WPE_SysInit (void)
       /* max_nat_systems */ 0,
       /* max_iw_second_aggregations */ 0,
       /* iw_comp_limits */ NULL,
-      /* max_iw_mc_members */
-      NUM_OF_MC_GROUPS * NUM_OF_MC_MEMBERS_PER_GROUP,
+      /* max_iw_mc_members */ NUM_OF_MC_GROUPS * NUM_OF_MC_MEMBERS_PER_GROUP,
       /* max_iw_programmable_filters */ 32,
       /* max_iw_policers */ 1,
       /* max_dscpmt; */ 0,
       /* max_wred_bindings; */ 0,
       /* tcm_policer_limits; */
-      {
-       0, 0},
+      { 0, 0},
       /* max_flow_rule_stat_tables; */ 0,
       /* max_indirect_action_tables; */ 0,
       /* lpm_dfc_limits; */
-      {
-       0, 0},
+      { 0, 0},
       /* brigding_time_stamp_info; */
-      {
-       0, 0}
+      { 0, 0}
    };
 
 // To Do: put NONE everywhere for non crucial masters
@@ -652,6 +698,7 @@ void WPE_InitHWCards ()
 #if 1
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_NORMAL);
 #else
+// loopback here will cause system stuck
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_LOOPBACK);
 #endif
 
@@ -670,10 +717,14 @@ void WPE_CreateIWQnode ()
    /* Host (Adjunct) pool part of IW QNode */
    WP_pool_buffer_data adjunct_buffer_config = {
 
-      /* n_buffers */ 2,
+      /* n_buffers */ 200,
       // Number of host threads that do Host Receive (1 BD per thread)
       /* offset */ 64,
+#if 0
       /* size */ 2048,
+#else
+      /* size */ 2048,
+#endif
       /* pad */ 0,
       /* databustype */ WP_BUS_HOST,
       /* bank */ APP_BANK_HOST
@@ -785,8 +836,7 @@ void WPE_CreateIWBridgeSystem ()
 {
    WP_dfc_sys_info dfc_sys_info = {
 
-      /* classification_hash_size */
-      WP_IW_2K_HASH_ENTRIES,
+      /* classification_hash_size */ WP_IW_2K_HASH_ENTRIES,
       /* port_filtering */ WP_IW_PORT_FILTERING_INPUT,
       /* deny_eq_ip */ WP_IW_DENY_EQUAL_IP_DISABLE
    };
@@ -794,27 +844,22 @@ void WPE_CreateIWBridgeSystem ()
 
       /* tag */ 0,
       /* max_flows; */ MAX_IW_FLOWS,
-      /* classification_mode */
-      WP_IW_CLASSIFIER_BASED_BRIDGING,
+      /* classification_mode */ WP_IW_CLASSIFIER_BASED_BRIDGING,
       /* classifier_config */
       {
 
-       /*classification_parsing_mode */
-       WP_IW_DYNAMIC_CLASS,
-       /*max_classification_rules; */
-       (NUM_OF_EMC_FILTERS + 1) * NUM_OF_RULES_PER_FILTER,
+       /*classification_parsing_mode */ WP_IW_DYNAMIC_CLASS,
+       /*max_classification_rules; */ (NUM_OF_EMC_FILTERS + 1) * NUM_OF_RULES_PER_FILTER,
        /*number_parse_fields */ 0,
-            /**parse_keys*/ NULL
+       /**parse_keys*/ NULL
        },
       /* learning_mode; */ WP_IW_BRIDGE_LEARNING_ENABLE,
       /* learning_queue */
       {
 
        /*int_queue_num */ WP_IW_IRQT1,
-       /*learning_queue_size */
-       LEARNING_QUEUE_SIZE,
-       /*interrupt_enbale */
-       WP_LEARNING_INTENABLE,
+       /*learning_queue_size */ LEARNING_QUEUE_SIZE,
+       /*interrupt_enbale */ WP_LEARNING_INTENABLE,
        /*interrupt_rate */ 1
        },
       /*forwarding_table_size */ WP_IW_32K_HASH_ENTRIES,
@@ -823,8 +868,7 @@ void WPE_CreateIWBridgeSystem ()
       /*max_iw_ports */ NUM_OF_IW_BPORTS,
       /*dfc info */ &dfc_sys_info,
       /*svl_mode */ WP_IW_SVL_DISABLED,
-      /*stag_ether_type */
-      WP_IW_SYS_BRIDGE_STAG_VLAN_ETYPE_DISABLE,
+      /*stag_ether_type */ WP_IW_SYS_BRIDGE_STAG_VLAN_ETYPE_DISABLE,
       /*parsing_mode; */ 0,
       /*dfc_log_mode; */ 0
    };
@@ -906,10 +950,8 @@ void WPE_CreateHostIwRxChannel ()
    WP_ch_iw_rx iw_host_ch_config = {
 
       /* pqblock */ 0,
-      /* priority queue block --morris */
       /* pqlevel */ 0,
       /* tx_binding_type */ WP_IW_TX_BINDING,
-      // from point of view of IW, here is TX channel.
       /* tx_binding_config */ &tx_host_binding_config
    };
    rx_host_channel =
@@ -1028,7 +1070,6 @@ void WPE_CreateIwBportHost ()
    WP_bridge_port iwhost_bport_config = {
 
       /* tag */ BRIDGE_PORT_HOST_TAG,
-      /* BPORT= bridge port -- morris */
       /* direct_mapping */ WP_IW_DIRECT_MAP_DISABLE,
       /* flow_agg */ 0,
       /* flooding_term_mode */ WP_IW_HOST_TERM_MODE,
@@ -1088,6 +1129,8 @@ void WPE_CreateIwBportHost ()
 
 void WPE_CreateFastEnetPortDevice ()
 {
+   WP_handle status;
+
    WP_port_enet enet_port_config = {
       /* pkt_limits */
       {
@@ -1106,7 +1149,7 @@ void WPE_CreateFastEnetPortDevice ()
       /* rx_iw_bkgnd */ 0,
    };
 
-#if 0
+#if 1
    WP_enet_filters rx_filters = {
 
       /* rx_ucfilter; */ WP_ENET_FILTER_PROCESS,
@@ -1133,20 +1176,23 @@ void WPE_CreateFastEnetPortDevice ()
 
       /* max_tx_channels */ 1,
       /* tx_maxsdu */ SDU_SIZE,
-      /* SDU: Service Data Unit -- morris */
       /* operating_speed */ WP_UNUSED,
       // Valid for RMII, RGMII only
       /* mac_addr */
       {
-       0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-      /*the MAC address is associated with "device", not "port" which is just created above -- morris */
-      // MAC of this device
+       0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa}, // MAC of this device
       /* tx_bit_rate */ 1000000000,
       /* loopbackmode */ WP_ENET_NORMAL,
+#if 1
       /* extended_params */ NULL
+#else
+	&enet_dev_ext_params_config 
+#endif
          // Must be NULL at device creation
    };
 
+   status = 0;
+   enet_dev_ext_params_config.duplexmode = WP_ENET_FULLDUPLEX;
    //enet_port_config.interface_mode = WP_ENET_SGMII_10_100;
    enet_port_config.pkt_limits.max_tx_channels =
       NUM_OF_FAST_ENET_TX_CHANNELS;
@@ -1163,7 +1209,6 @@ void WPE_CreateFastEnetPortDevice ()
     * device loopback was not supported by wdds4.3.1 anymore
     */
 #if 0
-   /* set loopback here -- morris */
    enet_dev_config.loopbackmode = WP_ENET_LOOPBACK;   
 #else
    enet_dev_config.loopbackmode = WP_ENET_NORMAL;
@@ -1174,6 +1219,17 @@ void WPE_CreateFastEnetPortDevice ()
       WP_DeviceCreate (port_enet, WP_PHY (0), WP_DEVICE_ENET,
                        &enet_dev_config);
    terminate_on_error (dev_enet, "WP_DeviceCreate() Fast Enet");
+
+
+
+
+#if  0
+   enet_dev_config.extended_params = &enet_dev_ext_params_config;
+   status = WP_DeviceModify (dev_enet, WP_DEV_MOD_ENET_DUPLEXMODE, &enet_dev_config);
+
+   terminate_on_error (status, "WP_DeviceModify () Fast Enet");
+   printf ("DeviceModify() ok\n");
+#endif
 } 
 
 
@@ -1344,7 +1400,7 @@ void WPE_CreateHierEnetIwBport ()
    };
 
    // Only one bPort is possible for one Enet device because only one RX channel is possible
-   enet_bport_config.tag = BRIDGE_PORT_HIER_ENET_TAG; /*the only different is the tag -- morris */
+   enet_bport_config.tag = BRIDGE_PORT_HIER_ENET_TAG; 
    enet_bport_config.input_filters_mask = 0x00000000;
    enet_bport_config.flow_agg = agg_host; // default flow agg
    bport_hier_enet = WP_IwPortCreate (iw_sys, &enet_bport_config);
@@ -1392,7 +1448,6 @@ void WPE_CreateFastEnetFlowAgg ()
       /*interruptqueue; */ WP_IW_IRQT1,
       /*error_pkt_mode */ WP_IW_ERRPKT_DISCARD,
       /*intmode; */ WP_IW_INT_DISABLE,
-      /*it's ENABLED when creating HOST-aggregation which means using interrupts when receiving packets -- morris */
       /*statmode; */ WP_IW_STAT_ENABLE,
       /*timestamp_mode; */ WP_IW_TIME_STAMP_DISABLE,
       /*ov_pool_mode */ WP_IW_OV_POOL_DISABLE,
@@ -1425,7 +1480,6 @@ void WPE_CreateFastEnetFlowAgg ()
       /*next_prsrv_inport */ WP_IW_OVERRIDE_INPORT,
       /*prsrv_inport_params */ WP_IW_OVERRIDE_INPORT,
       /*mac_replace_mode; */ WP_IW_MAC_REPLACE_DISABLED,
-      /* mac replace mode -- morris */
       /*new_dst_mac[6]; */
       {
        0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 
@@ -1447,7 +1501,11 @@ void WPE_CreateFastEnetFlowAgg ()
 
    {
       agg_enet_config.txfunc = tx_gbe_channel[i];
+#if 1
       agg_enet_config.iw_port = bport_enet;
+#else
+      agg_enet_config.iw_port = bport_hier_enet;
+#endif
       agg_enet_config.l2_header_insert_mode = WP_IW_L2H_INSERT_ENABLE;
       agg_enet_config.mac_replace_mode = WP_IW_REPLACE_DST_MAC;
       memcpy (agg_enet_config.new_dst_mac, hier_enet_dst_mac, 6); 
@@ -1690,13 +1748,11 @@ void WPE_CreateFastEnetRxTxChannel ()
       /* rx_queuedepth */ 10,
    };
 
-   /* 1 rx channel, 4 tx channel -- morris */
    rx_gbe_channel =
       WP_ChannelCreate (0x22, dev_enet, iw_qnode, WP_CH_RX,
                         WP_ENET, &enet_ch_config);
    terminate_on_error (rx_gbe_channel, "WP_Channel_Create() Fast RX");
 
-   /* the following is TX channel --morris */
    for (i = 0; i < NUM_OF_FAST_ENET_TX_CHANNELS /* 1 */ ; i++)
 
    {
@@ -1743,10 +1799,6 @@ void WPE_CreateHierHWEnetRxTxChannel ()
    terminate_on_error (rx_gbe_hier_channel,
                        "WP_Channel_Create() Gige Hierarchical RX");
 
-   /*
-    * There are altogether 1*4*8 = 32 channels in the system -- morris
-    * see page 184 
-    */
    for (i = 0; i < NUM_OF_L1_GROUP /* 1 */ ; i++)
 
    {
@@ -1833,7 +1885,6 @@ void WPE_CreateL2FMUGroups (void)
    WP_shaping_group_type_enet enet_group_l2_config = {
 
       /* group_level */ WP_L2_GROUP,
-      /* key point to which layer(layer1 or layer2 -- morris */
 #if USE_SOCKET                  //// <<<<<, WINSIM BUS: the FMU register does not updated correctly >>>>>>>
 #error USE_SOCKET_SHOULD_NOT_BE_DEFINED
       /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_STRICT,
@@ -2839,9 +2890,9 @@ void WPE_CLI (void)
    {
       printf ("\n\n\n");
       printf
-         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev,       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
+         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET7),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
-         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev,  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
+         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev(ENET8),  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
       printf
          ("       HostTermination: \n \t\t\t7-bPortHost,  \n \t\t\t8-FlowAggHost, \n \t\t\tq-Exit, \n \t\t\tr-Reboot, \n \t\t\tk-Kill(noDriverRelease) \n");
 
@@ -3033,10 +3084,11 @@ extern void WPI_HwWinnetSgmiiAnProceed(WP_U32 wpid, WP_U32 event_bits);
 void *LearningPoll(void *i)
 {
 	WP_U8 iii = 0;
-	WP_U8 jjj = 5;
+	WP_U8 jjj = 2;
 	WP_handle status = 0;
 	WP_U8 max_ch_tx = 0;
 	WP_U8 max_ch_rx = 0;
+	static WP_U32 switch_counter = 0;
 
    WP_port_enet my_enet_port_config = {
       {
@@ -3063,23 +3115,29 @@ void *LearningPoll(void *i)
 				WPI_HwWinnetSgmiiAnProceed);
 	while (1)
    	{
-		if (WP_ENET_SGMII_AN == interface_mode)
+		switch_counter  ++;
+		if (WP_ENET_1000_BASE_X == interface_mode)
 		{
-			interface_mode = WP_ENET_1000_BASE_X;
-		} else {
 			interface_mode = WP_ENET_SGMII_AN;
-		// 	interface_mode = WP_ENET_1000_BASE_X_AN;
+		} else {
+		 	interface_mode = WP_ENET_1000_BASE_X;
 		}
    		my_enet_port_config.interface_mode = interface_mode;
 
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+///////////////////// here is the delay ////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 		for (iii = 0; iii < jjj; iii ++)
 		{
 			WPL_Delay(DELAY_COUNT);
 		}
 
-		continue;
+		// continue;
 
-		printf ("change to (%s)\n", (WP_ENET_SGMII_AN==interface_mode)?"WP_ENET_SGMII_AN":"WP_ENET_1000_BASE_X");
+		printf ("change to (%s)count(%10d)\n", (WP_ENET_1000_BASE_X==interface_mode)?"WP_ENET_1000_BASE_X\t":"WP_ENET_SGMII_AN\t", switch_counter);
 
 		if (WP_ENET_SGMII_AN == interface_mode)
 		{

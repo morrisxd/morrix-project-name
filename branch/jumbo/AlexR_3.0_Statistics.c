@@ -236,6 +236,7 @@ void WPE_App_print_stats_enet (WP_stats_enet *var_ptr)
 
    WPE_App_print_U64 ("rx_packets", &var_ptr->rx_packets);
    WPE_App_print_U64 ("tx_packets", &var_ptr->tx_packets);
+   WPE_App_print_U64 ("tx_bytes", &var_ptr->tx_bytes);
    return;
 }
 

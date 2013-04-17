@@ -89,7 +89,7 @@ Full CLI Statistics
 #define MAXT_SIZE                255
 #define MTU_SIZE                 1536
 #define SDU_SIZE                 2048  // Must be > MTU_SIZE + 48
-#define PACKET_SIZE              64
+#define PACKET_SIZE              6400
 
 // Main Defines
 #define USE_SW_CHANNELS 0
@@ -334,19 +334,19 @@ int main (int argc, WP_CHAR ** argv)
     * because in WPE_CreateFast/HierEnetPortDevice () using paramter 'WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE', 
     * we must create shaping group here now !!! it is required.
     */
-   WPE_CreateL1FMUGroups ();    /* -- see page 73/184 -- *//* shaping group -- morris */
-   WPE_CreateL2FMUGroups ();    /* -- see page 73/184 -- *//* layer2 must be created based on layer1 group  -- morris */
+   WPE_CreateL1FMUGroups ();  
+   WPE_CreateL2FMUGroups ();   
    WPE_CreateHostIwRxChannel ();
-   WPE_CreateHostTermFlowAgg (); /* create default AGGREGATION here -- morris */
-   WPE_CreateIwBportHost ();    /* BPORT = bridge port -- morris */
+   WPE_CreateHostTermFlowAgg (); 
+   WPE_CreateIwBportHost ();    
    WPE_CreateHostIwTxChannel ();
-   WPE_CreateFastEnetIwBport (); /* use default agg in creating simple IW bridge port -- morris */
-   WPE_CreateFastEnetRxTxChannel ();   /* 1 RX, 1(indeed) TX channel, associated with dev_enet -- morris */
-   WPE_CreateFastEnetRxTxBinding ();   /* associated with bport_enet -- morris */
-   WPE_CreateFastEnetFlowAgg (); /* associated with channel & bport & flow_mode and, destination mac address -- morris */
+   WPE_CreateFastEnetIwBport (); 
+   WPE_CreateFastEnetRxTxChannel (); 
+   WPE_CreateFastEnetRxTxBinding (); 
+   WPE_CreateFastEnetFlowAgg (); 
    WPE_CreateHierEnetIwBport ();
-   WPE_CreateHierHWEnetRxTxChannel (); /* we must create both layer1 & layer2 hierarchical channel -- morris */
-   WPE_CreateHierEnetRxTxBinding ();   /* binding has no handle in describing the binding -- morris */
+   WPE_CreateHierHWEnetRxTxChannel (); 
+   WPE_CreateHierEnetRxTxBinding ();  
    WPE_CreateHierEnetFlowAgg ();
 
 //-------- Optional Functionality ---------//
@@ -681,8 +681,8 @@ void WPE_CreateIWQnode ()
 
    /* IW QNode (Free Buffer Pool part of IW QNode) */
    WP_qnode_iwq qn_iw_config = {
-
-      /* interruptqueue */ 0, // for IW TX channels only
+      // for IW TX channels only
+      /* interruptqueue */ 0, 
       /* num_buffers */ MAXT_SIZE * (NUM_OF_HIER_ENET_TX_CHANNELS + 1 +
                    1) + (NUM_OF_HIER_ENET_RX_CHANNELS + 1 + 1),
       /* adjunct_pool */ 0
@@ -693,10 +693,24 @@ void WPE_CreateIWQnode ()
    terminate_on_error (adjunct_buffer_pool, "WP_PoolCreate()");
    qn_iw_config.adjunct_pool = adjunct_buffer_pool;
    iw_qnode =
+#if 1
       WP_QNodeCreate (0,
                       WP_QNODE_IWQ |
                       WP_QNODE_OPT_DEDICATED_RX_HWQ |
                       WP_QNODE_OPT_FMU, &qn_iw_config);
+#else
+      WP_QNodeCreate (0, WP_QNODE_IWQ_JUMBO , &qn_iw_config);
+#endif
+
+#ifdef WP_HW_WINPATH2
+#error fuck!!!
+#endif
+
+#ifdef WP_HW_WINPATH3
+// #error !!!fuck!!!
+#endif
+
+
    terminate_on_error (iw_qnode, "WP_QNodeCreate()");
 } 
 
@@ -1138,7 +1152,7 @@ void WPE_CreateFastEnetPortDevice ()
       NUM_OF_FAST_ENET_TX_CHANNELS;
    enet_port_config.pkt_limits.max_rx_channels =
       NUM_OF_FAST_ENET_RX_CHANNELS;
-   enet_port_config.flowmode = WP_FLOWMODE_FAST;   /* this is the key point --- morris */
+   enet_port_config.flowmode = WP_FLOWMODE_FAST;   
    port_enet =
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7, &enet_port_config);
    terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
@@ -2664,10 +2678,10 @@ void WPE_Send_HostData (WP_handle tx_channel, WP_data_type data_type,
    segment.data_size       = PACKET_SIZE;
    WP_MEM_BYTES_FILL (segment.data, '0', segment.data_size);
    WP_MEM_BYTES_SET (&segment.data[0], hexa_buffer, PACKET_SIZE);
-   data_unit.type          = data_type;  /* Type of this data unit.          */
-   data_unit.segment       = &segment; /* Pointer to first segment.        */
-   data_unit.n_segments    = 1;    /* Number of available segments.    */
-   data_unit.n_active      = 1;      /* Number of live segments.         */
+   data_unit.type          = data_type;  
+   data_unit.segment       = &segment; 
+   data_unit.n_segments    = 1;    
+   data_unit.n_active      = 1;   
    data_unit.data_size     = segment.data_size;  
    data_unit.data_return   = 0;   
    data_unit.control       = WP_HT_CONTROL (0) 
