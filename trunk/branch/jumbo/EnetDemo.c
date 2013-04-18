@@ -78,10 +78,10 @@ Full CLI Statistics
  *******************************************************************************/
 
 #undef LOCK_AT_START
-
+#define USE_SIMPLE_DEVICE	(0)
 #define WPL_THREAD_LOCK_KEY \
    WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
-#define DELAY_COUNT	(200000*10)
+#define DELAY_COUNT	(100000*10)	// 2 seconds, micro seconds
 #define ENABLE_TRANSFER          (0)
 #define MAX_MACS                 4
 #define N_QNODES                 3
@@ -233,6 +233,13 @@ WP_U8 enet_dst_mac[6] = {
    0x00, 0x00, 0x00, 0x0A, 0x00, 0x00
 };
 
+#if 1
+WP_U8 enet_bidirect_dst_mac[6] = {
+   0x00, 0x00, 0x00, 0x05, 0x01, 0x00
+};
+#endif
+
+
 WP_U8 enet_change_dst_mac[6] = {
    0x00, 0x00, 0x00, 0x0A, 0x01, 0x00
 };
@@ -383,17 +390,6 @@ int main (int argc, WP_CHAR ** argv)
    WPE_CreateHostPortDevice (); 
    status = WP_SysCommit ();   
    terminate_on_error (status, "WP_SysCommit");
-
-
-
-#if 0
-   my_enet_dev_config.extended_params = &my_enet_dev_ext_params_config;
-   status = WP_DeviceModify (dev_enet, WP_DEV_MOD_ENET_DUPLEXMODE, &my_enet_dev_config);
-
-   terminate_on_error (status, "my_WP_DeviceModify () Fast Enet");
-   printf ("DeviceModify() ok\n");
-#endif
-
 
    /*
     * the following 2 lines of creating shaping group is written according to the code above, 
@@ -695,15 +691,19 @@ void WPE_InitHWCards ()
 
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_2UPI_1XGI_10SGMII);
    terminate_on_error (status, "WPX_CONFIGURE_2UPI_1XGI_10SGMII()");
-#if 1
+#if 0
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_NORMAL);
 #else
 // loopback here will cause system stuck
-   status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_LOOPBACK);
+   status = WPX_BoardSerdesInit (0, WP_PORT_ENET4, WPX_SERDES_NORMAL);
 #endif
 
    terminate_on_error (status, "WPX_BoardSerdesInit 7()");
+#if 0
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET8, WPX_SERDES_NORMAL);
+#else
+   status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_NORMAL);
+#endif
    terminate_on_error (status, "WPX_BoardSerdesInit 8()");
 }
 
@@ -716,7 +716,6 @@ void WPE_CreateIWQnode ()
 
    /* Host (Adjunct) pool part of IW QNode */
    WP_pool_buffer_data adjunct_buffer_config = {
-
       /* n_buffers */ 200,
       // Number of host threads that do Host Receive (1 BD per thread)
       /* offset */ 64,
@@ -889,7 +888,6 @@ void WPE_EnableSystem ()
 
    /* Enable the Enet Channels First TX than RX */
    for (i = 0; i < NUM_OF_FAST_ENET_TX_CHANNELS; i++)
-
    {
       status = WP_ChannelEnable (tx_gbe_channel[i]);
       terminate_on_error (status, "WP_ChannelEnable() tx_gbe");
@@ -899,13 +897,10 @@ void WPE_EnableSystem ()
 
    // Hierarchical Enet
    for (i = 0; i < NUM_OF_L1_GROUP; i++)
-
    {
       for (j = 0; j < NUM_OF_L2_GROUP; j++)
-
       {
          for (k = 0; k < NUM_OF_HIER_ENET_FAS_PER_L2; k++)
-
          {
             status = WP_ChannelEnable (tx_gbe_hier_channel[i][j][k]);
             terminate_on_error (status, "WP_ChannelEnable() tx_gbe");
@@ -1200,7 +1195,11 @@ void WPE_CreateFastEnetPortDevice ()
       NUM_OF_FAST_ENET_RX_CHANNELS;
    enet_port_config.flowmode = WP_FLOWMODE_FAST;   
    port_enet =
+#if 0
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7, &enet_port_config);
+#else
+      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET4, &enet_port_config);
+#endif
    terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
    enet_dev_config.max_tx_channels = NUM_OF_FAST_ENET_TX_CHANNELS;
 
@@ -1298,7 +1297,11 @@ void WPE_CreateHierEnetPortDevice ()
    enet_port_config.pkt_limits.max_rx_channels = NUM_OF_HIER_ENET_RX_CHANNELS;
    enet_port_config.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
    port_hier_enet =
+#if 0
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET8, &enet_port_config);
+#else
+      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET3, &enet_port_config);
+#endif
    terminate_on_error (port_hier_enet,
                        "WP_PortCreate() Hierarchical ENET");
    hier_enet_dev_config.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;
@@ -1628,16 +1631,17 @@ void WPE_CreateHierEnetFlowAgg ()
       /*dscp_remark_offset; */ 0
    };
    for (i = 0; i < NUM_OF_L1_GROUP /* 1 */ ; i++)
-
    {
       for (j = 0; j < NUM_OF_L2_GROUP /* 4 */ ; j++)
-
       {
          for (k = 0; k < NUM_OF_HIER_ENET_FAS_PER_L2 /* 8 */ ;
               k++)
-
          {
+#if 1
             agg_enet_config.txfunc = tx_gbe_hier_channel[i][j][k];
+#else
+            agg_enet_config.txfunc = tx_gbe_hier_channel[0][0][0];
+#endif
             agg_enet_config.iw_port = bport_hier_enet;
 
             //agg_enet_config.policer_enable = WP_IW_POLICER_ENABLE;
@@ -1713,23 +1717,20 @@ void WPE_CreateHierEnetRxTxBinding ()
    terminate_on_error (status,
                        "WPE_CreateIwSysEnetRxBinding() rx_binding_enet Hier");
    for (i = 0; i < NUM_OF_L1_GROUP; i++)
-
    {
       for (j = 0; j < NUM_OF_L2_GROUP; j++)
-
       {
          for (k = 0; k < NUM_OF_HIER_ENET_FAS_PER_L2; k++)
-
          {
-            status =
-               WP_IwTxBindingCreate
-               (tx_gbe_hier_channel[i][j][k],
-                WP_IW_TX_BINDING, &tx_binding_enet_config);
+            status = WP_IwTxBindingCreate (tx_gbe_hier_channel[i][j][k], WP_IW_TX_BINDING, &tx_binding_enet_config);
             terminate_on_error (status, "WP_IwTxBindingCreate Hier");
          }
       }
    }
 }
+
+
+
 void WPE_CreateFastEnetRxTxChannel ()
 {
    WP_U32 i;
@@ -1767,18 +1768,41 @@ void WPE_CreateFastEnetRxTxChannel ()
 void WPE_CreateHierHWEnetRxTxChannel ()
 {
    WP_U32 i, j, k;
+
+#if USE_SIMPLE_DEVICE
+   WP_ch_enet simple_enet_ch_config = {
+
+      /* intmode */ WP_PKTCH_INT_ENABLE,
+      /* iwmode */ WP_PKTCH_IWM_ENABLE,
+      /* testmode */ WP_PKTCH_TEST_DISABLE,
+      /* tx_pqblock */ 0, // Unused in HW mode
+      /* tx_pqlevel */ 0, // Unused in HW mode
+      /* tx_shaping_type */ WP_FMU_SHAPING_TYPE_STRICT,
+      /* tx_shaping_params */ NULL,
+      /* rx_maxsdu */ SDU_SIZE,
+      /* tx_cwid */ WP_CW_ID_A, // Unused in HW mode
+      /* tx_tq */ 0,
+      /* rx_queuedepth */ 10,
+   };
+#endif
+
    WP_fmu_shaping_cir_eir cir_eir_shaping_param = {
 
-      /* cir; */ 100000,
-      /* bits/second */
-      /* cbs; */ 1000,
-      /* Committed Burst Size in bits */
-      /* eir; */ 100000,
-      /* bits/second */
-      /* ebs; */ 1000,
-      /* Committed Burst Size in bits */
+      /* cir; */ 100000, 	/* bits/second */
+#if 0
+      /* cbs; */ 1000, 		/* Committed Burst Size in bits */
+#else
+      /* cbs; */ 100000, 		/* Committed Burst Size in bits */
+#endif
+      /* eir; */ 100000, 	/* bits/second */
+#if 0
+      /* ebs; */ 1000, 		/* Committed Burst Size in bits */
+#else
+      /* ebs; */ 100000, 		/* Committed Burst Size in bits */
+#endif
       /* flags */ 0,
    };
+
    WP_ch_enet hier_enet_ch_config = {
 
       /* intmode */ WP_PKTCH_INT_ENABLE,
@@ -1800,23 +1824,27 @@ void WPE_CreateHierHWEnetRxTxChannel ()
                        "WP_Channel_Create() Gige Hierarchical RX");
 
    for (i = 0; i < NUM_OF_L1_GROUP /* 1 */ ; i++)
-
    {
       for (j = 0; j < NUM_OF_L2_GROUP /* 4 */ ; j++)
-
       {
-         for (k = 0; k < NUM_OF_HIER_ENET_FAS_PER_L2 /* 8 */ ;
-              k++)
-
+         for (k = 0; k < NUM_OF_HIER_ENET_FAS_PER_L2 /* 8 */ ; k++)
          {
+	    printf ("create tx_gbe_hier_channel, i[%d]j[%d]k[%d]\n",i,j,k);
             hier_enet_ch_config.tx_tq = k;
-            tx_gbe_hier_channel[i][j][k] =
-               WP_ChannelCreate (0x11,
+            tx_gbe_hier_channel[i][j][k] = WP_ChannelCreate (0x11+k,
+#if USE_SIMPLE_DEVICE
+				dev_hier_enet,
+#else
                                  l2_group_hier[i][j], 
+#endif
                                  iw_qnode,
-                                 WP_CH_TX, WP_ENET, &hier_enet_ch_config);
-            terminate_on_error (tx_gbe_hier_channel[i]
-                                [j][k],
+                                 WP_CH_TX, WP_ENET, 
+#if USE_SIMPLE_DEVICE
+				&simple_enet_ch_config);
+#else
+				&hier_enet_ch_config);
+#endif
+            terminate_on_error (tx_gbe_hier_channel[i][j][k],
                                 "WP_Channel_Create() Gige Hierarchical TX");
          }
       }
@@ -1830,8 +1858,8 @@ void WPE_CreateL1FMUGroups (void)
    WP_U32 entry;
    WP_handle status;
 
-#if 0
-   WP_fmu_shaping_cir_eir l1_group_shaping_params = {
+#if 1
+   WP_fmu_shaping_cir_eir my_l1_group_shaping_params = {
 
       /* cir */ 1000000,
       /* cbs */ 80000,
@@ -1842,20 +1870,32 @@ void WPE_CreateL1FMUGroups (void)
 
 #endif /*  */
    WP_fmu_shaping_wfq l1_group_shaping_params = {
-
+#if 0
       /* weight */ 1,
+#else
+      /* weight */ 1024 * 10,
+#endif
       /* flags */ 0,
    };
    WP_shaping_group_type_packet enet_group_l1_config = {
 
       /* group_level */       WP_L1_GROUP,
+#if 1
       /* tx_shaping_type */   WP_FMU_SHAPING_TYPE_WFQ, 
       /* shaping_params */    &l1_group_shaping_params,
+#else
+      /* tx_shaping_type */   WP_FMU_SHAPING_TYPE_CIR_EIR,   //WP_FMU_SHAPING_TYPE_STRICT,
+      /* tx_shaping_params */ &my_l1_group_shaping_params, //NULL, 
+#endif
       /* num_fifos */         WP_NUM_FIFOS_8,
       /* block_handle */      0,
       /* block_level */       1,
       /* block_mode */        0,
    };
+
+   l1_group_shaping_params.weight = 100000;
+   my_l1_group_shaping_params.cir = 1000000;
+
    for (entry = 0; entry < NUM_OF_L1_GROUP /* 1 */ ; entry++)
 
    {
@@ -1874,6 +1914,8 @@ void WPE_CreateL2FMUGroups (void)
 {
    WP_U32 i, entry;
    WP_handle status;
+   WP_handle block_handle;
+
    WP_fmu_shaping_cir_eir l2_group_shaping_params = {
 
       /* cir */ 1000000,
@@ -1899,22 +1941,39 @@ void WPE_CreateL2FMUGroups (void)
       // not used without ShapingBlock
       /* block_mode */ WP_MODE_HW,
    };
-   for (i = 0; i < NUM_OF_L1_GROUP /* 1 */ ; i++)
 
+   block_handle = 0;
+#if 0
+   block_handle = WP_ShapingBlockCreate(WP_SYSHANDLE(WP_WINPATH(0)),
+                                     WP_L2_GROUP,
+                                     16,
+                                     WP_NUM_FIFOS_8);
+
+   terminate_on_error (block_handle, "WP_ShapingBlockCreate error");
+   enet_group_l2_config.block_handle = block_handle;
+#endif
+
+   i = 0;
+
+#if 1
+   for (i = 0; i < NUM_OF_L1_GROUP /* 1 */ ; i++)
+#endif
    {
       for (entry = 0; entry < NUM_OF_L2_GROUP /* 4 */ ; entry++)
-
       {
-
+	printf ("now it is i(%d), entry(%d)\n", i, entry);
 #if USE_SW_CHANNELS
          enet_group_l2_config.group_mode = WP_MODE_SW;
-
 #else /*  */
          enet_group_l2_config.group_mode = WP_MODE_HW;
-
 #endif /*  */
+	enet_group_l2_config.block_level = entry;
          l2_group_hier[i][entry] =
+#if 1
             WP_ShapingGroupCreate (l1_group_hier[i],
+#else
+            WP_ShapingGroupCreate (dev_hier_enet,
+#endif
                                    WP_SHAPING_GROUP_TYPE_PACKET,
                                    &enet_group_l2_config);
          terminate_on_error (l2_group_hier[i][entry],
@@ -2122,22 +2181,17 @@ void WPE_SetStaticForwardRules ()
    forward_rule_config.bport_tag = BRIDGE_PORT_HIER_ENET_TAG;
    forward_rule_config.vlan_id = VLAN_TAG_1;
    for (i = 0; i < NUM_OF_L1_GROUP /* 1 */ ; i++)
-
    {
       for (j = 0; j < NUM_OF_L2_GROUP /* 4 */ ; j++)
-
       {
-         for (k = 0; k < NUM_OF_HIER_ENET_FAS_PER_L2 /* 8 */ ;
-              k++)
-
+         for (k = 0; k < NUM_OF_HIER_ENET_FAS_PER_L2/*8*/ ; k++)
          {
             forward_rule_config.aggregation = agg_hier_enet[i][j][k];
-            status = WP_IwMacAddressInsert (iw_sys, &forward_rule_config);
+            status = WP_IwMacAddressInsert(iw_sys,&forward_rule_config);
             terminate_on_error (status,
-                                "WP_IwMacAddressInsert() -> HierarchicalEnet");
-            forward_rule_config.mac[5]++;
-
-            //forward_rule_config.vlan_id++;
+                   	"WP_IwMacAddressInsert() -> HierarchicalEnet");
+            forward_rule_config.mac[5] ++;
+            //forward_rule_config.vlan_id ++;
          }
       }
    }
@@ -2217,6 +2271,7 @@ void WPE_LearningIST (WP_tag tag, WP_U32 data, WP_U32 info)
 // In case the system in not VLAN aware, we still need to do MembersetFill
 // for learning propouses, as a database to find FlowAgg by input bPort,
 // VLAN filled in this case is always 0
+// --- not used now
 void WPE_MemeberSetFill (void)
 {
    WP_status status;
@@ -2890,9 +2945,9 @@ void WPE_CLI (void)
    {
       printf ("\n\n\n");
       printf
-         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET7),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
+         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET4/ENET7),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
-         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev(ENET8),  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
+         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev(ENET3/ENET8),  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
       printf
          ("       HostTermination: \n \t\t\t7-bPortHost,  \n \t\t\t8-FlowAggHost, \n \t\t\tq-Exit, \n \t\t\tr-Reboot, \n \t\t\tk-Kill(noDriverRelease) \n");
 
@@ -2930,9 +2985,10 @@ void WPE_CLI (void)
       case '3':
          printf
             ("************************* HierarchicalEnet FlowAgg[0] Stats ********************** \n");
-         WPE_DisplayFlowAggStats (agg_hier_enet[0][0][0]);
-printf ("agg_enet_change_mac statics\n");
+	printf ("agg_enet_change_mac statics\n");
          WPE_DisplayFlowAggStats (agg_enet_change_mac);
+	printf ("agg_hier_enet statics\n");
+         WPE_DisplayFlowAggStats (agg_hier_enet[0][0][0]);
 
          break;
       case '4':
@@ -3084,7 +3140,7 @@ extern void WPI_HwWinnetSgmiiAnProceed(WP_U32 wpid, WP_U32 event_bits);
 void *LearningPoll(void *i)
 {
 	WP_U8 iii = 0;
-	WP_U8 jjj = 2;
+	WP_U8 jjj = 15;
 	WP_handle status = 0;
 	WP_U8 max_ch_tx = 0;
 	WP_U8 max_ch_rx = 0;
@@ -3135,7 +3191,7 @@ void *LearningPoll(void *i)
 			WPL_Delay(DELAY_COUNT);
 		}
 
-		// continue;
+		continue;
 
 		printf ("change to (%s)count(%10d)\n", (WP_ENET_1000_BASE_X==interface_mode)?"WP_ENET_1000_BASE_X\t":"WP_ENET_SGMII_AN\t", switch_counter);
 

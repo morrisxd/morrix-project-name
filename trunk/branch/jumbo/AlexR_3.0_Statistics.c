@@ -563,6 +563,9 @@ void WPE_DisplayFlowAggStats(WP_handle agg)
            ((WPE_StatField*)&iw_flow_stats.forward_packet)->part.high,
            ((WPE_StatField*)&iw_flow_stats.forward_packet)->part.low);
 
+   printf( "TX Queue Drop Packets:   %08x%08x\n",
+           ((WPE_StatField*)&iw_flow_stats.tx_queue_drop_packets)->part.high,
+           ((WPE_StatField*)&iw_flow_stats.tx_queue_drop_packets)->part.low);
    printf("\n");
 }
 
