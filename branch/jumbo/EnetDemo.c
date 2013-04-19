@@ -470,8 +470,6 @@ int main (int argc, WP_CHAR ** argv)
 	printf ("after lock init\n");
 
 
-
-
 #ifdef LOCK_AT_START
 	WPL_Lock(WPL_THREAD_LOCK_KEY, &eoam_lock);
 #endif
