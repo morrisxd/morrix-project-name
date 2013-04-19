@@ -54,10 +54,12 @@ Full CLI Statistics
 /********************************************************************************
  ***                                 INCLUDES                                 ***
  *******************************************************************************/
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "config.h"
+
 
 #include "api/wp_wddi.h"
 #include "api/wp_host_io.h"
@@ -92,11 +94,14 @@ Full CLI Statistics
 #define MTU_SIZE                 1536
 #define SDU_SIZE                 2048  // Must be > MTU_SIZE + 48
 #else
-#define MTU_SIZE                 6536
-#define SDU_SIZE                 7048  // Must be > MTU_SIZE + 48
+#define MTU_SIZE_STD		 1500
+#define MTU_SIZE                 (MTU_SIZE_STD + 1024)
+#define SDU_SIZE                 (MTU_SIZE + 64)// Must be > MTU_SIZE + 48
+#define WEIGHT_SIZE		(64 * 128/ SDU_SIZE  - 1)
 #endif
 
 #define PACKET_SIZE              2500
+#define CIR_EIR_RATE		(1024 * 100 * 8)
 
 // Main Defines
 #define USE_SW_CHANNELS 0
@@ -695,14 +700,14 @@ void WPE_InitHWCards ()
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_NORMAL);
 #else
 // loopback here will cause system stuck
-   status = WPX_BoardSerdesInit (0, WP_PORT_ENET4, WPX_SERDES_NORMAL);
+   status = WPX_BoardSerdesInit (0, EGRESS_PORT, WPX_SERDES_NORMAL);
 #endif
 
    terminate_on_error (status, "WPX_BoardSerdesInit 7()");
 #if 0
    status = WPX_BoardSerdesInit (0, WP_PORT_ENET8, WPX_SERDES_NORMAL);
 #else
-   status = WPX_BoardSerdesInit (0, WP_PORT_ENET3, WPX_SERDES_NORMAL);
+   status = WPX_BoardSerdesInit (0, INGRESS_PORT, WPX_SERDES_NORMAL);
 #endif
    terminate_on_error (status, "WPX_BoardSerdesInit 8()");
 }
@@ -1198,7 +1203,7 @@ void WPE_CreateFastEnetPortDevice ()
 #if 0
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7, &enet_port_config);
 #else
-      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET4, &enet_port_config);
+      WP_PortCreate (WP_WINPATH (0), EGRESS_PORT, &enet_port_config);
 #endif
    terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
    enet_dev_config.max_tx_channels = NUM_OF_FAST_ENET_TX_CHANNELS;
@@ -1300,7 +1305,7 @@ void WPE_CreateHierEnetPortDevice ()
 #if 0
       WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET8, &enet_port_config);
 #else
-      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET3, &enet_port_config);
+      WP_PortCreate (WP_WINPATH (0), INGRESS_PORT, &enet_port_config);
 #endif
    terminate_on_error (port_hier_enet,
                        "WP_PortCreate() Hierarchical ENET");
@@ -1788,13 +1793,13 @@ void WPE_CreateHierHWEnetRxTxChannel ()
 
    WP_fmu_shaping_cir_eir cir_eir_shaping_param = {
 
-      /* cir; */ 100000, 	/* bits/second */
+      /* cir; */ CIR_EIR_RATE, 	/* bits/second */
 #if 0
       /* cbs; */ 1000, 		/* Committed Burst Size in bits */
 #else
       /* cbs; */ 100000, 		/* Committed Burst Size in bits */
 #endif
-      /* eir; */ 100000, 	/* bits/second */
+      /* eir; */ CIR_EIR_RATE, 	/* bits/second */
 #if 0
       /* ebs; */ 1000, 		/* Committed Burst Size in bits */
 #else
@@ -1861,7 +1866,7 @@ void WPE_CreateL1FMUGroups (void)
 #if 1
    WP_fmu_shaping_cir_eir my_l1_group_shaping_params = {
 
-      /* cir */ 1000000,
+      /* cir */ CIR_EIR_RATE,
       /* cbs */ 80000,
       /* eir */ 0,
       /* ebs */ 0,
@@ -1873,14 +1878,14 @@ void WPE_CreateL1FMUGroups (void)
 #if 0
       /* weight */ 1,
 #else
-      /* weight */ 1024 * 10,
+      /* weight */ WEIGHT_SIZE,
 #endif
       /* flags */ 0,
    };
    WP_shaping_group_type_packet enet_group_l1_config = {
 
       /* group_level */       WP_L1_GROUP,
-#if 1
+#if 0
       /* tx_shaping_type */   WP_FMU_SHAPING_TYPE_WFQ, 
       /* shaping_params */    &l1_group_shaping_params,
 #else
@@ -1893,7 +1898,8 @@ void WPE_CreateL1FMUGroups (void)
       /* block_mode */        0,
    };
 
-   l1_group_shaping_params.weight = 100000;
+printf ("weight(%d)\n", WEIGHT_SIZE);
+   l1_group_shaping_params.weight = WEIGHT_SIZE;
    my_l1_group_shaping_params.cir = 1000000;
 
    for (entry = 0; entry < NUM_OF_L1_GROUP /* 1 */ ; entry++)
@@ -1917,8 +1923,7 @@ void WPE_CreateL2FMUGroups (void)
    WP_handle block_handle;
 
    WP_fmu_shaping_cir_eir l2_group_shaping_params = {
-
-      /* cir */ 1000000,
+      /* cir */ CIR_EIR_RATE,
       /* cbs */ 80000,
       /* eir */ 0,
       /* ebs */ 0,
@@ -3140,7 +3145,7 @@ extern void WPI_HwWinnetSgmiiAnProceed(WP_U32 wpid, WP_U32 event_bits);
 void *LearningPoll(void *i)
 {
 	WP_U8 iii = 0;
-	WP_U8 jjj = 15;
+	WP_U8 jjj = 2;
 	WP_handle status = 0;
 	WP_U8 max_ch_tx = 0;
 	WP_U8 max_ch_rx = 0;
@@ -3191,7 +3196,7 @@ void *LearningPoll(void *i)
 			WPL_Delay(DELAY_COUNT);
 		}
 
-		continue;
+		// continue;
 
 		printf ("change to (%s)count(%10d)\n", (WP_ENET_1000_BASE_X==interface_mode)?"WP_ENET_1000_BASE_X\t":"WP_ENET_SGMII_AN\t", switch_counter);
 
