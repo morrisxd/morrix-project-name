@@ -1,0 +1,160 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+ATM	.\gbe_term.c	66;"	d	file:
+ETH_LOOPBACKno	.\gbe_term.c	73;"	d	file:
+FRAMED	.\gbe_term.c	75;"	d	file:
+HDLC_FRno	.\gbe_term.c	69;"	d	file:
+HDLC_TRANSno	.\gbe_term.c	68;"	d	file:
+HDLCno	.\gbe_term.c	67;"	d	file:
+LINE_PROTECTIONno	.\gbe_term.c	77;"	d	file:
+LINK_STATUS_KO	.\gbe_term.c	615;"	d	file:
+LINK_STATUS_OK	.\gbe_term.c	614;"	d	file:
+MAP_UA_LSR	.\gbe_term.c	3567;"	d	file:
+MAP_UA_RBR	.\gbe_term.c	3566;"	d	file:
+MAP_WN0_TSTAT_0	.\gbe_term.c	582;"	d	file:
+MAP_WN0_TSTAT_1	.\gbe_term.c	583;"	d	file:
+MAP_WN1_TSTAT_0	.\gbe_term.c	584;"	d	file:
+MAP_WN1_TSTAT_1	.\gbe_term.c	585;"	d	file:
+MAP_WN2_TSTAT_0	.\gbe_term.c	586;"	d	file:
+MAP_WN2_TSTAT_1	.\gbe_term.c	587;"	d	file:
+MAP_WN3_TSTAT_0	.\gbe_term.c	588;"	d	file:
+MAP_WN3_TSTAT_1	.\gbe_term.c	589;"	d	file:
+MAP_WN4_TSTAT_0	.\gbe_term.c	590;"	d	file:
+MAP_WN4_TSTAT_1	.\gbe_term.c	591;"	d	file:
+MAP_WN5_TSTAT_0	.\gbe_term.c	592;"	d	file:
+MAP_WN5_TSTAT_1	.\gbe_term.c	593;"	d	file:
+MAP_WN6_TSTAT_0	.\gbe_term.c	594;"	d	file:
+MAP_WN6_TSTAT_1	.\gbe_term.c	595;"	d	file:
+MAP_WN7_TSTAT_0	.\gbe_term.c	596;"	d	file:
+MAP_WN7_TSTAT_1	.\gbe_term.c	597;"	d	file:
+My_AppIndicateErrors	.\gbe_term.c	/^static void My_AppIndicateErrors(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+My_AppIndicateEventRx	.\gbe_term.c	/^static void My_AppIndicateEventRx(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+My_AppIndicateEventTx	.\gbe_term.c	/^static void My_AppIndicateEventTx(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+PCI_CONSOLE_READ_STATUS_MASK	.\gbe_term.c	3586;"	d	file:
+STM1_LOOPBACKno	.\gbe_term.c	72;"	d	file:
+StatField	.\gbe_term.c	/^typedef union StatField$/;"	u	file:
+TAG_ATM0	.\gbe_term.c	81;"	d	file:
+TAG_ETH0	.\gbe_term.c	79;"	d	file:
+TAG_ETH0_L2	.\gbe_term.c	80;"	d	file:
+TAG_FR0	.\gbe_term.c	82;"	d	file:
+TAG_HDLC0	.\gbe_term.c	83;"	d	file:
+TAG_TRANS0	.\gbe_term.c	84;"	d	file:
+TRANSno	.\gbe_term.c	70;"	d	file:
+UART_CONSOLE	.\gbe_term.c	3563;"	d	file:
+WEB_UART_STATUS_DR	.\gbe_term.c	3565;"	d	file:
+WPE_StatField	.\gbe_term.c	/^} WPE_StatField;$/;"	t	typeref:union:StatField	file:
+WPE_StatHsEnet	.\gbe_term.c	/^static void WPE_StatHsEnet(WP_handle hs_device)$/;"	f	file:
+WT_Eint3Interrupt	.\gbe_term.c	/^void WT_Eint3Interrupt(WP_U32 wpid, WP_U32 signal_info)$/;"	f
+WT_Identify	.\wt_util.c	/^void WT_Identify(void)$/;"	f
+WT_TranslateAsciiToHex	.\wt_util.c	/^void WT_TranslateAsciiToHex(WP_CHAR *Hex, WP_CHAR *Ascii,$/;"	f
+WUFE_UFE4	.\gbe_term.c	48;"	d	file:
+alarm_cback_S1	.\gbe_term.c	/^static void alarm_cback_S1(U8 iDevice, U8 iLinePort, U8 S1)$/;"	f	file:
+alarm_cback_client	.\gbe_term.c	/^static void alarm_cback_client(U8 iDevice, $/;"	f	file:
+alarm_cback_discrete	.\gbe_term.c	/^static void alarm_cback_discrete(U8  iDevice, $/;"	f	file:
+alarm_cback_k1k2	.\gbe_term.c	/^static void alarm_cback_k1k2(U8 iDevice, $/;"	f	file:
+alarm_cback_path	.\gbe_term.c	/^static void alarm_cback_path(U8 iDevice, $/;"	f	file:
+alarm_cback_pm_client	.\gbe_term.c	/^static void alarm_cback_pm_client(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f	file:
+alarm_cback_pm_discrete	.\gbe_term.c	/^static void alarm_cback_pm_discrete(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f	file:
+alarm_cback_pm_hpath	.\gbe_term.c	/^static void alarm_cback_pm_hpath(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f	file:
+alarm_cback_pm_lpath	.\gbe_term.c	/^static void alarm_cback_pm_lpath(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f	file:
+alarm_cback_pm_port	.\gbe_term.c	/^static void alarm_cback_pm_port(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f	file:
+alarm_cback_port	.\gbe_term.c	/^static void alarm_cback_port(U8 iDevice, U8 iLinePort, U8 AlarmCategory, U8 IsAsserted)$/;"	f	file:
+appname	.\gbe_term.c	/^static WP_CHAR appname[] = "GBE TERM";$/;"	v	file:
+atmSend	.\gbe_term.c	/^static void atmSend(WP_handle handle, int iter) $/;"	f	file:
+atm_params	.\gbe_term.c	/^WP_atm_global atm_params[1] =$/;"	v
+atm_rx_no	.\gbe_term.c	/^static int atm_rx_no;$/;"	v	file:
+atm_tx_no	.\gbe_term.c	/^static int atm_tx_no;$/;"	v	file:
+buffer_data	.\gbe_term.c	/^static WP_pool_buffer_data buffer_data[1] =$/;"	v	file:
+buffer_pool	.\gbe_term.c	/^static WP_handle        iwbuffer_pool, buffer_pool;$/;"	v	file:
+calendar	.\gbe_term.c	/^static WP_calendar_wheel calendar[2] =$/;"	v	file:
+ch_config_gbe	.\gbe_term.c	/^static WP_ch_enet ch_config_gbe[1] =$/;"	v	file:
+clientAlrmStr	.\gbe_term.c	/^static char clientAlrmStr[6][8] = $/;"	v	file:
+context	.\gbe_term.c	/^static WP_context context[1] =$/;"	v	file:
+dfc_sys_info	.\gbe_term.c	/^static WP_dfc_sys_info dfc_sys_info[1] = {$/;"	v	file:
+displayUfeEvents	.\gbe_term.c	/^void displayUfeEvents(void) $/;"	f
+emphy_iw_config	.\gbe_term.c	/^static WP_port_upi_iw_ext emphy_iw_config[1] =$/;"	v	file:
+enet_link_status	.\gbe_term.c	/^static void enet_link_status(int eth_port) {$/;"	f	file:
+ethSend	.\gbe_term.c	/^static void ethSend(WP_handle handle, int iter) $/;"	f	file:
+eth_link_status	.\gbe_term.c	/^static int eth_link_status(int port)$/;"	f	file:
+eth_rx_no	.\gbe_term.c	/^static int eth_rx_no;$/;"	v	file:
+eth_tx_no	.\gbe_term.c	/^static int eth_tx_no;$/;"	v	file:
+event_handler	.\gbe_term.c	/^static void *event_handler( void *dummy)$/;"	f	file:
+fflush	.\gbe_term.c	37;"	d	file:
+field	.\gbe_term.c	/^    WP_U64 field;$/;"	m	union:StatField	file:
+fileLineError	.\gbe_term.c	/^static void fileLineError(const WP_CHAR *file, const WP_CHAR *function, WP_S32 line, WP_S32 error_id) {$/;"	f	file:
+flexmux_terminate_on_error	.\gbe_term.c	/^flexmux_terminate_on_error(WP_handle handle, WP_CHAR *s)$/;"	f	file:
+frSend	.\gbe_term.c	/^static void frSend(WP_handle handle, int iter) $/;"	f	file:
+g_data	.\gbe_term.c	/^static WP_U32 g_data;$/;"	v	file:
+g_info	.\gbe_term.c	/^static WP_U32 g_info;$/;"	v	file:
+g_tag	.\gbe_term.c	/^static WP_tag g_tag;$/;"	v	file:
+gbe_dev	.\gbe_term.c	/^static WP_device_enet gbe_dev[1] =$/;"	v	file:
+gbe_s	.\gbe_term.c	/^static WP_port_enet gbe_s[1] =$/;"	v	file:
+gbedev	.\gbe_term.c	/^static WP_handle        gbep[10], gbedev[10], tdm_device[4];$/;"	v	file:
+gbep	.\gbe_term.c	/^static WP_handle        gbep[10], gbedev[10], tdm_device[4];$/;"	v	file:
+hdlcSend	.\gbe_term.c	/^static void hdlcSend(WP_handle handle, int iter) $/;"	f	file:
+high	.\gbe_term.c	/^        WP_U32 high;$/;"	m	struct:StatField::__anon1	file:
+htonl	.\gbe_term.c	35;"	d	file:
+int_queue_tables	.\gbe_term.c	/^static WP_int_queue_table int_queue_tables =$/;"	v	file:
+ipv4_sys_one	.\gbe_term.c	/^static WP_iw_ipv4_sys_info ipv4_sys_one[1] =$/;"	v	file:
+iw_agg_g	.\gbe_term.c	/^static WP_handle        iw_sys,iw_agg_g[10], rx_host_term;$/;"	v	file:
+iw_agg_routing	.\gbe_term.c	/^static WP_iw_agg_routing iw_agg_routing [1] = {$/;"	v	file:
+iw_sys	.\gbe_term.c	/^static WP_handle        iw_sys,iw_agg_g[10], rx_host_term;$/;"	v	file:
+iwbuffer_pool	.\gbe_term.c	/^static WP_handle        iwbuffer_pool, buffer_pool;$/;"	v	file:
+iwdev	.\gbe_term.c	/^static WP_handle        iwp,iwdev;$/;"	v	file:
+iwp	.\gbe_term.c	/^static WP_handle        iwp,iwdev;$/;"	v	file:
+iwport_stats	.\gbe_term.c	/^static void iwport_stats(WP_handle iw_port)$/;"	f	file:
+kill_all_threads	.\gbe_term.c	/^static int kill_all_threads = 0;$/;"	v	file:
+led_handler	.\gbe_term.c	/^static void *led_handler(void *dummy)$/;"	f	file:
+lineAlrmStr	.\gbe_term.c	/^static char lineAlrmStr[54][12] = $/;"	v	file:
+link_status	.\gbe_term.c	/^static int link_status(int sfp_port)$/;"	f	file:
+low	.\gbe_term.c	/^        WP_U32 low;$/;"	m	struct:StatField::__anon1	file:
+mailbox_handler	.\gbe_term.c	/^static void *mailbox_handler(void *dummy)$/;"	f	file:
+main	.\gbe_term.c	/^WP_S32 main(WP_S32 argc, WP_CHAR **argv)$/;"	f
+max_iw	.\gbe_term.c	/^static WP_iw_global  max_iw[1] =$/;"	v	file:
+mbox_sema	.\gbe_term.c	/^static sem_t mbox_sema;$/;"	v	file:
+ntohl	.\gbe_term.c	36;"	d	file:
+oc3_link_status	.\gbe_term.c	/^static void oc3_link_status(int atm_port) {$/;"	f	file:
+part	.\gbe_term.c	/^    } part;$/;"	m	union:StatField	typeref:struct:StatField::__anon1	file:
+pciConsoleReadData	.\gbe_term.c	/^volatile WP_U32 *pciConsoleReadData    = (volatile WP_U32 *)0xbe100468;$/;"	v
+pciConsoleStatus	.\gbe_term.c	/^volatile WP_U32 *pciConsoleStatus      = (volatile WP_U32 *)0xbe100410;$/;"	v
+printAtmDeviceStats	.\gbe_term.c	/^static void printAtmDeviceStats(WP_handle handle) {$/;"	f	file:
+printFrDeviceStats	.\gbe_term.c	/^static void printFrDeviceStats(WP_handle handle, WP_handle tx_handle, WP_handle rx_handle) {$/;"	f	file:
+printHdlcDeviceStats	.\gbe_term.c	/^static void printHdlcDeviceStats(WP_handle handle, WP_handle tx_handle, WP_handle rx_handle) {$/;"	f	file:
+printTransDeviceStats	.\gbe_term.c	/^static void printTransDeviceStats(WP_handle handle, WP_handle rx_handle, WP_handle agg) {$/;"	f	file:
+print_winmon_env	.\gbe_term.c	/^int print_winmon_env (void)$/;"	f
+process_atm	.\gbe_term.c	/^static void process_atm(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+process_enet	.\gbe_term.c	/^static void process_enet(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+process_enet_l2	.\gbe_term.c	/^static void process_enet_l2(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+process_fr	.\gbe_term.c	/^static void process_fr(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+process_hdlc	.\gbe_term.c	/^static void process_hdlc(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+process_trans	.\gbe_term.c	/^static void process_trans(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+qn_host	.\gbe_term.c	/^static WP_qnode_hostq qn_host[1] =$/;"	v	file:
+qn_iw	.\gbe_term.c	/^static WP_qnode_iwq qn_iw[1]=$/;"	v	file:
+qniw	.\gbe_term.c	/^static WP_handle        qniw;$/;"	v	file:
+qniw_enet	.\gbe_term.c	/^static WP_handle        qniw_enet;$/;"	v	file:
+ring_data	.\gbe_term.c	/^static WP_pool_ring_data ring_data[] = $/;"	v	file:
+route_port	.\gbe_term.c	/^static WP_iw_route_port route_port[1] =$/;"	v	file:
+routing_sys	.\gbe_term.c	/^static WP_iw_sys_routing routing_sys[1]=$/;"	v	file:
+rx_binding	.\gbe_term.c	/^WP_rx_binding_routing rx_binding[1]=$/;"	v
+rx_ch	.\gbe_term.c	/^static WP_ch_iw_rx rx_ch [1] = {$/;"	v	file:
+rx_enet_handle	.\gbe_term.c	/^static WP_handle        tx_enet_handle[10], rx_enet_handle[10];$/;"	v	file:
+rx_host_term	.\gbe_term.c	/^static WP_handle        iw_sys,iw_agg_g[10], rx_host_term;$/;"	v	file:
+rx_tdm_handle	.\gbe_term.c	/^static WP_handle        tx_tdm_handle[4], rx_tdm_handle[4];$/;"	v	file:
+sema	.\gbe_term.c	/^static sem_t sema;$/;"	v	file:
+socketAlarmStr	.\gbe_term.c	/^static char socketAlarmStr[3][8] =$/;"	v	file:
+stm1_link_status	.\gbe_term.c	/^static int stm1_link_status(int port)$/;"	f	file:
+sys_dcache_invalidate_index	.\wt_util.c	/^void sys_dcache_invalidate_index(void) {$/;"	f
+tdm_device	.\gbe_term.c	/^static WP_handle        gbep[10], gbedev[10], tdm_device[4];$/;"	v	file:
+terminate_on_error	.\gbe_term.c	/^terminate_on_error(WP_handle handle, WP_CHAR *s)$/;"	f	file:
+transSend	.\gbe_term.c	/^static void transSend(WP_handle handle, int iter) $/;"	f	file:
+tx_enet_handle	.\gbe_term.c	/^static WP_handle        tx_enet_handle[10], rx_enet_handle[10];$/;"	v	file:
+tx_qos_iw	.\gbe_term.c	/^static WP_tx_binding  tx_qos_iw[1]=$/;"	v	file:
+tx_tdm_handle	.\gbe_term.c	/^static WP_handle        tx_tdm_handle[4], rx_tdm_handle[4];$/;"	v	file:
+ufe_e1_slots	.\gbe_term.c	/^WP_U32 ufe_e1_slots[] = {$/;"	v
+wddiLog	.\gbe_term.c	/^static void wddiLog(int level, char *msg) {$/;"	f	file:
+wufe_terminate_on_error	.\gbe_term.c	/^wufe_terminate_on_error(WP_handle handle, WP_CHAR *s)$/;"	f	file:
+xs_getchar	.\gbe_term.c	/^static int xs_getchar(unsigned char *c, unsigned int block) {$/;"	f	file:
