@@ -1,0 +1,1 @@
+this program is for reading out the information inside the SFP.
