@@ -3120,6 +3120,8 @@ void WPE_CLI (void)
 {
    char InputBuf[256];
    int i = 0;
+   static int flag = 1;
+   unsigned int tmp = 0;
 
    InputBuf[0] = '\0';
    while ((InputBuf[0] != 'q') && (InputBuf[0] != 'k'))
@@ -3142,6 +3144,7 @@ void WPE_CLI (void)
       printf ("\t\t\t9-disable/enable thread)\n");
       printf ("\t\t\tc-print all error_name)\n");
       printf ("\t\t\td-print all wufe_error_name)\n");
+      printf ("\t\t\te-(switch NES)\n");
 
 #if 0
       gets (InputBuf);
@@ -3244,7 +3247,23 @@ void WPE_CLI (void)
 		}
 		break;
 	}
-
+      case 'e':
+	tmp = *(volatile unsigned int *)(unsigned long)(0x1e0082c4 + WPL_RIF_VIRTUAL(0, 0));
+	if (flag)
+	{
+		tmp = tmp & (~0x000003e0);
+		tmp = tmp | 0x00000080;
+		flag = 0;
+		printf ("set NES\n");
+	} else {
+		tmp = tmp & (~0x000003e0);
+		tmp = tmp;
+		flag = 1;
+		printf ("clear NES\n");
+	}
+ 	printf ("WPL_RIF_VIRTUAL=(%x)\n", WPL_RIF_VIRTUAL(0,0));
+	*(volatile unsigned int *)(unsigned long)(0x1e0082c4 + WPL_RIF_VIRTUAL(0, 0)) = tmp;
+	break;
       case 'f':
          printf
             ("********************* SHOW FDB **********************   \n");
