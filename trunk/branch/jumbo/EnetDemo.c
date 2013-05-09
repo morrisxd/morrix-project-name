@@ -76,6 +76,8 @@ Full CLI Statistics
 
 #include "wufe_errors.h"
 
+#include "map.h"
+
 /********************************************************************************
  ***                                 DEFINES                                  ***
  *******************************************************************************/
@@ -3248,7 +3250,8 @@ void WPE_CLI (void)
 		break;
 	}
       case 'e':
-	tmp = *(volatile unsigned int *)(unsigned long)(0x1e0082c4 + WPL_RIF_VIRTUAL(0, 0));
+	tmp = *(volatile unsigned int *)(unsigned long)(MAP_SERDES3_IO_CTRL_3 + WPL_RIF_VIRTUAL(0, 0));
+	printf ("current 0x1e0082c4=(%x)\n", tmp);
 	if (flag)
 	{
 		tmp = tmp & (~0x000003e0);
