@@ -58,7 +58,6 @@ Full CLI Statistics
 #include <stdio.h>
 #include <string.h>
 
-#include "config.h"
 
 
 #include "api/wp_wddi.h"
@@ -76,6 +75,7 @@ Full CLI Statistics
 
 #include "wufe_errors.h"
 
+#include "config.h"
 #include "map.h"
 
 /********************************************************************************
@@ -370,7 +370,35 @@ WP_U32 interface_mode = 0;
 
 void *LearningPoll(void *i);
 
+void init_vars (void)
+{
+	map_address_reg[WP_PORT_ENET1].tcntr = 0;
+	map_address_reg[WP_PORT_ENET2].tcntr = 0;
+	map_address_reg[WP_PORT_ENET3].tcntr = 0;
+	map_address_reg[WP_PORT_ENET4].tcntr = MAP_SERDES3_IO_CTRL_3;
+	map_address_reg[WP_PORT_ENET5].tcntr = 0;
+	map_address_reg[WP_PORT_ENET6].tcntr = 0;
+	map_address_reg[WP_PORT_ENET7].tcntr = 0;
+	map_address_reg[WP_PORT_ENET8].tcntr = 0;
+	map_address_reg[WP_PORT_ENET9].tcntr = 0;
+	map_address_reg[WP_PORT_ENET10].tcntr = 0;
+	map_address_reg[WP_PORT_ENET11].tcntr = 0;
+	map_address_reg[WP_PORT_ENET12].tcntr = 0;
 
+
+	map_address_reg[WP_PORT_ENET1].serdes_io_ctrl = 0;
+	map_address_reg[WP_PORT_ENET2].serdes_io_ctrl = 0;
+	map_address_reg[WP_PORT_ENET3].serdes_io_ctrl = 0;
+	map_address_reg[WP_PORT_ENET4].serdes_io_ctrl = MAP_SERDES3_IO_CTRL_3;
+	map_address_reg[WP_PORT_ENET5].serdes_io_ctrl = MAP_SERDES3_IO_CTRL_2;
+	map_address_reg[WP_PORT_ENET6].serdes_io_ctrl = 0;
+	map_address_reg[WP_PORT_ENET7].serdes_io_ctrl = MAP_SERDES1_IO_CTRL_1;
+	map_address_reg[WP_PORT_ENET8].serdes_io_ctrl = MAP_SERDES0_IO_CTRL_1;
+	map_address_reg[WP_PORT_ENET9].serdes_io_ctrl = 0;
+	map_address_reg[WP_PORT_ENET10].serdes_io_ctrl = 0;
+	map_address_reg[WP_PORT_ENET11].serdes_io_ctrl = 0;
+	map_address_reg[WP_PORT_ENET12].serdes_io_ctrl = 0;
+}
 
 /********************************************************************************
  ***                        Functions Implementations: Main                   ***
