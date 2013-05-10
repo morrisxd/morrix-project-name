@@ -1,9 +1,8 @@
+filename=enet_432_linux.exe
+oldfile=EnetDemo
 ctags -R
-make TEST=EnetDemo
-# copy_to_tftpboot.sh
-cp bin/EnetDemo /tftpboot/jumbo_422_linux.exe
-echo cp bin/EnetDemo /tftpboot/jumbo_422_linux.exe
-# cd bin
-# mv EnetDemo EnetDemo_lin.exe 
-# up EnetDemo_lin.exe bin
+make TEST=$oldfile
+cp ./bin/$oldfile ./bin/$filename
+# echo cp bin/$oldfile{.exe} $filename
 
+copy_to_tftpboot.sh
