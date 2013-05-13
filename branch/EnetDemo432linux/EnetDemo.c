@@ -71,6 +71,7 @@ Full CLI Statistics
 #include "wpl_locks.h"
 
 
+
 #include "AlexR_3.0_Statistics.c"
 
 #include "wufe_errors.h"
@@ -86,7 +87,7 @@ Full CLI Statistics
 #define USE_SIMPLE_DEVICE	(0)
 #define WPL_THREAD_LOCK_KEY \
    WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
-#define DELAY_COUNT	(100000*10)	// 2 seconds, micro seconds
+#define DELAY_COUNT	(10000 * 100)	// micro seconds
 #define ENABLE_TRANSFER          (0)
 #define MAX_MACS                 4
 #define N_QNODES                 3
@@ -725,20 +726,12 @@ void WPE_InitHWCards ()
 
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_2UPI_1XGI_10SGMII);
    terminate_on_error (status, "WPX_CONFIGURE_2UPI_1XGI_10SGMII()");
-#if 0
-   status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_NORMAL);
-#else
-// loopback here will cause system stuck
-   status = WPX_BoardSerdesInit (0, EGRESS_PORT, WPX_SERDES_NORMAL);
-#endif
 
-   terminate_on_error (status, "WPX_BoardSerdesInit 7()");
-#if 0
-   status = WPX_BoardSerdesInit (0, WP_PORT_ENET8, WPX_SERDES_NORMAL);
-#else
+   status = WPX_BoardSerdesInit (0, EGRESS_PORT, WPX_SERDES_NORMAL);
+   terminate_on_error (status, "WPX_BoardSerdesInit EGRESS()");
+
    status = WPX_BoardSerdesInit (0, INGRESS_PORT, WPX_SERDES_NORMAL);
-#endif
-   terminate_on_error (status, "WPX_BoardSerdesInit 8()");
+   terminate_on_error (status, "WPX_BoardSerdesInit INGRESS()");
 }
 
 /*
@@ -1228,13 +1221,11 @@ void WPE_CreateFastEnetPortDevice ()
    enet_port_config.pkt_limits.max_rx_channels =
       NUM_OF_FAST_ENET_RX_CHANNELS;
    enet_port_config.flowmode = WP_FLOWMODE_FAST;   
+
    port_enet =
-#if 0
-      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7, &enet_port_config);
-#else
       WP_PortCreate (WP_WINPATH (0), EGRESS_PORT, &enet_port_config);
-#endif
    terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
+
    enet_dev_config.max_tx_channels = NUM_OF_FAST_ENET_TX_CHANNELS;
 
 
@@ -1330,14 +1321,12 @@ void WPE_CreateHierEnetPortDevice ()
    enet_port_config.pkt_limits.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;
    enet_port_config.pkt_limits.max_rx_channels = NUM_OF_HIER_ENET_RX_CHANNELS;
    enet_port_config.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
+
    port_hier_enet =
-#if 0
-      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET8, &enet_port_config);
-#else
       WP_PortCreate (WP_WINPATH (0), INGRESS_PORT, &enet_port_config);
-#endif
    terminate_on_error (port_hier_enet,
                        "WP_PortCreate() Hierarchical ENET");
+
    hier_enet_dev_config.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;
    dev_hier_enet =
       WP_DeviceCreate (port_hier_enet, WP_PHY (0),
@@ -1823,17 +1812,9 @@ void WPE_CreateHierHWEnetRxTxChannel ()
    WP_fmu_shaping_cir_eir cir_eir_shaping_param = {
 
       /* cir; */ CIR_EIR_RATE, 	/* bits/second */
-#if 0
-      /* cbs; */ 1000, 		/* Committed Burst Size in bits */
-#else
-      /* cbs; */ 100000, 		/* Committed Burst Size in bits */
-#endif
+      /* cbs; */ 100000, 	/* Committed Burst Size in bits */
       /* eir; */ CIR_EIR_RATE, 	/* bits/second */
-#if 0
-      /* ebs; */ 1000, 		/* Committed Burst Size in bits */
-#else
-      /* ebs; */ 100000, 		/* Committed Burst Size in bits */
-#endif
+      /* ebs; */ 100000, 	/* Committed Burst Size in bits */
       /* flags */ 0,
    };
 
@@ -1901,8 +1882,10 @@ void WPE_CreateL1FMUGroups (void)
       /* ebs */ 0,
       /* flags */ 0
    };
-
 #endif /*  */
+
+
+
    WP_fmu_shaping_wfq l1_group_shaping_params = {
 #if 0
       /* weight */ 1,
@@ -3278,22 +3261,27 @@ void WPE_CLI (void)
 		break;
 	}
       case 'e':
-	tmp = *(volatile unsigned int *)(unsigned long)(MAP_SERDES3_IO_CTRL_3 + WPL_RIF_VIRTUAL(0, 0));
+
+#define ME_FIELD_MASK(S, W)	(((1 << W) - 1) << (S))
+#define SERDES_NES_CTRL	MAP_SERDES1_IO_CTRL_1 
+#define SERDES_IO_CTRL_MASK_ME	(0x003e0000)
+
+	tmp = *(volatile unsigned int *)(unsigned long)(SERDES_NES_CTRL	+ WPL_RIF_VIRTUAL(0, 0));
+
 	printf ("current 0x1e0082c4=(%x)\n", tmp);
 	if (flag)
 	{
-		tmp = tmp & (~0x000003e0);
-		tmp = tmp | 0x00000080;
+		tmp = tmp & (~(ME_FIELD_MASK(17, 5)));
+		tmp = tmp | (0x04 << 17);
 		flag = 0;
 		printf ("set NES\n");
 	} else {
-		tmp = tmp & (~0x000003e0);
-		tmp = tmp;
+		tmp = tmp & (~(ME_FIELD_MASK(17, 5)));
 		flag = 1;
 		printf ("clear NES\n");
 	}
  	printf ("WPL_RIF_VIRTUAL=(%x)\n", WPL_RIF_VIRTUAL(0,0));
-	*(volatile unsigned int *)(unsigned long)(0x1e0082c4 + WPL_RIF_VIRTUAL(0, 0)) = tmp;
+	*(volatile unsigned int *)(unsigned long)(SERDES_NES_CTRL + WPL_RIF_VIRTUAL(0, 0)) = tmp;
 	break;
       case 'f':
          printf
@@ -3404,7 +3392,7 @@ extern void WPI_HwWinnetSgmiiAnProceed(WP_U32 wpid, WP_U32 event_bits);
 void *LearningPoll(void *i)
 {
 	WP_U8 iii = 0;
-	WP_U8 jjj = 2;
+	WP_U8 jjj = SECONDS_TO_WAIT;
 	WP_handle status = 0;
 	WP_U8 max_ch_tx = 0;
 	WP_U8 max_ch_rx = 0;
@@ -3453,6 +3441,9 @@ void *LearningPoll(void *i)
 		for (iii = 0; iii < jjj; iii ++)
 		{
 			WPL_Delay(DELAY_COUNT);
+			if (2 == iii)
+			{
+			}
 		}
 
 		if (g_threadStop)
