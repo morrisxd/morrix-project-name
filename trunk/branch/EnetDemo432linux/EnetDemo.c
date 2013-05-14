@@ -3141,7 +3141,7 @@ void WPE_CLI (void)
    while ((InputBuf[0] != 'q') && (InputBuf[0] != 'k'))
 
    {
-      printf ("\n\n\n");
+      printf ("\n");
       printf
          ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET4/ENET7/EXGRESS),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
@@ -3154,12 +3154,12 @@ void WPE_CLI (void)
       printf
          ("       QDepth control : \n \t\t\tb-get WP_ChannelQDepth(tx_gbe_channel[0])\n");
       printf
-         ("       All    control : \n \t\t\ta-get all statistics)\n");
+         ("\t\t\ta-get all statistics)\n");
       printf ("\t\t\t9-disable/enable thread)\n");
       printf ("\t\t\tc-print all error_name)\n");
       printf ("\t\t\td-print all wufe_error_name)\n");
-      printf ("\t\t\te-(switch NES)\n");
-      printf ("\t\t\tg-(switch NES)\n");
+      printf ("\t\t\te-(switch NES on the EGRESS port)\n");
+      printf ("\t\t\tg-(adjust the delay(looply)\n");
 
 #if 0
       gets (InputBuf);
@@ -3265,7 +3265,7 @@ void WPE_CLI (void)
       case 'e':
 
 #define ME_FIELD_MASK(S, W)	(((1 << W) - 1) << (S))
-#define SERDES_NES_CTRL	MAP_SERDES1_IO_CTRL_1 
+#define SERDES_NES_CTRL	MAP_SERDES4_IO_CTRL_4
 #define SERDES_IO_CTRL_MASK_ME	(0x003e0000)
 
 	tmp = *(volatile unsigned int *)(unsigned long)(SERDES_NES_CTRL	+ WPL_RIF_VIRTUAL(0, 0));
@@ -3273,12 +3273,12 @@ void WPE_CLI (void)
 	printf ("current 0x1e0082c4=(%x)\n", tmp);
 	if (flag)
 	{
-		tmp = tmp & (~(ME_FIELD_MASK(17, 5)));
-		tmp = tmp | (0x04 << 17);
+		tmp = tmp & (~(ME_FIELD_MASK(5, 5)));
+		tmp = tmp | (0x04 << 5);
 		flag = 0;
 		printf ("set NES\n");
 	} else {
-		tmp = tmp & (~(ME_FIELD_MASK(17, 5)));
+		tmp = tmp & (~(ME_FIELD_MASK(5, 5)));
 		flag = 1;
 		printf ("clear NES\n");
 	}
