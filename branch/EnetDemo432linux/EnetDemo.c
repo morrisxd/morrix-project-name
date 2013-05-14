@@ -351,6 +351,7 @@ static WP_U32 g_event;
 static WP_U32 g_info;
 static WP_U32 g_flag = 0;
 static WP_U32 g_threadStop = 1;
+static WP_U32 jjj = SECONDS_TO_WAIT;
 
 void app_overrun_callback (WP_U32 wpid, WP_U32 queue_id, WP_U32 overrun_count)
 {
@@ -3158,6 +3159,7 @@ void WPE_CLI (void)
       printf ("\t\t\tc-print all error_name)\n");
       printf ("\t\t\td-print all wufe_error_name)\n");
       printf ("\t\t\te-(switch NES)\n");
+      printf ("\t\t\tg-(switch NES)\n");
 
 #if 0
       gets (InputBuf);
@@ -3293,6 +3295,10 @@ void WPE_CLI (void)
             ("********************* WPE_ShowAvailableBusesMemory **********************   \n");
          WPE_ShowAvailableBusesMemory ();
          break;
+      case 'g':
+	jjj = (jjj + 1) % 10;
+	printf ("current jjj=(%d)\n", jjj);
+	break;
       case 'p':
 #if 1
    for (i = 0; i < 10; i++)
@@ -3392,7 +3398,6 @@ extern void WPI_HwWinnetSgmiiAnProceed(WP_U32 wpid, WP_U32 event_bits);
 void *LearningPoll(void *i)
 {
 	WP_U8 iii = 0;
-	WP_U8 jjj = SECONDS_TO_WAIT;
 	WP_handle status = 0;
 	WP_U8 max_ch_tx = 0;
 	WP_U8 max_ch_rx = 0;
