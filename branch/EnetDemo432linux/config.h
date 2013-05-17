@@ -1,6 +1,12 @@
 #if 1
+#if 0
 #define INGRESS_PORT	WP_PORT_ENET15	// IXIA->wds3
 #define EGRESS_PORT	WP_PORT_ENET16	// wds3->IXIA
+#endif
+
+#define INGRESS_PORT	WP_PORT_ENET15	// IXIA->wds3
+#define EGRESS_PORT	WP_PORT_ENET16// wds3->IXIA
+
 // #define INGRESS_PORT	WP_PORT_ENET5	// IXIA->wds3
 // #define EGRESS_PORT	WP_PORT_ENET4	// wds3->IXIA
 #else
@@ -8,7 +14,7 @@
 #define EGRESS_PORT	WP_PORT_ENET7
 #endif
 
-#define SECONDS_TO_WAIT	(2)
+#define SECONDS_TO_WAIT	(8)
 
 typedef struct map_register_group {
 	WP_U32 tcntr;
