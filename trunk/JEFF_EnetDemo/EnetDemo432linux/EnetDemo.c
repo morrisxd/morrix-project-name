@@ -3226,6 +3226,7 @@ void WPE_CLI (void)
       printf ("\t\t\td-print all wufe_error_name)\n");
       printf ("\t\t\te-(switch NES on the EGRESS port)\n");
       printf ("\t\t\tg-(adjust the delay(looply)\n");
+      printf ("\t\t\tw-(invoke the winutil tool)\n");
 
 #if 0
       gets (InputBuf);
@@ -3290,9 +3291,13 @@ void WPE_CLI (void)
          break;
       case '9':
 	 if (g_threadStop)
+	{
 		g_threadStop = 0;
-	 else
+		printf ("set g_threadStop = 0\n");
+	} else {
 		g_threadStop = 1;
+		printf ("set g_threadStop = 1\n");
+	}
          break;
       case 'a':
          printf
@@ -3504,6 +3509,20 @@ void *LearningPoll(void *i)
 				WPI_HwWinnetSgmiiAnProceed);
 	while (1)
    	{
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+///////////////////// here is the delay ////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+		for (iii = 0; iii < jjj; iii ++)
+		{
+			WPL_Delay(DELAY_COUNT);
+			if (2 == iii)
+			{
+			}
+		}
+
+
 		if (g_threadStop)
 		{
 			continue;
@@ -3523,18 +3542,6 @@ void *LearningPoll(void *i)
    		my_enet_port_config.interface_mode = interface_mode;
 
 
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-///////////////////// here is the delay ////////////////
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-		for (iii = 0; iii < jjj; iii ++)
-		{
-			WPL_Delay(DELAY_COUNT);
-			if (2 == iii)
-			{
-			}
-		}
 
 
 		printf ("change to (%s)count(%10d)\n", (WP_ENET_1000_BASE_X==interface_mode)?"WP_ENET_1000_BASE_X\t":"WP_ENET_SGMII_AN\t", switch_counter);

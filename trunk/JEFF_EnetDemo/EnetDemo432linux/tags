@@ -10134,7 +10134,7 @@ MAXT_SIZE	EnetDemo.c	99;"	d	file:
 MAX_IW_FLOWS	EnetDemo.c	125;"	d	file:
 MAX_MACS	EnetDemo.c	96;"	d	file:
 MAX_VLAN_IDS	EnetDemo.c	123;"	d	file:
-ME_FIELD_MASK	EnetDemo.c	3333;"	d	file:
+ME_FIELD_MASK	EnetDemo.c	3338;"	d	file:
 MFC	EnetDemo.c	152;"	d	file:
 MTU_SIZE	EnetDemo.c	106;"	d	file:
 MTU_SIZE_STD	EnetDemo.c	105;"	d	file:
@@ -10166,8 +10166,8 @@ PHY_DIR	makefile	/^PHY_DIR = $(WDDI_DIR)\/phy$/;"	m
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
 SDU_SIZE	EnetDemo.c	107;"	d	file:
 SECONDS_TO_WAIT	config.h	12;"	d
-SERDES_IO_CTRL_MASK_ME	EnetDemo.c	3335;"	d	file:
-SERDES_NES_CTRL	EnetDemo.c	3334;"	d	file:
+SERDES_IO_CTRL_MASK_ME	EnetDemo.c	3340;"	d	file:
+SERDES_NES_CTRL	EnetDemo.c	3339;"	d	file:
 SPECIAL_FLAG	makefile	/^SPECIAL_FLAG = -lpthread$/;"	m
 StatField	AlexR_3.0_Statistics.c	/^typedef union StatField {$/;"	u	file:
 TEST_CFLAGS	makefile	/^TEST_CFLAGS = -D$(TLOG_FUNCTION) -DWT_DEBUG_LEVEL=$(TLOG_LEVEL) $(DEFINE_WEB) \\$/;"	m
