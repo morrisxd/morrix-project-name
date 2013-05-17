@@ -3209,7 +3209,7 @@ void WPE_CLI (void)
    {
       printf ("\n");
       printf
-         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET4/ENET7/EXGRESS),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
+         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET4/ENET7/EGRESS),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
          ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev(ENET3/ENET8/INGRESS),  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
       printf
@@ -3220,10 +3220,10 @@ void WPE_CLI (void)
       printf
          ("       QDepth control : \n \t\t\tb-get WP_ChannelQDepth(tx_gbe_channel[0])\n");
       printf
-         ("\t\t\ta-get all statistics)\n");
-      printf ("\t\t\t9-disable/enable thread)\n");
-      printf ("\t\t\tc-print all error_name)\n");
-      printf ("\t\t\td-print all wufe_error_name)\n");
+         ("\t\t\ta-(get all statistics)\n");
+      printf ("\t\t\t9-(disable/enable thread)\n");
+      printf ("\t\t\tc-(print all error_name)\n");
+      printf ("\t\t\td-(print all wufe_error_name)\n");
       printf ("\t\t\te-(switch NES on the EGRESS port)\n");
       printf ("\t\t\tg-(adjust the delay(looply)\n");
       printf ("\t\t\tw-(invoke the winutil tool)\n");
@@ -3517,6 +3517,7 @@ void *LearningPoll(void *i)
 		for (iii = 0; iii < jjj; iii ++)
 		{
 			WPL_Delay(DELAY_COUNT);
+			printf ("iii is (%d), jjj is(%d)\r", iii, jjj);
 			if (2 == iii)
 			{
 			}
