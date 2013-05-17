@@ -1,0 +1,1 @@
+lftp -f ./s.script

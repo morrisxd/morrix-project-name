@@ -1,8 +1,4 @@
 filename=enet_432_linux.exe
 oldfile=EnetDemo
 ctags -R
-make TEST=$oldfile
-mv ./bin/$oldfile ./bin/$filename
-# echo cp bin/$oldfile{.exe} $filename
-
-copy_to_tftpboot.sh
+make TEST=$oldfile && mv ./bin/$oldfile ./bin/$filename && ./transfer.sh
