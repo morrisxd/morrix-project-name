@@ -1,4 +1,4 @@
 filename=enet_432_linux.exe
 oldfile=EnetDemo
 ctags -R
-make TEST=$oldfile && mv ./bin/$oldfile ./bin/$filename && ./transfer.sh
+make TEST=$oldfile && mv ./bin/$oldfile ./bin/$filename && ls -l bin && ./transfer.sh
