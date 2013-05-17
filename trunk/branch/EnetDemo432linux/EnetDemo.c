@@ -217,7 +217,7 @@ WP_handle adjunct_buffer_pool, pool_host, pool_ring_host;
 WP_handle agg_tag_counter = 0;
 WP_handle port_host, dev_host, bport_host, agg_host, rx_host_channel,
    tx_host_channel;
-WP_handle port_enet, dev_enet, bport_enet, agg_enet_change_mac,
+WP_handle port_enet1, port_enet, dev_enet1, dev_enet, bport_enet, agg_enet_change_mac,
    agg_enet[NUM_OF_FAST_ENET_FAS], rx_gbe_channel,
    tx_gbe_channel[NUM_OF_FAST_ENET_TX_CHANNELS];
 WP_handle port_hier_enet, dev_hier_enet, rx_gbe_hier_channel;
@@ -728,11 +728,21 @@ void WPE_InitHWCards ()
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_2UPI_1XGI_10SGMII);
    terminate_on_error (status, "WPX_CONFIGURE_2UPI_1XGI_10SGMII()");
 
+#if 0
    status = WPX_BoardSerdesInit (0, EGRESS_PORT, WPX_SERDES_NORMAL);
    terminate_on_error (status, "WPX_BoardSerdesInit EGRESS()");
+#else
+   status = WPX_BoardSerdesInit (0, EGRESS_PORT, WPX_SERDES_LOOPBACK);
+   terminate_on_error (status, "WPX_BoardSerdesInit EGRESS()");
+#endif
 
    status = WPX_BoardSerdesInit (0, INGRESS_PORT, WPX_SERDES_NORMAL);
    terminate_on_error (status, "WPX_BoardSerdesInit INGRESS()");
+
+#if 0
+   status = WPX_BoardSerdesInit (0, WP_PORT_ENET1, WPX_SERDES_NORMAL);
+   terminate_on_error (status, "WPX_BoardSerdesInit WP_PORT_ENET1");
+#endif
 }
 
 /*
@@ -1167,7 +1177,8 @@ void WPE_CreateFastEnetPortDevice ()
 #if 0
       /* interface_mode */ WP_ENET_SGMII_1000,
 #else
-      /* interface_mode */ WP_ENET_1000_BASE_X,
+      /* interface_mode */ /* WP_ENET_1000_BASE_X, */
+WP_ENET_SGMII_1000,
 #endif
       /* rx_iw_bkgnd */ 0,
    };
@@ -1227,6 +1238,12 @@ void WPE_CreateFastEnetPortDevice ()
       WP_PortCreate (WP_WINPATH (0), EGRESS_PORT, &enet_port_config);
    terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
 
+#if 0
+   port_enet1 =
+      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET1, &enet_port_config);
+   terminate_on_error (port_enet, "WP_PortCreate() ENET1");
+#endif
+
    enet_dev_config.max_tx_channels = NUM_OF_FAST_ENET_TX_CHANNELS;
 
 
@@ -1245,7 +1262,12 @@ void WPE_CreateFastEnetPortDevice ()
                        &enet_dev_config);
    terminate_on_error (dev_enet, "WP_DeviceCreate() Fast Enet");
 
-
+#if 0
+   dev_enet1 =
+      WP_DeviceCreate (port_enet1, WP_PHY (0), WP_DEVICE_ENET,
+                       &enet_dev_config);
+   terminate_on_error (dev_enet, "WP_DeviceCreate() Fast Enet1");
+#endif
 
 
 #if  0
@@ -3160,6 +3182,7 @@ void WPE_CLI (void)
       printf ("\t\t\td-print all wufe_error_name)\n");
       printf ("\t\t\te-(switch NES on the EGRESS port)\n");
       printf ("\t\t\tg-(adjust the delay(looply)\n");
+      printf ("\t\t\tw-(invoke winutil tool)\n");
 
 #if 0
       gets (InputBuf);
@@ -3322,6 +3345,9 @@ void WPE_CLI (void)
          printf
             ("************************* Exiting Driver Still Running! ******************* \n");
          break;
+	  case 'w':
+		system ("%s");
+		 break;
       default:
          printf ("Wrong Key(%x).\n\n", InputBuf[0]);
          break;
@@ -3455,6 +3481,10 @@ void *LearningPoll(void *i)
 		{
 			continue;
 		}
+
+#if 1
+		g_threadStop = 1;
+#endif
 
 		printf ("change to (%s)count(%10d)\n", (WP_ENET_1000_BASE_X==interface_mode)?"WP_ENET_1000_BASE_X\t":"WP_ENET_SGMII_AN\t", switch_counter);
 
