@@ -1,6 +1,4 @@
 filename=enet_432_linux.exe
 oldfile=EnetDemo
 ctags -R
-make TEST=$oldfile && mv ./bin/$oldfile ./bin/$filename && ls -l bin && ./transfer.sh
-ssh dengmorr@216.241.237.121 "cp $filename /tftpboot;ls -l /tftpboot/$filename"
-echo copy to /tftpboot success!
+make TEST=$oldfile && mv ./bin/$oldfile ./bin/$filename && ls -l bin && ./transfer.sh && ssh dengmorr@216.241.237.121 "cp $filename /tftpboot;ls -l /tftpboot/$filename" && echo copy to /tftpboot success!

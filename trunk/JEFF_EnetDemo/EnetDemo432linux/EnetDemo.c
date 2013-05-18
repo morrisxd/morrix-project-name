@@ -3517,7 +3517,8 @@ void *LearningPoll(void *i)
 		for (iii = 0; iii < jjj; iii ++)
 		{
 			WPL_Delay(DELAY_COUNT);
-			printf ("iii is (%d), jjj is(%d)\r", iii, jjj);
+			fprintf (stdout, "iii is (%d), jjj is(%d)\r", iii, jjj);
+			fflush (stdout);
 			if (2 == iii)
 			{
 			}
