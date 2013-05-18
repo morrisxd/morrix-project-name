@@ -1,5 +1,5 @@
 #!/bin/bash
 open sftp://216.241.237.121
-user dengmorr helloworld
+user dengmorr hello
 mput ./bin/*.exe
 quit
