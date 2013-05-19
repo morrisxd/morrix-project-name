@@ -273,7 +273,7 @@ printf ("argc=(%d)\n", argc);
 		printf ("arg(%d)=(%s)\n", i, argv[i]);
 	}
 
-    if (argc <= 1)
+    if (argc < 1)
     {
         /* Menu for testing the application */
         while (1)

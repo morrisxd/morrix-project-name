@@ -383,6 +383,7 @@ void App_PortsCreate(void)
 			&upi_emphy_port_config);
 	App_TerminateOnError(emphy_port, "WP_PortCreate UPI EMPHY Transparent");
 
+	WPX_Ufe4HwReset(0, WP_PORT_UPI1);
 }
 
 /*****************************************************************************
@@ -601,11 +602,13 @@ void App_ufeSystem(void)
 		if (line_cfg->transfer_type == WUFE_SDH_TYPE_E1)
 		{
 			printf ("WUFE_SDH_TYPE_E1 link(%3d) created, %d all\r", i, num_of_lines);
+			fflush(stdout);
 			client_port = i + (i / 3);
 		}
 		else
 		{
 			printf ("WUFE_SDH_TYPE_T1 link(%3d) created, %d all\r", i, num_of_lines);
+			fflush(stdout);
 			client_port = i;
 		}
 

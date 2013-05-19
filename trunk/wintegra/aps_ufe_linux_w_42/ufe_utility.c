@@ -835,6 +835,7 @@ void WT_Eint3Interrupt (WP_U32 wpid, WP_U32 signal_info)
 }
 
 extern void WPL_InterruptConfigureEint3(WP_U32 wpid);
+#if 0
 void WPL_InterruptConfigureEint3(WP_U32 wpid)
 {
    WP_U32 val;
@@ -850,6 +851,7 @@ void WPL_InterruptConfigureEint3(WP_U32 wpid)
    val |= 0x8000;
    WP_MEM_SET(*IC_IntMode, val);
 }
+#endif
 
 
 static void WTI_EnableUfeInterrupts (void)
