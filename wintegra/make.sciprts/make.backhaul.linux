@@ -1,0 +1,9 @@
+#!/bin/bash
+make WPI_TARGET=mips_linux WPI_BOARD=wds WPI_HW_DEVICE=winpath3 DPS_IMAGES=local DPS_CACHE=no DPS_IMAGE_LIST=backhaul
+
+while [ $? -gt 0 ]
+do 
+make WPI_TARGET=mips_linux WPI_BOARD=wds WPI_HW_DEVICE=winpath3 DPS_IMAGES=local DPS_CACHE=no DPS_IMAGE_LIST=backhaul
+done
+
+echo build backhaul complete

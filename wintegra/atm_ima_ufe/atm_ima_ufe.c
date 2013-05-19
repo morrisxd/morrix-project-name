@@ -218,7 +218,11 @@ int main (int argc, char *argv[])
          printf ("c. clear events\n");
          printf ("r. Reboot\n");
          printf ("x. Exit\n");
-         comm = getchar ();
+
+	do {
+         	comm = getchar ();
+	} while (0x10 == comm || 0x13 == comm);
+
          switch (comm)
          {
          case 'a':

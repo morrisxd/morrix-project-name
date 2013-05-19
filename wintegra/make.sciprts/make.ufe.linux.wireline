@@ -1,0 +1,9 @@
+#!/bin/bash
+
+make WPI_TARGET=mips_linux WPI_BOARD=wds WPI_HW_DEVICE=winpath3 DPS_IMAGES=local DPS_CACHE=no DPS_IMAGE_LIST=wireline WUFE=ufe412 FRAMER=flexmux
+
+while [ $? -gt 0 ]
+do
+echo make WPI_TARGET=mips_linux WPI_BOARD=wds WPI_HW_DEVICE=winpath3 DPS_IMAGES=local DPS_CACHE=no DPS_IMAGE_LIST=wireline WUFE=ufe412 FRAMER=flexmux
+make WPI_TARGET=mips_linux WPI_BOARD=wds WPI_HW_DEVICE=winpath3 DPS_IMAGES=local DPS_CACHE=no DPS_IMAGE_LIST=wireline WUFE=ufe412 FRAMER=flexmux
+done
