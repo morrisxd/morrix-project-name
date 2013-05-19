@@ -1,0 +1,15 @@
+[1] INGRESS_PORT
+this macro defines the port that packets go into the WDS3 board.
+
+[2] EGRESS_PORT
+this macro defines the port that packets go out of the WDS3 board to IXIA
+
+[3] jjj
+how many seconds it will delay between each interface mode switch
+
+[4] DELAY_COUNT
+defines a standard 1 seconds which is 10000,00 microseconds
+
+[5] g_threadStop
+control the thread to be executed or NOT.
+
