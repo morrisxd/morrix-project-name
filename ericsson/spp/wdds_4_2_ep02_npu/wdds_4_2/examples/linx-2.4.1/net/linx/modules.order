@@ -1,0 +1,2 @@
+kernel//usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/linx.ko
+kernel//usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/linx_tcp_cm.ko

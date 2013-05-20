@@ -1,0 +1,625 @@
+==14045== Memcheck, a memory error detector
+==14045== Copyright (C) 2002-2009, and GNU GPL'd, by Julian Seward et al.
+==14045== Using Valgrind-3.5.0 and LibVEX; rerun with -h for copyright info
+==14045== Command: ./bin/spp_npu
+==14045== Parent PID: 13868
+==14045== 
+==14045== Warning: noted but unhandled ioctl 0xb9 with no size/direction hints
+==14045==    This could cause spurious value errors to appear.
+==14045==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==14045== Warning: noted but unhandled ioctl 0xbf with no size/direction hints
+==14045==    This could cause spurious value errors to appear.
+==14045==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BBD0: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BBF8: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x6A1BBFB: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BC00: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x6A1BC03: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BC08: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x6A1BC0B: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BC10: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x6A1BC13: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x690CE65: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x690CE80: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x690CE82: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x690CE96: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x690CEA3: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x690CEA5: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x6A1BB8E: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BBCE: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BBF6: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BBFD: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BC05: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BC0D: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x6A1BC1A: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A1BC1C: strtok_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x8063197: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806319C: tap_hwadd_read (tun_dev.c:627)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x690CE62: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x690CE7E: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x690CE92: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x690CEA0: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x80631B7: tap_hwadd_read (tun_dev.c:628)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A947E4: ether_aton_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A94786: ether_aton (in /lib/libc-2.11.1.so)
+==14045==    by 0x80631CE: tap_hwadd_read (tun_dev.c:630)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A947E7: ether_aton_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A94786: ether_aton (in /lib/libc-2.11.1.so)
+==14045==    by 0x80631CE: tap_hwadd_read (tun_dev.c:630)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A94839: ether_aton_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A94786: ether_aton (in /lib/libc-2.11.1.so)
+==14045==    by 0x80631CE: tap_hwadd_read (tun_dev.c:630)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A94843: ether_aton_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A94786: ether_aton (in /lib/libc-2.11.1.so)
+==14045==    by 0x80631CE: tap_hwadd_read (tun_dev.c:630)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x6A94884: ether_aton_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A94786: ether_aton (in /lib/libc-2.11.1.so)
+==14045==    by 0x80631CE: tap_hwadd_read (tun_dev.c:630)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x6A94887: ether_aton_r (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A94786: ether_aton (in /lib/libc-2.11.1.so)
+==14045==    by 0x80631CE: tap_hwadd_read (tun_dev.c:630)
+==14045== 
+==14045== Warning: noted but unhandled ioctl 0xb5 with no size/direction hints
+==14045==    This could cause spurious value errors to appear.
+==14045==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x80C26EC: WPI_HeapMalloc (wpi_heap.c:790)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC84: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC89: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC84: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x81F8094: WPI_RegistryIwBackground (wpi_registry_class.c:1017)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC89: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x81F8094: WPI_RegistryIwBackground (wpi_registry_class.c:1017)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC84: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x6958C91: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0x852E090: ??? (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC89: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x6958C91: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0x852E090: ??? (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC84: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x6958C91: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0xE091E090: ???
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC89: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x6958C91: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0xE091E090: ???
+==14045== 
+==14045== Invalid read of size 1
+==14045==    at 0x844E0E1: WPI_SaDeviceCreate (wpi_hw_sa.c:4490)
+==14045==  Address 0x482c1a9a is not stack'd, malloc'd or (recently) free'd
+==14045== 
+==14045== Invalid read of size 1
+==14045==    at 0x844D856: WPI_SaCfuTxEntryConfigBuild (wpi_hw_sa.c:4723)
+==14045==  Address 0x482c1a99 is not stack'd, malloc'd or (recently) free'd
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC84: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x17D787E7: ??? (in /dev/wp_bank1)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC89: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x17D787E7: ??? (in /dev/wp_bank1)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC84: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x3: ???
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x844CC89: WPI_SaPctFind (wpi_hw_sa.c:3187)
+==14045==    by 0x3: ???
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x84ACD9D: OMIINO_LLC_UtilCheckWords (WO_FRMR_llc_mailbox.c:70)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x8075254: WTUFE_config_phys (np_ufe_fr.c:1576)
+==14045== 
+==14045== Source and destination overlap in memcpy(0x159d97e8, 0x159d97e8, 136)
+==14045==    at 0x690D099: memcpy (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x806987E: npu_set_trunk_info (spp_wddi_server.c:1720)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x69E2206: _itoa_word (in /lib/libc-2.11.1.so)
+==14045==    by 0x69E578D: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806A277: npu_set_vport_info (spp_wddi_server.c:1471)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E220E: _itoa_word (in /lib/libc-2.11.1.so)
+==14045==    by 0x69E578D: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806A277: npu_set_vport_info (spp_wddi_server.c:1471)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E38DE: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806A277: npu_set_vport_info (spp_wddi_server.c:1471)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E5F20: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806A277: npu_set_vport_info (spp_wddi_server.c:1471)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E398A: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806A277: npu_set_vport_info (spp_wddi_server.c:1471)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E38DE: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806A370: npu_set_vport_info (spp_wddi_server.c:1479)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E5F20: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806A370: npu_set_vport_info (spp_wddi_server.c:1479)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E398A: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806A370: npu_set_vport_info (spp_wddi_server.c:1479)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806A2F5: npu_set_vport_info (spp_wddi_server.c:1514)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x80659DD: np_get_slots_selection (spp_wddi_server.c:2501)
+==14045==    by 0x2: ???
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x806A542: npu_set_vport_info (spp_wddi_server.c:1535)
+==14045==    by 0x2: ???
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x806A57C: npu_set_vport_info (spp_wddi_server.c:1536)
+==14045==    by 0x2: ???
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x806A5B5: npu_set_vport_info (spp_wddi_server.c:1537)
+==14045==    by 0x2: ???
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x806A5EA: npu_set_vport_info (spp_wddi_server.c:1538)
+==14045==    by 0x2: ???
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806B828: npu_handle_linx_msg (spp_wddi_server.c:235)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806B88F: npu_handle_linx_msg (spp_wddi_server.c:262)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806B89D: npu_handle_linx_msg (spp_wddi_server.c:266)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E38DE: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x8067C4C: npu_get_vport_info (spp_wddi_server.c:1946)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E5F20: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x8067C4C: npu_get_vport_info (spp_wddi_server.c:1946)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E398A: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x8067C4C: npu_get_vport_info (spp_wddi_server.c:1946)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x8067C8E: npu_get_vport_info (spp_wddi_server.c:1963)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x69E2238: _itoa_word (in /lib/libc-2.11.1.so)
+==14045==    by 0x69E578D: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A0B383: vsnprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806FBA2: wddi_log_msg (wddi_log.c:261)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E2243: _itoa_word (in /lib/libc-2.11.1.so)
+==14045==    by 0x69E578D: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A0B383: vsnprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806FBA2: wddi_log_msg (wddi_log.c:261)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E38DE: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A0B383: vsnprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806FBA2: wddi_log_msg (wddi_log.c:261)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x69E2206: _itoa_word (in /lib/libc-2.11.1.so)
+==14045==    by 0x69E578D: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A0B383: vsnprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806FBA2: wddi_log_msg (wddi_log.c:261)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E220E: _itoa_word (in /lib/libc-2.11.1.so)
+==14045==    by 0x69E578D: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A0B383: vsnprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806FBA2: wddi_log_msg (wddi_log.c:261)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E5F20: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A0B383: vsnprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806FBA2: wddi_log_msg (wddi_log.c:261)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E398A: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A0B383: vsnprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x806FBA2: wddi_log_msg (wddi_log.c:261)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x8077897: np_creat_fr_vport (np_ufe_fr.c:364)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x80778C6: np_creat_fr_vport (np_ufe_fr.c:376)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x80778D7: np_creat_fr_vport (np_ufe_fr.c:378)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x80778DD: np_creat_fr_vport (np_ufe_fr.c:379)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x8075CD6: np_creat_fr_host_channel (np_ufe_fr.c:1177)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x8075EFD: np_creat_fr_iw_channel (np_ufe_fr.c:966)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x8075F5B: np_creat_fr_iw_channel (np_ufe_fr.c:980)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x81F7B8F: WPI_RegistryGlobalLockCrc32Table (wpi_registry_class.c:752)
+==14045== 
+==14045== Syscall param msync(start) points to uninitialised byte(s)
+==14045==    at 0x6958C7B: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0x85261FF: __xsWP_MEM_SET (wpl_platform.c:1076)
+==14045==  Address 0x17943a86 is not stack'd, malloc'd or (recently) free'd
+==14045== 
+==14045== Syscall param msync(start) points to uninitialised byte(s)
+==14045==    at 0x6958C7B: ??? (in /lib/libpthread-2.11.1.so)
+==14045==  Address 0x1721ba9c is not stack'd, malloc'd or (recently) free'd
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x69E38DE: vfprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x6A04ECB: vsprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x69ED3FA: sprintf (in /lib/libc-2.11.1.so)
+==14045==    by 0x805D94F: np_dl_enet2_to_fr_rule_add (np_app.c:3502)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806B5A5: npu_handle_linx_msg (spp_wddi_server.c:449)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806C8B9: npu_handle_linx_msg (spp_wddi_server.c:586)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x805AF8B: np_ul_link_table_set (np_app.c:2963)
+==14045==    by 0x1: ???
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x805AFD9: np_ul_link_table_set (np_app.c:2963)
+==14045==    by 0x1: ???
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x805AFE1: np_ul_link_table_set (np_app.c:2975)
+==14045==    by 0x1: ???
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x85261E6: __xsWP_MEM_SET (wpl_platform.c:1075)
+==14045==    by 0xAAA21DB: ???
+==14045== 
+==14045== Syscall param msync(start) points to uninitialised byte(s)
+==14045==    at 0x6958C7B: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0xAAA21DB: ???
+==14045==  Address 0x1bdcce9c is not stack'd, malloc'd or (recently) free'd
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x81B1A23: WP_IPEndPointEntryInsert (wpi_lookup.c:1190)
+==14045==    by 0xAAA21DB: ???
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x8526197: __xsWP_MEM_SHORT_SET (wpl_platform.c:1086)
+==14045==    by 0xAAA21DB: ???
+==14045== 
+==14045== 
+==14045== More than 100 errors detected.  Subsequent errors
+==14045== will still be recorded, but in less detail than before.
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x81B1A70: WP_IPEndPointEntryInsert (wpi_lookup.c:1190)
+==14045==    by 0xAAA21DB: ???
+==14045== 
+==14045== Syscall param ioctl(generic) points to uninitialised byte(s)
+==14045==    at 0x6A70A09: ioctl (in /lib/libc-2.11.1.so)
+==14045==    by 0x806C8FC: npu_handle_linx_msg (spp_wddi_server.c:596)
+==14045==  Address 0x15dc862c is 28 bytes inside a block of size 65 alloc'd
+==14045==    at 0x690BC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x8527CC9: linx_alloc (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==14045==    by 0x806C86A: npu_handle_linx_msg (spp_wddi_server.c:578)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x805E7CA: np_ul_route_table_add (np_app.c:2619)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x805E858: np_ul_route_table_add (np_app.c:2679)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x8063627: tap_socket_getarp (tun_dev.c:410)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x85261E6: __xsWP_MEM_SET (wpl_platform.c:1075)
+==14045== 
+==14045== Syscall param ioctl(generic) points to uninitialised byte(s)
+==14045==    at 0x6A70A09: ioctl (in /lib/libc-2.11.1.so)
+==14045==    by 0x806CB3D: npu_handle_linx_msg (spp_wddi_server.c:530)
+==14045==  Address 0x15dc86f4 is 28 bytes inside a block of size 65 alloc'd
+==14045==    at 0x690BC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x8527CC9: linx_alloc (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==14045==    by 0x806CAAA: npu_handle_linx_msg (spp_wddi_server.c:520)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806CEDF: npu_handle_linx_msg (spp_wddi_server.c:695)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x805F915: np_dl_link_table_set (np_app.c:1905)
+==14045==    by 0x1: ???
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x805FA25: np_dl_link_table_set (np_app.c:1907)
+==14045==    by 0x1: ???
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x805FA19: np_dl_link_table_set (np_app.c:1905)
+==14045==    by 0x1: ???
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x85261E6: __xsWP_MEM_SET (wpl_platform.c:1075)
+==14045==    by 0x38002A0F: ??? (in /usr/lib64/valgrind/memcheck-x86-linux)
+==14045== 
+==14045== Syscall param msync(start) points to uninitialised byte(s)
+==14045==    at 0x6958C7B: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0x38002A0F: ??? (in /usr/lib64/valgrind/memcheck-x86-linux)
+==14045==  Address 0x1de94580 is not stack'd, malloc'd or (recently) free'd
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x81B134A: WP_VPortEntryInsert (wpi_lookup.c:1268)
+==14045==    by 0x38002A0F: ??? (in /usr/lib64/valgrind/memcheck-x86-linux)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x81B1371: WP_VPortEntryInsert (wpi_lookup.c:1268)
+==14045==    by 0x38002A0F: ??? (in /usr/lib64/valgrind/memcheck-x86-linux)
+==14045== 
+==14045== Syscall param ioctl(generic) points to uninitialised byte(s)
+==14045==    at 0x6A70A09: ioctl (in /lib/libc-2.11.1.so)
+==14045==    by 0x806CF22: npu_handle_linx_msg (spp_wddi_server.c:706)
+==14045==  Address 0x4931072c is 28 bytes inside a block of size 65 alloc'd
+==14045==    at 0x690BC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x8527CC9: linx_alloc (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==14045==    by 0x806CE90: npu_handle_linx_msg (spp_wddi_server.c:687)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x805FCAA: np_dl_route_table_add (np_app.c:1712)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x805FF29: np_dl_route_table_add (np_app.c:1743)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x805FF3A: np_dl_route_table_add (np_app.c:1744)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x805FCDB: np_dl_route_table_add (np_app.c:1825)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x805FCEB: np_dl_route_table_add (np_app.c:1826)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x81F7B8F: WPI_RegistryGlobalLockCrc32Table (wpi_registry_class.c:752)
+==14045==    by 0x806FFFF: xsreset (npu_main.c:814)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x80B4A88: WPI_UserHashIwMacAddressFind (wpi_hash_table.c:3440)
+==14045== 
+==14045== Syscall param msync(start) points to uninitialised byte(s)
+==14045==    at 0x6958C7B: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0x85261B1: __xsWP_MEM_SHORT_SET (wpl_platform.c:1087)
+==14045==  Address 0x1e84380a is not stack'd, malloc'd or (recently) free'd
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x8067349: create_ht_link (spp_wddi_server.c:2511)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x8067384: create_ht_link (spp_wddi_server.c:2513)
+==14045== 
+==14045== Syscall param ioctl(generic) points to uninitialised byte(s)
+==14045==    at 0x6A70A09: ioctl (in /lib/libc-2.11.1.so)
+==14045==    by 0x806C5BA: npu_handle_linx_msg (spp_wddi_server.c:615)
+==14045==  Address 0x493107f4 is 28 bytes inside a block of size 65 alloc'd
+==14045==    at 0x690BC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x8527CC9: linx_alloc (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==14045==    by 0x806C532: npu_handle_linx_msg (spp_wddi_server.c:605)
+==14045== 
+==14045== Use of uninitialised value of size 4
+==14045==    at 0x81F7B8F: WPI_RegistryGlobalLockCrc32Table (wpi_registry_class.c:752)
+==14045==    by 0x402FFFF: ???
+==14045== 
+==14045== Syscall param ioctl(generic) points to uninitialised byte(s)
+==14045==    at 0x6A70A09: ioctl (in /lib/libc-2.11.1.so)
+==14045==    by 0x806C7EA: npu_handle_linx_msg (spp_wddi_server.c:657)
+==14045==  Address 0x15dc8aa4 is 28 bytes inside a block of size 65 alloc'd
+==14045==    at 0x690BC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x8527CC9: linx_alloc (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==14045==    by 0x806C762: npu_handle_linx_msg (spp_wddi_server.c:646)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x806B94F: npu_handle_linx_msg (spp_wddi_server.c:359)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x8526128: __xsmemcpy (wpl_platform.c:1043)
+==14045== 
+==14045== Syscall param msync(start) points to uninitialised byte(s)
+==14045==    at 0x6958C7B: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0x85260B0: __xsWP_MEM_BYTE_SET (wpl_platform.c:1096)
+==14045==  Address 0x38c79002 is not stack'd, malloc'd or (recently) free'd
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x852615E: __xsmemcpy (wpl_platform.c:1043)
+==14045== 
+==14045== Conditional jump or move depends on uninitialised value(s)
+==14045==    at 0x8065A00: np_host_set_ns_bssgp_statics (spp_wddi_server.c:3328)
+==14045== 
+==14045== Syscall param write(buf) points to uninitialised byte(s)
+==14045==    at 0x695843B: ??? (in /lib/libpthread-2.11.1.so)
+==14045==    by 0x806180B: AppRxEvent (np_app.c:2189)
+==14045==  Address 0xfe9924e4 is on thread 1's stack
+==14045== 
+==14045== 
+==14045== HEAP SUMMARY:
+==14045==     in use at exit: 65,009,743 bytes in 988 blocks
+==14045==   total heap usage: 1,369 allocs, 381 frees, 65,268,826 bytes allocated
+==14045== 
+==14045== 136 bytes in 1 blocks are possibly lost in loss record 30 of 59
+==14045==    at 0x690AFAB: calloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x44124EB: _dl_allocate_tls (in /lib/ld-2.11.1.so)
+==14045==    by 0x6950CCD: pthread_create@@GLIBC_2.1 (in /lib/libpthread-2.11.1.so)
+==14045==    by 0x8526892: WPL_ThreadInit (wpl_platform.c:656)
+==14045== 
+==14045== 270 bytes in 6 blocks are possibly lost in loss record 32 of 59
+==14045==    at 0x690BC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x83EDCC5: WPI_dirty_malloc (wpi_dmalloc.c:91)
+==14045== 
+==14045== 4,096 bytes in 1 blocks are possibly lost in loss record 38 of 59
+==14045==    at 0x690BC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==14045==    by 0x8070289: getpath (npu_main.c:316)
+==14045==    by 0x805AA50: ??? (start.S:119)
+==14045== 
+==14045== LEAK SUMMARY:
+==14045==    definitely lost: 0 bytes in 0 blocks
+==14045==    indirectly lost: 0 bytes in 0 blocks
+==14045==      possibly lost: 4,502 bytes in 8 blocks
+==14045==    still reachable: 65,005,241 bytes in 980 blocks
+==14045==         suppressed: 0 bytes in 0 blocks
+==14045== Reachable blocks (those to which a pointer was found) are not shown.
+==14045== To see them, rerun with: --leak-check=full --show-reachable=yes
+==14045== 
+==14045== For counts of detected and suppressed errors, rerun with: -v
+==14045== Use --track-origins=yes to see where uninitialised values come from
+==14045== ERROR SUMMARY: 1980 errors from 138 contexts (suppressed: 3 from 3)

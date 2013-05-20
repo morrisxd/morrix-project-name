@@ -1,0 +1,3991 @@
+>==6789== Memcheck, a memory error detector
+==6789== Copyright (C) 2002-2009, and GNU GPL'd, by Julian Seward et al.
+==6789== Using Valgrind-3.5.0 and LibVEX; rerun with -h for copyright info
+==6789== Command: ./bin/spp_npu
+==6789== Parent PID: 6318
+==6789== 
+==6789== Warning: noted but unhandled ioctl 0xb9 with no size/direction hints
+==6789==    This could cause spurious value errors to appear.
+==6789==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==6789== Warning: noted but unhandled ioctl 0xbf with no size/direction hints
+==6789==    This could cause spurious value errors to appear.
+==6789==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FBD0: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FBF8: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6A1FBFB: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FC00: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6A1FC03: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FC08: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6A1FC0B: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FC10: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6A1FC13: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6910E65: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6910E80: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6910E82: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6910E96: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6910EA3: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6910EA5: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6A1FB8E: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FBCE: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FBF6: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FBFD: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FC05: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FC0D: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6A1FC1A: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A1FC1C: strtok_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FA7: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8062FAC: tap_hwadd_read (tun_dev.c:626)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6910E62: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6910E7E: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6910E92: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6910EA0: strncmp (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x8062FC7: tap_hwadd_read (tun_dev.c:627)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A987E4: ether_aton_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x6A98786: ether_aton (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FDE: tap_hwadd_read (tun_dev.c:629)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A987E7: ether_aton_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x6A98786: ether_aton (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FDE: tap_hwadd_read (tun_dev.c:629)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A98839: ether_aton_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x6A98786: ether_aton (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FDE: tap_hwadd_read (tun_dev.c:629)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A98843: ether_aton_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x6A98786: ether_aton (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FDE: tap_hwadd_read (tun_dev.c:629)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x6A98884: ether_aton_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x6A98786: ether_aton (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FDE: tap_hwadd_read (tun_dev.c:629)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x6A98887: ether_aton_r (in /lib/libc-2.11.1.so)
+==6789==    by 0x6A98786: ether_aton (in /lib/libc-2.11.1.so)
+==6789==    by 0x8062FDE: tap_hwadd_read (tun_dev.c:629)
+==6789== 
+==6789== Warning: noted but unhandled ioctl 0xb5 with no size/direction hints
+==6789==    This could cause spurious value errors to appear.
+==6789==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8526048: WPL_BusesMapGet (wpl_platform.c:255)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8526178: WPL_BusesMapGet (wpl_platform.c:261)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8526189: WPL_BusesMapGet (wpl_platform.c:261)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8526200: WPL_BusesMapGet (wpl_platform.c:270)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8526214: WPL_BusesMapGet (wpl_platform.c:271)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8526228: WPL_BusesMapGet (wpl_platform.c:275)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85252CC: win_get_characteristics (wpl_platform.c:162)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8526238: WPL_BusesMapGet (wpl_platform.c:277)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85261D7: WPL_BusesMapGet (wpl_platform.c:334)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85261E1: WPL_BusesMapGet (wpl_platform.c:334)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x852618D: WPL_BusesMapGet (wpl_platform.c:261)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8526084: WPL_BusesMapGet (wpl_platform.c:352)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8526267: WPL_BusesMapGet (wpl_platform.c:360)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x852626B: WPL_BusesMapGet (wpl_platform.c:370)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85262D6: WPL_BusesMapGet (wpl_platform.c:413)
+==6789== 
+==6789== Syscall param mmap2(length) contains uninitialised byte(s)
+==6789==    at 0x6A79BC8: mmap (in /lib/libc-2.11.1.so)
+==6789==    by 0x85262FC: WPL_BusesMapGet (wpl_platform.c:413)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85262A5: WPL_BusesMapGet (wpl_platform.c:422)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85262B3: WPL_BusesMapGet (wpl_platform.c:423)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x852608D: WPL_BusesMapGet (wpl_platform.c:352)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8526096: WPL_BusesMapGet (wpl_platform.c:352)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85251BD: WPL_Lock (wpl_locks.c:155)
+==6789==    by 0x8619FF3: ??? (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8619FF3: ??? (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8205340: WPI_DriverInitBsp (wpi_system.c:202)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8205374: WPI_DriverInitBsp (wpi_system.c:213)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8205338: WPI_DriverInitBsp (wpi_system.c:202)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x820535D: WPI_DriverInitBsp (wpi_system.c:206)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19BE: WPI_HeapInit (wpi_heap.c:534)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19D8: WPI_HeapInit (wpi_heap.c:534)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19E0: WPI_HeapInit (wpi_heap.c:538)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C1A16: WPI_HeapInit (wpi_heap.c:538)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x80C1A30: WPI_HeapInit (wpi_heap.c:303)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x823ECA6: wpi_long_divide (wpi_utility.c:262)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85264AA: WPL_TimeInit (wpl_time.c:98)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x820565E: WPI_DriverInitBsp (wpi_system.c:314)
+==6789==    by 0xFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x81B709E: WPI_MemorySetVbankofBusBank (wpi_memory_class.c:84)
+==6789==    by 0xFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x82055C3: WPI_DriverInitBsp (wpi_system.c:346)
+==6789==    by 0xFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x820565E: WPI_DriverInitBsp (wpi_system.c:314)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8205696: WPI_DriverInitBsp (wpi_system.c:329)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x81B709E: WPI_MemorySetVbankofBusBank (wpi_memory_class.c:84)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82056FC: WPI_DriverInitBsp (wpi_system.c:341)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82055B8: WPI_DriverInitBsp (wpi_system.c:344)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x82055C3: WPI_DriverInitBsp (wpi_system.c:346)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x82055D0: WPI_DriverInitBsp (wpi_system.c:346)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82055DA: WPI_DriverInitBsp (wpi_system.c:348)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19BE: WPI_HeapInit (wpi_heap.c:534)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19D8: WPI_HeapInit (wpi_heap.c:534)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19E0: WPI_HeapInit (wpi_heap.c:538)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C2526: WPI_PrivateMemoryInit (wpi_heap.c:2027)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82057CE: WPI_DriverInitBsp (wpi_system.c:356)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82057DE: WPI_DriverInitBsp (wpi_system.c:375)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8205618: WPI_DriverInitBsp (wpi_system.c:378)
+==6789==    by 0x1FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x820565E: WPI_DriverInitBsp (wpi_system.c:314)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8205696: WPI_DriverInitBsp (wpi_system.c:329)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x81B709E: WPI_MemorySetVbankofBusBank (wpi_memory_class.c:84)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82056FC: WPI_DriverInitBsp (wpi_system.c:341)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82055B8: WPI_DriverInitBsp (wpi_system.c:344)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x82055C3: WPI_DriverInitBsp (wpi_system.c:346)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x82055D0: WPI_DriverInitBsp (wpi_system.c:346)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82055DA: WPI_DriverInitBsp (wpi_system.c:348)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19BE: WPI_HeapInit (wpi_heap.c:534)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19D8: WPI_HeapInit (wpi_heap.c:534)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C19E0: WPI_HeapInit (wpi_heap.c:538)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C2526: WPI_PrivateMemoryInit (wpi_heap.c:2027)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82057CE: WPI_DriverInitBsp (wpi_system.c:356)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82057DE: WPI_DriverInitBsp (wpi_system.c:375)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== 
+==6789== More than 100 errors detected.  Subsequent errors
+==6789== will still be recorded, but in less detail than before.
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8205618: WPI_DriverInitBsp (wpi_system.c:378)
+==6789==    by 0x2FFFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x820565E: WPI_DriverInitBsp (wpi_system.c:314)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8205696: WPI_DriverInitBsp (wpi_system.c:329)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x81B709E: WPI_MemorySetVbankofBusBank (wpi_memory_class.c:84)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82056FC: WPI_DriverInitBsp (wpi_system.c:341)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x82055B8: WPI_DriverInitBsp (wpi_system.c:344)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x82055C3: WPI_DriverInitBsp (wpi_system.c:346)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x820578B: WPI_DriverInitBsp (wpi_system.c:365)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8205795: WPI_DriverInitBsp (wpi_system.c:366)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8205618: WPI_DriverInitBsp (wpi_system.c:378)
+==6789==    by 0x1FBFFF: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8526339: WPLI_BusesRifBaseGet (wpl_platform.c:932)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8525636: __xsWP_MEM_SET (wpl_platform.c:1009)
+==6789==    by 0x8619FF3: ??? (in /usr/src/wdds_4_2/examples/bin/spp_npu)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85008E5: xp2_get (wpx_board_functions.c:2054)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8500897: xp2_put (wpx_board_functions.c:2070)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x8525636: __xsWP_MEM_SET (wpl_platform.c:1009)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8503305: WPX_PinMuxPadControlSet (wpx_pinmux.c:1205)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8527772: __udivdi3 (libgcc2.c:885)
+==6789==    by 0x85265AC: WPL_TimestampGet (wpl_time.c:143)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85266AA: WPLI_Delay (wpl_time.c:216)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85266B2: WPLI_Delay (wpl_time.c:216)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85266B8: WPLI_Delay (wpl_time.c:216)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAF5A0: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85266CC: WPLI_Delay (wpl_time.c:216)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB0E4E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB0E80: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB0EA8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB14CB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB1681: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB16B2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB16D9: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x85251BD: WPL_Lock (wpl_locks.c:155)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x8417E4E: WPI_CapabilityHwDevice (wpi_hw_capability.c:476)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x823ED1F: wpi_32x32_32 (wpi_utility.c:321)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x823ED46: wpi_32x32_32 (wpi_utility.c:334)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x823ED42: wpi_32x32_32 (wpi_utility.c:334)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x81B6EFB: WPI_memalloc (wpi_memory.c:216)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x81B6F4C: WPI_memalloc (wpi_memory.c:238)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C1A90: malloc_pages (wpi_heap.c:632)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C1ABA: malloc_pages (wpi_heap.c:635)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C1AD1: malloc_pages (wpi_heap.c:659)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x80C1AE7: malloc_pages (wpi_heap.c:662)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x80C1B06: malloc_pages (wpi_heap.c:664)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x81B6F5B: WPI_memalloc (wpi_memory.c:242)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x81B6F5D: WPI_memalloc (wpi_memory.c:252)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x81E4C8A: WPI_PoolCreate (wpi_pool.c:168)
+==6789== 
+==6789== Syscall param msync(start) points to uninitialised byte(s)
+==6789==    at 0x695CC53: __msync_nocancel (in /lib/libpthread-2.11.1.so)
+==6789==    by 0x852564F: __xsWP_MEM_SET (wpl_platform.c:1010)
+==6789==  Address 0x15df7000 is not stack'd, malloc'd or (recently) free'd
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C2012: WPI_HeapMalloc (wpi_heap.c:706)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x80C201F: WPI_HeapMalloc (wpi_heap.c:242)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x80C209E: WPI_HeapMalloc (wpi_heap.c:726)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x80C20B9: WPI_HeapMalloc (wpi_heap.c:730)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x80C20C6: WPI_HeapMalloc (wpi_heap.c:732)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80C1F3C: WPI_HeapMalloc (wpi_heap.c:790)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80E84D1: WPI_IwAlloc (wpi_iw.c:861)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x81B6818: WPI_memclr (wpi_memory.c:638)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80E81B6: WPI_IwAlloc (wpi_iw.c:920)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x81B6F9C: WPI_memalloc (wpi_memory.c:187)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80E825A: WPI_IwAlloc (wpi_iw.c:944)
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80E8CA1: WPI_IwAlloc (wpi_iw.c:967)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA8814: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA9A4B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAAB1D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xABBE4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xACCA3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xADD60: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAEE20: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAFED8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB0FB7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB2077: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB3151: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB4218: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB52FE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB63D8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB7497: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB8565: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB9702: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBA7CE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBB89F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBC95E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBDA42: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBEAF5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBFBB1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC0C70: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC1D2E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC2DEF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC3EA5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC4F5A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC6010: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC70F2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC81A1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC9264: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCA323: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCB3DC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCC4AC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCD56E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCE632: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCF6DE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD07AC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD186A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD2934: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD3A17: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD4AF7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD5BD9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD6C91: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD7D66: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD8E3A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD9F04: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDAFEA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDC0B4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDD178: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDE247: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDF310: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE03CF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE147E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE2561: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE3638: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE4725: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE57FC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE68BD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE79A0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE8A7E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE9B3E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEAC01: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEBCC3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xECD9A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEDE98: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEEF49: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF0017: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF10BB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF2184: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF324E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x118A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2256: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3339: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4423: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x54E7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x65B7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7695: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8774: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9827: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA90A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB9E0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCABF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDB97: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEC53: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xFD13: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x10DD1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x11E93: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x12F5E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x14028: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x15109: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x161DD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x172B6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x18373: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1944A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1A525: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1B5E5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1C6B5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1D787: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1E84F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1F935: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x209F3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x21AC8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x22BA5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x23C70: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x24D4E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x25E07: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x26EE8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x27F9F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x29064: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2A13A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2B1FB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2C2B6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2D365: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2E441: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2F4F7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x305BE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x31653: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x32710: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x337CA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x348B5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3599A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x36A4C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x37B10: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x38BEA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x39CC9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3ADA0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3BE84: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3CF55: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3E00B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3F0EF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x401B7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x41263: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4234D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x433FB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x444C7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4557E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4662F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x476F5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x487D1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x49896: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4A96C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4BA2F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4CAEE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4DBEE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4ECA9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4FD50: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x50E0E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x51EDD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x52FAE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5406A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x55135: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x561F5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x572BF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x58367: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x59421: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5A4E4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5B5AF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5C68D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5D74B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5E823: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5F911: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x609F4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x61AB4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x62B79: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x63C44: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x64D1A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x65DF6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x66EA6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x67F5A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6900B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6A0B3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6B1A2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6C259: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6D340: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6E414: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6F4CA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7059D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7166B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x72726: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x737DF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x74899: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x75980: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x76A5D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x77B19: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x78BDB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x79C91: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7AD77: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7BE47: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7CEFE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7DFE0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7F093: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x80167: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x81228: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8230C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x833CA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8449E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x85576: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8663F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8770F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x887DF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x89882: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8A96C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8BA46: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8CB21: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8DBDE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8ECA9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8FD5D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x90E33: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x91EF5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x92FA9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9407C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x95139: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x961E7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x972B2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x98374: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9942E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9A4EC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9B5AC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9C671: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9D73A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9E7F5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9F8D5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA099F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA1A73: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA2B52: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA3CCC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA4DB1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA5E9C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA6F4E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA8012: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA90D9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAA1AB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAB28C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAC358: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAD416: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAE4D1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAF589: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB0658: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB1729: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB27FF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB38D2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB498C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB5A47: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB6B1E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB7BFE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB8CDA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB9D9D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBAE67: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBBF1A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBCFDA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBE07A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBF116: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC01F8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC12C3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC239F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC3466: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC4512: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC55D7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC66B3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC777C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC8836: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC98F3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCA9B6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCBA91: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCCB3D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCDBF2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCECC8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCFDA7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD0E76: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD1F2B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD2FE6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD40B2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD5190: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD623D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD72FB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD83CD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD94C2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDA566: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDB629: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDC709: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDD7DD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDE8A3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDF971: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE0A33: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE1AF8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE2BC0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE3C89: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE4D5A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE5E3D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE6F05: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE7FCA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE90A3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEA162: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEB26E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEC33A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xED3ED: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEE4B8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEF576: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF0656: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF1711: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF27E2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF389C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x710: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x17C1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2874: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x394D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4A28: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5B2B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6C58: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7D30: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8E16: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9EE9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAFAC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC058: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD12B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE1ED: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF2A4: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80E8D12: WPI_IwAlloc (wpi_iw.c:985)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x10B91: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x11C4D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x12CF8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x13DAF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x14E69: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x15F38: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x17000: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x180C1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1917C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1A22F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1B314: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1C3F4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1D4D2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1E5A9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1F665: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x20727: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x217F2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x228A5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x23973: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x24A34: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x25AF6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x26BD1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x27C9C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x28D83: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x29E60: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2AF11: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2BFE9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2D09E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2E13D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2F200: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x302C7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x31398: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3246D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x33555: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x34646: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x35730: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x367F4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x378C6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x389AF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x39A92: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3AB6A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3BC43: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3CCF8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3DDCB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3EEA2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3FF72: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4104D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x42126: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x43202: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x442D5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x453A9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x46479: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x47538: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x485FB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x496D4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4A7BA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4B8A4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4C9A0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4DA7D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4EB38: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4FC00: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x50CD7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x51DA7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x52E82: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x53F56: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x55011: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x56102: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x571D0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5828F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5935C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5A436: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5B504: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5C5DD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5D6B8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5E785: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5F870: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x60950: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x61A1F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x62B12: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x63BFA: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80E82E6: WPI_IwAlloc (wpi_iw.c:1005)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x652A8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x66365: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x67430: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x68520: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x695DF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6A6C2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6B773: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6C844: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6D91B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6E9EF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6FAB0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x70B7D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x71C50: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x72D19: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x73DD4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x74EA0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x75F86: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x77089: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x78155: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x79234: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7A2F9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7B3F7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7C4DC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7D5C8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7E69C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7F77B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8083B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x81902: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x829D6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x83AC3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x84B93: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x85C5E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x86D2A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x87DEA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x88EA8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x89F65: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8B022: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8C0F5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8D1C7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8E290: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80E9D4A: WPI_IwAlloc (wpi_iw.c:1028)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8FA4A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x90B21: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x91BF0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x92CAC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x93D63: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x94E3A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x95F0F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x97096: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x98173: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9926C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9A336: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9B422: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9C4FB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9D5E2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9E6BB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9F77E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA0839: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA1911: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA29C8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA3A72: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA4B44: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA5C1E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA6CEF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA7DD8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA8EBC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA9F89: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAB045: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAC11A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAD1E5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAE2B0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAF37C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB0448: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB150D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB25CE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB36A4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB4788: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB5865: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB693A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB7A0E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB8AD5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB9BB6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBAC8F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBBD65: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBCE46: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBDF17: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBEFF8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC00B5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC117B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC224A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC3324: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC43F7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC54C7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC6589: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC764A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC8721: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC9804: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCA8CD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCB9BB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCCA8B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCDB67: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCEC44: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCFD25: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD0E21: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD1ED1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD2FA6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD408C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD5173: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD6246: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD731B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD83E3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD94AC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDA576: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDB62F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDC6F7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDD7B2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDE896: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDF975: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE0A41: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE1B07: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE2BE0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE3CAA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE4D75: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE5E44: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE6F46: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE8031: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE911B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEA1DF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEB2BF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEC3AA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xED476: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEE53D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEF5F8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF06C6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF179D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF285D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF3929: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7C0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1883: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2949: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3A2B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4B1F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5C1B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6CDE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7DAA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8E7C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9F57: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB029: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC109: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD1E2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE2C4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF386: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x10461: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1154B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x12636: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x13706: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x147EC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x158D1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x169A8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x17A7D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x18B38: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x19C0B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1ACCE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1BDA6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1CE88: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1DF54: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1F02B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x20115: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x211D0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x222AE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x23391: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x24452: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x25526: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x265FB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x276C8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x28792: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x29862: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2A92C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2B9F4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2CAEA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2DBC3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2EC96: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2FD70: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x30E3C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x31F1A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x32FCB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x340AC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3518C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x36251: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3731B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x383EF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x394D7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3A5B8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3B688: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3C75A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3D82E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3E8FD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3F9CA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x40A8B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x41B53: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x42C1E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x43CEB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x44DAF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x45E7A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x46F46: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x48006: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x490FE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4A1E2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4B2A3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4C383: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4D44C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4E51D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4F5FC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x506F3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x517D4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x528E4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x539CB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x54AB5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x55B88: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x56C65: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x57D20: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x58DF0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x59EA3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5AF81: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5C05F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5D120: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5E1D9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5F2AF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6038F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x61452: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x62517: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x63609: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x646E3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x657A5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x66888: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6794B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x68A1B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x69AEB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6ABB9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6BC80: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6CD38: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6DDD8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6EEB9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x6FF7E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7102B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x72111: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x731F9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x742CC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x75396: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x76452: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x77526: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x785EC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x796CC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7A7A5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7B86F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7C931: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7DA19: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7EAF5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x7FBDA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x80CBD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x81D83: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x82E41: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x83F04: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x84FD1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8609B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x87163: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8823F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x89301: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8A3E1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8B4A2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8C597: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8D679: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8E76A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8F832: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x909B9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x91A8D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x92B70: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x93C2D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x94CF7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x95DBE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x96E84: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x97F5E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x99023: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9A0D7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9B1AF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9C2A3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9D38F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9E45D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9F545: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA0617: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA16EC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA27BC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA3890: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA495D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA5A2E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA6B08: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA7BE8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA8CBB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xA9D7E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAAE40: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xABF19: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xACFD3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAE0A6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAF16C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB0257: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB1321: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB23E3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB34A8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB455A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB5624: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB66F5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB77EF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB88CB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xB99AC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBAA88: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBBB6A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBCC42: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBDD1D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBEDFA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBFECA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC0FCF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC20AD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC318D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC4268: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC5318: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC63D6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC749E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC855B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xC9628: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCA6F3: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCB7B7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCC895: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCD954: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCEA12: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCFAD8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD0BA6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD1C8F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD2D89: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD3E4B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD4F1A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD5FE7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD70AE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD817A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xD9259: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDA331: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDB414: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDC4DD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDD59F: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDE687: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDF75A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE0819: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE18D5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE2999: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE3A96: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE4B6E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE5C3E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE6D39: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE7E03: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE8ECC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xE9F9A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEB078: ???
+==6789== 
+==6789== Conditional jump or move depends on uninitialised value(s)
+==6789==    at 0x80E8AFB: WPI_IwAlloc (wpi_iw.c:1159)
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xECF3A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEE026: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEF0F9: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF01E4: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF12BB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF2377: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xF3450: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2DD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x13B2: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2490: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3564: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4637: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x5718: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x67E0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x78AB: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x8984: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x9A7C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xAB5A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xBC2D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xCCF6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xDDD0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xEE94: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0xFF64: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1103B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1210C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x131F5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x142C7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x153A0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x16491: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x17578: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x18647: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x19713: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1A7E0: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1B8CE: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1C9A1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1DA5D: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1EB30: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x1FBFC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x20CCC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x21D8C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x22E52: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x23F21: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x25018: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x260D8: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x27185: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2825E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2934B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2A428: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2B4FA: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2C5D7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2D6AC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2E782: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x2F858: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3093A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x31A0E: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x32AF6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x33BCC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x34CA1: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x35D80: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x36E67: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x37F43: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x39021: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3A0EF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3B1BC: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3C28A: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3D359: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3E42B: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x3F4EF: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x405DD: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x416A5: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x42767: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x43829: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x448F6: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x459C7: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x46A95: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x47B7C: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x48C52: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x49D16: ???
+==6789== 
+==6789== Use of uninitialised value of size 4
+==6789==    at 0x85254B3: __xsWP_MEM_GET (wpl_platform.c:1041)
+==6789==    by 0x4ADE2: ???
+==6789== 
+==6789== 
+==6789== More than 1000 different errors detected.  I'm not reporting any more.
+==6789== Final error counts will be inaccurate.  Go fix your program!
+==6789== Rerun with --error-limit=no to disable this cutoff.  Note
+==6789== that errors may occur in your program without prior warning from
+==6789== Valgrind, because errors are no longer being displayed.
+==6789== 
+==6789== 
+==6789== HEAP SUMMARY:
+==6789==     in use at exit: 64,500,301 bytes in 939 blocks
+==6789==   total heap usage: 1,488 allocs, 549 frees, 64,719,036 bytes allocated
+==6789== 
+==6789== 136 bytes in 1 blocks are possibly lost in loss record 15 of 39
+==6789==    at 0x690EFAB: calloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x44124EB: _dl_allocate_tls (in /lib/ld-2.11.1.so)
+==6789==    by 0x6954CCD: pthread_create@@GLIBC_2.1 (in /lib/libpthread-2.11.1.so)
+==6789==    by 0x8525AD2: WPL_ThreadInit (wpl_platform.c:597)
+==6789== 
+==6789== 4,096 bytes in 1 blocks are possibly lost in loss record 18 of 39
+==6789==    at 0x690FC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x806FF89: getpath (npu_main.c:316)
+==6789== 
+==6789== 14,074 bytes in 36 blocks are possibly lost in loss record 23 of 39
+==6789==    at 0x690FC6C: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-x86-linux.so)
+==6789==    by 0x83ED515: WPI_dirty_malloc (wpi_dmalloc.c:91)
+==6789== 
+==6789== LEAK SUMMARY:
+==6789==    definitely lost: 0 bytes in 0 blocks
+==6789==    indirectly lost: 0 bytes in 0 blocks
+==6789==      possibly lost: 18,306 bytes in 38 blocks
+==6789==    still reachable: 64,481,995 bytes in 901 blocks
+==6789==         suppressed: 0 bytes in 0 blocks
+==6789== Reachable blocks (those to which a pointer was found) are not shown.
+==6789== To see them, rerun with: --leak-check=full --show-reachable=yes
+==6789== 
+==6789== For counts of detected and suppressed errors, rerun with: -v
+==6789== Use --track-origins=yes to see where uninitialised values come from
+==6789== ERROR SUMMARY: 1479729 errors from 1003 contexts (suppressed: 3 from 3)

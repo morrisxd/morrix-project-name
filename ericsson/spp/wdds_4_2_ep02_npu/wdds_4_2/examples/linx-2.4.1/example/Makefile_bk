@@ -1,0 +1,22 @@
+default: all
+
+LINX ?= $(PWD)/..
+
+include $(LINX)/config.mk
+
+ifneq ($(ASSERT),yes)
+CFLAGS += -DNDEBUG
+endif
+
+all: linx_basic
+
+clean: linx_basic-clean
+
+linx_basic:
+	$(XMAKE) -C linx_basic linx_basic
+
+linx_basic-clean:
+	$(XMAKE) -C linx_basic clean
+	$(RM) $(LINX)/example/bin $(LINX)/example/obj
+
+.PHONY: linx_basic linx_basic-clean
