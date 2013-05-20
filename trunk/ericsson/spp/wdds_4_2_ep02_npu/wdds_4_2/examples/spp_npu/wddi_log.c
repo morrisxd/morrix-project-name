@@ -1,21 +1,21 @@
 /* COPYRIGHT-ENEA-SRC-R2 *
- **************************************************************************
- * Copyright (C) 2006-2009 by Enea Software AB.
- * All rights reserved.
- *
- * This Software is furnished under a software license agreement and
- * may be used only in accordance with the terms of such agreement.
- * Any other use or reproduction is prohibited. No title to and
- * ownership of the Software is hereby transferred.
- *
- * PROPRIETARY NOTICE
- * This Software consists of confidential information.
- * Trade secret law and copyright law protect this Software.
- * The above notice of copyright on this Software does not indicate
- * any actual or intended publication of such Software.
- **************************************************************************
- * COPYRIGHT-END
- */
+**************************************************************************
+* Copyright (C) 2006-2009 by Enea Software AB.
+* All rights reserved.
+*
+* This Software is furnished under a software license agreement and
+* may be used only in accordance with the terms of such agreement.
+* Any other use or reproduction is prohibited. No title to and
+* ownership of the Software is hereby transferred.
+*
+* PROPRIETARY NOTICE
+* This Software consists of confidential information.
+* Trade secret law and copyright law protect this Software.
+* The above notice of copyright on this Software does not indicate
+* any actual or intended publication of such Software.
+**************************************************************************
+* COPYRIGHT-END
+*/
 
 /**
  * @file wddi_log.c
@@ -35,7 +35,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <assert.h> 
+#include <assert.h>
 #include <sys/time.h>
 #include <time.h>
 
@@ -95,13 +95,13 @@ static char wddi_og_level[COMMON_MAX_STRING_LENGTH];
 int
 wddi_log_open(const char *ident)
 {
-   /* Opens a connection to the system logger for the calling program.
-    * The ident string is prepended to every message, and is typically
-    * set to the program name.
-    */
+    /* Opens a connection to the system logger for the calling program.
+     * The ident string is prepended to every message, and is typically
+     * set to the program name.
+     */
     //return 0;
-   #if 1
-   int logfd;
+#if 1
+    int logfd;
     FILE  * fp = fopen( "/var/log/spp_wddi.log","a+");
 	if(fp == NULL)
 	{
@@ -113,11 +113,11 @@ wddi_log_open(const char *ident)
     dup2( logfd, STDERR_FILENO);
 	dup2( logfd, STDOUT_FILENO);
     close(logfd);
-   /*Print to stderr as well*/
-   // openlog(ident, LOG_PID | LOG_CONS | LOG_NDELAY | LOG_PERROR, facility);
-   openlog(ident, LOG_PID, LOG_USER);
-   return 0;
-   #endif
+    /*Print to stderr as well*/
+    // openlog(ident, LOG_PID | LOG_CONS | LOG_NDELAY | LOG_PERROR, facility);
+    openlog(ident, LOG_PID, LOG_USER);
+    return 0;
+#endif
 }
 
 
@@ -135,8 +135,8 @@ wddi_log_open(const char *ident)
 int
 wddi_log_close(void)
 {
-   (void) closelog();
-   return 0;
+    (void) closelog();
+    return 0;
 }
 
 
@@ -157,9 +157,9 @@ wddi_log_close(void)
 int
 wddi_log_get_mask(char *loglevel, unsigned int max_buff_size)
 {
-   strncpy(loglevel, wddi_og_level, max_buff_size);
-   loglevel[max_buff_size - 1] = '\0';
-   return 0;
+    strncpy(loglevel, wddi_og_level, max_buff_size);
+    loglevel[max_buff_size - 1] = '\0';
+    return 0;
 }
 
 
@@ -179,41 +179,41 @@ wddi_log_get_mask(char *loglevel, unsigned int max_buff_size)
 int
 wddi_log_set_mask(char *loglevel)
 {
-   unsigned int mask;
+    unsigned int mask;
 
-   /* Logging is enabled for the priorities that have the corresponding bit
-    * set in mask.
-    * The initial mask is such that logging is enabled for all priorities.
-    */
+    /* Logging is enabled for the priorities that have the corresponding bit
+     * set in mask.
+     * The initial mask is such that logging is enabled for all priorities.
+     */
 
-   if (loglevel == NULL)
-      return -1;
+    if (loglevel == NULL)
+        return -1;
 
-   if (strncmp(loglevel, "LOG_DEBUG", COMMON_MAX_STRING_LENGTH) == 0)
-      mask = LOG_DEBUG;
-   else if (strncmp(loglevel, "LOG_INFO", COMMON_MAX_STRING_LENGTH) == 0)
-      mask = LOG_INFO;
-   else if (strncmp(loglevel, "LOG_NOTICE", COMMON_MAX_STRING_LENGTH) == 0)
-      mask = LOG_NOTICE;
-   else if (strncmp(loglevel, "LOG_WARNING", COMMON_MAX_STRING_LENGTH) == 0)
-      mask = LOG_WARNING;
-   else if (strncmp(loglevel, "LOG_ERR", COMMON_MAX_STRING_LENGTH) == 0)
-      mask = LOG_ERR;
-   else if (strncmp(loglevel, "LOG_CRIT", COMMON_MAX_STRING_LENGTH) == 0)
-      mask = LOG_CRIT;
-   else if (strncmp(loglevel, "LOG_ALERT", COMMON_MAX_STRING_LENGTH) == 0)
-      mask = LOG_ALERT;
-   else if (strncmp(loglevel, "LOG_EMERG", COMMON_MAX_STRING_LENGTH) == 0)
-      mask = LOG_EMERG;
-   else 
-      return -1;
+    if (strncmp(loglevel, "LOG_DEBUG", COMMON_MAX_STRING_LENGTH) == 0)
+        mask = LOG_DEBUG;
+    else if (strncmp(loglevel, "LOG_INFO", COMMON_MAX_STRING_LENGTH) == 0)
+        mask = LOG_INFO;
+    else if (strncmp(loglevel, "LOG_NOTICE", COMMON_MAX_STRING_LENGTH) == 0)
+        mask = LOG_NOTICE;
+    else if (strncmp(loglevel, "LOG_WARNING", COMMON_MAX_STRING_LENGTH) == 0)
+        mask = LOG_WARNING;
+    else if (strncmp(loglevel, "LOG_ERR", COMMON_MAX_STRING_LENGTH) == 0)
+        mask = LOG_ERR;
+    else if (strncmp(loglevel, "LOG_CRIT", COMMON_MAX_STRING_LENGTH) == 0)
+        mask = LOG_CRIT;
+    else if (strncmp(loglevel, "LOG_ALERT", COMMON_MAX_STRING_LENGTH) == 0)
+        mask = LOG_ALERT;
+    else if (strncmp(loglevel, "LOG_EMERG", COMMON_MAX_STRING_LENGTH) == 0)
+        mask = LOG_EMERG;
+    else
+        return -1;
 
-   (void) setlogmask(LOG_UPTO(mask));
-   /* Save localy the DMP log level configured */
-   strncpy(wddi_og_level, loglevel, COMMON_MAX_STRING_LENGTH);
-   wddi_og_level[COMMON_MAX_STRING_LENGTH - 1] = '\0';
+    (void) setlogmask(LOG_UPTO(mask));
+    /* Save localy the DMP log level configured */
+    strncpy(wddi_og_level, loglevel, COMMON_MAX_STRING_LENGTH);
+    wddi_og_level[COMMON_MAX_STRING_LENGTH - 1] = '\0';
 
-   return 0;
+    return 0;
 }
 
 
@@ -238,32 +238,32 @@ int
 wddi_log_msg(const unsigned int priority, char *file, unsigned int line, char *log_msg, ...)
 {
 
-   va_list args;
-   va_start(args, log_msg);       /*lint !e530 varargs */
-   char log_entry_str[1024];
-   int cnt = 0;
-   #if 0
-   struct tm *p;
-   char timestr[40];
-   time_t timep;
-   time(&timep);
-   p= localtime(&timep);
-   sprintf(timestr,"%4d-%02d-%02d %2.2d:%2.2d:%2.2d",p->tm_year+1900,p->tm_mon+1,p->tm_mday,p->tm_hour,p->tm_min,p->tm_sec);
-   /* Assemble the log entry string. */
-   cnt = snprintf(log_entry_str, 1024, "%s %s:%4d ", timestr,file, line);   
-   #endif
-   cnt = snprintf(log_entry_str, 1024, "%s:%4d ",file, line);
-   
-   if(cnt < 0)
-   {
-      cnt = 0;
-   }
-   
-   (void)vsnprintf(&(log_entry_str[cnt]), 1024 - cnt, log_msg, args);
+    va_list args;
+    va_start(args, log_msg);       /*lint !e530 varargs */
+    char log_entry_str[1024];
+    int cnt = 0;
+#if 0
+    struct tm *p;
+    char timestr[40];
+    time_t timep;
+    time(&timep);
+    p= localtime(&timep);
+    sprintf(timestr,"%4d-%02d-%02d %2.2d:%2.2d:%2.2d",p->tm_year+1900,p->tm_mon+1,p->tm_mday,p->tm_hour,p->tm_min,p->tm_sec);
+    /* Assemble the log entry string. */
+    cnt = snprintf(log_entry_str, 1024, "%s %s:%4d ", timestr,file, line);
+#endif
+    cnt = snprintf(log_entry_str, 1024, "%s:%4d ",file, line);
 
-   /* Write into the specified syslog. */
-   syslog(facility | priority, log_entry_str);
-   va_end(args);
+    if(cnt < 0)
+    {
+        cnt = 0;
+    }
 
-   return 0;
+    (void)vsnprintf(&(log_entry_str[cnt]), 1024 - cnt, log_msg, args);
+
+    /* Write into the specified syslog. */
+    syslog(facility | priority, log_entry_str);
+    va_end(args);
+
+    return 0;
 }

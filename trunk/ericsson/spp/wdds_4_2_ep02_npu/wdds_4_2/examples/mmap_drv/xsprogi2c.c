@@ -46,7 +46,7 @@ int main (int argc, char *argv[])
     unsigned char *buf;
     char          *filename;
     unsigned int  flen;
-    int           fd;
+    int           fd, ret;
     
     if(argc != 2) {
 	printf("Usage: %s filename\n", argv[0]);
@@ -58,7 +58,7 @@ int main (int argc, char *argv[])
     /* Open file */
     if((fp=fopen(filename, "r")) == NULL) {
         printf("Couldn't open %s\n", filename);
-        return -1;
+	exit(1);
     }
 
     /* Get file length */
@@ -70,13 +70,14 @@ int main (int argc, char *argv[])
     buf = (unsigned char *)malloc(flen);
     if(buf==NULL) {
         printf("Couldn't allocate memory to read file\n");
-        return -1;
+	exit(1);
     }
 
     /* Read file */
     if(fread(buf, flen, 1, fp) != 1) {
         printf("Couldn't read file\n");
-        return -1;
+	free(buf);
+	exit(1);
     }
 
     /* Close file */
@@ -85,22 +86,26 @@ int main (int argc, char *argv[])
     fd = open("/dev/wp_bank24", O_RDWR | O_NOFOLLOW, 0644);
     if(fd == -1) {
 	perror("open");
+	free(buf);
 	exit(1);
     }
 
     desc.len = flen;
     desc.buf = buf;
 
-    if(ioctl(fd, XS_IOCTL_I2C_PROG, &desc) != 0) {
-	close(fd);
-	perror("ioctl");
-	printf("Couldn't write I2C\n");
-	exit(1);
+    while(1) {
+	ret = ioctl(fd, XS_IOCTL_I2C_PROG, &desc);
+	if(ret != 0) {
+	    printf("Couldn't write I2C, retrying\n");
+	    continue;
+	}
+	break;
     }
-    
     printf("I2C successfully programmed\n");
+
+    free(buf);
 
     close(fd);
 
-    return 0;
+    exit(0);
 }

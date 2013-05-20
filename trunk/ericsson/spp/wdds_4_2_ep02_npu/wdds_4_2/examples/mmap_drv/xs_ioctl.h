@@ -20,7 +20,7 @@
 #define XS_IOCTL_REV_GET                 XS_IOCTL_OS_VALUE(15)
 #define XS_IOCTL_ENV_GET32               XS_IOCTL_OS_VALUE(16) // Do not use from application
 #define XS_IOCTL_READ_WORD               XS_IOCTL_OS_VALUE(17)
-
+#define  XS_IOCTL_I2C_READ               XS_IOCTL_OS_VALUE(18)
 #define PCI_CONSOLE_SIZE   256
 
 typedef struct {

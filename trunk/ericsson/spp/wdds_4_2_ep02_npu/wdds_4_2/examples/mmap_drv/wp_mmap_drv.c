@@ -53,7 +53,7 @@
 #include <xs_ioctl.h>
 #include <irq.h>
 
-#define XS_VERSION "0.92"
+#define XS_VERSION "0.93"
 
 #define WDS_WINPATH_NO_MAX   4
 #define MAX_SIU_NO           5
@@ -216,8 +216,8 @@ typedef struct XS_HANDLE {
 
 static XS_HANDLE *gxsHandle;
 
-static unsigned int i2c_read(XS_HANDLE *xsHandle, unsigned int addr_msb, unsigned int addr_lsb);
-static void i2c_write(XS_HANDLE *xsHandle, unsigned int addr_msb, unsigned int addr_lsb, unsigned int data);
+static int i2c_read_seq  (XS_HANDLE *xsHandle, unsigned int addr, unsigned char *buf);
+static int i2c_write_page(XS_HANDLE *xsHandle, unsigned int page, unsigned char *buf);
 
 static unsigned int usage_count;
 
@@ -810,7 +810,7 @@ static int  mmap_probe (struct pci_dev *pdev, const struct pci_device_id *ent)
     STORE(xsHandle->wpathAdrs, 0x80000000, MAP_PCIE_REG_OF_EP_SEND_INTERRUPT);
    
     // Restore I2C frequency
-    STORE(xsHandle->wpathAdrs, 0x233, MAP_I2C_CLKDIV);
+    STORE(xsHandle->wpathAdrs, 0x320, MAP_I2C_CLKDIV); // 250 KHz
 
     spin_lock_init(&xsHandle->xsInterrupt_lock);
 
@@ -1555,10 +1555,9 @@ static int mmapdrv_ioctl(struct inode *inode, struct file *file, unsigned int cm
 	case XS_IOCTL_I2C_PROG :
 	    {
 		XS_FILE_DESC  desc;
-		unsigned char *buf;
-		int           i;
-		unsigned int  data;
-		unsigned char c;
+		unsigned char *wbuf, *rbuf;
+		int           i, ret;
+		unsigned int  data, pages;
 
 		// Make sure we are the only one using the driver
 		if(usage_count != 1) {
@@ -1568,10 +1567,28 @@ static int mmapdrv_ioctl(struct inode *inode, struct file *file, unsigned int cm
 		if (copy_from_user(&desc, (void *)arg, sizeof(desc)))
 		    return -EFAULT;
 
-		buf = kmalloc(desc.len, GFP_KERNEL);
+		// WinPath3 controller only supports up to 5 bytes (63) length including 
+		// address. So we use half pages...
+		
+		pages = desc.len/32;
+		if(desc.len % 32) {
+		    pages++;
+		}
 
-		if (copy_from_user(buf, (void *)desc.buf, desc.len)) {
-		    kfree(buf);
+		wbuf = kmalloc(pages*32, GFP_KERNEL);
+		if(wbuf == NULL) {
+		    return -ENOMEM;
+		}
+
+		rbuf = kmalloc(pages*32, GFP_KERNEL);
+		if(rbuf == NULL) {
+		    kfree(wbuf);
+		    return -ENOMEM;
+		}
+
+		if (copy_from_user(wbuf, (void *)desc.buf, desc.len)) {
+		    kfree(wbuf);
+		    kfree(rbuf);
 		    return -EFAULT;
 		}
 
@@ -1579,15 +1596,29 @@ static int mmapdrv_ioctl(struct inode *inode, struct file *file, unsigned int cm
 		XS_READ_32(gxsHandle->fpgaAdrs + 0x1020/4, data);
 		XS_WRITE_32(gxsHandle->fpgaAdrs + 0x1020/4, data | 0x2);
 
+		// Init I2C controller
+		STORE(gxsHandle->wpathAdrs, 0x1a,  MAP_I2C_CFG);
+		STORE(gxsHandle->wpathAdrs, 2000, MAP_I2C_CLKDIV);  // 100 KHz
+		STORE(gxsHandle->wpathAdrs, 0x50,  MAP_I2C_DEV_ADDR);
+
+		// Write
 		printk("Writing WinPath3 I2C:\n");
-		for(i=0; i<desc.len; i++) {
-		    // printk("Writing %02x to %x\n", buf[i], i);
-		    i2c_write(gxsHandle, (i>>8) & 0xff, i & 0xff, buf[i]);
-		    if(!(i%(desc.len/10))) {
-			printk("I2C Upgrade: %3d%% written\n", (100*i)/desc.len);
-			set_current_state(TASK_INTERRUPTIBLE);
-			schedule_timeout(100);
-		    } 
+
+		for(i=0; i<pages; i++) {
+		    ret = i2c_write_page(gxsHandle, i, &wbuf[32*i]);
+		    if(ret != 0) {
+			kfree(wbuf);
+			kfree(rbuf);
+			return -EIO;
+		    }
+
+		    if(pages > 10) {
+			if(!(i%(pages/10))) {
+			    printk("I2C Upgrade: %3d%% written\n", (100*i)/pages);
+			    set_current_state(TASK_INTERRUPTIBLE); // to allow printk
+			    schedule_timeout(100);
+			} 
+		    }
 		}
 		printk("I2C Upgrade: 100%% written\n\n");
 		
@@ -1595,22 +1626,83 @@ static int mmapdrv_ioctl(struct inode *inode, struct file *file, unsigned int cm
 		XS_READ_32(gxsHandle->fpgaAdrs + 0x1020/4, data);
 		XS_WRITE_32(gxsHandle->fpgaAdrs + 0x1020/4, data & ~0x2);
 
-		printk("Checking WinPath3 I2C:\n");
+		printk("Reading WinPath3 I2C:\n");
 		// Read back
+		for(i=0; i<pages; i++) {
+		    ret = i2c_read_seq(gxsHandle, i, &rbuf[32*i]);
+		    if(ret != 0) {
+			kfree(wbuf);
+			kfree(rbuf);
+			return -EIO;
+		    }
+		    if(pages > 10) {
+			if(!(i%(pages/10))) {
+			    printk("I2C Upgrade: %3d%% checked\n", (100*i)/pages);
+			    set_current_state(TASK_INTERRUPTIBLE);
+			    schedule_timeout(100);
+			} 
+		    }
+		}
+
 		for(i=0; i<desc.len; i++) {
-		    c = i2c_read(gxsHandle, (i>>8) & 0xff, i & 0xff);
-		    if(c != buf[i]) {
+		    if(rbuf[i] != wbuf[i]) {
+			printk("### Error at %05x: written %02x read back %02x\n", 
+			       i, wbuf[i], rbuf[i]);
+			kfree(wbuf);
+			kfree(rbuf);
+			return -EIO;
+		    }
+		}
+		printk("I2C Upgrade: 100%% checked\n");
+
+		kfree(wbuf);
+		kfree(rbuf);
+	    }
+	    break;
+
+	case XS_IOCTL_I2C_READ :
+	    {
+		XS_FILE_DESC  desc;
+		unsigned char *buf;
+		int           i, ret;
+		unsigned int  pages;
+
+		// Make sure we are the only one using the driver
+		if(usage_count != 1) {
+		    return -EBUSY;
+		}
+
+		if (copy_from_user(&desc, (void *)arg, sizeof(desc)))
+		    return -EFAULT;
+
+		pages = desc.len/32;
+		if(desc.len % 32) {
+		    pages++;
+		}
+
+		buf = kmalloc(pages*32, GFP_KERNEL);
+		if(buf == NULL) {
+		    return -ENOMEM;
+		}
+
+   		STORE(gxsHandle->wpathAdrs, 0x1a,  MAP_I2C_CFG);
+		STORE(gxsHandle->wpathAdrs, 2000, MAP_I2C_CLKDIV); // 100 KHz
+		STORE(gxsHandle->wpathAdrs, 0x50,  MAP_I2C_DEV_ADDR);
+
+		for(i=0; i<pages; i++) {
+		    ret = i2c_read_seq(gxsHandle, i, &buf[32*i]);
+		    if(ret != 0) {
 			kfree(buf);
 			return -EIO;
 		    }
-		    //printk("Read %02x from %x\n", c, i);
-		    if(!(i%(desc.len/10))) {
-			printk("I2C Upgrade: %3d%% checked\n", (100*i)/desc.len);
-			set_current_state(TASK_INTERRUPTIBLE);
-			schedule_timeout(100);
-		    } 
 		}
-		printk("I2C Upgrade: 100%% checked\n");
+
+		if (copy_to_user((void *) desc.buf, 
+				 buf,
+				 desc.len)) {
+		    kfree(buf);
+		    return -EFAULT;   
+		}
 
 		kfree(buf);
 	    }
@@ -1801,7 +1893,6 @@ static int mmapdrv_ioctl(struct inode *inode, struct file *file, unsigned int cm
 
 		//printk("XS_IOCTL_READ_WORD: address is %x\n", ptr);
 
-		// Only appl supported yet
 		GET(gxsHandle->hostAdrs, data, ptr);
 
 		//printk("XS_IOCTL_READ_WORD: data is %x\n", data);
@@ -2343,77 +2434,128 @@ static void __exit exit_mmapdrv(void)
 module_init(init_mmapdrv);
 module_exit(exit_mmapdrv);
 
-#define I2C_STATUS_TIMEOUT 0x400
-#define WAIT_FOR_ACK 200
+#define I2C_STATUS_TIMEOUT 0x10000
 
-static unsigned int status_poll_ack(XS_HANDLE *xsHandle, unsigned int expected_value, unsigned int index, unsigned int time_out) 
+static int status_poll(XS_HANDLE *xsHandle, unsigned int expected_value, unsigned int index, unsigned int time_out) 
 {
     unsigned int status;
-    unsigned int masked_status;
+    unsigned int masked_status, ackerr;
     unsigned int cnt = 0;
 
-    GET(xsHandle->wpathAdrs, status, MAP_I2C_STATUS);
-    masked_status = status & expected_value;
-
-    while ((masked_status != expected_value) && (cnt != time_out)){
-        cnt++;
+    do {
 	GET(xsHandle->wpathAdrs, status, MAP_I2C_STATUS);
-        masked_status = status & expected_value;
-    }
+	ackerr = status & 0x8;
+	masked_status = status & expected_value;
+	cnt++;
+    } while ((masked_status != expected_value) && (cnt != time_out));
     
+    if(ackerr && ((status & 1) == 0)) {
+	printk("!!! I2C ACK ERROR, Slave Not Responding !!! read %x, expected %x, index %x \n",
+	       status, expected_value, index);
+	
+	// make sure we recover
+	printk("Recovering ACK error\n");
+	do {
+	    STORE(xsHandle->wpathAdrs, 0, MAP_I2C_DATA_OUT);
+	    GET(xsHandle->wpathAdrs, status, MAP_I2C_STATUS);
+	} while ((status & 1) == 0);
+
+	printk(" done\n");
+	return 1;
+    }
+
     if(cnt == time_out){
         printk("!!! I2C STATUS TIMEOUT !!! read %x, expected %x, index %x \n", 
 		status, expected_value, index);
+
+	return 1;
     }
     
-    return (status & 0x8);
+    return 0;
 }
 
-static void i2c_write(XS_HANDLE *xsHandle, unsigned int addr_msb, unsigned int addr_lsb, unsigned int data)
+static int i2c_write_page(XS_HANDLE *xsHandle, unsigned int page, unsigned char *buf)
 {
-    unsigned int bad_ack;
-    unsigned int cnt = 0;
-    
-    do {
-	cnt++;
-	STORE(xsHandle->wpathAdrs, 0x02, MAP_I2C_BYTCNT);
-	STORE(xsHandle->wpathAdrs, addr_msb, MAP_I2C_DATA_OUT);
-	STORE(xsHandle->wpathAdrs, 0x00, MAP_I2C_SDEN);
-	bad_ack = status_poll_ack (xsHandle, 0x02,0x1,I2C_STATUS_TIMEOUT);
-	
-	STORE(xsHandle->wpathAdrs, addr_lsb, MAP_I2C_DATA_OUT);
-	bad_ack = bad_ack | status_poll_ack (xsHandle, 0x02,0x2,I2C_STATUS_TIMEOUT);
-	/* data tx */
-	/* ------- */
-	STORE(xsHandle->wpathAdrs, data, MAP_I2C_DATA_OUT);
-	bad_ack = bad_ack | status_poll_ack (xsHandle, 0x03,0x3,I2C_STATUS_TIMEOUT);
-    } while ((bad_ack != 0) && (cnt != WAIT_FOR_ACK));
+    int i, rc;
+    unsigned int addr_msb, addr_lsb;
 
-    if (cnt == WAIT_FOR_ACK)  printk (" <No ACK> ");
+    addr_msb = (page >> 3) & 0xff;
+    addr_lsb = (page << 5) & 0xff;
+
+    //printk("Writing to %02x %02x\n", addr_msb, addr_lsb);
+
+    // Check I2C is idle
+    rc = status_poll(xsHandle, 0x01, 0x0, I2C_STATUS_TIMEOUT);
+    if(rc) {
+	return -1;
+    }
+
+    set_current_state(TASK_UNINTERRUPTIBLE);
+
+    STORE(xsHandle->wpathAdrs, 2+32-1, MAP_I2C_BYTCNT);
+    STORE(xsHandle->wpathAdrs, addr_msb, MAP_I2C_DATA_OUT);
+    STORE(xsHandle->wpathAdrs, 0x00, MAP_I2C_SDEN);
+    rc = status_poll(xsHandle, 0x02, 0x1, I2C_STATUS_TIMEOUT);
+    if(rc) { set_current_state(TASK_RUNNING); return -1; }
+    STORE(xsHandle->wpathAdrs, addr_lsb, MAP_I2C_DATA_OUT);
+    rc = status_poll(xsHandle, 0x02, 0x2, I2C_STATUS_TIMEOUT);
+    if(rc) { set_current_state(TASK_RUNNING); return -1; }
+
+    for(i=0; i<32; i++) {
+	STORE(xsHandle->wpathAdrs, buf[i], MAP_I2C_DATA_OUT);
+	rc = status_poll(xsHandle, 0x02, 0x3+i, I2C_STATUS_TIMEOUT);
+	if(rc) { set_current_state(TASK_RUNNING); return -1; }
+    }
+
+    set_current_state(TASK_RUNNING);
+
+    rc = status_poll(xsHandle, 0x01, 0xffffffff, I2C_STATUS_TIMEOUT);
+    if(rc) return -1;
+
+    msleep(5);
+
+    return 0;
 }
 
-static unsigned int i2c_read(XS_HANDLE *xsHandle, unsigned int addr_msb, unsigned int addr_lsb)
+static int i2c_read_seq(XS_HANDLE *xsHandle, unsigned int page, unsigned char *buf)
 {
-    unsigned int data;
-    unsigned int bad_ack;
-    unsigned int cnt = 0;
+    int i, rc;
+    unsigned int addr_msb, addr_lsb;
+
+    addr_msb = (page >> 3) & 0xff;
+    addr_lsb = (page << 5) & 0xff;
+
+    //printk("Reading from %02x %02x\n", addr_msb, addr_lsb);
+
+    // Check I2C is idle
+    rc = status_poll(xsHandle, 0x01, 0x0, I2C_STATUS_TIMEOUT);
+    if(rc) {
+	return -1;
+    }
+
+    set_current_state(TASK_UNINTERRUPTIBLE);
+
+    STORE(xsHandle->wpathAdrs, 0x01, MAP_I2C_BYTCNT);
+    STORE(xsHandle->wpathAdrs, addr_msb, MAP_I2C_DATA_OUT);
+    STORE(xsHandle->wpathAdrs, 0x00, MAP_I2C_SDEN);
+    rc = status_poll(xsHandle, 0x02, 0x1, I2C_STATUS_TIMEOUT);
+    if(rc) { set_current_state(TASK_RUNNING); return -1; }
+    STORE(xsHandle->wpathAdrs, addr_lsb, MAP_I2C_DATA_OUT);
+    rc = status_poll(xsHandle, 0x03, 0x2, I2C_STATUS_TIMEOUT);
+    if(rc) { set_current_state(TASK_RUNNING); return -1; }
+
+    STORE(xsHandle->wpathAdrs, 32-1, MAP_I2C_BYTCNT);
+    STORE(xsHandle->wpathAdrs, 0x01, MAP_I2C_SDEN);
+    for(i=0; i<32; i++) {
+	rc = status_poll(xsHandle, 0x04, 0x3+i, I2C_STATUS_TIMEOUT);
+	if(rc) { set_current_state(TASK_RUNNING); return -1; }
+	GET(xsHandle->wpathAdrs, buf[i], MAP_I2C_DATA_IN);
+    }
     
-    do {
-	cnt++;        
-	STORE(xsHandle->wpathAdrs, 0x01, MAP_I2C_BYTCNT);
-	STORE(xsHandle->wpathAdrs, addr_msb, MAP_I2C_DATA_OUT);
-	STORE(xsHandle->wpathAdrs, 0x00, MAP_I2C_SDEN);
-	bad_ack = status_poll_ack (xsHandle, 0x02,0x4,I2C_STATUS_TIMEOUT);
-	STORE(xsHandle->wpathAdrs, addr_lsb, MAP_I2C_DATA_OUT);
-	bad_ack = bad_ack | status_poll_ack (xsHandle, 0x03,0x5,I2C_STATUS_TIMEOUT);
-	STORE(xsHandle->wpathAdrs, 0x00, MAP_I2C_BYTCNT);
-	STORE(xsHandle->wpathAdrs, 0x01, MAP_I2C_SDEN);
-	bad_ack = bad_ack | status_poll_ack (xsHandle, 0x07,0x6,I2C_STATUS_TIMEOUT);
-	GET(xsHandle->wpathAdrs, data, MAP_I2C_DATA_IN);
-	bad_ack = bad_ack | status_poll_ack (xsHandle, 0x03,0x7,I2C_STATUS_TIMEOUT);
-    } while ((bad_ack != 0) && (cnt != WAIT_FOR_ACK));
-    
-    if (cnt == WAIT_FOR_ACK)  printk (" <No ACK> ");
-    
-    return data;
+    set_current_state(TASK_RUNNING);
+
+    rc = status_poll(xsHandle, 0x01, 0xffffffff, I2C_STATUS_TIMEOUT);
+    if(rc) return -1;
+
+    return 0;
 }

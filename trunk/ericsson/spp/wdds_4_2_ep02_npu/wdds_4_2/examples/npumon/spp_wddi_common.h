@@ -1,12 +1,12 @@
 #ifndef __WDDI_COMMON_H
-#define __WDDI_COMMON_H 
+#define __WDDI_COMMON_H
 #include <linx.h>
 
 #ifndef FULSE
 #define FULSE 0
 #endif
 
-#ifndef TRUE 
+#ifndef TRUE
 #define TRUE 1
 #endif
 
@@ -18,7 +18,7 @@
 #define NPUMON_NAME  	"npumon_"
 
 #define NPU_RECEIVE_TIMEOUT 1000 /*find server timeout*/
-#define NPU_SERVER_TIMEOUT 100 
+#define NPU_SERVER_TIMEOUT 100
 #define NPU_RECEIVE_IOCTL_TIMEOUT 300 /* miliseconds */
 
 
@@ -51,12 +51,12 @@ struct stru_spp_send_sig {
 	LINX_SIGSELECT  sig_no;
 	u8 vp_type;
 	u32 length;
-    u32 ipaddr_src;	
+    u32 ipaddr_src;
 	u32 ipaddr_dst;
 	u32 port_src;
 	u32 port_dst;
 	u8 pdata[1];
-	
+
 };
 
 #define SPP_RECEIVE_SIG (LINX_SIG_BASE + 5)
@@ -84,7 +84,7 @@ struct stru_vport_open_sig {
 #define VPORT_PORT_CLOSE_SIG (LINX_SIG_BASE + 9)
 struct stru_vport_close_sig {
 	LINX_SIGSELECT  sig_no;
-	u8  vp_type;	
+	u8  vp_type;
 	u32 port_src;
 };
 
@@ -110,7 +110,7 @@ struct stru_npu_set_request_ack_sig {
 struct stru_npu_get_request_ack_sig {
 	LINX_SIGSELECT  sig_no;
 	u32 cmd;
-	int result;	
+	int result;
 	u8  pdata[1];
 };
 
@@ -119,19 +119,19 @@ struct stru_npu_get_request_ack_sig {
 union LINX_SIGNAL
 {
 	LINX_SIGSELECT  sig_no;
-	struct stru_npu_ack_sig npu_ack;	
+	struct stru_npu_ack_sig npu_ack;
 	struct stru_npu_cfg_sig npu_cfg;
 	struct stru_spp_send_sig spp_send;
 	struct stru_spp_receive_sig spp_receive;
 
-	struct stru_vport_open_sig vport_open;	
+	struct stru_vport_open_sig vport_open;
 	struct stru_vport_close_sig vport_close;
 	struct stru_npu_request_sig npu_request;
-	struct stru_npu_set_request_ack_sig npu_set_request_ack;	
+	struct stru_npu_set_request_ack_sig npu_set_request_ack;
 	struct stru_npu_get_request_ack_sig npu_get_request_ack;
 };
 
-#pragma pack () 
+#pragma pack ()
 
 #if 0
 /*error message type define*/
@@ -158,8 +158,8 @@ union LINX_SIGNAL
 #endif
 
 /*
-*  Interface specification between GEP3 and NPU (PDU type)
-*/
+ *  Interface specification between GEP3 and NPU (PDU type)
+ */
 int linx_init(void);
 int np_get_slots_selection(u32 card,u32 trunk,u32 group);
 #endif

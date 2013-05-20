@@ -70,30 +70,75 @@ typedef struct  {
 #ifndef O_NOFOLLOW
 #define O_NOFOLLOW     00400000        /* don't follow links */
 #endif
+#define I2C_BUF_LEN    768
 
 int main (int argc, char *argv[])
 {
-    wds_board_info_t desc;
+    wds_board_info_t bdesc;
+    XS_REV_DESC      rdesc;
+    XS_FILE_DESC     fdesc;
     int              fd, status = 0;
-    unsigned int     revision;
+    unsigned int     revision, part, rev, subrev;
     char             date[16];
-    unsigned int     data[3];
+    unsigned int     data[3], *uintptr;
+    unsigned char    buf[I2C_BUF_LEN];
 
     fd = open("/dev/wp_bank24", O_RDWR | O_NOFOLLOW, 0644);
     if(fd == -1) {
 	perror("open");
 	exit(1);
     }
-	    
-    if(ioctl(fd, MMAP_IOCTL_READ_BOARD_GEN_CONF, &desc) != 0) {
+
+    // First get WinPath revision
+    if(ioctl(fd, XS_IOCTL_REV_GET, &rdesc) < 0) {
+	perror("ioctl XS_IOCTL_REV_GET");
+	close(fd);
+	exit(1);
+    }
+
+    part   = (rdesc.Fuse0 >> 19) & 0xff;
+    rev    = (rdesc.Fuse0 >> 27) & 0x0f;
+    subrev = ((rdesc.Fuse0 >> 31) & 0x01) | ((rdesc.Fuse1 & 0x07) << 1);
+
+    if(!((part == 3) && (rev == 1) && (subrev == 2))) {
+	printf("The device is not a WinPath3 Rev B2, skipping update\n");
+	close(fd);
+	exit(5);
+    }
+
+    fdesc.buf = buf;
+    fdesc.len = I2C_BUF_LEN;
+
+    // Then Check I2C version
+    if(ioctl(fd, XS_IOCTL_I2C_READ, &fdesc) < 0) {
+	perror("ioctl XS_IOCTL_I2C_READ");
+	close(fd);
+	exit(1);
+    }
+
+    uintptr = (unsigned int *)&buf[0x228];
+
+    if(*uintptr != 0x10fc4000) {
+	printf("I2C is not up-to-date\n");
+	status = 2;
+    }
+
+    // And Finally WinMon revision
+    if(ioctl(fd, MMAP_IOCTL_READ_BOARD_GEN_CONF, &bdesc) != 0) {
 	close(fd);
 	printf("Could not get WinMon revision\n");
 	exit(1);
     }
 	    
+#if 0 // May 4 - foudn with mips-sde-elf-objdump -s winmon_int_copy.eef
     data[0] = 0x0002fe34;
     data[1] = 0x0002fe38;
     data[2] = 0x0002fe3c;
+#endif
+
+    data[0] = 0x0002f91c;
+    data[1] = 0x0002f920;
+    data[2] = 0x0002f924;
 
     if(ioctl(fd, XS_IOCTL_READ_WORD, &data[0]) != 0) {
 	close(fd);
@@ -131,19 +176,26 @@ int main (int argc, char *argv[])
     date[11] = (data[2] >>  0) & 0xff;
     date[12] = 0;
 
-    revision = desc.wds_winmon_ver;
+    revision = bdesc.wds_winmon_ver;
 
     if(revision != 0x04020400) {
 	printf("WinMon version should be %x and is %x\n", 0x04020400, revision);
-	status = -1;
+	if(status == 2) status = 4; else status = 3;
     }
 
+#if 0 // May 4
     if(strcmp(date, "May  4 2012")) {
 	printf("WinMon version date should be %s and is %s\n", "May  4 2012", date);
-	status = -1;
+	if(status == 2) status = 4; else status = 3;
+    }
+#endif
+
+    if(strcmp(date, "Sep  3 2012")) {
+	printf("WinMon version date should be %s and is %s\n", "Sep  3 2012", date);
+	if(status == 2) status = 4; else status = 3;
     }
 
     printf("WinMon revision: %08x %s\n", revision, date);
 
-    return status;
+    exit(status);
 }

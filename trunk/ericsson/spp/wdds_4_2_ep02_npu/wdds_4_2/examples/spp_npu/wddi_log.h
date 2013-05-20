@@ -1,21 +1,21 @@
 /* COPYRIGHT-ENEA-SRC-R2 *
- **************************************************************************
- * Copyright (C) 2006-2009 by Enea Software AB.
- * All rights reserved.
- *
- * This Software is furnished under a software license agreement and
- * may be used only in accordance with the terms of such agreement.
- * Any other use or reproduction is prohibited. No title to and
- * ownership of the Software is hereby transferred.
- *
- * PROPRIETARY NOTICE
- * This Software consists of confidential information.
- * Trade secret law and copyright law protect this Software.
- * The above notice of copyright on this Software does not indicate
- * any actual or intended publication of such Software.
- **************************************************************************
- * COPYRIGHT-END
- */
+**************************************************************************
+* Copyright (C) 2006-2009 by Enea Software AB.
+* All rights reserved.
+*
+* This Software is furnished under a software license agreement and
+* may be used only in accordance with the terms of such agreement.
+* Any other use or reproduction is prohibited. No title to and
+* ownership of the Software is hereby transferred.
+*
+* PROPRIETARY NOTICE
+* This Software consists of confidential information.
+* Trade secret law and copyright law protect this Software.
+* The above notice of copyright on this Software does not indicate
+* any actual or intended publication of such Software.
+**************************************************************************
+* COPYRIGHT-END
+*/
 
 /**
  * @file wddi_log.h
@@ -57,11 +57,11 @@
  *
  * @return
  */
-#define WDDI_INFONL(...)                                                         \
-do                                                                              \
-{                                                                               \
-  (void) wddi_log_msg(LOG_INFO, FILE_NOPATH, __LINE__,"\n" __VA_ARGS__);         \
-} while (0)
+#define WDDI_INFONL(...)                                                \
+    do                                                                  \
+    {                                                                   \
+        (void) wddi_log_msg(LOG_INFO, FILE_NOPATH, __LINE__,"\n" __VA_ARGS__); \
+    } while (0)
 
 
 /**
@@ -76,12 +76,12 @@ do                                                                              
  *
  * @return
  */
-#define WDDI_INFO(...)                                                            \
-do                                                                               \
-{                                                                                \
-  if(g_logLevel < 2) \
-  (void) wddi_log_msg(LOG_INFO, FILE_NOPATH, __LINE__, __VA_ARGS__);\
-} while (0)
+#define WDDI_INFO(...)                                                  \
+    do                                                                  \
+    {                                                                   \
+        if(g_logLevel < 2)                                              \
+            (void) wddi_log_msg(LOG_INFO, FILE_NOPATH, __LINE__, __VA_ARGS__); \
+    } while (0)
 
 /**
  * @macro WARNING
@@ -95,12 +95,12 @@ do                                                                              
  *
  * @return
  */
-#define WDDI_WARNING(...)                                                       \
-do                                                                             \
-{                                                                              \
-   if(g_logLevel < 3)                                                          \
-   (void) wddi_log_msg(LOG_WARNING, FILE_NOPATH, __LINE__,  __VA_ARGS__);\
-} while (0)
+#define WDDI_WARNING(...)                                               \
+    do                                                                  \
+    {                                                                   \
+        if(g_logLevel < 3)                                              \
+            (void) wddi_log_msg(LOG_WARNING, FILE_NOPATH, __LINE__,  __VA_ARGS__); \
+    } while (0)
 
 /**
  * @macro WARNINGNL
@@ -114,11 +114,11 @@ do                                                                             \
  *
  * @return
  */
-#define WDDI_WARNINGNL(...)                                                         \
-do                                                                                 \
-{                                                                                  \
-  (void) wddi_log_msg(LOG_WARNING, FILE_NOPATH, __LINE__, "\n" __VA_ARGS__);  \
-} while (0)
+#define WDDI_WARNINGNL(...)                                             \
+    do                                                                  \
+    {                                                                   \
+        (void) wddi_log_msg(LOG_WARNING, FILE_NOPATH, __LINE__, "\n" __VA_ARGS__); \
+    } while (0)
 
 
 /**
@@ -131,32 +131,32 @@ do                                                                              
  *
  * @return
  */
-#define WDDI_PRINT(...)                          \
-do                                              \
-{                                               \
-   if(g_logLevel == 0)\
-  (void) wddi_log_msg(LOG_DEBUG, FILE_NOPATH, __LINE__, __VA_ARGS__);\
-} while (0)
+#define WDDI_PRINT(...)                                                 \
+    do                                                                  \
+    {                                                                   \
+        if(g_logLevel == 0)                                             \
+            (void) wddi_log_msg(LOG_DEBUG, FILE_NOPATH, __LINE__, __VA_ARGS__); \
+    } while (0)
 
-//#define  WDDI_STRING(buffer, length) 
+//#define  WDDI_STRING(buffer, length)
 
-#define  WDDI_STRING(buffer, length) \
-do                                      \
-{   if(g_logLevel == 0)  \
-    {                   \
-    char string[512]={0}; \
-    char *pstr = string; \
-    int count; \
-    int len;  \
-    len = length > 128 ? 128: length ;               \
-      for (count= 0; count < len ;count++) \
-      {                                                                                                \
-        pstr +=sprintf(pstr, "%2.2x", (unsigned char)buffer[count]); \
-       }                                                                                               \
-                                                                                                        \
-      WDDI_PRINT(string);                                                           \
-     }\
-} while(0) 
+#define  WDDI_STRING(buffer, length)                                    \
+    do                                                                  \
+    {   if(g_logLevel == 0)                                             \
+        {                                                               \
+            char string[512]={0};                                       \
+            char *pstr = string;                                        \
+            int count;                                                  \
+            int len;                                                    \
+            len = length > 128 ? 128: length ;                          \
+            for (count= 0; count < len ;count++)                        \
+            {                                                           \
+                pstr +=sprintf(pstr, "%2.2x", (unsigned char)buffer[count]); \
+            }                                                           \
+            *pstr = '\n';                                               \
+            WDDI_PRINT(string);                                         \
+        }                                                               \
+    } while(0)
 
 /**
  * @macro ERR
@@ -169,18 +169,18 @@ do                                      \
  *
  * @return
  */
-#define WDDI_ERR(...)                                                        \
-do                                                                          \
-{                                                                           \
-  (void) wddi_log_msg(LOG_EMERG, FILE_NOPATH, __LINE__, "\nFATAL_ERROR");    \
-  (void) wddi_log_msg(LOG_EMERG, FILE_NOPATH, __LINE__, __VA_ARGS__);        \
-  if (errno)                                                                \
-  {                                                                         \
-     (void) wddi_log_msg(LOG_EMERG, FILE_NOPATH, __LINE__, "errno = %d:%s", errno, strerror(errno));\
-  }                                                                         \
-  (void) wddi_log_msg(LOG_EMERG, FILE_NOPATH, __LINE__, "Terminating.\n");   \
-  exit(0);                                                                   \
-} while (0)
+#define WDDI_ERR(...)                                                   \
+        do                                                              \
+        {                                                               \
+            (void) wddi_log_msg(LOG_EMERG, FILE_NOPATH, __LINE__, "\nFATAL_ERROR"); \
+            (void) wddi_log_msg(LOG_EMERG, FILE_NOPATH, __LINE__, __VA_ARGS__); \
+            if (errno)                                                  \
+            {                                                           \
+                (void) wddi_log_msg(LOG_EMERG, FILE_NOPATH, __LINE__, "errno = %d:%s", errno, strerror(errno)); \
+            }                                                           \
+            (void) wddi_log_msg(LOG_EMERG, FILE_NOPATH, __LINE__, "Terminating.\n"); \
+            exit(0);                                                    \
+        } while (0)
 /*abort replace by exit(1);*/
 /*----------------------------  Structs and typedefs  -----------------------*/
 
