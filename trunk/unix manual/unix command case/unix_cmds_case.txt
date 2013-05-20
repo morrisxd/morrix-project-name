@@ -48,4 +48,98 @@ file1120
 
 
 
+[8]
+ssh-copy-id user@host
+ssh -N -L2001:localhost:80 somemachine
+
+dd if=/dev/dsp | ssh -c arcfour -C username@host dd of=/dev/dsp
+ssh user@host cat /path/to/remotefile | diff /path/to/localfile 
+
+sshfs name@server:/path/to/folder /path/to/mount/point
+ssh -t reachable_host ssh unreachable_host
+
+sh root@host1 "cd /somedir/tocopy/ && tar -cf  ." | ssh root@host2 "cd /samedir/tocopyto/ && tar -xf -"
+
+
+ssh -fX <user>@<host> <program>
+
+ssh -MNf <user>@<host>
+
+Host host
+ControlPath ~/.ssh/master-%r@%h:%p
+ControlMaster no
+
+ssh -t remote_host screen r
+
+
+knock <host> 3000 4000 5000 && ssh -p <port> user@host && knock <host> 5000 4000 3000
+
+
+[options]
+logfile = /var/log/knockd.log
+[openSSH]
+sequence = 3000,4000,5000
+seq_timeout = 5
+command = /sbin/iptables -A INPUT -i eth0 -s %IP% -p tcp dport 22 -j ACCEPT
+tcpflags = syn
+[closeSSH]
+sequence = 5000,4000,3000
+seq_timeout = 5
+command = /sbin/iptables -D INPUT -i eth0 -s %IP% -p tcp dport 22 -j ACCEPT
+tcpflags = syn
+
+
+
+ssh-keygen -R <the_offending_host>
+
+ssh host -l user $(<cmd.txt)
+
+ssh host -l user "`cat cmd.txt`"
+
+mysqldump -add-drop-table -extended-insert -force -log-error=error.log -uUSER -pPASS OLD_DB_NAME | ssh -C user@newhost "mysql -uUSER -pPASS NEW_DB_NAME"
+
+sed -i 8d ~/.ssh/known_hosts
+
+
+cat ~/.ssh/id_rsa.pub | ssh user@machine "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
+
+
+yes | pv | ssh $host "cat > /dev/null"
+
+
+apt-get install pv
+
+
+yum install pv
+
+ssh -t user@some.domain.com /usr/bin/screen -xRR
+
+rsync -partial -progress -rsh=ssh $file_source $user@$host:$destination_file
+
+rsync -partial -progress -rsh=ssh $file_source $user@$host:$destination_file local -> remote
+
+rsync -partial -progress -rsh=ssh $user@$host:$remote_file $destination_file remote -> local
+
+ssh root@server.com 'tshark -f "port !22? -w -' | wireshark -k -i -
+
+ssh root@example.com tcpdump -w - 'port !22' | wireshark -k -i -
+
+autossh -M50000 -t server.example.com 'screen -raAd mysession
+
+ssh -4 -C -c blowfish-cbc
+ /backup | cstream -t 777k | ssh host 'tar -xj -C /backup'
+
+http://www.cons.org/cracauer/cstream.html#usage????,??:
+echo w00t, i'm 733+ | cstream -b1 -t2
+
+
+ssh-keygen; ssh-copy-id user@host; ssh user@host
+
+
+ssh user@host cat /path/to/some/file | xclip
+
+
+
+A
+
 
