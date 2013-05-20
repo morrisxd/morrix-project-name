@@ -1,0 +1,19 @@
+/***               NPU SET FUNCTION                    ***/
+num       function                cmd       args...
+1.    NPU_SET_INITIAL             100       none
+
+/***               NPU GET FUNCTION                    ***/
+num       function                cmd       args...
+1.    NPU_GET_ETH_STATICS          0      EthNumber
+2.    NPU_GET_UPI_STATICS          2      trunkid  
+3.    NPU_GET_RXFR_STATICS         3      card,trunk,group,dlci
+4.    NPU_GET_TXFR_STATICS         4      card,trunk,group,dlci
+
+/***              NPU DEBUG FUNCTION                   ***/
+num      function                 cmd        args...
+1.    NPU_GET_UFE_SYS              20      none
+2.    NPU_GET_UFE_LINE             21      trunk
+3.    NPU_GET_UFE_PHY              22      card,trunk,group,dlci
+4.    NNPU_GET_FLOW_STATICS        23      card,trunk,group,dlci
+5.    NNPU_GET_FLOW_STATICS        23      port (IP<-IP)
+6.    NPU_DISPLAY_CONFIG_INFO      24      none

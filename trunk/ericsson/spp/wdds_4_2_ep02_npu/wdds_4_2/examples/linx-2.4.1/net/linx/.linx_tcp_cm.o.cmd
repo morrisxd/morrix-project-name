@@ -1,0 +1,1 @@
+cmd_/usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/linx_tcp_cm.o := ld -m elf_x86_64   -r -o /usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/linx_tcp_cm.o /usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/tcp_cm/tcp_cm.o 

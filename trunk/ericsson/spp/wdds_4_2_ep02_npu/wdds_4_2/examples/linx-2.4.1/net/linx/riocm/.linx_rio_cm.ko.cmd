@@ -1,0 +1,1 @@
+cmd_/usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/riocm/linx_rio_cm.ko := ld -r -m elf_x86_64 -T /usr/src/linux-2.6.32.29-0.3/scripts/module-common.lds --build-id -o /usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/riocm/linx_rio_cm.ko /usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/riocm/linx_rio_cm.o /usr/src/wdds_4_2/examples/linx-2.4.1/net/linx/riocm/linx_rio_cm.mod.o

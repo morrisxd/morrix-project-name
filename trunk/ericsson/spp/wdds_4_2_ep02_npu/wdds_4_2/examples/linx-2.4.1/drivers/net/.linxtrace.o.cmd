@@ -1,0 +1,1 @@
+cmd_/usr/src/wdds_4_2/examples/linx-2.4.1/drivers/net/linxtrace.o := ld -m elf_x86_64   -r -o /usr/src/wdds_4_2/examples/linx-2.4.1/drivers/net/linxtrace.o /usr/src/wdds_4_2/examples/linx-2.4.1/drivers/net/linxtracedrv.o 
