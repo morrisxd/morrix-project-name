@@ -1,0 +1,71 @@
+/*****************************************************************************
+ * (C) Copyright 2003-2009, Wintegra. All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ ****************************************************************************/
+
+/*****************************************************************************
+ *
+ * File: wpx_board_if.h
+ *
+ * Purpose: Define board-independent interfaces.
+ *
+ * The functions used in this file let an application interact with a board
+ * through ways that may or may not covered by the WDDI API.
+ *
+ * This file must not be included by any files in wddi/sources.
+ *
+ ****************************************************************************/
+
+#ifndef WPX_BOARD_IF_H
+#include "wpx_board_if.h"
+#endif
+
+#include <stdio.h>
+#include "api/wp_types.h"
+#include "include/core/hardware/wpi_reg.h"
+#include "api/wp_wddi.h"
+#include "veneer/wpi_board_data_int.h"
+
+WP_status WPX_SetBank(wpi_match_mask *saved, wpi_match_mask *program)
+{
+   WP_U32 *if_addr;
+
+   saved->match_address = program->match_address;
+   /* Get the virtual address of the match/mask register pair. */
+   if_addr = (WP_U32 *) WPL_RIF_VIRTUAL(0, program->match_address);
+
+   /* Save the current match/mask values. */
+   WPI_REG_GET(saved->match_value, if_addr[0]);
+   WPI_REG_GET(saved->mask_value, if_addr[1]);
+
+   /* Install the desired match/mask values. */
+   if (program->mask_value != saved->mask_value ||
+       program->match_value != saved->match_value)
+   {
+     WPI_REG_SET(if_addr[1], program->mask_value);
+     WPI_REG_SET(if_addr[0], program->match_value);
+   }
+
+   return WP_OK;
+}
+
+WP_status WPX_RestoreBank(wpi_match_mask *saved)
+{
+   WP_U32 *if_addr;
+
+   /* in WP3 WPX_RestoreBank() should do nothing */
+   if(saved->match_address == 0xffffffff)
+      return WP_OK;
+
+   /* Get the virtual address of the match/mask register pair. */
+   if_addr = (WP_U32 *) WPL_RIF_VIRTUAL(0, saved->match_address);
+
+   /* Install the desired match/mask values. */
+   WPI_REG_SET(if_addr[1], saved->mask_value);
+   WPI_REG_SET(if_addr[0], saved->match_value);
+
+   return WP_OK;
+}
