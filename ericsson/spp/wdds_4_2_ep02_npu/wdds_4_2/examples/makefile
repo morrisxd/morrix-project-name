@@ -117,7 +117,7 @@ INCLUDES += -I$(WINUTIL_TARGET_DIR) -I$(WINUTIL_DIR) -I$(UTILITY_DIR) -I$(PHY_DI
 INCLUDES += -I$(WDDS_DIR)/include $(OS_INC_DIRS) -I$(WDDS_DIR)/wddi/sources/ -I$(COMMON) 
 INCLUDES += -I$(WDDS_DIR)/wddi/target/$(WPI_TARGET)_$(WPI_HW_DEVICE)/include -I$(WDDS_DIR)/wddi/sources/winutil/include 
 INCLUDES += -I$(WDDS_DIR)/wddi/sources/winutil/include/$(WPI_HW_DEVICE)
-INCLUDES += -I$(WDDS_DIR)/wddi/phy/wpx_ufe/api -I$(WDDS_DIR)/wddi/phy/wpx_ufe/fpga/ufe4
+INCLUDES += -I$(WDDS_DIR)/wddi/phy/wpx_ufe/api -I$(WDDS_DIR)/wddi/phy/wpx_ufe/fpga/ufe4 -I$(WDDS_DIR)/wddi/phy/wpx_ufe/wpx_frmr/common/inc
 INCLUDES += -I$(LINX)/include -I$(HARDWARE_DIR)
 INCLUDES += -I$(EXPAT)/lib
 include $(SRC_DIR)/make.list 

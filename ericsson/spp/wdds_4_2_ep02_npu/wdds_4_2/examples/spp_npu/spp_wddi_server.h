@@ -13,37 +13,38 @@
 #define UNUSED 0
 
 #define NPU_UDP_MAC_ADDR_LEN 6
-#define NPU_UDP_VLAN_EN 	    1 
+#define NPU_UDP_VLAN_EN 	    1
 
 
-#define NPU_UDP_ETHPACK_LEN_MAX         1600             
+#define NPU_UDP_ETHPACK_LEN_MAX         1536
+#define NPU_UDP_ETHPACK_PROTECTION      64
 
-#define NPU_UDP_ETH_TYPE_IPV4           0x0800           
+#define NPU_UDP_ETH_TYPE_IPV4           0x0800
 
-#define NPU_UDP_VLAN_TYPE_TAG           0x8100          
+#define NPU_UDP_VLAN_TYPE_TAG           0x8100
 
-#define NPU_UDP_VLAN_EN                 1                
+#define NPU_UDP_VLAN_EN                 1
 
-#define NPU_UDP_VLAN_DIS                0               
+#define NPU_UDP_VLAN_DIS                0
 
 
 /*IPV4*/
-#define NPU_UDP_IPV4_VER                0x45     
+#define NPU_UDP_IPV4_VER                0x45
 
-#define NPU_UDP_IPV4_LEN                4    
+#define NPU_UDP_IPV4_LEN                4
 
-#define NPU_UDP_IPV4_TOS                0    
+#define NPU_UDP_IPV4_TOS                0
 
-#define NPU_UDP_IPV4_ID                 0   
+#define NPU_UDP_IPV4_ID                 0
 
-#define NPU_UDP_IPV4_OFF                0x4000   
+#define NPU_UDP_IPV4_OFF                0x4000
 
 #define NPU_UDP_IPV4_TTL                0x40
 
-#define NPU_UDP_IPV4_PRO_UDP            0x11    
+#define NPU_UDP_IPV4_PRO_UDP            0x11
 
-#define NPU_UDP_IPV4_CKSUM              0                
- 
+#define NPU_UDP_IPV4_CKSUM              0
+
 #define NPU_UDP_CHKSUM                  0
 
 typedef struct NODE
@@ -77,7 +78,7 @@ typedef struct STRU_VPORT_INFO_TAG
 	u32 agg_dl_ip2iptx2Enet1;
 	u32 agg_ip2iptx2host;
 	u32 flow_ul_tx2enet1;
-	u32 agg_ul_ip2iptx2Enet1ModifyFlag;	
+	u32 agg_ul_ip2iptx2Enet1ModifyFlag;
 	u32 agg_ul_ip_to_enet2_handle;
 	HOST_NS_BSSGP_STATICS ns_bssgp_statics;/*for ip*/
 	struct NODE* bvci_nodehead;
@@ -94,15 +95,15 @@ typedef struct STRU_PEER_VPORT_INFO_TAG
 typedef struct STRU_LINX_SERVER_INFO_TAG
 {
 	LINX *linx;
-    unsigned int   UsedFlag;	
+    unsigned int   UsedFlag;
 }STRU_LINX_SERVER_INFO;
 
 typedef struct NPU_HOST_RSV_PACKET_INFO_TAG
 {
-    u32 vp_type;   
+    u32 vp_type;
 	u32 length;
     u32 port; /*dst port*/
-	u32 ipaddr_dst;	
+	u32 ipaddr_dst;
 	u32 ipaddr_src;
 	u16 port_src;
 	u8  *pdata; /*udp payload*/
@@ -116,7 +117,7 @@ typedef struct
     u8	ether_shost[6];
     u16	ether_type;
 }
-STRU_NPU_ETH_HDR;
+    STRU_NPU_ETH_HDR;
 
 /* ETH header with VLAN */
 typedef struct
@@ -131,7 +132,7 @@ typedef struct
        IPv6: 0x86dd */
     u16   ether_type;
 }
-STRU_NPU_ETH_VLAN_HDR;
+    STRU_NPU_ETH_VLAN_HDR;
 
 /* IPv4ͷ */
 typedef struct
@@ -148,7 +149,7 @@ typedef struct
     u32 ip_src;
     u32 ip_dst;	        /* source and dest address */
 }
-STRU_NPU_IP_HDR;
+    STRU_NPU_IP_HDR;
 
 /* UDPͷ */
 typedef struct
@@ -158,7 +159,7 @@ typedef struct
     u16	uh_ulen;		/* udp length */
     u16	uh_sum;			/* udp checksum */
 }
-STRU_NPU_UDP_HDR;
+    STRU_NPU_UDP_HDR;
 
 
 STRU_VPORT_INFO * npu_get_vport_info(u32 port_src);
@@ -240,4 +241,3 @@ int linx_init_thread_rx_eth(void);
 
 
 #endif 			/* __WDDI_SERVER_H */
-

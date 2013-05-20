@@ -5,7 +5,7 @@ ifndef KERNEL_SOURCE
     KERNEL_SOURCE=/lib/modules/$(KVER)/build
 endif
 
-TOOLS_C = xsreset.c xsgettemp.c xsconsole.c xsgetfwversion.c xsprogi2c.c xsprogflash.c xsenv.c xsgetrevision.c xscheckwinmon.c
+TOOLS_C = xsreset.c xsgettemp.c xsconsole.c xsgetfwversion.c xsprogi2c.c xsprogflash.c xsenv.c xsgetrevision.c xscheckwinmon.c xssfpdiag.c
 
 TOOLS  	= $(patsubst %.c, %, $(TOOLS_C))
 
@@ -16,7 +16,7 @@ default: $(TOOLS)
 	make -C $(KERNEL_SOURCE) M=`pwd` modules
 
 % : %.c
-	gcc $(TOOLS_CFLAGS) $^ -o $@
+	gcc $(TOOLS_CFLAGS) $^ -o $@ -lm
 
 # The cleaner
 clean:

@@ -15,8 +15,8 @@
 #include <sys/socket.h>
 #include <setjmp.h>
 #include <libgen.h>
-#include <assert.h> 
-#include <stdarg.h>	
+#include <assert.h>
+#include <stdarg.h>
 #include <syslog.h>
 
 /*add for debug message write to syslog*/
@@ -43,17 +43,19 @@ wddi_log_msg(const unsigned int priority, char *file, unsigned int line, char *l
    char log_entry_str[1024];
    int cnt = 0;
    cnt = snprintf(log_entry_str, 1024, "%s", " ");
-   
+
    if(cnt < 0)
    {
       cnt = 0;
    }
-   
+
    (void)vsnprintf(&(log_entry_str[cnt]), 1024 - cnt, log_msg, args);
 
    /* Write into the specified syslog. */
    syslog(facility | priority, log_entry_str);
+
    va_end(args);
+
    return 0;
 }
 
@@ -175,17 +177,17 @@ int main(int argc, char **argv)
 	int LogLevel_flag  = 0;
 	int xmlpath_flag = 0;
 	pid_t appId;
-    int opt;	
+    int opt;
 
 	sigset_t sigmask;
 	 //pid_t chldpid = child_pid;
 	 sigemptyset(&sigmask);
 	 struct sigaction siginfo;
-	 
+
 	 sigaddset(&sigmask,  SIGALRM |WPL_SIGNAL_RT_SER | WPL_SIGNAL_RT_OV |WPL_SIGNAL_RT_BUSERR|SIGNAL_RT_SGMII_AN|SIGNAL_RT_UFE4_FRAMER);
 	 sigprocmask(SIG_BLOCK, &sigmask, NULL);
 
-	
+
 	while((opt = getopt(argc, argv, "hr:n:l:"))!= -1) {
 		switch(opt){
 		case 'h':
@@ -214,7 +216,7 @@ int main(int argc, char **argv)
 		print_help();
 	}
 
-   
+
     /* Check that a wddi server path is supplied.
      */
 
@@ -223,8 +225,8 @@ int main(int argc, char **argv)
    {
       printf("%s doesn't exist or has no execute privilige.\n", sevpath);
       return (errno);
-   } 
-   
+   }
+
    appname = basename(sevpath);
    if(appname != NULL)
    {
@@ -234,11 +236,11 @@ int main(int argc, char **argv)
    {
 	  printf("invalid application name %s \n",sevpath);
    }
-   
+
    if (sigsetjmp(jmpbuf, 1)) {
         printf("repeat_create\n");
     }
-	
+
 repeat_create:
 
     while(1)/*scan other wdg is run*/
@@ -259,11 +261,11 @@ repeat_create:
 		usleep(500000);
 
 	}
-	
+
 	/*scan application alread existed ,if there is kill them*/
 	while(1)
 	{
-		waitpid(-1,NULL,WNOHANG );/*in case of when child exited ,generate defunct process*/		
+		waitpid(-1,NULL,WNOHANG );/*in case of when child exited ,generate defunct process*/
 		appId = getpidbyname(appname);
 		if(appId < 0)
 		{
@@ -271,10 +273,12 @@ repeat_create:
 		   break;
 		}
 		/*kill application*/
-		printf("application %s existed ,kill it pid = %d \n",appname,appId);
-		kill(appId, SIGKILL);
+		//printf("application %s existed ,kill it pid = %d \n",appname,appId);
+		//kill(appId, SIGKILL);
 		usleep(500000);
 	}
+	  sleep(15);
+    printf("vfork................\n");
     child_pid = vfork();
     if (!child_pid) {
 
@@ -292,21 +296,21 @@ repeat_create:
 	else if (LogLevel_flag == 0 && xmlpath_flag !=0)
 		{
 		printf("LogLevel = NULL xmlpath = %s\n",xmlpath);
-		
+
 		execl(sevpath,sevpath, "-l", xmlpath, NULL);
 
 	    }
 	else if(LogLevel_flag != 0 && xmlpath_flag !=0)
 		{
 		printf("LogLevel =%s xmlpath =%s \n \n",LogLevel,xmlpath);
-		
+
 		execl(sevpath,sevpath,"-n", LogLevel, "-l", xmlpath, NULL);
 
 	    }
 	else if (LogLevel_flag != 0 && xmlpath_flag ==0)
 	{
 		printf("LogLevel = %s xmlpath = NULL \n \n",LogLevel);
-	
+
 		execl(sevpath,sevpath, "-n", LogLevel, NULL);
 	}
 	else
@@ -323,17 +327,34 @@ repeat_create:
 	perror("fork");
 	return (errno);
     }
-    
+
 
    sigaction(SIGTERM, NULL, &siginfo);
    siginfo.sa_sigaction = (void *) sig_sigterm;
    sigemptyset(&siginfo.sa_mask);
    siginfo.sa_flags = SA_SIGINFO | SA_RESTART;
-   
+
    if (sigaction(SIGTERM, &siginfo, NULL) == -1){
 		printf("can't catch SIGTERM");
    }
    sleep(1);
+
+   while(1)
+   {
+           ret = waitpid(-1,NULL,WNOHANG );/*in case of when child exited ,generate defunct process*/
+           if(ret != 0)
+           {
+               if((appId=getpidbyname(appname))<0)
+               {
+                   g_childPid = 0;
+                   printf("child(%d) has been exited,go to repeat_create,ret=%d\n",child_pid,ret);
+                   sleep(2);
+                   goto repeat_create;
+               }   
+           }
+      sleep(1);
+   }
+
    int waitloop = 90;//it must wait a long time so that child can be started.
    while(waitloop-- > 0 )
    {
@@ -343,17 +364,17 @@ repeat_create:
 		   g_childPid = 0;
 		   printf("child has been exited,go to repeat_create\n");
 		   sleep(2);
-		   goto repeat_create;	   
+		   goto repeat_create;
 	   }
       sleep(1);
    }
 
-   
+
    g_childPid = child_pid;
    /*keep detect spp_npu,if not existed create it*/
    while(1)
    {
-	   waitpid(-1,NULL,WNOHANG );/*in case of when child exited ,generate defunct process*/ 	   
+	   waitpid(-1,NULL,WNOHANG );/*in case of when child exited ,generate defunct process*/
 	   appId = getpidbyname(appname);
 	   if(appId < 0)
 	   {
@@ -361,8 +382,8 @@ repeat_create:
 		  goto repeat_create;
 	   }
 	   sleep(1);
-   }	   
-   
+   }
+
   return 1;
 
 }

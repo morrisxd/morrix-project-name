@@ -1,7 +1,7 @@
 /***               NPU SET FUNCTION                    ***/
 num       function                cmd       args...
 1.      NPU_RECONFIG              100       OpterateMode
-2.      NPU_SET_PVC_STATUS        111       stm1Id trunk group dlci pvc_status   
+2.      NPU_SET_PVC_STATUS        111       stm1Id trunk group dlci pvc_status
                                             /* pvc_status 0 :PVC_ENABLE  1:PVC_DISABLE */
 3.      NPU_SET_LOG_DEBUG_LEVEL   112       debug_level
                                             /*NPU_LOG_DEBUG=0;
@@ -13,8 +13,10 @@ num       function                cmd       args...
                                               NPU_LOG_ARLERT=6;
                                               NPU_LOG_EMERG=7;*/
 4.     NPU_SET_NS_BSSGP_STATICS_ZERO 113    0 stm1Id trunk group dlci /*FR MODE*/
-                                            1 UDPport                 /*IP MODE*/    
-                                                                                      
+                                            1 UDPport                 /*IP MODE*/
+5.     NPU_SET_NSEAGG_FLAG           115    0 NSE_Aggregation is off
+                                            1 NSE_Aggregation is on
+
 /***               NPU GET FUNCTION                    ***/
 num       function                cmd       args...
 NOTE: stm1Id 1~2  trunk 1~N  group 0~N
@@ -35,4 +37,11 @@ num      function                 cmd        args...
 4.    NNPU_GET_FLOW_STATICS        23      0 stm1Id trunk group dlci /*FR MODE*/
                                            1 UDPport                 /*IP MODE*/
 5.    NPU_DISPLAY_CONFIG_INFO      24      none
+6.    NPU_DISPLAY_TRUNK_INFO       25      none
+7.    NPU_DISPLAY_DPORT_INFO       26      none
+8.    NPU_DISPLAY_TABLE_ITEM       27      0 vport /*UL-Route*/
+                                           1 portSrc /*UL-Link*/
+                                           2 agg_dl_dportGrp_handle BVCI/*DL-Route*/
+                                           3 NSEI /*DL-Link*/
+                                           4 vport NS_BVCI_old /*BVCI*/
 

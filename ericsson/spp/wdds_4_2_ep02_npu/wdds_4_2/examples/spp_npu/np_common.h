@@ -1,5 +1,5 @@
 #ifndef __NPU_COMMON_H
-#define __NPU_COMMON_H 
+#define __NPU_COMMON_H
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -52,49 +52,49 @@ typedef WP_U32 WPI_PTR;
 #define NPU_WAIT_FINISHED 0xff
 #define NPU_FR_RX_MAXT 20
 #define NPU_FR_TX_MAXT 20
-#define NPU_FR_RX_MAXT_PRI 1000
+#define NPU_FR_RX_MAXT_PRI 4000
 
 #if ENEA_RELEASE
 #define NPU_WAIT_TIME     2
 #else
 #define NPU_WAIT_TIME     2
-#endif 
+#endif
 #if ENEA_RELEASE
 #define printf(fmt, ...)   WDDI_WARNING(fmt,## __VA_ARGS__)
 #endif
 /*Clock selection*/
 /*
-#define WPX_UFE_FRAMER_TRANSMIT_TIMING_RX_PATH                                 			(0)
-#define WPX_UFE_FRAMER_TRANSMIT_TIMING_INPUT_REFERENCE_CLOCK                   			(1)
-#define WPX_UFE_FRAMER_TRANSMIT_TIMING_SONET_TIMING			                  			(2)
-#define WPX_UFE_FRAMER_TRANSMIT_TIMING_WINPATH			                  				(3)
-#define WPX_UFE_FRAMER_TRANSMIT_TIMING_MAX				                  				(4)
+  #define WPX_UFE_FRAMER_TRANSMIT_TIMING_RX_PATH                                 			(0)
+  #define WPX_UFE_FRAMER_TRANSMIT_TIMING_INPUT_REFERENCE_CLOCK                   			(1)
+  #define WPX_UFE_FRAMER_TRANSMIT_TIMING_SONET_TIMING			                  			(2)
+  #define WPX_UFE_FRAMER_TRANSMIT_TIMING_WINPATH			                  				(3)
+  #define WPX_UFE_FRAMER_TRANSMIT_TIMING_MAX				                  				(4)
 */
 #define UFE_CLOCK_MASTER_MODE WPX_UFE_FRAMER_TRANSMIT_TIMING_SONET_TIMING//WPX_UFE_FRAMER_TRANSMIT_TIMING_SONET_TIMING
 #define UFE_CLOCK_SLAVE_MODE  WPX_UFE_FRAMER_TRANSMIT_TIMING_RX_PATH
 extern FILE *debug_log_file;
 #if ENEA_RELEASE
-#define Fprintf(fmt, ...) do {  \
-if (debug_log_file != NULL)  \
-	fprintf(debug_log_file,fmt,## __VA_ARGS__);\
-else printf(fmt,## __VA_ARGS__); } while (0)
+#define Fprintf(fmt, ...) do {                      \
+    if (debug_log_file != NULL)                     \
+        fprintf(debug_log_file,fmt,## __VA_ARGS__); \
+    else printf(fmt,## __VA_ARGS__); } while (0)
 #else
 #define Fprintf(fmt, ...) printf(fmt,## __VA_ARGS__)
 #endif
 
-#define NPU_DEBUG_FILE_ENABLE() do{ char fileName[60];\
-	struct tm *p;\
-    time_t timep;\
-    time(&timep);\
-    p= localtime(&timep);\   
-    sprintf(fileName,"/var/log/spp_wddi_debug_test_%4d-%02d-%02d_%2.2d:%2.2d:%2.2d.log",p->tm_year+1900,p->tm_mon+1,p->tm_mday,p->tm_hour,p->tm_min,p->tm_sec);\
-    debug_log_file = fopen(fileName,"w");\
-}while(0)
+#define NPU_DEBUG_FILE_ENABLE() do{ char fileName[60];                  \
+	struct tm *p;                                                       \
+    time_t timep;                                                       \
+    time(&timep);                                                       \
+    p= localtime(&timep);                                               \
+    sprintf(fileName,"/var/log/spp_wddi_debug_test_%4d-%02d-%02d_%2.2d:%2.2d:%2.2d.log",p->tm_year+1900,p->tm_mon+1,p->tm_mday,p->tm_hour,p->tm_min,p->tm_sec); \
+    debug_log_file = fopen(fileName,"w");                               \
+    }while(0)
 
-#define NPU_DEBUG_FILE_DISABLE() do {\
-	if (debug_log_file != NULL)fclose(debug_log_file);\
-		debug_log_file = NULL;\
-}while(0)
+#define NPU_DEBUG_FILE_DISABLE() do {                   \
+	if (debug_log_file != NULL)fclose(debug_log_file);  \
+    debug_log_file = NULL;                              \
+    }while(0)
 
 /*UFE3 Specific Defines - Single Core, Single STM-1*/
 #define N_UFE_CORES 1
@@ -103,21 +103,21 @@ else printf(fmt,## __VA_ARGS__); } while (0)
 #define N_UFE_MAX_PHYS 3200
 #define N_UFE_MAX_LINES_SPE_E1 21
 #define N_UFE_MAX_LINES_SPE_T1 28
-#define N_MAX_SPE_PER_STM1 3 
+#define N_MAX_SPE_PER_STM1 3
 #define N_UFE_SPE_MAX_INDX WUFE_MAX_N_CORE*WUFE_MAX_N_STM1*WUFE_MAX_N_SPE
 #define UFE_ID 0
 #define N_FR_MAX_RX_HT_CHANNEL  3600
-#define N_FR_MAX_IW_TX_CHANNEL  3600 
-#define N_FR_MAX_IW_RX_CHANNEL  3600 
+#define N_FR_MAX_IW_TX_CHANNEL  3600
+#define N_FR_MAX_IW_RX_CHANNEL  3600
 #define N_FR_MAX_SDU  1984
 #define BPORT_DEFAULT_VLAN_TAG 0x0a
-#define N_MAX_IP_FRAME_SIZE  8192 
+#define N_MAX_IP_FRAME_SIZE  8192
 
 #define WT_MIN_CH_RATE    6000    /* calendar parameter 6K~3M bits/s*/
 #define WT_MAX_CH_RATE    3000000 /* calendar parameter */
 
 #define WTUFE_UPI_PORT_1 0
-#define WTUFE_UPI_PORT_2 1  
+#define WTUFE_UPI_PORT_2 1
 
 #define UFE_LB_SYSTEM 1
 #define UFE_LB_LINE 2
@@ -155,13 +155,13 @@ else printf(fmt,## __VA_ARGS__); } while (0)
 #define WP_PRIORIYT_MSG_IP_TYPE 1
 
 #define WP_FR_MAX_RSV_LOWPRIO_NUMBER  5
-#define WP_FR_MAX_RSV_HIPRIO_NUMBER   10
+#define WP_FR_MAX_RSV_HIPRIO_NUMBER   20
 
-#define WP_ETH_MAX_RSV_LOWPRIO_NUMBER 10
-#define WP_ETH_MAX_RSV_HIPRIO_NUMBER  20
+#define WP_ETH_MAX_RSV_LOWPRIO_NUMBER 10
+#define WP_ETH_MAX_RSV_HIPRIO_NUMBER  20
 
 
-typedef struct 
+typedef struct
 {
    	WP_U64 TxNsBytes;
 	WP_U64 TxNsDataPackets;
@@ -174,30 +174,30 @@ typedef struct
 
 typedef struct FR_CHANNEL_INFO_TAG
 {
-   WP_handle rx_iw_handle;
-   WP_handle tx_iw_handle;  
-   WP_handle rx_host_handle;
-   WP_handle tx_host_handle;  
-   WP_handle agg_fr_rx_host_flow;
-   WP_handle agg_tx2Enet1ModifyFlag;
-   WP_handle agg_tx2Enet1;/*dps will modify ip_dst port_src &port_dst*/
-   WP_handle agg_fr_to_enet2;
-   WP_handle phy_handle;
-   WP_handle device_handle;/*host device*/
-   WP_handle device_iw_handle;/*iw device*/   
-   WP_U32    vfport;
-   WP_U32    QosEn;
-   WP_U32    be;
-   WP_U32    bc;
-   WP_U32    cir;
-   WP_U32    dlci;
-   WP_U32    card;
-   WP_U32    trunk;
-   WP_U32    group;
-   WP_U32    slot_selection;
-   WP_handle agg_downlink_tx2fr_device;
-   WP_handle agg_enet2_to_fr;
-   WP_handle flow_enet2_to_fr;
+    WP_handle rx_iw_handle;
+    WP_handle tx_iw_handle;
+    WP_handle rx_host_handle;
+    WP_handle tx_host_handle;
+    WP_handle agg_fr_rx_host_flow;
+    WP_handle agg_tx2Enet1ModifyFlag;
+    WP_handle agg_tx2Enet1;/*dps will modify ip_dst port_src &port_dst*/
+    WP_handle agg_fr_to_enet2;
+    WP_handle phy_handle;
+    WP_handle device_handle;/*host device*/
+    WP_handle device_iw_handle;/*iw device*/
+    WP_U32    vfport;
+    WP_U32    QosEn;
+    WP_U32    be;
+    WP_U32    bc;
+    WP_U32    cir;
+    WP_U32    dlci;
+    WP_U32    card;
+    WP_U32    trunk;
+    WP_U32    group;
+    WP_U32    slot_selection;
+    WP_handle agg_downlink_tx2fr_device;
+    WP_handle agg_enet2_to_fr;
+    WP_handle flow_enet2_to_fr;
 }FR_CHANNEL_INFO;
 
 typedef struct NP_UL_FLOW_INFO_TAG
@@ -211,11 +211,11 @@ typedef struct NP_UL_FLOW_INFO_TAG
 typedef struct NP_UPDATE_BVCI_FLOW_INFO_TAG
 {
 	WP_handle flowHandle_bvci;
-    WP_handle agg_updateBVCI_handle;	
+    WP_handle agg_updateBVCI_handle;
     WP_U32 UsedFlag;
 	WP_U32  vport;
 	WP_U16  NS_BVCI;
-	WP_U16  NS_BVCI_old; 
+	WP_U16  NS_BVCI_old;
 }NP_UPDATE_BVCI_FLOW_INFO;
 
 
@@ -230,7 +230,7 @@ typedef struct NP_DL_FLOW_INFO_TAG
 
 typedef struct NP_ARP_INFO_TAG
 {
-	WP_U32 Ip;      
+	WP_U32 Ip;
 	WP_U8 Mac[6];
 	WP_handle agg_ipfrag;
 	WP_handle agg_tx2eth1;
@@ -248,42 +248,42 @@ typedef struct NP_TRUNK_INFO_TAG
 
 typedef struct NP_SYSTEM_INFO_TAG
 {
-   WP_handle system_fr_handle;
-   WP_handle Bport_enet1_handle;
-   WP_handle Bport_enet2host_handle;
-   WP_handle agg_enet_default_host_handle;
-   WP_handle agg_enet2_to_enet1;
-   WP_handle agg_dl_ip_to_enet2_handle;
-   /*add for npumon capture packet*/
-   WP_U32    npumon_capture_enable_flag;/*NPU_NPUMON_CAPTURE_ENABLE NPU_NPUMON_CAPTURE_DISALBE*/
-   WP_handle flow_default_mfc;
-   WP_handle ip_defrag_group;
-   WP_handle system_route_send2eth1_handle;
-   WP_handle Rport_enet1_hanlde; /*route port*/
-   WP_handle system_bfd_handle;
-   WP_handle Bport_bfd_handle;
-   WP_handle agg_bfd_tx_handle;
-   WP_handle bfd_tx_table_handle;   
-   WP_handle agg_bfd_rx_handle;
-   WP_handle bfd_rx_table_handle;
-   WP_handle flow_bdf_handle;
-   WP_handle Bport_mac_filter_handle;
-   WP_handle agg_mac_filter_handle;
-   WP_handle flow_mac_filter_handle;
-   WP_handle agg_mac_filter_from_eth2_handle;
-   WP_handle Bport_mac_filter_from_eth2_handle;
-   WP_handle Channel_IP_PrioRx0_host_handle;
-   WP_handle agg_enet_PrioRx0_host_handle;
-   WP_handle Channel_FR_PrioRx0_host_handle;
-   WP_handle agg_FR_PrioRx0_host_handle;   
-   WP_handle agg_host_arp_agg;
-   WP_handle agg_after_defrag;
+    WP_handle system_fr_handle;
+    WP_handle Bport_enet1_handle;
+    WP_handle Bport_enet2host_handle;
+    WP_handle agg_enet_default_host_handle;
+    WP_handle agg_enet2_to_enet1;
+    WP_handle agg_dl_ip_to_enet2_handle;
+    /*add for npumon capture packet*/
+    WP_U32    npumon_capture_enable_flag;/*NPU_NPUMON_CAPTURE_ENABLE NPU_NPUMON_CAPTURE_DISALBE*/
+    WP_handle flow_default_mfc;
+    WP_handle ip_defrag_group;
+    WP_handle system_route_send2eth1_handle;
+    WP_handle Rport_enet1_hanlde; /*route port*/
+    WP_handle system_bfd_handle;
+    WP_handle Bport_bfd_handle;
+    WP_handle agg_bfd_tx_handle;
+    WP_handle bfd_tx_table_handle;
+    WP_handle agg_bfd_rx_handle;
+    WP_handle bfd_rx_table_handle;
+    WP_handle flow_bdf_handle;
+    WP_handle Bport_mac_filter_handle;
+    WP_handle agg_mac_filter_handle;
+    WP_handle flow_mac_filter_handle;
+    WP_handle agg_mac_filter_from_eth2_handle;
+    WP_handle Bport_mac_filter_from_eth2_handle;
+    WP_handle Channel_IP_PrioRx0_host_handle;
+    WP_handle agg_enet_PrioRx0_host_handle;
+    WP_handle Channel_FR_PrioRx0_host_handle;
+    WP_handle agg_FR_PrioRx0_host_handle;
+    WP_handle agg_host_arp_agg;
+    WP_handle agg_after_defrag;
 }NP_SYSTEM_INFO;
 
 typedef struct NP_ALARM_STATUS_TAG
 {
-   u32 stm1_status;
-   u32 e1_status;
+    u32 stm1_status;
+    u32 e1_status;
 }NP_ALARM_STATUS;
 
 typedef struct
@@ -296,13 +296,13 @@ typedef struct
 
 typedef enum
 {
-   NPU_INITALIZED = 0,
-   NPU_UNINITALIZED 
+    NPU_INITALIZED = 0,
+    NPU_UNINITALIZED
 }NP_Flag;
 
 /*add for QOS parameters*/
 typedef struct STRU_PVC_QOS_INFO_TAG
-{   
+{
     u8    adminState;/*0:enable 1:disable*/
 	u32	  be;
 	u32	  bc;
@@ -311,7 +311,7 @@ typedef struct STRU_PVC_QOS_INFO_TAG
 
 typedef struct STRU_E1_GROUP_INFO_TAG
 {
-    u8 crc_type;             /*NPU_E1T1_CRC16 
+    u8 crc_type;             /*NPU_E1T1_CRC16
 	                           NPU_E1T1_CRC32 */
 	u16 max_frame_size;      /*MTU on this phy*/
     u8 groupValid;          /*NPU_VALID or NPU_INVALID*/
@@ -321,8 +321,8 @@ typedef struct STRU_E1_GROUP_INFO_TAG
 }STRU_E1_GROUP_INFO;
 
 typedef struct STRU_E1_TRUNK_INFO_TAG
-{   
-    u32 Opt_Mode;      /* details in E1T1OptMode struct ,for T1 means framing for Ericsson */	
+{
+    u32 Opt_Mode;      /* details in E1T1OptMode struct ,for T1 means framing for Ericsson */
     u8 trunkValid;      /*NPU_VALID or NPU_INVALID*/
 	u32 clock_mode;    /*NPU_E1T1_CLOCK_MASTER
 						 NPU_E1T1_CLOCK_SLAVE */
@@ -340,14 +340,14 @@ typedef struct STRU_STM1_CFG_INFO_TAG
 typedef struct STRU_STM1_RECFG_TAG
 {
     u32 trunkId;
-    STRU_E1_GROUP_INFO group_info[SPP_MAX_GROUP_NUM];   
+    STRU_E1_GROUP_INFO group_info[SPP_MAX_GROUP_NUM];
 }STRU_STM1_RECFG;
 
 /*route info dst and gateway*/
 typedef struct STRU_ROUTE_INFO_TAG
 {
     u32 IpDst;
-	u32 mask;	
+	u32 mask;
 	u32 GatewayIP;
 }STRU_ROUTE_INFO;
 
@@ -357,9 +357,9 @@ typedef struct STRU_SET_INITAIL_CONFIG_TAG
 	u32 VlanTag;         /*vlan tag value only valid when VlanFlag = NPU_VLAN_ENABLE*/
 	u32 OpterateMode;    /*NPU_MODE_FR or NPU_MODE_IP*/
 	u8  ifMACsrc[6];     /*tap0 interface MAC SRC*/
-	u32 ifIpaddr;        /*tap0 interface ipaddr*/ 
+	u32 ifIpaddr;        /*tap0 interface ipaddr*/
 	u32 ifIpNetMask;     /*tap0 interface netmask*/
-	u32 stm1_num;        /*the total using number stm-1 port*/	
+	u32 stm1_num;        /*the total using number stm-1 port*/
 	u32 NRI_bitLen;	     /*gloable configure value is 1~8*/
 	u32 PortPoolSize;    /*how many port from DportStartValue*/
     u32 PacketMemTotalByte;
@@ -380,31 +380,31 @@ typedef enum
 
 typedef struct STRU_STM1_SDH_ALARM_TAG
 {
-	u8 SDH_LOS;			
-	u8 SDH_LOF;			
-	u8 SDH_RS_TIM;	
-	u8 SDH_MS_AIS;	
-	u8 SDH_MS_RDI;	
-	u8 SDH_OOF;			
-	u8 SDH_MS_EXC;	
-	u8 SDH_MS_DEG;	
-	u8 SDH_AU_AIS;	
-	u8 SDH_AU_LOP;	
-	u8 SDH_HP_LOM;	
-	u8 SDH_HP_TIM;	
-	u8 SDH_HP_PLM;	
+	u8 SDH_LOS;
+	u8 SDH_LOF;
+	u8 SDH_RS_TIM;
+	u8 SDH_MS_AIS;
+	u8 SDH_MS_RDI;
+	u8 SDH_OOF;
+	u8 SDH_MS_EXC;
+	u8 SDH_MS_DEG;
+	u8 SDH_AU_AIS;
+	u8 SDH_AU_LOP;
+	u8 SDH_HP_LOM;
+	u8 SDH_HP_TIM;
+	u8 SDH_HP_PLM;
 	u8 SDH_HP_UNEQ;
-	u8 SDH_HP_RDI;	
-	u8 SDH_HP_EXC;	
-	u8 SDH_HP_DEG;	
-	u8 SDH_LP_TIM;	
-	u8 SDH_LP_PLM;	
+	u8 SDH_HP_RDI;
+	u8 SDH_HP_EXC;
+	u8 SDH_HP_DEG;
+	u8 SDH_LP_TIM;
+	u8 SDH_LP_PLM;
 	u8 SDH_LP_UNEQ;
-	u8 SDH_LP_RDI;	
-	u8 SDH_LP_EXC;	
-	u8 SDH_LP_DEG;	
-	u8 SDH_TU_AIS;	
-	u8 SDH_TU_LOP;   
+	u8 SDH_LP_RDI;
+	u8 SDH_LP_EXC;
+	u8 SDH_LP_DEG;
+	u8 SDH_TU_AIS;
+	u8 SDH_TU_LOP;
 }STRU_STM1_SDH_ALARM;
 
 typedef struct STRU_STM1_E1T1_ALARM_INFO_TAG
@@ -423,9 +423,16 @@ typedef struct STRU_STM1_SDH_ALARM_INFO_TAG
 	STRU_STM1_E1T1_ALARM_INFO E1T1_alarm[SPP_MAX_STM1_PORT_NUM][SPP_MAX_TRUNK_NUM];
 }STRU_STM1_ALARM_INFO;
 
+typedef struct DportGrpaggInfo_TAG
+{
+	WP_handle handle;
+	u16 PortSize;
+}DportGrpaggInfo;
 
 extern int g_npinitialFlag;
 extern int g_npnonpoolFlag;
+extern int g_npNseAggFlag;
+
 WP_S32 np_init(void);
 void np_display_ufe_system(void);
 void np_display_ufe_phy(WP_U32 phyIndex);
@@ -486,49 +493,50 @@ int tap_interface_reconfig(void);
 
 
 extern WP_status WP_UserDefHashTableCreate(WP_U32 wpid,
-						  WP_U32 n_entries);
+                                           WP_U32 n_entries);
 extern WP_status WP_DlLookupEntryInsert(WP_handle device,
-                               WP_handle elink,
-                               WP_U16 key1,
-                                wp_dl_rt *dl_rt);
+                                        WP_handle elink,
+                                        WP_U16 key1,
+                                        wp_dl_rt *dl_rt);
 extern WP_status WP_VPortEntryInsert(WP_handle device,
-                                WP_U16 key,
-                                wp_vport_table *vport_table);
+                                     WP_U16 key,
+                                     wp_vport_table *vport_table);
 extern WP_status WP_DlLookupEntryRemove(WP_handle device,
-                               WP_handle elink,
-                               WP_U16 key1);
+                                        WP_handle elink,
+                                        WP_U16 key1);
 extern WP_status WPI_UserDefHashEntryRemove (WP_handle dev_handle,
-                                 WP_U32 key1,WP_U16 key2,WP_U16 data);
+                                             WP_U32 key1,WP_U16 key2,WP_U16 data);
 extern WP_status WPI_UserDefHashEntryInsert (WP_handle dev_handle,
-                                 WP_U32 key1,WP_U16 key2,WP_U16 data);
+                                             WP_U32 key1,WP_U16 key2,WP_U16 data);
 extern WP_status WP_LookupEntryInsert(WP_handle device,
-                               WP_handle elink,
-                               WP_handle flow_agg_h[],
-                               WP_U32 nri,
-                                WP_U32 port_num);
+                                      WP_handle elink,
+                                      WP_handle flow_agg_h[],
+                                      WP_U32 nri,
+                                      WP_U32 port_num);
 extern WP_status WPI_UserDefHashEntryInsert (WP_handle dev_handle,
-                                 WP_U32 key1,WP_U16 key2,WP_U16 data);
+                                             WP_U32 key1,WP_U16 key2,WP_U16 data);
 extern WP_status WP_LookupEntryRemove(WP_handle device,
-                               WP_handle elink,
-                               WP_U32 nri);
+                                      WP_handle elink,
+                                      WP_U32 nri);
 
 extern WP_status WP_IPEndPointEntryInsert(WP_handle device,
-                                WP_U32 key,
-                                 wp_local_rt *local_rt);
+                                          WP_U32 key,
+                                          wp_local_rt *local_rt);
 
 extern WP_status WTUFE_Reconfig_Stm1(WP_U32 stm1id, WP_U32 line_index_base,STRU_STM1_RECFG *reconfig_info,STRU_SET_INITAIL_CONFIG *p2);
+extern WP_status WTUFE_Reconfig_Stm1_inLoop(WP_U32 stm1id, WP_U32 trunkid, WP_U32 groupid, WP_U32 line_index_base,STRU_STM1_RECFG *reconfig_info,STRU_SET_INITAIL_CONFIG *p2);
 extern WP_status WTUFE_Reconfig_Stm1_All(STRU_SET_INITAIL_CONFIG *p1, STRU_SET_INITAIL_CONFIG *p2);
 extern WUFE_status WUFE_PhyDisplay(WUFE_handle ufe_phy_handle);
 extern WUFE_status WUFE_LineDisplay(WUFE_handle ufe_line_handle);
 extern WUFE_status WUFE_SystemDisplay(WP_U32 wufe_id);
 extern WP_status WP_FlowStatisticsGet(WP_handle device,
-                           WP_U32 elink,
-                           wp_ns_bssgp_statis * statis_ptr);
+                                      WP_U32 elink,
+                                      wp_ns_bssgp_statis * statis_ptr);
 extern WP_status WP_FlowStatisticsClear(WP_handle device,
-                           WP_U32 elink);
+                                        WP_U32 elink);
 extern WP_status WP_PriorityMsgFlowSet(WP_handle device,
-                                WP_U16 type,/*FR or IP ,WP_FR_TYPE WP_IP_TYPE*/
-                                wp_priority_msg *flowtable);
+                                       WP_U16 type,/*FR or IP ,WP_FR_TYPE WP_IP_TYPE*/
+                                       wp_priority_msg *flowtable);
 extern WP_status WP_WDDI_ResWddiGet(WP_U32 fiwtIndex,wpi_res_fiwt *res_fiwt);
 void WT_Np_UfeLineConfigureAndCreateE1(WP_U32 line_index, WP_U16 framing_mode, WP_U8 cas_enable,WP_U32 line_lb_mode,WP_U32 clock_mode);
 void WT_Np_UfeLineConfigureAndCreateT1(WP_U32 line_index, WP_U16 framing_mode, WP_U8 cas_enable,WP_U32 line_lb_mode,WP_U32 clock_mode);
