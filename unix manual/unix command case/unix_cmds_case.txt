@@ -1,5 +1,8 @@
+[1]
 wget -E -k -p -w5 -np http://www.ibm.com/index.html
 wget -r -l2 -c -t20 -A*.iso -R*.gif http://www.ibm.com/
+
+[2]
 curl http://www.ibm.com/index[0-9].html 
 
 curl http://mediastore.magnumphotos.com/CoreXDoc/MAG/Media/TR3/7/6/9/2/PAR[0-411850].jpg
@@ -8,8 +11,41 @@ curl http://mediastore.magnumphotos.com/CoreXDoc/MAG/Media/TR3/7/6/9/2/PAR[0-411
 
 
 
-
+[3]
 sudo dpkg -i package_file.deb
 http://outlook.pmc-sierra.bc.ca
+
+[4]
+07:13:48 <18> more transfer.sh 
+lftp -f ./s.script
+
+ 07:13:56 <19> more s.script 
+#!/bin/bash
+open sftp://216.241.237.121
+user dengmorr hello
+mput ./bin/*.exe
+quit
+
+[5]
+scp dengmorr@216.241.237.121:.ssh/* .
+
+[6]
+cat .ssh/id_rsa.pub ssh dengmorr@216.241.237.121 "cat - >> .ssh/authorized_keys"
+
+
+
+[7]
+file022
+file033
+file111
+file112
+file113
+file114
+file123
+file1110
+file1120
+[wydeng@cvs3 ~/sort]$ ls | sort -k1.5,1.8 -n
+
+
 
 
