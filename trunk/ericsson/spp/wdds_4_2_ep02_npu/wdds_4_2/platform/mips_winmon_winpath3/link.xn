@@ -1,0 +1,94 @@
+/*************************************************************
+ * (C) Copyright 2003-2005, Wintegra. All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ ************************************************************/
+
+OUTPUT_ARCH(mips)
+
+/**** Start point ****/
+ENTRY(_start)                   /* Entry point of application           */
+
+SECTIONS
+{
+  /**** Code and read-only data ****/
+
+  .text 0x80400000:
+  {
+    _ftext = ABSOLUTE(.) ;      /* Start of code and read-only data     */
+    start.o (.text)             /* Entry point                          */
+    *(.text)
+    _ecode = ABSOLUTE(.) ;      /* End of code                          */
+
+    *(.rodata)
+
+    . = ALIGN(8);
+    _etext = ABSOLUTE(.);       /* End of code and read-only data       */
+  } = 0
+
+  /**** Initialised data ****/
+
+  .data :
+  {
+    _fdata = ABSOLUTE(.);       /* Start of initialised data            */
+    *(.data)
+
+    . = ALIGN(8);
+
+    _gp = ABSOLUTE(.); /* Base of small data                   */
+
+    *(.lit8)
+    *(.lit4)
+    *(.sdata)
+
+    . = ALIGN(8);
+
+    _edata  = ABSOLUTE(.);      /* End of initialised data              */
+  }
+
+  /**** Uninitialised data ****/
+
+  _fbss = .;                    /* Start of uninitialised data          */
+
+  .sbss :
+  {
+    *(.sbss)
+    *(.scommon)
+  }
+  .bss :
+  {
+    *(.bss)
+    *(COMMON)
+    
+    /* Allocate room for heap default heap at 40Mb */
+    .     =  ALIGN(8);
+    _heap_base = .;   
+      .   += 0x0c000000;
+/*      . = ALIGN(0x08000000); */
+
+    _heap_end = . - 16;
+
+    /* Allocate room for stack */
+    .   += 0x80000;
+    _sp =  . - 16;
+  }
+
+  _end = . ;                    /* End of unitialised data              */
+
+  _host_uncached_base = ABSOLUTE(. + 0x100); /* HOST uncached start address */
+
+  .gptab.sdata : { *(.gptab.data) *(.gptab.sdata) }
+  .gptab.sbss : { *(.gptab.bss) *(.gptab.sbss) }
+
+  /DISCARD/ :
+  {
+    *(.reginfo)
+  }
+
+  PROVIDE(etext = _etext);
+  PROVIDE (edata = .);
+  PROVIDE (end = .);
+  PROVIDE (host_uncached_base = .);
+}
