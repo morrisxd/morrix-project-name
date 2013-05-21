@@ -81,7 +81,9 @@
 
 // UFE Related Defines
 #define N_MAX_UFE_SPE_INDEX                         WUFE_MAX_N_CORE*WUFE_MAX_N_STM1*WUFE_MAX_N_SPE
+#if 0
 #define MAX_UFE_LINES_USED                          1344
+#endif
 #define N_MAX_EMPHY_PHYS                            4032
 #define WT_UFE_HANDLE_INVALID                       0xffffffff
 
@@ -92,7 +94,9 @@
 
 #define WT_MAX_LINE_INDEX                           252 
 
+#if 0
 #define MAX_UFE_LINES_USED                          1344
+#endif
 #define MAX_CHANNELS								WTI_MAX_LINES * 2
 #define WTI_MAX_DEVICE								WTI_MAX_LINES
 #define WTI_MAX_TX_RX_CHANNEL						WTI_MAX_LINES
@@ -347,7 +351,11 @@ WP_iw_global iw_global_cfg =
 	/* max_vlan_priority...   */ 0,
 	/* iw_bkgnd_fifo_size     */ 1000,
 	/* cong_pt                */ NULL,
+#if 0
 	/* iw_host_limits         */ {10, 10, 0,0 },
+#else
+	/* iw_host_limits         */ {10, 8, 0,0 },
+#endif
 	/* mpls_config            */ {0, 0},
 	/* iw_modes               */ {
 		WP_IW_POLICER_ENABLE,
