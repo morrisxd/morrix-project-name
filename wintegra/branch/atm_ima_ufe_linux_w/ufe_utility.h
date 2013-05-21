@@ -18,8 +18,8 @@
  * Demonstrates prototypes and definitions of UFE utility functions
  *
  ****************************************************************************/
-#ifndef WTI_UFE_UTILITY_H
-#define WTI_UFE_UTILITY_H
+#ifndef UFE_UTILITY_H
+#define UFE_UTILITY_H
 
 #include <stdio.h>
 #include <wufei_user_config.h>
@@ -31,7 +31,7 @@
 #define PHY_TYPE_E1	1
 #define PHY_TYPE_T1	0
 
-
+#if 1
 typedef enum
 {
 	WT_OCTAL =0,
@@ -83,6 +83,8 @@ typedef struct
 	WUFE_line_clock_rec_params *clock_rec_line_params;
 } WT_ufe_line_sonet_params;
 
+
+
 typedef union
 {
 	WT_ufe_line_sonet_params line_sonet_params;
@@ -131,6 +133,7 @@ typedef struct
 	WUFE_events           ufe_events;
 } WT_ufe;
 
+#endif
 WT_ufe ufe={0};
 
 typedef struct
@@ -270,12 +273,14 @@ void WT_UfeLineConfigureAndCreateT1SDH(WP_U32 i, WP_U16 transfer_type, WP_U16 fr
 
 void WT_UfeLineSocketLpbkSetup(WT_ufe *ufe, int line_index, WUFE_line_loopback_type lpbk_type);
 
+#if 0
 void WT_UfePhyTransCreate(WT_ufe *ufe,
 		WP_U32 line_index,
 		WP_U32 phy_index,
 		WP_U32 n_slots,
 		WP_U8 *slots_arr,
 		WP_U32 ufe_dataunit_size);
+#endif
 
 void WT_UfePhyEnable(WT_ufe *ufe, WP_U32 phy_index);
 

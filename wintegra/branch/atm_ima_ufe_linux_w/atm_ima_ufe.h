@@ -69,7 +69,6 @@
 #define WTI_INITIALIZE_FIRMWARE                     1 /* setting to '1' allows programming configuration through the host */
 #define WTI_TX_MAX_SDU                              8192
 #define WTI_MAX_PW                                  350//336          /* maximum number of PW's in PWE3 system */  // For E1: should be 260
-#define WTI_EMPHY_PORT                              WP_PORT_UPI1       /* EMPHY port */
 
 #define WT_BRG_UPI1                                 WP_BRG3
 #define WT_BRG_UPI2                                 WP_BRG1
@@ -81,7 +80,10 @@
 
 // UFE Related Defines
 #define N_MAX_UFE_SPE_INDEX                         WUFE_MAX_N_CORE*WUFE_MAX_N_STM1*WUFE_MAX_N_SPE
+#if 1
 #define MAX_UFE_LINES_USED                          1344
+#endif
+
 #define N_MAX_EMPHY_PHYS                            4032
 #define WT_UFE_HANDLE_INVALID                       0xffffffff
 
@@ -92,7 +94,10 @@
 
 #define WT_MAX_LINE_INDEX                           252 
 
+#if 0
 #define MAX_UFE_LINES_USED                          1344
+#endif
+
 #define MAX_CHANNELS								WTI_MAX_LINES * 2
 #define WTI_MAX_DEVICE								WTI_MAX_LINES
 #define WTI_MAX_TX_RX_CHANNEL						WTI_MAX_LINES
