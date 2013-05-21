@@ -18,8 +18,8 @@
  * Demonstrates prototypes and definitions of UFE utility functions
  *
  ****************************************************************************/
-#ifndef WTI_UFE_UTILITY_H
-#define WTI_UFE_UTILITY_H
+#ifndef UFE_UTILITY_H
+#define UFE_UTILITY_H
 
 #include <stdio.h>
 #include <wufei_user_config.h>
@@ -32,104 +32,8 @@
 #define PHY_TYPE_T1	0
 
 
-typedef enum
-{
-	WT_OCTAL =0,
-	WT_SBI,
-	WT_HMVIP,
-	WT_SONET,
-	WT_SDH,
-} WT_fpga_mode;
 
 
-typedef enum
-{
-	WT_CRC_16 = 1,
-	WT_CRC_32 = 2,
-} WT_crc_type;
-
-typedef enum
-{
-	WT_OP_MODE_NORMAL          = 0,
-	WT_OP_MODE_LOOPBACK_LINE   = 1,
-	WT_OP_MODE_LOOPBACK_SYSTEM = 2,
-}WT_operation_mode;
-
-typedef struct
-{
-	WP_U8 stm4;
-	WP_U8 stm1;
-	WP_U8 stm0;
-	WP_U8 tug2;
-	WP_U8 tu;
-	WUFE_line_transf_type transfer_type;
-	WUFE_un_framed        framed;
-	WUFE_cas_enable       cas_enable;
-	WUFE_line_loopback_type loopback;
-	WUFE_line_clock_rec_params *clock_rec_line_params;
-} WT_ufe_line_sdh_params;
-
-typedef struct
-{
-	WP_U8 sts12;
-	WP_U8 sts3;
-	WP_U8 sts1;
-	WP_U8 vt_group;
-	WP_U8 vt;
-	WUFE_line_transf_type transfer_type;
-	WUFE_un_framed        framed;
-	WUFE_cas_enable       cas_enable;
-	WUFE_line_loopback_type loopback;
-	WUFE_line_clock_rec_params *clock_rec_line_params;
-} WT_ufe_line_sonet_params;
-
-typedef union
-{
-	WT_ufe_line_sonet_params line_sonet_params;
-	WT_ufe_line_sdh_params line_sdh_params;
-}WT_ufe_framer_line_params;
-
-typedef struct
-{
-	WP_U8                      valid;
-	WUFE_line_transf_type      transfer_type;
-	WUFE_un_framed             framed;
-	WUFE_cas_enable            cas_enable;
-	WUFE_clock_rec_mode        clock_rec_mode;
-	WUFE_clock_master          tx_clk_master;
-	WP_U16                     clock_translator_id;
-	WP_U16                     rx_clk_rec_if;
-	WUFE_cad_cr_extended       ext_mode_active;
-	WT_ufe_framer_line_params framer_line_params;
-} WT_ufe_line_params;
-
-typedef enum
-{
-	WT_EXT_CLOCK          = 0,
-	WT_RX_LOOPTIME_CLOCK  = 1,
-}WT_tx_clk;
-
-typedef struct
-{
-	/* User Configure parameters */
-	WP_U32                wpid;
-	WP_U32                ufe_id;
-	WP_U32                upi_id;
-	WT_fpga_mode          fpga_mode;
-	WP_U16                max_lines;
-	WP_U16                max_phys;
-	WUFE_line_transf_type sbi_spe_line_type[N_MAX_UFE_SPE_INDEX];
-	WT_crc_type           hdlc_crc;
-	WT_tx_clk             tx_clock_mode;
-	WT_operation_mode     operation_mode;
-	WUFE_system_clock_rec system_clock_rec_enable;
-	WUFE_clk_rec_system_params   *clk_rec_system_params;
-	WT_ufe_line_params    line_params[MAX_UFE_LINES_USED];
-	WUFE_handle           line_handle[MAX_UFE_LINES_USED];
-	WUFE_handle           phy_handle[N_MAX_EMPHY_PHYS];
-	WP_U8                 temux_used;
-	WUFE_events           ufe_events;
-} WT_ufe;
 
 WT_ufe ufe={0};
 
@@ -270,12 +174,14 @@ void WT_UfeLineConfigureAndCreateT1SDH(WP_U32 i, WP_U16 transfer_type, WP_U16 fr
 
 void WT_UfeLineSocketLpbkSetup(WT_ufe *ufe, int line_index, WUFE_line_loopback_type lpbk_type);
 
+#if 0
 void WT_UfePhyTransCreate(WT_ufe *ufe,
 		WP_U32 line_index,
 		WP_U32 phy_index,
 		WP_U32 n_slots,
 		WP_U8 *slots_arr,
 		WP_U32 ufe_dataunit_size);
+#endif
 
 void WT_UfePhyEnable(WT_ufe *ufe, WP_U32 phy_index);
 

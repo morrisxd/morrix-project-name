@@ -65,31 +65,48 @@
 #define PHY_TYPE_T1	0
 #define PHY_TYPE_E1	1
 
-#include "atm_ima_ufe.h"
 
-#include "ufe_utility.h"
+#define WTI_T1_LINES_PER_SPE                        28
+#define WTI_E1_LINES_PER_SPE                        21
+#define WTI_TDM_SLOTS_PER_SPE                       672
+#define WTI_MIN_DATAUNIT_SIZE                       2
+#define WTI_MAX_DATAUNIT_SIZE                       64
+#define WTI_MAX_STRING_SIZE                         128
+#define WTI_MIN_SLOTS_PER_PHY                       1
+#define WTI_UNUSED_SLOT                             0xffffffff
+#define WTI_MAX_SLOTS                               8064
+
+#define WT_PASS 0
+#define WT_FAIL 1
+
+#include "wti_ufe_utility.h"
 
 extern WUFE_status WUFE_SystemDisplay (WP_U32 wufe_id);
 
+#include "atm_ima_ufe.h"
 #include "atm_ima_ufe_util.c"
 #include "atm_ima_ufe_stats.c"
 
 WP_U8 prbs_result[336];
 
-#include "flexmux_util.c"
+#include "wti_flexmux_util.c"
 // #include "flexmux_alarms_and_pm.c"
-#include "ufe_utility.c"
+#include "wti_ufe_utility.c"
+
+#include "ufe_utility.h"
+
 
 WUFE_init_config ufe4_config;
 WP_ima_event a_task;
 
-static void release_test (void)
+void release_test (void)
 {
    WP_DriverRelease ();
 
    exit (1);
 }
 
+#if 0
 void WT_UfeTerminateOnError (WUFE_status handle, WP_CHAR * s, WP_U32 id,
                              WP_U32 LineNum)
 {
@@ -101,6 +118,7 @@ void WT_UfeTerminateOnError (WUFE_status handle, WP_CHAR * s, WP_U32 id,
    }
 
 }
+#endif
 
 void App_ResetUfe (void)
 {
