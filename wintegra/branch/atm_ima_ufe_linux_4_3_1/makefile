@@ -1,9 +1,6 @@
 ############################################################ Change this block only!  #############################################################
 
 WPI_APP_TARGET     = mips_linux
-
-
-
 # By default this makefile assumes that the test directory reside under the WDDI root directory!
 # If you want to change it please redefine WDDI_DIR in this makefile!
 TEST_DIR = .
@@ -45,8 +42,8 @@ WPI_APP_BOARD  	?= wds
 
 WPI_HOST   	= linux
 UFE_TYPE        = ufe412
-DPS_IMAGE_NAME  = wpi_dps_image_wireline
-# DPS_IMAGE_NAME  = wpi_dps_image_backhaul
+# DPS_IMAGE_NAME  = wpi_dps_image_wireline
+DPS_IMAGE_NAME  = wpi_dps_image_backhaul
 
 WDDS_OBJECTS = objects
 WDDI_SOURCES = /sources

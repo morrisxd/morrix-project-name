@@ -361,14 +361,17 @@ WP_S32 WTI_FlexmuxInit(WP_U32 upi_index,
    flexmux_cfg->second_flexmux_id = WTI_FLEXMUX_SECOND_FLEXMUX_ID;
 #endif
 
+
+
+#define WPX_FPGA_INTR_ALL_MASKED          0x7f
    /* Mask all framer interrupts in the CPLD so that northbound messaging is disabled */
    WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
 
    /*register the peek response callback function to the frmr driver*/
-   WPX_FRMR_RegisterPeekCallback(WTI_UFE_FRAMER_PEEK_RESPONSE_CALLBACK); 
+   WPX_FRMR_RegisterPeekCallback((void*)(int)WTI_UFE_FRAMER_PEEK_RESPONSE_CALLBACK); 
 
    /* register the framer lock take function */
-   WPX_FRMR_RegisterFramerLockCallback(WTI_flexmux_take_framer_lock);
+   WPX_FRMR_RegisterFramerLockCallback((void*)(int)WTI_flexmux_take_framer_lock);
 
    /* Initialize the Flexmux devices */
    status = WPX_UFE_FRAMER_FlexmuxInit(flexmux_cfg->flexmux_id,

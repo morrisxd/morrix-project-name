@@ -348,7 +348,11 @@ WP_iw_global iw_global_cfg =
 	/* max_vlan_priority...   */ 0,
 	/* iw_bkgnd_fifo_size     */ 1000,
 	/* cong_pt                */ NULL,
+#if 0
 	/* iw_host_limits         */ {10, 10, 0,0 },
+#else
+	/* iw_host_limits         */ {10, 8, 0,0 },
+#endif
 	/* mpls_config            */ {0, 0},
 	/* iw_modes               */ {
 		WP_IW_POLICER_ENABLE,
