@@ -1,0 +1,1119 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+AIS_insertion_disable	wti_flexmux_alarms_and_pm.c	/^void AIS_insertion_disable(char *strParm)$/;"	f
+AIS_insertion_enable	wti_flexmux_alarms_and_pm.c	/^void AIS_insertion_enable(char *strParm)$/;"	f
+ALARM_TASK_LIST_SIZE	ufe_utility.c	109;"	d	file:
+ALARM_TASK_LIST_SIZE	wti_flexmux_alarms_and_pm.c	144;"	d	file:
+API_DIR	makefile	/^API_DIR = $(WDDI_DIR)$(WDDI_SOURCES)\/api$/;"	m
+APP_DATA_LENGTH	atm_ima_ufe_util.c	27;"	d	file:
+APP_DEBUG	atm_ima_ufe.h	22;"	d
+APP_EMPHY_PORT	atm_ima_ufe.h	64;"	d
+APP_IW_BUFFER_OFFSET	atm_ima_ufe.h	35;"	d
+APP_IW_BUFFER_SIZE	atm_ima_ufe.h	34;"	d
+APP_K1_K2_SIGNAL_TASK	ufe_utility.c	/^} APP_K1_K2_SIGNAL_TASK;$/;"	t	typeref:struct:__anon5	file:
+APP_K1_K2_SIGNAL_TASK	wti_flexmux_alarms_and_pm.c	/^} APP_K1_K2_SIGNAL_TASK;$/;"	t	typeref:struct:__anon28	file:
+APP_MASTER_WPID	atm_ima_ufe.h	36;"	d
+APP_MAX_BPORTS	atm_ima_ufe.h	32;"	d
+APP_MAX_IMA_DEVICE	atm_ima_ufe.h	65;"	d
+APP_MAX_MAC_ADDRESS	atm_ima_ufe.h	25;"	d
+APP_MAX_PKTS_NUM	atm_ima_ufe.h	27;"	d
+APP_MAX_TDM_PORTS	atm_ima_ufe.h	49;"	d
+APP_MPLS_SIZE	atm_ima_ufe.h	54;"	d
+APP_NUM_IW_BUFFERS	atm_ima_ufe.h	33;"	d
+APP_PATH_ALARM_TASK	ufe_utility.c	/^} APP_PATH_ALARM_TASK;$/;"	t	typeref:struct:__anon3	file:
+APP_PATH_ALARM_TASK	wti_flexmux_alarms_and_pm.c	/^} APP_PATH_ALARM_TASK;$/;"	t	typeref:struct:__anon26	file:
+APP_PDH_ALARM_TASK	wti_flexmux_alarms_and_pm.c	/^} APP_PDH_ALARM_TASK;$/;"	t	typeref:struct:__anon30	file:
+APP_PM_TASK	ufe_utility.c	/^} APP_PM_TASK;$/;"	t	typeref:struct:__anon4	file:
+APP_PM_TASK	wti_flexmux_alarms_and_pm.c	/^} APP_PM_TASK;$/;"	t	typeref:struct:__anon27	file:
+APP_PORT_ALARM_TASK	ufe_utility.c	/^} APP_PORT_ALARM_TASK;$/;"	t	typeref:struct:__anon2	file:
+APP_PORT_ALARM_TASK	wti_flexmux_alarms_and_pm.c	/^} APP_PORT_ALARM_TASK;$/;"	t	typeref:struct:__anon25	file:
+APP_S1_SIGNAL_TASK	ufe_utility.c	/^} APP_S1_SIGNAL_TASK;$/;"	t	typeref:struct:__anon6	file:
+APP_S1_SIGNAL_TASK	wti_flexmux_alarms_and_pm.c	/^} APP_S1_SIGNAL_TASK;$/;"	t	typeref:struct:__anon29	file:
+APP_VLAN_ID	atm_ima_ufe.h	24;"	d
+Address	wti_flexmux_util.c	/^      U32 Address;$/;"	m	struct:WTI_DIAG_PEEK_INFO	file:
+App_AtmRxChannelStats	atm_ima_ufe_stats.c	/^void App_AtmRxChannelStats(WP_handle atm_rx_ch_handle, WP_stats_aal5_rx atm_rx_channel_stats)$/;"	f
+App_AtmTxChannelStats	atm_ima_ufe_stats.c	/^void App_AtmTxChannelStats(WP_handle atm_tx_ch_handle, WP_stats_aal5_tx atm_tx_channel_stats)$/;"	f
+App_BufferPoolsCreate	atm_ima_ufe.c	/^void App_BufferPoolsCreate (void)$/;"	f
+App_ChannelsCreate	atm_ima_ufe.c	/^void App_ChannelsCreate (void)$/;"	f
+App_ChannelsEnable	atm_ima_ufe.c	/^void App_ChannelsEnable (void)$/;"	f
+App_CheckStats	atm_ima_ufe_stats.c	/^void App_CheckStats(WP_status *test_result)$/;"	f
+App_CreateEnetUfeIwSystem	atm_ima_ufe.c	/^void App_CreateEnetUfeIwSystem (void)$/;"	f
+App_CreateUfeEnetIwSystem	atm_ima_ufe.c	/^void App_CreateUfeEnetIwSystem (void)$/;"	f
+App_DataSend	atm_ima_ufe_util.c	/^void App_DataSend (WP_handle h_tx, WP_handle h_pool)$/;"	f
+App_Debug	atm_ima_ufe_util.c	/^void App_Debug (WP_boolean debug)$/;"	f
+App_DevicesAllocCreate	atm_ima_ufe.c	/^void App_DevicesAllocCreate (void)$/;"	f
+App_DuReceive	atm_ima_ufe_util.c	/^void App_DuReceive (WP_handle h_rx, WP_U32 data_type)$/;"	f
+App_EnableUFESystem	atm_ima_ufe.c	/^void App_EnableUFESystem (void)$/;"	f
+App_EventErrorIndicate	atm_ima_ufe_util.c	/^void App_EventErrorIndicate (WP_tag tag, WP_U32 event, WP_U32 data)$/;"	f
+App_EventRxIndicate	atm_ima_ufe_util.c	/^void App_EventRxIndicate (WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f
+App_EventTxIndicate	atm_ima_ufe_util.c	/^void App_EventTxIndicate (WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f
+App_EventTxIndicatePolled	atm_ima_ufe_util.c	/^void App_EventTxIndicatePolled (WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f
+App_IMADevicesCreate	atm_ima_ufe.c	/^void App_IMADevicesCreate (void)$/;"	f
+App_IMADevicesEnable	atm_ima_ufe.c	/^void App_IMADevicesEnable (void)$/;"	f
+App_ImaChannelsCreate	atm_ima_ufe.c	/^void App_ImaChannelsCreate (void)$/;"	f
+App_ImaEvent	atm_ima_ufe_util.c	/^static void App_ImaEvent (WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+App_ImaGroupEvent	atm_ima_ufe.c	/^void App_ImaGroupEvent (void)$/;"	f
+App_ImaSetup	atm_ima_ufe.c	/^void App_ImaSetup (void)$/;"	f
+App_InitHW	atm_ima_ufe.c	/^void App_InitHW (void)$/;"	f
+App_PortsCreate	atm_ima_ufe.c	/^void App_PortsCreate (void)$/;"	f
+App_PortsDevicesEnable	atm_ima_ufe.c	/^void App_PortsDevicesEnable (void)$/;"	f
+App_Quit	atm_ima_ufe_util.c	/^void App_Quit (WP_U32 status)$/;"	f
+App_ResetUfe	atm_ima_ufe.c	/^void App_ResetUfe (void)$/;"	f
+App_ShowBridgePortStats	atm_ima_ufe_stats.c	/^void App_ShowBridgePortStats(WP_handle bport_handle, WP_bport_stats bport_stats)$/;"	f
+App_ShowEnetDeviceStats	atm_ima_ufe_stats.c	/^void App_ShowEnetDeviceStats(WP_handle enet_device_handle, WP_stats_enet s_hs_enet)$/;"	f
+App_ShowFlowAggStats	atm_ima_ufe_stats.c	/^void App_ShowFlowAggStats(WP_handle flow_agg_handle, WP_iw_flow_stats flow_stats)$/;"	f
+App_ShowImaGroupStats	atm_ima_ufe_stats.c	/^void App_ShowImaGroupStats(void)$/;"	f
+App_ShowImaLinkStats	atm_ima_ufe_stats.c	/^void App_ShowImaLinkStats(void)$/;"	f
+App_ShowPwe3FlowAggStats	atm_ima_ufe_stats.c	/^void App_ShowPwe3FlowAggStats(WP_handle flow_agg_handle, WP_iw_pwe3_stats flow_stats)$/;"	f
+App_ShowStats	atm_ima_ufe_stats.c	/^void App_ShowStats(void)$/;"	f
+App_ShowTdmAtmDeviceStats	atm_ima_ufe_stats.c	/^void App_ShowTdmAtmDeviceStats(WP_handle tdm_device_handle, WP_stats_tdi_atm tdi_atm_stats)$/;"	f
+App_ShowTdmDeviceStats	atm_ima_ufe_stats.c	/^void App_ShowTdmDeviceStats(WP_handle tdm_device_handle, WP_stats_tdi_hdlc tdi_hdlc_stats)$/;"	f
+App_SysInit	atm_ima_ufe.c	/^void App_SysInit (void)$/;"	f
+App_SystemSetup	atm_ima_ufe.c	/^void App_SystemSetup (void)$/;"	f
+App_TerminateOnError	atm_ima_ufe_util.c	/^void App_TerminateOnError (WP_handle handle, WP_CHAR * s)$/;"	f
+App_TestInit	atm_ima_ufe.c	/^void App_TestInit (void)$/;"	f
+App_enableEmphyPort	atm_ima_ufe.c	/^void App_enableEmphyPort (void)$/;"	f
+App_perform_freerun	atm_ima_ufe.c	/^static void App_perform_freerun (void)$/;"	f	file:
+App_ufeSystem	atm_ima_ufe.c	/^void App_ufeSystem (void)$/;"	f
+B1_count	ufe_utility.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
+B1_count	wti_flexmux_alarms_and_pm.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
+B2_count	ufe_utility.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
+B2_count	wti_flexmux_alarms_and_pm.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
+BIN_DIR	makefile	/^BIN_DIR = $(TEST_DIR)\/bin$/;"	m
+BOARD_DIR	makefile	/^BOARD_DIR = $(WDDI_DIR)\/board\/$(WPI_APP_BOARD)_$(WPI_APP_HW_DEVICE)$/;"	m
+BOARD_LIB	makefile	/^BOARD_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_board.a$/;"	m
+BOARD_WDS_COMMON_DIR	makefile	/^BOARD_WDS_COMMON_DIR = $(WDDI_DIR)\/board\/wds_common$/;"	m
+BOARD_WP3	atm_ima_ufe.h	19;"	d
+CHECK_CORE_HW_INTERRUPT_ASSERTED	wti_flexmux_util.h	50;"	d
+CLI_F_AlarmsStatusCheck	wti_flexmux_alarms_and_pm.c	/^void CLI_F_AlarmsStatusCheck(char *StrPrm)$/;"	f
+CLI_F_DisplayUfeEvents	wti_ufe_utility.c	/^void CLI_F_DisplayUfeEvents(char *StrPrm)$/;"	f
+CLI_F_Enable_PM_Print	wti_flexmux_alarms_and_pm.c	/^void CLI_F_Enable_PM_Print(char *StrPrm)$/;"	f
+CLI_F_PDH_Alarm_Assertion	wti_flexmux_alarms_and_pm.c	/^void CLI_F_PDH_Alarm_Assertion(char *StrPrm)$/;"	f
+CLI_F_PMStatusCheck	wti_flexmux_alarms_and_pm.c	/^void CLI_F_PMStatusCheck(char *StrPrm)$/;"	f
+CLI_F_PdhAisTowardsLine	wti_flexmux_alarms_and_pm.c	/^void CLI_F_PdhAisTowardsLine(char *strParm)$/;"	f
+CLI_F_PdhAlarmStatusGet	wti_flexmux_alarms_and_pm.c	/^void CLI_F_PdhAlarmStatusGet(char *strParm)$/;"	f
+CLI_F_PdhFEACTowardsLine	wti_flexmux_alarms_and_pm.c	/^void CLI_F_PdhFEACTowardsLine(char *strParm)$/;"	f
+CLI_F_PdhRdiTowardsLine	wti_flexmux_alarms_and_pm.c	/^void CLI_F_PdhRdiTowardsLine(char *strParm)$/;"	f
+CLI_F_ValidateSpcificAlarmAssertion	wti_flexmux_alarms_and_pm.c	/^void CLI_F_ValidateSpcificAlarmAssertion(char *StrPrm)$/;"	f
+CONNECTOR_0_DEVICE_ID	wti_ufe_utility.c	156;"	d	file:
+CONNECTOR_0_DEVICE_ID	wti_ufe_utility.c	161;"	d	file:
+CONNECTOR_0_UFE_ID	wti_ufe_utility.c	155;"	d	file:
+CONNECTOR_0_UFE_ID	wti_ufe_utility.c	160;"	d	file:
+CONNECTOR_2_DEVICE_ID	wti_ufe_utility.c	158;"	d	file:
+CONNECTOR_2_DEVICE_ID	wti_ufe_utility.c	163;"	d	file:
+CONNECTOR_2_UFE_ID	wti_ufe_utility.c	157;"	d	file:
+CONNECTOR_2_UFE_ID	wti_ufe_utility.c	162;"	d	file:
+DBG_MODE	wti_ufe_utility.h	62;"	d
+DEFINE_WEB	makefile	/^DEFINE_WEB = -DWEB$/;"	m
+DIAG_PEEK_INFO	wti_flexmux_util.c	/^} DIAG_PEEK_INFO;$/;"	v	typeref:struct:WTI_DIAG_PEEK_INFO
+DPS_IMAGE_NAME	makefile	/^DPS_IMAGE_NAME  = wpi_dps_image_backhaul$/;"	m
+DPS_IMAGE_OBJ	makefile	/^DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_APP_TARGET)\/lib\/$(DPS_IMAGE_NAME).o$/;"	m
+ENABLE_EMPHY_BEFORE_UFE_INIT	atm_ima_ufe.c	45;"	d	file:
+ENET_HEADER_SIZE	atm_ima_ufe.h	959;"	d
+FACTOR	wti_ufe_utility.h	66;"	d
+IMA_DEBUG	atm_ima_ufe.h	21;"	d
+INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(BOARD_WDS_COMMON_DIR) -I$(WINUTIL_DIR) \\$/;"	m
+IP_CHECKSUM	atm_ima_ufe.h	967;"	d
+IP_DA	atm_ima_ufe.h	969;"	d
+IP_HEADER_SIZE	atm_ima_ufe.h	960;"	d
+IP_LENGTH	atm_ima_ufe.h	964;"	d
+IP_PROTOCOL	atm_ima_ufe.h	966;"	d
+IP_SA	atm_ima_ufe.h	968;"	d
+IP_SER_TYPE	atm_ima_ufe.h	963;"	d
+IP_TTL	atm_ima_ufe.h	965;"	d
+IP_VER_HLEN	atm_ima_ufe.h	962;"	d
+IRQ_TASK_LIST_SIZE	atm_ima_ufe.h	891;"	d
+K1K2_SIGNAL_TYPE	ufe_utility.c	76;"	d	file:
+K1K2_SIGNAL_TYPE	wti_flexmux_alarms_and_pm.c	112;"	d	file:
+LDFLAGS2	makefile	/^LDFLAGS2	= -lpthread$/;"	m
+M1_count	ufe_utility.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
+M1_count	wti_flexmux_alarms_and_pm.c	/^WP_U32 B1_count, B2_count, M1_count;$/;"	v
+MAC_COPY	atm_ima_ufe.h	123;"	d
+MAP_UA_LSR	wti_ufe_utility.c	1684;"	d	file:
+MAP_UA_LSR	wti_ufe_utility.h	71;"	d
+MAP_UA_LSR	wti_ufe_utility.h	74;"	d
+MAP_UA_RBR	wti_ufe_utility.c	1683;"	d	file:
+MAX_AAL2_CID_VALUE	atm_ima_ufe.h	53;"	d
+MAX_ATM_RX_CHANNEL	atm_ima_ufe.h	46;"	d
+MAX_ATM_TX_CHANNEL	atm_ima_ufe.h	45;"	d
+MAX_BANDWIDTH	atm_ima_ufe.h	115;"	d
+MAX_CHANNELS	atm_ima_ufe.h	100;"	d
+MAX_CHANNEL_RATE	atm_ima_ufe.h	56;"	d
+MAX_CPS_SDU	atm_ima_ufe.h	50;"	d
+MAX_HO_PATH_NUMBER	wti_flexmux_alarms_and_pm.c	33;"	d	file:
+MAX_LO_PATH_NUMBER	wti_flexmux_alarms_and_pm.c	34;"	d	file:
+MAX_PDH_NUMBER	wti_flexmux_alarms_and_pm.c	35;"	d	file:
+MAX_PORTS_NUMBER	wti_flexmux_alarms_and_pm.c	32;"	d	file:
+MAX_SSSAR_SDU	atm_ima_ufe.h	51;"	d
+MAX_UFE_LINES	atm_ima_ufe.h	92;"	d
+MAX_UFE_LINES_USED	wti_ufe_utility.h	48;"	d
+MAX_UFE_LINES_USED	wti_ufe_utility.h	52;"	d
+MAX_UFE_LINES_USED	wti_ufe_utility.h	54;"	d
+MAX_UFE_LINES_USED	wti_ufe_utility.h	58;"	d
+MIN_AAL2_CID_VALUE	atm_ima_ufe.h	52;"	d
+MIN_NUM_OF_LINKS	atm_ima_ufe.h	41;"	d
+NO_APS_ON_LOS	wti_flexmux_util.h	27;"	d
+NUM_OF_CH_IN_GROUP	atm_ima_ufe.h	43;"	d
+NUM_OF_GROUPS	atm_ima_ufe.h	39;"	d
+NUM_OF_LINKS	atm_ima_ufe.h	40;"	d
+NUM_OF_SWCH	atm_ima_ufe.h	44;"	d
+NUM_TU	atm_ima_ufe.h	104;"	d
+N_MAX_EMPHY_PHYS	atm_ima_ufe.h	87;"	d
+N_MAX_EMPHY_PHYS	wti_ufe_utility.h	60;"	d
+N_MAX_OUT_OF_BAND_CAS_FLOWS	atm_ima_ufe.h	76;"	d
+N_MAX_UFE_CAD_LINE	wti_ufe_utility.h	37;"	d
+N_MAX_UFE_CAD_LINE	wti_ufe_utility.h	40;"	d
+N_MAX_UFE_CORES	wti_ufe_utility.h	47;"	d
+N_MAX_UFE_CORES	wti_ufe_utility.h	50;"	d
+N_MAX_UFE_CORES	wti_ufe_utility.h	57;"	d
+N_MAX_UFE_OCT_LINE	wti_ufe_utility.h	38;"	d
+N_MAX_UFE_OCT_LINE	wti_ufe_utility.h	41;"	d
+N_MAX_UFE_SBI_LINE	wti_ufe_utility.h	31;"	d
+N_MAX_UFE_SBI_LINE	wti_ufe_utility.h	33;"	d
+N_MAX_UFE_SPE_INDEX	atm_ima_ufe.h	83;"	d
+N_MAX_UFE_SPE_INDEX	wti_ufe_utility.h	44;"	d
+N_MAX_UFE_ZBT_BUFFERS	wti_ufe_utility.h	35;"	d
+N_UFE_SBI_SPE_LINE	wti_ufe_utility.h	29;"	d
+OBJ_DIR	makefile	/^OBJ_DIR = $(TEST_DIR)\/bin$/;"	m
+OCTETS_PER_LINE	atm_ima_ufe.h	93;"	d
+PATH_ALARM_TYPE	ufe_utility.c	75;"	d	file:
+PATH_ALARM_TYPE	wti_flexmux_alarms_and_pm.c	111;"	d	file:
+PATS_RECORD	wti_flexmux_util.c	/^} PATS_RECORD;$/;"	t	typeref:struct:__anon20	file:
+PCR	atm_ima_ufe.h	55;"	d
+PDH_ALARM_TYPE	wti_flexmux_alarms_and_pm.c	114;"	d	file:
+PDH_STORAGE_NUM_ELEMENTS	ufe_utility.c	177;"	d	file:
+PDH_STORAGE_NUM_ELEMENTS	wti_flexmux_alarms_and_pm.c	236;"	d	file:
+PHY_BOARD_LIB_DIR	makefile	/^PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)\/$(WPI_APP_BOARD)\/lib$/;"	m
+PHY_DIR	makefile	/^PHY_DIR = $(WDDI_DIR)\/phy$/;"	m
+PHY_TYPE_E1	atm_ima_ufe.c	66;"	d	file:
+PHY_TYPE_E1	atm_ima_ufe.h	59;"	d
+PHY_TYPE_E1	ufe_utility.h	31;"	d
+PHY_TYPE_T1	atm_ima_ufe.c	65;"	d	file:
+PHY_TYPE_T1	atm_ima_ufe.h	58;"	d
+PHY_TYPE_T1	atm_ima_ufe.h	60;"	d
+PHY_TYPE_T1	ufe_utility.h	32;"	d
+PM_HO_PATH_TYPE	ufe_utility.c	79;"	d	file:
+PM_HO_PATH_TYPE	wti_flexmux_alarms_and_pm.c	116;"	d	file:
+PM_LO_PATH_TYPE	ufe_utility.c	80;"	d	file:
+PM_LO_PATH_TYPE	wti_flexmux_alarms_and_pm.c	117;"	d	file:
+PM_PDH_TYPE	ufe_utility.c	81;"	d	file:
+PM_PDH_TYPE	wti_flexmux_alarms_and_pm.c	118;"	d	file:
+PM_PORT_TYPE	ufe_utility.c	78;"	d	file:
+PM_PORT_TYPE	wti_flexmux_alarms_and_pm.c	115;"	d	file:
+PM_TASK_LIST_SIZE	ufe_utility.c	113;"	d	file:
+PM_TASK_LIST_SIZE	wti_flexmux_alarms_and_pm.c	147;"	d	file:
+PORT_ALARM_TYPE	ufe_utility.c	74;"	d	file:
+PORT_ALARM_TYPE	wti_flexmux_alarms_and_pm.c	110;"	d	file:
+PQBLOCK_SIZE	atm_ima_ufe.h	42;"	d
+RATE_TABLE_SLOTS	atm_ima_ufe.h	47;"	d
+RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
+S1_SIGNAL_TYPE	ufe_utility.c	77;"	d	file:
+S1_SIGNAL_TYPE	wti_flexmux_alarms_and_pm.c	113;"	d	file:
+SECONDS	atm_ima_ufe.c	44;"	d	file:
+SERIAL_1_CPLD_INTERRUPT_MASK	ufe_utility.c	902;"	d	file:
+SIGNAL_TASK_LIST_SIZE	ufe_utility.c	117;"	d	file:
+SIGNAL_TASK_LIST_SIZE	wti_flexmux_alarms_and_pm.c	150;"	d	file:
+SONET_SDH_HO_PATH_STORAGE_NUM_ELEMENTS	ufe_utility.c	175;"	d	file:
+SONET_SDH_HO_PATH_STORAGE_NUM_ELEMENTS	wti_flexmux_alarms_and_pm.c	234;"	d	file:
+SONET_SDH_LO_PATH_STORAGE_NUM_ELEMENTS	ufe_utility.c	176;"	d	file:
+SONET_SDH_LO_PATH_STORAGE_NUM_ELEMENTS	wti_flexmux_alarms_and_pm.c	235;"	d	file:
+SONET_SDH_PORT_STORAGE_NUM_ELEMENTS	ufe_utility.c	174;"	d	file:
+SONET_SDH_PORT_STORAGE_NUM_ELEMENTS	wti_flexmux_alarms_and_pm.c	233;"	d	file:
+SPECIAL_FLAG	makefile	/^SPECIAL_FLAG = -lpthread$/;"	m
+TEST_CFLAGS	makefile	/^TEST_CFLAGS = -D$(TLOG_FUNCTION) -DWT_DEBUG_LEVEL=$(TLOG_LEVEL) $(DEFINE_WEB) \\$/;"	m
+TEST_DIR	makefile	/^TEST_DIR = .$/;"	m
+TEST_EXE	makefile	/^TEST_EXE = $(BIN_DIR)\/$(TEST_NAME)$(EXE)$/;"	m
+TEST_NAME	makefile	/^TEST_NAME = $(basename $(TEST))$/;"	m
+TEST_OBJ	makefile	/^TEST_OBJ = $(patsubst %.c, $(OBJ_DIR)\/%.o, $(TEST_NAME).c)$/;"	m
+TICKS_PER_SECOND	atm_ima_ufe.c	43;"	d	file:
+TLOG_FUNCTION	makefile	/^TLOG_FUNCTION = WT_LOG_PRINTF$/;"	m
+TLOG_LEVEL	makefile	/^TLOG_LEVEL=1$/;"	m
+UDP_CHECKSUM	atm_ima_ufe.h	975;"	d
+UDP_DST_PORT	atm_ima_ufe.h	973;"	d
+UDP_HEADER_SIZE	atm_ima_ufe.h	971;"	d
+UDP_LENGTH	atm_ima_ufe.h	974;"	d
+UDP_SRC_PORT	atm_ima_ufe.h	972;"	d
+UFE4_EVENTS_OBJ	makefile	/^UFE4_EVENTS_OBJ = $(WPI_UFE4_OBJ)\/wufei_events.o$/;"	m
+UFE4_FPGA_DIR	makefile	/^UFE4_FPGA_DIR = $(WPX_UFE_DIR)\/fpga\/ufe4$/;"	m
+UFE_API_DIR	makefile	/^UFE_API_DIR = $(WPX_UFE_DIR)\/api$/;"	m
+UFE_DIR	makefile	/^UFE_DIR = $(WPI_WDDS_DIR)\/ufe$/;"	m
+UFE_FRAMER_DIR	makefile	/^UFE_FRAMER_DIR = $(WPX_UFE_DIR)\/wpx_frmr\/device_driver$/;"	m
+UFE_FRAMER_INC	makefile	/^UFE_FRAMER_INC = -I$(UFE_FRAMER_DIR) -I$(UFE_FRAMER_DIR)\/library\/00_api_layer\/inc -I$(UFE_FRAMER_DIR)\/library\/04_low_level_comms_layer\/inc -I$(UFE_FRAMER_DIR)\/common\/inc$/;"	m
+UFE_FRAMER_LIB	makefile	/^UFE_FRAMER_LIB = $(UFE_LIB_DIR)\/wpx_phy_ufe_framer.a$/;"	m
+UFE_FRMR_FLEXMUX_DIR	makefile	/^UFE_FRMR_FLEXMUX_DIR = $(UFE_FRMR_DIR)\/device_driver$/;"	m
+UFE_INC	makefile	/^UFE_INC = -I$(UFE_API_DIR) -I$(UFE4_FPGA_DIR)$/;"	m
+UFE_LIB	makefile	/^UFE_LIB = $(UFE_LIB_DIR)\/wpx_ufe.a$/;"	m
+UFE_LIB_DIR	makefile	/^UFE_LIB_DIR = $(PHY_BOARD_LIB_DIR)\/..\/$(UFE_TYPE)\/lib$/;"	m
+UFE_MEM_PORT_SIZE	wti_ufe_utility.h	78;"	d
+UFE_TYPE	makefile	/^UFE_TYPE        = ufe412$/;"	m
+UFE_UTILITY_H	ufe_utility.h	22;"	d
+USE_ANT	ufe_utility.c	27;"	d	file:
+USE_POLLING	wti_flexmux_util.h	24;"	d
+USE_UFE	wti_ufe_utility.c	31;"	d	file:
+VENEER_DIR	makefile	/^VENEER_DIR = $(WDDI_DIR)\/sources\/veneer$/;"	m
+VERBOSE	wti_flexmux_alarms_and_pm.c	31;"	d	file:
+VERBOSE	wti_flexmux_alarms_and_pm.c	38;"	d	file:
+VP_PER_IMA_GROUP	atm_ima_ufe.h	48;"	d
+Valid	wti_flexmux_util.c	/^      U8 Valid;$/;"	m	struct:WTI_DIAG_PEEK_INFO	file:
+Value	wti_flexmux_util.c	/^      U32 Value;$/;"	m	struct:WTI_DIAG_PEEK_INFO	file:
+WDDI_DIR	makefile	/^WDDI_DIR = $(WPI_WDDS_DIR)\/wddi$/;"	m
+WDDI_LIBS	makefile	/^WDDI_LIBS = $(WDDI_LIB_DIR)\/wpi_wddi.a  \\$/;"	m
+WDDI_LIB_DIR	makefile	/^WDDI_LIB_DIR = $(WPI_HT_DIR)\/lib$/;"	m
+WDDI_SOURCES	makefile	/^WDDI_SOURCES = \/sources$/;"	m
+WDDS_OBJECTS	makefile	/^WDDS_OBJECTS = objects$/;"	m
+WEB_UART_STATUS_BI	wti_ufe_utility.c	1691;"	d	file:
+WEB_UART_STATUS_DR	wti_ufe_utility.c	1695;"	d	file:
+WEB_UART_STATUS_DR	wti_ufe_utility.h	68;"	d
+WEB_UART_STATUS_FE	wti_ufe_utility.c	1692;"	d	file:
+WEB_UART_STATUS_OE	wti_ufe_utility.c	1694;"	d	file:
+WEB_UART_STATUS_OE	wti_ufe_utility.h	69;"	d
+WEB_UART_STATUS_PE	wti_ufe_utility.c	1693;"	d	file:
+WEB_UART_STATUS_RXFE	wti_ufe_utility.c	1688;"	d	file:
+WEB_UART_STATUS_RXFE	wti_ufe_utility.h	67;"	d
+WEB_UART_STATUS_TEMT	wti_ufe_utility.c	1689;"	d	file:
+WEB_UART_STATUS_THRE	wti_ufe_utility.c	1690;"	d	file:
+WINUTIL_DIR	makefile	/^WINUTIL_DIR = $(WDDI_DIR)\/sources\/winutil\/include\/$/;"	m
+WPI_APP_BOARD	makefile	/^WPI_APP_BOARD  	?= wds$/;"	m
+WPI_APP_BOARD	makefile	/^WPI_APP_BOARD      = wds$/;"	m
+WPI_APP_BOARD	makefile	/^WPI_APP_BOARD      = wds_sl$/;"	m
+WPI_APP_HW_DEVICE	makefile	/^WPI_APP_HW_DEVICE       = winpath2$/;"	m
+WPI_APP_HW_DEVICE	makefile	/^WPI_APP_HW_DEVICE       = winpath3$/;"	m
+WPI_APP_HW_DEVICE	makefile	/^WPI_APP_HW_DEVICE       ?= winpath3$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET 	= mips_linux_$(WPI_APP_HW_DEVICE)$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET 	= mips_winmon_$(WPI_APP_HW_DEVICE)$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET 	?= mips_winmon$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET     = mips_linux$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET     = mips_winmon$/;"	m
+WPI_HOST	makefile	/^WPI_HOST   	= linux$/;"	m
+WPI_HTB_DIR	makefile	/^WPI_HTB_DIR = $(WPI_HT_DIR)\/$(WPI_APP_BOARD)$/;"	m
+WPI_HT_DIR	makefile	/^WPI_HT_DIR = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_APP_TARGET)$/;"	m
+WPI_PLATFORM_DIR	makefile	/^WPI_PLATFORM_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_APP_TARGET)$/;"	m
+WPI_START_FILE	makefile	/^WPI_START_FILE = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_APP_TARGET)\/lib$/;"	m
+WPI_T_DIR	makefile	/^WPI_T_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_APP_TARGET)$/;"	m
+WPI_UFE4_DIR	makefile	/^WPI_UFE4_DIR = $(WPI_HTB_DIR)\/$(UFE_TYPE)$/;"	m
+WPI_UFE4_OBJ	makefile	/^WPI_UFE4_OBJ = $(WPI_UFE4_DIR)\/obj$/;"	m
+WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..\/..\/..$/;"	m
+WPL_THREAD_LOCK_KEY	flexmux_util.c	208;"	d	file:
+WPX_FPGA_INTR_ALL_MASKED	wti_flexmux_util.c	366;"	d	file:
+WPX_UFE_DIR	makefile	/^WPX_UFE_DIR = $(WPI_WDDS_DIR)\/ufe$/;"	m
+WP_BOARD_NAME	makefile	/^WP_BOARD_NAME=WP_BOARD_WDS3$/;"	m
+WP_HW_WINPATHX	makefile	/^WP_HW_WINPATHX = WP_HW_WINPATH3$/;"	m
+WTI_APS_Time_Measure	wti_flexmux_util.c	/^void WTI_APS_Time_Measure(void)$/;"	f
+WTI_ATM_IMA_H	atm_ima_ufe.h	15;"	d
+WTI_CESOP_REGRESSION_TEST	atm_ima_ufe.c	40;"	d	file:
+WTI_COLLECT_TIMING_INFORMATION	flexmux_util.h	39;"	d
+WTI_COLLECT_TIMING_INFORMATION	wti_flexmux_util.h	42;"	d
+WTI_COLLECT_TRACE_INFORMATION	flexmux_util.h	40;"	d
+WTI_COLLECT_TRACE_INFORMATION	wti_flexmux_util.h	43;"	d
+WTI_COLLECT_TRACKING_DATA	flexmux_util.h	43;"	d
+WTI_COLLECT_TRACKING_DATA	wti_flexmux_util.h	46;"	d
+WTI_DIAG_PEEK_INFO	wti_flexmux_util.c	/^struct WTI_DIAG_PEEK_INFO{$/;"	s	file:
+WTI_DisplayDeviceUfeEvents	wti_ufe_utility.c	/^static void WTI_DisplayDeviceUfeEvents(WUFE_events *ufe_events)$/;"	f	file:
+WTI_DisplayRecords	wti_flexmux_util.c	/^void WTI_DisplayRecords(void)$/;"	f
+WTI_E1_LINES_PER_SPE	atm_ima_ufe.c	70;"	d	file:
+WTI_EMPHY_PORT	atm_ima_ufe.h	72;"	d
+WTI_FLEXMUX_ALARM_AND_PM_THREAD	flexmux_util.h	42;"	d
+WTI_FLEXMUX_ALARM_AND_PM_THREAD	wti_flexmux_util.h	45;"	d
+WTI_FLEXMUX_CLOCK_REC_GAIN_FAST	flexmux_util.h	51;"	d
+WTI_FLEXMUX_CLOCK_REC_GAIN_FAST	wti_flexmux_util.h	63;"	d
+WTI_FLEXMUX_CLOCK_REC_GAIN_SLOW	flexmux_util.h	52;"	d
+WTI_FLEXMUX_CLOCK_REC_GAIN_SLOW	wti_flexmux_util.h	64;"	d
+WTI_FLEXMUX_DBG_MODE	flexmux_util.c	520;"	d	file:
+WTI_FLEXMUX_DBG_MODE	flexmux_util.c	521;"	d	file:
+WTI_FLEXMUX_DBG_MODE	flexmux_util.c	576;"	d	file:
+WTI_FLEXMUX_DBG_MODE	flexmux_util.c	577;"	d	file:
+WTI_FLEXMUX_DBG_MODE	flexmux_util.h	33;"	d
+WTI_FLEXMUX_DBG_MODE	wti_flexmux_util.c	1420;"	d	file:
+WTI_FLEXMUX_DBG_MODE	wti_flexmux_util.c	1421;"	d	file:
+WTI_FLEXMUX_DBG_MODE	wti_flexmux_util.c	1481;"	d	file:
+WTI_FLEXMUX_DBG_MODE	wti_flexmux_util.c	1482;"	d	file:
+WTI_FLEXMUX_DBG_MODE	wti_flexmux_util.h	30;"	d
+WTI_FLEXMUX_ENABLE_ALARMS	flexmux_util.h	35;"	d
+WTI_FLEXMUX_ENABLE_ALARMS	wti_flexmux_util.h	33;"	d
+WTI_FLEXMUX_ENABLE_ALARMS	wti_flexmux_util.h	37;"	d
+WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING	flexmux_util.h	37;"	d
+WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING	wti_flexmux_util.h	35;"	d
+WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING	wti_flexmux_util.h	39;"	d
+WTI_FLEXMUX_LINE_TIMING_CT_MODE_ENABLE	flexmux_util.h	57;"	d
+WTI_FLEXMUX_LINE_TIMING_CT_MODE_ENABLE	wti_flexmux_util.h	69;"	d
+WTI_FLEXMUX_NUM_DEVICES	atm_ima_ufe.h	110;"	d
+WTI_FLEXMUX_NUM_DEVICES	flexmux_util.h	31;"	d
+WTI_FLEXMUX_PHYSICAL_CONF	flexmux_util.h	49;"	d
+WTI_FLEXMUX_PHYSICAL_CONF	wti_flexmux_util.h	58;"	d
+WTI_FLEXMUX_PHYSICAL_CONF	wti_flexmux_util.h	60;"	d
+WTI_FLEXMUX_PRIMARY_DEVICE_ID	wti_flexmux_util.h	76;"	d
+WTI_FLEXMUX_PRIMARY_FLEXMUX_ID	wti_flexmux_util.h	75;"	d
+WTI_FLEXMUX_PRIMARY_UPI_INDEX	wti_flexmux_util.h	74;"	d
+WTI_FLEXMUX_RECV_PDH_LINE_CLK_0	flexmux_util.h	54;"	d
+WTI_FLEXMUX_RECV_PDH_LINE_CLK_0	wti_flexmux_util.h	66;"	d
+WTI_FLEXMUX_RECV_PDH_LINE_CLK_1	flexmux_util.h	55;"	d
+WTI_FLEXMUX_RECV_PDH_LINE_CLK_1	wti_flexmux_util.h	67;"	d
+WTI_FLEXMUX_SECOND_DEVICE_ID	wti_flexmux_util.h	81;"	d
+WTI_FLEXMUX_SECOND_FLEXMUX_ID	wti_flexmux_util.h	80;"	d
+WTI_FLEXMUX_SECOND_UPI_INDEX	wti_flexmux_util.h	79;"	d
+WTI_FLEXMUX_UFE_FRAMER_WUFE_SDH_TYPE_VC	flexmux_util.h	47;"	d
+WTI_FLEXMUX_UFE_FRAMER_WUFE_SDH_TYPE_VC	wti_flexmux_util.h	53;"	d
+WTI_FLEXMUX_UFE_FRAMER_WUFE_SDH_TYPE_VC	wti_flexmux_util.h	55;"	d
+WTI_FLEXMUX_UTIL_H	flexmux_util.h	24;"	d
+WTI_FLEXMUX_UTIL_H	wti_flexmux_util.h	18;"	d
+WTI_FRAMER_LOCK_KEY	wti_flexmux_util.c	109;"	d	file:
+WTI_FlexmuxCheckPrbsResult	flexmux_util.c	/^WP_U8 WTI_FlexmuxCheckPrbsResult (U8 flexmux_id, WP_U32 client_port_id, WUFE_un_framed framing_mode)$/;"	f
+WTI_FlexmuxCheckPrbsResult	wti_flexmux_util.c	/^WP_U8 WTI_FlexmuxCheckPrbsResult(U8 flexmux_id, WP_U32 client_port_id, WUFE_un_framed framing_mode)$/;"	f
+WTI_FlexmuxCheckStatus	flexmux_util.c	/^void WTI_FlexmuxCheckStatus (WP_CHAR * Message, WP_U8 status, WP_U32 line)$/;"	f
+WTI_FlexmuxCheckStatus	wti_flexmux_util.c	/^void WTI_FlexmuxCheckStatus(WP_CHAR * Message, WP_U8 status, WP_U32 line)$/;"	f
+WTI_FlexmuxClearChannelConfigureHighOrder	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxClearChannelConfigureHighOrder($/;"	f
+WTI_FlexmuxClientPortIndexGet	flexmux_util.c	/^WP_S32 WTI_FlexmuxClientPortIndexGet (WP_U32 ufe_line_index, WUFE_line_transf_type transfer_type)$/;"	f
+WTI_FlexmuxClientPortIndexGet	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxClientPortIndexGet(WP_U32 ufe_line_index, WUFE_line_transf_type transfer_type)$/;"	f
+WTI_FlexmuxConnectionCreate	flexmux_util.c	/^WP_S32 WTI_FlexmuxConnectionCreate (WP_U8 flexmux_id, WP_U8 line_port_id, WP_U32 client_port_id, WTI_flexmux_connection_type type, void *ufe_line_params)$/;"	f
+WTI_FlexmuxConnectionCreate	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxConnectionDelete	flexmux_util.c	/^WP_S32 WTI_FlexmuxConnectionDelete (WP_U8 flexmux_id, WP_U32 client_port_id, void *ufe_line_params)$/;"	f
+WTI_FlexmuxConnectionDelete	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxConnectionDelete(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxDccDisable	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxDccDisable(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxDccEnable	flexmux_util.c	/^WP_S32 WTI_FlexmuxDccEnable (WP_U8 flexmux_id, WP_U8 line_port_id, WP_U32 dcc_mode)$/;"	f
+WTI_FlexmuxDccEnable	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxDccEnable(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxDeviceInit	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxDeviceInit(WP_U32 upi_index,$/;"	f
+WTI_FlexmuxDisableLoopback	flexmux_util.c	/^WP_U8 WTI_FlexmuxDisableLoopback (U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxDisableLoopback	wti_flexmux_util.c	/^WP_U8 WTI_FlexmuxDisableLoopback(U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxDisplayVersionAndConfig	flexmux_util.c	/^void WTI_FlexmuxDisplayVersionAndConfig (WP_U32 flexmux_id)$/;"	f
+WTI_FlexmuxDisplayVersionAndConfig	wti_flexmux_util.c	/^void WTI_FlexmuxDisplayVersionAndConfig(WP_U32 flexmux_id)$/;"	f
+WTI_FlexmuxEnableLoopback	flexmux_util.c	/^WP_U8 WTI_FlexmuxEnableLoopback (U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxEnableLoopback	wti_flexmux_util.c	/^WP_U8 WTI_FlexmuxEnableLoopback(U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxForceA	flexmux_util.c	/^void WTI_FlexmuxForceA (WP_U32 line_port_id)$/;"	f
+WTI_FlexmuxForceA	wti_flexmux_util.c	/^void WTI_FlexmuxForceA(WP_U32 flexmux_id, WP_U32 line_port_id)$/;"	f
+WTI_FlexmuxForceB	flexmux_util.c	/^void WTI_FlexmuxForceB (WP_U32 line_port_id)$/;"	f
+WTI_FlexmuxForceB	wti_flexmux_util.c	/^void WTI_FlexmuxForceB(WP_U32 flexmux_id, WP_U32 line_port_id)$/;"	f
+WTI_FlexmuxGetLoopbackState	flexmux_util.c	/^WP_U8 WTI_FlexmuxGetLoopbackState (U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxGetLoopbackState	wti_flexmux_util.c	/^WP_U8 WTI_FlexmuxGetLoopbackState(U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxInit	flexmux_util.c	/^WP_S32 WTI_FlexmuxInit (WP_U32 upi_index, WP_U8 flexmux_id, WTI_flexmux_physical_conf flexmux_hw_config, WP_U8 flexmux_mode, WPX_UFE_FRAMER_WUFE_line_transf_type vc_3_4, WTI_Flexmux_global_setup * flexmux_cfg)$/;"	f
+WTI_FlexmuxInit	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxInit(WP_U32 upi_index,$/;"	f
+WTI_FlexmuxLinePortConfig	flexmux_util.c	/^WP_S32 WTI_FlexmuxLinePortConfig (WP_U8 flexmux_id, WP_U8 line_port_id, WTI_flexmux_line_port_mode line_port_cfg)$/;"	f
+WTI_FlexmuxLinePortConfig	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxLinePortConfig(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxLinePortIndexGet	flexmux_util.c	/^WP_S32 WTI_FlexmuxLinePortIndexGet (WP_U32 ufe_line_index, WP_U32 flexmux_id)$/;"	f
+WTI_FlexmuxLinePortIndexGet	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxLinePortIndexGet(WP_U32 ufe_line_index, WP_U32 flexmux_id)$/;"	f
+WTI_FlexmuxPDHOutputClockSet	flexmux_util.c	/^void WTI_FlexmuxPDHOutputClockSet (WP_U8 output_select, WP_U32 line_index, WUFE_line_transf_type transfer_type, WP_U32 clock_rate)$/;"	f
+WTI_FlexmuxPDHOutputClockSet	wti_flexmux_util.c	/^void WTI_FlexmuxPDHOutputClockSet(WP_U8 output_select, WP_U32 line_index,WUFE_line_transf_type transfer_type,WP_U32 clock_rate)$/;"	f
+WTI_FlexmuxPDHTxTimingSet	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxPDHTxTimingSet(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxTerminateOnError	flexmux_util.c	/^void WTI_FlexmuxTerminateOnError (WP_CHAR * pFatalErrorMessage, WP_U8 error_code)$/;"	f
+WTI_FlexmuxTerminateOnError	wti_flexmux_util.c	/^void WTI_FlexmuxTerminateOnError(WP_CHAR * pFatalErrorMessage, WP_U8 error_code)$/;"	f
+WTI_Flexmux_AddressBasePeek	wti_flexmux_util.c	/^void WTI_Flexmux_AddressBasePeek(U8 flexmux_id, U32 StartAddress)$/;"	f
+WTI_Flexmux_ForceStateGet	wti_flexmux_util.c	/^void WTI_Flexmux_ForceStateGet(WP_U32 iLinePort)$/;"	f
+WTI_Flexmux_Peek	wti_flexmux_util.c	/^void WTI_Flexmux_Peek(U8 flexmux_id, U32 Address)$/;"	f
+WTI_Flexmux_Poke	wti_flexmux_util.c	/^void WTI_Flexmux_Poke(U8 flexmux_id, U32 Address, U32 Value)$/;"	f
+WTI_Flexmux_Port_SetRate	wti_flexmux_util.c	/^void WTI_Flexmux_Port_SetRate(U8 flexmux_id,U8 line_port_id, U8 rate)$/;"	f
+WTI_Flexmux_Squelch_RecClkSet	wti_flexmux_util.c	/^void WTI_Flexmux_Squelch_RecClkSet(WP_U8 flexmux_id, WP_U8 output_selector, WP_U8 squelch_mode)$/;"	f
+WTI_Flexmux_connection_registry	flexmux_util.h	/^} WTI_Flexmux_connection_registry;$/;"	t	typeref:struct:__anon39
+WTI_Flexmux_connection_registry	wti_flexmux_util.h	/^} WTI_Flexmux_connection_registry;$/;"	t	typeref:struct:__anon48
+WTI_Flexmux_device_registry	flexmux_util.h	/^} WTI_Flexmux_device_registry;$/;"	t	typeref:struct:__anon41
+WTI_Flexmux_device_registry	wti_flexmux_util.h	/^} WTI_Flexmux_device_registry;$/;"	t	typeref:struct:__anon50
+WTI_Flexmux_global_setup	flexmux_util.h	/^} WTI_Flexmux_global_setup;$/;"	t	typeref:struct:__anon38
+WTI_Flexmux_global_setup	wti_flexmux_util.h	/^} WTI_Flexmux_global_setup;$/;"	t	typeref:struct:__anon47
+WTI_Flexmux_line_port_registry	flexmux_util.h	/^} WTI_Flexmux_line_port_registry;$/;"	t	typeref:struct:__anon40
+WTI_Flexmux_line_port_registry	wti_flexmux_util.h	/^} WTI_Flexmux_line_port_registry;$/;"	t	typeref:struct:__anon49
+WTI_INITIALIZE_FIRMWARE	atm_ima_ufe.h	69;"	d
+WTI_InitializeDisplayRecords	wti_flexmux_util.c	/^void WTI_InitializeDisplayRecords(void)$/;"	f
+WTI_LINE_SIDE_ALARM_DISPLAY	ufe_utility.c	217;"	d	file:
+WTI_LINE_SIDE_ALARM_DISPLAY	wti_flexmux_alarms_and_pm.c	336;"	d	file:
+WTI_LINE_SIDE_ALARM_DISPLAY	wti_flexmux_alarms_and_pm.c	339;"	d	file:
+WTI_LINE_SIDE_ALARM_DISPLAY	wti_flexmux_alarms_and_pm.c	341;"	d	file:
+WTI_MAX_ABS_PW	atm_ima_ufe.h	77;"	d
+WTI_MAX_DATAUNIT_SIZE	atm_ima_ufe.c	73;"	d	file:
+WTI_MAX_DEVICE	atm_ima_ufe.h	101;"	d
+WTI_MAX_FLEXMUX_DEVICES_SUPPORTED_BY_DRIVER	atm_ima_ufe.h	109;"	d
+WTI_MAX_FLEXMUX_DEVICES_SUPPORTED_BY_DRIVER	flexmux_util.h	30;"	d
+WTI_MAX_LINES	atm_ima_ufe.h	62;"	d
+WTI_MAX_LINES	atm_ima_ufe.h	90;"	d
+WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE	atm_ima_ufe.h	111;"	d
+WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE	flexmux_util.h	32;"	d
+WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE	wti_flexmux_util.h	29;"	d
+WTI_MAX_NUM_EMPHY_PHYS	atm_ima_ufe.h	78;"	d
+WTI_MAX_PW	atm_ima_ufe.h	71;"	d
+WTI_MAX_SLOTS	atm_ima_ufe.c	77;"	d	file:
+WTI_MAX_STRING_SIZE	atm_ima_ufe.c	74;"	d	file:
+WTI_MAX_TX_RX_CHANNEL	atm_ima_ufe.h	102;"	d
+WTI_MIN_DATAUNIT_SIZE	atm_ima_ufe.c	72;"	d	file:
+WTI_MIN_SLOTS_PER_PHY	atm_ima_ufe.c	75;"	d	file:
+WTI_NUM_OF_WORDS_TO_READ	wti_flexmux_util.c	41;"	d	file:
+WTI_PRINT_ALARM_DATA	flexmux_util.h	36;"	d
+WTI_PRINT_ALARM_DATA	wti_flexmux_util.h	34;"	d
+WTI_PRINT_ALARM_DATA	wti_flexmux_util.h	38;"	d
+WTI_SERVER_LOCK_KEY	wti_flexmux_util.c	110;"	d	file:
+WTI_SOCKET_LOOPBACK_MODE	atm_ima_ufe.h	79;"	d
+WTI_T1_LINES_PER_SPE	atm_ima_ufe.c	69;"	d	file:
+WTI_TDM_SLOTS_PER_SPE	atm_ima_ufe.c	71;"	d	file:
+WTI_TX_MAX_SDU	atm_ima_ufe.h	70;"	d
+WTI_UFE412_REVA	flexmux_util.c	29;"	d	file:
+WTI_UFE412_REVA	wti_flexmux_util.c	30;"	d	file:
+WTI_UFE412_REVA	wti_flexmux_util.c	32;"	d	file:
+WTI_UFE_FRAMER_PEEK_RESPONSE_CALLBACK	wti_flexmux_util.c	/^void WTI_UFE_FRAMER_PEEK_RESPONSE_CALLBACK(U8 iDevice, U32 Address, U32 Value)$/;"	f
+WTI_UFE_UTILITY_H	wti_ufe_utility.h	16;"	d
+WTI_UNUSED_SLOT	atm_ima_ufe.c	76;"	d	file:
+WTI_UfeFramerTerminateOnError	wti_flexmux_util.c	/^void WTI_UfeFramerTerminateOnError(WP_handle handle, WP_CHAR *s,WP_U32 id,WP_U32 LineNum)$/;"	f
+WTI_allocate_pm_storage_areas	ufe_utility.c	/^void WTI_allocate_pm_storage_areas (void)$/;"	f
+WTI_allocate_pm_storage_areas	wti_flexmux_alarms_and_pm.c	/^void WTI_allocate_pm_storage_areas(void)$/;"	f
+WTI_enable_alarms	ufe_utility.c	/^void WTI_enable_alarms (int type)$/;"	f
+WTI_enable_alarms	wti_flexmux_alarms_and_pm.c	/^void WTI_enable_alarms(int type)$/;"	f
+WTI_enable_performance_monitoring	ufe_utility.c	/^void WTI_enable_performance_monitoring (int type)$/;"	f
+WTI_enable_performance_monitoring	wti_flexmux_alarms_and_pm.c	/^void WTI_enable_performance_monitoring(int type)$/;"	f
+WTI_enable_performance_monitoring_points	ufe_utility.c	/^void WTI_enable_performance_monitoring_points (int type, int is_e1, int vc_type, WUFE_un_framed framing_mode)$/;"	f
+WTI_enable_performance_monitoring_points	wti_flexmux_alarms_and_pm.c	/^void WTI_enable_performance_monitoring_points(int type, int is_e1, int vc_type, WUFE_un_framed framing_mode)$/;"	f
+WTI_flexmux_connection_type	flexmux_util.h	/^} WTI_flexmux_connection_type;$/;"	t	typeref:enum:__anon37
+WTI_flexmux_connection_type	wti_flexmux_util.h	/^}WTI_flexmux_connection_type;$/;"	t	typeref:enum:__anon46
+WTI_flexmux_line_port_mode	flexmux_util.h	/^} WTI_flexmux_line_port_mode;$/;"	t	typeref:enum:__anon36
+WTI_flexmux_line_port_mode	wti_flexmux_util.h	/^}WTI_flexmux_line_port_mode;$/;"	t	typeref:enum:__anon45
+WTI_flexmux_loopback_mode	flexmux_util.h	/^} WTI_flexmux_loopback_mode;$/;"	t	typeref:enum:__anon35
+WTI_flexmux_loopback_mode	wti_flexmux_util.h	/^}WTI_flexmux_loopback_mode;$/;"	t	typeref:enum:__anon44
+WTI_flexmux_mode	wti_flexmux_util.h	/^}WTI_flexmux_mode;$/;"	t	typeref:enum:__anon42
+WTI_flexmux_physical_conf	flexmux_util.h	/^} WTI_flexmux_physical_conf;$/;"	t	typeref:enum:__anon34
+WTI_flexmux_physical_conf	wti_flexmux_util.h	/^}WTI_flexmux_physical_conf;$/;"	t	typeref:enum:__anon43
+WTI_flexmux_release_framer_lock	wti_flexmux_util.c	/^void WTI_flexmux_release_framer_lock(void) {}$/;"	f
+WTI_flexmux_release_framer_lock	wti_flexmux_util.c	/^void WTI_flexmux_release_framer_lock(void)$/;"	f
+WTI_flexmux_release_server_lock	wti_flexmux_util.c	/^void WTI_flexmux_release_server_lock(void) {}$/;"	f
+WTI_flexmux_release_server_lock	wti_flexmux_util.c	/^void WTI_flexmux_release_server_lock(void)$/;"	f
+WTI_flexmux_take_framer_lock	wti_flexmux_util.c	/^void WTI_flexmux_take_framer_lock(void) {}$/;"	f
+WTI_flexmux_take_framer_lock	wti_flexmux_util.c	/^void WTI_flexmux_take_framer_lock(void)$/;"	f
+WTI_flexmux_take_server_lock	wti_flexmux_util.c	/^void WTI_flexmux_take_server_lock(void) {}$/;"	f
+WTI_flexmux_take_server_lock	wti_flexmux_util.c	/^void WTI_flexmux_take_server_lock(void)$/;"	f
+WT_BRG_UPI1	atm_ima_ufe.h	74;"	d
+WT_BRG_UPI2	atm_ima_ufe.h	75;"	d
+WT_BulkFlexmuxConnectionCreate	wti_flexmux_util.c	/^void WT_BulkFlexmuxConnectionCreate(WT_ufe *ufe, WP_U32 max_pw, WP_U32 is_e1, WP_U32 create_lo)$/;"	f
+WT_BulkFlexmuxConnectionDelete	wti_flexmux_util.c	/^void WT_BulkFlexmuxConnectionDelete(WT_ufe *ufe, WP_U32 max_pw, WP_U32 is_e1, WP_U32 delete_lo)$/;"	f
+WT_BulkFlexmuxSDH_HO_FacitilyCreate	wti_flexmux_util.c	/^void WT_BulkFlexmuxSDH_HO_FacitilyCreate(WT_ufe *ufe, $/;"	f
+WT_BulkFlexmuxSDH_HO_FacitilyDelete	wti_flexmux_util.c	/^void WT_BulkFlexmuxSDH_HO_FacitilyDelete(WT_ufe *ufe, $/;"	f
+WT_CRC_16	wti_ufe_utility.h	/^   WT_CRC_16 = 1,$/;"	e	enum:__anon11
+WT_CRC_32	wti_ufe_utility.h	/^   WT_CRC_32 = 2,$/;"	e	enum:__anon11
+WT_ClockRecInterfaceId	wti_ufe_utility.c	/^WP_U32 WT_ClockRecInterfaceId(WP_U32 line_index)$/;"	f
+WT_EXT_CLOCK	wti_ufe_utility.h	/^   WT_EXT_CLOCK          = 0,$/;"	e	enum:__anon18
+WT_Eint3Interrupt	wti_ufe_utility.c	/^void WT_Eint3Interrupt(WP_U32 wpid, WP_U32 signal_info)$/;"	f
+WT_FAIL	atm_ima_ufe.c	80;"	d	file:
+WT_FIRST_LINE_INDEX	atm_ima_ufe.h	80;"	d
+WT_FLEXMUX_CONNECTION_TYPE_DS3	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_DS3,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_DS3_FRAMED_CPARITY	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_DS3_FRAMED_CPARITY,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_DS3_FRAMED_M23	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_DS3_FRAMED_M23,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_DS3_UNFRAMED	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_DS3_UNFRAMED,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED_CAS	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED_CAS,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED_CAS	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED_CAS,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_E1_UNFRAMED	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_E1_UNFRAMED,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_E1_UNFRAMED	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_E1_UNFRAMED,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_E3	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_E3,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_E3_FRAMED_G751	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_E3_FRAMED_G751,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_E3_FRAMED_G751_ATM	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_E3_FRAMED_G751_ATM,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_E3_UNFRAMED	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_E3_UNFRAMED,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_STS12	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_STS12,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_STS12	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_STS12,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_STS1_SPE	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_STS1_SPE,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_STS1_SPE	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_STS1_SPE,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_STS3	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_STS3,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_STS3	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_STS3,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED_CAS	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED_CAS,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED_CAS	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED_CAS,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_T1_UNFRAMED	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_T1_UNFRAMED,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_T1_UNFRAMED	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_T1_UNFRAMED,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_VC11	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC11,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_VC11	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_VC11,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_VC12	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC12,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_VC12	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_VC12,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_VC3	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC3,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_VC3	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_VC3,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_VC4	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC4,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_VC4	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_VC4,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_VC4_4C	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC4_4C,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_VC4_4C	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_VC4_4C,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_VCAT	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VCAT$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_VCAT	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_VCAT$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_VT1_5	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VT1_5,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_VT1_5	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_VT1_5,$/;"	e	enum:__anon46
+WT_FLEXMUX_CONNECTION_TYPE_VT2	flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VT2,$/;"	e	enum:__anon37
+WT_FLEXMUX_CONNECTION_TYPE_VT2	wti_flexmux_util.h	/^   WT_FLEXMUX_CONNECTION_TYPE_VT2,$/;"	e	enum:__anon46
+WT_FLEXMUX_DEEP_LINE_LOOPBACK	flexmux_util.h	/^    WT_FLEXMUX_DEEP_LINE_LOOPBACK,$/;"	e	enum:__anon35
+WT_FLEXMUX_DEEP_LINE_LOOPBACK	wti_flexmux_util.h	/^   WT_FLEXMUX_DEEP_LINE_LOOPBACK,$/;"	e	enum:__anon44
+WT_FLEXMUX_DEEP_SYSTEM_LOOPBACK	flexmux_util.h	/^    WT_FLEXMUX_DEEP_SYSTEM_LOOPBACK,$/;"	e	enum:__anon35
+WT_FLEXMUX_DEEP_SYSTEM_LOOPBACK	wti_flexmux_util.h	/^   WT_FLEXMUX_DEEP_SYSTEM_LOOPBACK,$/;"	e	enum:__anon44
+WT_FLEXMUX_DEVICE_MODE_SDH	wti_flexmux_util.h	/^   WT_FLEXMUX_DEVICE_MODE_SDH = WPX_UFE_FRAMER_DEVICE_MODE_SDH,$/;"	e	enum:__anon42
+WT_FLEXMUX_DEVICE_MODE_SONET	wti_flexmux_util.h	/^   WT_FLEXMUX_DEVICE_MODE_SONET = WPX_UFE_FRAMER_DEVICE_MODE_SONET$/;"	e	enum:__anon42
+WT_FLEXMUX_DIAGSONTIC_LOOPBACK	wti_flexmux_util.h	/^   WT_FLEXMUX_DIAGSONTIC_LOOPBACK,$/;"	e	enum:__anon44
+WT_FLEXMUX_LINE_PORT_OC12	flexmux_util.h	/^    WT_FLEXMUX_LINE_PORT_OC12,$/;"	e	enum:__anon36
+WT_FLEXMUX_LINE_PORT_OC12	wti_flexmux_util.h	/^   WT_FLEXMUX_LINE_PORT_OC12,$/;"	e	enum:__anon45
+WT_FLEXMUX_LINE_PORT_OC3	flexmux_util.h	/^    WT_FLEXMUX_LINE_PORT_OC3,$/;"	e	enum:__anon36
+WT_FLEXMUX_LINE_PORT_OC3	wti_flexmux_util.h	/^   WT_FLEXMUX_LINE_PORT_OC3,$/;"	e	enum:__anon45
+WT_FLEXMUX_LINE_PORT_STM1	flexmux_util.h	/^    WT_FLEXMUX_LINE_PORT_STM1,$/;"	e	enum:__anon36
+WT_FLEXMUX_LINE_PORT_STM1	wti_flexmux_util.h	/^   WT_FLEXMUX_LINE_PORT_STM1,$/;"	e	enum:__anon45
+WT_FLEXMUX_LINE_PORT_STM4	flexmux_util.h	/^    WT_FLEXMUX_LINE_PORT_STM4$/;"	e	enum:__anon36
+WT_FLEXMUX_LINE_PORT_STM4	wti_flexmux_util.h	/^   WT_FLEXMUX_LINE_PORT_STM4$/;"	e	enum:__anon45
+WT_FLEXMUX_NONE_LOOPBACK	flexmux_util.h	/^    WT_FLEXMUX_NONE_LOOPBACK,$/;"	e	enum:__anon35
+WT_FLEXMUX_NONE_LOOPBACK	wti_flexmux_util.h	/^   WT_FLEXMUX_NONE_LOOPBACK,$/;"	e	enum:__anon44
+WT_FLEXMUX_SHALLOW_LINE_LOOPBACK	flexmux_util.h	/^    WT_FLEXMUX_SHALLOW_LINE_LOOPBACK,$/;"	e	enum:__anon35
+WT_FLEXMUX_SHALLOW_LINE_LOOPBACK	wti_flexmux_util.h	/^   WT_FLEXMUX_SHALLOW_LINE_LOOPBACK,$/;"	e	enum:__anon44
+WT_FLEXMUX_SHALLOW_SYSTEM_LOOPBACK	flexmux_util.h	/^    WT_FLEXMUX_SHALLOW_SYSTEM_LOOPBACK,$/;"	e	enum:__anon35
+WT_FLEXMUX_SHALLOW_SYSTEM_LOOPBACK	wti_flexmux_util.h	/^   WT_FLEXMUX_SHALLOW_SYSTEM_LOOPBACK,$/;"	e	enum:__anon44
+WT_FLEXMUX_UFE_412_1_PORT_OC12	flexmux_util.h	/^    WT_FLEXMUX_UFE_412_1_PORT_OC12,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_412_1_PORT_OC12	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_1_PORT_OC12,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_1_PORT_OC12_CLEAR_CHANNEL	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_1_PORT_OC12_CLEAR_CHANNEL,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_1_PORT_OC12_PLUS_1_PROTECTION	flexmux_util.h	/^    WT_FLEXMUX_UFE_412_1_PORT_OC12_PLUS_1_PROTECTION,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_412_1_PORT_OC12_PLUS_1_PROTECTION	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_1_PORT_OC12_PLUS_1_PROTECTION,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_2_PORTS_OC3	flexmux_util.h	/^    WT_FLEXMUX_UFE_412_2_PORTS_OC3,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_412_2_PORTS_OC3	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_2_PORTS_OC3,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_4_PORTS_OC3	flexmux_util.h	/^    WT_FLEXMUX_UFE_412_4_PORTS_OC3,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_412_4_PORTS_OC3	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_4_PORTS_OC3,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_MASTER	flexmux_util.h	/^    WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_MASTER,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_MASTER	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_MASTER,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_SLAVE	flexmux_util.h	/^    WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_SLAVE,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_SLAVE	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_SLAVE,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_UPI1_MASTER_UPI3_SLAVE	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_UPI1_MASTER_UPI3_SLAVE$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_CLEAR_CHANNEL	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_4_PORTS_OC3_CLEAR_CHANNEL,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_PLUS_4_PROTECTION	flexmux_util.h	/^    WT_FLEXMUX_UFE_412_4_PORTS_OC3_PLUS_4_PROTECTION,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_PLUS_4_PROTECTION	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_412_4_PORTS_OC3_PLUS_4_PROTECTION,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_448_16_PORTS_OC3	flexmux_util.h	/^    WT_FLEXMUX_UFE_448_16_PORTS_OC3,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_448_4_PORTS_OC12	flexmux_util.h	/^    WT_FLEXMUX_UFE_448_4_PORTS_OC12,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_448_4_PORTS_OC12	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_448_4_PORTS_OC12,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_448_4_PORTS_OC12_CARD_PROTECTION_MASTER	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_448_4_PORTS_OC12_CARD_PROTECTION_MASTER,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_448_4_PORTS_OC12_CARD_PROTECTION_SLAVE	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_448_4_PORTS_OC12_CARD_PROTECTION_SLAVE,$/;"	e	enum:__anon43
+WT_FLEXMUX_UFE_448_4_PORTS_OC12_PLUS_4_PROTECTION	flexmux_util.h	/^    WT_FLEXMUX_UFE_448_4_PORTS_OC12_PLUS_4_PROTECTION,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_448_8_PORTS_OC3_PLUS_8_PROTECTION	flexmux_util.h	/^    WT_FLEXMUX_UFE_448_8_PORTS_OC3_PLUS_8_PROTECTION,$/;"	e	enum:__anon34
+WT_FLEXMUX_UFE_448_8_PORTS_OC3_PLUS_8_PROTECTION	wti_flexmux_util.h	/^   WT_FLEXMUX_UFE_448_8_PORTS_OC3_PLUS_8_PROTECTION,$/;"	e	enum:__anon43
+WT_HMVIP	wti_ufe_utility.h	/^   WT_HMVIP,$/;"	e	enum:__anon10
+WT_MAX_LINE_INDEX	atm_ima_ufe.h	95;"	d
+WT_OCTAL	wti_ufe_utility.h	/^   WT_OCTAL =0,$/;"	e	enum:__anon10
+WT_OP_MODE_LOOPBACK_LINE	wti_ufe_utility.h	/^   WT_OP_MODE_LOOPBACK_LINE   = 1,$/;"	e	enum:__anon12
+WT_OP_MODE_LOOPBACK_SYSTEM	wti_ufe_utility.h	/^   WT_OP_MODE_LOOPBACK_SYSTEM = 2,$/;"	e	enum:__anon12
+WT_OP_MODE_NORMAL	wti_ufe_utility.h	/^   WT_OP_MODE_NORMAL          = 0,$/;"	e	enum:__anon12
+WT_PASS	atm_ima_ufe.c	79;"	d	file:
+WT_RUN_PRBS_CHECK	flexmux_util.h	45;"	d
+WT_RUN_PRBS_CHECK	wti_flexmux_util.h	48;"	d
+WT_RX_LOOPTIME_CLOCK	wti_ufe_utility.h	/^   WT_RX_LOOPTIME_CLOCK  = 1,$/;"	e	enum:__anon18
+WT_Reboot	atm_ima_ufe_util.c	/^void WT_Reboot (void)$/;"	f
+WT_ReinstateInterruptMask	ufe_utility.c	/^void WT_ReinstateInterruptMask (WP_U32 wpid)$/;"	f
+WT_ReinstateInterruptMask	wti_ufe_utility.c	/^void WT_ReinstateInterruptMask(WP_U32 wpid)$/;"	f
+WT_SBI	wti_ufe_utility.h	/^   WT_SBI,$/;"	e	enum:__anon10
+WT_SDH	wti_ufe_utility.h	/^   WT_SDH,$/;"	e	enum:__anon10
+WT_SELECT_MIN	wti_ufe_utility.h	263;"	d
+WT_SONET	wti_ufe_utility.h	/^   WT_SONET,$/;"	e	enum:__anon10
+WT_SampleSerial	wti_ufe_utility.c	/^WP_U8 WT_SampleSerial(void)$/;"	f
+WT_UFEPDHOutputClockSet	wti_ufe_utility.c	/^void WT_UFEPDHOutputClockSet(WT_ufe *ufe,WP_U8 output_select, WP_U32 line_index,WP_U32 ClockRate)$/;"	f
+WT_UFE_HANDLE_INVALID	atm_ima_ufe.h	88;"	d
+WT_UFE_HANDLE_INVALID	wti_ufe_utility.h	64;"	d
+WT_UfeAnalyzeClockRecEvents	wti_ufe_utility.c	/^static void WT_UfeAnalyzeClockRecEvents(WUFE_events_clock_recovery *cr_events)$/;"	f	file:
+WT_UfeAnalyzeEmphyEvents	wti_ufe_utility.c	/^static void WT_UfeAnalyzeEmphyEvents(WUFE_events_emphy *emphy_events, WP_U32 coreid)$/;"	f	file:
+WT_UfeAnalyzeEvents	wti_ufe_utility.c	/^static void WT_UfeAnalyzeEvents(WT_ufe *ufe)$/;"	f	file:
+WT_UfeAnalyzeEvents4Automation	wti_ufe_utility.c	/^WP_U32 WT_UfeAnalyzeEvents4Automation(WT_ufe *ufe)$/;"	f
+WT_UfeAnalyzeFmEvents	wti_ufe_utility.c	/^static void WT_UfeAnalyzeFmEvents(WUFE_events_fm *fm_events)$/;"	f	file:
+WT_UfeAnalyzeMachineEvents	wti_ufe_utility.c	/^static void WT_UfeAnalyzeMachineEvents(WUFE_events_machine *machine_events)$/;"	f	file:
+WT_UfeAnalyzeTdmEvents	wti_ufe_utility.c	/^static void WT_UfeAnalyzeTdmEvents(WUFE_events_tdm *tdm_events)$/;"	f	file:
+WT_UfeClockRecInfoGet	wti_ufe_utility.c	/^void WT_UfeClockRecInfoGet(WP_U32 wufe_id,$/;"	f
+WT_UfeClockRecLineConfigure	wti_ufe_utility.c	/^void WT_UfeClockRecLineConfigure(WUFE_line_clock_rec_params *line_cr_params, WP_U32 tx_cr_enable, WP_U32 physical_clock_enable, WP_U32 physical_clock_id)$/;"	f
+WT_UfeClockRecMasterSet	wti_ufe_utility.h	267;"	d
+WT_UfeClockRecTimestampStubSet	wti_ufe_utility.c	/^void WT_UfeClockRecTimestampStubSet(WP_U32 enable)$/;"	f
+WT_UfeGpioOutputClockRead	wti_ufe_utility.c	/^void WT_UfeGpioOutputClockRead(WT_ufe *ufe, WP_U16 *gpio_register)$/;"	f
+WT_UfeGpioOutputClockSet	wti_ufe_utility.c	/^void WT_UfeGpioOutputClockSet(WT_ufe *ufe, WP_U32 gpio_number,$/;"	f
+WT_UfeInitializeFirmware	wti_ufe_utility.c	/^void WT_UfeInitializeFirmware(WP_U32 ufe_id)$/;"	f
+WT_UfeLineConfigureAndCreateClearChannel	wti_ufe_utility.c	/^void WT_UfeLineConfigureAndCreateClearChannel(WT_ufe *ufe, WP_U32 i, WP_U16 transfer_type, WP_U16 framing_mode, WP_U8 cas_enable, WP_U8 enable, WUFE_line_clock_rec_params *line_cr_params)$/;"	f
+WT_UfeLineConfigureAndCreateE1	wti_ufe_utility.c	/^void WT_UfeLineConfigureAndCreateE1(WT_ufe *ufe, WP_U32 i, WP_U16 transfer_type, WP_U16 framing_mode, WP_U8 cas_enable, WP_U8 enable, WUFE_line_clock_rec_params *line_cr_params)$/;"	f
+WT_UfeLineConfigureAndCreateE1T1	wti_ufe_utility.c	/^void WT_UfeLineConfigureAndCreateE1T1(WT_ufe *ufe, WP_U32 i, WP_U16 transfer_type, WP_U16 framing_mode, WP_U8 cas_enable, WP_U8 enable, WUFE_line_clock_rec_params *line_cr_params)$/;"	f
+WT_UfeLineConfigureAndCreateE3DS3	wti_ufe_utility.c	/^void WT_UfeLineConfigureAndCreateE3DS3(WT_ufe *ufe, WP_U32 i, WP_U16 transfer_type, WP_U16 framing_mode, WP_U8 ds3_e3_framing_type, WP_U8 cas_enable, WP_U8 enable, WUFE_line_clock_rec_params *line_cr_params)$/;"	f
+WT_UfeLineConfigureAndCreateT1	wti_ufe_utility.c	/^void WT_UfeLineConfigureAndCreateT1(WT_ufe *ufe, WP_U32 i, WP_U16 transfer_type, WP_U16 framing_mode, WP_U8 cas_enable, WP_U8 enable, WUFE_line_clock_rec_params *line_cr_params)$/;"	f
+WT_UfeLineCreate	wti_ufe_utility.c	/^void WT_UfeLineCreate(WT_ufe *ufe, WP_U32 index, void *config, WP_U8 enable)$/;"	f
+WT_UfeLineDelete	wti_ufe_utility.c	/^void WT_UfeLineDelete(WT_ufe *ufe, WP_U32 index)$/;"	f
+WT_UfeLineDisable	wti_ufe_utility.c	/^void WT_UfeLineDisable(WT_ufe *ufe, WP_U32 line_index)$/;"	f
+WT_UfeLineEnable	wti_ufe_utility.c	/^void  WT_UfeLineEnable(WT_ufe *ufe, WP_U32 line_index)$/;"	f
+WT_UfeLineOctalConfig	wti_ufe_utility.c	/^static void WT_UfeLineOctalConfig(WT_ufe_line_octal_params *line_octal_params,$/;"	f	file:
+WT_UfeLineOctalCreate	wti_ufe_utility.c	/^void WT_UfeLineOctalCreate(WT_ufe *ufe,$/;"	f
+WT_UfeLinePdhLoopbackSetup	wti_ufe_utility.c	/^void WT_UfeLinePdhLoopbackSetup(WT_ufe *ufe, int line_index, WUFE_line_pdh_loopback_type lpbk_type)$/;"	f
+WT_UfeLineProtectionSwitch	wti_ufe_utility.c	/^void WT_UfeLineProtectionSwitch(WP_U32 flexmux_id, WP_U32 line_port_id, WP_U32 protected_line_active)$/;"	f
+WT_UfeLineSdhConfig	wti_ufe_utility.c	/^static void WT_UfeLineSdhConfig(WT_ufe_line_sdh_params *line_sdh_params,$/;"	f	file:
+WT_UfeLineSdhCreate	wti_ufe_utility.c	/^void WT_UfeLineSdhCreate(WT_ufe *ufe,$/;"	f
+WT_UfeLineSdhModify	wti_ufe_utility.c	/^void WT_UfeLineSdhModify(WT_ufe *ufe, WP_U32 line_index, WUFE_line_sdh_reconfig *config)$/;"	f
+WT_UfeLineSocketLpbkSetup	wti_ufe_utility.c	/^void WT_UfeLineSocketLpbkSetup(WT_ufe *ufe, int line_index, WUFE_line_loopback_type lpbk_type)$/;"	f
+WT_UfeLineSonetConfig	wti_ufe_utility.c	/^static void WT_UfeLineSonetConfig(WT_ufe_line_sonet_params *line_sonet_params,$/;"	f	file:
+WT_UfeLineSonetCreate	wti_ufe_utility.c	/^void  WT_UfeLineSonetCreate(WT_ufe *ufe,$/;"	f
+WT_UfeLineSonetModify	wti_ufe_utility.c	/^void WT_UfeLineSonetModify(WT_ufe *ufe, WP_U32 line_index, WUFE_line_sonet_reconfig *config)$/;"	f
+WT_UfePhyDelete	wti_ufe_utility.c	/^void WT_UfePhyDelete(WT_ufe *ufe, WP_U32 phy_index)$/;"	f
+WT_UfePhyDisable	wti_ufe_utility.c	/^void WT_UfePhyDisable(WT_ufe *ufe, WP_U32 phy_index)$/;"	f
+WT_UfePhyDisplay	wti_ufe_utility.c	/^void WT_UfePhyDisplay(WT_ufe *ufe, WP_U32 phy_index)$/;"	f
+WT_UfePhyEnable	wti_ufe_utility.c	/^void WT_UfePhyEnable(WT_ufe *ufe, WP_U32 phy_index)$/;"	f
+WT_UfePhySlotsModify	wti_ufe_utility.c	/^void WT_UfePhySlotsModify(WT_ufe *ufe, WP_U32 phy_index, WUFE_phy *new_phy_cfg)$/;"	f
+WT_UfePhyTransConfig	wti_ufe_utility.c	/^static void WT_UfePhyTransConfig(WT_ufe *ufe,$/;"	f	file:
+WT_UfePhyTransCreate	wti_ufe_utility.c	/^void WT_UfePhyTransCreate(WT_ufe *ufe,$/;"	f
+WT_UfeReadEvents	wti_ufe_utility.c	/^void WT_UfeReadEvents(WT_ufe *ufe)$/;"	f
+WT_UfeReadEvents4Automation	wti_ufe_utility.c	/^WP_U32 WT_UfeReadEvents4Automation(WT_ufe *ufe)$/;"	f
+WT_UfeRelease	wti_ufe_utility.c	/^void  WT_UfeRelease(WT_ufe *ufe)$/;"	f
+WT_UfeSystemConfig	wti_ufe_utility.c	/^void WT_UfeSystemConfig(WT_ufe *ufe, WUFE_system *sys_cfg)$/;"	f
+WT_UfeSystemCreate	wti_ufe_utility.c	/^void  WT_UfeSystemCreate(WT_ufe *ufe)$/;"	f
+WT_UfeSystemEnable	wti_ufe_utility.c	/^void  WT_UfeSystemEnable(WT_ufe *ufe)$/;"	f
+WT_UfeSystemIdleModify	wti_ufe_utility.c	/^void WT_UfeSystemIdleModify(WT_ufe *ufe, WUFE_idle_pattern *new_config)$/;"	f
+WT_UfeSystemRxTrafficMask	wti_ufe_utility.c	/^void  WT_UfeSystemRxTrafficMask(WT_ufe *ufe, WP_U8 aug1, WP_U8 enable)$/;"	f
+WT_UfeTerminateOnError	wti_ufe_utility.c	/^static void WT_UfeTerminateOnError(WP_handle handle, WP_CHAR *s,WP_U32 id,WP_U32 LineNum)$/;"	f	file:
+WT_Vt100CrsrLeft	wti_ufe_utility.c	/^void WT_Vt100CrsrLeft(WP_U32 left)$/;"	f
+WT_Vt100CrsrRight	wti_ufe_utility.c	/^void WT_Vt100CrsrRight(WP_U32 right)$/;"	f
+WT_crc_type	wti_ufe_utility.h	/^} WT_crc_type;$/;"	t	typeref:enum:__anon11
+WT_fpga_mode	wti_ufe_utility.h	/^} WT_fpga_mode;$/;"	t	typeref:enum:__anon10
+WT_operation_mode	wti_ufe_utility.h	/^}WT_operation_mode;$/;"	t	typeref:enum:__anon12
+WT_tx_clk	wti_ufe_utility.h	/^}WT_tx_clk;$/;"	t	typeref:enum:__anon18
+WT_ufe	wti_ufe_utility.h	/^} WT_ufe;$/;"	t	typeref:struct:__anon19
+WT_ufe_framer_line_params	wti_ufe_utility.h	/^}WT_ufe_framer_line_params;$/;"	t	typeref:union:__anon16
+WT_ufe_line_octal_params	wti_ufe_utility.h	/^} WT_ufe_line_octal_params;$/;"	t	typeref:struct:__anon13
+WT_ufe_line_params	wti_ufe_utility.h	/^} WT_ufe_line_params;$/;"	t	typeref:struct:__anon17
+WT_ufe_line_sdh_params	wti_ufe_utility.h	/^} WT_ufe_line_sdh_params;$/;"	t	typeref:struct:__anon14
+WT_ufe_line_sonet_params	wti_ufe_utility.h	/^} WT_ufe_line_sonet_params;$/;"	t	typeref:struct:__anon15
+a_task	atm_ima_ufe.c	/^WP_ima_event a_task;$/;"	v
+aal5_shaping_param	atm_ima_ufe.h	/^WP_atm_shaping_pcr aal5_shaping_param = $/;"	v
+add_framer_task	wti_flexmux_alarms_and_pm.c	/^void add_framer_task(framer_task_list *task_list, framer_task *task)$/;"	f
+add_task	atm_ima_ufe_util.c	/^void add_task (app_task_list * task_list, WP_U32 event_type,$/;"	f
+alarm_and_pm_thread_id	flexmux_util.c	/^WP_THREAD_ID alarm_and_pm_thread_id = 0;$/;"	v
+alarm_and_pm_thread_id	wti_flexmux_util.c	/^WP_THREAD_ID alarm_and_pm_thread_id = 0;$/;"	v
+alarm_category	ufe_utility.c	/^    WP_U8 alarm_category;$/;"	m	struct:__anon2	file:
+alarm_category	ufe_utility.c	/^    WP_U8 alarm_category;$/;"	m	struct:__anon3	file:
+alarm_category	wti_flexmux_alarms_and_pm.c	/^      WP_U8 alarm_category;$/;"	m	struct:__anon25	file:
+alarm_category	wti_flexmux_alarms_and_pm.c	/^      WP_U8 alarm_category;$/;"	m	struct:__anon26	file:
+alarm_category	wti_flexmux_alarms_and_pm.c	/^      WP_U8 alarm_category;$/;"	m	struct:__anon30	file:
+alarm_is_ho_level	wti_flexmux_alarms_and_pm.c	/^WP_boolean alarm_is_ho_level(WP_U32 alarm_category)$/;"	f
+alarm_is_lo_level	wti_flexmux_alarms_and_pm.c	/^WP_boolean alarm_is_lo_level(WP_U32 alarm_category)$/;"	f
+alarm_is_port_level	wti_flexmux_alarms_and_pm.c	/^WP_boolean alarm_is_port_level(WP_U32 alarm_category)$/;"	f
+alarm_string_to_index	wti_flexmux_alarms_and_pm.c	/^WP_U32 alarm_string_to_index(WP_CHAR *pStr)$/;"	f
+alarm_supported_by_device_current_mode	wti_flexmux_alarms_and_pm.c	/^WP_boolean alarm_supported_by_device_current_mode(WP_U32 device_currnt_mode, WP_U32 alarm_index)$/;"	f
+app_perform_action	atm_ima_ufe_util.c	/^void app_perform_action (app_task * task)$/;"	f
+app_task	atm_ima_ufe.h	/^} app_task;$/;"	t	typeref:struct:__anon22
+app_task_list	atm_ima_ufe.h	/^} app_task_list;$/;"	t	typeref:struct:__anon23
+atm_global_cfg	atm_ima_ufe.h	/^WP_atm_global atm_global_cfg = $/;"	v
+bridge_cfg	atm_ima_ufe.h	/^WP_flow_learning_rule_vlan bridge_cfg;$/;"	v
+bridge_port_cfg	atm_ima_ufe.h	/^WP_bridge_port bridge_port_cfg = $/;"	v
+build_personality_in_use	wti_flexmux_util.c	/^WP_U8 build_personality_in_use;$/;"	v
+cas_enable	wti_ufe_utility.h	/^   WUFE_cas_enable            cas_enable;$/;"	m	struct:__anon17
+cas_enable	wti_ufe_utility.h	/^   WUFE_cas_enable       cas_enable;$/;"	m	struct:__anon13
+cas_enable	wti_ufe_utility.h	/^   WUFE_cas_enable       cas_enable;$/;"	m	struct:__anon14
+cas_enable	wti_ufe_utility.h	/^   WUFE_cas_enable       cas_enable;$/;"	m	struct:__anon15
+cb_alarm_map_complete	wti_flexmux_alarms_and_pm.c	/^void cb_alarm_map_complete(WP_U8 device)$/;"	f
+cb_k1k2_signal	wti_flexmux_alarms_and_pm.c	/^void cb_k1k2_signal(WP_U8 device_id, WP_U8 iLinePort, WPX_UFE_FRAMER_SONET_SDH_PORT_LINE_K1K2_TYPE *pRX_K1K2)$/;"	f
+cb_path_alarm	wti_flexmux_alarms_and_pm.c	/^void cb_path_alarm(WP_U8 device_id, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *p_SDH_Sonet_line_endpoint_type,$/;"	f
+cb_path_alarm_report_only	wti_flexmux_alarms_and_pm.c	/^void cb_path_alarm_report_only(WP_U8 device_id,$/;"	f
+cb_pdh_alarm	wti_flexmux_alarms_and_pm.c	/^void cb_pdh_alarm(WP_U8 device_id, WP_U32 iSocketClientPDH, U8 alarm_category, U8 is_asserted)$/;"	f
+cb_pdh_alarm_report_only	wti_flexmux_alarms_and_pm.c	/^void cb_pdh_alarm_report_only(WP_U8 device_id, WP_U32 iSocketClientPDH, U8 alarm_category, U8 is_asserted)$/;"	f
+cb_pm_ho_path	wti_flexmux_alarms_and_pm.c	/^void cb_pm_ho_path(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+cb_pm_lo_path	wti_flexmux_alarms_and_pm.c	/^void cb_pm_lo_path(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+cb_pm_pdh	wti_flexmux_alarms_and_pm.c	/^void cb_pm_pdh(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+cb_pm_port	wti_flexmux_alarms_and_pm.c	/^void cb_pm_port(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+cb_port_alarm	wti_flexmux_alarms_and_pm.c	/^void cb_port_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8 is_asserted)$/;"	f
+cb_port_alarm_report_only	wti_flexmux_alarms_and_pm.c	/^void cb_port_alarm_report_only(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8 is_asserted)$/;"	f
+cb_s1_signal	wti_flexmux_alarms_and_pm.c	/^void cb_s1_signal(WP_U8 device_id, WP_U8 iLinePort, U8 s1_value)$/;"	f
+ch_enet_cfg	atm_ima_ufe.h	/^WP_ch_enet ch_enet_cfg = $/;"	v
+ch_iw_rx_cfg	atm_ima_ufe.h	/^WP_ch_iw_rx ch_iw_rx_cfg =$/;"	v
+check_type	wti_flexmux_alarms_and_pm.c	/^WP_U32 check_type = 0;$/;"	v
+clk_rec_system_params	wti_ufe_utility.h	/^   WUFE_clk_rec_system_params   *clk_rec_system_params;$/;"	m	struct:__anon19
+clock_rec_line_params	wti_ufe_utility.h	/^   WUFE_line_clock_rec_params *clock_rec_line_params;$/;"	m	struct:__anon13
+clock_rec_line_params	wti_ufe_utility.h	/^   WUFE_line_clock_rec_params *clock_rec_line_params;$/;"	m	struct:__anon14
+clock_rec_line_params	wti_ufe_utility.h	/^   WUFE_line_clock_rec_params *clock_rec_line_params;$/;"	m	struct:__anon15
+clock_rec_mode	wti_ufe_utility.h	/^   WUFE_clock_rec_mode        clock_rec_mode;$/;"	m	struct:__anon17
+clock_rec_mode	wti_ufe_utility.h	/^   WUFE_clock_rec_mode   clock_rec_mode;$/;"	m	struct:__anon13
+clock_translator_id	wti_ufe_utility.h	/^   WP_U16                     clock_translator_id;$/;"	m	struct:__anon17
+context_cfg	atm_ima_ufe.h	/^WP_context context_cfg = $/;"	v
+cw_config	atm_ima_ufe.h	/^WP_calendar_wheel cw_config[2] =$/;"	v
+debug_on	atm_ima_ufe.h	/^WP_boolean debug_on = WP_FALSE;$/;"	v
+default_iw_agg_bridging_cfg	atm_ima_ufe.h	/^WP_iw_agg_bridging default_iw_agg_bridging_cfg = $/;"	v
+default_pkt_shaping_wfq_cfg	atm_ima_ufe.h	/^WP_pkt_shaping_wfq default_pkt_shaping_wfq_cfg = $/;"	v
+device	ufe_utility.c	/^    WP_U8 device;$/;"	m	struct:__anon2	file:
+device	ufe_utility.c	/^    WP_U8 device;$/;"	m	struct:__anon3	file:
+device	ufe_utility.c	/^    WP_U8 device;$/;"	m	struct:__anon4	file:
+device	ufe_utility.c	/^    WP_U8 device;$/;"	m	struct:__anon5	file:
+device	ufe_utility.c	/^    WP_U8 device;$/;"	m	struct:__anon6	file:
+device	wti_flexmux_alarms_and_pm.c	/^      WP_U8 device;$/;"	m	struct:__anon25	file:
+device	wti_flexmux_alarms_and_pm.c	/^      WP_U8 device;$/;"	m	struct:__anon26	file:
+device	wti_flexmux_alarms_and_pm.c	/^      WP_U8 device;$/;"	m	struct:__anon27	file:
+device	wti_flexmux_alarms_and_pm.c	/^      WP_U8 device;$/;"	m	struct:__anon28	file:
+device	wti_flexmux_alarms_and_pm.c	/^      WP_U8 device;$/;"	m	struct:__anon29	file:
+device	wti_flexmux_alarms_and_pm.c	/^      WP_U8 device;$/;"	m	struct:__anon30	file:
+device_enet_cfg	atm_ima_ufe.h	/^WP_device_enet device_enet_cfg = $/;"	v
+dfc_sys_info	atm_ima_ufe.h	/^WP_dfc_sys_info dfc_sys_info = $/;"	v
+display_events	atm_ima_ufe_util.c	/^void display_events (void)$/;"	f
+display_events_noima	atm_ima_ufe_util.c	/^void display_events_noima (void)$/;"	f
+ds3_e3_framing_type	wti_ufe_utility.h	/^   WP_U8 ds3_e3_framing_type;$/;"	m	struct:__anon14
+ds3_e3_framing_type	wti_ufe_utility.h	/^   WP_U8 ds3_e3_framing_type;$/;"	m	struct:__anon15
+emphy_ext	atm_ima_ufe.h	/^WP_port_upi_emphy_ext emphy_ext =$/;"	v
+emphy_port	atm_ima_ufe.h	/^WP_handle 				emphy_port;$/;"	v
+enable_peek_print	wti_flexmux_alarms_and_pm.c	/^WP_boolean enable_peek_print = WP_TRUE;$/;"	v
+enable_pm_print_ho_path	wti_flexmux_alarms_and_pm.c	/^WP_U8 enable_pm_print_ho_path[WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_HO_PATH] = {0};$/;"	v
+enable_pm_print_lo_path	wti_flexmux_alarms_and_pm.c	/^WP_U8 enable_pm_print_lo_path[WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_LO_PATH] = {0};$/;"	v
+enable_pm_print_pdh	wti_flexmux_alarms_and_pm.c	/^WP_U8 enable_pm_print_pdh[WPX_UFE_FRAMER_PDH_E1_T1_CRC + 1] = {0};$/;"	v
+enable_pm_print_port	wti_flexmux_alarms_and_pm.c	/^WP_U8 enable_pm_print_port[WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_PORT] = {0};$/;"	v
+endpoint	ufe_utility.c	/^    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE endpoint;$/;"	m	struct:__anon3	file:
+endpoint	wti_flexmux_alarms_and_pm.c	/^      WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE endpoint;$/;"	m	struct:__anon26	file:
+enet_filters_cfg	atm_ima_ufe.h	/^WP_enet_filters enet_filters_cfg = $/;"	v
+event	atm_ima_ufe.h	/^	WP_CHAR *event;$/;"	m	struct:__anon21
+event_contents_0	wti_ufe_utility.c	/^WP_boolean event_contents_0 = WP_FALSE;$/;"	v
+event_contents_2	wti_ufe_utility.c	/^WP_boolean event_contents_2 = WP_FALSE;$/;"	v
+event_param	atm_ima_ufe.h	/^	void *event_param;$/;"	m	struct:__anon22
+event_table	atm_ima_ufe.h	/^event_table_s event_table[] =$/;"	v
+event_table_s	atm_ima_ufe.h	/^} event_table_s;$/;"	t	typeref:struct:__anon21
+event_tag	atm_ima_ufe.h	/^	WP_tag event_tag;$/;"	m	struct:__anon22
+event_type	atm_ima_ufe.h	/^	WP_U32 event_type;$/;"	m	struct:__anon22
+events_connector_0	wti_ufe_utility.c	/^WUFE_events events_connector_0;$/;"	v
+events_connector_2	wti_ufe_utility.c	/^WUFE_events events_connector_2;$/;"	v
+ext_mode_active	wti_ufe_utility.h	/^   WUFE_cad_cr_extended       ext_mode_active;$/;"	m	struct:__anon17
+ext_mode_active	wti_ufe_utility.h	/^   WUFE_cad_cr_extended  ext_mode_active;$/;"	m	struct:__anon13
+fence	wti_flexmux_util.c	/^static int fence = 0;$/;"	v	file:
+flexmux_build_personality	flexmux_util.h	/^    WP_U8 flexmux_build_personality;$/;"	m	struct:__anon38
+flexmux_build_personality	flexmux_util.h	/^    WP_U8 flexmux_build_personality;$/;"	m	struct:__anon41
+flexmux_build_personality	wti_flexmux_util.h	/^   WP_U8                                           flexmux_build_personality;$/;"	m	struct:__anon47
+flexmux_build_personality	wti_flexmux_util.h	/^   WP_U8 flexmux_build_personality;$/;"	m	struct:__anon50
+flexmux_hw_config	flexmux_util.h	/^    WTI_flexmux_physical_conf flexmux_hw_config;$/;"	m	struct:__anon38
+flexmux_hw_config	flexmux_util.h	/^    WTI_flexmux_physical_conf flexmux_hw_config;$/;"	m	struct:__anon41
+flexmux_hw_config	wti_flexmux_util.h	/^   WTI_flexmux_physical_conf                       flexmux_hw_config;$/;"	m	struct:__anon47
+flexmux_hw_config	wti_flexmux_util.h	/^   WTI_flexmux_physical_conf flexmux_hw_config;$/;"	m	struct:__anon50
+flexmux_id	flexmux_util.h	/^    WP_U8 flexmux_id;$/;"	m	struct:__anon38
+flexmux_id	wti_flexmux_util.h	/^   WP_U8                                           flexmux_id;$/;"	m	struct:__anon47
+flexmux_loopback_mode	flexmux_util.h	/^    WTI_flexmux_loopback_mode flexmux_loopback_mode;$/;"	m	struct:__anon38
+flexmux_loopback_mode	wti_flexmux_util.h	/^   WTI_flexmux_loopback_mode                       flexmux_loopback_mode;$/;"	m	struct:__anon47
+flexmux_mode	flexmux_util.h	/^    WP_U8 flexmux_mode;$/;"	m	struct:__anon38
+flexmux_mode	flexmux_util.h	/^    WP_U8 flexmux_mode;$/;"	m	struct:__anon41
+flexmux_mode	wti_flexmux_util.h	/^   WP_U8                                           flexmux_mode;$/;"	m	struct:__anon47
+flexmux_mode	wti_flexmux_util.h	/^   WP_U8 flexmux_mode;$/;"	m	struct:__anon50
+flexmux_reg	flexmux_util.h	/^WTI_Flexmux_device_registry flexmux_reg[WTI_MAX_FLEXMUX_DEVICES_SUPPORTED_BY_DRIVER];$/;"	v
+flexmux_reg	wti_flexmux_util.h	/^WTI_Flexmux_device_registry flexmux_reg[WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES];$/;"	v
+forward_rule	atm_ima_ufe.h	/^WP_l2_forward forward_rule;$/;"	v
+fpga_mode	wti_ufe_utility.h	/^   WT_fpga_mode          fpga_mode;$/;"	m	struct:__anon19
+framed	wti_ufe_utility.h	/^   WUFE_un_framed             framed;$/;"	m	struct:__anon17
+framed	wti_ufe_utility.h	/^   WUFE_un_framed        framed;$/;"	m	struct:__anon13
+framed	wti_ufe_utility.h	/^   WUFE_un_framed        framed;$/;"	m	struct:__anon14
+framed	wti_ufe_utility.h	/^   WUFE_un_framed        framed;$/;"	m	struct:__anon15
+framer_line_params	wti_ufe_utility.h	/^   WT_ufe_framer_line_params framer_line_params;$/;"	m	struct:__anon17
+framer_lock	wti_flexmux_util.c	/^WP_U32 framer_lock;   \/* coordinate between interrupt handler and mailbox server thread  *\/$/;"	v
+framer_task	ufe_utility.c	/^} framer_task;$/;"	t	typeref:struct:__anon7	file:
+framer_task	wti_flexmux_alarms_and_pm.c	/^} framer_task;$/;"	t	typeref:struct:__anon31	file:
+framer_task_list	ufe_utility.c	/^} framer_task_list;$/;"	t	typeref:struct:__anon9	file:
+framer_task_list	wti_flexmux_alarms_and_pm.c	/^} framer_task_list;$/;"	t	typeref:struct:__anon33	file:
+get_alarm_category	wti_flexmux_alarms_and_pm.c	/^WP_U32 get_alarm_category(WP_U32 alarms_index)$/;"	f
+group_alloc	atm_ima_ufe.h	/^WP_ima_group_alloc group_alloc[] = {$/;"	v
+h_bridge1_bport_enet1	atm_ima_ufe.h	/^WP_handle               h_bridge1_bport_enet1, h_bridge1_bport_tdm[APP_MAX_TDM_PORTS];$/;"	v
+h_bridge1_bport_ima	atm_ima_ufe.h	/^WP_handle h_bridge1_bport_ima;$/;"	v
+h_bridge1_bport_tdm	atm_ima_ufe.h	/^WP_handle               h_bridge1_bport_enet1, h_bridge1_bport_tdm[APP_MAX_TDM_PORTS];$/;"	v
+h_bridge1_default_agg	atm_ima_ufe.h	/^WP_handle               h_bridge1_default_agg,h_bridge2_default_agg;$/;"	v
+h_bridge1_dfcflow1	atm_ima_ufe.h	/^WP_handle               h_bridge1_dfcflow1[MAX_ATM_TX_CHANNEL];$/;"	v
+h_bridge1_filter	atm_ima_ufe.h	/^WP_handle               h_bridge1_filter[2],h_bridge2_filter[4];$/;"	v
+h_bridge1_iwhost	atm_ima_ufe.h	/^WP_handle               h_bridge1_iwhost, h_bridge2_iwhost;$/;"	v
+h_bridge2_bport_enet2	atm_ima_ufe.h	/^WP_handle               h_bridge2_bport_enet2, h_bridge2_bport_tdm[APP_MAX_TDM_PORTS];$/;"	v
+h_bridge2_bport_tdm	atm_ima_ufe.h	/^WP_handle               h_bridge2_bport_enet2, h_bridge2_bport_tdm[APP_MAX_TDM_PORTS];$/;"	v
+h_bridge2_default_agg	atm_ima_ufe.h	/^WP_handle               h_bridge1_default_agg,h_bridge2_default_agg;$/;"	v
+h_bridge2_dfcflow	atm_ima_ufe.h	/^WP_handle               h_bridge2_dfcflow[4];$/;"	v
+h_bridge2_filter	atm_ima_ufe.h	/^WP_handle               h_bridge1_filter[2],h_bridge2_filter[4];$/;"	v
+h_bridge2_iwhost	atm_ima_ufe.h	/^WP_handle               h_bridge1_iwhost, h_bridge2_iwhost;$/;"	v
+h_dev_ima	atm_ima_ufe.h	/^WP_handle				h_dev_ima[APP_MAX_IMA_DEVICE];$/;"	v
+h_dev_iwhost	atm_ima_ufe.h	/^WP_handle               h_port_iwhost,h_dev_iwhost;$/;"	v
+h_dev_tdm_alloc	atm_ima_ufe.h	/^WP_handle h_dev_tdm_alloc[APP_MAX_TDM_PORTS];$/;"	v
+h_device_enet1	atm_ima_ufe.h	/^WP_handle               h_device_enet1, h_device_enet2;$/;"	v
+h_device_enet2	atm_ima_ufe.h	/^WP_handle               h_device_enet1, h_device_enet2;$/;"	v
+h_enet1_host_tx	atm_ima_ufe.h	/^WP_handle               h_enet1_rx, h_enet1_host_tx, h_enet1_tx;$/;"	v
+h_enet1_rx	atm_ima_ufe.h	/^WP_handle               h_enet1_rx, h_enet1_host_tx, h_enet1_tx;$/;"	v
+h_enet1_tx	atm_ima_ufe.h	/^WP_handle               h_enet1_rx, h_enet1_host_tx, h_enet1_tx;$/;"	v
+h_enet2_rx	atm_ima_ufe.h	/^WP_handle               h_enet2_rx, h_enet2_tx;$/;"	v
+h_enet2_tx	atm_ima_ufe.h	/^WP_handle               h_enet2_rx, h_enet2_tx;$/;"	v
+h_flow_agg_enet2	atm_ima_ufe.h	/^WP_handle               h_flow_agg_enet2;$/;"	v
+h_flow_agg_pwe3_atm_ingress	atm_ima_ufe.h	/^WP_handle h_flow_agg_pwe3_atm_ingress[MAX_ATM_RX_CHANNEL];$/;"	v
+h_flow_agg_tdm	atm_ima_ufe.h	/^WP_handle               h_flow_agg_tdm[APP_MAX_TDM_PORTS];$/;"	v
+h_flow_agg_trans_bridge_egress	atm_ima_ufe.h	/^WP_handle h_flow_agg_trans_bridge_egress[MAX_ATM_TX_CHANNEL];$/;"	v
+h_iw_sys_bridge1	atm_ima_ufe.h	/^WP_handle               h_iw_sys_bridge1, h_iw_sys_bridge2;$/;"	v
+h_iw_sys_bridge2	atm_ima_ufe.h	/^WP_handle               h_iw_sys_bridge1, h_iw_sys_bridge2;$/;"	v
+h_iw_sys_directmap	atm_ima_ufe.h	/^WP_handle h_iw_sys_directmap;$/;"	v
+h_learningflow_enet1	atm_ima_ufe.h	/^WP_handle               h_learningflow_enet1;$/;"	v
+h_pool_256	atm_ima_ufe.h	/^WP_handle               h_pool_buffer_iw,h_pool_256;$/;"	v
+h_pool_buffer_host	atm_ima_ufe.h	/^WP_handle               h_pool_buffer_host;$/;"	v
+h_pool_buffer_iw	atm_ima_ufe.h	/^WP_handle               h_pool_buffer_iw,h_pool_256;$/;"	v
+h_pool_ring_host	atm_ima_ufe.h	/^WP_handle               h_pool_ring_host;$/;"	v
+h_port_enet1	atm_ima_ufe.h	/^WP_handle               h_port_enet1, h_port_enet2;$/;"	v
+h_port_enet2	atm_ima_ufe.h	/^WP_handle               h_port_enet1, h_port_enet2;$/;"	v
+h_port_iwhost	atm_ima_ufe.h	/^WP_handle               h_port_iwhost,h_dev_iwhost;$/;"	v
+h_qnode_host	atm_ima_ufe.h	/^WP_handle               h_qnode_iwq, h_qnode_host,h_qnode_iwq_tdm;$/;"	v
+h_qnode_iwq	atm_ima_ufe.h	/^WP_handle               h_qnode_iwq, h_qnode_host,h_qnode_iwq_tdm;$/;"	v
+h_qnode_iwq_tdm	atm_ima_ufe.h	/^WP_handle               h_qnode_iwq, h_qnode_host,h_qnode_iwq_tdm;$/;"	v
+h_rport_enet2	atm_ima_ufe.h	/^WP_handle               h_rport_tdm[APP_MAX_TDM_PORTS], h_rport_enet2;$/;"	v
+h_rport_tdm	atm_ima_ufe.h	/^WP_handle               h_rport_tdm[APP_MAX_TDM_PORTS], h_rport_enet2;$/;"	v
+h_tdm_rx	atm_ima_ufe.h	/^WP_handle               h_tdm_rx[APP_MAX_TDM_PORTS],h_tdm_tx[APP_MAX_TDM_PORTS];$/;"	v
+h_tdm_tx	atm_ima_ufe.h	/^WP_handle               h_tdm_rx[APP_MAX_TDM_PORTS],h_tdm_tx[APP_MAX_TDM_PORTS];$/;"	v
+hdlc_crc	wti_ufe_utility.h	/^   WT_crc_type           hdlc_crc;$/;"	m	struct:__anon19
+head	atm_ima_ufe.h	/^	WP_U16 head;$/;"	m	struct:__anon23
+head	ufe_utility.c	/^    WP_U16 head;$/;"	m	struct:__anon9	file:
+head	wti_flexmux_alarms_and_pm.c	/^      WP_U16 head;$/;"	m	struct:__anon33	file:
+ho_transfer_type_in_use	flexmux_util.c	/^int ho_transfer_type_in_use;$/;"	v
+ho_transfer_type_in_use	wti_flexmux_util.c	/^int ho_transfer_type_in_use;$/;"	v
+iDevice	wti_flexmux_util.c	/^      U8 iDevice;$/;"	m	struct:WTI_DIAG_PEEK_INFO	file:
+ima_add_task	atm_ima_ufe_util.c	/^void ima_add_task (ima_app_task_list * task_list, WP_U32 data, WP_U32 info)$/;"	f
+ima_app_perform_action	atm_ima_ufe_util.c	/^void ima_app_perform_action (WP_ima_event * task)$/;"	f
+ima_app_task_list	atm_ima_ufe.h	/^ima_app_task_list;$/;"	t	typeref:struct:__anon24
+ima_events_name	atm_ima_ufe_util.c	/^static char *ima_events_name[] = {$/;"	v	file:
+ima_group	atm_ima_ufe.h	/^WP_ima_group ima_group = $/;"	v
+ima_group_handle	atm_ima_ufe.h	/^WP_handle ima_group_handle[NUM_OF_GROUPS];$/;"	v
+ima_group_pqblock_handle	atm_ima_ufe.h	/^WP_handle ima_group_pqblock_handle[NUM_OF_GROUPS];$/;"	v
+ima_irq_task_list	atm_ima_ufe.h	/^ima_app_task_list ima_irq_task_list[1] = { {0, 0, IRQ_TASK_LIST_SIZE,(WP_ima_event*) &irq_task} };$/;"	v
+ima_link	atm_ima_ufe.h	/^WP_ima_link ima_link[1] = $/;"	v
+ima_link_handle	atm_ima_ufe.h	/^WP_handle ima_link_handle[NUM_OF_LINKS * NUM_OF_GROUPS];$/;"	v
+ima_next_task	atm_ima_ufe_util.c	/^WP_ima_event *ima_next_task (ima_app_task_list * task_list,$/;"	f
+ima_qn	atm_ima_ufe.h	/^WP_handle ima_qn;$/;"	v
+ima_rx_ch_handle	atm_ima_ufe.h	/^WP_handle ima_rx_ch_handle[MAX_ATM_RX_CHANNEL];$/;"	v
+ima_s	atm_ima_ufe_stats.c	/^char * ima_s (int n)$/;"	f
+ima_s_fe	atm_ima_ufe_stats.c	/^char * ima_s_fe (int n)$/;"	f
+ima_sys_handle	atm_ima_ufe.h	/^WP_handle ima_sys_handle;$/;"	v
+ima_sys_params	atm_ima_ufe.h	/^WP_ima_system ima_sys_params = {$/;"	v
+ima_tx_ch_handle	atm_ima_ufe.h	/^WP_handle ima_tx_ch_handle[MAX_ATM_TX_CHANNEL];$/;"	v
+imass	atm_ima_ufe_stats.c	/^char imass[64];$/;"	v
+in	atm_ima_ufe.h	/^	WP_U16 in;$/;"	m	struct:__anon24
+initialize_locks	wti_flexmux_util.c	/^void initialize_locks(void) {}$/;"	f
+initialize_locks	wti_flexmux_util.c	/^void initialize_locks(void)$/;"	f
+insert_ip_header	atm_ima_ufe_util.c	/^void insert_ip_header (WP_U32 ip_sa, WP_U32 ip_da, WP_U32 payload_size,$/;"	f
+int_queue_table_cfg	atm_ima_ufe.h	/^WP_int_queue_table int_queue_table_cfg =$/;"	v
+irq_task	atm_ima_ufe.h	/^app_task irq_task[IRQ_TASK_LIST_SIZE];$/;"	v
+irq_task_list	atm_ima_ufe.h	/^app_task_list irq_task_list[1] = { { 0, 0, IRQ_TASK_LIST_SIZE, 0, irq_task} };$/;"	v
+is_asserted	ufe_utility.c	/^    WP_U8 is_asserted;$/;"	m	struct:__anon2	file:
+is_asserted	ufe_utility.c	/^    WP_U8 is_asserted;$/;"	m	struct:__anon3	file:
+is_asserted	wti_flexmux_alarms_and_pm.c	/^      WP_U8 is_asserted;$/;"	m	struct:__anon25	file:
+is_asserted	wti_flexmux_alarms_and_pm.c	/^      WP_U8 is_asserted;$/;"	m	struct:__anon26	file:
+is_asserted	wti_flexmux_alarms_and_pm.c	/^      WP_U8 is_asserted;$/;"	m	struct:__anon30	file:
+is_initialized	flexmux_util.h	/^    WP_boolean is_initialized;$/;"	m	struct:__anon39
+is_initialized	flexmux_util.h	/^    WP_boolean is_initialized;$/;"	m	struct:__anon40
+is_initialized	flexmux_util.h	/^    WP_boolean is_initialized;$/;"	m	struct:__anon41
+is_initialized	wti_flexmux_util.h	/^   WP_boolean is_initialized;$/;"	m	struct:__anon48
+is_initialized	wti_flexmux_util.h	/^   WP_boolean is_initialized;$/;"	m	struct:__anon49
+is_initialized	wti_flexmux_util.h	/^   WP_boolean is_initialized;$/;"	m	struct:__anon50
+iw_agg_directmap_cfg	atm_ima_ufe.h	/^WP_iw_agg_directmap iw_agg_directmap_cfg  = $/;"	v
+iw_ch_aal5_cfg	atm_ima_ufe.h	/^WP_ch_aal5 iw_ch_aal5_cfg[1] =$/;"	v
+iw_global_cfg	atm_ima_ufe.h	/^WP_iw_global iw_global_cfg =$/;"	v
+iw_sys_bridge	atm_ima_ufe.h	/^WP_iw_sys_bridging iw_sys_bridge = $/;"	v
+iw_sys_directmap_cfg	atm_ima_ufe.h	/^WP_iw_sys_directmap iw_sys_directmap_cfg = $/;"	v
+k1_value	ufe_utility.c	/^    WP_U8 k1_value;$/;"	m	struct:__anon5	file:
+k1_value	wti_flexmux_alarms_and_pm.c	/^      WP_U8 k1_value;$/;"	m	struct:__anon28	file:
+k1k2_signal_task	ufe_utility.c	/^        APP_K1_K2_SIGNAL_TASK k1k2_signal_task;$/;"	m	union:__anon7::__anon8	file:
+k1k2_signal_task	wti_flexmux_alarms_and_pm.c	/^            APP_K1_K2_SIGNAL_TASK k1k2_signal_task;$/;"	m	union:__anon31::__anon32	file:
+k2_value	ufe_utility.c	/^    WP_U8 k2_value;$/;"	m	struct:__anon5	file:
+k2_value	wti_flexmux_alarms_and_pm.c	/^      WP_U8 k2_value;$/;"	m	struct:__anon28	file:
+last_interrupt_mask	ufe_utility.c	/^WP_U8 last_interrupt_mask = SERIAL_1_CPLD_INTERRUPT_MASK;$/;"	v
+last_interrupt_mask	wti_ufe_utility.c	/^WP_U8 last_interrupt_mask;$/;"	v
+last_record_index	wti_flexmux_util.c	/^static WP_U32 last_record_index = sizeof(type_name) \/ sizeof(type_name[0]);$/;"	v	file:
+line_cfg	ufe_utility.h	/^WUFE_line_sdh line_cfg[1] =$/;"	v
+line_handle	ufe_utility.h	/^	WUFE_handle line_handle[WT_MAX_LINE_INDEX] ;$/;"	m	struct:__anon1
+line_handle	wti_ufe_utility.h	/^   WUFE_handle           line_handle[MAX_UFE_LINES_USED];$/;"	m	struct:__anon19
+line_id	wti_ufe_utility.h	/^   WP_U16                line_id;$/;"	m	struct:__anon13
+line_params	wti_ufe_utility.h	/^   WT_ufe_line_params    line_params[MAX_UFE_LINES_USED];$/;"	m	struct:__anon19
+line_port_id	ufe_utility.c	/^    WP_U8 line_port_id;$/;"	m	struct:__anon2	file:
+line_port_id	ufe_utility.c	/^    WP_U8 line_port_id;$/;"	m	struct:__anon5	file:
+line_port_id	ufe_utility.c	/^    WP_U8 line_port_id;$/;"	m	struct:__anon6	file:
+line_port_id	wti_flexmux_alarms_and_pm.c	/^      WP_U8 line_port_id;$/;"	m	struct:__anon25	file:
+line_port_id	wti_flexmux_alarms_and_pm.c	/^      WP_U8 line_port_id;$/;"	m	struct:__anon28	file:
+line_port_id	wti_flexmux_alarms_and_pm.c	/^      WP_U8 line_port_id;$/;"	m	struct:__anon29	file:
+line_port_mode	flexmux_util.h	/^    WP_U8 line_port_mode;$/;"	m	struct:__anon40
+line_port_mode	wti_flexmux_util.h	/^   WP_U8 line_port_mode;$/;"	m	struct:__anon49
+line_ports_reg	flexmux_util.h	/^    WTI_Flexmux_line_port_registry line_ports_reg[WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE];$/;"	m	struct:__anon41
+line_ports_reg	wti_flexmux_util.h	/^   WTI_Flexmux_line_port_registry line_ports_reg[WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE];$/;"	m	struct:__anon50
+line_sdh_params	wti_ufe_utility.h	/^   WT_ufe_line_sdh_params line_sdh_params;$/;"	m	union:__anon16
+line_side_alarm_names	ufe_utility.c	/^static char *line_side_alarm_names[] = {$/;"	v	file:
+line_side_alarm_names	wti_flexmux_alarms_and_pm.c	/^static char *line_side_alarm_names[] =$/;"	v	file:
+line_sonet_params	wti_ufe_utility.h	/^   WT_ufe_line_sonet_params line_sonet_params;$/;"	m	union:__anon16
+line_transfer_type_names	wti_flexmux_alarms_and_pm.c	/^static char *line_transfer_type_names[] =$/;"	v	file:
+link_s	atm_ima_ufe_stats.c	/^char *link_s(int n)$/;"	f
+linkss	atm_ima_ufe_stats.c	/^char linkss[64];$/;"	v
+lline_state	atm_ima_ufe_stats.c	/^WP_CHAR *lline_state[] = {$/;"	v
+lo_transfer_type_in_use	flexmux_util.c	/^int lo_transfer_type_in_use;$/;"	v
+lo_transfer_type_in_use	wti_flexmux_util.c	/^int lo_transfer_type_in_use;$/;"	v
+loopback	wti_ufe_utility.h	/^   WUFE_line_loopback_type loopback;$/;"	m	struct:__anon14
+loopback	wti_ufe_utility.h	/^   WUFE_line_loopback_type loopback;$/;"	m	struct:__anon15
+m_showGrpStatus	atm_ima_ufe_stats.c	/^void m_showGrpStatus (void)$/;"	f
+m_showLnkStatus	atm_ima_ufe_stats.c	/^void m_showLnkStatus (void)$/;"	f
+m_showWUFE	atm_ima_ufe_stats.c	/^m_showWUFE (void)$/;"	f
+mailbox_thread_id	flexmux_util.c	/^WP_THREAD_ID mailbox_thread_id = 0;$/;"	v
+mailbox_thread_id	wti_flexmux_util.c	/^WP_THREAD_ID mailbox_thread_id = 0;$/;"	v
+main	atm_ima_ufe.c	/^int main (int argc, char *argv[])$/;"	f
+max_items	wti_flexmux_util.c	/^static int max_items = 0x10000\/sizeof(PATS_RECORD);$/;"	v	file:
+max_line_ports	flexmux_util.h	/^    WP_U8 max_line_ports;$/;"	m	struct:__anon41
+max_line_ports	wti_flexmux_util.h	/^   WP_U8 max_line_ports;$/;"	m	struct:__anon50
+max_lines	ufe_utility.h	/^	WP_U32      max_lines;$/;"	m	struct:__anon1
+max_lines	wti_ufe_utility.h	/^   WP_U16                max_lines;$/;"	m	struct:__anon19
+max_phys	ufe_utility.h	/^	WP_U32      max_phys;$/;"	m	struct:__anon1
+max_phys	wti_ufe_utility.h	/^   WP_U16                max_phys;$/;"	m	struct:__anon19
+next_framer_task	ufe_utility.c	/^framer_task *next_framer_task (framer_task_list * task_list, framer_task * result)$/;"	f
+next_framer_task	wti_flexmux_alarms_and_pm.c	/^framer_task *next_framer_task(framer_task_list *task_list, framer_task *result)$/;"	f
+next_task	atm_ima_ufe_util.c	/^app_task *next_task (app_task_list * task_list, app_task * result)$/;"	f
+num_elements	atm_ima_ufe.h	/^	WP_U16 num_elements;$/;"	m	struct:__anon23
+num_elements	ufe_utility.c	/^    WP_U16 num_elements;$/;"	m	struct:__anon9	file:
+num_elements	wti_flexmux_alarms_and_pm.c	/^      WP_U16 num_elements;$/;"	m	struct:__anon33	file:
+num_tasks	ufe_utility.c	/^WP_U32 num_tasks = 0;$/;"	v
+num_tasks	wti_flexmux_alarms_and_pm.c	/^WP_U32 num_tasks = 0;$/;"	v
+octets_per_line	ufe_utility.h	/^	WP_U32      octets_per_line;$/;"	m	struct:__anon1
+operation_mode	wti_ufe_utility.h	/^   WT_operation_mode     operation_mode;$/;"	m	struct:__anon19
+out	atm_ima_ufe.h	/^	WP_U16 out;$/;"	m	struct:__anon24
+pad	atm_ima_ufe.h	/^	WP_U16 pad;$/;"	m	struct:__anon23
+pad	ufe_utility.c	/^    WP_U16 pad;$/;"	m	struct:__anon4	file:
+pad	ufe_utility.c	/^    WP_U16 pad;$/;"	m	struct:__anon9	file:
+pad	wti_flexmux_alarms_and_pm.c	/^      WP_U16 pad;$/;"	m	struct:__anon27	file:
+pad	wti_flexmux_alarms_and_pm.c	/^      WP_U16 pad;$/;"	m	struct:__anon33	file:
+path_alarm_task	ufe_utility.c	/^        APP_PATH_ALARM_TASK path_alarm_task;$/;"	m	union:__anon7::__anon8	file:
+path_alarm_task	wti_flexmux_alarms_and_pm.c	/^            APP_PATH_ALARM_TASK   path_alarm_task;$/;"	m	union:__anon31::__anon32	file:
+pdh_alarm_string_to_index	wti_flexmux_alarms_and_pm.c	/^WP_U32 pdh_alarm_string_to_index(WP_CHAR *pStr)$/;"	f
+pdh_alarm_task	wti_flexmux_alarms_and_pm.c	/^            APP_PDH_ALARM_TASK    pdh_alarm_task;$/;"	m	union:__anon31::__anon32	file:
+pdh_level_alarm_status	wti_flexmux_alarms_and_pm.c	/^WP_U8 pdh_level_alarm_status[MAX_PDH_NUMBER][WPX_UFE_FRAMER_SOCKET_CLIENT_MAX_ALARM_CATEGORIES];$/;"	v
+pending_los	ufe_utility.c	/^WP_boolean pending_los = WP_FALSE;$/;"	v
+pending_los	wti_flexmux_alarms_and_pm.c	/^WP_boolean pending_los = WP_FALSE;$/;"	v
+phy_handle	ufe_utility.h	/^	WUFE_handle phy_handle[WT_MAX_LINE_INDEX] ;$/;"	m	struct:__anon1
+phy_handle	wti_ufe_utility.h	/^   WUFE_handle           phy_handle[N_MAX_EMPHY_PHYS];$/;"	m	struct:__anon19
+pm_ho_path_counter	wti_flexmux_alarms_and_pm.c	/^WP_U32 pm_ho_path_counter[MAX_HO_PATH_NUMBER][WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_HO_PATH] = {{0},{0}};$/;"	v
+pm_lo_path_counter	wti_flexmux_alarms_and_pm.c	/^WP_U32 pm_lo_path_counter[MAX_LO_PATH_NUMBER][WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_LO_PATH] = {{0},{0}};$/;"	v
+pm_pdhs_counter	wti_flexmux_alarms_and_pm.c	/^WP_U32 pm_pdhs_counter[MAX_PDH_NUMBER][(WPX_UFE_FRAMER_PDH_E1_T1_CRC + 1)] = {{0},{0}};$/;"	v
+pm_ports_counter	wti_flexmux_alarms_and_pm.c	/^WP_U32 pm_ports_counter[MAX_PORTS_NUMBER][WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_PORT] = {{0},{0}};$/;"	v
+pm_task	ufe_utility.c	/^        APP_PM_TASK pm_task;$/;"	m	union:__anon7::__anon8	file:
+pm_task	wti_flexmux_alarms_and_pm.c	/^            APP_PM_TASK           pm_task;$/;"	m	union:__anon31::__anon32	file:
+policer_handle	atm_ima_ufe.h	/^WP_handle policer_handle;$/;"	v
+pool_buffer_data_256_cfg	atm_ima_ufe.h	/^WP_pool_buffer_data pool_buffer_data_256_cfg = $/;"	v
+pool_buffer_data_iw_cfg	atm_ima_ufe.h	/^WP_pool_buffer_data pool_buffer_data_iw_cfg = $/;"	v
+pool_ring_data_cfg	atm_ima_ufe.h	/^WP_pool_ring_data pool_ring_data_cfg = $/;"	v
+port_alarm_task	ufe_utility.c	/^        APP_PORT_ALARM_TASK port_alarm_task;$/;"	m	union:__anon7::__anon8	file:
+port_alarm_task	wti_flexmux_alarms_and_pm.c	/^            APP_PORT_ALARM_TASK   port_alarm_task;$/;"	m	union:__anon31::__anon32	file:
+port_enet_cfg	atm_ima_ufe.h	/^WP_port_enet port_enet_cfg =$/;"	v
+prbs_result	atm_ima_ufe.c	/^WP_U8 prbs_result[336];$/;"	v
+print_data	wti_flexmux_alarms_and_pm.c	/^WP_U32 print_data = 0;$/;"	v
+private_thread_lock	ufe_utility.c	/^WP_U32 private_thread_lock = 0;$/;"	v
+process_framer_task_list	ufe_utility.c	/^void process_framer_task_list (void)$/;"	f
+process_framer_task_list	wti_flexmux_alarms_and_pm.c	/^void process_framer_task_list(void)$/;"	f
+pwe3_atm_flow_agg_config	atm_ima_ufe.h	/^WP_iw_agg_pwe3 pwe3_atm_flow_agg_config[1] =$/;"	v
+qn_iw_ima_cfg	atm_ima_ufe.h	/^WP_qnode_iwq qn_iw_ima_cfg =$/;"	v
+qnode_hostq_cfg	atm_ima_ufe.h	/^WP_qnode_hostq qnode_hostq_cfg =$/;"	v
+qnode_iwq_cfg	atm_ima_ufe.h	/^WP_qnode_iwq qnode_iwq_cfg =$/;"	v
+record_action	wti_flexmux_util.c	/^void record_action(WP_U32 type, WP_U32 timestamp)$/;"	f
+release_test	atm_ima_ufe.c	/^void release_test (void)$/;"	f
+rx_binding_bridging_cfg	atm_ima_ufe.h	/^WP_rx_binding_bridging rx_binding_bridging_cfg = $/;"	v
+rx_binding_directmap_cfg	atm_ima_ufe.h	/^WP_rx_binding_directmap rx_binding_directmap_cfg =$/;"	v
+rx_clk_rec_if	wti_ufe_utility.h	/^   WP_U16                     rx_clk_rec_if;$/;"	m	struct:__anon17
+rx_clk_rec_if	wti_ufe_utility.h	/^   WP_U8                 rx_clk_rec_if;$/;"	m	struct:__anon13
+s1_signal_task	ufe_utility.c	/^        APP_S1_SIGNAL_TASK s1_signal_task;$/;"	m	union:__anon7::__anon8	file:
+s1_signal_task	wti_flexmux_alarms_and_pm.c	/^            APP_S1_SIGNAL_TASK    s1_signal_task;$/;"	m	union:__anon31::__anon32	file:
+s1_value	ufe_utility.c	/^    WP_U8 s1_value;$/;"	m	struct:__anon6	file:
+s1_value	wti_flexmux_alarms_and_pm.c	/^      WP_U8 s1_value;$/;"	m	struct:__anon29	file:
+s_name_fe	atm_ima_ufe_stats.c	/^char * s_name_fe[] = {$/;"	v
+save_area	wti_flexmux_util.c	/^PATS_RECORD save_area[0x10000\/sizeof(PATS_RECORD)];$/;"	v
+sbi_spe_line_type	wti_ufe_utility.h	/^   WUFE_line_transf_type sbi_spe_line_type[N_MAX_UFE_SPE_INDEX];$/;"	m	struct:__anon19
+second_flexmux_id	wti_flexmux_util.h	/^   WP_U8                                           second_flexmux_id;$/;"	m	struct:__anon47
+server_lock	wti_flexmux_util.c	/^WP_U32 server_lock;   \/* coordinate between mailbox server thread and task server thread *\/$/;"	v
+service_k1_k2_signal	ufe_utility.c	/^void service_k1_k2_signal (WP_U8 device, WP_U8 line_port_id, WP_U8 k1, WP_U8 k2)$/;"	f
+service_k1_k2_signal	wti_flexmux_alarms_and_pm.c	/^void service_k1_k2_signal(WP_U8 device, WP_U8 line_port_id, WP_U8 k1, WP_U8 k2)$/;"	f
+service_los_alarm	wti_flexmux_alarms_and_pm.c	/^void service_los_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8 is_asserted, framer_task *task)$/;"	f
+service_path_alarm	ufe_utility.c	/^void service_path_alarm (WP_U8 device_id, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE * p_SDH_Sonet_line_endpoint_type, WP_U8 alarm_category, WP_U8 is_asserted)$/;"	f
+service_path_alarm	wti_flexmux_alarms_and_pm.c	/^void service_path_alarm(WP_U8 device_id,$/;"	f
+service_pdh_alarm	wti_flexmux_alarms_and_pm.c	/^void service_pdh_alarm(WP_U8 device, WP_U32 socket_client_pdh_id, WP_U8 alarm_category, WP_U8 is_asserted)$/;"	f
+service_pm_ho_path_data	ufe_utility.c	/^void service_pm_ho_path_data (WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+service_pm_ho_path_data	wti_flexmux_alarms_and_pm.c	/^void service_pm_ho_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+service_pm_lo_path_data	ufe_utility.c	/^void service_pm_lo_path_data (WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+service_pm_lo_path_data	wti_flexmux_alarms_and_pm.c	/^void service_pm_lo_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+service_pm_pdh_data	ufe_utility.c	/^void service_pm_pdh_data (WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+service_pm_pdh_data	wti_flexmux_alarms_and_pm.c	/^void service_pm_pdh_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+service_pm_port_data	ufe_utility.c	/^void service_pm_port_data (WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+service_pm_port_data	wti_flexmux_alarms_and_pm.c	/^void service_pm_port_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)$/;"	f
+service_port_alarm	ufe_utility.c	/^void service_port_alarm (WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8 is_asserted)$/;"	f
+service_port_alarm	wti_flexmux_alarms_and_pm.c	/^void service_port_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8 is_asserted)$/;"	f
+service_s1_signal	ufe_utility.c	/^void service_s1_signal (WP_U8 device, WP_U8 line_port_id, WP_U8 s1)$/;"	f
+service_s1_signal	wti_flexmux_alarms_and_pm.c	/^void service_s1_signal(WP_U8 device, WP_U8 line_port_id, WP_U8 s1)$/;"	f
+shaping_table	atm_ima_ufe.h	/^WP_U16 shaping_table[RATE_TABLE_SLOTS+1];$/;"	v
+shift	atm_ima_ufe.h	/^	WP_U32  shift;$/;"	m	struct:__anon21
+size	atm_ima_ufe.h	/^	WP_U16 size;$/;"	m	struct:__anon24
+socket_client_pdh	wti_flexmux_alarms_and_pm.c	/^      WP_U32 socket_client_pdh;$/;"	m	struct:__anon30	file:
+socket_client_side_alarm_names	ufe_utility.c	/^static char *socket_client_side_alarm_names[] = {$/;"	v	file:
+socket_client_side_alarm_names	wti_flexmux_alarms_and_pm.c	/^static char *socket_client_side_alarm_names[] =$/;"	v	file:
+sonet_sdh_level_alarm_status	wti_flexmux_alarms_and_pm.c	/^WP_U8 sonet_sdh_level_alarm_status[MAX_LO_PATH_NUMBER][WPX_UFE_FRAMER_SONET_SDH_MAX_ALARM_CATEGORIES];$/;"	v
+status	atm_ima_ufe.h	/^WP_handle status;$/;"	v
+stm0	wti_ufe_utility.h	/^   WP_U8 stm0;$/;"	m	struct:__anon14
+stm1	wti_ufe_utility.h	/^   WP_U8 stm1;$/;"	m	struct:__anon14
+stm4	wti_ufe_utility.h	/^   WP_U8 stm4;$/;"	m	struct:__anon14
+sts1	wti_ufe_utility.h	/^   WP_U8 sts1;$/;"	m	struct:__anon15
+sts12	wti_ufe_utility.h	/^   WP_U8 sts12;$/;"	m	struct:__anon15
+sts3	wti_ufe_utility.h	/^   WP_U8 sts3;$/;"	m	struct:__anon15
+system_clock_rec_enable	wti_ufe_utility.h	/^   WUFE_system_clock_rec system_clock_rec_enable;$/;"	m	struct:__anon19
+t1_binding	atm_ima_ufe.h	/^WP_tdm_binding t1_binding[] = {$/;"	v
+table_index	ufe_utility.c	/^    WP_U8 table_index;$/;"	m	struct:__anon4	file:
+table_index	wti_flexmux_alarms_and_pm.c	/^      WP_U8 table_index;$/;"	m	struct:__anon27	file:
+tag_agg_default_bridge1	atm_ima_ufe.h	/^WP_tag tag_agg_default_bridge1, tag_agg_default_bridge2;$/;"	v
+tag_agg_default_bridge2	atm_ima_ufe.h	/^WP_tag tag_agg_default_bridge1, tag_agg_default_bridge2;$/;"	v
+tag_agg_enet	atm_ima_ufe.h	/^WP_tag tag_agg_enet;$/;"	v
+tag_agg_enet2	atm_ima_ufe.h	/^WP_tag tag_agg_enet2;$/;"	v
+tag_agg_ima1	atm_ima_ufe.h	/^WP_tag    tag_agg_ima1;$/;"	v
+tag_bport_enet1	atm_ima_ufe.h	/^WP_tag tag_bport_enet1;$/;"	v
+tag_bport_enet2	atm_ima_ufe.h	/^WP_tag tag_bport_enet2;$/;"	v
+tag_bridge1_bport_ima	atm_ima_ufe.h	/^WP_tag    tag_bridge1_bport_ima;$/;"	v
+tag_bridge1_bport_tdm	atm_ima_ufe.h	/^WP_tag tag_bridge1_bport_tdm[APP_MAX_TDM_PORTS];$/;"	v
+tag_bridge2_bport_tdm	atm_ima_ufe.h	/^WP_tag tag_bridge2_bport_tdm[APP_MAX_TDM_PORTS];$/;"	v
+tag_channel_base	atm_ima_ufe.h	/^WP_tag tag_channel_base = 1;$/;"	v
+tag_enet1_rx	atm_ima_ufe.h	/^WP_tag tag_enet1_rx, tag_enet2_rx;$/;"	v
+tag_enet1_tx	atm_ima_ufe.h	/^WP_tag tag_enet1_tx, tag_enet2_tx;$/;"	v
+tag_enet2_rx	atm_ima_ufe.h	/^WP_tag tag_enet1_rx, tag_enet2_rx;$/;"	v
+tag_enet2_tx	atm_ima_ufe.h	/^WP_tag tag_enet1_tx, tag_enet2_tx;$/;"	v
+tag_iw_sys_bridge1	atm_ima_ufe.h	/^WP_tag tag_iw_sys_bridge1, tag_iw_sys_bridge2;$/;"	v
+tag_iw_sys_bridge2	atm_ima_ufe.h	/^WP_tag tag_iw_sys_bridge1, tag_iw_sys_bridge2;$/;"	v
+tag_iwhost_rx1	atm_ima_ufe.h	/^WP_tag tag_iwhost_rx1,tag_iwhost_rx2;$/;"	v
+tag_iwhost_rx2	atm_ima_ufe.h	/^WP_tag tag_iwhost_rx1,tag_iwhost_rx2;$/;"	v
+tag_rport_enet2	atm_ima_ufe.h	/^WP_tag tag_rport_enet2;$/;"	v
+tag_rport_tdm	atm_ima_ufe.h	/^WP_tag tag_rport_tdm[APP_MAX_TDM_PORTS];$/;"	v
+tag_tdmrx	atm_ima_ufe.h	/^WP_tag tag_tdmrx = 200;$/;"	v
+tag_tdmtx	atm_ima_ufe.h	/^WP_tag tag_tdmtx = 300;$/;"	v
+tail	atm_ima_ufe.h	/^	WP_U16 tail;$/;"	m	struct:__anon23
+tail	ufe_utility.c	/^    WP_U16 tail;$/;"	m	struct:__anon9	file:
+tail	wti_flexmux_alarms_and_pm.c	/^      WP_U16 tail;$/;"	m	struct:__anon33	file:
+task	atm_ima_ufe.h	/^	WP_ima_event *task;$/;"	m	struct:__anon24
+task	atm_ima_ufe.h	/^	app_task *task;$/;"	m	struct:__anon23
+task	ufe_utility.c	/^    framer_task *task;$/;"	m	struct:__anon9	file:
+task	wti_flexmux_alarms_and_pm.c	/^      framer_task *task;$/;"	m	struct:__anon33	file:
+task_type	ufe_utility.c	/^    WP_U32 task_type;$/;"	m	struct:__anon7	file:
+task_type	wti_flexmux_alarms_and_pm.c	/^      WP_U32 task_type;$/;"	m	struct:__anon31	file:
+temux_used	wti_ufe_utility.h	/^   WP_U8                 temux_used;$/;"	m	struct:__anon19
+test_passed	wti_flexmux_alarms_and_pm.c	/^WP_boolean test_passed;$/;"	v
+the_alarm_task_list	ufe_utility.c	/^framer_task_list the_alarm_task_list[1] = { {0, 0, ALARM_TASK_LIST_SIZE, 0, the_alarm_tasks} };$/;"	v
+the_alarm_task_list	wti_flexmux_alarms_and_pm.c	/^framer_task_list the_alarm_task_list[1] = { { 0, 0, ALARM_TASK_LIST_SIZE, 0, the_alarm_tasks} };$/;"	v
+the_alarm_tasks	ufe_utility.c	/^framer_task the_alarm_tasks[ALARM_TASK_LIST_SIZE];$/;"	v
+the_alarm_tasks	wti_flexmux_alarms_and_pm.c	/^framer_task the_alarm_tasks[ALARM_TASK_LIST_SIZE];$/;"	v
+the_pm_task_list	ufe_utility.c	/^framer_task_list the_pm_task_list[1] = { {0, 0, PM_TASK_LIST_SIZE, 0, the_pm_tasks} };$/;"	v
+the_pm_task_list	wti_flexmux_alarms_and_pm.c	/^framer_task_list the_pm_task_list[1] = { { 0, 0, PM_TASK_LIST_SIZE, 0, the_pm_tasks} };$/;"	v
+the_pm_tasks	ufe_utility.c	/^framer_task the_pm_tasks[PM_TASK_LIST_SIZE];$/;"	v
+the_pm_tasks	wti_flexmux_alarms_and_pm.c	/^framer_task the_pm_tasks[PM_TASK_LIST_SIZE];$/;"	v
+the_signal_task_list	ufe_utility.c	/^framer_task_list the_signal_task_list[1] = { {0, 0, SIGNAL_TASK_LIST_SIZE, 0, the_signal_tasks} };$/;"	v
+the_signal_task_list	wti_flexmux_alarms_and_pm.c	/^framer_task_list the_signal_task_list[1] = { { 0, 0, SIGNAL_TASK_LIST_SIZE, 0, the_signal_tasks} };$/;"	v
+the_signal_tasks	ufe_utility.c	/^framer_task the_signal_tasks[PM_TASK_LIST_SIZE];$/;"	v
+the_signal_tasks	wti_flexmux_alarms_and_pm.c	/^framer_task the_signal_tasks[PM_TASK_LIST_SIZE];$/;"	v
+the_system_clock_rec_params	wti_ufe_utility.h	/^WUFE_clk_rec_system_params the_system_clock_rec_params;$/;"	v
+ticks	atm_ima_ufe.h	/^WP_U32 ticks;  \/* IMA ticks *\/$/;"	v
+timestamp	ufe_utility.c	/^    WP_U32 timestamp;$/;"	m	struct:__anon4	file:
+timestamp	wti_flexmux_alarms_and_pm.c	/^      WP_U32 timestamp;$/;"	m	struct:__anon27	file:
+timestamp	wti_flexmux_util.c	/^   WP_U32 timestamp;$/;"	m	struct:__anon20	file:
+transfer_type	wti_ufe_utility.h	/^   WUFE_line_transf_type      transfer_type;$/;"	m	struct:__anon17
+transfer_type	wti_ufe_utility.h	/^   WUFE_line_transf_type transfer_type;$/;"	m	struct:__anon13
+transfer_type	wti_ufe_utility.h	/^   WUFE_line_transf_type transfer_type;$/;"	m	struct:__anon14
+transfer_type	wti_ufe_utility.h	/^   WUFE_line_transf_type transfer_type;$/;"	m	struct:__anon15
+tu	wti_ufe_utility.h	/^   WP_U8 tu;$/;"	m	struct:__anon14
+tug2	wti_ufe_utility.h	/^   WP_U8 tug2;$/;"	m	struct:__anon14
+tx_binding_cfg	atm_ima_ufe.h	/^WP_tx_binding tx_binding_cfg =$/;"	v
+tx_clk_master	wti_ufe_utility.h	/^   WUFE_clock_master          tx_clk_master;$/;"	m	struct:__anon17
+tx_clock_mode	wti_ufe_utility.h	/^      WT_tx_clk             tx_clock_mode;\/\/CR related?$/;"	m	struct:__anon19
+tx_safe	atm_ima_ufe_util.c	/^int tx_safe = 0;$/;"	v
+type	wti_flexmux_util.c	/^   WP_U32 type;$/;"	m	struct:__anon20	file:
+type_name	wti_flexmux_util.c	/^WP_CHAR *type_name[] = {$/;"	v
+u	ufe_utility.c	/^    } u;$/;"	m	struct:__anon7	typeref:union:__anon7::__anon8	file:
+u	wti_flexmux_alarms_and_pm.c	/^      } u;$/;"	m	struct:__anon31	typeref:union:__anon31::__anon32	file:
+ufe	ufe_utility.h	/^WT_ufe ufe={0};$/;"	v
+ufe4_app_system	ufe_utility.h	/^ufe4_system_data ufe4_app_system = {$/;"	v
+ufe4_atm_ext	atm_ima_ufe.h	/^WP_port_upi_atm_ext ufe4_atm_ext = {$/;"	v
+ufe4_atm_limits	atm_ima_ufe.h	/^WP_port_atm_limits ufe4_atm_limits = {$/;"	v
+ufe4_config	atm_ima_ufe.c	/^WUFE_init_config ufe4_config;$/;"	v
+ufe4_phy_cfg	ufe_utility.h	/^WUFE_phy ufe4_phy_cfg = {$/;"	v
+ufe4_system_cfg	ufe_utility.h	/^WUFE_system ufe4_system_cfg = {$/;"	v
+ufe4_system_data	ufe_utility.h	/^} ufe4_system_data;$/;"	t	typeref:struct:__anon1
+ufe_device_cfg	atm_ima_ufe.h	/^WP_device_emphy_atm ufe_device_cfg[1] = {$/;"	v
+ufe_events	wti_ufe_utility.h	/^   WUFE_events           ufe_events;$/;"	m	struct:__anon19
+ufe_id	wti_ufe_utility.h	/^   WP_U32                ufe_id;$/;"	m	struct:__anon19
+ufeid	ufe_utility.h	/^	WP_U32      ufeid;$/;"	m	struct:__anon1
+unshaped_shaping_param	atm_ima_ufe.h	/^WP_atm_shaping_unshaped unshaped_shaping_param = {$/;"	v
+upi_emphy_port_config	atm_ima_ufe.h	/^WP_port_upi upi_emphy_port_config = {$/;"	v
+upi_id	wti_ufe_utility.h	/^   WP_port               upi_id;$/;"	m	struct:__anon19
+valid	wti_ufe_utility.h	/^   WP_U8                      valid;$/;"	m	struct:__anon17
+vc_3_4	wti_flexmux_util.h	/^   WPX_UFE_FRAMER_WUFE_line_transf_type            vc_3_4;$/;"	m	struct:__anon50
+vp_vc_range	atm_ima_ufe.h	/^WP_vp_vc_block vp_vc_range[2] = {$/;"	v
+vt	wti_ufe_utility.h	/^   WP_U8 vt;$/;"	m	struct:__anon15
+vt_group	wti_ufe_utility.h	/^   WP_U8 vt_group;$/;"	m	struct:__anon15
+wpid	wti_ufe_utility.h	/^   WP_U32                wpid;$/;"	m	struct:__anon19
+wt_mac_enet1	atm_ima_ufe.h	/^WP_U8 wt_mac_enet1[6]    = {0x45, 0x6e, 0x65, 0x74, 0x23, 0x31};$/;"	v
+wt_mac_enet2	atm_ima_ufe.h	/^WP_U8 wt_mac_enet2[6]    = {0x45, 0x6e, 0x65, 0x74, 0x23, 0x32};$/;"	v
