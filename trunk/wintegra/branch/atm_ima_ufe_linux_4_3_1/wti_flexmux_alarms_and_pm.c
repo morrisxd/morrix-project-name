@@ -1952,7 +1952,7 @@ void AIS_insertion_enable(char *strParm)
    WP_U32 device_id, dummy, res;
    WP_U8 status;
 
-   res = sscanf(strParm, "%d %d", &dummy, &device_id);
+   res = sscanf(strParm, "%d %d",(int*) &dummy, (int *)&device_id);
 
    if (res != 2)
    {
@@ -1976,7 +1976,7 @@ void AIS_insertion_disable(char *strParm)
    WP_U32 device_id, dummy, res;
    WP_U8 status;
 
-   res = sscanf(strParm, "%d %d", &dummy, &device_id);
+   res = sscanf(strParm, "%d %d", (int*)&dummy, (int*)&device_id);
    if (res != 2)
    {
       printf("INVALID NUMBER OF PARAMETERS\n");
@@ -1999,7 +1999,7 @@ void CLI_F_PdhAisTowardsLine(char *strParm)
    WP_U32 device_id, socket_pdh_id, dummy, res, enable;
    WP_U8 status;
 
-   res = sscanf(strParm, "%d %d %d %d", &dummy, &device_id, &socket_pdh_id, &enable);
+   res = sscanf(strParm, "%d %d %d %d", (int*)&dummy, (int*)&device_id, (int*)&socket_pdh_id, (int*)&enable);
    if (res != 4)
    {
       printf("INVALID NUMBER OF PARAMETERS\n");
@@ -2037,7 +2037,7 @@ void CLI_F_PdhFEACTowardsLine(char *strParm)
    WP_U32 device_id, socket_pdh_id, dummy, res, code;
    WP_U8 status;
 
-   res = sscanf(strParm, "%d %d %d %d", &dummy, &device_id, &socket_pdh_id, &code);
+   res = sscanf(strParm, "%d %d %d %d", (int*)&dummy, (int*)&device_id, (int*)&socket_pdh_id, (int*)&code);
    if (res != 4)
    {
       printf("INVALID NUMBER OF PARAMETERS\n");
@@ -2060,7 +2060,7 @@ void CLI_F_PdhRdiTowardsLine(char *strParm)
    WP_U32 device_id, socket_pdh_id, dummy, res, enable;
    WP_U8 status;
 
-   res = sscanf(strParm, "%d %d %d %d", &dummy, &device_id, &socket_pdh_id, &enable);
+   res = sscanf(strParm, "%d %d %d %d", (int*)&dummy, (int*)&device_id, (int*)&socket_pdh_id, (int*)&enable);
    if (res != 4)
    {
       printf("INVALID NUMBER OF PARAMETERS\n");

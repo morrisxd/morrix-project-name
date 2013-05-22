@@ -183,6 +183,8 @@ int main (int argc, char *argv[])
 
    status = WP_SysCommit ();
    App_TerminateOnError (status, "WP_SysCommit()");
+printf ("WP_SysCommit ()\n");
+fflush (stdout);
 
    App_enableEmphyPort ();
 
@@ -603,6 +605,65 @@ void App_ufeSystem (void)
    /* Initialize the UFE4 system (system id = 0)  */
    ufe_status = WUFE_SystemConfig (0, &ufe4_system_cfg);
    WT_UfeTerminateOnError (ufe_status, "WUFE_SystemConfig", 0, __LINE__);
+
+
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
+
+   /* Connect handler for UFE4 interrupts and supply signal handler*/
+   WPL_IntConnect (WP_WINPATH (0), WPL_Eint3Ufe4, 0, WT_Eint3Interrupt);
+#if 1
+   WPL_IntEnable (WP_WINPATH (0), WPL_Eint3Ufe4);
+#else
+   WPL_IntDisable (WP_WINPATH (0), WPL_Eint3Ufe4);
+#endif
+
+   /* Select EINT3 for interrupts */
+   WPX_Ufe412CpldInterruptSelect (0, WPX_INTERRUPT_EINT3);
+
+
+
+#if 1
+        // this is very important !
+        ufe_status = WUFE_UfeFramerHwInterruptEnable (0);
+#else
+        ufe_status = WUFE_UfeFramerHwInterruptDisable (0);
+#endif
+        WT_UfeTerminateOnError (ufe_status,
+                                "WUFE_UfeFramerHwInterruptEnable", 0,
+                                __LINE__);
+
+#if 0
+        ufe_status = WUFE_UfeCoreHwInterruptEnable (0);
+#else
+        ufe_status = WUFE_UfeCoreHwInterruptDisable (0);
+#endif
+        WT_UfeTerminateOnError (ufe_status,
+                                "WUFE_UfeCoreHwInterruptEnable", 0,
+                                __LINE__);
+
+#if 1
+        ufe_status = WUFE_SystemInterruptEnable (0);
+#else
+        ufe_status = WUFE_SystemInterruptDisable (0);
+#endif
+        WT_UfeTerminateOnError (ufe_status, "WUFE_SystemInterruptEnable ",
+                                0, __LINE__);
+
+        ufe_status = WUFE_UfeCoreHwInterruptDisable (0);
+        WT_UfeTerminateOnError (ufe_status,
+                                "WUFE_UfeCoreHwInterruptDisable", 0,
+                                __LINE__);
+
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
 
    // Initialize the framer:
    // calls:
