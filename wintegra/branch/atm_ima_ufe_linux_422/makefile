@@ -1,5 +1,10 @@
 ############################################################ Change this block only!  #############################################################
 
+WPI_TARGET 	= mips_linux
+
+
+
+
 # By default this makefile assumes that the test directory reside under the WDDI root directory!
 # If you want to change it please redefine WDDI_DIR in this makefile!
 TEST_DIR = .

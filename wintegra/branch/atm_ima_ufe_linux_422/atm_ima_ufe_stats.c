@@ -137,7 +137,10 @@ void App_ShowStats(void)
 			printf("\nEnter x to previous menu");
 			printf("\n");
 
+			do { 
 			ch=getchar();
+			}
+while (!(('z' >= ch && ch >= 'a') || ('0' <= ch && ch <= '9')));		
 			if(ch=='6')
 				stats_all='6';
 		}
@@ -948,7 +951,7 @@ void App_CheckStats(WP_status *test_result)
 
    if (flow_stats.forward_packet != APP_MAX_PKTS_NUM){
       *test_result = (-1);
-      printf("IMA trans bridge egress 0 forward_packet check fail!\n", ii);
+      printf("IMA trans bridge egress 0 forward_packet check fail(%d)!\n", ii);
    }
 
    if (flow_stats.fbp_drop_packets || flow_stats.mtu_drop_packets ||
@@ -967,7 +970,7 @@ void App_CheckStats(WP_status *test_result)
 
    if (flow_stats.forward_packet != 0){
       *test_result = (-1);
-      printf("IMA trans bridge egress 1 forward_packet check fail!\n", ii);
+      printf("IMA trans bridge egress 1 forward_packet check fail(%d)!\n", ii);
    }
 
    if (flow_stats.fbp_drop_packets || flow_stats.mtu_drop_packets ||
@@ -987,7 +990,7 @@ void App_CheckStats(WP_status *test_result)
 
    if (pwe3_flow_stats.forwarded_packets != APP_MAX_PKTS_NUM){
       *test_result = (-1);
-      printf("IMA PWE3 ingress flow agg forwarded_packets check fail!\n", ii);
+      printf("IMA PWE3 ingress flow agg forwarded_packets check fail(%d)!\n", ii);
    }
 
    if (pwe3_flow_stats.fbp_drop_packets || pwe3_flow_stats.mtu_drop_packets ||
