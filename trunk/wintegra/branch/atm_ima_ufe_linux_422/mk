@@ -1,7 +1,0 @@
-ctags -R
-make TEST=atm_ima_ufe.c 2>&1 | tee make.log
-cd bin
-mv atm_ima_ufe atm_ima_ufe_linux_431.exe
-cp *.exe /tftpboot
-copy_to_tftpboot.sh
-
