@@ -243,6 +243,8 @@ int main (int argc, char *argv[])
    WP_Delay (1000000);
    display_events ();
 
+   WPX_FRMR_SONET_SDH_PORT_DIAG_LpbkEnableDeepSystem (0, 0, 0);
+
    App_startThread ();
 
    if (argc <= 1)
