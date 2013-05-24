@@ -204,7 +204,7 @@ WUFE_phy ufe4_phy_cfg = {
 };
 
 
-WUFE_line_sdh line_cfg[1] =
+WUFE_line_sdh g_line_cfg[1] =
 {
 	{
 		/*struct_id*/WUFE_STRUCT_LINE_SDH,
