@@ -71,6 +71,7 @@
 
 extern WUFE_status WUFE_SystemDisplay (WP_U32 wufe_id);
 
+#include "wyd_util.c"
 #include "atm_ima_ufe_util.c"
 #include "atm_ima_ufe_stats.c"
 
@@ -79,6 +80,7 @@ WP_U8 prbs_result[336];
 #include "flexmux_util.c"
 // #include "flexmux_alarms_and_pm.c"
 #include "ufe_utility.c"
+
 
 WUFE_init_config ufe4_config;
 WP_ima_event a_task;
@@ -216,13 +218,7 @@ int main (int argc, char *argv[])
          printf ("s. Simulate Interrupts\n");
          printf ("x. Exit\n");
 
-         do
-         {
-            comm = getchar ();
-         }
-         while (!
-                (('z' >= comm && comm >= 'a')
-                 || ('0' <= comm && comm <= '9')));
+         comm = wyd_getchar ();
 
          switch (comm)
          {

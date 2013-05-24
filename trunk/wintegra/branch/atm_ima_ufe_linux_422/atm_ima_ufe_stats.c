@@ -137,10 +137,8 @@ void App_ShowStats(void)
 			printf("\nEnter x to previous menu");
 			printf("\n");
 
-			do { 
-			ch=getchar();
-			}
-while (!(('z' >= ch && ch >= 'a') || ('0' <= ch && ch <= '9')));		
+			ch = wyd_getchar ();
+
 			if(ch=='6')
 				stats_all='6';
 		}
