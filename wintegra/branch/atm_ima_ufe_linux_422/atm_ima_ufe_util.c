@@ -205,7 +205,8 @@ WP_ima_event *ima_next_task(ima_app_task_list *task_list,
 		task_list->out = out;
 		return result;
 	}
-	printf ("ima_next_task: in(%4d),out(%4d)\n", in, out);
+	printf ("ima_next_task: in(%8d),out(%8d)\r", in, out);
+	fflush(stdout);
 
 	return NULL;
 }

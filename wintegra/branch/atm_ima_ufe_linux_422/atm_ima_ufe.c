@@ -38,6 +38,8 @@
  ***********************************************************************************************/
 
 #define WTI_CESOP_REGRESSION_TEST 1
+#define DELAY_COUNT     (10000 * 100)   // micro seconds
+#define SECONDS_TO_WAIT (1)
 
 /* Number of IMA DPS generated ticks in 1 second */
 #define TICKS_PER_SECOND 2
@@ -81,7 +83,6 @@ WP_U8 prbs_result[336];
 // #include "flexmux_alarms_and_pm.c"
 #include "ufe_utility.c"
 
-
 WUFE_init_config ufe4_config;
 WP_ima_event a_task;
 
@@ -123,6 +124,43 @@ void App_ResetUfe (void)
 
    }                            // if(WTI_INITIALIZE_FIRMWARE)
 }
+
+static WP_U32 jjj = SECONDS_TO_WAIT;
+
+void *LearningPoll(void *i)
+{
+   int iii = 0;
+
+   while (1)
+   {
+      display_events ();
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+///////////////////// here is the delay ////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+      for (iii = 0; iii < jjj; iii ++) 
+      {       
+         WPL_Delay(DELAY_COUNT);
+      }       
+   }
+}
+
+
+
+void App_startThread (void)
+{
+#if 1
+   WP_THREAD_ID learning_thread_id;
+
+   status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
+   App_TerminateOnError (status , "WPL_ThreadInit() learning");
+   printf ("after Threadinit\n");
+   fflush(stdout);
+#endif
+}
+
+
 
 /****************************************************************************************************************************
  * Function name: main()
@@ -204,6 +242,8 @@ int main (int argc, char *argv[])
    display_events ();
    WP_Delay (1000000);
    display_events ();
+
+   App_startThread ();
 
    if (argc <= 1)
    {
@@ -600,15 +640,17 @@ void App_ufeSystem (void)
 
       if (g_line_cfg->transfer_type == WUFE_SDH_TYPE_E1)
       {
-         printf ("WUFE_SDH_TYPE_E1 link(%3d) created,lineport(%3d) (%d) all\r", i,
-                 line_port, num_of_lines);
+         printf
+            ("WUFE_SDH_TYPE_E1 link(%3d) created,lineport(%3d) (%d) all\r",
+             i, line_port, num_of_lines);
          fflush (stdout);
          client_port = i + (i / 3);
       }
       else
       {
-         printf ("WUFE_SDH_TYPE_T1 link(%3d) created,lineport(%3d) (%d) all\r", i,
-                 line_port, num_of_lines);
+         printf
+            ("WUFE_SDH_TYPE_T1 link(%3d) created,lineport(%3d) (%d) all\r",
+             i, line_port, num_of_lines);
          fflush (stdout);
          client_port = i;
       }
@@ -661,19 +703,18 @@ void App_ufeSystem (void)
             }
          }
       }
-   } // end of for (..252..)
+   }                            // end of for (..252..)
 
-
-/////////////////////////////////////////////////////////////	
-/////////////////////////////////////////////////////////////	
-/////////////////////////////////////////////////////////////	
-/////////////////////////////////////////////////////////////	
-/////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////  
+/////////////////////////////////////////////////////////////  
+/////////////////////////////////////////////////////////////  
+/////////////////////////////////////////////////////////////  
+/////////////////////////////////////////////////////////////  
    /*
     * create 252 phy(s)
     */
    temp = num_of_lines;
-   for (i=WT_FIRST_LINE_INDEX; i < (temp + WT_FIRST_LINE_INDEX); ++i)
+   for (i = WT_FIRST_LINE_INDEX; i < (temp + WT_FIRST_LINE_INDEX); ++i)
    {
 /*-------------------------------------------------------------*\
       WUFE_PhyCreate () 
