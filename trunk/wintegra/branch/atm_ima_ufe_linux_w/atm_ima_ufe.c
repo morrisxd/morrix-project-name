@@ -84,17 +84,17 @@
 
 #include "atm_ima_ufe.h"
 #include "ufe_utility.h"
-#include "wti_ufe_utility.h"
+// #include "wti_ufe_utility.h"
 
 extern WUFE_status WUFE_SystemDisplay (WP_U32 wufe_id);
 
 
 WP_U8 prbs_result[336];
 
-#include "wti_flexmux_util.c"
+#include "flexmux_util.c"
 // #include "flexmux_alarms_and_pm.c"
 
-#include "wti_ufe_utility.c"
+#include "ufe_utility.c"
 #include "atm_ima_ufe_util.c"
 #include "atm_ima_ufe_stats.c"
 
@@ -108,7 +108,7 @@ void release_test (void)
    exit (1);
 }
 
-#if 0
+#if 1
 void WT_UfeTerminateOnError (WUFE_status handle, WP_CHAR * s, WP_U32 id,
                              WP_U32 LineNum)
 {
@@ -227,7 +227,7 @@ int main (int argc, char *argv[])
    display_events ();
   
 printf ("ready to show MENU\n");
-fflush(stdout);
+// fflush(stdout);
 
    if (argc <= 1)
    {
@@ -603,6 +603,7 @@ void App_ufeSystem (void)
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
+#if 0
    /* Connect handler for UFE4 interrupts and supply signal handler*/
    WPL_IntConnect (WP_WINPATH (0), WPL_Eint3Ufe4, 0, WT_Eint3Interrupt);
 #if 1
@@ -648,7 +649,8 @@ void App_ufeSystem (void)
                                 "WUFE_UfeCoreHwInterruptDisable", 0,
                                 __LINE__);
 
-
+#endif
+   WPX_FRMR_RegisterFramerLockCallback(WTI_flexmux_take_framer_lock);
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
 ///////////////////////////////////////////////
@@ -663,7 +665,7 @@ void App_ufeSystem (void)
    WTI_FlexmuxInit (APP_EMPHY_PORT, 0, WT_FLEXMUX_UFE_412_1_PORT_OC12, WPX_UFE_FRAMER_DEVICE_MODE_SDH, WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC4,  //WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC3,
                     &flex_global_params);
    printf ("WWTI_FlexmuxInit () complete! \n");
-   fflush(stdout);
+   // fflush(stdout);
 
    // Configure and create UFE lines for T1 SDH mode
    for (i = WT_FIRST_LINE_INDEX; i < (num_of_lines + WT_FIRST_LINE_INDEX);
@@ -682,14 +684,14 @@ void App_ufeSystem (void)
       {
          printf ("WUFE_SDH_TYPE_E1 link(%3d) created, %d all\r", i,
                  num_of_lines);
-         fflush (stdout);
+         // fflush (stdout);
          client_port = i + (i / 3);
       }
       else
       {
          printf ("WUFE_SDH_TYPE_T1 link(%3d) created, %d all\r", i,
                  num_of_lines);
-         fflush (stdout);
+         // fflush (stdout);
          client_port = i;
       }
 
@@ -988,7 +990,7 @@ void App_ImaChannelsCreate (void)
 
    iw_ch_aal5_cfg[0].iwmode = WP_ATMCH_IWM_ENABLE;
    printf ("MAX_ATM_TX_CHANNEL=(%d)\n", MAX_ATM_TX_CHANNEL);
-   fflush(stdout);
+   // fflush(stdout);
    for (ii = 0; ii < MAX_ATM_TX_CHANNEL; ii++)
    {
       iw_ch_aal5_cfg[0].tx_tq = ii;
