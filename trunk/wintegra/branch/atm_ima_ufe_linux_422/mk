@@ -1,3 +1,3 @@
 #!/bin/sh
-make TEST=atm_ima_ufe.c 2>&1 | tee make.log
+make TEST=atm_ima_ufe.c 2>&1 | tee make.log &&  mv ./bin/atm_ima_ufe ./bin/atm_ima_ufe_linux_422.exe &&  copy_to_tftpboot.sh && echo copy to /tftpboot complete !
 
