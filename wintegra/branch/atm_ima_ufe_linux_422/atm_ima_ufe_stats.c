@@ -11,6 +11,7 @@
  *  File Name   : atm_ima_tdm_stats.c
  *
  *****************************************************************************/
+int g_flag_thread  = 0;
 
 void m_showWUFE (void)
 {
@@ -150,7 +151,11 @@ void App_ShowStats (void)
          printf ("\nEnter 9 to show group status");
          printf ("\nEnter a to show links' status");
          printf ("\nEnter b to show WUFE_SystemDisplay' status");
+#if 0
          printf ("\nEnter c to handle events");
+#else
+         printf ("\nEnter c to show thread activity(events)");
+#endif
          printf ("\nEnter x to previous menu");
          printf ("\n");
 
@@ -281,7 +286,15 @@ void App_ShowStats (void)
          printf ("-------------------------------\n");
          printf ("clear events\n");
          printf ("-------------------------------\n");
+	 if (g_flag_thread)
+	 {
+	    g_flag_thread = 0;
+	 } else {
+	    g_flag_thread = 1;
+	 }
+#if 0
          display_events ();
+#endif
          break;
       default:
          printf ("Invalid Entry\n");
