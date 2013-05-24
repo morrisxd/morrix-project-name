@@ -208,10 +208,11 @@ int main (int argc, char *argv[])
       /*default mode, no parameters */
       while (1)
       {
-         printf ("\n");
+         printf ("MENU\n");
          printf ("a. Stats & Status\n");
          printf ("d. Debug\n");
          printf ("p. Send Packet\n");
+         printf ("r. Reboot the machine\n");
          printf ("s. Simulate Interrupts\n");
          printf ("x. Exit\n");
 
@@ -239,7 +240,7 @@ int main (int argc, char *argv[])
                WPI_SimulateInterrupts();
                break; */
          case 'r':
-            WT_Reboot ();
+            WPX_Reboot ();
             break;
          case 'x':
             {
@@ -557,7 +558,7 @@ void App_ufeSystem (void)
    WUFE_cas_enable cas_mode;
    WT_ufe_line_sdh_params ufe_line_params;
    WTI_flexmux_connection_type conn_type;
-   WP_U32 client_port, line_port;
+   WP_U32 client_port, line_port = 0;
    WUFE_line_clock_rec_params line_cr_params;
 
    property = 0;
@@ -603,15 +604,15 @@ void App_ufeSystem (void)
 
       if (g_line_cfg->transfer_type == WUFE_SDH_TYPE_E1)
       {
-         printf ("WUFE_SDH_TYPE_E1 link(%3d) created, %d all\r", i,
-                 num_of_lines);
+         printf ("WUFE_SDH_TYPE_E1 link(%3d) created,lineport(%3d) (%d) all\r", i,
+                 line_port, num_of_lines);
          fflush (stdout);
          client_port = i + (i / 3);
       }
       else
       {
-         printf ("WUFE_SDH_TYPE_T1 link(%3d) created, %d all\r", i,
-                 num_of_lines);
+         printf ("WUFE_SDH_TYPE_T1 link(%3d) created,lineport(%3d) (%d) all\r", i,
+                 line_port, num_of_lines);
          fflush (stdout);
          client_port = i;
       }
@@ -665,7 +666,13 @@ void App_ufeSystem (void)
          }
       }
    } // end of for (..252..)
-	
+
+
+/////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////	
    /*
     * create 252 phy(s)
     */
