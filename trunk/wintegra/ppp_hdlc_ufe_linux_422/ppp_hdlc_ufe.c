@@ -199,6 +199,7 @@ int main(int argc, char *argv[])
    {
        while(1)
        {
+          printf ("MENU\n");
           printf("\n Enter choice \n");
           printf("a. Stats\n");
           printf("p. Send Packet\n");
