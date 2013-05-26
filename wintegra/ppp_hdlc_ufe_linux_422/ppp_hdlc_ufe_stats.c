@@ -28,6 +28,7 @@ void App_ShowDeviceStats(void)
    WP_stats_enet s_hs_enet = {0};
    WP_stats_upi_hdlc upi_hdlc_stats={0};
    WP_U32 ii;
+   WP_U32 rxpackets = 0;
 
    memset(&s_hs_enet,0,sizeof(s_hs_enet));
    printf("----------------------------------------------------------\n");
@@ -44,6 +45,7 @@ void App_ShowDeviceStats(void)
    printf(" txrx_frames_1522          : %08d\n", (WP_U32)s_hs_enet.txrx_frames_1522);
    printf(" rx_bytes                  : %08d\n", (WP_U32)s_hs_enet.rx_bytes);
    printf(" rx_packets                : %08d\n", (WP_U32)s_hs_enet.rx_packets);
+   rxpackets = (WP_U32)s_hs_enet.rx_packets;
    printf(" rx_err_fcs                : %08d\n", (WP_U32)s_hs_enet.rx_err_fcs);
    printf(" rx_multicast              : %08d\n", (WP_U32)s_hs_enet.rx_multicast);
    printf(" rx_broadcast              : %08d\n", (WP_U32)s_hs_enet.rx_broadcast);
@@ -195,7 +197,10 @@ void App_ShowDeviceStats(void)
        WP_DeviceStatisticsReset(h_dev_hdlc[ii], &upi_hdlc_stats);
 
     }
-}
+
+
+   printf ("-------------------------------\n");   
+   printf(" rx_packets                : %08d\n", rxpackets); }
 
 /****************************************************************************************************************************
 * Function name: App_ShowBportStats()
