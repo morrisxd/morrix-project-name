@@ -64,6 +64,59 @@
 #include "ppp_hdlc_ufe_util.c"
 #include "ppp_hdlc_ufe_stats.c"
 
+#define DELAY_COUNT     (10000 * 100)   // micro seconds
+#define SECONDS_TO_WAIT (1)
+
+static WP_U32 jjj = SECONDS_TO_WAIT;
+
+void *LearningPoll(void *i)
+{
+   int iii = 0;
+
+   while (1)
+   {  
+      // display_events ();
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+///////////////////// here is the delay ////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+      for (iii = 0; iii < jjj; iii ++)
+      {
+         WPL_Delay(DELAY_COUNT);
+
+             switch(dp_interface_val)
+             {       
+             case HDLC_OVER_IP:
+             case PPP_OVER_IP:
+                App_DataSend(h_enet1_tx, h_pool_buffer_iw);
+                break;  
+             case HDLC_OVER_MPLS:
+             case PPP_OVER_MPLS:
+                App_MPLS_DataSend(h_enet1_tx, h_pool_buffer_iw);
+                break;  
+             default:
+                printf(" Invalid Entry\n");
+                exit(0);
+                break;  
+             }       
+
+      }      
+   }
+}  
+
+
+void App_startThread (void)
+{
+#if 1
+   WP_THREAD_ID learning_thread_id;
+
+   status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
+   App_TerminateOnError (status , "WPL_ThreadInit() learning");
+   printf ("after Threadinit\n");
+   fflush(stdout);
+#endif
+}
 
 
 /****************************************************************************************************************************
@@ -194,12 +247,15 @@ int main(int argc, char *argv[])
    /* Enable all sytem, ports, device and channels*/
    App_EnableSystem();
 
+   App_startThread ();
+
+
    /* Menu for testing the application*/
    if (0 == freerun)
    {
        while(1)
        {
-          printf ("MENU\n");
+          printf ("\nMENU");
           printf("\n Enter choice \n");
           printf("a. Stats\n");
           printf("p. Send Packet\n");
