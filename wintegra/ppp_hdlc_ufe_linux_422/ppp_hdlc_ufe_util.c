@@ -432,14 +432,14 @@ void App_ShowStats(void)
       printf("\nEnter 4 to print All Stats");
       printf("\nEnter 5 to previous menu");
       printf("\n");
-
+      tmp[0] = 0;
+#if 0
       gets(tmp);
-#if 1
       sscanf(tmp, "%d", (int *)&ch);
 #else
-      ch = getchar (tmp);
-	  printf ("getchar returns (%d)\n", ch);
-	  ch = atoi (ch);
+      ch = getchar ();
+      printf ("getchar returns ch='(%c)'\n", ch);
+      ch = ch - '1' + 1;
 #endif
       switch(ch)
       {

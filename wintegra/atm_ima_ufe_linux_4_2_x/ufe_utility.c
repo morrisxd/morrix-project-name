@@ -1,911 +1,1918 @@
 /*****************************************************************************
- * (C) Copyright PMC - WIN division (Wintegra) 2012.  All rights reserved.
+ * (C) Copyright PMC - WIN division (Wintegra) 2011.  All rights reserved.
  * PMC-Sierra (WINTEGRA) CONFIDENTIAL PROPRIETARY
  * Contains Confidential Proprietary information of PMC-Sierra (Wintegra).
  * Reverse engineering is prohibited.
  * The copyright notice does not imply publication.
  ****************************************************************************/
 
-/*****************************************************************************
- *  Application : ATM IMA UFE
- *  File Name   : ufe_utility.c
- *
- *****************************************************************************/
-
 /****************************************************************************
  *
- * File: ufe_utility.c
- * Demonstrates handling OMIINO alarm and performance monitoring callbacks
+ * Example: wti_ufe_utility.c
+ * UFE demo utility functions for PWE3 CES application.
+ * Demonstrates the use of UFE API.
  *
  ****************************************************************************/
-
 #include <string.h>
-#include "wp_wddi.h"
 
-#include <wpl_platform.h>
+#include "wufe_types.h"         /* All .H files located at: /projects/winpath/wddi/phy/wpx_ufe/api */
+#include "wufe_errors.h"
+#ifndef WTI_UFE_UTILITY_H
+#include "wti_ufe_utility.h"
+#endif
 
-#undef USE_ANT
+#ifdef WT_UFE_FRAMER
+#ifndef WTI_FLEXMUX_UTIL_H
+#include "wti_flexmux_util.c"
+#endif
+#include "wti_flexmux_alarms_and_pm.c"
+#endif
 
-WP_U32 private_thread_lock = 0;
+#define USE_UFE 1
 
-void WT_ReinstateInterruptMask (WP_U32 wpid);
-extern char *OMIINO_FRAMER_ErrorCodeToTxt (WP_U32 ErrorCode);
+WUFE_events events_connector_0;
+WP_boolean event_contents_0 = WP_FALSE;
 
-/* Alarm and PM handling structures */
-typedef struct
+WUFE_events events_connector_2;
+WP_boolean event_contents_1 = WP_FALSE;
+
+void WT_UfeTerminateOnError (WP_handle handle, WP_CHAR * s, WP_U32 id,
+                             WP_U32 LineNum)
 {
-    WP_U8 device;
-    WP_U8 line_port_id;
-    WP_U8 alarm_category;
-    WP_U8 is_asserted;
-} APP_PORT_ALARM_TASK;
-
-typedef struct
-{
-    WP_U8 device;
-    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE endpoint;
-    WP_U8 alarm_category;
-    WP_U8 is_asserted;
-} APP_PATH_ALARM_TASK;
-
-typedef struct
-{
-    WP_U8 device;
-    WP_U8 table_index;
-    WP_U16 pad;
-    WP_U32 timestamp;
-} APP_PM_TASK;
-
-typedef struct
-{
-    WP_U8 device;
-    WP_U8 line_port_id;
-    WP_U8 k1_value;
-    WP_U8 k2_value;
-} APP_K1_K2_SIGNAL_TASK;
-
-typedef struct
-{
-    WP_U8 device;
-    WP_U8 line_port_id;
-    WP_U8 s1_value;
-} APP_S1_SIGNAL_TASK;
-
-#define PORT_ALARM_TYPE   1
-#define PATH_ALARM_TYPE   2
-#define K1K2_SIGNAL_TYPE  3
-#define S1_SIGNAL_TYPE    4
-#define PM_PORT_TYPE      5
-#define PM_HO_PATH_TYPE   6
-#define PM_LO_PATH_TYPE   7
-#define PM_PDH_TYPE       8
-
-typedef struct
-{
-    WP_U32 task_type;
-    union
-    {
-        APP_PORT_ALARM_TASK port_alarm_task;
-        APP_PATH_ALARM_TASK path_alarm_task;
-        APP_PM_TASK pm_task;
-        APP_K1_K2_SIGNAL_TASK k1k2_signal_task;
-        APP_S1_SIGNAL_TASK s1_signal_task;
-    } u;
-} framer_task;
-
-typedef struct
-{
-    WP_U16 head;
-    WP_U16 tail;
-    WP_U16 num_elements;
-    WP_U16 pad;
-    framer_task *task;
-} framer_task_list;
-
-/*************************************************/
-/*  The task lists                               */
-/*************************************************/
-
-#define ALARM_TASK_LIST_SIZE 4096
-framer_task the_alarm_tasks[ALARM_TASK_LIST_SIZE];
-framer_task_list the_alarm_task_list[1] = { {0, 0, ALARM_TASK_LIST_SIZE, 0, the_alarm_tasks} };
-
-#define PM_TASK_LIST_SIZE 4096
-framer_task the_pm_tasks[PM_TASK_LIST_SIZE];
-framer_task_list the_pm_task_list[1] = { {0, 0, PM_TASK_LIST_SIZE, 0, the_pm_tasks} };
-
-#define SIGNAL_TASK_LIST_SIZE 4096
-framer_task the_signal_tasks[PM_TASK_LIST_SIZE];
-framer_task_list the_signal_task_list[1] = { {0, 0, SIGNAL_TASK_LIST_SIZE, 0, the_signal_tasks} };
-
-/*************************************************************
- *
- * This function adds a pre-formatted task to the task list.
- *
- * Inputs
- *   task_list:    pointer to the task list
- *   task:         pointer to a task definition to be added
- *                 (the task definition is copied into the
- *                 task list)
- *
- * ************************************************************/
-
-WP_U32 num_tasks = 0;
-WP_boolean pending_los = WP_FALSE;
-
-/**************************************************
- * This function gets a task from a task queue.
- *
- * Inputs
- *   task_list:    pointer to the task list
- *   result:       pointer to where to copy task
- *
- * Output
- *   *result:      the task
- *
- * Return value
- *   NULL if no tasks were on the list
- *   result if a task was on the list
- *
- ******************************************************/
-
-framer_task *next_framer_task (framer_task_list * task_list, framer_task * result)
-{
-    WP_U32 head = task_list->head;
-    WP_U32 tail = task_list->tail;
-
-    if (head == tail)
-        return NULL;
-
-    *result = task_list->task[head];
-    if (++head == task_list->num_elements)
-        head = 0;
-    task_list->head = head;
-
-    --num_tasks;
-
-    return result;
-}
-
-void WTI_allocate_pm_storage_areas (void)
-{
-    /* Allocate storage for the performance monitoring data */
-
-#define SONET_SDH_PORT_STORAGE_NUM_ELEMENTS      120
-#define SONET_SDH_HO_PATH_STORAGE_NUM_ELEMENTS   120
-#define SONET_SDH_LO_PATH_STORAGE_NUM_ELEMENTS   120
-#define PDH_STORAGE_NUM_ELEMENTS                 120
-
-    void *space;
-    int element_size;
-    WUFE_status status;
-
-    element_size = sizeof (WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_PORT_ENDPOINT_TYPE);
-    space = malloc (SONET_SDH_PORT_STORAGE_NUM_ELEMENTS * element_size);
-    if (space == NULL)
-        WTI_FlexmuxCheckStatus ("PM storage allocation", WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE, __LINE__);
-    status = WPX_FRMR_PM_SonetSdhPortStorage (space, SONET_SDH_PORT_STORAGE_NUM_ELEMENTS);
-    if (status != WUFE_OK)
-        WTI_FlexmuxCheckStatus ("PM storage allocation", WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE, __LINE__);
-
-    element_size = sizeof (WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_HO_PATH_ENDPOINT_TYPE);
-    space = malloc (SONET_SDH_HO_PATH_STORAGE_NUM_ELEMENTS * element_size);
-    if (space == NULL)
-        WTI_FlexmuxCheckStatus ("PM storage allocation", WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE, __LINE__);
-    status = WPX_FRMR_PM_SonetSdhHOPathStorage (space, SONET_SDH_HO_PATH_STORAGE_NUM_ELEMENTS);
-    if (status != WUFE_OK)
-        WTI_FlexmuxCheckStatus ("PM storage allocation", WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE, __LINE__);
-
-    element_size = sizeof (WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_LO_PATH_ENDPOINT_TYPE);
-    space = malloc (SONET_SDH_LO_PATH_STORAGE_NUM_ELEMENTS * element_size);
-    if (space == NULL)
-        WTI_FlexmuxCheckStatus ("PM storage allocation", WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE, __LINE__);
-    status = WPX_FRMR_PM_SonetSdhLOPathStorage (space, SONET_SDH_LO_PATH_STORAGE_NUM_ELEMENTS);
-    if (status != WUFE_OK)
-        WTI_FlexmuxCheckStatus ("PM storage allocation", WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE, __LINE__);
-
-    element_size = sizeof (WPX_UFE_FRAMER_PDH_PERFORMANCE_MONITORING_ENDPOINT_TYPE);
-    space = malloc (PDH_STORAGE_NUM_ELEMENTS * element_size);
-    if (space == NULL)
-        WTI_FlexmuxCheckStatus ("PM storage allocation", WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE, __LINE__);
-    status = WPX_FRMR_PM_PdhStorage (space, PDH_STORAGE_NUM_ELEMENTS);
-    if (status != WUFE_OK)
-        WTI_FlexmuxCheckStatus ("PM storage allocation", WPX_UFE_FRAMER_ERROR_PARAMETER_OUT_OF_RANGE, __LINE__);
-
-}
-
-#define WTI_LINE_SIDE_ALARM_DISPLAY 1
-
-static char *line_side_alarm_names[] = {
-    "WPX_UFE_FRAMER_SDH_LOS",   /*   0 */
-    "WPX_UFE_FRAMER_SDH_LOF",   /*   1 */
-    "WPX_UFE_FRAMER_SDH_RS_TIM",    /*   2 */
-    "WPX_UFE_FRAMER_SDH_MS_AIS",    /*   3 */
-    "WPX_UFE_FRAMER_SDH_MS_RDI",    /*   4 */
-    "WPX_UFE_FRAMER_SDH_OOF",   /*   5 */
-    "WPX_UFE_FRAMER_SDH_MS_EXC",    /*   6 */
-    "WPX_UFE_FRAMER_SDH_MS_DEG",    /*   7 */
-    "WPX_UFE_FRAMER_SDH_AU_AIS",    /*   8 */
-    "WPX_UFE_FRAMER_SDH_AU_LOP",    /*   9 */
-    "WPX_UFE_FRAMER_SDH_HP_LOM",    /*  10 */
-    "WPX_UFE_FRAMER_SDH_HP_TIM",    /*  11 */
-    "WPX_UFE_FRAMER_SDH_HP_PLM",    /*  12 */
-    "WPX_UFE_FRAMER_SDH_HP_UNEQ",   /*  13 */
-    "WPX_UFE_FRAMER_SDH_HP_RDI",    /*  14 */
-    "WPX_UFE_FRAMER_SDH_HP_EXC",    /*  15 */
-    "WPX_UFE_FRAMER_SDH_HP_DEG",    /*  16 */
-    "WPX_UFE_FRAMER_SDH_LP_TIM",    /*  17 */
-    "WPX_UFE_FRAMER_SDH_LP_PLM",    /*  18 */
-    "WPX_UFE_FRAMER_SDH_LP_UNEQ",   /*  19 */
-    "WPX_UFE_FRAMER_SDH_LP_RDI",    /*  20 */
-    "WPX_UFE_FRAMER_SDH_LP_EXC",    /*  21 */
-    "WPX_UFE_FRAMER_SDH_LP_DEG",    /*  22 */
-    "WPX_UFE_FRAMER_SDH_TU_AIS",    /*  23 */
-    "WPX_UFE_FRAMER_SDH_TU_LOP",    /*  24 */
-    "WPX_UFE_FRAMER_SONET_LOS", /*  25 */
-    "WPX_UFE_FRAMER_SONET_LOF", /*  26 */
-    "WPX_UFE_FRAMER_SONET_TIM_S",   /*  27 */
-    "WPX_UFE_FRAMER_SONET_AIS_L",   /*  28 */
-    "WPX_UFE_FRAMER_SONET_RDI_L",   /*  29 */
-    "WPX_UFE_FRAMER_SONET_OOF", /*  30 */
-    "WPX_UFE_FRAMER_SONET_EXC_L",   /*  31 */
-    "WPX_UFE_FRAMER_SONET_DEG_L",   /*  32 */
-    "WPX_UFE_FRAMER_SONET_LOM_P",   /*  33 */
-    "WPX_UFE_FRAMER_SONET_TIM_P",   /*  34 */
-    "WPX_UFE_FRAMER_SONET_PLM_P",   /*  35 */
-    "WPX_UFE_FRAMER_SONET_UNEQ_P",  /*  36 */
-    "WPX_UFE_FRAMER_SONET_RDI_P",   /*  37 */
-    "WPX_UFE_FRAMER_SONET_EXC_P",   /*  38 */
-    "WPX_UFE_FRAMER_SONET_DEG_P",   /*  39 */
-    "WPX_UFE_FRAMER_SONET_TIM_V",   /*  40 */
-    "WPX_UFE_FRAMER_SONET_PLM_V",   /*  41 */
-    "WPX_UFE_FRAMER_SONET_UNEQ_V",  /*  42 */
-    "WPX_UFE_FRAMER_SONET_RDI_V",   /*  43 */
-    "WPX_UFE_FRAMER_SONET_EXC_V",   /*  44 */
-    "WPX_UFE_FRAMER_SONET_DEG_V",   /*  45 */
-    "WPX_UFE_FRAMER_SONET_AIS_V",   /*  46 */
-    "WPX_UFE_FRAMER_SONET_LOP_V",   /*  47 */
-    "WPX_UFE_FRAMER_SONET_AIS_P",   /*  48 */
-    "WPX_UFE_FRAMER_SONET_LOP_P",   /*  49 */
-    "WPX_UFE_FRAMER_SDH_RS_EXC",    /*  50 */
-    "WPX_UFE_FRAMER_SDH_RS_DEG",    /*  51 */
-    "WPX_UFE_FRAMER_SONET_EXC_S",   /*  52 */
-    "WPX_UFE_FRAMER_SONET_DEG_S"    /*  53 */
-};
-
-static char *socket_client_side_alarm_names[] = {
-    "WPX_UFE_FRAMER_SOCKET_CLIENT_E_RFI",
-    "WPX_UFE_FRAMER_SOCKET_CLIENT_A_RAI",
-    "WPX_UFE_FRAMER_SOCKET_CLIENT_LOS_AIS"
-};
-
-void service_path_alarm (WP_U8 device_id, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE * p_SDH_Sonet_line_endpoint_type, WP_U8 alarm_category, WP_U8 is_asserted)
-{
-
-    printf ("PATH ALARM:  alarm_category = %s %s\n", line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
-}
-
-void service_port_alarm (WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8 is_asserted)
-{
-
-    printf ("PORT ALARM:  line_port_id = %d, alarm_category = %s %s\n", line_port_id, line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
-}
-
-void service_k1_k2_signal (WP_U8 device, WP_U8 line_port_id, WP_U8 k1, WP_U8 k2)
-{
-
-    printf ("K1K2 SIGNAL:  iLinePort = %d K1 %d, K2 %d\n", line_port_id, k1, k2);
-
-}
-
-void service_s1_signal (WP_U8 device, WP_U8 line_port_id, WP_U8 s1)
-{
-
-    printf ("S1 SIGNAL:  iLinePort = %d S1 %d\n", line_port_id, s1);
-
-}
-
-WP_U32 B1_count, B2_count, M1_count;
-
-void service_pm_port_data (WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
-{
-
-    WP_U32 count;
-    WP_U8 result;
-
-    printf ("PM PORT:  device_id = %d, table_index = %d, timestamp = 0x%x\n", device_id, table_index, timestamp);
-
-    if ((result = WPX_FRMR_STATUS_PM_SONET_SDH_Port_ReadData (device_id, table_index, 0, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B1, &count)) == 0)
-    {
-        printf ("port %d: B1 count %d\n", device_id, count);
-        B1_count += count;
-    }
-    else
-        printf ("Port_ReadData failed on B1: 0x%x\n", result);
-
-    if ((result = WPX_FRMR_STATUS_PM_SONET_SDH_Port_ReadData (device_id, table_index, 0, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B2, &count)) == 0)
-    {
-        printf ("port %d: B2 count %d\n", device_id, count);
-        B2_count += count;
-    }
-    else
-        printf ("Port_ReadData failed on B2: 0x%x\n", result);
-
-    if ((result = WPX_FRMR_STATUS_PM_SONET_SDH_Port_ReadData (device_id, table_index, 0, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_M1, &count)) == 0)
-    {
-        printf ("port %d: M1 count %d\n", device_id, count);
-        M1_count += count;
-    }
-    else
-        printf ("Port_ReadData failed on M1: 0x%x\n", result);
-
-}
-
-void service_pm_ho_path_data (WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
-{
-
-    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE LineEndpointType;
-    U32 count = 0;
-    U32 max_stm1, max_stm0, max_tug2, max_tu;
-    U32 stm1, stm0, tug2, tu;
-    U8 result;
-
-    memset (&LineEndpointType, 0, sizeof (WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE));
-
-    printf ("HO PATH:  table_index = %d timestamp = 0x%x\n", table_index, timestamp);
-
-    LineEndpointType.TransferType = ho_transfer_type_in_use;
-    LineEndpointType.u.SDH.stm4 = 0;
-
-    if (LineEndpointType.TransferType == WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC3)
-        max_stm0 = 3;
-    else
-        max_stm0 = 1;
-
-    max_stm1 = 4;
-    max_tug2 = max_tu = 1;
-
-    for (stm1 = 0; stm1 < max_stm1; ++stm1)
-        for (stm0 = 0; stm0 < max_stm0; ++stm0)
-            for (tug2 = 0; tug2 < max_tug2; ++tug2)
-                for (tu = 0; tu < max_tu; ++tu)
-                {
-                    LineEndpointType.u.SDH.stm1 = stm1;
-                    LineEndpointType.u.SDH.stm0 = stm0;
-                    LineEndpointType.u.SDH.tug2 = tug2;
-                    LineEndpointType.u.SDH.tu = tu;
-
-                    result = WPX_FRMR_STATUS_PM_SONET_SDH_HO_PATH_ReadData (device_id, table_index, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B3, &count);
-
-                    if (result)
-                        printf ("    ---->  HO_Path_ReadData failed on %d:%d:%d:%d with %d\n", stm1, stm0, tug2, tu, result);
-                    else
-                        printf ("    ---->  B3 count on %d:%d:%d:%d is %d\n", stm1, stm0, tug2, tu, count);
-
-                    result = WPX_FRMR_STATUS_PM_SONET_SDH_HO_PATH_ReadData (device_id, table_index, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_G1, &count);
-
-                    if (result)
-                        printf ("    ---->  HO_Path_ReadData failed on %d:%d:%d:%d with %d\n", stm1, stm0, tug2, tu, result);
-                    else
-                        printf ("    ---->  G1 count on %d:%d:%d:%d is %d\n", stm1, stm0, tug2, tu, count);
-                }
-
-}
-
-void service_pm_lo_path_data (WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
-{
-
-    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE LineEndpointType;
-    U32 count = 0;
-    U32 max_stm1, max_stm0, max_tug2, max_tu;
-    U32 stm1, stm0, tug2, tu;
-    U8 result;
-
-    memset (&LineEndpointType, 0, sizeof (WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE));
-
-    printf ("LO PATH:  table_index = %d timestamp = 0x%x\n", table_index, timestamp);
-
-    LineEndpointType.TransferType = lo_transfer_type_in_use;
-    LineEndpointType.u.SDH.stm4 = 0;
-
-    max_stm1 = 1;
-    max_stm0 = 1;
-    max_tug2 = 1;
-    max_tu = 3;
-
-    for (stm1 = 0; stm1 < max_stm1; ++stm1)
-        for (stm0 = 0; stm0 < max_stm0; ++stm0)
-            for (tug2 = 0; tug2 < max_tug2; ++tug2)
-                for (tu = 0; tu < max_tu; ++tu)
-                {
-                    LineEndpointType.u.SDH.stm1 = stm1;
-                    LineEndpointType.u.SDH.stm0 = stm0;
-                    LineEndpointType.u.SDH.tug2 = tug2;
-                    LineEndpointType.u.SDH.tu = tu;
-
-                    result = WPX_FRMR_STATUS_PM_SONET_SDH_LO_PATH_ReadData (device_id, table_index, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_V5_BIP, &count);
-
-                    if (result)
-                        printf ("    ---->  LO_Path_ReadData failed on %d:%d:%d:%d with %d\n", stm1, stm0, tug2, tu, result);
-                    else
-                        printf ("    ---->  V5_BIP count on %d:%d:%d:%d is %d\n", stm1, stm0, tug2, tu, count);
-
-                    result = WPX_FRMR_STATUS_PM_SONET_SDH_LO_PATH_ReadData (device_id, table_index, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_V5_REI, &count);
-
-                    if (result)
-                        printf ("    ---->  LO_Path_ReadData failed on %d:%d:%d:%d with %d\n", stm1, stm0, tug2, tu, result);
-                    else
-                        printf ("    ---->  V5_REI count on %d:%d:%d:%d is %d\n", stm1, stm0, tug2, tu, count);
-                }
-}
-
-void service_pm_pdh_data (WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
-{
-    printf ("PDH:  table_index = %d timestamp = 0x%x\n", table_index, timestamp);
-}
-
-void process_framer_task_list (void)
-{
-    framer_task a_task;
-    APP_PORT_ALARM_TASK *port_alarm;
-    APP_PATH_ALARM_TASK *path_alarm;
-    APP_PM_TASK *pm_task;
-    APP_K1_K2_SIGNAL_TASK *k1k2_signal;
-    APP_S1_SIGNAL_TASK *s1_signal;
-
-    while (1)
-    {
-        WPL_Lock (WPL_THREAD_LOCK_KEY, &private_thread_lock);
-
-        while (WP_TRUE)
+        if (handle != WUFE_OK)
         {
-            if (next_framer_task (the_alarm_task_list, &a_task) != NULL)
-            {
-                switch (a_task.task_type)
-                {
-                case PORT_ALARM_TYPE:
+                printf ("Test Abort %s %d %s 0x%x Line:%d\n", s, id,
+                        WUFE_error_name[(handle & 0x03ffffff)], handle,
+                        LineNum);
 
-                    port_alarm = &a_task.u.port_alarm_task;
-
-                    service_port_alarm (port_alarm->device, port_alarm->line_port_id, port_alarm->alarm_category, port_alarm->is_asserted);
-
-                    break;
-
-                case PATH_ALARM_TYPE:
-
-                    path_alarm = &a_task.u.path_alarm_task;
-
-                    service_path_alarm (path_alarm->device, &path_alarm->endpoint, path_alarm->alarm_category, path_alarm->is_asserted);
-
-                    break;
-
-                default:
-
-                    break;
-                }
-            }
-
-            else if (next_framer_task (the_signal_task_list, &a_task) != NULL)
-            {
-                switch (a_task.task_type)
-                {
-                case K1K2_SIGNAL_TYPE:
-
-                    k1k2_signal = &a_task.u.k1k2_signal_task;
-
-                    service_k1_k2_signal (k1k2_signal->device, k1k2_signal->line_port_id, k1k2_signal->k1_value, k1k2_signal->k2_value);
-
-                    break;
-
-                case S1_SIGNAL_TYPE:
-
-                    s1_signal = &a_task.u.s1_signal_task;
-
-                    service_s1_signal (s1_signal->device, s1_signal->line_port_id, s1_signal->s1_value);
-
-                    break;
-
-                default:
-
-                    break;
-                }
-            }
-
-            else if (next_framer_task (the_pm_task_list, &a_task) != NULL)
-            {
-                switch (a_task.task_type)
-                {
-                case PM_PORT_TYPE:
-
-                    pm_task = &a_task.u.pm_task;
-
-                    service_pm_port_data (pm_task->device, pm_task->table_index, pm_task->timestamp);
-
-                    break;
-
-                case PM_HO_PATH_TYPE:
-
-                    pm_task = &a_task.u.pm_task;
-
-                    service_pm_ho_path_data (pm_task->device, pm_task->table_index, pm_task->timestamp);
-
-                    break;
-
-                case PM_LO_PATH_TYPE:
-
-                    pm_task = &a_task.u.pm_task;
-
-                    service_pm_lo_path_data (pm_task->device, pm_task->table_index, pm_task->timestamp);
-
-                    break;
-
-                case PM_PDH_TYPE:
-
-                    pm_task = &a_task.u.pm_task;
-
-                    service_pm_pdh_data (pm_task->device, pm_task->table_index, pm_task->timestamp);
-
-                    break;
-
-                default:
-
-                    break;
-                }
-            }
-
-            else
-                break;
+                exit (1);
         }
-    }
-}
-
-void WTI_enable_alarms (int type)
-{
-    WP_boolean is_sdh = (type == 0);
-
-    int j;
-    WP_U8 status;
-    int start_alarm, last_alarm;
-//   WPX_FRMR_RegisterSonetSdhPathAlarmCallback(&cb_path_alarm);    // -- morris
-//   WPX_FRMR_RegisterSonetSdhPortAlarmCallback(&cb_port_alarm);
-//   WPX_FRMR_RegisterSocketClientPdhAlarmCallback(&cb_pdh_alarm);
-//    WPX_FRMR_RegisterSonetSdhSectionK1K2AnnounceCallback(&cb_k1k2_signal);
-
-    if (is_sdh)
-    {
-        start_alarm = WPX_UFE_FRAMER_SDH_LOS;
-        last_alarm = WPX_UFE_FRAMER_SDH_HP_DEG;
-    }
-    else
-    {
-        start_alarm = WPX_UFE_FRAMER_SONET_LOS;
-        last_alarm = WPX_UFE_FRAMER_SONET_LOP_P;
-    }
-
-    for (j = start_alarm; j <= last_alarm; ++j)
-    {
-        status = WPX_FRMR_DEV_DRV_SONET_SDH_EnableAlarm (j, j);
-        if (status != WPX_UFE_FRAMER_OK)
-        {
-            printf ("********************************************************************\n" "   %d     SDH/SONET EVENT %d FAILED with %s\n" "********************************************************************\n", __LINE__, j, OMIINO_FRAMER_ErrorCodeToTxt (status));
-            WTI_FlexmuxCheckStatus ("WTI_enable_alarms_and_performance_monitoring", status, __LINE__);
-        }
-    }
-
-    if (is_sdh)
-    {
-        start_alarm = WPX_UFE_FRAMER_SDH_RS_EXC;
-        last_alarm = WPX_UFE_FRAMER_SDH_RS_DEG;
-    }
-    else
-    {
-        start_alarm = WPX_UFE_FRAMER_SONET_EXC_S;
-        last_alarm = WPX_UFE_FRAMER_SONET_DEG_S;
-    }
-    for (j = start_alarm; j <= last_alarm; ++j)
-    {
-        status = WPX_FRMR_DEV_DRV_SONET_SDH_EnableAlarm (j, j);
-        if (status != WPX_UFE_FRAMER_OK)
-        {
-            printf ("********************************************************************\n" "   %d     SDH/SONET EVENT %d FAILED with %s\n" "********************************************************************\n", __LINE__, j, OMIINO_FRAMER_ErrorCodeToTxt (status));
-            WTI_FlexmuxCheckStatus ("WTI_enable_alarms_and_performance_monitoring", status, __LINE__);
-        }
-    }
-
-    for (j = WPX_UFE_FRAMER_SOCKET_CLIENT_E_RFI; j < WPX_UFE_FRAMER_SOCKET_CLIENT_MAX_ALARM_CATEGORIES; ++j)
-    {
-        status = WPX_FRMR_DEV_DRV_SOCKET_EnableAlarm (j, j);
-        if (status != WPX_UFE_FRAMER_OK)
-        {
-            printf ("********************************************************************\n" "          SOCKET EVENT %d FAILED\n" "********************************************************************\n", j);
-            WTI_FlexmuxCheckStatus ("WTI_enable_alarms_and_performance_monitoring", status, __LINE__);
-        }
+#if WTI_DEBUG_LEVEL
         else
-            printf ("%s enabled\n", socket_client_side_alarm_names[j]);
-    }
-
-    printf ("***************** ALARMS ENABLED ************************************\n");
-
-}
-
-void WTI_enable_performance_monitoring (int type)
-{
-
-    // WPX_FRMR_PM_RegisterSonetSdhPortAnnounceCallback(&cb_pm_port);    // -- morris
-//    WPX_FRMR_PM_RegisterSonetSdhHOPathAnnounceCallback(&cb_pm_ho_path);
-//    WPX_FRMR_PM_RegisterSonetSdhLOPathAnnounceCallback(&cb_pm_lo_path);
-//    WPX_FRMR_PM_RegisterSocketClientPdhAnnounceCallback(&cb_pm_pdh);
-
-}
-
-void WTI_enable_performance_monitoring_points (int type, int is_e1, int vc_type, WUFE_un_framed framing_mode)
-{
-
-    WP_boolean is_sdh = (type == 0);
-    WP_U32 transaction_number;
-    U8 result;
-
-    WP_U32 number_lo_points = 0;
-
-    /* for SDH: stm1, stm0, tug2, tu */
-    WP_U32 stm1, stm0, tug2, tu;
-    WP_U32 max_stm1, max_stm0, max_tug2, max_tu;
-
-    /* for SONET:  sts3, sts1, vt_group, vt */
-    WP_U32 sts3, sts1, vt_group, vt;
-
-    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE LineEndpointType;
-
-    /* Enable Port PM */
-    static WP_U32 line_port = 0;
-
-    WPX_FRMR_PM_SONET_SDH_Port_EnableMonitoring (101, 0, line_port, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B1);
-    WPX_FRMR_PM_SONET_SDH_Port_EnableMonitoring (102, 0, line_port, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B2);
-    WPX_FRMR_PM_SONET_SDH_Port_EnableMonitoring (103, 0, line_port, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_M1);
-
-    if (is_e1)
-    {
-        /* For HO paths */
-        LineEndpointType.u.SDH.stm4 = 0;
-        LineEndpointType.u.SDH.tug2 = 0;
-        LineEndpointType.u.SDH.tu = 0;
-
-        transaction_number = 200;
-
-        if (is_sdh)
         {
-            if (vc_type == 0)
-                LineEndpointType.TransferType = WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC3;
-            else
-                LineEndpointType.TransferType = WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC4;
+                printf ("Handle,Status returned from %s is %d, id is %d, Line %d\n", s, handle, id, LineNum);
+        }
+#endif
+}
 
-            ho_transfer_type_in_use = LineEndpointType.TransferType;
+/**********************************************************************************
+ **********************************************************************************
+ ************                       SYSTEM                    *********************
+ **********************************************************************************
+ *********************************************************************************/
 
-            if (LineEndpointType.TransferType == WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC3)
-                max_stm0 = 3;
-            else
-                max_stm0 = 1;
+void WT_UfeSystemConfig (WT_ufe * ufe, WUFE_system * sys_cfg)
+{
+        memset (sys_cfg, 0, sizeof (WUFE_system));
 
-            max_stm1 = 4;
-
-            for (stm1 = 0; stm1 < max_stm1; ++stm1)
-                for (stm0 = 0; stm0 < max_stm0; ++stm0)
-                {
-                    LineEndpointType.u.SDH.stm1 = stm1;
-                    LineEndpointType.u.SDH.stm0 = stm0;
-
-                    result = WPX_FRMR_PM_SONET_SDH_HO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B3);
-                    if (result)
-                        printf ("B3 failure on %d:%d:%d:%d --> %d\n", stm1, stm0, 0, 0, result);
-                    else
-                        printf ("B3 enabled on %d:%d:%d:%d --> %d\n", stm1, stm0, 0, 0, result);
-
-                    result = WPX_FRMR_PM_SONET_SDH_HO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_G1);
-                    if (result)
-                        printf ("G1 failure on %d:%d:%d:%d --> %d\n", stm1, stm0, 0, 0, result);
-                    else
-                        printf ("G1 enabled on %d:%d:%d:%d --> %d\n", stm1, stm0, 0, 0, result);
-                }
-
-            LineEndpointType.TransferType = WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC12;
-
-            for (stm1 = 0; stm1 < 1; ++stm1)
-                for (stm0 = 0; stm0 < 1; ++stm0)
-                    for (tug2 = 0; tug2 < 1; ++tug2)
-                        for (tu = 0; tu < 3; ++tu)
-                        {
-                            LineEndpointType.u.SDH.stm1 = stm1;
-                            LineEndpointType.u.SDH.stm0 = stm0;
-                            LineEndpointType.u.SDH.tug2 = tug2;
-                            LineEndpointType.u.SDH.tu = tu;
-
-                            result = WPX_FRMR_PM_SONET_SDH_LO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_V5_BIP);
-                            if (result)
-                                printf ("V5_BIP failure on %d:%d:%d:%d --> %d\n", stm1, stm0, tug2, tu, result);
-                            else
-                                ++number_lo_points;
-
-                            result = WPX_FRMR_PM_SONET_SDH_LO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_V5_REI);
-                            if (result)
-                                printf ("V5_REI failure on %d:%d:%d:%d --> %d\n", stm1, stm0, tug2, tu, result);
-                            else
-                                ++number_lo_points;
-                        }
-            printf ("****************** number_lo_points %d\n", number_lo_points);
+        if (ufe->fpga_mode == WT_SONET)
+        {
+                sys_cfg->line_interface = WUFE_INTERFACE_SONET;
+        }
+        else if (ufe->fpga_mode == WT_SDH)
+        {
+                sys_cfg->line_interface = WUFE_INTERFACE_SDH;
+        }
+        else if (ufe->fpga_mode == WT_OCTAL)
+        {
+                sys_cfg->line_interface = WUFE_INTERFACE_CAD_E1_T1;
         }
         else
         {
-            LineEndpointType.TransferType = WPX_UFE_FRAMER_WUFE_SONET_TYPE_VT2;
+                WUFE_status ufe_status = 0x1;
 
-            for (sts3 = 0; sts3 < 4; ++sts3)
-                for (sts1 = 0; sts1 < 3; ++sts1)
-                    for (vt_group = 0; vt_group < 1; ++vt_group)
-                        for (vt = 0; vt < 1; ++vt)
-                        {
-                            LineEndpointType.u.SONET.sts3 = sts3;
-                            LineEndpointType.u.SONET.sts1 = sts1;
-                            LineEndpointType.u.SONET.vt_group = vt_group;
-                            LineEndpointType.u.SONET.vt = vt;
-
-                            result = WPX_FRMR_PM_SONET_SDH_HO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B3);
-                            if (result)
-                                printf ("B3 failure on %d:%d:%d:%d --> %d\n", sts3, sts1, vt_group, vt, result);
-                            else
-                                printf ("B3 enabled on %d:%d:%d:%d --> %d\n", sts3, sts1, vt_group, vt, result);
-
-                            result = WPX_FRMR_PM_SONET_SDH_HO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_G1);
-                            if (result)
-                                printf ("G1 failure on %d:%d:%d:%d --> %d\n", sts3, sts1, vt_group, vt, result);
-                        }
+                WT_UfeTerminateOnError (ufe_status, "HW not SONET or SDH",
+                                        ufe->fpga_mode, __LINE__);
         }
 
-        /* Limited number of points can be concurrently monitored.  CRC monitoring performed only if framed */
+        sys_cfg->max_line_number = ufe->max_lines;
+        sys_cfg->max_phy_number = ufe->max_phys;
 
-        if (framing_mode == WUFE_FRAMED)
-        {
-            int j, k;
-            WP_U8 result;
+        sys_cfg->idle_pattern.tx_idle_byte_data_pattern = 0x81;
+        sys_cfg->idle_pattern.tx_idle_nibble_cas_pattern = 0x4;
 
-            for (j = k = 0; k < 80; ++j)
-            {
-                if ((j % 4) < 3)
-                {
-                    if ((result = WPX_FRMR_PM_E1_EnableMonitoringCrc (transaction_number++, 0, j)) != WPX_UFE_FRAMER_OK)
-                    {
-                        printf ("E1 CRC Monitoring failed on %d with %s\n", j, OMIINO_FRAMER_ErrorCodeToTxt (result));
-                        break;
-                    }
-                    else
-                        ++k;
-                }
-            }
-        }
-    }
-    else
-    {
-        LineEndpointType.u.SDH.stm4 = 0;
-        transaction_number = 200;
+        sys_cfg->emphy.rx_parity_mode = WUFE_RX_PARITY_EVEN;
+        sys_cfg->emphy.tx_parity_mode = WUFE_TX_PARITY_EVEN;
+        sys_cfg->emphy.tx_parity_check = WUFE_TX_PARITY_IGNORE;
 
-        if (is_sdh)
-        {
-            if (vc_type == 0)
-                LineEndpointType.TransferType = WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC3;
-            else
-                LineEndpointType.TransferType = WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC4;
+        sys_cfg->tdm_parity.rx_parity_mode = WUFE_RX_PARITY_EVEN;
+        sys_cfg->tdm_parity.tx_parity_mode = WUFE_TX_PARITY_EVEN;
 
-            if (LineEndpointType.TransferType == WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC3)
-                max_stm0 = 3;
-            else
-                max_stm0 = 1;
+        sys_cfg->fifo_manager.loopback = WUFE_FM_LOOPBACK_DISABLE;
+        sys_cfg->max_buff_num = WUFE_MAX_BUF_SIZE_64;
 
-            max_tug2 = max_tu = 1;
-            max_tug2 = 7;
-            max_tu = 4;
-            max_stm0 = 3;
-
-            // TEMPORARY
-            max_stm1 = 4;
-
-            for (stm1 = 0; stm1 < max_stm1; ++stm1)
-                for (stm0 = 0; stm0 < max_stm0; ++stm0)
-                    for (tug2 = 0; tug2 < max_tug2; ++tug2)
-                        for (tu = 0; tu < max_tu; ++tu)
-                        {
-                            LineEndpointType.u.SDH.stm1 = stm1;
-                            LineEndpointType.u.SDH.stm0 = stm0;
-                            LineEndpointType.u.SDH.tug2 = tug2;
-                            LineEndpointType.u.SDH.tu = tu;
-
-                            result = WPX_FRMR_PM_SONET_SDH_HO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B3);
-                            if (result)
-                                printf ("B3 failure on %d:%d:%d:%d --> %d\n", stm1, stm0, tug2, tu, result);
-
-                            result = WPX_FRMR_PM_SONET_SDH_HO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_G1);
-                            if (result)
-                                printf ("G1 failure on %d:%d:%d:%d --> %d\n", stm1, stm0, tug2, tu, result);
-                        }
-
-            LineEndpointType.TransferType = WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC11;
-
-            for (stm1 = 0; stm1 < 1; ++stm1)
-                for (stm0 = 0; stm0 < 1; ++stm0)
-                    for (tug2 = 0; tug2 < 1; ++tug2)
-                        for (tu = 0; tu < 3; ++tu)
-                        {
-                            LineEndpointType.u.SDH.stm1 = stm1;
-                            LineEndpointType.u.SDH.stm0 = stm0;
-                            LineEndpointType.u.SDH.tug2 = tug2;
-                            LineEndpointType.u.SDH.tu = tu;
-
-                            result = WPX_FRMR_PM_SONET_SDH_LO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_V5_BIP);
-                            if (result)
-                                printf ("V5_BIP failure on %d:%d:%d:%d --> %d\n", stm1, stm0, tug2, tu, result);
-
-                            result = WPX_FRMR_PM_SONET_SDH_LO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_V5_REI);
-                            if (result)
-                                printf ("V5_REI failure on %d:%d:%d:%d --> %d\n", stm1, stm0, tug2, tu, result);
-                        }
-        }
-        else
-        {
-            LineEndpointType.TransferType = WPX_UFE_FRAMER_WUFE_SONET_TYPE_T1;
-
-            for (sts3 = 0; sts3 < 4; ++sts3)
-                for (sts1 = 0; sts1 < 3; ++sts1)
-                    for (vt_group = 0; vt_group < 1; ++vt_group)
-                        for (vt = 0; vt < 1; ++vt)
-                        {
-                            LineEndpointType.u.SONET.sts3 = sts3;
-                            LineEndpointType.u.SONET.sts1 = sts1;
-                            LineEndpointType.u.SONET.vt_group = vt_group;
-                            LineEndpointType.u.SONET.vt = vt;
-
-                            result = WPX_FRMR_PM_SONET_SDH_HO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_B3);
-                            if (result)
-                                printf ("B3 failure on %d:%d:%d:%d --> %d\n", sts3, sts1, vt_group, vt, result);
-
-                            result = WPX_FRMR_PM_SONET_SDH_HO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_G1);
-                            if (result)
-                                printf ("G1 failure on %d:%d:%d:%d --> %d\n", sts3, sts1, vt_group, vt, result);
-
-                            result = WPX_FRMR_PM_SONET_SDH_LO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_V5_BIP);
-                            if (result)
-                                printf ("V5_BIP failure on %d:%d:%d:%d --> %d\n", sts3, sts1, vt_group, vt, result);
-
-                            result = WPX_FRMR_PM_SONET_SDH_LO_Path_EnableMonitoring (transaction_number++, 0, &LineEndpointType, WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_DATA_POINT_V5_REI);
-                            if (result)
-                                printf ("V5_REI failure on %d:%d:%d:%d --> %d\n", sts3, sts1, vt_group, vt, result);
-                        }
-        }
-
-        if (framing_mode == WUFE_FRAMED)
-        {
-            int j, k;
-            WP_U8 result;
-
-            for (j = k = 0; k < 80; j += 2)
-            {
-                if ((result = WPX_FRMR_PM_T1_EnableMonitoringCrc (transaction_number++, 0, j)) != WPX_UFE_FRAMER_OK)
-                {
-                    printf ("T1 CRC Monitoring failed on %d with %s\n", j, OMIINO_FRAMER_ErrorCodeToTxt (result));
-                    break;
-                }
-                else
-                    ++k;
-            }
-        }
-    }
-
-    printf ("*****************     PM ENABLED ************************************\n");
+        /* If set, enable CR at system level */
+        sys_cfg->system_clock_rec_enable = ufe->system_clock_rec_enable;
+        sys_cfg->clk_rec_system_params = ufe->clk_rec_system_params;
 }
 
-#define SERIAL_1_CPLD_INTERRUPT_MASK 0x6f
+void WT_UfeInitializeFirmware (WP_U32 ufe_id)
+{
+        WUFE_init_config config;
 
-WP_U8 last_interrupt_mask = SERIAL_1_CPLD_INTERRUPT_MASK;
+        memset (&config, 0, sizeof (WUFE_init_config));
+        config.ufe_id = ufe_id;
+        if (WTI_EMPHY_PORT == WP_PORT_UPI2)
+                config.attributes |= WUFE_ATTRIB_CONNECT_OFFSET_F (1);
+        if (WTI_EMPHY_PORT == WP_PORT_UPI3)
+                config.attributes |= WUFE_ATTRIB_CONNECT_OFFSET_F (2);
+
+#if WTI_DUAL_EMPHY
+        /* relevant base addresses are located at offset 0 therefore change the UFEID to O
+           just for the purpose of host programming and later restore to the right value */
+        if (ufe_id == 1)
+        {
+                config.ufe_id = 0;
+                config.attributes |= WUFE_ATTRIB_CONNECT_OFFSET_F (2);
+        }
+#endif
+
+        WUFE_UfeInitializeFirmware (&config);
+
+#if WTI_DUAL_EMPHY
+        /* restore the correct UFEID */
+        config.ufe_id = 1;
+#endif
+}
+
+WP_U8 last_interrupt_mask;
 
 void WT_ReinstateInterruptMask (WP_U32 wpid)
 {
+#if WTI_COLLECT_TIMING_INFORMATION
+        WP_U8 pending;
+        extern WP_U8 WPX_Ufe412CpldInterruptSourceGet (WP_U32 wpid);
 
-    /* Reset the CPLD interrupt mask */
-    WPX_Ufe412CpldInterruptMaskSet (wpid, last_interrupt_mask);
+        record_action (15, WP_TimeRead ());
+        pending = WPX_Ufe412CpldInterruptSourceGet (0);
+        record_action (53, pending);
+#endif
+
+        /* Reset the CPLD interrupt mask */
+        WPX_Ufe412CpldInterruptMaskSet (wpid, last_interrupt_mask);
 }
+
+void WT_Eint3Interrupt (WP_U32 wpid, WP_U32 signal_info)
+{
+        WP_boolean is_framer_int_0 = WP_FALSE, is_core_int_0 = WP_FALSE;
+        WP_boolean is_framer_int_2 = WP_FALSE, is_core_int_2 = WP_FALSE;
+
+#if CHECK_CORE_HW_INTERRUPT_ASSERTED
+        WUFE_events active_events;
+#endif
+        WP_U8 pending;
+        extern void WPX_UFE_FRAMER_ISR (WP_U8 iDevice);
+
+#if WTI_COLLECT_TIMING_INFORMATION
+        record_action (13, WP_TimeRead ());
+#endif
+
+        /* Recover the value of the CPLD interrupt mask at the time of the interrupt */
+#if !defined(__linux__)
+        last_interrupt_mask = WPX_Ufe412CpldInterruptMaskGet (0);
+#else
+        last_interrupt_mask = signal_info & 0xffff;
+#endif
+
+        pending = WPX_Ufe412CpldInterruptSourceGet (wpid);
+
+#if WTI_COLLECT_TIMING_INFORMATION
+        record_action (16, pending);
+#endif
+
+        if ((pending & WPX_FPGA_INTR_SERIAL_1_CONNECTOR) == 0)
+        {
+                /* Assume UFEID == 0 is on UPI1; needs to be generalized */
+                is_framer_int_0 = WUFE_UfeFramerHwInterruptGet (0);
+                is_core_int_0 = WUFE_UfeCoreHwInterruptGet (0);
+        }
+
+        if ((pending & WPX_FPGA_INTR_SERIAL_3_CONNECTOR) == 0)
+        {
+                /* Assume UFEID == 1 is on UPI3; needs to be generalized */
+                is_framer_int_2 = WUFE_UfeFramerHwInterruptGet (1);
+                is_core_int_2 = WUFE_UfeCoreHwInterruptGet (1);
+        }
+
+#if WTI_COLLECT_TIMING_INFORMATION
+
+        if ((pending & WPX_FPGA_INTR_SERIAL_1_CONNECTOR) == 0)
+        {
+                if (is_framer_int_0 || is_core_int_0)
+                        record_action (43,
+                                       (0 << 24) + (is_core_int_0 << 8) +
+                                       is_framer_int_0);
+                else
+                {
+                        record_action (46,
+                                       WUFE_UfeExtPllHwInterruptGet (0));
+                        record_action (45,
+                                       WUFE_UfeLockLostHwInterruptGet (0));
+                        record_action (44, WUFE_UfeSfpHwInterruptGet (0));
+                }
+        }
+
+        if ((pending & WPX_FPGA_INTR_SERIAL_3_CONNECTOR) == 0)
+        {
+                if (is_framer_int_2 || is_core_int_2)
+                        record_action (43,
+                                       (2 << 24) + (is_core_int_2 << 8) +
+                                       is_framer_int_2);
+                else
+                {
+                        record_action (46,
+                                       (2 << 24) +
+                                       WUFE_UfeExtPllHwInterruptGet (1));
+                        record_action (45,
+                                       (2 << 24) +
+                                       WUFE_UfeLockLostHwInterruptGet (1));
+                        record_action (44,
+                                       (2 << 24) +
+                                       WUFE_UfeSfpHwInterruptGet (1));
+                }
+        }
+
+#endif
+
+        if (is_framer_int_0)
+                WPX_UFE_FRAMER_ISR (0); /* argument is iDevice on UPI1 */
+
+#if CHECK_CORE_HW_INTERRUPT_ASSERTED
+
+        if (is_core_int_0)
+        {
+                memset (&active_events, 0, sizeof (WUFE_events));
+
+                WUFE_UfeReadEvents (0, &active_events); /* Assumption about UFEID (see above) */
+
+                if (event_contents_0 == WP_FALSE)
+                {
+                        memcpy (&events_connector_0, &active_events,
+                                sizeof (WUFE_events));
+                        event_contents_0 = WP_TRUE;
+                }
+        }
+
+        if (is_framer_int_2)
+                WPX_UFE_FRAMER_ISR (1); /* argument is iDevice on UPI3 */
+
+        if (is_core_int_2)
+        {
+                memset (&active_events, 0, sizeof (WUFE_events));
+
+                WUFE_UfeReadEvents (1, &active_events); /* Assumption about UFEID (see above) */
+
+                if (event_contents_1 == WP_FALSE)
+                {
+                        memcpy (&events_connector_2, &active_events,
+                                sizeof (WUFE_events));
+                        event_contents_1 = WP_TRUE;
+                }
+        }
+#endif
+
+#if WTI_COLLECT_TIMING_INFORMATION
+        record_action (14, WP_TimeRead ());
+#endif
+
+#if !defined(WPL_MAILBOX_LOCK_KEY)
+#define WPL_MAILBOX_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 6, 0)
+#endif
+
+        if (is_framer_int_0 || is_framer_int_2)
+        {
+                WPL_Unlock (WPL_MAILBOX_LOCK_KEY, 0);
+#if WTI_COLLECT_TRACE_INFORMATION
+                record_action (40, WP_TimeRead ());
+#endif
+        }
+
+        WT_ReinstateInterruptMask (wpid);
+}
+
+void WT_UfeSystemCreate (WT_ufe * ufe)
+{
+        WUFE_system sys_cfg;
+        WUFE_status ufe_status;
+        WUFE_init_config config;
+
+#if !defined(__linux__)
+        extern void WPL_InterruptConfigureEint3 (WP_U32 wpid);
+#endif
+
+        memset (&config, 0, sizeof (WUFE_init_config));
+        config.ufe_id = ufe->ufe_id;
+
+        if (ufe->upi_id == WP_PORT_UPI2)
+                config.attributes |= WUFE_ATTRIB_CONNECT_OFFSET_F (1);
+        if (ufe->upi_id == WP_PORT_UPI3)
+                config.attributes |= WUFE_ATTRIB_CONNECT_OFFSET_F (2);
+
+        /* Initialize the UFE */
+        ufe_status = WUFE_UfeInit (&config);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_UfeInit", 0, __LINE__);
+
+#if defined __WT__UFE412__ || defined __WT__UFE448__
+#if WTI_CESOP_REGRESSION_TEST
+        WUFE_BSSetExtPllFreeRunMode (ufe->ufe_id);
+#endif
+#endif
+
+   /************************************
+    * Configure the UFE system.
+    ************************************/
+
+        WT_UfeSystemConfig (ufe, &sys_cfg);
+
+        ufe_status = WUFE_SystemConfig (ufe->ufe_id, &sys_cfg);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_SystemConfig  ", 0,
+                                __LINE__);
+
+#if !defined(__linux__)
+
+        WPL_IntDisable (WP_WINPATH (0), WPL_IntGlobalState);
+        WPL_InterruptConfigureEint3 (WP_WINPATH (0));
+        WPL_IntEnable (WP_WINPATH (0), WPL_IntGlobalState);
+
+#endif
+
+        /* Connect handler for UFE4 interrupts and supply signal handler */
+        WPL_IntConnect (WP_WINPATH (0), WPL_Eint3Ufe4, 0,
+                        WT_Eint3Interrupt);
+        WPL_IntEnable (WP_WINPATH (0), WPL_Eint3Ufe4);
+
+        /* Select EINT3 for interrupts */
+        WPX_Ufe412CpldInterruptSelect (0);
+}
+
+void WT_UfeSystemEnable (WT_ufe * ufe)
+{
+        WUFE_status ufe_status;
+        WP_U32 property, i;
+
+        /* Enable UFE system */
+        property = WUFE_SYS_EMPHY;
+
+#if USE_UFE
+        ufe_status =
+                WUFE_SystemEnable (ufe->ufe_id, property,
+                                   WUFE_FULL_DUPLEX);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_SystemEnable ", 0,
+                                __LINE__);
+#endif
+
+        for (i = 0; i < MAX_UFE_LINES_USED; i++)
+                ufe->line_handle[i] = WT_UFE_HANDLE_INVALID;
+
+        for (i = 0; i < N_MAX_EMPHY_PHYS; i++)
+                ufe->phy_handle[i] = WT_UFE_HANDLE_INVALID;
+
+        ufe_status = WUFE_UfeFramerHwInterruptEnable (0);
+        WT_UfeTerminateOnError (ufe_status,
+                                "WUFE_UfeFramerHwInterruptEnable", 0,
+                                __LINE__);
+
+        ufe_status = WUFE_UfeCoreHwInterruptEnable (0);
+        WT_UfeTerminateOnError (ufe_status,
+                                "WUFE_UfeCoreHwInterruptEnable", 0,
+                                __LINE__);
+
+        ufe_status = WUFE_SystemInterruptEnable (ufe->ufe_id);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_SystemInterruptEnable ",
+                                0, __LINE__);
+
+        ufe_status = WUFE_UfeCoreHwInterruptDisable (0);
+        WT_UfeTerminateOnError (ufe_status,
+                                "WUFE_UfeCoreHwInterruptDisable", 0,
+                                __LINE__);
+}
+
+/**********************************************************************************
+ **********************************************************************************
+ ************                          LINE                   *********************
+ **********************************************************************************
+ *********************************************************************************/
+void WT_UfeLineCreate (WT_ufe * ufe, WP_U32 index, void *config,
+                       WP_U8 enable)
+{
+        if (ufe->fpga_mode == WT_SONET)
+        {
+                /* create the UFE line */
+                WT_UfeLineSonetCreate (ufe, index,
+                                       (WT_ufe_line_sonet_params *) config,
+                                       enable);
+
+#ifdef WT_UFE_FRAMER
+                {
+                        WT_ufe_line_sonet_params *line_params =
+                                (WT_ufe_line_sonet_params *) config;
+                        int client_port, line_port;
+                        WTI_flexmux_connection_type con_type = 0;
+
+                        client_port =
+                                WTI_FlexmuxClientPortIndexGet (index,
+                                                               line_params->
+                                                               transfer_type);
+                        line_port =
+                                WTI_FlexmuxLinePortIndexGet (index,
+                                                             ufe->ufe_id);
+                        if (line_port == -1)
+                        {
+                                printf ("Illegal line port index %d\n",
+                                        index);
+                                exit (1);
+                        }
+
+                        switch (line_params->transfer_type)
+                        {
+                        case (WUFE_SONET_TYPE_E1):
+                                {
+                                        con_type =
+                                                (line_params->framed ==
+                                                 WUFE_FRAMED) ?
+                                                WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED
+                                                :
+                                                WT_FLEXMUX_CONNECTION_TYPE_E1_UNFRAMED;
+                                        break;
+                                }
+                        case (WUFE_SONET_TYPE_T1):
+                                {
+                                        con_type =
+                                                (line_params->framed ==
+                                                 WUFE_FRAMED) ?
+                                                WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED
+                                                :
+                                                WT_FLEXMUX_CONNECTION_TYPE_T1_UNFRAMED;
+                                        break;
+                                }
+                        default:
+                                printf ("Unsupported transfer_type %d\n",
+                                        line_params->transfer_type);
+                                exit (1);
+                        }
+
+                        /* save the UFE line configuration structure */
+                        memcpy (&ufe->line_params[index].
+                                framer_line_params.line_sonet_params,
+                                line_params,
+                                sizeof (WT_ufe_line_sonet_params));
+                        ufe->line_params[index].transfer_type =
+                                line_params->transfer_type;
+
+#if !WTI_FRAMER_SCRIPT
+                        /* create connection on the Flexmux framer */
+                        WTI_FlexmuxConnectionCreate (0,
+                                                     line_port,
+                                                     client_port,
+                                                     con_type, config);
+#endif
+                }
+#endif
+        }
+        else if (ufe->fpga_mode == WT_SDH)
+        {
+                /* create the UFE line */
+                WT_UfeLineSdhCreate (ufe, index,
+                                     (WT_ufe_line_sdh_params *) config,
+                                     enable);
+#ifdef WT_UFE_FRAMER
+#if !WTI_FRAMER_SCRIPT
+                {
+                        WT_ufe_line_sdh_params *line_params =
+                                (WT_ufe_line_sdh_params *) config;
+                        int client_port, line_port;
+                        WTI_flexmux_connection_type con_type = 0;
+
+                        client_port =
+                                WTI_FlexmuxClientPortIndexGet (index,
+                                                               line_params->
+                                                               transfer_type);
+                        line_port =
+                                WTI_FlexmuxLinePortIndexGet (index,
+                                                             ufe->ufe_id);
+                        if (line_port == -1)
+                        {
+                                printf ("Illegal line port index %d\n",
+                                        index);
+                                exit (1);
+                        }
+
+                        switch (line_params->transfer_type)
+                        {
+                        case (WUFE_SDH_TYPE_E1):
+                                {
+                                        con_type =
+                                                (line_params->framed ==
+                                                 WUFE_FRAMED) ?
+                                                WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED
+                                                :
+                                                WT_FLEXMUX_CONNECTION_TYPE_E1_UNFRAMED;
+                                        break;
+                                }
+                        case (WUFE_SDH_TYPE_T1):
+                                {
+                                        con_type =
+                                                (line_params->framed ==
+                                                 WUFE_FRAMED) ?
+                                                WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED
+                                                :
+                                                WT_FLEXMUX_CONNECTION_TYPE_T1_UNFRAMED;
+                                        break;
+                                }
+                        default:
+                                printf ("Unsupported transfer_type %d\n",
+                                        line_params->transfer_type);
+                                exit (1);
+                        }
+
+                        /* save the UFE line configuration structure */
+                        memcpy (&ufe->line_params[index].
+                                framer_line_params.line_sdh_params,
+                                line_params,
+                                sizeof (WT_ufe_line_sdh_params));
+                        /* create connection on the Flexmux framer */
+                        WTI_FlexmuxConnectionCreate (0,
+                                                     line_port,
+                                                     client_port,
+                                                     con_type, config);
+                }
+#endif
+#endif
+        }
+        else if (ufe->fpga_mode == WT_OCTAL)
+                WT_UfeLineOctalCreate (ufe, index,
+                                       (WT_ufe_line_octal_params *) config,
+                                       enable);
+        else
+        {
+                printf ("The UFE FPGA mode is not supported %d\n",
+                        ufe->fpga_mode);
+                exit (1);
+        }
+}
+
+void WT_UfeClockRecLineConfigure (WUFE_line_clock_rec_params *
+                                  line_cr_params, WP_U32 tx_cr_enable,
+                                  WP_U32 physical_clock_enable,
+                                  WP_U32 physical_clock_id)
+{
+        line_cr_params->tx_clk_rec_enable = tx_cr_enable;
+        line_cr_params->clk_rec_physical_clock_enable =
+                physical_clock_enable;
+        line_cr_params->clk_rec_physical_clock_id = physical_clock_id;
+}
+
+void WT_UfeLineConfigureAndCreateT1 (WT_ufe * ufe, WP_U32 i,
+                                     WP_U16 transfer_type,
+                                     WP_U16 framing_mode, WP_U8 cas_enable,
+                                     WP_U8 enable,
+                                     WUFE_line_clock_rec_params *
+                                     line_cr_params)
+{
+        if (ufe->fpga_mode == WT_SONET)
+        {
+                WT_ufe_line_sonet_params line_params;
+
+                memset (&line_params, 0,
+                        sizeof (WT_ufe_line_sonet_params));
+
+                line_params.sts12 = i / 336;
+                line_params.sts3 = (i % 336) / 84;
+                line_params.sts1 = (i % 84) / 28;
+                line_params.vt_group = (i % 28) / 4;
+                line_params.vt = (i % 4);
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+        else if (ufe->fpga_mode == WT_SDH)
+        {
+                WT_ufe_line_sdh_params line_params;
+
+                memset (&line_params, 0, sizeof (WT_ufe_line_sdh_params));
+
+                line_params.stm4 = i / 336;
+                line_params.stm1 = (i % 336) / 84;
+                line_params.stm0 = (i % 84) / 28;
+                line_params.tug2 = (i % 28) / 4;
+                line_params.tu = (i % 4);
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+        else
+        {
+                /*CAD*/ WT_ufe_line_octal_params line_params;
+
+                memset (&line_params, 0,
+                        sizeof (WT_ufe_line_octal_params));
+
+                line_params.line_id = i;
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+}
+
+void WT_UfeLineConfigureAndCreateE1 (WT_ufe * ufe, WP_U32 i,
+                                     WP_U16 transfer_type,
+                                     WP_U16 framing_mode, WP_U8 cas_enable,
+                                     WP_U8 enable,
+                                     WUFE_line_clock_rec_params *
+                                     line_cr_params)
+{
+        if (ufe->fpga_mode == WT_SONET)
+        {
+                WT_ufe_line_sonet_params line_params;
+
+                memset (&line_params, 0,
+                        sizeof (WT_ufe_line_sonet_params));
+
+                line_params.sts12 = i / 336;
+                line_params.sts3 = (i % 336) / 84;
+                line_params.sts1 = (i % 84) / 28;
+                line_params.vt_group = (i % 28) / 3;
+                line_params.vt = ((i % 28) % 3);
+
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+        else if (ufe->fpga_mode == WT_SDH)
+        {
+                WT_ufe_line_sdh_params line_params;
+
+                memset (&line_params, 0, sizeof (WT_ufe_line_sdh_params));
+                line_params.stm4 = i / 336;
+                line_params.stm1 = (i % 336) / 84;
+                line_params.stm0 = (i % 84) / 28;
+                line_params.tug2 = (i % 28) / 3;
+                line_params.tu = ((i % 28) % 3);
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+        else
+        {
+                /*CAD*/ WT_ufe_line_octal_params line_params;
+
+                memset (&line_params, 0,
+                        sizeof (WT_ufe_line_octal_params));
+
+                line_params.line_id = i;
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+}
+
+void WT_UfeLineConfigureAndCreateE1T1 (WT_ufe * ufe, WP_U32 i,
+                                       WP_U16 transfer_type,
+                                       WP_U16 framing_mode,
+                                       WP_U8 cas_enable, WP_U8 enable,
+                                       WUFE_line_clock_rec_params *
+                                       line_cr_params)
+{
+        static WP_U32 index = 0;
+
+        if (ufe->fpga_mode == WT_SONET)
+        {
+                WT_ufe_line_sonet_params line_params;
+
+                memset (&line_params, 0,
+                        sizeof (WT_ufe_line_sonet_params));
+
+                line_params.sts12 = index / 336;
+                line_params.sts3 = (index % 336) / 84;
+                line_params.sts1 = (index % 84) / 28;
+                line_params.vt_group = (index % 28) / 4;
+                line_params.vt = (index % 4);
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+                index++;
+                if (index % 4 == 3)
+                {
+                        if (framing_mode == WUFE_SDH_TYPE_E1)
+                                index++;
+                }
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+        else if (ufe->fpga_mode == WT_SDH)
+        {
+                WT_ufe_line_sdh_params line_params;
+
+                memset (&line_params, 0, sizeof (WT_ufe_line_sdh_params));
+
+                line_params.stm4 = index / 336;
+                line_params.stm1 = (index % 336) / 84;
+                line_params.stm0 = (index % 84) / 28;
+                line_params.tug2 = (index % 28) / 4;
+                line_params.tu = (index % 4);
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+                index++;
+                if (index % 4 == 3)
+                {
+                        if (framing_mode == WUFE_SDH_TYPE_E1)
+                                index++;
+                }
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+        else
+        {
+                /*CAD*/ WT_ufe_line_octal_params line_params;
+
+                memset (&line_params, 0,
+                        sizeof (WT_ufe_line_octal_params));
+
+                line_params.line_id = i;
+                line_params.transfer_type = transfer_type;
+                line_params.framed = framing_mode;
+                line_params.cas_enable = cas_enable;
+                if (line_cr_params != NULL)
+                        line_params.clock_rec_line_params = line_cr_params;
+
+                WT_UfeLineCreate (ufe, i, &line_params, enable);
+        }
+}
+
+void WT_UfeLineDelete (WT_ufe * ufe, WP_U32 index)
+{
+        WUFE_status ufe_status;
+
+#ifdef WT_UFE_FRAMER
+        int client_port;
+#endif
+
+        if (ufe->line_handle[index] == WT_UFE_HANDLE_INVALID)
+                return;
+
+        ufe_status =
+                WUFE_LineDisable (ufe->line_handle[index],
+                                  WUFE_FULL_DUPLEX);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_LineDisable", index,
+                                __LINE__);
+
+        ufe_status = WUFE_LineDelete (ufe->line_handle[index]);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_LineDelete", index,
+                                __LINE__);
+
+        ufe->line_handle[index] = WT_UFE_HANDLE_INVALID;
+
+#ifdef WT_UFE_FRAMER
+        /* delete connection on the Flexmux framer */
+        if (ufe->fpga_mode == WT_SONET)
+        {
+                client_port =
+                        WTI_FlexmuxClientPortIndexGet (index,
+                                                       ufe->
+                                                       line_params[index].
+                                                       framer_line_params.
+                                                       line_sonet_params.
+                                                       transfer_type);
+                WTI_FlexmuxConnectionDelete (0, client_port,
+                                             &ufe->line_params[index].
+                                             framer_line_params.
+                                             line_sonet_params);
+        }
+        else if (ufe->fpga_mode == WT_SDH)
+        {
+                client_port =
+                        WTI_FlexmuxClientPortIndexGet (index,
+                                                       ufe->
+                                                       line_params[index].
+                                                       framer_line_params.
+                                                       line_sdh_params.
+                                                       transfer_type);
+                WTI_FlexmuxConnectionDelete (0, client_port,
+                                             &ufe->line_params[index].
+                                             framer_line_params.
+                                             line_sdh_params);
+        }
+        else
+        {
+                printf ("The UFE FPGA mode is not supported %d\n",
+                        ufe->fpga_mode);
+                exit (1);
+        }
+
+#endif
+}
+
+void WT_UfeLineProtectionSwitch (WP_U32 line_port_id,
+                                 WP_U32 protected_line_active)
+{
+        /* This function supports only 2xOC3+protection mode. When additional modes will be
+           available, this function needs to be updated. */
+#ifdef WT_UFE_FRAMER
+        if (protected_line_active)
+                WTI_FlexmuxForceB (line_port_id);
+        else
+                WTI_FlexmuxForceA (line_port_id);
+#endif /* WT_UFE_FRAMER */
+}
+
+/**********************************************************************************
+ **********************************************************************************
+ ************                    Line Octal                   *********************
+ **********************************************************************************
+ *********************************************************************************/
+static void WT_UfeLineOctalConfig (WT_ufe_line_octal_params *
+                                   line_octal_params,
+                                   WUFE_line_cad * line_cfg)
+{
+        memset (line_cfg, 0, sizeof (WUFE_line_cad));
+
+        line_cfg->struct_id = WUFE_STRUCT_LINE_CAD;
+        line_cfg->cad_id = line_octal_params->line_id;
+
+        line_cfg->transfer_type = line_octal_params->transfer_type;
+        line_cfg->framed = line_octal_params->framed;
+        line_cfg->cas_enable = line_octal_params->cas_enable;
+
+        if (line_cfg->cas_enable == WUFE_CAS_ENABLE)
+                line_cfg->multi_frame = WUFE_MULTI_FRAME;
+        else
+                line_cfg->multi_frame = WUFE_SINGLE_FRAME;
+        line_cfg->multi_frame_sync_level =
+                WUFE_MULTI_F_SYNC_HIGH_START_OF_FRAME;
+
+        if ((line_cfg->transfer_type == WUFE_CAD_TYPE_T1 &&
+             line_cfg->framed == WUFE_FRAMED) ||
+            (line_cfg->transfer_type == WUFE_CAD_TYPE_HMVIP_4_T1))
+                line_cfg->multi_frame_num = WUFE_MULTI_FRAME_24;
+        else
+                line_cfg->multi_frame_num = WUFE_MULTI_FRAME_16;
+
+        line_cfg->cas_alignment_location = WUFE_CAS_LOWER_NIBBLE;
+//   line_cfg->clock_rec_mode = line_octal_params->clock_rec_mode;
+//   line_cfg->rx_clk_rec_if = line_octal_params->rx_clk_rec_if;
+//   line_cfg->ext_mode_active = line_octal_params->ext_mode_active;
+        line_cfg->cad_loopback = WUFE_CAD_NORMAL;       /*WUFE_CAD_NORMAL or WUFE_CAD_LOOPBACK_SYSTEM or WUFE_CAD_LOOPBACK_LINE */
+
+        /* Copy clock recovery line parameters */
+        if (line_octal_params->clock_rec_line_params != NULL)
+        {
+                WUFE_line_clock_rec_params *line_cr_params =
+                        line_octal_params->clock_rec_line_params;
+                if (line_cr_params->tx_clk_rec_enable != 0
+                    && line_cr_params->tx_clk_rec_enable != 1)
+                {
+                        printf ("Invalid TX Clock Recovery mode\n");
+                        exit (1);
+                }
+                if (line_cr_params->clk_rec_physical_clock_enable != 0
+                    && line_cr_params->clk_rec_physical_clock_enable != 1)
+                {
+                        printf ("Invalid Physical clock mode\n");
+                        exit (1);
+                }
+                if (line_cr_params->clk_rec_physical_clock_id < 0
+                    || line_cr_params->clk_rec_physical_clock_id > 1)
+                {
+                        printf ("Invalid Physical clock ID, must be '0' or '1'\n");
+                        exit (1);
+                }
+                line_cfg->clock_rec_line_params = line_cr_params;
+        }
+}
+
+void WT_UfeLineOctalCreate (WT_ufe * ufe,
+                            WP_U32 line_index,
+                            WT_ufe_line_octal_params * line_octal_params,
+                            WP_U8 enable)
+{
+        WUFE_status ufe_status;
+        WUFE_line_cad line_cfg;
+
+        if (ufe->fpga_mode != WT_OCTAL)
+        {
+                printf ("The UFE FPGA mode is not OCTAL. Can't create octal line\n");
+                exit (1);
+        }
+
+        /* Set the line configuration parameters */
+        WT_UfeLineOctalConfig (line_octal_params, &line_cfg);
+
+#if USE_UFE
+        /* Create the line */
+        ufe_status = WUFE_LineCreate (&ufe->line_handle[line_index],
+                                      ufe->ufe_id,
+                                      WUFE_STRUCT_LINE_CAD, &line_cfg);
+        WT_UfeTerminateOnError (ufe_status, "Octal WUFE_LineCreate",
+                                line_index, __LINE__);
+
+        /* Enable the line */
+        if (enable)
+        {
+                ufe_status =
+                        WUFE_LineEnable (ufe->line_handle[line_index],
+                                         WUFE_FULL_DUPLEX);
+                WT_UfeTerminateOnError (ufe_status, "WUFE_LineEnable ",
+                                        line_index, __LINE__);
+        }
+#endif
+}
+
+/**********************************************************************************
+ **********************************************************************************
+ ************                    Line Sonet                   *********************
+ **********************************************************************************
+ *********************************************************************************/
+static void WT_UfeLineSonetConfig (WT_ufe_line_sonet_params *
+                                   line_sonet_params,
+                                   WUFE_line_sonet * line_cfg)
+{
+        memset (line_cfg, 0, sizeof (WUFE_line_sonet));
+
+        line_cfg->struct_id = WUFE_STRUCT_LINE_SONET;
+
+        if (line_sonet_params->sts12 > 3)
+        {
+                printf ("Invalid STS12 parameter, use 0-3 only \n");
+                exit (1);
+        }
+        else
+                line_cfg->sts12 = line_sonet_params->sts12;
+
+        if (line_sonet_params->sts3 > 3)
+        {
+                printf ("Invalid STS3 parameter, use 0-3 only \n");
+                exit (1);
+        }
+        else
+                line_cfg->sts3 = line_sonet_params->sts3;
+
+        if (line_sonet_params->sts1 > 2)
+        {
+                printf ("Invalid STS1 parameter, use 0-2 only \n");
+                exit (1);
+        }
+        else
+                line_cfg->sts1 = line_sonet_params->sts1;
+
+        if (line_sonet_params->vt_group > 6)
+        {
+                printf ("Invalid Vt_Group parameter,use 0-6 only \n");
+                exit (1);
+        }
+        else
+                line_cfg->vt_group = line_sonet_params->vt_group;
+
+        if (line_sonet_params->vt > 3)
+        {
+                printf ("Invalid Vt_Group parameter,use 0-6 only \n");
+                exit (1);
+        }
+        else if ((line_sonet_params->vt == 3) &&
+                 ((line_sonet_params->transfer_type == WUFE_SONET_TYPE_E1)
+                  || (line_sonet_params->transfer_type ==
+                      WUFE_SONET_TYPE_VT2)))
+        {
+                printf ("Invalid Vt_Group parameter, slot 3 not valid for E1 or VT2\n");
+                exit (1);
+        }
+        else
+                line_cfg->vt = line_sonet_params->vt;
+
+        line_cfg->transfer_type = line_sonet_params->transfer_type;
+        line_cfg->framed = line_sonet_params->framed;
+        line_cfg->cas_enable = line_sonet_params->cas_enable;
+
+        /* Copy clock recovery line parameters */
+        if (line_sonet_params->clock_rec_line_params != NULL)
+        {
+                WUFE_line_clock_rec_params *line_cr_params =
+                        line_sonet_params->clock_rec_line_params;
+                if (line_cr_params->tx_clk_rec_enable != 0
+                    && line_cr_params->tx_clk_rec_enable != 1)
+                {
+                        printf ("Invalid TX Clock Recovery mode\n");
+                        exit (1);
+                }
+                if (line_cr_params->clk_rec_physical_clock_enable != 0
+                    && line_cr_params->clk_rec_physical_clock_enable != 1)
+                {
+                        printf ("Invalid Physical clock mode\n");
+                        exit (1);
+                }
+                if (line_cr_params->clk_rec_physical_clock_id < 0
+                    || line_cr_params->clk_rec_physical_clock_id > 1)
+                {
+                        printf ("Invalid Physical clock ID, must be '0' or '1'\n");
+                        exit (1);
+                }
+                line_cfg->clock_rec_line_params = line_cr_params;
+        }
+}
+
+static void WT_UfeLineSdhConfig (WT_ufe_line_sdh_params * line_sdh_params,
+                                 WUFE_line_sdh * line_cfg)
+{
+        memset (line_cfg, 0, sizeof (WUFE_line_sdh));
+
+        line_cfg->struct_id = WUFE_STRUCT_LINE_SDH;
+        if (line_sdh_params->stm4 > 3)
+        {
+                printf ("Invalid stm4 parameter, use 0-3 only \n");
+                exit (1);
+        }
+        else
+                line_cfg->stm4 = line_sdh_params->stm4;
+
+        if (line_sdh_params->stm1 > 3)
+        {
+                printf ("Invalid stm1 parameter, use 0-3 only \n");
+                exit (1);
+        }
+        else
+                line_cfg->stm1 = line_sdh_params->stm1;
+
+        if (line_sdh_params->stm0 > 2)
+        {
+                printf ("Invalid stm0 parameter, use 0-2 only \n");
+                exit (1);
+        }
+        else
+                line_cfg->stm0 = line_sdh_params->stm0;
+
+        if (line_sdh_params->tug2 > 6)
+        {
+                printf ("Invalid tug2 parameter,use 0-6 only \n");
+                exit (1);
+        }
+        else
+                line_cfg->tug2 = line_sdh_params->tug2;
+
+        if (line_sdh_params->tu > 3)
+        {
+                printf ("Invalid tu parameter,use 0-6 only \n");
+                exit (1);
+        }
+        else if ((line_sdh_params->tu == 3) &&
+                 ((line_sdh_params->transfer_type == WUFE_SDH_TYPE_E1) ||
+                  (line_sdh_params->transfer_type == WUFE_SDH_TYPE_VC12)))
+        {
+                printf ("Invalid tu parameter, slot 3 not valid for E1 or VC12\n");
+                exit (1);
+        }
+        else
+                line_cfg->tu = line_sdh_params->tu;
+
+        line_cfg->transfer_type = line_sdh_params->transfer_type;
+        line_cfg->framed = line_sdh_params->framed;
+        line_cfg->cas_enable = line_sdh_params->cas_enable;
+
+        /* Copy clock recovery line parameters */
+        if (line_sdh_params->clock_rec_line_params != NULL)
+        {
+                WUFE_line_clock_rec_params *line_cr_params =
+                        line_sdh_params->clock_rec_line_params;
+                if (line_cr_params->tx_clk_rec_enable != 0
+                    && line_cr_params->tx_clk_rec_enable != 1)
+                {
+                        printf ("Invalid TX Clock Recovery mode\n");
+                        exit (1);
+                }
+                if (line_cr_params->clk_rec_physical_clock_enable != 0
+                    && line_cr_params->clk_rec_physical_clock_enable != 1)
+                {
+                        printf ("Invalid Physical clock mode\n");
+                        exit (1);
+                }
+                if (line_cr_params->clk_rec_physical_clock_id < 0
+                    || line_cr_params->clk_rec_physical_clock_id > 1)
+                {
+                        printf ("Invalid Physical clock ID, must be '0' or '1'\n");
+                        exit (1);
+                }
+                line_cfg->clock_rec_line_params = line_cr_params;
+        }
+}
+
+void WT_UfeLineSonetCreate (WT_ufe * ufe,
+                            WP_U32 line_index,
+                            WT_ufe_line_sonet_params * line_sonet_params,
+                            WP_U8 enable)
+{
+        WUFE_status ufe_status;
+        WUFE_line_sonet line_cfg;
+
+        if (ufe->fpga_mode != WT_SONET)
+        {
+                printf ("The UFE FPGA mode is not SONET. Can't create sonet line\n");
+                exit (1);
+        }
+
+        /* Set the line configuration parameters */
+        WT_UfeLineSonetConfig (line_sonet_params, &line_cfg);
+
+#if USE_UFE
+        /* Create the line */
+        ufe_status = WUFE_LineCreate (&ufe->line_handle[line_index],
+                                      ufe->ufe_id,
+                                      WUFE_STRUCT_LINE_SONET, &line_cfg);
+        WT_UfeTerminateOnError (ufe_status, "Sonet WUFE_LineCreate",
+                                line_index, __LINE__);
+
+        /* Enable the line */
+        if (enable)
+        {
+                ufe_status =
+                        WUFE_LineEnable (ufe->line_handle[line_index],
+                                         WUFE_FULL_DUPLEX);
+                WT_UfeTerminateOnError (ufe_status, "WUFE_LineEnable ",
+                                        line_index, __LINE__);
+        }
+#endif
+}
+
+void WT_UfeLineSdhCreate (WT_ufe * ufe,
+                          WP_U32 line_index,
+                          WT_ufe_line_sdh_params * line_sdh_params,
+                          WP_U8 enable)
+{
+        WUFE_status ufe_status;
+        WUFE_line_sdh line_cfg;
+
+        if (ufe->fpga_mode != WT_SDH)
+        {
+                printf ("The UFE FPGA mode is not SDH. Can't create sdh line\n");
+                exit (1);
+        }
+
+        /* Set the line configuration parameters */
+        WT_UfeLineSdhConfig (line_sdh_params, &line_cfg);
+
+#if USE_UFE
+        ufe_status = WUFE_LineCreate (&ufe->line_handle[line_index],
+                                      ufe->ufe_id,
+                                      WUFE_STRUCT_LINE_SDH, &line_cfg);
+        WT_UfeTerminateOnError (ufe_status, "SDH WUFE_LineCreate",
+                                line_index, __LINE__);
+
+        if (enable)
+        {
+                ufe_status =
+                        WUFE_LineEnable (ufe->line_handle[line_index],
+                                         WUFE_FULL_DUPLEX);
+                WT_UfeTerminateOnError (ufe_status, "SDH WUFE_LineEnable",
+                                        line_index, __LINE__);
+        }
+#endif
+}
+
+void WT_UfeLineEnable (WT_ufe * ufe, WP_U32 line_index)
+{
+        WUFE_status ufe_status;
+
+        ufe_status =
+                WUFE_LineEnable (ufe->line_handle[line_index],
+                                 WUFE_FULL_DUPLEX);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_LineEnable ", line_index,
+                                __LINE__);
+}
+
+/**********************************************************************************
+ **********************************************************************************
+ ************                    PHYS                         *********************
+ **********************************************************************************/
+static void WT_UfePhyTransConfig (WT_ufe * ufe,
+                                  WUFE_phy * phy_cfg,
+                                  WP_U32 data_unit_size,
+                                  WP_U32 n_slots, WP_U8 * slots_arr)
+{
+        WUFE_SlotGroup slot_group;
+
+   /************************************
+    * Configure the UFE phy .
+    ************************************/
+        memset (phy_cfg, 0, sizeof (WUFE_phy));
+
+        phy_cfg->struct_id = WUFE_STRUCT_PHY_TRANS;
+        phy_cfg->tx_fifo_param.transmit_th = 0x1;
+        phy_cfg->tx_fifo_param.fast_mode = WUFE_PHY_FIFO_MODE_SLOW;
+        phy_cfg->tx_fifo_param.wait_type = WUFE_PHY_TX_WAIT_TYPE_A;
+
+        /* configure the slots */
+        memset (&slot_group, 0, sizeof (WUFE_SlotGroup));
+        slot_group.n_slots = n_slots;
+        memcpy (slot_group.slot_arr, slots_arr, n_slots * sizeof (WP_U8));
+
+        memcpy (&phy_cfg->rx_slot_group, &slot_group, sizeof (slot_group));
+        memcpy (&phy_cfg->tx_slot_group, &slot_group, sizeof (slot_group));
+
+        phy_cfg->type.trans.rx_data_unit_size = data_unit_size;
+}
+
+void WT_UfePhyTransCreate (WT_ufe * ufe,
+                           WP_U32 line_index,
+                           WP_U32 phy_index,
+                           WP_U32 n_slots,
+                           WP_U8 * slots_arr,
+                           WP_U32 ufe_dataunit_size, WP_U8 rx_clk_rec_mode)
+{
+        WUFE_phy phy_cfg;
+        WUFE_status ufe_status;
+
+        WT_UfePhyTransConfig (ufe, &phy_cfg, ufe_dataunit_size, n_slots,
+                              slots_arr);
+
+#if USE_UFE
+        ufe_status = WUFE_PhyCreate (&ufe->phy_handle[phy_index],
+                                     ufe->line_handle[line_index],
+                                     &phy_cfg, WUFE_FULL_DUPLEX);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_PhyCreate", phy_index,
+                                __LINE__);
+#endif
+}
+
+void WT_UfePhyEnable (WT_ufe * ufe, WP_U32 phy_index)
+{
+        WUFE_status ufe_status;
+
+#if USE_UFE
+        ufe_status =
+                WUFE_PhyEnable (ufe->phy_handle[phy_index],
+                                WUFE_FULL_DUPLEX);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_PhyEnable", phy_index,
+                                __LINE__);
+#endif
+}
+
+void WT_UfePhyDisable (WT_ufe * ufe, WP_U32 phy_index)
+{
+        WUFE_status ufe_status;
+
+        if (ufe->phy_handle[phy_index] == WT_UFE_HANDLE_INVALID)
+                return;
+
+        ufe_status =
+                WUFE_PhyDisable (ufe->phy_handle[phy_index],
+                                 WUFE_FULL_DUPLEX);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_PhyDisable", phy_index,
+                                __LINE__);
+
+}
+
+void WT_UfePhyDelete (WT_ufe * ufe, WP_U32 phy_index)
+{
+        WP_handle phy_handle = ufe->phy_handle[phy_index];
+        WUFE_status ufe_status = WUFE_OK;
+        volatile WP_U32 timeout;
+
+        if (phy_handle == WT_UFE_HANDLE_INVALID)
+                return;
+
+        timeout = 0;
+        do
+        {
+                ufe_status = WUFE_PhyDelete (phy_handle);
+                if (ufe_status != WUFE_OK
+                    && ufe_status != WUFE_ERR_PHY_FIFO_NOT_EMPTY)
+                        break;
+
+                if (++timeout > 100000)
+                {
+                        printf ("---------------- Timeout -------------\n");
+                        break;
+                }
+
+                WP_Delay (10);
+        }
+        while (ufe_status != WUFE_OK);
+
+        if (ufe_status != WUFE_OK)
+        {
+                WUFE_PhyDisplay (phy_handle);
+                WT_UfeTerminateOnError (ufe_status,
+                                        "WUFE_PhyDelete not complete",
+                                        timeout, __LINE__);
+        }
+
+        ufe->phy_handle[phy_index] = WT_UFE_HANDLE_INVALID;
+}
+
+static void WT_UfeAnalyzeEmphyEvents (WUFE_events_emphy * emphy_events,
+                                      WP_U32 coreid)
+{
+        WP_U16 event = emphy_events->event_reg;
+
+        printf ("Emphy event register for core id %d: 0x%04x\n", coreid,
+                event);
+        if (event & WUFE_EVENT_EMPHY)
+        {
+                if (event & WUFE_EVENT_EMPHY_INGRESS_BUS)
+                        printf ("WUFE_EVENT_EMPHY_INGRESS_BUS\n");
+                if (event & WUFE_EVENT_EMPHY_INGRESS_MAX_BUFF_SIZE)
+                        printf ("WUFE_EVENT_EMPHY_INGRESS_MAX_BUFF_SIZE\n");
+                if (event & WUFE_EVENT_EMPHY_INGRESS_IF)
+                        printf ("WUFE_EVENT_EMPHY_INGRESS_IF\n");
+                if (event & WUFE_EVENT_EMPHY_EGRESS_PHY_NOT_VALID)
+                {
+                        printf ("WUFE_EVENT_EMPHY_EGRESS_PHY_NOT_VALID\n");
+                        printf ("phy_not_valid_handle = 0x%x\n",
+                                emphy_events->phy_not_valid_handle);
+                }
+                if (event & WUFE_EVENT_EMPHY_EGRESS_BUS)
+                        printf ("WUFE_EVENT_EMPHY_EGRESS_BUS\n");
+                if (event & WUFE_EVENT_EMPHY_EGRESS_IF)
+                        printf ("WUFE_EVENT_EMPHY_EGRESS_IF\n");
+                if (event & WUFE_EVENT_EMPHY_EGRESS_PARITY)
+                        printf ("WUFE_EVENT_EMPHY_EGRESS_PARITY\n");
+        }
+}
+
+static void WT_UfeAnalyzeTdmEvents (WUFE_events_tdm * tdm_events)
+{
+        WP_U16 event = tdm_events->event_reg;
+
+        printf ("TDM event register 0x%04x\n", event);
+        if (event & WUFE_EVENT_TDM)
+        {
+                if (event & WUFE_EVENT_TDM_RX_PARITY)
+                        printf ("WUFE_EVENT_TDM_RX_PARITY\n");
+                if (event & WUFE_EVENT_TDM_TX_PARITY)
+                        printf ("WUFE_EVENT_TDM_TX_PARITY\n");
+        }
+}
+
+static void WT_UfeAnalyzeFmEvents (WUFE_events_fm * fm_events)
+{
+        WP_U16 event = fm_events->event_reg;
+
+        printf ("FM event register 0x%04x\n", event);
+        if (event & WUFE_EVENT_FM)
+        {
+                if (event & WUFE_EVENT_FM_RX_DDR_OVERRUN)
+                        printf ("WUFE_EVENT_FM_RX_DDR_OVERRUN\n");
+                if (event & WUFE_EVENT_FM_RX_BURST_OVERRUN)
+                        printf ("WUFE_EVENT_FM_RX_BURST_OVERRUN\n");
+                if (event & WUFE_EVENT_FM_TX_DDR_UNDERRUN)
+                        printf ("WUFE_EVENT_FM_TX_DDR_UNDERRUN\n");
+                if (event & WUFE_EVENT_FM_TX_BURST_UNDERRUN)
+                        printf ("WUFE_EVENT_FM_TX_BURST_UNDERRUN\n");
+                if (event & WUFE_EVENT_FM_RX_ECC_ONE_BIT)
+                        printf ("WUFE_EVENT_FM_RX_ECC_ONE_BIT\n");
+                if (event & WUFE_EVENT_FM_TX_ECC_ONE_BIT)
+                        printf ("WUFE_EVENT_FM_TX_ECC_ONE_BIT\n");
+                if (event & WUFE_EVENT_FM_TX_READ_FIFO_OVERRUN)
+                        printf ("WUFE_EVENT_FM_TX_READ_FIFO_OVERRUN\n");
+        }
+}
+
+static void WT_UfeAnalyzeMachineEvents (WUFE_events_machine *
+                                        machine_events)
+{
+        WP_U16 event = machine_events->rx_event_reg;
+
+        printf ("Machine event Rx register 0x%04x\n", event);
+        if (event & WUFE_EVENT_MACHINE_RX)
+        {
+                if (event & WUFE_EVENT_MACHINE_CES_RX_LOSS)
+                        printf ("WUFE_EVENT_MACHINE_CES_RX_LOSS\n");
+                if (event & WUFE_EVENT_MACHINE_CES_RX_MF_LOSS)
+                        printf ("WUFE_EVENT_MACHINE_CES_RX_MF_LOSS\n");
+                if (event & WUFE_EVENT_MACHINE_ATM_RX_LCD)
+                        printf ("WUFE_EVENT_MACHINE_ATM_RX_LCD\n");
+                if (event & WUFE_EVENT_MACHINE_HDLC_RX_ABORT)
+                        printf ("WUFE_EVENT_MACHINE_HDLC_RX_ABORT\n");
+                if (event & WUFE_EVENT_MACHINE_HDLC_RX_CRC_ERR)
+                        printf ("WUFE_EVENT_MACHINE_HDLC_RX_CRC_ERR\n");
+                if (event & WUFE_EVENT_MACHINE_HDLC_RX_NON_OCTET)
+                        printf ("WUFE_EVENT_MACHINE_HDLC_RX_NON_OCTET\n");
+                if (event & WUFE_EVENT_MACHINE_POS_RX_ABORT)
+                        printf ("WUFE_EVENT_MACHINE_POS_RX_ABORT\n");
+                if (event & WUFE_EVENT_MACHINE_POS_CRC_ERR)
+                        printf ("WUFE_EVENT_MACHINE_POS_CRC_ERR\n");
+                if (event & WUFE_EVENT_MACHINE_RX_OVERRUN_BURST)
+                        printf ("WUFE_EVENT_MACHINE_RX_OVERRUN_BURST\n");
+                if (event & WUFE_EVENT_MACHINE_RX_OVERRUN_DDR)
+                        printf ("WUFE_EVENT_MACHINE_RX_OVERRUN_DDR\n");
+        }
+
+        event = machine_events->tx_event_reg;
+
+        printf ("Machine event Tx register 0x%04x\n", event);
+        if (event & WUFE_EVENT_MACHINE_TX)
+        {
+                if (event & WUFE_EVENT_MACHINE_CES_TX_LOSS)
+                        printf ("WUFE_EVENT_MACHINE_CES_TX_LOSS\n");
+                if (event & WUFE_EVENT_MACHINE_TX_UNDERRUN_BURST)
+                        printf ("WUFE_EVENT_MACHINE_TX_UNDERRUN_BURST\n");
+                if (event & WUFE_EVENT_MACHINE_TX_UNDERRUN_DDR)
+                        printf ("WUFE_EVENT_MACHINE_TX_UNDERRUN_DDR\n");
+        }
+}
+
+static void WT_UfeAnalyzeClockRecEvents (WUFE_events_clock_recovery *
+                                         cr_events)
+{
+        WP_U16 event = cr_events->event_reg;
+        WP_U16 stf_loss_line_id =
+                cr_events->stuffing_loss_indication_line_id;
+
+        printf ("Clock Recovery event register 0x%04x\n", event);
+        if (event & WUFE_EVENT_CLOCK_REC)
+        {
+                if (event & WUFE_EVENT_CLOCK_REC_XO_RATIO_LOSS_1)
+                        printf ("WUFE_EVENT_CLOCK_REC_XO_RATIO_LOSS_1\n");
+                if (event & WUFE_EVENT_CLOCK_REC_XO_RATIO_LOSS)
+                        printf ("WUFE_EVENT_CLOCK_REC_XO_RATIO_LOSS\n");
+                if (event & WUFE_EVENT_CLOCK_REC_DIFF_RATIO_LOSS_1)
+                        printf ("WUFE_EVENT_CLOCK_REC_DIFF_RATIO_LOSS_1\n");
+                if (event & WUFE_EVENT_CLOCK_REC_DIFF_RATIO_LOSS)
+                        printf ("WUFE_EVENT_CLOCK_REC_DIFF_RATIO_LOSS\n");
+                if (event & WUFE_EVENT_CLOCK_REC_STUFF_LOSS)
+                {
+                        printf ("WUFE_EVENT_CLOCK_REC_STUFF_LOSS\n");
+                        printf ("Stuffing loss on line ID: %d\n",
+                                stf_loss_line_id);
+                }
+        }
+}
+
+static void WT_UfeAnalyzeEvents (WT_ufe * ufe)
+{
+        WP_U32 coreid;
+        WUFE_events *ufe_events = &ufe->ufe_events;
+
+        for (coreid = 0; coreid < N_MAX_UFE_CORES; coreid++)
+        {
+                WT_UfeAnalyzeEmphyEvents (&
+                                          (ufe_events->
+                                           emphy_events[coreid]), coreid);
+        }
+
+        WT_UfeAnalyzeTdmEvents (&(ufe_events->tdm_events));
+        WT_UfeAnalyzeFmEvents (&(ufe_events->fm_events));
+        WT_UfeAnalyzeMachineEvents (&(ufe_events->machine_events));
+        WT_UfeAnalyzeClockRecEvents (&(ufe_events->cr_events));
+
+}
+
+WP_U32 WT_UfeAnalyzeEvents4Automation (WT_ufe * ufe)
+{
+#if 0
+        WP_U32 coreid;
+        WUFE_events *ufe_events = &ufe->ufe_events;
+
+        for (coreid = 0; coreid < N_MAX_UFE_CORES; coreid++)
+        {
+                if ((ufe_events->emphy_events[coreid].
+                     event_reg) & WUFE_EVENT_EMPHY)
+                        return WT_FAIL;
+        }
+
+        if ((ufe_events->tdm_events.event_reg) & WUFE_EVENT_TDM)
+                return WT_FAIL;
+
+        if ((ufe_events->fm_events.event_reg) & WUFE_EVENT_FM)
+                return WT_FAIL;
+
+        if ((ufe_events->machine_events.
+             rx_event_reg) & WUFE_EVENT_MACHINE_RX)
+                return WT_FAIL;
+
+        if ((ufe_events->machine_events.
+             tx_event_reg) & WUFE_EVENT_MACHINE_TX)
+                return WT_FAIL;
+
+        if ((ufe_events->cr_events.event_reg) & WUFE_EVENT_CLOCK_REC)
+                return WT_FAIL;
+#endif
+
+        return WT_PASS;
+}
+
+void WT_UfeReadEvents (WT_ufe * ufe)
+{
+        WUFE_status status;
+        WUFE_events *ufe_events = &ufe->ufe_events;
+
+        memset (ufe_events, 0, sizeof (WUFE_events));
+
+        status = WUFE_UfeReadEvents (ufe->ufe_id, ufe_events);
+        WT_UfeTerminateOnError (status, "WUFE_UfeReadEvents  fail ", 0,
+                                __LINE__);
+
+        WT_UfeAnalyzeEvents (ufe);
+}
+
+WP_U32 WT_UfeReadEvents4Automation (WT_ufe * ufe)
+{
+        WUFE_status status;
+        WUFE_events *ufe_events = &ufe->ufe_events;
+        WP_U32 result;
+
+        memset (ufe_events, 0, sizeof (WUFE_events));
+
+        status = WUFE_UfeReadEvents (ufe->ufe_id, ufe_events);
+        WT_UfeTerminateOnError (status, "WUFE_UfeReadEvents  fail ", 0,
+                                __LINE__);
+
+        WT_UfeAnalyzeEvents (ufe);
+
+        result = WT_UfeAnalyzeEvents4Automation (ufe);
+
+        return result;
+}
+
+void WT_UfeSystemIdleModify (WT_ufe * ufe, WUFE_idle_pattern * new_config)
+{
+        WUFE_status ufe_status;
+
+        ufe_status =
+                WUFE_SystemReconfigure (ufe->ufe_id,
+                                        WUFE_SYSTEM_RECONFIG_IDLE_PATTERN,
+                                        new_config);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_UfeSystemReconfigure", 0,
+                                __LINE__);
+}
+
+void WT_UfeLineSdhModify (WT_ufe * ufe, WP_U32 line_index,
+                          WUFE_line_sdh_reconfig * config)
+{
+        WUFE_status ufe_status;
+
+        ufe_status = WUFE_LineReconfigure (ufe->line_handle[line_index],
+                                           WUFE_STRUCT_LINE_SDH, config);
+
+        WT_UfeTerminateOnError (ufe_status, "WUFE_LineReconfigure",
+                                line_index, __LINE__);
+}
+
+void WT_UfeLineSonetModify (WT_ufe * ufe, WP_U32 line_index,
+                            WUFE_line_sonet_reconfig * config)
+{
+        WUFE_status ufe_status;
+
+        ufe_status = WUFE_LineReconfigure (ufe->line_handle[line_index],
+                                           WUFE_STRUCT_LINE_SONET, config);
+
+        WT_UfeTerminateOnError (ufe_status, "WUFE_LineReconfigure",
+                                line_index, __LINE__);
+}
+
+void WT_UfePhySlotsModify (WT_ufe * ufe, WP_U32 phy_index,
+                           WUFE_phy * new_phy_cfg)
+{
+        WUFE_status ufe_status;
+
+        ufe_status = WUFE_PhyReconfigure (ufe->phy_handle[phy_index],
+                                          new_phy_cfg);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_PhyReconfigure",
+                                phy_index, __LINE__);
+}
+
+void WT_UfeLineSocketLpbkSetup (WT_ufe * ufe, int line_index,
+                                WUFE_line_loopback_type lpbk_type)
+{
+        WUFE_status ufe_status;
+
+        ufe_status =
+                WUFE_LineLoopbackConfigure (ufe->line_handle[line_index],
+                                            lpbk_type);
+        WT_UfeTerminateOnError (ufe_status, "WUFE_LineLoopbackConfigure",
+                                0, __LINE__);
+}
+
+void WT_UfeRelease (WT_ufe * ufe)
+{
+        WUFE_status ufe_status;
+
+        ufe_status = WUFE_UfeRelease (ufe->ufe_id);
+        WT_UfeTerminateOnError (ufe_status,
+                                "WUFE_UfeRelease (from WT_UfeRelease)", 0,
+                                __LINE__);
+}
+
+/* --------------------------------------------------------- */
+/* ------------------   Vt100 Functions   ------------------ */
+/* --------------------------------------------------------- */
+
+void WT_Vt100CrsrRight (WP_U32 right)
+{
+        printf ("\033[%dC", right);
+}
+
+void WT_Vt100CrsrLeft (WP_U32 left)
+{
+        printf ("\033[%dD", left);
+}
+
+/*****************************************************************************
+ * Function name: F_SampleSerial
+ * Description  :
+ * Input  params:
+ * Output params:
+ * Return val   :
+ *****************************************************************************/
+WP_U8 WT_SampleSerial (void)
+{
+#ifndef __PPC__
+
+#ifndef MAP_UA_LSR
+#if __WT_UFE3__
+#define MAP_UA_RBR 0xbd030f00
+#define MAP_UA_LSR 0xbd030f1c
+#endif
+#endif /*MAP_UA_LSR */
+#ifndef WEB_UART_STATUS_RXFE
+#define WEB_UART_STATUS_RXFE            0x80
+#define WEB_UART_STATUS_TEMT            0x40
+#define WEB_UART_STATUS_THRE            0x20
+#define WEB_UART_STATUS_BI              0x10
+#define WEB_UART_STATUS_FE              0x08
+#define WEB_UART_STATUS_PE              0x04
+#define WEB_UART_STATUS_OE              0x02
+#define WEB_UART_STATUS_DR              0x01
+#endif /*WEB_UART_STATUS_RXFE */
+
+        WP_handle status;
+
+        /* sample serial port */
+        status = *(WP_U32 volatile *) MAP_UA_LSR;       /* Read UART line status register */
+        if (status &
+            (WEB_UART_STATUS_RXFE | WEB_UART_STATUS_OE |
+             WEB_UART_STATUS_DR))
+        {
+                return 1;
+        }
+        else
+        {
+                return 0;
+        }
+#else
+        return 0;
+#endif
+}                               /* F_SampleSerial */
+
+/* ---------------------------------------------------------------------- */
+/* ----------                                             --------------- */
+/* ----------     End of Temperature Sensor Functions     --------------- */
+/* ----------                                             --------------- */
+/* ---------------------------------------------------------------------- */
+
+/*********************************************
+ ***        IO functions                 ***
+ *********************************************/
+void WT_UfeGpioOutputClockSet (WT_ufe * ufe, WP_U32 gpio_number,
+                               WP_U8 gpio_clock_type,
+                               WP_U8 gpio_ref_clk_out)
+{
+        WUFE_status ufe_status = WUFE_OK;
+
+        ufe_status =
+                WUFE_GpioOutputClockSet (ufe->ufe_id, gpio_number,
+                                         gpio_clock_type,
+                                         gpio_ref_clk_out);
+        WT_UfeTerminateOnError (ufe_status, "WT_UfeGpioOutputClockSet", 0,
+                                __LINE__);
+}
+
+void WT_UfeGpioOutputClockRead (WT_ufe * ufe, WP_U16 * gpio_register)
+{
+        WUFE_status ufe_status = WUFE_OK;
+
+        ufe_status = WUFE_GpioOutputClockRead (ufe->ufe_id, gpio_register);
+        WT_UfeTerminateOnError (ufe_status, "WT_UfeGpioOutputClockRead", 0,
+                                __LINE__);
+}
+
+#ifdef WT_UFE_FRAMER
+void WT_UFEPDHOutputClockSet (WT_ufe * ufe, WP_U8 output_select,
+                              WP_U32 line_index, WP_U32 ClockRate)
+{
+        WTI_FlexmuxPDHOutputClockSet (output_select, line_index,
+                                      ufe->line_params[line_index].
+                                      transfer_type, ClockRate);
+}
+
+#if ( !(WTI_CESOP_TDI) && (WTI_CESOP_REGRESSION_TEST) )
+WP_U32 CLI_F_UfeFramerPrbsCheck (char *StrPrm)
+{
+        WP_U32 res, cmd;
+        WP_CHAR temp_string[WTI_MAX_STRING_SIZE], *byte;
+        WP_U32 lines[MAX_UFE_LINES_USED];
+        WP_U32 line_index, client_port;
+        WP_U8 prbs_errors = 0;
+        WP_U8 prbs_tmp = 0;
+        WP_U32 i, j;
+
+        res = sscanf (StrPrm, "%d %s", &cmd, temp_string);
+
+        if (res == 1)
+        {
+                printf ("Checking UFE Framer PRBS (only on active lines)...\n");
+                for (line_index = 0; line_index < MAX_UFE_LINES_USED;
+                     line_index++)
+                {
+                        if (!
+                            (the_system->ufe.line_handle[line_index] ==
+                             WT_UFE_HANDLE_INVALID))
+                        {
+                                client_port =
+                                        WTI_FlexmuxClientPortIndexGet
+                                        (line_index,
+                                         the_system->ufe.line_params->
+                                         transfer_type);
+                                prbs_tmp =
+                                        WTI_FlexmuxCheckPrbsResult (0,
+                                                                    client_port,
+                                                                    the_system->
+                                                                    ufe.
+                                                                    line_params
+                                                                    [line_index].
+                                                                    framed);
+                                prbs_errors |= prbs_tmp;
+                                if (prbs_tmp)
+                                        printf ("PRBS check failed at line %d. Line:%d\n", line_index, __LINE__);
+                        }
+                }
+        }
+        else
+        {
+                i = 0;
+
+                if (strstr (temp_string, ","))
+                {
+                        byte = strtok (temp_string, ",");
+                        while (byte)
+                        {
+                                lines[i++] = atoi (byte);
+                                byte = strtok (NULL, ",");
+                        }
+                        if (i > MAX_UFE_LINES_USED)
+                        {
+                                WTI_TerminatePrintError
+                                        ("CLI_F_UfeFramerPrbsCheck",
+                                         __LINE__);
+                                return WT_FAIL;
+                        }
+                }
+                else if (strstr (temp_string, "-"))
+                {
+                        byte = strtok (temp_string, "-");
+                        if (byte)
+                        {
+                                lines[0] = atoi (byte);
+                                byte = strtok (NULL, "-");
+                                j = atoi (byte);
+                                for (i = 1; i <= j - lines[0]; i++)
+                                {
+                                        lines[i] = lines[i - 1] + 1;
+                                }
+                        }
+                }
+                else            /* Single line index */
+                {
+                        i = 1;
+                        lines[0] = atoi (temp_string);
+                }
+
+                for (j = 0; j < i; j++)
+                {
+                        line_index = lines[j];
+                        if (line_index >= MAX_UFE_LINES_USED
+                            || line_index < 0)
+                        {
+                                printf ("\nCLI_F_UfeFramerPrbsCheck(). Line index %d is invalid. Line:%d\n", line_index, __LINE__);
+                                return WT_FAIL;
+                        }
+                }
+
+                printf ("Checking UFE Framer PRBS (only on active lines)...\n");
+                for (j = 0; j < i; j++)
+                {
+                        line_index = lines[j];
+
+                        if (!
+                            (the_system->ufe.line_handle[line_index] ==
+                             WT_UFE_HANDLE_INVALID))
+                        {
+                                printf ("Check PRBS at line %d\n",
+                                        line_index);
+                                client_port =
+                                        WTI_FlexmuxClientPortIndexGet
+                                        (line_index,
+                                         the_system->ufe.line_params->
+                                         transfer_type);
+                                prbs_tmp =
+                                        WTI_FlexmuxCheckPrbsResult (0,
+                                                                    client_port,
+                                                                    the_system->
+                                                                    ufe.
+                                                                    line_params
+                                                                    [line_index].
+                                                                    framed);
+                                prbs_errors |= prbs_tmp;
+                                if (prbs_tmp)
+                                        printf ("PRBS check failed at line %d. Line:%d\n", line_index, __LINE__);
+                        }
+                        else
+                                printf ("\nLine %d is inactive. Line:%d\n",
+                                        line_index, __LINE__);
+                }
+        }
+
+        if (prbs_errors == 0)
+        {
+                printf ("PRBS check Passed\n");
+                return WT_PASS;
+        }
+        else
+        {
+                printf ("PRBS check failed\n");
+                return WT_FAIL;
+        }
+}
+
+#endif /* ( !(WTI_CESOP_TDI) && (WTI_CESOP_REGRESSION_TEST) ) */
+#endif /* WT_UFE_FRAMER */
+
+/**********************************************************************************
+ **********************************************************************************
+ ************             Clock Recovery Functions            *********************
+ **********************************************************************************
+ *********************************************************************************/
+#if WTI_CESOP_CLOCK_RECOVERY_ENABLE
+
+WP_U32 WT_ClockRecInterfaceId (WP_U32 line_index)
+{
+        WUFE_clk_rec_info_line clk_rec_info_line;
+
+        memset (&clk_rec_info_line, 0, sizeof (WUFE_clk_rec_info_line));
+
+        WT_UfeClockRecInfoGet (the_system->ufe.ufe_id,
+                               the_system->ufe.line_handle[line_index],
+                               WUFE_CLOCK_REC_INFO_LINE,
+                               &clk_rec_info_line);
+
+        return (clk_rec_info_line.clock_rec_if_id);
+}
+
+void WT_UfeClockRecInfoGet (WP_U32 wufe_id,
+                            WUFE_handle ufe_line_handle,
+                            WUFE_clock_rec_info_type info_type,
+                            void *clk_rec_info)
+{
+        WUFE_status ufe_status = WUFE_OK;
+
+        ufe_status = WUFE_ClockRecInfo (wufe_id,
+                                        ufe_line_handle,
+                                        info_type, clk_rec_info);
+        WT_UfeTerminateOnError (ufe_status, "WT_UfeClockRecInfoGet", 0,
+                                __LINE__);
+}
+
+/* Function for internal testing and debug */
+/* This function sets or clears the TS stub bit in the CR mode register.
+   It is used mainly for testing and debug and required a dedicated synthesis. This function
+   has no real purpose in a working system and should not be called. */
+void WT_UfeClockRecTimestampStubSet (WP_U32 enable)
+{
+        WUFE_status ufe_status = WUFE_OK;
+
+        ufe_status =
+                WUFE_ClockRecTimestampStubSet (the_system->ufe.ufe_id,
+                                               enable);
+        WT_UfeTerminateOnError (ufe_status,
+                                "WT_UfeClockRecTimestampStubSet", 0,
+                                __LINE__);
+
+}
+
+/* end of function for internal testing and debug */
+
+#endif /* WTI_CESOP_CLOCK_RECOVERY_ENABLE */
