@@ -116,6 +116,10 @@ int main(int argc, char *argv[])
        exit(0);       
    }
 
+#if 1
+   dp_interface_val = HDLC_OVER_IP;
+#endif
+
    /* choose the datapath among given option */
     while( dp_interface_val != HDLC_OVER_IP
          && dp_interface_val != HDLC_OVER_MPLS
@@ -128,9 +132,10 @@ int main(int argc, char *argv[])
       printf("3. PPP_OVER_IP\n");
       printf("4. PPP_OVER_MPLS\n");
       printf("Enter Application No:\n");
-      dp_interface_val = getchar();
+      // dp_interface_val = getchar();
       printf("Your choice: %c\n", dp_interface_val);  
    }
+
 
    /*   Initialize various tags and Context Configurations used in this test	*/
    App_InitConfig();
@@ -197,6 +202,7 @@ int main(int argc, char *argv[])
           printf("\n Enter choice \n");
           printf("a. Stats\n");
           printf("p. Send Packet\n");
+          printf("r. Reboot the machine\n");
           /*printf("d. Debug\n");*/                /*For future use */
           /*printf("s. Simulate Interrupts\n"); */ /*For future use */
           printf("x. Exit\n");
@@ -236,6 +242,9 @@ int main(int argc, char *argv[])
                		break;*/
           case 'x':
              exit(0);
+	  case 'r':
+	     WPX_Reboot ();
+	     break;
           }
           WPI_SimulateInterrupts();
           while((task = next_task(irq_task_list, &a_task)) != NULL)
@@ -657,6 +666,12 @@ void App_UfeSystem(void)
    ufe_status = WUFE_SystemConfig(0, &ufe4_system_cfg);
    WT_UfeTerminateOnError(ufe_status, "WUFE_SystemConfig",0,__LINE__);
 
+printf ("+++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+printf ("+++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+printf ("+++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+printf ("WTI_FlexmuxInit () ...\n");
+fflush(stdout);
+
    // Initialize the framer:
    // calls:
    // 1. WPX_UFE_FRAMER_FlexmuxInit()
@@ -721,6 +736,8 @@ void App_UfeSystem(void)
                                   &ufe4_phy_cfg,
                                   WUFE_FULL_DUPLEX);
       WT_UfeTerminateOnError(ufe_status, "WUFE_PhyCreate",i,__LINE__);
+printf ("WUFE_PhyCreate ():line_port(%2d)client(%3d)phy(%3d): TOTAL:(%d)\r", line_port, client_port, i, WT_MAX_LINE_INDEX);
+fflush(stdout);
 
       /* Increment the Tributary Unit */
       ++line_cfg->tu;
@@ -740,7 +757,7 @@ void App_UfeSystem(void)
             }
          }
       }
-   }
+   } // end of for ()
 
    property = WUFE_SYS_EMPHY;
    ufe_status = WUFE_SystemEnable(ufe4_app_system.ufeid, property, WUFE_FULL_DUPLEX);
@@ -959,6 +976,9 @@ void App_CreateEnetHdlcBridgeForIP()
       App_TerminateOnError(h_bridge1_bport_hdlc[ii],"WP_IwBridgingPortCreate()HDLC");
    }
 
+#if 1
+      config_choice = TRAFFIC;
+#endif
     /* Here Giving choice of configuring HDLC Header*/
    /* For adding different header, modify here and compile the code */
    while( config_choice!= TRAFFIC
@@ -1450,6 +1470,9 @@ void App_CreateEnetHdlcBridgeForMPLS()
       App_TerminateOnError(h_bridge1_bport_hdlc[ii],"WP_IwBridgingPortCreate()HDLC");
    }
 
+#if 1
+   config_choice = TRAFFIC;
+#endif
    /* Giving choice of configuring HDLC Header*/
    /* For adding different header, modify here and compile the code */
    while( config_choice!= TRAFFIC
@@ -1458,7 +1481,7 @@ void App_CreateEnetHdlcBridgeForMPLS()
       printf("HDLC Header config:\n");
       printf("1. 0x0f000800 (Traffic)\n");
       printf("2. 0x0f008035 (LCP)\n");
-      config_choice = getchar();
+      // config_choice = getchar();
    }
 
    if ( config_choice == TRAFFIC )
@@ -1954,6 +1977,11 @@ void App_CreateEnetPPPBridgeForIP()
       App_TerminateOnError(h_bridge1_bport_hdlc[ii],"WP_IwBridgingPortCreate()HDLC");
    }
 
+#if 1
+   config_choice = TRAFFIC;
+#endif
+
+
    /* Giving choice of configuring PPP Header*/
    /* For adding different header, modify here and compile the code */
    while( config_choice!= TRAFFIC
@@ -1964,7 +1992,7 @@ void App_CreateEnetPPPBridgeForIP()
       printf("1. 0xff030021 (Traffic)\n");
       printf("2. 0xff038021 (IPCP)\n");
       printf("3. 0xff03c021 (LCP)\n\n");
-      config_choice = getchar();
+      // config_choice = getchar();
    }
 
    if ( config_choice == TRAFFIC )
@@ -2493,6 +2521,10 @@ void App_CreateEnetPPPBridgeForMPLS()
                                                         &bridge_port_cfg);
       App_TerminateOnError(h_bridge1_bport_hdlc[ii],"WP_IwBridgingPortCreate()HDLC");
    }
+
+#if 1
+   config_choice = TRAFFIC;
+#endif
 
    /* Giving choice of configuring PPP Header*/
    /* For adding different header, modify here and compile the code */

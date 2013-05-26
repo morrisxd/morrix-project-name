@@ -3165,16 +3165,16 @@ void WPE_CLI (void)
    {
       printf ("\n");
       printf
-         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET4/ENET7/EXGRESS),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
+         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET4/ENET7/EGRESS),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
-         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev(ENET3/ENET8/INGRESS),  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
+         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev(ENET5/ENET3/ENET8/INGRESS),  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
       printf
          ("       HostTermination: \n \t\t\t7-bPortHost,  \n \t\t\t8-FlowAggHost, \n \t\t\tq-Exit, \n \t\t\tr-Reboot, \n \t\t\tk-Kill(noDriverRelease) \n");
 
       printf
          ("       packet control : \n \t\t\tp-send packets\n");
       printf
-         ("       QDepth control : \n \t\t\tb-get WP_ChannelQDepth(tx_gbe_channel[0])\n");
+         ("\t\t\tb-get WP_ChannelQDepth(tx_gbe_channel[0])\n");
       printf
          ("\t\t\ta-get all statistics)\n");
       printf ("\t\t\t9-disable/enable thread)\n");

@@ -81,7 +81,11 @@
 
 // UFE Related Defines
 #define N_MAX_UFE_SPE_INDEX                         WUFE_MAX_N_CORE*WUFE_MAX_N_STM1*WUFE_MAX_N_SPE
+#if 0
 #define MAX_UFE_LINES_USED                          1344
+#endif
+
+
 #define N_MAX_EMPHY_PHYS                            4032
 #define WT_UFE_HANDLE_INVALID                       0xffffffff
 
@@ -92,7 +96,10 @@
 
 #define WT_MAX_LINE_INDEX                           252 
 
+#if 0
 #define MAX_UFE_LINES_USED                          1344
+#endif
+
 #define MAX_CHANNELS								WTI_MAX_LINES * 2
 #define WTI_MAX_DEVICE								WTI_MAX_LINES
 #define WTI_MAX_TX_RX_CHANNEL						WTI_MAX_LINES
