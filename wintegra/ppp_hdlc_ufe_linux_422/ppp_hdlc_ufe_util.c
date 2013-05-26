@@ -81,14 +81,20 @@ void App_DataSend(WP_handle h_tx, WP_handle h_pool)
 
    memset(km_data_ptr+offset,0xa,payload_len);
 
+#if 0
    printf("sending packet( ethernet vlan IP) of length %d\n",APP_DATA_LENGTH);
+#endif
    for(ii = 0;ii < APP_DATA_LENGTH;ii++)
    {
+#if 0
       printf("%.2x",*(km_data_ptr+ii));
+#endif
       if((ii != 0) && !(ii % 40))
          printf("\n");
    }
+#if 0
    printf("\n");
+#endif
    /* Use interworking qnode and interworking buffer pool for Gige */
    status = WP_HostSend(h_tx, &data_unit);
    App_TerminateOnError(status, "WP_HostSend()");
