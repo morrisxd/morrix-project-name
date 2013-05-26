@@ -98,7 +98,7 @@ void App_DataSend(WP_handle h_tx, WP_handle h_pool)
    /* Use interworking qnode and interworking buffer pool for Gige */
    status = WP_HostSend(h_tx, &data_unit);
    App_TerminateOnError(status, "WP_HostSend()");
-   WP_Delay(500000);
+   WP_Delay(50);
    WPI_SimulateInterrupts();
 }
 
