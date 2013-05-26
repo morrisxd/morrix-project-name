@@ -88,9 +88,9 @@ void App_DataSend(WP_handle h_tx, WP_handle h_pool)
    {
 #if 0
       printf("%.2x",*(km_data_ptr+ii));
-#endif
       if((ii != 0) && !(ii % 40))
          printf("\n");
+#endif
    }
 #if 0
    printf("\n");
@@ -393,6 +393,9 @@ void App_Quit(WP_U32 status)
 * Output params: 
 * Return val   : none
 *****************************************************************************************************************************/
+extern int g_hide;
+
+WP_U32 g_pkts_cnt = 0;
 
 void App_TerminateOnError(WP_handle handle, WP_CHAR *s)
 {
@@ -406,7 +409,16 @@ void App_TerminateOnError(WP_handle handle, WP_CHAR *s)
    {
 
       if(handle == WP_OK)
-         printf("Status returned from %s : WP_OK\n",s);
+      { 
+#if 1
+	 if (!g_hide)
+	 {
+            printf("Status returned from %s, pkts(%16d) : WP_OK\r",
+		s, g_pkts_cnt++);
+	    fflush (stdout);
+	 } 
+#endif
+      } 
       else
          printf("Handle returned from %s is %#8.8x\n", s,handle);
 

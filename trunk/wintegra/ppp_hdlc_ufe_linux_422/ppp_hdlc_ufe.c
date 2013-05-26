@@ -67,6 +67,8 @@
 #define DELAY_COUNT     (10000 * 100)   // micro seconds
 #define SECONDS_TO_WAIT (1)
 
+int g_hide = 1;
+
 static WP_U32 jjj = SECONDS_TO_WAIT;
 
 void *LearningPoll(void *i)
@@ -260,12 +262,19 @@ int main(int argc, char *argv[])
           printf("a. Stats\n");
           printf("p. Send Packet\n");
           printf("r. Reboot the machine\n");
+          printf("h. Hide info\n");
           /*printf("d. Debug\n");*/                /*For future use */
           /*printf("s. Simulate Interrupts\n"); */ /*For future use */
           printf("x. Exit\n");
           comm = getchar();
           switch(comm)
           {
+	  case 'h':
+	     if (g_hide)
+	        g_hide = 0;
+	     else g_hide = 1;
+
+	     break;
           case 'a':
              App_ShowStats();
              break;
