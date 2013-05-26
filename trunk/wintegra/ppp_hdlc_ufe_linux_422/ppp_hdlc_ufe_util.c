@@ -434,7 +434,13 @@ void App_ShowStats(void)
       printf("\n");
 
       gets(tmp);
-      sscanf(tmp, "%d", &ch);
+#if 1
+      sscanf(tmp, "%d", (int *)&ch);
+#else
+      ch = getchar (tmp);
+	  printf ("getchar returns (%d)\n", ch);
+	  ch = atoi (ch);
+#endif
       switch(ch)
       {
          case 1:

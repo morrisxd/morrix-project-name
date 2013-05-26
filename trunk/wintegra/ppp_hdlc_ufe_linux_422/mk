@@ -1,1 +1,5 @@
-make TEST=ppp_hdlc_ufe.c
+make TEST=ppp_hdlc_ufe.c 2>&1 | more && mv ./bin/ppp_hdlc_ufe ./bin/ppp_hdlc_ufe_linux_422.exe && scp ./bin/ppp_hdlc_ufe_linux_422.exe dengmorr@216.241.237.121:/tftpboot/ppp_hdlc_ufe_linux_422.exe && echo copy to /tftpboot complete!
+
+
+
+
