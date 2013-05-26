@@ -67,7 +67,7 @@
 #define DELAY_COUNT     (10000 * 100)   // micro seconds
 #define SECONDS_TO_WAIT (1)
 
-int g_hide = 1;
+int g_hide = 0;
 
 static WP_U32 jjj = SECONDS_TO_WAIT;
 
@@ -85,7 +85,7 @@ void *LearningPoll(void *i)
 ////////////////////////////////////////////////////////
       for (iii = 0; iii < jjj; iii ++)
       {
-         WPL_Delay(DELAY_COUNT);
+         WPL_Delay(DELAY_COUNT/1000);
 
              switch(dp_interface_val)
              {       
