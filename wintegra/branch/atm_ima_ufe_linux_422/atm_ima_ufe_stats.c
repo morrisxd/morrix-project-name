@@ -11,7 +11,7 @@
  *  File Name   : atm_ima_tdm_stats.c
  *
  *****************************************************************************/
-int g_flag_thread  = 0;
+int g_flag_thread  = 1;
 
 void m_showWUFE (void)
 {
