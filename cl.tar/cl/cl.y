@@ -10,6 +10,7 @@ Jutta Degener, 1995
 #include "globals.h"
 #include "symtab.h"
 
+extern int column;
 #define YYDEBUG 1
 /*
  * control for print debug info on console
@@ -741,7 +742,6 @@ function_definition
 #include <stdio.h>
 
 extern char yytext[];
-extern int column;
 
 yyerror(s)
 char *s;
