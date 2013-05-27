@@ -40,7 +40,7 @@
 #define WTI_CESOP_REGRESSION_TEST 1
 #define DELAY_COUNT     (10000 * 100)   // micro seconds
 #define IMA_EVENT_DELAY (10)
-#define IMA_SEND_DELAY  (100)
+#define IMA_SEND_DELAY  (10000 * 100)
 #define IMA_GOT_DELAY  (20)
 #define SECONDS_TO_WAIT (1)
 
