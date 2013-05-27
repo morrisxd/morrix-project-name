@@ -165,7 +165,7 @@ loop:
 }
 
 
-int column = 0;
+int column = 0; 
 
 void count()
 {
