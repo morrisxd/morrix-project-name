@@ -39,7 +39,13 @@
 
 #define WTI_CESOP_REGRESSION_TEST 1
 #define DELAY_COUNT     (10000 * 100)   // micro seconds
+#define IMA_EVENT_DELAY (10)
+#define IMA_SEND_DELAY  (100)
+#define IMA_GOT_DELAY  (20)
 #define SECONDS_TO_WAIT (1)
+
+
+#define PKTS_INTERVAL	(1)
 
 /* Number of IMA DPS generated ticks in 1 second */
 #define TICKS_PER_SECOND 2
@@ -74,8 +80,17 @@
 extern WUFE_status WUFE_SystemDisplay (WP_U32 wufe_id);
 
 #include "wyd_util.c"
+
+
+
+#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+
+
+
 #include "atm_ima_ufe_util.c"
 #include "atm_ima_ufe_stats.c"
+
+WP_U32      pkts_lock;
 
 WP_U8 prbs_result[336];
 
@@ -84,7 +99,7 @@ WP_U8 prbs_result[336];
 #include "ufe_utility.c"
 
 WUFE_init_config ufe4_config;
-WP_ima_event a_task;
+// WP_ima_event a_task;
 
 static void release_test (void)
 {
@@ -125,37 +140,78 @@ void App_ResetUfe (void)
    }                            // if(WTI_INITIALIZE_FIRMWARE)
 }
 
-static WP_U32 jjj = SECONDS_TO_WAIT;
-
-void *LearningPoll(void *i)
+void *events_poll(void *i)
 {
-   int iii = 0;
-
    while (1)
    {
       display_events ();
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-///////////////////// here is the delay ////////////////
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-      for (iii = 0; iii < jjj; iii ++) 
-      {       
-         WPL_Delay(DELAY_COUNT);
-      }       
+
+      WPL_Delay(IMA_EVENT_DELAY);
+   }
+}
+
+int g_hide = 0;
+app_task *task, a_task;
+
+
+void *pkts_got (void *i)
+{
+   while (1)
+   {
+      WPL_Delay (IMA_GOT_DELAY);
+
+#if 0
+      WPI_SimulateInterrupts ();
+#endif
+      while ((task = next_task (irq_task_list, &a_task)) != NULL)
+      {
+         app_perform_action (task);
+      }
    }
 }
 
 
+void *pkts_send(void *i)
+{
+   while (1)
+   {
+      if (g_hide)
+      {
+         App_DataSend (h_enet1_tx, h_pool_buffer_iw);
+      }
+
+      WPL_Delay(IMA_SEND_DELAY);
+   }
+}
 
 void App_startThread (void)
 {
 #if 1
-   WP_THREAD_ID learning_thread_id;
+   WP_THREAD_ID learning_thread_id, learning_thread_id_pkts, thread_id_pkts_got;
 
-   status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+   status = WPL_ThreadInit(&learning_thread_id, events_poll, 0);
    App_TerminateOnError (status , "WPL_ThreadInit() learning");
    printf ("after Threadinit\n");
+   fflush(stdout);
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+   status=WPL_ThreadInit(&learning_thread_id_pkts, pkts_send, 0);
+   App_TerminateOnError (status , "WPL_ThreadInit() pkts learning");
+
+   printf ("pkts after Threadinit\n");
+   fflush(stdout);
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+   status=WPL_ThreadInit(&thread_id_pkts_got, pkts_got, 0);
+   App_TerminateOnError (status , "WPL_ThreadInit() pkts learning");
+
+   printf ("pkts after Threadinit\n");
    fflush(stdout);
 #endif
 }
@@ -173,7 +229,6 @@ void App_startThread (void)
 int main (int argc, char *argv[])
 {
    WP_status status;
-   app_task *task, a_task;
    WP_CHAR comm;
 
    status = WP_DriverInit ();
@@ -245,6 +300,13 @@ int main (int argc, char *argv[])
 
    WPX_FRMR_SONET_SDH_PORT_DIAG_LpbkEnableDeepSystem (0, 0, 0);
 
+   WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &pkts_lock);
+   printf ("after lock init\n");
+
+#ifdef LOCK_AT_START
+   WPL_Lock(WPL_THREAD_LOCK_KEY, &pkts_lock);
+#endif
+
    App_startThread ();
 
    if (argc <= 1)
@@ -258,25 +320,38 @@ int main (int argc, char *argv[])
          printf ("p. Send Packet\n");
          printf ("r. Reboot the machine\n");
          printf ("s. Simulate Interrupts\n");
+         printf ("h. start/stop sending packets\n");
          printf ("x. Exit\n");
 
          comm = wyd_getchar ();
 
          switch (comm)
          {
+	 case 'h':
+	    if (g_hide)
+	    { 
+	       g_hide = 0;
+	       printf ("disable sending packets\n");
+	    } else {
+	       g_hide = 1;
+	       printf ("ensable sending packets\n");
+	    }
+	    break;
          case 'a':
             App_ShowStats ();
             break;
          case 'p':
             App_DataSend (h_enet1_tx, h_pool_buffer_iw);
             break;
-            /*Not supported....Added code for future use. 
-               case 'd':
-               App_Debug(debug_on);
-               break;
-               case 's':
+#if 0
+// Not supported....Added code for future use. 
+         case 'd':
+            App_Debug(debug_on);
+            break;
+         case 's':
                WPI_SimulateInterrupts();
-               break; */
+               break; 
+#endif
          case 'r':
             WPX_Reboot ();
             break;
@@ -286,9 +361,11 @@ int main (int argc, char *argv[])
                exit (0);
             }
          }
+#if 0
          WPI_SimulateInterrupts ();
          while ((task = next_task (irq_task_list, &a_task)) != NULL)
             app_perform_action (task);
+#endif
       }
    }
    else if ((argc == 3) && (!strcmp (argv[1], "freerun")))
