@@ -83,7 +83,7 @@ extern WUFE_status WUFE_SystemDisplay (WP_U32 wufe_id);
 
 
 
-#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
 
 
 
@@ -189,6 +189,8 @@ void App_startThread (void)
 #if 1
    WP_THREAD_ID learning_thread_id, learning_thread_id_pkts, thread_id_pkts_got;
 
+   learning_thread_id_pkts = 0;
+
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -200,11 +202,13 @@ void App_startThread (void)
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
+#if 0
    status=WPL_ThreadInit(&learning_thread_id_pkts, pkts_send, 0);
    App_TerminateOnError (status , "WPL_ThreadInit() pkts learning");
 
    printf ("pkts after Threadinit\n");
    fflush(stdout);
+#endif
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -302,10 +306,6 @@ int main (int argc, char *argv[])
 
    WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &pkts_lock);
    printf ("after lock init\n");
-
-#ifdef LOCK_AT_START
-   WPL_Lock(WPL_THREAD_LOCK_KEY, &pkts_lock);
-#endif
 
    App_startThread ();
 

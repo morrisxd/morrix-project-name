@@ -127,12 +127,14 @@ void add_task (app_task_list * task_list, WP_U32 event_type,
    WP_U16 tail = task_list->tail;
    WP_U32 next = tail + 1;
 
-   WPL_Lock (WPL_THREAD_LOCK_KEY, &pkts_lock);
+printf ("add_task: ready to lock\n");fflush(stdout);
+   // WPL_Lock (WPL_THREAD_LOCK_KEY, &pkts_lock);
 
-
+printf ("add_task: ready to lock-2\n");fflush(stdout);
    if (next == task_list->num_elements)
       next = 0;
 
+printf ("add_task: ready to lock-3\n");fflush(stdout);
    if (next != task_list->head)
    {
       task_list->task[tail].event_tag = event_tag;
@@ -142,6 +144,7 @@ void add_task (app_task_list * task_list, WP_U32 event_type,
    }
 
    WPL_Unlock(WPL_THREAD_LOCK_KEY, &pkts_lock);
+   printf ("event inserted into queue list\n"); fflush (stdout);
 }
 
 /*******************************************************************************
@@ -188,14 +191,17 @@ app_task *next_task (app_task_list * task_list, app_task * result)
    WPL_Lock (WPL_THREAD_LOCK_KEY, &pkts_lock);
 
    if (head == tail)
+   {
+      WPL_Unlock(WPL_THREAD_LOCK_KEY, &pkts_lock);
       return NULL;
+   }
 
    *result = task_list->task[head];
    if (++head == task_list->num_elements)
       head = 0;
    task_list->head = head;
 
-   WPL_Unlock(WPL_THREAD_LOCK_KEY, &pkts_lock);
+   // WPL_Unlock(WPL_THREAD_LOCK_KEY, &pkts_lock);
 
    return result;
 }
@@ -419,6 +425,7 @@ void App_DuReceive (WP_handle h_rx, WP_U32 data_type)
 
 void App_EventRxIndicate (WP_tag tag, WP_U32 data, WP_U32 info)
 {
+   printf ("got a pakcets\n"); fflush (stdout);
    add_task (irq_task_list, WP_EVENT_RX_INDICATE, tag, NULL);
 }
 
