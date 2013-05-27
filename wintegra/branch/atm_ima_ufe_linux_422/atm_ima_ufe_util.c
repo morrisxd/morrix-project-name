@@ -19,6 +19,15 @@
  * Output params: None
  * Return val   : None
  *****************************************************************************/
+
+
+
+
+
+extern WP_U32 pkts_lock;
+
+
+
 void App_DataSend (WP_handle h_tx, WP_handle h_pool)
 {
 #define APP_DATA_LENGTH 80
@@ -83,18 +92,24 @@ void App_DataSend (WP_handle h_tx, WP_handle h_pool)
 
    memset (km_data_ptr + offset, 0xa, payload_len);
 
+#if 0
    printf ("sending packet of length %d\n", APP_DATA_LENGTH);
+#endif
    for (ii = 0; ii < APP_DATA_LENGTH; ii++)
    {
+#if 0
       printf ("%.2x", *(km_data_ptr + ii));
       if ((ii != 0) && !(ii % 40))
          printf ("\n");
+#endif
    }
+#if 0
    printf ("\n");
+#endif
    /* Use interworking qnode and interworking buffer pool for Gige */
    status = WP_HostSend (h_tx, &data_unit);
    App_TerminateOnError (status, "WP_HostSend()");
-   WP_Delay (500000);
+   WP_Delay (50);
 
    WPI_SimulateInterrupts ();
 }
@@ -112,6 +127,9 @@ void add_task (app_task_list * task_list, WP_U32 event_type,
    WP_U16 tail = task_list->tail;
    WP_U32 next = tail + 1;
 
+   WPL_Lock (WPL_THREAD_LOCK_KEY, &pkts_lock);
+
+
    if (next == task_list->num_elements)
       next = 0;
 
@@ -122,6 +140,8 @@ void add_task (app_task_list * task_list, WP_U32 event_type,
       task_list->task[tail].event_param = event_param;
       task_list->tail = next;
    }
+
+   WPL_Unlock(WPL_THREAD_LOCK_KEY, &pkts_lock);
 }
 
 /*******************************************************************************
@@ -152,6 +172,7 @@ void ima_add_task (ima_app_task_list * task_list, WP_U32 data, WP_U32 info)
    }
 }
 
+
 /*****************************************************************************
  * Function name: next_task
  * Description	: Event handling , returning next task
@@ -164,6 +185,8 @@ app_task *next_task (app_task_list * task_list, app_task * result)
    WP_U32 head = task_list->head;
    WP_U32 tail = task_list->tail;
 
+   WPL_Lock (WPL_THREAD_LOCK_KEY, &pkts_lock);
+
    if (head == tail)
       return NULL;
 
@@ -171,6 +194,9 @@ app_task *next_task (app_task_list * task_list, app_task * result)
    if (++head == task_list->num_elements)
       head = 0;
    task_list->head = head;
+
+   WPL_Unlock(WPL_THREAD_LOCK_KEY, &pkts_lock);
+
    return result;
 }
 
@@ -474,6 +500,8 @@ void App_Quit (WP_U32 status)
  *****************************************************************************/
 void App_TerminateOnError (WP_handle handle, WP_CHAR * s)
 {
+   static WP_U32 pkts_cnt = 0;
+
    if (WPI_SimulateInterrupts (), WP_ERROR_P (handle))
    {
       printf ("Test Abort %s %s 0x%x\n", s,
@@ -485,7 +513,10 @@ void App_TerminateOnError (WP_handle handle, WP_CHAR * s)
    else
    {
       if (handle == WP_OK)
-         printf ("Status returned from %s : WP_OK\n", s);
+	{
+         printf ("Status returned from %s : WP_OK, pkts(%15d)\r", s, pkts_cnt ++);
+	 fflush (stdout);
+	}
       else
          printf ("Handle returned from %s is %#8.8x\n", s, handle);
    }
