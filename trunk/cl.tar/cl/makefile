@@ -3,7 +3,7 @@
 # xxx.y and xxx.o MUST have the idential 'xxx' filename.
 
 
-
+YACC = bison
 YFLAGS	=	-d
 OBJS = cl.o c.o symtab.o
 cl:	$(OBJS)
