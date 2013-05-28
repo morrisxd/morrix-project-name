@@ -330,13 +330,33 @@ int main (int argc, char *argv[])
          {
          case 'f':
             {
+               int i = 0, j =0;
                WUFE_status status = 0;
                WP_U8 data[512];
                WP_U8 data2[512];
 
+               printf ("\n");
+               for (i = 0; i < 16; i ++) printf ("[%2d]", i);
+               printf ("\n");
                memset (data, 0, 512);
                memset (data2, 0, 512);
-               status = WUFE_SfpRead (0, 0, 1, 0, 0xa1, /*0x14*/0, data);
+            for (j = 0; j < 8; j ++)
+            {
+               for (i = 0; i < 16; i ++)
+               {
+                  status = WUFE_SfpRead (0, 0, 1, 1, 0xa1, i+j*16, &data[i+j*16]);
+                  if (status != 0)
+                  {
+                     printf ("status is (%d)\n", status);
+                     App_TerminateOnError (status,"SfpRead ENET1 RX");
+                  } else {
+                     printf ("[%2x]", data[i+j*16]); 
+                  }
+               }
+               printf ("\n");
+            }
+#if 0
+               status = WUFE_SfpRead (0, 0, 0, 16, 0xa1, /*0x14*/0, data);
                if (status != 0)
                {
                   printf ("status is (%d)\n", status);
@@ -356,6 +376,7 @@ int main (int argc, char *argv[])
                   }
                   printf ("\n");
                }
+#endif
 #if 0
                status = WUFE_SfpRead (0, 0, 1, 128, 0xa2, 0x14, data2);
                if (status != 0)
