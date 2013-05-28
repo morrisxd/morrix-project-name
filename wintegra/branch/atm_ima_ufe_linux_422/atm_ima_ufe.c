@@ -321,12 +321,65 @@ int main (int argc, char *argv[])
          printf ("r. Reboot the machine\n");
          printf ("s. Simulate Interrupts\n");
          printf ("h. start/stop sending packets\n");
+         printf ("f. WUFE_SfpRead()\n");
          printf ("x. Exit\n");
 
          comm = wyd_getchar ();
 
          switch (comm)
          {
+         case 'f':
+            {
+               WUFE_status status = 0;
+               WP_U8 data[512];
+               WP_U8 data2[512];
+
+               memset (data, 0, 512);
+               memset (data2, 0, 512);
+               status = WUFE_SfpRead (0, 0, 1, 16, 0xa1, /*0x14*/0, data);
+               if (status != 0)
+               {
+                  printf ("status is (%d)\n", status);
+                  App_TerminateOnError (status,"WUFE_SfpRead ENET1 RX");
+               } else {
+                  int i = 0, j = 0;
+                  
+                  printf ("\n");
+                  printf ("[A1] data = \n");
+                  for (i = 0; i < 16; i ++) printf ("[%2d]", i);
+                  printf ("\n");
+                  for (j = 0; j < 8; j ++)
+                  {
+                     for (i = 0; i < 16; i ++)
+                        printf ("[%2x]", data[i + j * 16]);
+                     printf ("\n");
+                  }
+                  printf ("\n");
+               }
+#if 0
+               status = WUFE_SfpRead (0, 0, 1, 128, 0xa2, 0x14, data2);
+               if (status != 0)
+               {
+                  printf ("status is (%d)\n", status);
+                  App_TerminateOnError (status,"WUFE_SfpRead ENET1 RX");
+               } else {
+                  int i = 0, j = 0;
+                  
+                  printf ("\n");
+                  printf ("[A2] data = \n");
+                  for (i = 0; i < 16; i ++) printf ("[%2d]", i);
+                  printf ("\n");
+                  for (j = 0; j < 8; j ++)
+                  {
+                     for (i = 0; i < 16; i ++)
+                        printf ("[%2x]", data[i + j * 16]);
+                     printf ("\n");
+                  }
+                  printf ("\n");
+               }
+#endif
+            }
+            break;
 	 case 'h':
 	    if (g_hide)
 	    { 
