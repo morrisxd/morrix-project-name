@@ -112,6 +112,13 @@ void m_showGrpStatus (void)
            group_state[i].fe_alarm_state);
    printf ("group_state[0].fe_alarm_type      =%d\n",
            group_state[i].fe_alarm_type);
+
+
+   printf ("group_state[0].ne_state           =%s\n",
+           ima_s (group_state[i].ne_state));
+   printf ("group_state[0].fe_state           =%s\n",
+           ima_s_fe (group_state[i].fe_state));
+
    i++;
 }
 
@@ -172,6 +179,13 @@ void App_ShowStats (void)
       switch (ch)
       {
       case '1':
+         for (ii = 0; ii < APP_MAX_TDM_PORTS; ii++)
+         {
+            printf ("-------------------------------\n");
+            printf (" Device statisics IMA %d       \n", ii);
+            printf ("-------------------------------\n");
+            App_ShowTdmAtmDeviceStats (h_dev_ima[ii], tdi_atm_stats);
+         }
          printf ("-------------------------------\n");
          printf (" ENET1 statisics               \n");
          printf ("-------------------------------\n");
@@ -180,13 +194,6 @@ void App_ShowStats (void)
          printf (" ENET2 statisics               \n");
          printf ("-------------------------------\n");
          App_ShowEnetDeviceStats (h_device_enet2, s_hs_enet);
-         for (ii = 0; ii < APP_MAX_TDM_PORTS; ii++)
-         {
-            printf ("-------------------------------\n");
-            printf (" Device statisics IMA %d       \n", ii);
-            printf ("-------------------------------\n");
-            App_ShowTdmAtmDeviceStats (h_dev_ima[ii], tdi_atm_stats);
-         }
          if (ch == '1')
             break;
       case '2':
@@ -432,6 +439,17 @@ void App_ShowEnetDeviceStats (WP_handle enet_device_handle,
            (WP_U32) s_hs_enet.g999_rx_errored_fragments);
    printf (" g999_rx_length_error      : %d\n",
            (WP_U32) s_hs_enet.g999_rx_length_error);
+
+
+
+   printf (" tx_bytes                  : %d\n",
+           (WP_U32) s_hs_enet.tx_bytes);
+   printf (" tx_packets                : %d\n",
+           (WP_U32) s_hs_enet.tx_packets);
+   printf (" rx_bytes                  : %d\n",
+           (WP_U32) s_hs_enet.rx_bytes);
+   printf (" rx_packets                : %d\n",
+           (WP_U32) s_hs_enet.rx_packets);
 
 }
 
