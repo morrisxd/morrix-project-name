@@ -366,7 +366,7 @@ extern void usleep(WP_U32 period);
 WP_U32 g_callback = 0;
 
 WP_U32      eoam_lock;
-#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+#define     WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
 
 WP_U32 interface_mode = 0;
 
