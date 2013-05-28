@@ -336,7 +336,7 @@ int main (int argc, char *argv[])
 
                memset (data, 0, 512);
                memset (data2, 0, 512);
-               status = WUFE_SfpRead (0, 0, 1, 16, 0xa1, /*0x14*/0, data);
+               status = WUFE_SfpRead (0, 0, 1, 0, 0xa1, /*0x14*/0, data);
                if (status != 0)
                {
                   printf ("status is (%d)\n", status);
@@ -372,7 +372,7 @@ int main (int argc, char *argv[])
                   for (j = 0; j < 8; j ++)
                   {
                      for (i = 0; i < 16; i ++)
-                        printf ("[%2x]", data[i + j * 16]);
+                        printf ("[%2x]", data2[i + j * 16]);
                      printf ("\n");
                   }
                   printf ("\n");
