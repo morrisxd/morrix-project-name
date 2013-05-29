@@ -1,8 +1,6 @@
 Variable Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
-(this_is_a_struct)      +40                           +1 
-           (f)      +15                           +5 
-           (i)      +13                           +4 
 
 Typedef  Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
+(this_is_a_struct)      +48                           +1 
