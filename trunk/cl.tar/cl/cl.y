@@ -4,7 +4,15 @@ In 1985, Jeff Lee published his Yacc grammar (which is accompanied by a matching
 Jutta Degener, 1995 
 */
 
-
+/*
+   Now the problem is:
+   "
+   typedef struct this_is_a_struct this_is_a_struct;
+   struct this_is_a_struct {int i; float f;};
+   "
+   in the above case, 'this_is_a_struct' is both a type and a name, 
+   so it is confused.
+ */
 
 %{
 #include "globals.h"
@@ -37,6 +45,9 @@ extern int column;
 #define SET_CLEAN_IN_ID_RECOGNIZE
 #define CHECK_INDEX_IN_ID_RECOGNIZE
 
+int tmp = 0;
+
+int pre_s_u = 0;
 int after_type_specifiers = 0;
 int in_namelist = 0;
 int in_struct_or_union = 0;
@@ -341,7 +352,7 @@ declaration_specifiers
 	: storage_class_specifier 
 		{
 			/* 
-			 * 'auto','extern', 'static', 'register', 'typedef'
+			 * 'auto','extern','static','register','typedef'
 			 */
 			in_var.storage_class_specifier = $1; 
 		}
@@ -405,9 +416,9 @@ type_specifier
 	;
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' {in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union '{' {in_struct_or_union=1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union IDENTIFIER
+	: struct_or_union IDENTIFIER {pre_s_u = 0;} '{' {in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
+	| struct_or_union {tmp=3;} '{' {in_struct_or_union=1;} struct_declaration_list {in_struct_or_union=0;} '}'
+	| struct_or_union IDENTIFIER {pre_s_u = 1;printf ("KKK");}
 	;
 
 struct_or_union
