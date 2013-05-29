@@ -149,6 +149,9 @@ variable in_var;
 %token INLINE INLINE2
 
 %start translation_unit
+
+%nonassoc LOWER_THAN_ELSE
+%nonassoc '{' 
 %%
 
 primary_expression
@@ -416,9 +419,9 @@ type_specifier
 	;
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER {pre_s_u = 0;} '{' {in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
+	: struct_or_union IDENTIFIER '{' {in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
 	| struct_or_union {tmp=3;} '{' {in_struct_or_union=1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union IDENTIFIER {pre_s_u = 1;printf ("KKK");}
+	| struct_or_union IDENTIFIER { printf ("KKK");} %prec LOWER_THAN_ELSE
 	;
 
 struct_or_union
