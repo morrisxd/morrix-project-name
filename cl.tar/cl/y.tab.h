@@ -1,7 +1,3 @@
-#ifndef YYERRCODE
-#define YYERRCODE 256
-#endif
-
 #define IDENTIFIER 257
 #define CONSTANT 258
 #define STRING_LITERAL 259
@@ -62,3 +58,4 @@
 #define RETURN 314
 #define INLINE 315
 #define INLINE2 316
+#define LOWER_THAN_ELSE 317
