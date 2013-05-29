@@ -67,7 +67,7 @@ char chsharp = 0;
 "static"		{ count(); return(STATIC); }
 "struct"		{ count(); return(STRUCT); }
 "switch"		{ count(); return(SWITCH); }
-"typedef"		{ count(); in_typedef=1; return(TYPEDEF); }
+"typedef"		{ count(); return(TYPEDEF); }
 "union"			{ count(); return(UNION); }
 "unsigned"		{ count(); return(UNSIGNED); }
 "void"			{ count(); return(VOID); }
@@ -209,10 +209,10 @@ int check_type()
 	{
 		p = st_lookup_typedef (g_cur_sym);
 		if (p) {
-			printf ("(T2[%d])", after_type_specifiers);
+			printf ("//T2[%d]//", after_type_specifiers);
 			return (TYPE_NAME);
 		} else {
-			printf ("(I2[%d])", after_type_specifiers);
+			printf ("//I2[%d]//", after_type_specifiers);
 		}
 	}
 	
