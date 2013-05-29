@@ -150,7 +150,7 @@ variable in_var;
 
 %start translation_unit
 
-%nonassoc LOWER_THAN_ELSE
+%nonassoc WITHOUT_STRUCT_CONTENT
 %nonassoc '{' 
 %%
 
@@ -348,7 +348,7 @@ constant_expression
 
 declaration
 	: declaration_specifiers ';'
-	| declaration_specifiers init_declarator_list ';' {if (in_typedef) in_typedef = 0;}
+	| declaration_specifiers init_declarator_list ';' {in_typedef = 0;/* clear flag for 'typedef' */ }
 	;
 
 declaration_specifiers
@@ -396,7 +396,7 @@ init_declarator
 	;
 
 storage_class_specifier
-	: TYPEDEF { in_typedef = 1; /*printf ("TYPEDEF FOUND");*/}
+	: TYPEDEF { in_typedef = 1; printf ("//TYPEDEF FOUND//");}
 	| EXTERN
 	| STATIC
 	| AUTO
@@ -421,7 +421,7 @@ type_specifier
 struct_or_union_specifier
 	: struct_or_union IDENTIFIER '{' {in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
 	| struct_or_union {tmp=3;} '{' {in_struct_or_union=1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union IDENTIFIER { printf ("KKK");} %prec LOWER_THAN_ELSE
+	| struct_or_union IDENTIFIER { printf ("//KKK//"); in_struct_or_union=0;} %prec WITHOUT_STRUCT_CONTENT
 	;
 
 struct_or_union
