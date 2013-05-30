@@ -71,7 +71,7 @@ static BucketList typedefNameTable[SIZE];
  * otherwise ignored
  */
 void 
-st_insert(char *name, int lineno, int loc)
+st_insert_id (char *name, int lineno, int loc)
 {
 	int             h = hash(name);
 	BucketList      l = hashTable[h];
