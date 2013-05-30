@@ -16,7 +16,7 @@
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-extern void st_insert( char * name, int lineno, int loc );
+extern void st_insert_id( char * name, int lineno, int loc );
 extern void st_insert_typedef(char *name, int lineno, int loc);
 
 /* Function st_lookup returns the memory 

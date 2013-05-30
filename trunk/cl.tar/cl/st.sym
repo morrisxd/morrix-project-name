@@ -1,13 +1,15 @@
 Variable Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
            (i)      +26                          +14 
-         (iii)       +7                           +1 
            (j)      +35                          +14 
-     (myshort)      +16                          +12 
 
 Typedef  Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
+     (myunion)       +9                          +22 
 (a_7nd_struct)      +51                           +3 
+           (j)      +36                          +14 
     (funcProc)      +19                          +14 
+      (ccchar)      +22                          +17 
     (ushort_t)      +32                           +4 
 (a_2nd_struct)      +41                           +2 
+      (mylong)      +20                          +24 
