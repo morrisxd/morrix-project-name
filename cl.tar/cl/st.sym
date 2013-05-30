@@ -1,13 +1,13 @@
 Variable Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
-           (i)      +35                           +7 
+           (i)       +5                           +1           +8 
 
 Typedef  Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
-(this_is_a_struct)      +48                           +1 
-(a_7nd_struct)      +50                           +7 
-(a_6nd_struct)      +40                           +6 
-(a_5nd_struct)      +40                           +5 
-(a_4nd_struct)      +40                           +4 
-(a_3nd_struct)      +40                           +3 
-(a_2nd_struct)      +40                           +2 
+(this_is_a_struct)      +48                           +2 
+(a_7nd_struct)      +50                           +8 
+(a_6nd_struct)      +40                           +7 
+(a_5nd_struct)      +40                           +6 
+(a_4nd_struct)      +40                           +5 
+(a_3nd_struct)      +40                           +4 
+(a_2nd_struct)      +40                           +3 

@@ -1,3 +1,4 @@
+int i = 0;
 typedef struct this_is_a_struct this_is_a_struct;
 typedef struct a_2nd_struct a_2nd_struct;
 typedef struct a_3nd_struct a_3nd_struct;

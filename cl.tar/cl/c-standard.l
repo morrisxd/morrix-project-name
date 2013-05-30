@@ -1,16 +1,13 @@
-/*
 ANSI C grammar, Lex specification
 In 1985, Jeff Lee published this Lex specification together with a Yacc grammar for the April 30, 1985 ANSI C draft.  Tom Stockfisch reposted both to net.sources in 1987; that original, as mentioned in the answer to question 17.25 of the comp.lang.c FAQ, can be ftp'ed from ftp.uu.net, file usenet/net.sources/ansi.c.grammar.Z. 
 I intend to keep this version as close to the current C Standard grammar as possible; please let me know if you discover discrepancies. 
 
 Jutta Degener, 1995 
 
-*/
 
 
 
-preprocess		#.*\n
-newline			\n
+
 D			[0-9]
 L			[a-zA-Z_]
 H			[a-fA-F0-9]
@@ -20,24 +17,14 @@ IS			(u|U|l|L)*
 
 %{
 #include <stdio.h>
-#include <string.h>
-
-#include "globals.h"
-#include "symtab.h"
-
 #include "y.tab.h"
 
-int lineno = 1;
-
 void count();
-char chsharp = 0;
 %}
 
 %%
-{newline}		{ count(); lineno ++;}
-{preprocess}		{ count(); lineno ++;
-		/*while ('\n' != (chsharp=input())) {putchar(' ');};*/ }
 "/*"			{ comment(); }
+
 "auto"			{ count(); return(AUTO); }
 "break"			{ count(); return(BREAK); }
 "case"			{ count(); return(CASE); }
@@ -50,9 +37,6 @@ char chsharp = 0;
 "else"			{ count(); return(ELSE); }
 "enum"			{ count(); return(ENUM); }
 "extern"		{ count(); return(EXTERN); }
-"inline"		{ count(); /*return(INLINE);*/ }
-"__inline"		{ count(); /*return(INLINE2);*/ }
-"__attribute__ ((packed))" {count();}
 "float"			{ count(); return(FLOAT); }
 "for"			{ count(); return(FOR); }
 "goto"			{ count(); return(GOTO); }
@@ -74,8 +58,7 @@ char chsharp = 0;
 "volatile"		{ count(); return(VOLATILE); }
 "while"			{ count(); return(WHILE); }
 
-{L}({L}|{D})*		{ sprintf (g_cur_sym, "(%s)", yytext); 
-		          count(); return(check_type()); }
+{L}({L}|{D})*		{ count(); return(check_type()); }
 
 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
 0{D}+{IS}?		{ count(); return(CONSTANT); }
@@ -165,7 +148,7 @@ loop:
 }
 
 
-int column = 0; 
+int column = 0;
 
 void count()
 {
@@ -182,52 +165,22 @@ void count()
 	ECHO;
 }
 
-/*
- * return IDENTIFIER or TYPENAME. I think this function mainly returns 
- * IDENTIFIER. I added the second return value TYPENAME later. 
- *
- */
 
 int check_type()
 {
 /*
- * pseudo code --- this is what it should check
- *
- *	if (yytext == type_name)
- *		return(TYPE_NAME);
- *
- *	return(IDENTIFIER);
- */
-	BucketList p;
-	char temp [MAXSYMLEN];
+* pseudo code --- this is what it should check
+*
+*	if (yytext == type_name)
+*		return(TYPE_NAME);
+*
+*	return(IDENTIFIER);
+*/
 
-	if (0) printf ("[i%d:a%d]", in_para_list, after_type_specifiers);
-
-	if (in_para_list && after_type_specifiers)
-	{
-		after_type_specifiers = 0;
-		printf ("(I1)");
-		return (IDENTIFIER);
-	}
-
-
-	{
-		p = st_lookup_typedef (g_cur_sym);
-		if (p) {
-			printf ("//T2[%d]//", after_type_specifiers);
-			return (TYPE_NAME);
-		} else {
-			printf ("//I2[%d]//", after_type_specifiers);
-		}
-	}
-	
 /*
- *	it actually will only return IDENTIFIER
- */
-#if 0
-	printf ("(IDENTIFIER:%s)", g_cur_sym);
-#endif
-	after_type_specifiers = 0;
+*	it actually will only return IDENTIFIER
+*/
+
 	return(IDENTIFIER);
 }
 

@@ -396,7 +396,7 @@ init_declarator
 	;
 
 storage_class_specifier
-	: TYPEDEF { in_typedef = 1; printf ("//TYPEDEF FOUND//");}
+	: TYPEDEF { in_typedef = 1; /*printf ("//TYPEDEF FOUND//");*/ }
 	| EXTERN
 	| STATIC
 	| AUTO
