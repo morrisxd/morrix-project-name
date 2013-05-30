@@ -201,7 +201,6 @@ int check_type()
 	BucketList p;
 	char temp [MAXSYMLEN];
 
-	if (0) printf ("[i%d:a%d]", in_para_list, after_type_specifiers);
 
 	if (in_para_list && after_type_specifiers)
 	{
@@ -210,7 +209,7 @@ int check_type()
 		return (IDENTIFIER);
 	}
 
-
+#if 0
 	{
 		p = st_lookup_typedef (g_cur_sym);
 		if (p) {
@@ -220,13 +219,11 @@ int check_type()
 			printf ("//I2[%d]//", after_type_specifiers);
 		}
 	}
+#endif
 	
 /*
  *	it actually will only return IDENTIFIER
  */
-#if 0
-	printf ("(IDENTIFIER:%s)", g_cur_sym);
-#endif
 	after_type_specifiers = 0;
 	return(IDENTIFIER);
 }

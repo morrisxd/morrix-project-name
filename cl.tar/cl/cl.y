@@ -5,13 +5,16 @@ Jutta Degener, 1995
 */
 
 /*
-   Now the problem is:
-   "
-   typedef struct this_is_a_struct this_is_a_struct;
-   struct this_is_a_struct {int i; float f;};
-   "
-   in the above case, 'this_is_a_struct' is both a type and a name, 
-   so it is confused.
+   - Now the problem is:
+      "
+      typedef struct this_is_a_struct this_is_a_struct;
+      struct this_is_a_struct {int i; float f;};
+      "
+      in the above case, 'this_is_a_struct' is both a type and a name, 
+      so it is confused.
+   - we can focus on 'endoftype' now. this is the correct 
+      location & value. 
+      may/30/2013
  */
 
 %{
@@ -348,7 +351,14 @@ constant_expression
 
 declaration
 	: declaration_specifiers ';'
-	| declaration_specifiers init_declarator_list ';' {in_typedef = 0;/* clear flag for 'typedef' */ }
+	| declaration_specifiers init_declarator_list ';' 
+           {
+              if (in_typedef) 
+              {
+                 in_typedef = 0;
+                 printf ("//endoftypedef(%s)//",g_cur_sym);
+              } /* clear flag for 'typedef' */ 
+           }
 	;
 
 declaration_specifiers
@@ -359,7 +369,7 @@ declaration_specifiers
 			 */
 			in_var.storage_class_specifier = $1; 
 		}
-	| storage_class_specifier declaration_specifiers {;}
+	| storage_class_specifier declaration_specifiers
 	| type_specifier 
 		{
 		/*
@@ -419,9 +429,9 @@ type_specifier
 	;
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' {in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union {tmp=3;} '{' {in_struct_or_union=1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union IDENTIFIER { printf ("//KKK//"); in_struct_or_union=0;} %prec WITHOUT_STRUCT_CONTENT
+	: struct_or_union IDENTIFIER '{' {printf("//STRUC-ID//");in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
+	| struct_or_union '{' {in_struct_or_union=1;} struct_declaration_list {in_struct_or_union=0;} '}'
+	| struct_or_union IDENTIFIER { printf ("//PRE-TYPE//"); in_struct_or_union=0;} %prec WITHOUT_STRUCT_CONTENT
 	;
 
 struct_or_union
@@ -497,7 +507,7 @@ pre_direct_declarator
 
 direct_declarator
 	: IDENTIFIER 
-	{
+	{   
 		sprintf (saved_identifier, "%s", g_cur_sym); 
 		show_id_or_type ();
 		if (1==in_typedef && 0==in_para_list && 0==in_struct_or_union)
