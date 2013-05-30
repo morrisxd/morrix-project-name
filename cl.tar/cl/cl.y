@@ -535,7 +535,8 @@ direct_declarator
 	| '(' declarator {functypedef=1;printf("//FUNCTYPEDEF(%s)//", g_cur_sym);st_insert_typedef(g_cur_sym, lineno, column);} ')'
 	| direct_declarator '[' direct_declarator_needinsert constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' parameter_type_list ')' {functypedef=0;}
+	| direct_declarator '(' parameter_type_list ')' 
+            { functypedef=0; }
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'
 	;
