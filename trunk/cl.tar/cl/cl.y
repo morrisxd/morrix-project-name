@@ -13,8 +13,9 @@ Jutta Degener, 1995
       in the above case, 'this_is_a_struct' is both a type and a name, 
       so it is confused.
    - we can focus on 'endoftype' now. this is the correct 
-      location & value. 
+      location & value. Success !
       may/30/2013
+   - something wrong if typedef (func)(para list)
  */
 
 %{
@@ -50,6 +51,7 @@ extern int column;
 
 int tmp = 0;
 
+int functypedef = 0;
 int pre_s_u = 0;
 int after_type_specifiers = 0;
 int in_namelist = 0;
@@ -353,10 +355,14 @@ declaration
 	: declaration_specifiers ';'
 	| declaration_specifiers init_declarator_list ';' 
            {
-              if (in_typedef) 
+              if (in_typedef && 0 == functypedef) 
               {
+                 sprintf (saved_identifier, "%s", g_cur_sym); 
+#if 1
+                 printf ("//EOT(%s)functypedef(%d)//",g_cur_sym, functypedef); // very important
+#endif
+                 st_insert_typedef (saved_identifier, lineno, column);
                  in_typedef = 0;
-                 printf ("//endoftypedef(%s)//",g_cur_sym);
               } /* clear flag for 'typedef' */ 
            }
 	;
@@ -385,8 +391,8 @@ declaration_specifiers
 	| type_specifier declaration_specifiers
 	| type_qualifier 
 	| type_qualifier declaration_specifiers
-	| function_specifier
-	| function_specifier declaration_specifiers
+	| function_specifier 
+	| function_specifier declaration_specifiers 
 	;
 
 function_specifier
@@ -406,7 +412,7 @@ init_declarator
 	;
 
 storage_class_specifier
-	: TYPEDEF { in_typedef = 1; /*printf ("//TYPEDEF FOUND//");*/ }
+	: TYPEDEF { in_typedef = 1; }
 	| EXTERN
 	| STATIC
 	| AUTO
@@ -429,9 +435,9 @@ type_specifier
 	;
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' {printf("//STRUC-ID//");in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
+	: struct_or_union IDENTIFIER '{' { in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
 	| struct_or_union '{' {in_struct_or_union=1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union IDENTIFIER { printf ("//PRE-TYPE//"); in_struct_or_union=0;} %prec WITHOUT_STRUCT_CONTENT
+	| struct_or_union IDENTIFIER { /* printf ("//PRETYPE//");*/ in_struct_or_union=0;} %prec WITHOUT_STRUCT_CONTENT
 	;
 
 struct_or_union
@@ -508,16 +514,24 @@ pre_direct_declarator
 direct_declarator
 	: IDENTIFIER 
 	{   
-		sprintf (saved_identifier, "%s", g_cur_sym); 
-		show_id_or_type ();
-		if (1==in_typedef && 0==in_para_list && 0==in_struct_or_union)
-		{
-			st_insert_typedef (saved_identifier, lineno, column);
-		} else {
-			st_insert (saved_identifier, lineno, column);
-		}
+           sprintf (saved_identifier, "%s", g_cur_sym); 
+           show_id_or_type ();
+           if (1==in_typedef && 0==in_para_list &&0==in_struct_or_union)
+           {
+           } else {
+              if (0 == in_para_list && 0 == in_struct_or_union)
+              {
+#if 1
+                 printf ("//ID(%s)in(%d)inp(%d)//", 
+                    saved_identifier, in_struct_or_union, in_para_list);
+#endif
+                 st_insert (saved_identifier, lineno, column);
+              } else {
+                 printf ("//inp(%d)ins(%d)//", in_para_list, in_struct_or_union);
+              }
+           }
 	}
-	| '(' declarator ')'
+	| '(' declarator {functypedef=1;printf("//FUNCTYPEDEF(%s)//", g_cur_sym);st_insert_typedef(g_cur_sym, lineno, column);} ')'
 	| direct_declarator '[' direct_declarator_needinsert constant_expression ']'
 	| direct_declarator '[' ']'
 	| direct_declarator 
@@ -747,7 +761,7 @@ function_definition
 		{
 			external_func_decl = 0;
 			enter_func = 1;
-//			printf ("##%s:intype(%d)", saved_func_name, in_typedef);
+			printf ("##%s:intype(%d)", saved_func_name, in_typedef);
 			enter_block ();
 		}
 	compound_statement {enter_func = 0; leave_block (); external_func_decl = 0;}
