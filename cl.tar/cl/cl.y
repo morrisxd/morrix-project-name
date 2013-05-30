@@ -536,9 +536,10 @@ direct_declarator
 	| direct_declarator '[' direct_declarator_needinsert constant_expression ']'
 	| direct_declarator '[' ']'
 	| direct_declarator '(' parameter_type_list ')' 
-            { functypedef=0; }
+            { functypedef=0; printf("//clearFunctypdef//");}
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'
+            { functypedef=0; printf("//clearFunctypdef//");}
 	;
 
 direct_declarator_needinsert :
