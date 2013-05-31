@@ -1,0 +1,14 @@
+./typedef2.c
+./sdd_si.c
+./hello.c
+./t1.c
+./dos/dos2unix.c
+./dos/unix2dos.c
+./symtab.c
+./t2.c
+./typedef.c
+./cl-standard.y
+./cl.y
+./cl2.y
+./globals.h
+./symtab.h
