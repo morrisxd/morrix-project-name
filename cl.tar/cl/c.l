@@ -214,8 +214,6 @@ int check_type()
  * it actually will only return IDENTIFIER. 
  * if we did not find in the type list, then this is a symbol name
  */
-   after_type_specifiers = 0;
-//   printf ("//ID(%s)//", yytext);
    return(IDENTIFIER);
 }
 

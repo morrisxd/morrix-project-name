@@ -1,34 +1,19 @@
 Variable Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
-    (fds_bits)      +26                        +2166 
-      (MIBDID)      +83                        +3660        +3661        +3662 
-     (timeout)      +51                        +3492 
-     (options)      +40                        +3497        +3499        +3501 
-        (code)      +50                        +2685 
-       (semId)      +38                        +3491        +3492        +3493        +3494        +3495        +3502        +3506 
-         (did)      +40                        +3660        +3661        +3662        +3665 
-      (idList)      +52                        +3495 
-    (oid_data)      +23                        +3584        +3591 
-(initialState)      +66                        +3497 
-         (val)      +34                        +2004 
-       (level)      +49                        +3506 
-    (maxTasks)      +66                        +3495 
-       (flags)      +28                        +3577 
-(initialCount)      +58                        +3499 
 
 Typedef  Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
     (uint16_t)      +33                        +1973 
         (VOID)      +29                        +2058 
- (VOIDFUNCPTR)      +38                        +2067        +2067 
+ (VOIDFUNCPTR)      +38                        +2067 
      (BOOLEAN)      +31                        +2269 
-     (FUNCPTR)      +34                        +2066        +2066 
+     (FUNCPTR)      +34                        +2066 
       (ushort)      +31                        +2181 
     (ENTITY_T)      +24                        +2474 
   (INSTANCE_T)      +26                        +2296 
       (MIBDID)      +29                        +3593 
 (ENTITY_INFO_T)      +15                        +2488 
-  (FLTFUNCPTR)      +37                        +2069        +2069 
+  (FLTFUNCPTR)      +37                        +2069 
       (fpos_t)      +21                        +1953 
       (addr_t)      +23                        +2007 
        (UINT8)      +30                        +2044 
@@ -49,7 +34,6 @@ Typedef  Name  Location  Domain         Line Numbers
         (UINT)      +29                        +2051 
     (DateTime)      +15                        +3608 
 (DEVICE_STATUS_Tval)      +20                        +2289 
-  (fptr_check)      +63                        +3661 
        (TBOOL)      +30                        +2186 
      (ulong_t)      +32                        +2002 
      (int32_t)      +22                        +1978 
@@ -66,7 +50,6 @@ Typedef  Name  Location  Domain         Line Numbers
  (MIB_Flags_t)      +18                        +3578 
        (INT32)      +30                        +2041 
 (SLOT_NUMBER_T)      +15                        +2392 
-(fptr_partial)      +67                        +3662 
       (time_t)      +30                        +1948 
      (ssize_t)      +21                        +1943 
        (INSTR)      +28                        +2214 
@@ -85,7 +68,7 @@ Typedef  Name  Location  Domain         Line Numbers
        (UINT2)      +29                        +2261 
      (int16_t)      +23                        +1968 
 (ENTITY_STATE_T)      +17                        +2481 
-  (DBLFUNCPTR)      +37                        +2068        +2068 
+  (DBLFUNCPTR)      +37                        +2068 
         (INT1)      +18                        +2259 
       (UINT32)      +31                        +2046 
 (BOARD_OPTION_T)      +27                        +2490 
@@ -94,7 +77,6 @@ Typedef  Name  Location  Domain         Line Numbers
        (UINT4)      +28                        +2265 
         (INT2)      +19                        +2263 
  (SEM_B_STATE)      +18                        +3483 
-        (fptr)      +52                        +3660 
       (wint_t)      +29                        +1560 
       (USHORT)      +31                        +2050 
      (int64_t)      +27                        +1988 

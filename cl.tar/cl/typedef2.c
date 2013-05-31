@@ -25,5 +25,6 @@ typedef long mylong;
 
 mylong mylongnum;
 
+int hotProc (int i, char ch, mylong ml, float f);
 
 

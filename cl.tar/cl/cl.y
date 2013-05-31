@@ -40,6 +40,10 @@ extern int column;
 #undef PRINTF_INIT_DECLARATOR
 #endif
 
+#define E_F_TYPEDEF { tmp=0;}
+#define E_F_TYPEDEF2 { }
+
+#define S_FUNC_TYPEDEF {functypedef=1;printf("//FUNCTYPEDEF(%s)//", g_cur_sym);st_insert_typedef(g_cur_sym, lineno, column);}
 
 /*
  * These macro has no use indeed, the code was written firstly not so good,
@@ -53,7 +57,6 @@ int tmp = 0;
 
 int functypedef = 0;
 int pre_s_u = 0;
-int after_type_specifiers = 0;
 int in_namelist = 0;
 int in_struct_or_union = 0;
 int in_para_list = 0;
@@ -130,12 +133,6 @@ int save_right_sym (char * right);
  */
 int enter_block (void);
 int leave_block (void);
-
-/*
- * for data type analyze
- */
-variable in_var;
-
 %}
 
 
@@ -355,40 +352,26 @@ declaration
 	: declaration_specifiers ';'
 	| declaration_specifiers init_declarator_list ';' 
            {
-              printf("//functypedef(%d)//", functypedef);
+              if (functypedef)printf("//functypedef(%d)//",functypedef);
               if (in_typedef && 0 == functypedef) 
               {
                  sprintf (saved_identifier, "%s", g_cur_sym); 
-#if 1
-                 printf ("//EOT(%s)functypedef(%d)//",g_cur_sym, functypedef); // very important
-#endif
+                 printf ("//EOT(%s)//",g_cur_sym);
                  st_insert_typedef (saved_identifier, lineno, column);
                  in_typedef = 0;
-              } /* clear flag for 'typedef' */ 
+              }
+              if (functypedef)
+              {
+                 functypedef = 0;
+                 printf("//clearFunctypedef//");
+              }
            }
 	;
 
 declaration_specifiers
 	: storage_class_specifier 
-		{
-			/* 
-			 * 'auto','extern','static','register','typedef'
-			 */
-			in_var.storage_class_specifier = $1; 
-		}
 	| storage_class_specifier declaration_specifiers
 	| type_specifier 
-		{
-		/*
-		 * This is what we need when defining a variable
-		 * Here decides the 
-		 *	'int' , 'char', 'long', typedef_name, etc ...
-		 */
-			in_var.type_specifier = $1;
-		#if 0
-			printf ("#####(%s)", g_cur_sym);
-		#endif
-		} 
 	| type_specifier declaration_specifiers
 	| type_qualifier 
 	| type_qualifier declaration_specifiers
@@ -457,7 +440,7 @@ struct_declaration
 
 specifier_qualifier_list
 	: type_specifier specifier_qualifier_list
-	| type_specifier {in_var.type_specifier = $1;}
+	| type_specifier
 	| type_qualifier specifier_qualifier_list
 	| type_qualifier
 	;
@@ -513,43 +496,14 @@ pre_direct_declarator
 
 
 direct_declarator
-	: IDENTIFIER 
-        {
-#if 0
-           sprintf (saved_identifier, "%s", g_cur_sym); 
-           show_id_or_type ();
-           if (1==in_typedef && 0==in_para_list &&0==in_struct_or_union)
-           {
-           } else {
-              if (0 == in_para_list && 0 == in_struct_or_union)
-              {
-                 printf ("//ID(%s)in(%d)inp(%d)//", 
-                    saved_identifier, in_struct_or_union, in_para_list);
-                 st_insert_id (saved_identifier, lineno, column);
-              } else {
-                 printf ("//inp(%d)ins(%d)//", in_para_list, in_struct_or_union);
-              }
-           }
-#endif
-	}
-	| '(' declarator {functypedef=1;printf("//FUNCTYPEDEF(%s)//", g_cur_sym);st_insert_typedef(g_cur_sym, lineno, column);} ')'
-	| direct_declarator '[' direct_declarator_needinsert constant_expression ']'
+	: IDENTIFIER {if (9 == tmp) printf("//PARA(%s)//", g_cur_sym);} 
+	| '(' declarator {S_FUNC_TYPEDEF} ')'
+	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' parameter_type_list ')' 
-            { functypedef=0; printf("//clearFunctypdef//");}
+	| direct_declarator '(' parameter_type_list ')' {E_F_TYPEDEF} 
 	| direct_declarator '(' identifier_list ')'
-	| direct_declarator '(' ')'
-            { functypedef=0; printf("//clearFunctypdef//");}
+	| direct_declarator '(' ')' 			{E_F_TYPEDEF2} 
 	;
-
-direct_declarator_needinsert :
-		{
-			// printf("$direct_declarator\"%s\"$", g_cur_sym);
-			st_insert_id (g_cur_sym, lineno, column);
-		}
-	;
-
-
 
 pointer
 	: '*'
@@ -565,38 +519,23 @@ type_qualifier_list
 
 
 parameter_type_list
-	: parameter_list { printf ("(P1)"); after_type_specifiers = 0; }
+	: parameter_list
 	| parameter_list ',' ELLIPSIS
 	;
 
 parameter_list
-	: parameter_declaration {printf ("(P2)"); after_type_specifiers = 0; }
-	| parameter_list ',' parameter_declaration {printf ("(P3)"); after_type_specifiers = 0;}
+	: parameter_declaration
+	| parameter_list ',' parameter_declaration
 	;
 
 parameter_declaration
-	: declaration_specifiers_declarator declarator end_declarator
-		{
-#ifdef PRINT_INIT_DECLARATOR
-			/* printf ("@@@(%s)", g_cur_sym); */
-#endif
-			st_insert_id(g_cur_sym, lineno, column);
-		}
-	| declaration_specifiers_declarator abstract_declarator end_declarator
+	: declaration_specifiers_declarator { tmp = 9;} declarator
+	| declaration_specifiers_declarator abstract_declarator 
 	| declaration_specifiers
-	|   
-	;
-
-end_declarator
-	: { in_namelist = 0; }
 	;
 
 declaration_specifiers_declarator
-	: declaration_specifiers after_decl_spec 
-	;
-
-after_decl_spec
-	: { in_namelist = 1; /* printf("(AFTER_DECL(%s))", g_cur_sym);*/ }
+	: declaration_specifiers
 	;
 
 identifier_list
@@ -616,27 +555,15 @@ abstract_declarator
 	;
 
 direct_abstract_declarator
-	: '(' abstract_declarator 
-		{
-#ifdef PRINT_INIT_DECLARATOR
-			printf ("(%s)", g_cur_sym); 
-#endif
-		} 
-	')'
+	: '(' abstract_declarator ')'
 	| '[' ']'
 	| '[' constant_expression ']'
-	| direct_abstract_declarator 
-		{
-			printf("$direct_abstract_declarator$");
-		}
-		'[' ']'
-	| direct_abstract_declarator 
-		{printf("$direct_abstract_declarator2$");}
-		'[' constant_expression ']'
+	| direct_abstract_declarator '[' ']'
+	| direct_abstract_declarator '[' constant_expression ']'
 	| '(' ')'
-	| '(' {before_para (3); in_para_list=1;} parameter_type_list {after_para(3); in_para_list=0;} ')'
+	| '(' parameter_type_list ')'
 	| direct_abstract_declarator '(' ')'
-	| direct_abstract_declarator '(' {before_para (3); in_para_list=1;}parameter_type_list {after_para (3); in_para_list=0;} ')'
+	| direct_abstract_declarator '(' parameter_type_list ')'
 	;
 
 initializer
@@ -860,39 +787,17 @@ leave_block (void)
 
 int show_id_or_type (void)
 {
-#if 0
-	printf("(FOUND ID_IN_DECL(%s)P(%d))INTYPEDEF(%d)SU(%d)(%s)",
-		saved_identifier, 
-		in_para_list, 
-		in_typedef, 
-		in_struct_or_union,
-		(1==in_typedef&&0==in_para_list&&0==in_struct_or_union)? 
-				"st_inserttype":"st_insert_id"); 
-#endif
-
 	return 0;
 }
 
 int show_pos (const char * tag)
 {
-	printf (tag);
 	return 0;
 }
 
 int 
 type_specifiers (int n)
 {
-	if (in_para_list)
-	{
-		if (0)
-		{
-			printf ("(TYPESPECIFIERS)");
-		} else {
-			printf ("(T)");
-		}
-	}
-	after_type_specifiers = 1;
-
 	return 0;
 }
 
