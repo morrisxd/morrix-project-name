@@ -59,7 +59,7 @@ typedef struct BucketListRec {
 }              *BucketList;
 #endif
 
-extern char saved_func_name [];
+char saved_func_name [1024];
 
 /* the hash table */
 static BucketList hashTable[SIZE];

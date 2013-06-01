@@ -17,8 +17,6 @@ typedef struct _variable {
 
 extern int lineno;
 extern int in_typedef;
-extern char saved_func_name[MAXSYMLEN];
 extern int external_func_decl;
 extern int in_namelist;
 extern int after_type_specifiers;
-extern int in_para_list;
