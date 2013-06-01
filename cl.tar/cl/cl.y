@@ -40,10 +40,8 @@ extern int column;
 #undef PRINTF_INIT_DECLARATOR
 #endif
 
-#define E_F_TYPEDEF { tmp=0;}
-#define E_F_TYPEDEF2 { }
 
-#define S_FUNC_TYPEDEF {functypedef=1;printf("//FUNCTYPEDEF(%s)//", g_cur_sym);st_insert_typedef(g_cur_sym, lineno, column);}
+#define TYPEDEF_FUNC {td_func=1;printf("//FUNCTYPEDEF(%s)//", g_cur_sym);st_insert_typedef(g_cur_sym, lineno, column);}
 
 /*
  * These macro has no use indeed, the code was written firstly not so good,
@@ -53,16 +51,17 @@ extern int column;
 #define SET_CLEAN_IN_ID_RECOGNIZE
 #define CHECK_INDEX_IN_ID_RECOGNIZE
 
-int tmp = 0;
+typedef enum{
+   in_para_list,
+   in_func_typedef,
+   in_struct_or_union,
+   in_none
+}pos;
 
-int functypedef = 0;
-int pre_s_u = 0;
-int in_namelist = 0;
-int in_struct_or_union = 0;
-int in_para_list = 0;
-int block_level = 0;
+pos tmp = in_none;
+
+int td_func = 0;
 int in_typedef = 0;
-int external_func_decl = 0;
 
 // #define YYSTYPE treenode *
 
@@ -73,66 +72,6 @@ int external_func_decl = 0;
 char g_cur_sym [MAXSYMLEN];
 char identifier [MAXSYMLEN];
 char saved_identifier [MAXSYMLEN];
-
-/* 
- * used for depth record for function block '{ ... }'
- */
-char g_namespace [MAXSYMLEN];
-
-/*
- * function name which has been saved when SYMBOL was recognized
- */
-char saved_func_name [MAXSYMLEN]; 
-
-/*
- * check if the array index range has been checked for overflow safe
- */
-int check_dirty (int index);
-int show_pos (const char * tag);
-int type_specifiers (int n);
-
-/*
- * Used when analyzing array []
- */
-char saved_array_name [MAXSYMLEN];
-char saved_array_index_name [MAXSYMLEN];
-
-/*
- * saved symbols when recognized in 'if (i < j)' like expression
- */
-char saved_left_sym [MAXSYMLEN];
-char saved_right_sym [MAXSYMLEN];
-
-/*
- * Used when handling 'if(...)', 'int i, ...', and 'foo (int n)', etc ...
- */
-int in_cond_chk = 0;
-int in_postfix_expression = 0;
-int enter_func = 0;
-
-/*
- * Used when found 'if (...)' structure 
- */
-int set_clean (char * saved_id);
-
-int save_array (char * arrayname);
-
-/*
- * When checking 'name[i] = ...' struct for 'array index out of range' error.
- */
-int check_array_index (char * indexname);
-
-/*
- * for 'if (i < 3)' look-like structure
- */
-int save_left_sym (char * left);
-int save_right_sym (char * right);
-
-/*
- * for compound-statement '{}' look-like  structure .
- */
-int enter_block (void);
-int leave_block (void);
 %}
 
 
@@ -158,27 +97,6 @@ int leave_block (void);
 
 primary_expression
 	: IDENTIFIER 
-		{ 
-			sprintf (identifier, "%s", g_cur_sym); 
-			if (1 == in_cond_chk) {
-#ifdef PRINT_IDENTIFIER
-				printf ("#id(%s)#", identifier);
-#endif
-#ifdef SET_CLEAN_IN_ID_RECOGNIZE
-				set_clean (identifier);
-#endif
-			}
-
-			if (1 == in_postfix_expression) {
-#ifdef PRINT_IDENTIFIER
-				printf ("#postid(%s)", identifier);
-#endif
-
-#ifdef CHECK_INDEX_IN_ID_RECOGNIZE
-				check_array_index (g_cur_sym); 
-#endif
-			}
-		}
 	| CONSTANT
 	| STRING_LITERAL
 	| '(' expression ')'
@@ -186,14 +104,7 @@ primary_expression
 
 postfix_expression
 	: primary_expression
-	| postfix_expression { save_array (g_cur_sym); } 
-		'[' {in_postfix_expression = 1;} expression 
-			{ 
-#ifndef CHECK_INDEX_IN_ID_RECOGNIZE
-				check_array_index (g_cur_sym); 
-#endif
-			}
-		']' {in_postfix_expression = 0;}
+	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
 	| postfix_expression '(' argument_expression_list ')'
 	| postfix_expression '.' IDENTIFIER
@@ -251,34 +162,8 @@ shift_expression
 
 relational_expression
 	: shift_expression
-	| relational_expression 
-		{ 
-			save_left_sym (g_cur_sym);
-#ifdef PRINT_RELATION
-			printf ("relation(%s)", g_cur_sym);
-#endif
-		} 
-	'<' shift_expression 
-		{ 
-			save_right_sym (g_cur_sym); 
-#ifdef PRINT_RELATION
-			printf ("relation(%s)", g_cur_sym);
-#endif
-		}
-	| relational_expression 
-		{ 
-			save_left_sym (g_cur_sym);
-#ifdef PRINT_RELATION
-			printf ("relation(%s)", g_cur_sym);
-#endif
-		} 
-	'>' shift_expression
-		{ 
-			save_right_sym (g_cur_sym); 
-#ifdef PRINT_RELATION
-			printf ("relation(%s)", g_cur_sym);
-#endif
-		}
+	| relational_expression '<' shift_expression 
+	| relational_expression '>' shift_expression
 	| relational_expression LE_OP shift_expression
 	| relational_expression GE_OP shift_expression
 	;
@@ -352,18 +237,20 @@ declaration
 	: declaration_specifiers ';'
 	| declaration_specifiers init_declarator_list ';' 
            {
-              if (functypedef)printf("//functypedef(%d)//",functypedef);
-              if (in_typedef && 0 == functypedef) 
+              if (td_func)printf("//td_func(%d)//",td_func);
+              if (in_typedef)
               {
-                 sprintf (saved_identifier, "%s", g_cur_sym); 
-                 printf ("//EOT(%s)//",g_cur_sym);
-                 st_insert_typedef (saved_identifier, lineno, column);
+                 if (td_func) 
+                 {
+                    td_func = 0;
+                    printf("//clearFunctypedef//");
+                 } else {
+                    sprintf (saved_identifier, "%s", g_cur_sym); 
+                    printf ("//EOT(%s)//",g_cur_sym);
+                    st_insert_typedef (saved_identifier,lineno, column);
+                    in_typedef = 0;
+                 }
                  in_typedef = 0;
-              }
-              if (functypedef)
-              {
-                 functypedef = 0;
-                 printf("//clearFunctypedef//");
               }
            }
 	;
@@ -404,24 +291,24 @@ storage_class_specifier
 	;
 
 type_specifier
-	: VOID { type_specifiers (3); }
-	| CHAR { type_specifiers (3); }
-	| SHORT { type_specifiers (4); }
-	| INT { type_specifiers (4); }
-	| LONG { type_specifiers (4); }
-	| FLOAT { type_specifiers (4); }
-	| DOUBLE { type_specifiers (4); }
-	| SIGNED { type_specifiers (4); }
-	| UNSIGNED { type_specifiers (4); }
-	| struct_or_union_specifier { type_specifiers (4); }
-	| enum_specifier { type_specifiers (4); }
-	| TYPE_NAME { type_specifiers (4); }
+	: VOID
+	| CHAR
+	| SHORT
+	| INT
+	| LONG
+	| FLOAT
+	| DOUBLE
+	| SIGNED
+	| UNSIGNED
+	| struct_or_union_specifier
+	| enum_specifier
+	| TYPE_NAME
 	;
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' { in_struct_or_union = 1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union '{' {in_struct_or_union=1;} struct_declaration_list {in_struct_or_union=0;} '}'
-	| struct_or_union IDENTIFIER { /* printf ("//PRETYPE//");*/ in_struct_or_union=0;} %prec WITHOUT_STRUCT_CONTENT
+	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+	| struct_or_union '{' struct_declaration_list '}'
+	| struct_or_union IDENTIFIER %prec WITHOUT_STRUCT_CONTENT
 	;
 
 struct_or_union
@@ -491,18 +378,33 @@ declarator
 	;
 
 pre_direct_declarator
-	: { in_namelist = 1; }
+	:
 	;
 
 
 direct_declarator
-	: IDENTIFIER {if (9 == tmp) printf("//PARA(%s)//", g_cur_sym);} 
-	| '(' declarator {S_FUNC_TYPEDEF} ')'
+	: IDENTIFIER 
+            {
+               switch (tmp) {
+               case in_para_list:
+#if 1
+                  printf("//PARA(%s)//", g_cur_sym);
+                  column = column + strlen(g_cur_sym) + 10;
+#endif
+                  break;
+               case in_struct_or_union:
+                  printf ("//VAR(%s)//", g_cur_sym);
+                  break;
+               default:
+                  break;
+               }
+            }
+	| '(' declarator {TYPEDEF_FUNC} ')'
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' parameter_type_list ')' {E_F_TYPEDEF} 
+	| direct_declarator '(' parameter_type_list ')'
 	| direct_declarator '(' identifier_list ')'
-	| direct_declarator '(' ')' 			{E_F_TYPEDEF2} 
+	| direct_declarator '(' ')'
 	;
 
 pointer
@@ -529,7 +431,7 @@ parameter_list
 	;
 
 parameter_declaration
-	: declaration_specifiers_declarator { tmp = 9;} declarator
+	: declaration_specifiers_declarator { tmp = in_para_list;} declarator {tmp = in_none;}
 	| declaration_specifiers_declarator abstract_declarator 
 	| declaration_specifiers
 	;
@@ -615,13 +517,7 @@ expression_statement
 	;
 
 selection_statement_first_half
-	: IF '(' {in_cond_chk = 1;} expression 
-		{
-#ifndef SET_CLEAN_IN_ID_RECOGNIZE
-			set_clean (g_cur_sym); 
-#endif
-		}
-		')' {in_cond_chk = 0;} statement;
+	: IF '(' expression ')' statement;
 
 selection_statement
 	: selection_statement_first_half
@@ -676,12 +572,6 @@ char *s;
 	printf("\n%*s\n%*s(line(%d:%d))SYM(%s)\n", column, "^", column, s, lineno, column, g_cur_sym);
 }
 
-int 
-check_dirty (int index)
-{
-	return 0;
-}
-
 #include "string.h"
 
 int 
@@ -696,128 +586,5 @@ yydebug = 0;
 	release_table ();
 	release_typedef_table ();
 
-	return 0;
-}
-
-int 
-set_clean (char * saved_id)
-{
-	BucketList p = NULL;
-
-	// printf ("LEFT(%s)RIGHT(%S)", saved_left_sym, saved_right_sym);
-	p = st_lookup (saved_left_sym);
-	if (NULL == p) {
-		// nothing 
-	} else {
-		p->dirty = 0;
-	}
-	p = st_lookup (saved_right_sym);
-	if (NULL == p) {
-		// nothing 
-	} else {
-		p->dirty = 0;
-	}
-
-	return 0;
-}
-
-int 
-save_array (char * arrayname)
-{
-	// printf ("postfix_expression(%s)",arrayname); 
-	check_dirty(0);
-	sprintf (saved_array_name, "%s", arrayname);
-
-	return 0;
-}
-
-int 
-check_array_index (char * indexname)
-{
-	BucketList p = NULL;
-
-	if (0 != strcmp (saved_array_name, indexname)) {
-		printf("SYM(%s)",indexname);
-
-		p = st_lookup (indexname);
-		if (NULL == p) {
-			/* increadiable */;
-			printf ("INCREADIABLE");
-		} else {
-			if (p->dirty) {
-				/*
-				 * dirty, NOT cleared
-				 */
-				printf ("===>NOT cleared(line:%d)", lineno);
-			} else {
-			}
-		}
-	}
-
-	return 0;
-}
-
-int 
-save_left_sym (char * left)
-{
-	sprintf (saved_left_sym, "%s", left);
-}
-
-int 
-save_right_sym (char * right)
-{
-	sprintf (saved_right_sym, "%s", right);
-}
-
-int 
-enter_block (void)
-{
-	// printf ("enter block [%s]", saved_func_name);
-	return 0;
-}
-
-int 
-leave_block (void)
-{
-	// printf ("leave block [%s]", saved_func_name);
-	memset (saved_func_name, 0, MAXSYMLEN);
-
-	return 0;
-}
-
-int show_id_or_type (void)
-{
-	return 0;
-}
-
-int show_pos (const char * tag)
-{
-	return 0;
-}
-
-int 
-type_specifiers (int n)
-{
-	return 0;
-}
-
-
-/* 
- * before parameter declaration list in function head.
- */
-int
-before_para (int n)
-{
-	// printf ("(INININ)");
-	return 0;
-}
-
-/* 
- * after parameter declaration list in function head.
- */
-int
-after_para (int n)
-{
-	// printf ("(OUOUOU)");
 	return 0;
 }

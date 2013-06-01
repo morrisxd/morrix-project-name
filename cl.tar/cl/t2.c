@@ -1,16 +1,15 @@
-typedef struct thisis_1 thisis_1;
-typedef struct thisis_2 thisis_2;
-typedef struct thisis_3 thisis_3;
+int i, j, k = 0;
+float f = 0.3;
 
-typedef struct thisis_4 {int i;} thisis_4;
+typedef struct s1 s1;
+typedef struct s2 s2;
+typedef struct s3 s3;
 
-typedef union {
-	int i;
-	char ch;
-}thisis_union;
+typedef struct s4 { int i; } s4;
 
-typedef unsighe short ushort_t;
+typedef (*pFunc)(int i, char *);
 
-ushort_t myshort = 9;
+int main(int argc, char *argv);
+
 
 
