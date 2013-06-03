@@ -1,0 +1,2 @@
+- UFE412 system init entry point: fr_system_init()
+- WDDI init entry point: np_init ()
