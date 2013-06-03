@@ -86,13 +86,23 @@ char saved_identifier [MAXSYMLEN];
 %token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
 %token STRUCT UNION ENUM ELLIPSIS
 
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
+
+%nonassoc LOWER_THAN_DECLARATOR
+%nonassoc DECLARATOR
+%nonassoc H_DECLARATOR
+
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 %token INLINE INLINE2
 
 %start translation_unit
 
-%nonassoc WITHOUT_STRUCT_CONTENT
+%nonassoc LOWER_THAN_BRACE
 %nonassoc '{' 
+
+
+
 %%
 
 primary_expression
@@ -308,7 +318,7 @@ type_specifier
 struct_or_union_specifier
 	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
 	| struct_or_union '{' struct_declaration_list '}'
-	| struct_or_union IDENTIFIER %prec WITHOUT_STRUCT_CONTENT
+	| struct_or_union IDENTIFIER %prec LOWER_THAN_BRACE
 	;
 
 struct_or_union
@@ -377,11 +387,6 @@ declarator
 	| direct_declarator
 	;
 
-pre_direct_declarator
-	:
-	;
-
-
 direct_declarator
 	: IDENTIFIER 
             {
@@ -431,13 +436,9 @@ parameter_list
 	;
 
 parameter_declaration
-	: declaration_specifiers_declarator { tmp = in_para_list;} declarator {tmp = in_none;}
-	| declaration_specifiers_declarator abstract_declarator 
-	| declaration_specifiers
-	;
-
-declaration_specifiers_declarator
-	: declaration_specifiers
+	: declaration_specifiers { tmp = in_para_list;} declarator {tmp = in_none;}   %prec DECLARATOR
+	| declaration_specifiers abstract_declarator
+	| declaration_specifiers	%prec LOWER_THAN_DECLARATOR 
 	;
 
 identifier_list
@@ -516,12 +517,9 @@ expression_statement
 	| expression ';'
 	;
 
-selection_statement_first_half
-	: IF '(' expression ')' statement;
-
 selection_statement
-	: selection_statement_first_half
-	| selection_statement_first_half ELSE statement
+	: IF '(' expression ')' statement	%prec LOWER_THAN_ELSE
+	| IF '(' expression ')' statement ELSE statement
 	| SWITCH '(' expression ')' statement
 	;
 
