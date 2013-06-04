@@ -9,7 +9,8 @@ typedef struct s4 { int i; } s4;
 
 typedef (*pFunc)(int i, char *);
 
-int main(int argc, char *argv);
-
+int myfunc(int argc, char argv);
+int main (int argc, char **argv);
+char *p;
 
 

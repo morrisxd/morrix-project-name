@@ -407,7 +407,7 @@ direct_declarator
 	| '(' declarator {TYPEDEF_FUNC} ')'
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' parameter_type_list ')'
+	| direct_declarator '(' {tmp=in_para_list;} parameter_type_list ')' {tmp=in_none;}
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'
 	;
@@ -436,7 +436,7 @@ parameter_list
 	;
 
 parameter_declaration
-	: declaration_specifiers { tmp = in_para_list;} declarator {tmp = in_none;}   %prec DECLARATOR
+	: declaration_specifiers declarator %prec DECLARATOR
 	| declaration_specifiers abstract_declarator
 	| declaration_specifiers	%prec LOWER_THAN_DECLARATOR 
 	;
@@ -464,7 +464,7 @@ direct_abstract_declarator
 	| direct_abstract_declarator '[' ']'
 	| direct_abstract_declarator '[' constant_expression ']'
 	| '(' ')'
-	| '(' parameter_type_list ')'
+	| '(' {tmp=in_para_list;} parameter_type_list ')' {tmp=in_none;}
 	| direct_abstract_declarator '(' ')'
 	| direct_abstract_declarator '(' parameter_type_list ')'
 	;
