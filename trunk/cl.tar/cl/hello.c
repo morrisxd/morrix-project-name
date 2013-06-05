@@ -41,7 +41,7 @@ typedef struct _p {
 	float f;
 }myp;
 
-myp *(*findProc) (struct mystruct * tablePtr, const char * key);
+myp (*findProc) (struct mystruct * tablePtr, const char * key);
 
 
 typedef myp* mypp;
