@@ -436,7 +436,7 @@ void App_ShowStats(void)
       printf("\n");
 
       gets(tmp);
-      sscanf(tmp, "%d", &ch);
+      sscanf(tmp, "%d", (int *)&ch);
       switch(ch)
       {
          case 1:
