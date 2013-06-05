@@ -152,11 +152,13 @@ dp_interface_val = HDLC_OVER_MPLS;
    App_EnableEmphyPort();
 
    /* Initialize the framer. Configure and create UFE line and PHY create*/
+printf ("0\n");
    App_UfeSystem();
-
+printf ("1\n");
    /*Create channels and PQBlocks*/
    App_ChannelAndPQBlockCreate();
 
+printf ("2\n");
    switch(dp_interface_val)
    {
    case HDLC_OVER_IP:
@@ -187,11 +189,14 @@ dp_interface_val = HDLC_OVER_MPLS;
       break;
    }
 
+printf ("3\n");
    App_EnableUFESystem();
     
+printf ("4\n");
    /* Enable all sytem, ports, device and channels*/
    App_EnableSystem();
 
+printf ("5\n");
    /* Menu for testing the application*/
    if (0 == freerun)
    {
