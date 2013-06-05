@@ -20,13 +20,7 @@
  * Return val   : None
  *****************************************************************************/
 
-
-
-
-
 extern WP_U32 pkts_lock;
-
-
 
 void App_DataSend (WP_handle h_tx, WP_handle h_pool)
 {
@@ -127,14 +121,17 @@ void add_task (app_task_list * task_list, WP_U32 event_type,
    WP_U16 tail = task_list->tail;
    WP_U32 next = tail + 1;
 
-printf ("add_task: ready to lock\n");fflush(stdout);
+   printf ("add_task: ready to lock\n");
+   fflush (stdout);
    // WPL_Lock (WPL_THREAD_LOCK_KEY, &pkts_lock);
 
-printf ("add_task: ready to lock-2\n");fflush(stdout);
+   printf ("add_task: ready to lock-2\n");
+   fflush (stdout);
    if (next == task_list->num_elements)
       next = 0;
 
-printf ("add_task: ready to lock-3\n");fflush(stdout);
+   printf ("add_task: ready to lock-3\n");
+   fflush (stdout);
    if (next != task_list->head)
    {
       task_list->task[tail].event_tag = event_tag;
@@ -143,8 +140,9 @@ printf ("add_task: ready to lock-3\n");fflush(stdout);
       task_list->tail = next;
    }
 
-   WPL_Unlock(WPL_THREAD_LOCK_KEY, &pkts_lock);
-   printf ("event inserted into queue list\n"); fflush (stdout);
+   WPL_Unlock (WPL_THREAD_LOCK_KEY, &pkts_lock);
+   printf ("event inserted into queue list\n");
+   fflush (stdout);
 }
 
 /*******************************************************************************
@@ -175,7 +173,6 @@ void ima_add_task (ima_app_task_list * task_list, WP_U32 data, WP_U32 info)
    }
 }
 
-
 /*****************************************************************************
  * Function name: next_task
  * Description	: Event handling , returning next task
@@ -192,7 +189,7 @@ app_task *next_task (app_task_list * task_list, app_task * result)
 
    if (head == tail)
    {
-      WPL_Unlock(WPL_THREAD_LOCK_KEY, &pkts_lock);
+      WPL_Unlock (WPL_THREAD_LOCK_KEY, &pkts_lock);
       return NULL;
    }
 
@@ -205,8 +202,6 @@ app_task *next_task (app_task_list * task_list, app_task * result)
 
    return result;
 }
-
-
 
 extern int g_flag_thread;
 
@@ -425,7 +420,8 @@ void App_DuReceive (WP_handle h_rx, WP_U32 data_type)
 
 void App_EventRxIndicate (WP_tag tag, WP_U32 data, WP_U32 info)
 {
-   printf ("got a pakcets\n"); fflush (stdout);
+   printf ("got a pakcets\n");
+   fflush (stdout);
    add_task (irq_task_list, WP_EVENT_RX_INDICATE, tag, NULL);
 }
 
@@ -520,10 +516,11 @@ void App_TerminateOnError (WP_handle handle, WP_CHAR * s)
    else
    {
       if (handle == WP_OK)
-	{
-         printf ("Status returned from %s : WP_OK, pkts(%15d)\r", s, pkts_cnt ++);
-	 fflush (stdout);
-	}
+      {
+         printf ("Status returned from %s : WP_OK, pkts(%15d)\r", s,
+                 pkts_cnt++);
+         fflush (stdout);
+      }
       else
          printf ("Handle returned from %s is %#8.8x\n", s, handle);
    }

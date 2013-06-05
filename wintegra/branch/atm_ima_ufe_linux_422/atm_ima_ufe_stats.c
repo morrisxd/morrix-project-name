@@ -11,7 +11,7 @@
  *  File Name   : atm_ima_tdm_stats.c
  *
  *****************************************************************************/
-int g_flag_thread  = 1;
+int g_flag_thread = 1;
 
 void m_showWUFE (void)
 {
@@ -112,7 +112,6 @@ void m_showGrpStatus (void)
            group_state[i].fe_alarm_state);
    printf ("group_state[0].fe_alarm_type      =%d\n",
            group_state[i].fe_alarm_type);
-
 
    printf ("group_state[0].ne_state           =%s\n",
            ima_s (group_state[i].ne_state));
@@ -293,12 +292,14 @@ void App_ShowStats (void)
          printf ("-------------------------------\n");
          printf ("clear events\n");
          printf ("-------------------------------\n");
-	 if (g_flag_thread)
-	 {
-	    g_flag_thread = 0;
-	 } else {
-	    g_flag_thread = 1;
-	 }
+         if (g_flag_thread)
+         {
+            g_flag_thread = 0;
+         }
+         else
+         {
+            g_flag_thread = 1;
+         }
 #if 0
          display_events ();
 #endif
@@ -439,8 +440,6 @@ void App_ShowEnetDeviceStats (WP_handle enet_device_handle,
            (WP_U32) s_hs_enet.g999_rx_errored_fragments);
    printf (" g999_rx_length_error      : %d\n",
            (WP_U32) s_hs_enet.g999_rx_length_error);
-
-
 
    printf (" tx_bytes                  : %d\n",
            (WP_U32) s_hs_enet.tx_bytes);
