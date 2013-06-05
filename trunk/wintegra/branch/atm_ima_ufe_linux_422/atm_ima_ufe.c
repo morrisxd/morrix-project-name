@@ -38,12 +38,11 @@
  ***********************************************************************************************/
 
 #define WTI_CESOP_REGRESSION_TEST 1
-#define DELAY_COUNT     (10000 * 100)   // micro seconds
+#define DELAY_COUNT     (10000 * 100)  // micro seconds
 #define IMA_EVENT_DELAY (10)
 #define IMA_SEND_DELAY  (10000 * 100)
 #define IMA_GOT_DELAY  (20)
 #define SECONDS_TO_WAIT (1)
-
 
 #define PKTS_INTERVAL	(1)
 
@@ -81,16 +80,12 @@ extern WUFE_status WUFE_SystemDisplay (WP_U32 wufe_id);
 
 #include "wyd_util.c"
 
-
-
 #define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
-
-
 
 #include "atm_ima_ufe_util.c"
 #include "atm_ima_ufe_stats.c"
 
-WP_U32      pkts_lock;
+WP_U32 pkts_lock;
 
 WP_U8 prbs_result[336];
 
@@ -99,6 +94,7 @@ WP_U8 prbs_result[336];
 #include "ufe_utility.c"
 
 WUFE_init_config ufe4_config;
+
 // WP_ima_event a_task;
 
 static void release_test (void)
@@ -140,19 +136,18 @@ void App_ResetUfe (void)
    }                            // if(WTI_INITIALIZE_FIRMWARE)
 }
 
-void *events_poll(void *i)
+void *events_poll (void *i)
 {
    while (1)
    {
       display_events ();
 
-      WPL_Delay(IMA_EVENT_DELAY);
+      WPL_Delay (IMA_EVENT_DELAY);
    }
 }
 
 int g_hide = 0;
 app_task *task, a_task;
-
 
 void *pkts_got (void *i)
 {
@@ -170,8 +165,7 @@ void *pkts_got (void *i)
    }
 }
 
-
-void *pkts_send(void *i)
+void *pkts_send (void *i)
 {
    while (1)
    {
@@ -180,47 +174,46 @@ void *pkts_send(void *i)
          App_DataSend (h_enet1_tx, h_pool_buffer_iw);
       }
 
-      WPL_Delay(IMA_SEND_DELAY);
+      WPL_Delay (IMA_SEND_DELAY);
    }
 }
 
 void App_startThread (void)
 {
 #if 1
-   WP_THREAD_ID learning_thread_id, learning_thread_id_pkts, thread_id_pkts_got;
+   WP_THREAD_ID learning_thread_id, learning_thread_id_pkts,
+      thread_id_pkts_got;
 
    learning_thread_id_pkts = 0;
 
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
-   status = WPL_ThreadInit(&learning_thread_id, events_poll, 0);
-   App_TerminateOnError (status , "WPL_ThreadInit() learning");
+   status = WPL_ThreadInit (&learning_thread_id, events_poll, 0);
+   App_TerminateOnError (status, "WPL_ThreadInit() learning");
    printf ("after Threadinit\n");
-   fflush(stdout);
+   fflush (stdout);
 
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 #if 1
-   status=WPL_ThreadInit(&learning_thread_id_pkts, pkts_send, 0);
-   App_TerminateOnError (status , "WPL_ThreadInit() pkts learning");
+   status = WPL_ThreadInit (&learning_thread_id_pkts, pkts_send, 0);
+   App_TerminateOnError (status, "WPL_ThreadInit() pkts learning");
 
    printf ("pkts after Threadinit\n");
-   fflush(stdout);
+   fflush (stdout);
 #endif
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
-   status=WPL_ThreadInit(&thread_id_pkts_got, pkts_got, 0);
-   App_TerminateOnError (status , "WPL_ThreadInit() pkts learning");
+   status = WPL_ThreadInit (&thread_id_pkts_got, pkts_got, 0);
+   App_TerminateOnError (status, "WPL_ThreadInit() pkts learning");
 
    printf ("pkts after Threadinit\n");
-   fflush(stdout);
+   fflush (stdout);
 #endif
 }
-
-
 
 /****************************************************************************************************************************
  * Function name: main()
@@ -330,47 +323,56 @@ int main (int argc, char *argv[])
          {
          case 'f':
             {
-               int i = 0, j =0;
+               int i = 0, j = 0;
                WUFE_status status = 0;
                WP_U8 data[512];
                WP_U8 data2[512];
 
                printf ("\n");
-               for (i = 0; i < 16; i ++) printf ("[%2d]", i);
+               for (i = 0; i < 16; i++)
+                  printf ("[%2d]", i);
                printf ("\n");
                memset (data, 0, 512);
                memset (data2, 0, 512);
-            for (j = 0; j < 8; j ++)
-            {
-               for (i = 0; i < 16; i ++)
+               for (j = 0; j < 8; j++)
                {
-                  status = WUFE_SfpRead (0, 0, 1, 1, 0xa1, i+j*16, &data[i+j*16]);
-                  if (status != 0)
+                  for (i = 0; i < 16; i++)
                   {
-                     printf ("status is (%d)\n", status);
-                     App_TerminateOnError (status,"SfpRead ENET1 RX");
-                  } else {
-                     printf ("[%2x]", data[i+j*16]); 
+                     status =
+                        WUFE_SfpRead (0, 0, 1, 1, 0xa1, i + j * 16,
+                                      &data[i + j * 16]);
+                     if (status != 0)
+                     {
+                        printf ("status is (%d)\n", status);
+                        App_TerminateOnError (status, "SfpRead ENET1 RX");
+                     }
+                     else
+                     {
+                        printf ("[%2x]", data[i + j * 16]);
+                     }
                   }
+                  printf ("\n");
                }
-               printf ("\n");
-            }
 #if 0
-               status = WUFE_SfpRead (0, 0, 0, 16, 0xa1, /*0x14*/0, data);
+               status =
+                  WUFE_SfpRead (0, 0, 0, 16, 0xa1, /*0x14 */ 0, data);
                if (status != 0)
                {
                   printf ("status is (%d)\n", status);
-                  App_TerminateOnError (status,"WUFE_SfpRead ENET1 RX");
-               } else {
+                  App_TerminateOnError (status, "WUFE_SfpRead ENET1 RX");
+               }
+               else
+               {
                   int i = 0, j = 0;
-                  
+
                   printf ("\n");
                   printf ("[A1] data = \n");
-                  for (i = 0; i < 16; i ++) printf ("[%2d]", i);
+                  for (i = 0; i < 16; i++)
+                     printf ("[%2d]", i);
                   printf ("\n");
-                  for (j = 0; j < 8; j ++)
+                  for (j = 0; j < 8; j++)
                   {
-                     for (i = 0; i < 16; i ++)
+                     for (i = 0; i < 16; i++)
                         printf ("[%2x]", data[i + j * 16]);
                      printf ("\n");
                   }
@@ -382,17 +384,20 @@ int main (int argc, char *argv[])
                if (status != 0)
                {
                   printf ("status is (%d)\n", status);
-                  App_TerminateOnError (status,"WUFE_SfpRead ENET1 RX");
-               } else {
+                  App_TerminateOnError (status, "WUFE_SfpRead ENET1 RX");
+               }
+               else
+               {
                   int i = 0, j = 0;
-                  
+
                   printf ("\n");
                   printf ("[A2] data = \n");
-                  for (i = 0; i < 16; i ++) printf ("[%2d]", i);
+                  for (i = 0; i < 16; i++)
+                     printf ("[%2d]", i);
                   printf ("\n");
-                  for (j = 0; j < 8; j ++)
+                  for (j = 0; j < 8; j++)
                   {
-                     for (i = 0; i < 16; i ++)
+                     for (i = 0; i < 16; i++)
                         printf ("[%2x]", data2[i + j * 16]);
                      printf ("\n");
                   }
@@ -401,16 +406,18 @@ int main (int argc, char *argv[])
 #endif
             }
             break;
-	 case 'h':
-	    if (g_hide)
-	    { 
-	       g_hide = 0;
-	       printf ("disable sending packets\n");
-	    } else {
-	       g_hide = 1;
-	       printf ("ensable sending packets\n");
-	    }
-	    break;
+         case 'h':
+            if (g_hide)
+            {
+               g_hide = 0;
+               printf ("disable sending packets\n");
+            }
+            else
+            {
+               g_hide = 1;
+               printf ("ensable sending packets\n");
+            }
+            break;
          case 'a':
             App_ShowStats ();
             break;
@@ -420,11 +427,11 @@ int main (int argc, char *argv[])
 #if 0
 // Not supported....Added code for future use. 
          case 'd':
-            App_Debug(debug_on);
+            App_Debug (debug_on);
             break;
          case 's':
-               WPI_SimulateInterrupts();
-               break; 
+            WPI_SimulateInterrupts ();
+            break;
 #endif
          case 'r':
             WPX_Reboot ();
@@ -794,15 +801,15 @@ void App_ufeSystem (void)
       if (g_line_cfg->transfer_type == WUFE_SDH_TYPE_E1)
       {
          printf
-            ("WUFE_SDH_TYPE_E1 link(%3d) created,lineport(%3d) (%d) all\r",
+            ("WUFE_SDH_TYPE_E1 (%3d) created,lineport(%3d) (%d) all\r",
              i, line_port, num_of_lines);
          fflush (stdout);
          client_port = i + (i / 3);
       }
       else
-      {
+      { // if T1
          printf
-            ("WUFE_SDH_TYPE_T1 link(%3d) created,lineport(%3d) (%d) all\r",
+            ("WUFE_SDH_TYPE_T1 (%3d) created,lineport(%3d) (%d) all\r",
              i, line_port, num_of_lines);
          fflush (stdout);
          client_port = i;

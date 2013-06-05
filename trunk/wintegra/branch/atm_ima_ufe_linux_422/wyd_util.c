@@ -5,14 +5,13 @@ unsigned char wyd_getchar (void)
 {
    unsigned char comm = 0;
 
-   do   
-   {    
+   do
+   {
       comm = getchar ();
-   }    
-   while (!  (('z' >= comm && comm >= 'a') || ('0' <= comm && comm <= '9'))); 
+   }
+   while (!(('z' >= comm && comm >= 'a') || ('0' <= comm && comm <= '9')));
 
    return comm;
 }
 
 #endif
-
