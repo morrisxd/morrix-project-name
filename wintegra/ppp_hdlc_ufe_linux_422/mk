@@ -1,0 +1,3 @@
+make TEST=ppp_hdlc_ufe.c
+copy_to_tftpboot.sh
+
