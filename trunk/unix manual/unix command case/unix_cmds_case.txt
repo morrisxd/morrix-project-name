@@ -142,4 +142,12 @@ ssh user@host cat /path/to/some/file | xclip
 
 A
 
+[33] unix signal function prototype
+void (*signal(int signo, void (*func)(int)))(int);
+void (*signal())(int);
+
+
+
+
+
 
