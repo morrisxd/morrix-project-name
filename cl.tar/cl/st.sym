@@ -3,8 +3,12 @@ Variable Name  Location  Domain         Line Numbers
 
 Typedef  Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
-          (s2)      +21                           +5 
-          (s3)      +21                           +6 
-          (s4)      +32                           +8 
-       (pFunc)      +16                          +10 
-          (s1)      +21                           +4 
+     (FUNCPTR)      +22                          +26 
+      (pencil)      +19                          +17 
+       (UINT8)      +28                          +30 
+         (myp)       +5                          +42 
+         (USI)      +31                           +5 
+    (FUNCPTR2)      +23                          +27 
+     (pencil2)      +21                          +21 
+    (findProc)      +15                          +44 
+    (ushort_t)      +36                           +6 
