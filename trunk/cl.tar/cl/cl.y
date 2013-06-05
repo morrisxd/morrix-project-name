@@ -252,15 +252,25 @@ declaration
               {
                  if (td_func) 
                  {
+                    // function type
                     td_func = 0;
                     printf("//clearFunctypedef//");
                  } else {
+                    // normal type
                     sprintf (saved_identifier, "%s", g_cur_sym); 
                     printf ("//EOT(%s)//",g_cur_sym);
                     st_insert_typedef (saved_identifier,lineno, column);
                     in_typedef = 0;
                  }
                  in_typedef = 0;
+              } else {
+                 if (td_func)
+                 {
+                    // function pointer definition
+                    td_func = 0;
+                    printf ("//clear:td_func//");
+                 } else {
+                 }
               }
            }
 	;
