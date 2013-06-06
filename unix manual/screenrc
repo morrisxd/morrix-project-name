@@ -8,9 +8,9 @@ screen -t bsd
 screen -t sysop
 screen -t gproj
 screen -t sysop
+screen -t man screen
 screen -t sysop
 screen -t sysop
 screen -t sysop
 screen -t sysop
-screen -t sysop
-
+bind j focus down
