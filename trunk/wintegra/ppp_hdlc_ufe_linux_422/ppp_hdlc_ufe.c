@@ -654,21 +654,24 @@ void App_UfeSystem(void)
    /* Initialize the UFE4 */
    memset(&ufe4_config, 0, sizeof(WUFE_init_config));
    ufe4_config.ufe_id = 0;
-
+printf ("1.1\n");
    /* Host-Load UFE FW */
    status = WUFE_UfeInitializeFirmware(&ufe4_config);
    App_TerminateOnError(status, "WUFE_Ufe4InitializeFirmware");
 
+printf ("1.2\n");
    status = WUFE_UfeInit(&ufe4_config);
    App_TerminateOnError(status, "WUFE_Ufe4Init");
 
    /* Define UFE System */
    ufe4_system_cfg.clock_rec_sys_params = 0;
 
+printf ("1.3\n");
    /* Initialize the UFE4 system (system id = 0)  */
    ufe_status = WUFE_SystemConfig(0, &ufe4_system_cfg);
    WT_UfeTerminateOnError(ufe_status, "WUFE_SystemConfig",0,__LINE__);
 
+printf ("1.4\n");
    // Initialize the framer:
    // calls:
    // 1. WPX_UFE_FRAMER_FlexmuxInit()
@@ -695,7 +698,7 @@ void App_UfeSystem(void)
 
       WT_UfeTerminateOnError(status, "WUFE_LineCreate",i,__LINE__);
 printf ("createing line(%3d) all(%d)\r", i, num_of_lines);
-fflush((void*)1);
+fflush(stdout);
 
       if (line_cfg->transfer_type == WUFE_SDH_TYPE_E1)
          client_port = i + (i / 3);
