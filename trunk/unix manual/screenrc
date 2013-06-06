@@ -1,0 +1,16 @@
+caption always "%{= kc}%H (system load: %l)%-21=%{= .m}%D %d.%m.%Y %0c"
+screen -t Console
+screen -t Console
+screen -t solaris
+screen -t yacc
+screen -t wintegra
+screen -t bsd
+screen -t sysop
+screen -t gproj
+screen -t sysop
+screen -t sysop
+screen -t sysop
+screen -t sysop
+screen -t sysop
+screen -t sysop
+
