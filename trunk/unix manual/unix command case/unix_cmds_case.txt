@@ -148,6 +148,11 @@ void (*signal())(int);
 
 
 
+[34] vncserver
+$vncserver
+input password 2 times, and then in the windows client, input 'ourss:1'
+and input password, and then it should be OK.
+
 
 
 
