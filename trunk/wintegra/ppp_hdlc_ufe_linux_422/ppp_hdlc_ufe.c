@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
        exit(0);       
    }
 
-dp_interface_val = HDLC_OVER_MPLS;
+   dp_interface_val = HDLC_OVER_MPLS;
    /* choose the datapath among given option */
     while( dp_interface_val != HDLC_OVER_IP
          && dp_interface_val != HDLC_OVER_MPLS
@@ -152,13 +152,13 @@ dp_interface_val = HDLC_OVER_MPLS;
    App_EnableEmphyPort();
 
    /* Initialize the framer. Configure and create UFE line and PHY create*/
-printf ("0\n");
+   printf ("0\n");
    App_UfeSystem();
-printf ("1\n");
+   printf ("1\n");
    /*Create channels and PQBlocks*/
    App_ChannelAndPQBlockCreate();
 
-printf ("2\n");
+   printf ("2\n");
    switch(dp_interface_val)
    {
    case HDLC_OVER_IP:
@@ -189,14 +189,14 @@ printf ("2\n");
       break;
    }
 
-printf ("3\n");
+   printf ("3\n");
    App_EnableUFESystem();
     
-printf ("4\n");
+   printf ("4\n");
    /* Enable all sytem, ports, device and channels*/
    App_EnableSystem();
 
-printf ("5\n");
+   printf ("5\n");
    /* Menu for testing the application*/
    if (0 == freerun)
    {
@@ -654,24 +654,24 @@ void App_UfeSystem(void)
    /* Initialize the UFE4 */
    memset(&ufe4_config, 0, sizeof(WUFE_init_config));
    ufe4_config.ufe_id = 0;
-printf ("1.1\n");
+   printf ("1.1\n");
    /* Host-Load UFE FW */
    status = WUFE_UfeInitializeFirmware(&ufe4_config);
    App_TerminateOnError(status, "WUFE_Ufe4InitializeFirmware");
 
-printf ("1.2\n");
+   printf ("1.2\n");
    status = WUFE_UfeInit(&ufe4_config);
    App_TerminateOnError(status, "WUFE_Ufe4Init");
 
    /* Define UFE System */
    ufe4_system_cfg.clock_rec_sys_params = 0;
 
-printf ("1.3\n");
+   printf ("1.3\n");
    /* Initialize the UFE4 system (system id = 0)  */
    ufe_status = WUFE_SystemConfig(0, &ufe4_system_cfg);
    WT_UfeTerminateOnError(ufe_status, "WUFE_SystemConfig",0,__LINE__);
 
-printf ("1.4\n");
+   printf ("1.4\n");
    // Initialize the framer:
    // calls:
    // 1. WPX_UFE_FRAMER_FlexmuxInit()
@@ -697,8 +697,8 @@ printf ("1.4\n");
                                &line_cfg);
 
       WT_UfeTerminateOnError(status, "WUFE_LineCreate",i,__LINE__);
-printf ("createing line(%3d) all(%d)\r", i, num_of_lines);
-fflush(stdout);
+      printf ("createing line(%3d) all(%d)\r", i, num_of_lines);
+      fflush(stdout);
 
       if (line_cfg->transfer_type == WUFE_SDH_TYPE_E1)
          client_port = i + (i / 3);
