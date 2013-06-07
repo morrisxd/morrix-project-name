@@ -157,3 +157,32 @@ and input password, and then it should be OK.
 [10]
 formal-name of eclipse in ubunutu: [eclipse-platform]
 
+[11]
+"Every command in the pipe was executed in a stand-alone sub-shell insted of current shell"
+
+error code
++++++++++++++++++++++
+n=0
+cat $FILE |
+   while read LINE
+   do
+      echo "$n) $LINE"
+      n = 'expr $n + 1'
+   done
+echo "There were $n lines in $FILE."
+
+correct code
++++++++++++++++++++++
+n=0
+{
+   while read LINE
+   do
+      echo "$n) $LINE"
+      n = 'expr $n + 1'
+   done
+} < $FILE
+echo "There were $n lines in $FILE."
+# '{' means "in the current shell" while "(" means in the sub-shell
+
+[12]
+
