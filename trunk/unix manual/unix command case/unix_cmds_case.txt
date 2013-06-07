@@ -185,4 +185,6 @@ echo "There were $n lines in $FILE."
 # '{' means "in the current shell" while "(" means in the sub-shell
 
 [12]
+patterm { action }
+awk '/widget/ {print $1}' inventory
 
