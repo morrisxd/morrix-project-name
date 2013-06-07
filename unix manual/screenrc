@@ -5,12 +5,12 @@ screen -t solaris
 screen -t yacc
 screen -t wintegra
 screen -t bsd
-screen -t sysop
+screen -t w/cscope -RUu
 screen -t gproj
-screen -t sysop
+screen -t atm_ima_ufe_linux_422
 screen -t man screen
+screen -t enetDemo_linux_422
 screen -t sysop
-screen -t sysop
-screen -t sysop
-screen -t sysop
+screen -t ppp_hdlc_ufe_linux_422_official
+screen -t "man screen" man screen
 bind j focus down
