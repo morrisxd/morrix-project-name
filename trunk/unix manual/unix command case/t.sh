@@ -1,4 +1,4 @@
 #!/bin/bash
 { 
-   date; who; last 
+date; who; last 
 } > mylog

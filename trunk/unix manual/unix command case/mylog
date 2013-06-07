@@ -1,4 +1,4 @@
-Fri Jun  7 20:48:05 CST 2013
+Fri Jun  7 20:50:00 CST 2013
 morris   pts/1        2013-06-07 20:22 (:0:S.0)
 morris   pts/2        2013-06-07 20:22 (:0:S.1)
 morris   pts/4        2013-06-07 20:22 (:0:S.2)
@@ -13,8 +13,8 @@ morris   pts/14       2013-06-07 20:22 (:0:S.11)
 morris   pts/15       2013-06-07 20:22 (:0:S.12)
 morris   pts/16       2013-06-07 20:22 (:0:S.13)
 morris   pts/0        :0               Fri Jun  7 20:13   still logged in   
-reboot   system boot  3.2.0-24-generic Fri Jun  7 18:44 - 20:48  (02:03)    
-reboot   system boot  3.2.0-24-generic Fri Jun  7 18:42 - 20:48  (02:05)    
+reboot   system boot  3.2.0-24-generic Fri Jun  7 18:44 - 20:50  (02:05)    
+reboot   system boot  3.2.0-24-generic Fri Jun  7 18:42 - 20:50  (02:07)    
 morris   pts/0        :0               Thu Jun  6 20:48 - 22:39  (01:51)    
 reboot   system boot  3.2.0-24-generic Thu Jun  6 20:47 - 22:40  (01:52)    
 reboot   system boot  3.2.0-24-generic Thu Jun  6 20:45 - 22:40  (01:54)    
