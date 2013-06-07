@@ -44,7 +44,8 @@ file114
 file123
 file1110
 file1120
-[wydeng@cvs3 ~/sort]$ ls | sort -k1.5,1.8 -n
+
+wydeng@cvs3 ~/sort]$ ls | sort -k1.5,1.8 -n
 
 
 
@@ -142,7 +143,7 @@ ssh user@host cat /path/to/some/file | xclip
 
 A
 
-[33] unix signal function prototype
+[9] unix signal function prototype
 void (*signal(int signo, void (*func)(int)))(int);
 void (*signal())(int);
 
@@ -153,6 +154,6 @@ $vncserver
 input password 2 times, and then in the windows client, input 'ourss:1'
 and input password, and then it should be OK.
 
-
-
+[10]
+formal-name of eclipse in ubunutu: [eclipse-platform]
 
