@@ -46,7 +46,7 @@ file1110
 file1120
 
 wydeng@cvs3 ~/sort]$ ls | sort -k1.5,1.8 -n
-
+=from keyword 1, the 5th character, to the keyword 1, the 8th character
 
 
 [8]
