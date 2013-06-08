@@ -1,7 +1,7 @@
 caption always "%{= kc}%H (system load: %l)%-21=%{= .m}%D %d.%m.%Y %0c"
 screen -t Console
-screen -t Console
-screen -t solaris
+screen -t WDDS_4_3_X_DEV_morris_israel
+screen -t proj/4.2.2
 screen -t yacc
 screen -t wintegra
 screen -t bsd
@@ -10,7 +10,8 @@ screen -t gproj
 screen -t atm_ima_ufe_linux_422
 screen -t man screen
 screen -t enetDemo_linux_422
-screen -t sysop
+screen -t provider_bridge
 screen -t ppp_hdlc_ufe_linux_422_official
 screen -t "man screen" man screen
-bind j focus down
+bind R screen -t ’% |root:’ su
+screen -t top 2 nice top
