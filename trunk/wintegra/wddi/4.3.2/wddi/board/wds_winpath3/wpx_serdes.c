@@ -865,11 +865,11 @@ wpx_serdes_mux_ctrl serdes_mux_configurations[WPX_CONFIGURE_MAX_CONFIGURATIONS]=
 #if 0
       0x0000091b,
 #else
-   if (0)
+#if 0
       0x00fc991b,
-   else
+#else
       0x00EBA91B,
-   endif
+#endif
 #endif
       0x7fff071c
    },
