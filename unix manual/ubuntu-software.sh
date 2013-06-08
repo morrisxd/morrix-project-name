@@ -13,4 +13,5 @@ sudo apt-get install -y screen \
 && sudo apt-get install -y subversion \
 && sudo apt-get install -y ctags \
 && sudo apt-get install -y cscope \
-&& sudo apt-get install -y ccache
+&& sudo apt-get install -y ccache \
+&& sudo apt-get install -y m4
