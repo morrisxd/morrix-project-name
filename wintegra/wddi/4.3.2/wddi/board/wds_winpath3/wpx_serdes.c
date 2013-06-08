@@ -324,6 +324,7 @@ wpx_port_to_serdes_connection port_to_serdes[WPX_CONFIGURE_MAX_CONFIGURATIONS] =
          { /*WP_PORT_XGI1 */   WPX_SERDES2, WPX_SERDES_LANE_ALL, WPX_SERDES_2_5G},
          { /*WP_PORT_XGI2 */   WPX_SERDES_NA, WPX_SERDES_LANE_NA, WPX_SERDES_RATE_NA},
 #else
+// modified by morris/jane
          { /*WP_PORT_XGI1 */   WPX_SERDES_NA, WPX_SERDES_LANE_NA, WPX_SERDES_RATE_NA},
          { /*WP_PORT_XGI2 */   WPX_SERDES_NA, WPX_SERDES_LANE_NA, WPX_SERDES_RATE_NA},
 #endif
