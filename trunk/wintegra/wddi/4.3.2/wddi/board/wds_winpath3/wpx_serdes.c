@@ -318,7 +318,7 @@ wpx_port_to_serdes_connection port_to_serdes[WPX_CONFIGURE_MAX_CONFIGURATIONS] =
          { /*WP_PORT_ENET11 */ WPX_SERDES_NA, WPX_SERDES_LANE_NA, WPX_SERDES_RATE_NA},
          { /*WP_PORT_ENET12 */ WPX_SERDES_NA, WPX_SERDES_LANE_NA, WPX_SERDES_RATE_NA},
 #else
-         { /*WP_PORT_ENET11 */WPX_SERDES2, WPX_SERDES_LANE_3, WPX_SERDES_1G},
+         { /*WP_PORT_ENET11 */WPX_SERDES2, WPX_SERDES_LANE_0, WPX_SERDES_1G},
          { /*WP_PORT_ENET12 */WPX_SERDES2, WPX_SERDES_LANE_1, WPX_SERDES_1G},
 #endif
          { /*WP_PORT_ENET13 */ WPX_SERDES4, WPX_SERDES_LANE_0, WPX_SERDES_1G},
@@ -865,11 +865,8 @@ wpx_serdes_mux_ctrl serdes_mux_configurations[WPX_CONFIGURE_MAX_CONFIGURATIONS]=
 #if 0
       0x0000091b,
 #else
-#if 0
-      0x00fc991b,
-#else
-      0x00EBA91B,
-#endif
+      // 0x00fc991b,
+      0x004bf91b,
 #endif
       0x7fff071c
    },
@@ -1557,8 +1554,8 @@ WP_status WPX_SerDesSet(WP_U32 wpid,
          WPI_RETURN_IF_ERROR(status,
                              WPX_SerdesSetQuadLane(wpid, WPX_SERDES2, WPX_SERDES_2_5G ,Serdes2isXgi));
 #else
-// we use serdes2 as normal 1g rate bus
-WPI_RETURN_IF_ERROR(status,
+         // we use serdes2 as normal 1g rate bus
+         WPI_RETURN_IF_ERROR(status,
                              WPX_SerdesSetQuadLane(wpid, WPX_SERDES2, WPX_SERDES_1G, WPX_SERDES_NOT_XGI));
 
 #endif
@@ -1657,11 +1654,13 @@ WP_status WPX_BoardSerdesInit( WP_U32 wpid,
    serdes_index = serdes_lane_data->serdes_index;
    lane_index = serdes_lane_data->lane_index;
    rate = serdes_lane_data->rate;
-
    if(serdes_index == WPX_SERDES_NA || serdes_index == WPX_SERDES_INVALID || 
       lane_index == WPX_SERDES_LANE_NA ||
-      rate == WPX_SERDES_RATE_NA)
+      rate == WPX_SERDES_RATE_NA) 
+{
+      printf ("port(%d)serdes_index(%d)lane_index(%d)rate(%d)\n", port, serdes_index,lane_index,rate);
       return WPI_ERROR(WP_ERR_CONFIG);
+}
 
    if(lane_index != WPX_SERDES_LANE_ALL)
    {
