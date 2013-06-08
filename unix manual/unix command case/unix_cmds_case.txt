@@ -188,3 +188,7 @@ echo "There were $n lines in $FILE."
 patterm { action }
 awk '/widget/ {print $1}' inventory
 
+
+[13] 
+screen -x -r sharing -p one
+
