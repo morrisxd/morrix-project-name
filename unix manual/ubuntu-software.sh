@@ -10,4 +10,7 @@ sudo apt-get install -y screen \
 && sudo apt-get install -y byacc \
 && sudo apt-get install -y sysvbanner \
 && sudo apt-get install -y mldonkey-server \
-&& sudo apt-get install -y subversion
+&& sudo apt-get install -y subversion \
+&& sudo apt-get install -y ctags \
+&& sudo apt-get install -y cscope \
+&& sudo apt-get install -y ccache
