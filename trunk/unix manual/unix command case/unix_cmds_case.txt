@@ -192,3 +192,34 @@ awk '/widget/ {print $1}' inventory
 [13] 
 screen -x -r sharing -p one
 
+[14]
+mkdir -p /tmp/a/b/c
+
+[15]
+tar xvf -C /tmp/a/b/c newarc.tar.gz
+
+[16]
+cd /tmp/a/b/c && tar xvf ~/archive.tar
+
+[17]
+cd /tmp/a/b/c || mkdir -p /tmp/a/b/c
+
+[18]
+VAR="tmp/*"
+echo $VAR
+echo $VAR{a}
+
+[19]
+cd /tmp/a/b/c || \
+mkdir -p /tmp/a/b/c/ && \
+tar xvf -C /tmp/a/b/c ~/newarc.tar.gz
+
+[20]
+xargs, put multiple line into one blank-seperated line
+
+[21]
+grep -u
+grep -c
+
+[22]
+
