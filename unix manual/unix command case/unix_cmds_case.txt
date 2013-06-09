@@ -263,3 +263,7 @@ else
     echo At first glance, this does not appear to be a tarball.
 fi
 
+[29]
+bash online manual reference
+http://www.gnu.org/software/bash/manual/bash.html
+
