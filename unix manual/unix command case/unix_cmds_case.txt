@@ -224,4 +224,42 @@ grep -c
 [22]
 curl -o s.tar http://www.im.com/t.tar
 
+[23]
+basename /etc/rc.d/rc.local
+dirname /etc/rc.d/rc.local
+
+[24]
+MYDIR=$(dirname /usr/local/share/doc/foo/foo.txt)
+
+
+[25]
+$ MYVAR=foodforthought.jpg
+$ echo ${MYVAR##*fo}
+rthought.jpg
+$ echo ${MYVAR#*fo}
+odforthought.jpg
+
+[26]
+
+$ MYFOO="chickensoup.tar.gz"
+$ echo ${MYFOO%%.*}
+chickensoup
+$ echo ${MYFOO%.*}
+chickensoup.tar
+
+[27]
+$ EXCLAIM=cowabunga
+$ echo ${EXCLAIM:0:3}
+cow
+$ echo ${EXCLAIM:3:7}
+abunga
+
+[28]
+#!/bin/bash
+if [ "${1##*.}" = "tar" ]
+then 
+    echo This appears to be a tarball.
+else
+    echo At first glance, this does not appear to be a tarball.
+fi
 
