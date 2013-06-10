@@ -1,0 +1,89 @@
+ Improve Fonts in Fedora 
+by khaytsus — last modified Feb 25, 2012 03:26 PM
+
+Fedora ships with a reasonable configuration for most users, however, some tweaks can be applied if you're using an LCD. Additional improvements to font rendering can also be applied if you wish to enable a patent encumbered font renderer. The method to do each of these, separately, are outlined below. I suggest doing both to maximize your font appearance! In addition to these font rendering changes, there is also information for adding additional fonts to Fedora in the sections following. Please note that some suggested changes in this document can be very subjective based on individual preferences, hardware used, etc. The Troubleshooting section goes into some more detail in this regard and should be considered before making changes.
+Applicable to Fedora Versions 
+
+    All current supported versions
+
+Requirements 
+To perform any section which mentions RPMFusion you must have Yum configured per the steps below.  Otherwise, I suggest you just try the items below and if they do not work for you, simply undo them.  As always, you should make sure your system is up to date.
+
+    su -c 'yum update'
+    Your Yum configuration must be updated per this guide:  Yum Configuration 
+
+Doing the Work; enabling Anti-Aliasing and Hinting 
+
+This section allows you to enable Automatic Font Hinting, and Subpixel rendering.  This does not require updating your Yum repos, and is Free (beer/liberty).
+
+    Make a symlink of available configurations into this directory.  By doing this, if the original config files are updated, your fontconfig changes also reflect those updates.  Please note that this howto assumes your monitor has RGB pixels.  There is a link at the bottom of this page that will help you verify that.  If your monitor happens to be BGR, VRGB, etc, please use the appropriate sub-pixel file to link.
+
+    su -c "ln -s /etc/fonts/conf.avail/10-autohint.conf /etc/fonts/conf.d/"
+    su -c "ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/"
+
+    Reboot so the changes can take effect.  If you are stopping here at this howto, go ahead and reboot at this time.  If you are also enabling the bytecode interpreter, you can go onto the next section and reboot later.
+
+Doing the Work Continued; enabling the patented bytecode interpreter 
+
+This section allows you to enable the Freetype Freeworld package from RPMFusion, which is a patented bytecode interpreter for fonts.  This might not be legal in your country, and is not Free (liberty).  It, however, does generally improve font rendering and readability.  The choice is yours.  You must have configured your Yum repos as described in the Requirements section for this to work.
+
+    Install the Freetype Freeworld package:
+
+    su -c "yum install freetype-freeworld"
+
+    Log out of your desktop and reboot so the changes can take effect.
+
+Doing the Work Continued; adding extra fonts 
+
+Sometimes you just don't like the fonts that are available, or would like to try alternative ones.  The fonts in Fedora are all free (liberty) but you might want to try others.  Again, the ones marked non-free may not be free and legal in your country.
+Free fonts in Fedora 
+Here is a suggested list of free fonts included in Fedora.  Some may be already installed, depending upon the packages you've installed and how you installed.
+
+There are many more fonts available directly in Fedora, you can always perform a yum search font to see more.
+
+    su -c "yum install *inconsolata-font* google-droid*fonts* dejavu*fonts* liberation*fonts* bitstream-vera*"
+    fc-cache
+
+Non-Free Larabie fonts in RPMFusion 
+
+These fonts require RPMFusion is configured as per the Requirements section above.  They do not meet Fedora licensing guidelines, but are available directly from RPMFusion.  These fonts may only be available in F11.
+
+    su -c "yum install larabie-uncommon-fonts larabie-straight-fonts larabie-fonts-common larabie-decorative-fonts"
+    fc-cache
+
+Non-Free Fonts available on the net 
+
+The following are Microsoft TrueType fonts which are free to download off the MS website, but not to package for download.  Therefore, some clever folks have created a spec file which downloads the fonts and packages them into an RPM.  Perform the following steps to package and install these fonts.
+
+    Download and create an RPM from the MS Fonts:
+
+    su -c "yum install wget rpm-build ttmkfdir cabextract"
+    mkdir -p ~/rpmbuild/SOURCES
+    wget http://fenris02.fedorapeople.org/msttcore-fonts-2.0-6.spec
+    rpmbuild -bb msttcore-fonts-2.0-6.spec
+
+    Install the RPM:
+
+    su -mc "rpm -Uvh ~/rpmbuild/RPMS/noarch/msttcore-fonts-2.0-6.noarch.rpm"
+
+    And then run fc-cache for the fonts to take effect.  You might have to log out of X for your applications to see the new fonts.
+
+    su -c "ttmkfdir /usr/share/fonts/msttcore"
+    fc-cache
+
+Troubleshooting 
+How to test 
+There is no real way to test fonts besides seeing if they look right to you.  If you like, you could take screenshots before and after your alterations to compare.
+
+If you are unsure if a particular font has been installed, you can try running fc-list (and maybe xlsfonts as well) to see what fonts are listed.  There will be quite a few, so you can use more page through them, or grep for a particular font you're looking for.
+
+Please note that what looks good for some people might not look good for you.  For example, some people do not like hinting, or anti-aliasing, etc.  It could depend on personal tastes or even video hardware used to render the fonts.  If any particular section makes fonts worse for you, simply back out the changes you made.  Most often the only changes that would be so subjective would be the the first section, Doing the Work; enabling Anti-Aliasing and Hinting.
+Common problems and fixes 
+No known problems.
+More Information 
+Here are some links to external sites about font rendering, and a link to a site which will allow you to determine if your monitor has subpixel rendering (all LCD do) and which particular pattern it uses.
+Disclaimer 
+
+We test this stuff on our own machines, really we do. But you may run into problems, if you do, come to #fedora on irc.freenode.net
+Added Reading 
+
