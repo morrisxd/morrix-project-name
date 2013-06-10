@@ -21,5 +21,6 @@ sudo yum install -y screen \
 && sudo yum install -y ccache \
 && sudo yum install -y m4 \
 && sudo yum install -y lftp \
+&& sudo yum install -y audit \
 && sudo yum install -y gcc
 
