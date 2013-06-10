@@ -14,4 +14,12 @@ sudo yum install -y screen \
 && sudo yum install -y subversion \
 && sudo yum install -y openssh \
 && sudo yum install -y bison \
-&& sudo yum install -y flex
+&& sudo yum install -y flex \
+&& sudo yum install -y xeyes \
+&& sudo yum install -y ctags \
+&& sudo yum install -y cscope \
+&& sudo yum install -y ccache \
+&& sudo yum install -y m4 \
+&& sudo yum install -y lftp \
+&& sudo yum install -y gcc
+
