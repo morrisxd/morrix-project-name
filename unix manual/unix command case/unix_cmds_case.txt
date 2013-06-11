@@ -283,3 +283,17 @@ $ w >> state.`date '+%F'`
 [33]
 export LESS="-Nmsx4"
 
+[34]
+[ian@echidna lpi103-4]$ xargs<text1 echo "args >"
+args > 1 apple 2 pear 3 banana
+[ian@echidna lpi103-4]$ xargs --max-args 3 <text1 echo "args >"
+args > 1 apple 2
+args > pear 3 banana
+[ian@echidna lpi103-4]$ xargs -n 1 <text1 echo "args >"
+args > 1
+args > apple
+args > 2
+args > pear
+args > 3
+args > banana
+
