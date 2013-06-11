@@ -268,3 +268,18 @@ bash online manual reference
 http://www.gnu.org/software/bash/manual/bash.html
 
 [30]
+type perl
+
+[31]
+TZ="Japan" date
+
+[32]
+$ ps > state.`date '+%F'`
+$ w >> state.`date '+%F'`
+
+
+{ ps; w } > state.`date '+%F'`
+
+[33]
+export LESS="-Nmsx4"
+
