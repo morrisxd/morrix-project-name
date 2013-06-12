@@ -15,4 +15,5 @@ sudo apt-get install -y screen \
 && sudo apt-get install -y cscope \
 && sudo apt-get install -y ccache \
 && sudo apt-get install -y m4 \
-&& sudo apt-get install -y lftp
+&& sudo apt-get install -y lftp \
+&& sudo apt-get install -y evolution
