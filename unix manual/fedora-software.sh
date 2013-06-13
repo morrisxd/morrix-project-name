@@ -23,6 +23,8 @@ sudo yum install -y screen \
 && sudo yum install -y lftp \
 && sudo yum install -y audit \
 && sudo yum install -y gcc \
-&& sudo yum install -y evolution-exchange \
 && sudo yum install -y evolution-mapi \
-&& sudo yum install -y evolution
+&& sudo yum install -y evolution \
+&& sudo yum install -y exchange-bmc-os-info \
+&& sudo yum install -y evolution-ews \
+&& sudo yum install -y nmap
