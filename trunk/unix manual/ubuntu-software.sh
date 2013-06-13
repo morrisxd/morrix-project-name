@@ -17,5 +17,5 @@ sudo apt-get install -y screen \
 && sudo apt-get install -y m4 \
 && sudo apt-get install -y lftp \
 && sudo apt-get install -y evolution \
-&& sudo apt-get install -y evolution-exchange
-
+&& sudo apt-get install -y evolution-exchange \
+&& sudo apt-get install -y evolution-mapi

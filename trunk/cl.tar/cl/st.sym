@@ -9,6 +9,7 @@ Typedef  Name  Location  Domain         Line Numbers
          (myp)       +5                          +42 
          (USI)      +31                           +5 
     (FUNCPTR2)      +23                          +27 
+        (mypp)      +18                          +47 
      (pencil2)      +21                          +21 
     (findProc)      +15                          +44 
     (ushort_t)      +36                           +6 
