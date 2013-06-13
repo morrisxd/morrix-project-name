@@ -1,0 +1,6 @@
+[1]
+https://outlook.pmc-sierra.bc.ca/
+[2]
+server: BBY1EXM10.pmc_nt.nt.pmc-sierra.bc.ca
+This is the server name we should use in the 'server name'. We should NOT use 'webmail.pmc-sierra.com' as server name in Evolution.
+
