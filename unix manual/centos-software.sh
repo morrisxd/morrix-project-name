@@ -27,4 +27,13 @@ sudo yum install -y screen \
 && sudo yum install -y evolution \
 && sudo yum install -y exchange-bmc-os-info \
 && sudo yum install -y evolution-ews \
-&& sudo yum install -y nmap
+&& sudo yum install -y nmap \
+&& sudo yum install -y openoffice.org-base \
+&& sudo yum install -y openoffice.org-base \
+&& sudo yum install -y openoffice.org-calc \
+&& sudo yum install -y openoffice.org-core \
+&& sudo yum install -y openoffice.org-draw \
+&& sudo yum install -y openoffice.org-emailmerge \
+&& sudo yum install -y openoffice.org-graphicfilter \
+&& sudo yum install -y openoffice.org-headless \
+&& sudo yum install -y openoffice.org-impress
