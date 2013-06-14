@@ -297,3 +297,7 @@ args > pear
 args > 3
 args > banana
 
+
+[35]
+umount idle NFS mount will improve yum installation procedure.
+
