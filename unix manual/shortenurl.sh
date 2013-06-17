@@ -1,1 +1,32 @@
-1.#! /usr/bin/env bash2.#  ur1ca.sh3.#  Shorten a long URL from bash command line,4.#  using ur1.ca open source service.5.#  ksaver (at identi.ca), Aug 2010.6.#  Public Domain Code.7.#  No warranty at all.8. 9.function _curl()10.{11.    /usr/bin/env curl -s -A 'Mozilla' "$@"12.}13. 14.function html_txt()15.{16.    read string17.    echo "$string" |sed -e 's/<[^>]*>//g'18.}19. 20.function usage()21.{22.    prname=$(basename $0)23.    echo -e "\tUsage:  $prname  <long-url>"24.    echo -e "\tExamp:  $prname  http://www.google.com/search?q=bash+scripting"25.}26. 27.function _main_()28.{29.    if [ -z "$1" ]30.    then31.        usage32.        exit33.    else34.        UR1='http://ur1.ca/'35.        LONG="$1"36. 37.        _curl -s "$UR1" -d"longurl=$LONG" |grep -i 'Your ur1 is' |html_txt38.        echo39.    fi40.}41. 42.## Run script...43._main_ "$@"
+#!/usr/bin/env bash
+
+# Usage example:\r\n$./ur1ca.sh \\"http://www.google.com/search?q=bash+scripting\\"\r\nYour ur1 is: http://ur1.ca/17xpn\r\n$
+#  ur1ca.sh
+#  Shorten a long URL from bash command line,
+#  using ur1.ca open source service.
+#  ksaver (at identi.ca), Aug 2010.
+#  Public Domain Code.
+#  No warranty at all.
+function _curl()
+    /usr/bin/env curl -s -A 'Mozilla' "$@"
+
+function html_txt()
+    read string
+    echo "$string" |sed -e 's/<[^>]*>//g'
+
+function usage()
+    prname=$(basename $0)
+    echo -e "\tUsage:  $prname  <long-url>"
+    echo -e "\tExamp:  $prname  http://www.google.com/search?q=bash+scripting"
+
+function _main_()
+    if [ -z "$1" ]
+        usage
+        UR1='http://ur1.ca/'
+        LONG="$1"
+        _curl -s "$UR1" -d"longurl=$LONG" |grep -i 'Your ur1 is' |html_txt
+## Run script...
+_main_ "$@"
+ 
+
+
