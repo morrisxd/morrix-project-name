@@ -1,0 +1,45 @@
+FYI.
+
+From: Amir Fadlon 
+Sent: Tuesday, May 07, 2013 5:06 AM
+To: dl win sw ga release; Eli Gur
+Cc: Gadi Nathan; Ido Ovadia; Ofek Dekel; Rudy Zusman; Sharon Arokh; Yossi Labaton
+Subject: RE: WDDS 5.0.0 RC3 is ready
+
+Hi All,
+
+WDDS 5.0-PR1 RC3 is ready ¨C Backhaul image is the same as in RC2 (we will check it) so R&D do not t=need to run any tests on this build.
+Testing team will be responsible to check ALu-CSA_CEP is OK after the fixing introduced to it and to do sanity testing on backhaul and WDDK images.
+
+
+Preliminary WDDS Build report 2013-05-06_23-04-07 Release Name: 5.0.0
+Major: 5
+Minor: 0
+Mnt:   0
+
+RC:           3
+Products:     -dps -wddi -wddk
+Packages:     backhaul wireline mmb lte_security alu_csa_cep 
+GA Release:   1
+Stream:       WDDS_MAIN_DEV
+Snapshot:     WDDS_5_0_RC3_b1846_2013_05_06
+Packages:     /public/data/projects/winpath/wddi/versions/1846 
+
+Versions
+WDDS:  5
+WDDI:  1846
+DPS:   2320
+GPE:   191
+PPS:   774
+Tools: WP2: 115,WP3: 115,WP4: wp4/410,
+
+
+Regards,
+
+Amir Fadlon,
+Amir_Fadlon@Pmc-Sierra.com
+Mobile - +972-54-7232345.
+
+
+
+
