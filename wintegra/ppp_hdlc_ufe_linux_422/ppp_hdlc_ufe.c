@@ -641,13 +641,14 @@ void App_UfeSystem(void)
    WUFE_un_framed framing_mode;
    WUFE_cas_enable cas_mode;
    WT_ufe_line_sdh_params ufe_line_params;
+   WT_ufe_line_sonet_params ufe_line_params_sonet;
    WTI_flexmux_connection_type conn_type;
    WP_U32 client_port, line_port;
    WUFE_line_clock_rec_params line_cr_params;
    WUFE_init_config ufe4_config;
 
    num_of_lines  = WT_MAX_LINE_INDEX;
-   transfer_type = WUFE_SDH_TYPE_T1;
+   transfer_type = /*WUFE_SDH_TYPE_T1*/WUFE_SONET_TYPE_T1;
    framing_mode  = WUFE_UNFRAMED;
    cas_mode      = WUFE_CAS_DISABLE;
 
@@ -681,23 +682,25 @@ void App_UfeSystem(void)
    WTI_FlexmuxInit(WTI_EMPHY_PORT,
                    0,
                    WT_FLEXMUX_UFE_412_1_PORT_OC12,
-                   WPX_UFE_FRAMER_DEVICE_MODE_SDH,
-                   WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC4,//WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC3,
+  /*WPX_UFE_FRAMER_DEVICE_MODE_SDH*/WPX_UFE_FRAMER_DEVICE_MODE_SONET,
+/*WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC4*/WPX_UFE_FRAMER_WUFE_SONET_TYPE_STS3,
                    &flex_global_params);
-
+printf ("WTI_FlexmuxInit OK\n");
+fflush(stdout);
    // Configure and create UFE lines for T1 SDH mode
    for (i = WT_FIRST_LINE_INDEX; i < (num_of_lines+WT_FIRST_LINE_INDEX); ++i)
    {
       /* UFE line configuration, creation and enabling */
       /* Create Framer Connection */
-
+printf ("transfertype(%d)\n", so_line_cfg[0].transfer_type);
+fflush(stdout);
       status = WUFE_LineCreate(&ufe4_app_system.line_handle[i],
                                ufe4_app_system.ufeid,
-                               WUFE_STRUCT_LINE_SDH,
-                               &line_cfg);
+                  /*WUFE_STRUCT_LINE_SDH*/WUFE_STRUCT_LINE_SONET,
+                               &so_line_cfg);
 
       WT_UfeTerminateOnError(status, "WUFE_LineCreate",i,__LINE__);
-      printf ("createing line(%3d) all(%d)\r", i, num_of_lines);
+      printf ("createing line(%3d) all(%d)\n", i, num_of_lines);
       fflush(stdout);
 
       if (line_cfg->transfer_type == WUFE_SDH_TYPE_E1)
@@ -708,7 +711,10 @@ void App_UfeSystem(void)
       line_port = WTI_FlexmuxLinePortIndexGet(i, 0);
 
       memset(&ufe_line_params, 0, sizeof(WT_ufe_line_sdh_params));
-      ufe_line_params.transfer_type = line_cfg->transfer_type;
+      memset(&ufe_line_params_sonet,0,sizeof(WT_ufe_line_sonet_params));
+      ufe_line_params.transfer_type = so_line_cfg->transfer_type;
+      ufe_line_params_sonet.transfer_type = so_line_cfg->transfer_type;
+
       ufe_line_params.stm4 = line_cfg->stm4;
       ufe_line_params.stm1 = line_cfg->stm1;
       ufe_line_params.stm0 = line_cfg->stm0;
@@ -717,14 +723,24 @@ void App_UfeSystem(void)
       ufe_line_params.clock_rec_line_params = &line_cr_params;
       ufe_line_params.clock_rec_line_params->tx_clk_rec_enable = 0;
 
-      if (line_cfg->transfer_type == WUFE_SDH_TYPE_T1)
+      ufe_line_params_sonet.sts12= so_line_cfg->sts12;
+      ufe_line_params_sonet.sts3= so_line_cfg->sts3;
+      ufe_line_params_sonet.sts1= so_line_cfg->sts1;
+      ufe_line_params_sonet.vt_group = so_line_cfg->vt_group;
+      ufe_line_params_sonet.vt = so_line_cfg->vt;
+      ufe_line_params_sonet.clock_rec_line_params = &line_cr_params;
+      ufe_line_params_sonet.clock_rec_line_params->tx_clk_rec_enable = 0;
+
+      if (so_line_cfg->transfer_type == WUFE_SONET_TYPE_T1)
          conn_type = WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED;
       else
          conn_type = WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED;
 
+      printf ("before ConnectionCreate:line_port(%d)client(%d)conntype(%d)\n", line_port, client_port, conn_type);
+      fflush(stdout);
       /* Create Framer Connection */
       WTI_FlexmuxConnectionCreate(0, line_port, client_port,
-                                  conn_type, &ufe_line_params);
+                                  conn_type, &ufe_line_params_sonet);
 
       // UFE line is configured to work NOT in loopback mode (WUFE_LINE_LOOPBACK_TYPE_NONE)
       // In case UFE loopback is wanted, one should change the define WTI_SOCKET_LOOPBACK_MODE
@@ -733,30 +749,34 @@ void App_UfeSystem(void)
       ufe_status = WUFE_LineLoopbackConfigure(ufe4_app_system.line_handle[i],WTI_SOCKET_LOOPBACK_MODE);
       WT_UfeTerminateOnError(ufe_status, "WUFE_LineLoopbackConfigure" ,0,__LINE__);
 
+      printf ("before phyCreate\n");
+      fflush(stdout);
       ufe_status = WUFE_PhyCreate(&ufe4_app_system.phy_handle[i],
                                   ufe4_app_system.line_handle[i],
-                                  &ufe4_phy_cfg,
+                                  &ufe4_phy_cfg, // ******
                                   WUFE_FULL_DUPLEX);
       WT_UfeTerminateOnError(ufe_status, "WUFE_PhyCreate",i,__LINE__);
 
       /* Increment the Tributary Unit */
-      ++line_cfg->tu;
+      ++so_line_cfg->vt;
 
-      if ((line_cfg->tu % NUM_TU) == 0)
+      if ((so_line_cfg->vt % NUM_TU) == 0)
       {
-         line_cfg->tu = 0;
-         ++line_cfg->tug2;
+         so_line_cfg->vt = 0;
+         ++so_line_cfg->vt_group;
 
-         if ((line_cfg->tug2 % 7) == 0) {
-            line_cfg->tug2 = 0;
-            ++line_cfg->stm0;
+         if ((so_line_cfg->vt_group % 7) == 0) {
+            so_line_cfg->vt_group = 0;
+            ++so_line_cfg->sts1;
 
-            if ((line_cfg->stm0%3)==0) {
-               line_cfg->stm0 = 0;
-               ++line_cfg->stm1;
+            if ((so_line_cfg->sts1%3)==0) {
+               so_line_cfg->sts1= 0;
+               ++so_line_cfg->sts3;
             }
          }
       }
+      printf ("ROUND TRIP\n");
+      fflush(stdout);
    }
 
    property = WUFE_SYS_EMPHY;

@@ -208,6 +208,25 @@ WUFE_phy ufe4_phy_cfg = {
 	}
 };
 
+WUFE_line_sonet so_line_cfg[1] =
+{
+	{
+		/*struct_id*/WUFE_STRUCT_LINE_SONET,
+		/*sts12*/0,
+		/*sts3*/0,
+		/*sts1*/0,
+		/*vt_group*/0,
+		/*vt*/0,
+		/*transfer_type*/ WUFE_SONET_TYPE_T1,
+		/*framed*/ WUFE_FRAMED,
+		/*cas_enable*/WUFE_CAS_DISABLE,
+		0
+	}
+};
+
+
+
+
 WUFE_line_sdh line_cfg[1] =
 {
 	{
