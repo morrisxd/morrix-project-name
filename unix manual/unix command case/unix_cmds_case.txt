@@ -301,3 +301,11 @@ args > banana
 [35]
 umount idle NFS mount will improve yum installation procedure.
 
+[36]
+rsync -avrt rsync://mirror.stanford.edu/yum/pub/centos/4.2/updates/i386/RPMS/ --exclude=debug/ /var/www/html/yum/updates
+
+[37]
+http://www.centos.org/modules/tinycontent/index.php?id=30
+https://launchpad.net/ubuntu/+cdmirrors
+http://mirrors.fedoraproject.org/publiclist
+please google "fedora mirrors" or sth like this and you can find rsync server as you want.
