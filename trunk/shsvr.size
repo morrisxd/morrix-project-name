@@ -1,0 +1,11 @@
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/mapper/VolGroup00-LogVol00
+                      897G  151G  701G  18% /
+/dev/cciss/c0d0p1      99M   13M   82M  13% /boot
+tmpfs                  16G     0   16G   0% /dev/shm
+winfiler:/vol/vol1/app/public/data
+                      3.2T  3.0T  198G  94% /public/data
+winfiler:/vol/vol0/users/dengmorr
+                      8.1T  7.4T  753G  91% /users/dengmorr
+winfiler:/vol/vol0/users/newlinks
+                      8.1T  7.4T  753G  91% /users/newlinks
