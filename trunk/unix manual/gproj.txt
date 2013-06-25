@@ -1,0 +1,2 @@
+vA8Mj9pF7Av5
+svn checkout https://morrix-project-name.googlecode.com/svn/trunk/ morrix-project-name --username lord.praise@gmail.com
