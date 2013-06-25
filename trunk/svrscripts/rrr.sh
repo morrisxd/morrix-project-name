@@ -16,3 +16,5 @@ rsync -av /public/data/projects/winpath/Standards ${targetLoc}
 rsync -av ${sourceLoc}wddi/versions/186? ${targetLoc}wddi
 rsync -av ${sourceLoc}wddi/versions/185? ${targetLoc}wddi
 rsync -av ${sourceLoc}wddi/versions/153? ${targetLoc}wddi
+rsync -av ${sourceLoc}wddi/versions/174? ${targetLoc}wddi
+rsync -av ${sourceLoc}wddi/versions/177? ${targetLoc}wddi
