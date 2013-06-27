@@ -155,6 +155,9 @@ int main(int argc, char *argv[])
    printf ("0\n");
    App_UfeSystem();
    printf ("1\n");
+
+   WTI_enable_alarms (1);
+
    /*Create channels and PQBlocks*/
    App_ChannelAndPQBlockCreate();
 
@@ -692,7 +695,7 @@ fflush(stdout);
    {
       /* UFE line configuration, creation and enabling */
       /* Create Framer Connection */
-printf ("transfertype(%d)\n", so_line_cfg[0].transfer_type);
+// printf ("transfertype(%d)\r", so_line_cfg[0].transfer_type);
 fflush(stdout);
       status = WUFE_LineCreate(&ufe4_app_system.line_handle[i],
                                ufe4_app_system.ufeid,
@@ -700,7 +703,7 @@ fflush(stdout);
                                &so_line_cfg);
 
       WT_UfeTerminateOnError(status, "WUFE_LineCreate",i,__LINE__);
-      printf ("createing line(%3d) all(%d)\n", i, num_of_lines);
+      printf ("createing line(%3d) all(%d)\r", i, num_of_lines);
       fflush(stdout);
 
       if (line_cfg->transfer_type == WUFE_SDH_TYPE_E1)
@@ -736,7 +739,7 @@ fflush(stdout);
       else
          conn_type = WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED;
 
-      printf ("before ConnectionCreate:line_port(%d)client(%d)conntype(%d)\n", line_port, client_port, conn_type);
+      // printf ("before ConnectionCreate:line_port(%d)client(%d)conntype(%d)\n", line_port, client_port, conn_type);
       fflush(stdout);
       /* Create Framer Connection */
       WTI_FlexmuxConnectionCreate(0, line_port, client_port,
@@ -749,7 +752,7 @@ fflush(stdout);
       ufe_status = WUFE_LineLoopbackConfigure(ufe4_app_system.line_handle[i],WTI_SOCKET_LOOPBACK_MODE);
       WT_UfeTerminateOnError(ufe_status, "WUFE_LineLoopbackConfigure" ,0,__LINE__);
 
-      printf ("before phyCreate\n");
+      // printf ("before phyCreate\n");
       fflush(stdout);
       ufe_status = WUFE_PhyCreate(&ufe4_app_system.phy_handle[i],
                                   ufe4_app_system.line_handle[i],
@@ -775,7 +778,7 @@ fflush(stdout);
             }
          }
       }
-      printf ("ROUND TRIP\n");
+      // printf ("ROUND TRIP\n");
       fflush(stdout);
    }
 

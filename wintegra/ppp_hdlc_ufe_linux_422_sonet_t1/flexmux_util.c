@@ -22,6 +22,7 @@
  ****************************************************************************/
 
 #include <string.h>
+#include <stdio.h>
 #include "wp_wddi.h"
 
 
@@ -80,6 +81,318 @@ void WTI_FlexmuxCheckStatus(WP_CHAR * Message, WP_U8 status, WP_U32 line)
 #endif
 	}
 }
+
+
+#if WTI_FLEXMUX_ENABLE_ALARMS
+
+void cb_port_alarm (WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8 is_asserted)
+{
+#if 0
+    framer_task task;
+    APP_PORT_ALARM_TASK *port_alarm = &task.u.port_alarm_task;
+
+    task.task_type = PORT_ALARM_TYPE;
+    port_alarm->device = device;
+    port_alarm->line_port_id = line_port_id;
+    port_alarm->alarm_category = alarm_category;
+    port_alarm->is_asserted = is_asserted;
+
+    if ((alarm_category == WPX_UFE_FRAMER_SDH_LOS)
+    || (alarm_category == WPX_UFE_FRAMER_SDH_LOF) || (alarm_category == WPX_UFE_FRAMER_SDH_MS_AIS) || (alarm_category == WPX_UFE_FRAMER_SONET_LOS) || (alarm_category == WPX_UFE_FRAMER_SONET_LOF))
+    {
+    if (is_asserted)
+    {
+        service_los_alarm (device, line_port_id, alarm_category, is_asserted, &task);
+    }
+    }
+    else
+    add_framer_task (the_alarm_task_list, &task);
+#endif
+}
+#endif
+
+
+
+extern void WPL_InterruptConfigureEint3(WP_U32 wpid);
+extern char *OMIINO_FRAMER_ErrorCodeToTxt (WP_U32 ErrorCode);
+static char *socket_client_side_alarm_names[] =
+{
+   "WPX_UFE_FRAMER_SOCKET_CLIENT_E_RFI",
+   "WPX_UFE_FRAMER_SOCKET_CLIENT_A_RAI",
+   "WPX_UFE_FRAMER_SOCKET_CLIENT_LOS_AIS"
+};
+
+
+void process_framer_task_list (void)
+{
+}
+
+
+
+static void WTI_EnableUfeInterrupts (void)
+{
+    WUFE_status ufe_status;
+
+    ufe_status = WUFE_UfeFramerHwInterruptEnable(ufe4_app_system.ufeid);
+    WT_UfeTerminateOnError(ufe_status, "WUFE_UfeFramerHwInterruptEnable",0,__LINE__);
+
+    ufe_status = WUFE_UfeCoreHwInterruptEnable(ufe4_app_system.ufeid);
+    WT_UfeTerminateOnError(ufe_status, "WUFE_UfeCoreHwInterruptEnable",0,__LINE__);
+
+    ufe_status = WUFE_SystemInterruptEnable(ufe4_app_system.ufeid);
+    WT_UfeTerminateOnError(ufe_status, "WUFE_SystemInterruptEnable ",0,__LINE__);
+
+    ufe_status = WUFE_UfeCoreHwInterruptDisable(ufe4_app_system.ufeid);
+    WT_UfeTerminateOnError(ufe_status, "WUFE_UfeCoreHwInterruptDisable",0,__LINE__);
+
+    return ;
+}
+
+
+
+WP_U8 last_interrupt_mask;
+void WT_ReinstateInterruptMask (WP_U32 wpid)
+{
+    /* Reset the CPLD interrupt mask */
+    WPX_Ufe412CpldInterruptMaskSet (wpid, last_interrupt_mask);
+}
+
+
+
+
+
+void WT_Eint3Interrupt (WP_U32 wpid, WP_U32 signal_info)
+{
+    WP_boolean is_framer_int_0 = WP_FALSE, is_core_int_0 = WP_FALSE;
+    WP_boolean is_framer_int_2 = WP_FALSE, is_core_int_2 = WP_FALSE;
+#if CHECK_CORE_HW_INTERRUPT_ASSERTED
+    WUFE_events active_events;
+#endif
+    WP_U8 pending;
+    extern void WPX_UFE_FRAMER_ISR (WP_U8 iDevice);
+
+#if WTI_COLLECT_TIMING_INFORMATION
+    record_action (13, WP_TimeRead ());
+#endif
+
+
+    /* Recover the value of the CPLD interrupt mask at the time of the interrupt */
+#if !defined(__linux__)
+    last_interrupt_mask = WPX_Ufe412CpldInterruptMaskGet (0);
+#else
+    last_interrupt_mask = signal_info & 0xffff;
+#endif
+
+    pending = WPX_Ufe412CpldInterruptSourceGet (wpid);
+
+#if WTI_COLLECT_TIMING_INFORMATION
+    record_action (16, pending);
+#endif
+
+    if ((pending & WPX_FPGA_INTR_SERIAL_1_CONNECTOR) == 0)
+    {
+        /* Assume UFEID == 0 is on UPI1; needs to be generalized */
+        is_framer_int_0 = WUFE_UfeFramerHwInterruptGet (0);
+        is_core_int_0 = WUFE_UfeCoreHwInterruptGet (0);
+    }
+
+    if ((pending & WPX_FPGA_INTR_SERIAL_3_CONNECTOR) == 0)
+    {
+        /* Assume UFEID == 1 is on UPI3; needs to be generalized */
+        is_framer_int_2 = WUFE_UfeFramerHwInterruptGet (1);
+        is_core_int_2 = WUFE_UfeCoreHwInterruptGet (1);
+    }
+
+#if WTI_COLLECT_TIMING_INFORMATION
+
+    if ((pending & WPX_FPGA_INTR_SERIAL_1_CONNECTOR) == 0)
+    {
+        if (is_framer_int_0 || is_core_int_0)
+            record_action (43, (0 << 24) + (is_core_int_0 << 8) + is_framer_int_0);
+        else
+        {
+            record_action (46, WUFE_UfeExtPllHwInterruptGet (0));
+            record_action (45, WUFE_UfeLockLostHwInterruptGet (0));
+            record_action (44, WUFE_UfeSfpHwInterruptGet (0));
+        }
+    }
+
+    if ((pending & WPX_FPGA_INTR_SERIAL_3_CONNECTOR) == 0)
+    {
+        if (is_framer_int_2 || is_core_int_2)
+            record_action (43, (2 << 24) + (is_core_int_2 << 8) + is_framer_int_2);
+        else
+        {
+            record_action (46, (2 << 24) + WUFE_UfeExtPllHwInterruptGet (1));
+            record_action (45, (2 << 24) + WUFE_UfeLockLostHwInterruptGet (1));
+            record_action (44, (2 << 24) + WUFE_UfeSfpHwInterruptGet (1));
+        }
+    }
+
+#endif
+
+    if (is_framer_int_0)
+        WPX_UFE_FRAMER_ISR (0); /* argument is iDevice on UPI1 */
+
+#if CHECK_CORE_HW_INTERRUPT_ASSERTED
+
+    if (is_core_int_0)
+    {
+        memset (&active_events, 0, sizeof (WUFE_events));
+
+        WUFE_UfeReadEvents (0, &active_events); /* Assumption about UFEID (see above) */
+
+#if CHECK_CORE_HW_INTERRUPT_ASSERTED
+        if (event_contents_0 == WP_FALSE)
+        {
+            memcpy (&events_connector_0, &active_events, sizeof (WUFE_events));
+            event_contents_0 = WP_TRUE;
+        }
+#endif
+    }
+
+    if (is_framer_int_2)
+        WPX_UFE_FRAMER_ISR (1); /* argument is iDevice on UPI3 */
+
+    if (is_core_int_2)
+    {
+        memset (&active_events, 0, sizeof (WUFE_events));
+
+        WUFE_UfeReadEvents (1, &active_events); /* Assumption about UFEID (see above) */
+
+#if CHECK_CORE_HW_INTERRUPT_ASSERTED
+        if (event_contents_1 == WP_FALSE)
+        {
+            memcpy (&events_connector_2, &active_events, sizeof (WUFE_events));
+            event_contents_1 = WP_TRUE;
+        }
+#endif
+    }
+#endif
+
+#if WTI_COLLECT_TIMING_INFORMATION
+    record_action (14, WP_TimeRead ());
+#endif
+
+#if !defined(WPL_MAILBOX_LOCK_KEY)
+#define WPL_MAILBOX_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 6, 0)
+#endif
+
+    if (is_framer_int_0 || is_framer_int_2)
+    {
+        WPL_Unlock (WPL_MAILBOX_LOCK_KEY, 0);
+#if WTI_COLLECT_TRACE_INFORMATION
+        record_action (40, WP_TimeRead ());
+#endif
+    }
+
+    WT_ReinstateInterruptMask (wpid);
+}
+
+
+
+int WTI_ConfigUfeInterrupts (void)
+{
+    WPL_IntConnect (WP_WINPATH(0), WPL_Eint3Ufe4, 0, WT_Eint3Interrupt);
+
+#if 0
+    WPL_IntDisable (WP_WINPATH (0), WPL_IntGlobalState);
+    WPL_InterruptConfigureEint3 (WP_WINPATH (0));
+    WPL_IntEnable (WP_WINPATH (0), WPL_IntGlobalState);
+#endif
+
+    WPX_Ufe412CpldInterruptSelect (WP_WINPATH(0));
+
+    if (WPL_OK != WPL_IntEnable (WP_WINPATH(0), WPL_Eint3Ufe4)) 
+    {
+        printf ("WPL_IntEnable() failed. line(%d)\n", __LINE__);
+        return -1;
+    }
+
+    WPX_Ufe412CpldInterruptMaskSet (WP_WINPATH(0), 0x6e);
+    WTI_EnableUfeInterrupts  ();
+    
+    return 0;
+}
+
+#if 0
+int WTI_ConfigUfeInterrupts (void)
+{
+    WPL_IntConnect (WP_WINPATH(0), WPL_Eint3Ufe4, 0, WT_Eint3Interrupt);
+
+    WPL_IntDisable (WP_WINPATH (0), WPL_IntGlobalState);
+    WPL_InterruptConfigureEint3 (WP_WINPATH (0));
+    WPL_IntEnable (WP_WINPATH (0), WPL_IntGlobalState);
+
+    WPX_Ufe412CpldInterruptSelect (WP_WINPATH(0));
+
+    if (WPL_OK != WPL_IntEnable (WP_WINPATH(0), WPL_Eint3Ufe4)) 
+    {
+        printf ("WPL_IntEnable() failed. line(%d)\n", __LINE__);
+        return -1;
+    }
+
+    WPX_Ufe412CpldInterruptMaskSet (WP_WINPATH(0), 0x6e);
+    WTI_EnableUfeInterrupts  ();
+    
+    return 0;
+}
+#endif
+
+
+void WTI_enable_alarms (int type)
+{
+#if WTI_FLEXMUX_ENABLE_ALARMS
+    WP_boolean is_sdh = (type == 0);
+
+    int j;
+    WP_U8 status;
+    int start_alarm, last_alarm;
+
+    WPX_FRMR_RegisterSonetSdhPortAlarmCallback ((void *) ((int) cb_port_alarm));
+
+    if (0 != WTI_ConfigUfeInterrupts ()) return ;
+
+    if (is_sdh)
+    {
+	printf ("now it is E1\n");
+        start_alarm = WPX_UFE_FRAMER_SDH_LOS;
+        last_alarm = WPX_UFE_FRAMER_SDH_LOS;
+    }
+    else
+    {
+	printf ("now it is T1\n");
+        start_alarm = WPX_UFE_FRAMER_SONET_LOS;
+        last_alarm = WPX_UFE_FRAMER_SONET_LOP_P;
+    }
+
+    for (j = start_alarm; j <= last_alarm; ++j)
+    {
+        status = WPX_FRMR_DEV_DRV_SONET_SDH_EnableAlarm (j, j);
+        if (status != WPX_UFE_FRAMER_OK)
+        {
+            printf
+           ("********************************************************************\n"
+                 "   %d     SDH/SONET EVENT %d FAILED with %scode(%d)\n" \
+    "********************************************************************\n", 
+		__LINE__,j, OMIINO_FRAMER_ErrorCodeToTxt (status), status);
+            WTI_FlexmuxCheckStatus ("WPX_FRMR_DEV_DRV_SONET_SDH_EnableAlarm ", 
+		status, __LINE__);
+        } else {
+		printf ("SDH_EnableAlarm() OK on alarm(%3d)\n", j);
+		fflush (stdout);
+	}
+    }
+
+    j = socket_client_side_alarm_names[0][0];
+
+    printf ("***************** ALARMS ENABLED ************************************\n");
+#else
+#error WTI_FLEXMUX_ENABLE_ALARMS_should_defined
+#endif
+}
+
+
 
 /****************************************************************************************************************************
  * Function name: WTI_FlexmuxInit()
