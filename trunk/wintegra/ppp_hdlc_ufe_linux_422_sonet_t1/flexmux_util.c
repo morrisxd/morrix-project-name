@@ -1662,6 +1662,14 @@ WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,
 		WTI_FlexmuxCheckStatus("WPX_FRMR_SOCKET_PDH_EnableTimeStamp", status, __LINE__);
 	}
 
+printf ("###########WPX_FRMR_SOCKET_PDH_SetClkRec OK\n");
+printf ("###########WPX_FRMR_SOCKET_PDH_SetClkRec OK\n");
+printf ("###########WPX_FRMR_SOCKET_PDH_SetClkRec OK\n");
+printf ("###########WPX_FRMR_SOCKET_PDH_SetClkRec OK\n");
+printf ("###########WPX_FRMR_SOCKET_PDH_SetClkRec OK\n");
+fflush (stdout);
+
+
 	/* Set the PDH Tx line timing  */
 	status = WPX_FRMR_SOCKET_PDH_SetClkRec(0, flexmux_id, client_port_id, line_timing);
 	WTI_FlexmuxCheckStatus("WPX_FRMR_SOCKET_PDH_SetClkRec", status, __LINE__);
