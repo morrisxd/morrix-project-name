@@ -201,7 +201,7 @@ ifneq "$(START_FILE)" ""
 	-cp $(WPI_START_FILE)/$(START_FILE) $(START_FILE)
 endif
 # Do the link	
-	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) \
+	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) $(WDDI_LIB_DIR)/wpi_wddi.a \
 	$(WDDI_LIBS) $(OTHER_LIB)
 
 # Clean up after everything that might have happened
