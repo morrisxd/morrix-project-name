@@ -22,4 +22,4 @@ rsync -avz ${sourceLoc}wddi/versions/174? ${targetLoc}wddi
 rsync -avz ${sourceLoc}wddi/versions/177? ${targetLoc}wddi
 rsync -avz ~/WDDS_MAIN_DEV_refapps_morris_2 ${targetRoot}
 rsync -avz ~/WDDS_MAIN_DEV_refapps_morris_3 ${targetRootRD}
-# rsync -avz ~/WDDS_4_2_X_DEV_morris ${targetRootRD}
+rsync -avz ~/WDDS_4_2_X_DEV_morris ${targetRootRD}
