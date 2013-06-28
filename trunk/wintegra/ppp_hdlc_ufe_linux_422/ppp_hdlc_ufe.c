@@ -87,7 +87,19 @@ int main(int argc, char *argv[])
    WP_status status;
    app_task *task, a_task;
    WP_CHAR comm;
-
+printf ("sayhi\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("dlfjasl;djflkdj\n");
+printf ("sayhi\n");
+printf ("sayhi\n");
+printf ("sayhi\n");
    if (argc <= 1)
    {
        freerun = 0;
