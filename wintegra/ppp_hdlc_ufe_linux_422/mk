@@ -1,5 +1,7 @@
 rm ./bin/*
 make TEST=ppp_hdlc_ufe.c
 mv ./bin/ppp_hdlc_ufe ./bin/ppp_hdlc_ufe_l_422.exe
-copy_to_tftpboot.sh
+# copy_to_tftpboot.sh
+ls -hl ./bin
+rsync -avz --progress ./bin/ppp_hdlc_ufe_l_422.exe dengmorr@216.241.237.121:.
 
