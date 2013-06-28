@@ -11,7 +11,7 @@ do
    cur_hour=`date +%k`
    cur_min=`date +%M`
    cur_sec=`date +%S`
-   if test $cur_day = "Thu"; then
+   if test $cur_day = "Thu" -o $cur_day = "Fri" ; then
       if [ $(expr $cur_min % 2) -eq 0 ] ; then
          echo now it is [$cur_day:$cur_hour:$cur_min:$cur_sec]
          ( time ssh dengmorr@ran1sw08 ls -l; pwd; date ) | cat - > ran1sw08.dirlist
