@@ -316,3 +316,7 @@ please google "fedora mirrors" or sth like this and you can find rsync server as
 rsync -av versions dengmorr@216.241.237.121:dps/
 
 
+[39]
+server side: nc -kl 3333 > /dev/null
+client side: time nc -v -v -n ran1sw01 3333 < atm_ima_ufe.exe
+client side: time yes | nc -v -n ran1sw01 3333
