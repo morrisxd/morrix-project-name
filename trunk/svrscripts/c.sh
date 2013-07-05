@@ -1,5 +1,5 @@
-svn commit -m"clear"
-
+#!/bin/bash
+$?=1
 
 while [ $? -gt 0 ]
 do 
