@@ -1,4 +1,4 @@
-#if 1
+#if 0
 #define INGRESS_PORT	WP_PORT_ENET5	// IXIA->wds3
 #define EGRESS_PORT	WP_PORT_ENET4	// wds3->IXIA
 #else
