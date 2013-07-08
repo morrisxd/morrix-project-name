@@ -82,7 +82,7 @@ Full CLI Statistics
 #define WPL_THREAD_LOCK_KEY \
    WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
 #define DELAY_COUNT	(200000*10)
-#define ENABLE_TRANSFER          (0)
+#define ENABLE_TRANSFER          (1)
 #define MAX_MACS                 4
 #define N_QNODES                 3
 #define N_POOLS                  4

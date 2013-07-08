@@ -71,10 +71,9 @@ Full CLI Statistics
 #include "wpl_locks.h"
 
 
-
 #include "AlexR_3.0_Statistics.c"
 
-// #include "wufe_errors.h"
+#include "wufe_errors.h"
 
 #include "config.h"
 #include "map.h"
@@ -87,7 +86,7 @@ Full CLI Statistics
 #define USE_SIMPLE_DEVICE	(0)
 #define WPL_THREAD_LOCK_KEY \
    WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
-#define DELAY_COUNT	(10000 * 100)	// micro seconds
+#define DELAY_COUNT	(100000*10)	// 2 seconds, micro seconds
 #define ENABLE_TRANSFER          (0)
 #define MAX_MACS                 4
 #define N_QNODES                 3
@@ -95,7 +94,14 @@ Full CLI Statistics
 #define MAXT_SIZE                255
 
 #if 0
+#if 0
 #define MTU_SIZE                 1536
+#else
+#define MTU_SIZE                 4536
+#endif
+#endif
+
+#if 0
 #define SDU_SIZE                 2048  // Must be > MTU_SIZE + 48
 #else
 #define MTU_SIZE_STD		 1500
@@ -217,7 +223,7 @@ WP_handle adjunct_buffer_pool, pool_host, pool_ring_host;
 WP_handle agg_tag_counter = 0;
 WP_handle port_host, dev_host, bport_host, agg_host, rx_host_channel,
    tx_host_channel;
-WP_handle port_enet1, port_enet, dev_enet1, dev_enet, bport_enet, agg_enet_change_mac,
+WP_handle port_enet, dev_enet, bport_enet, agg_enet_change_mac,
    agg_enet[NUM_OF_FAST_ENET_FAS], rx_gbe_channel,
    tx_gbe_channel[NUM_OF_FAST_ENET_TX_CHANNELS];
 WP_handle port_hier_enet, dev_hier_enet, rx_gbe_hier_channel;
@@ -351,7 +357,6 @@ static WP_U32 g_event;
 static WP_U32 g_info;
 static WP_U32 g_flag = 0;
 static WP_U32 g_threadStop = 1;
-static WP_U32 jjj = SECONDS_TO_WAIT;
 
 void app_overrun_callback (WP_U32 wpid, WP_U32 queue_id, WP_U32 overrun_count)
 {
@@ -366,7 +371,7 @@ extern void usleep(WP_U32 period);
 WP_U32 g_callback = 0;
 
 WP_U32      eoam_lock;
-#define     WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
 
 WP_U32 interface_mode = 0;
 
@@ -727,22 +732,20 @@ void WPE_InitHWCards ()
 
    status = WPX_BoardConfigure (0, WPX_CONFIGURE_2UPI_1XGI_10SGMII);
    terminate_on_error (status, "WPX_CONFIGURE_2UPI_1XGI_10SGMII()");
-
 #if 0
-   status = WPX_BoardSerdesInit (0, EGRESS_PORT, WPX_SERDES_NORMAL);
-   terminate_on_error (status, "WPX_BoardSerdesInit EGRESS()");
+   status = WPX_BoardSerdesInit (0, WP_PORT_ENET7, WPX_SERDES_NORMAL);
 #else
-   status = WPX_BoardSerdesInit (0, EGRESS_PORT, WPX_SERDES_LOOPBACK);
-   terminate_on_error (status, "WPX_BoardSerdesInit EGRESS()");
+// loopback here will cause system stuck
+   status = WPX_BoardSerdesInit (0, EGRESS_PORT, WPX_SERDES_NORMAL);
 #endif
 
-   status = WPX_BoardSerdesInit (0, INGRESS_PORT, WPX_SERDES_NORMAL);
-   terminate_on_error (status, "WPX_BoardSerdesInit INGRESS()");
-
+   terminate_on_error (status, "WPX_BoardSerdesInit 7()");
 #if 0
-   status = WPX_BoardSerdesInit (0, WP_PORT_ENET1, WPX_SERDES_NORMAL);
-   terminate_on_error (status, "WPX_BoardSerdesInit WP_PORT_ENET1");
+   status = WPX_BoardSerdesInit (0, WP_PORT_ENET8, WPX_SERDES_NORMAL);
+#else
+   status = WPX_BoardSerdesInit (0, INGRESS_PORT, WPX_SERDES_NORMAL);
 #endif
+   terminate_on_error (status, "WPX_BoardSerdesInit 8()");
 }
 
 /*
@@ -1177,8 +1180,7 @@ void WPE_CreateFastEnetPortDevice ()
 #if 0
       /* interface_mode */ WP_ENET_SGMII_1000,
 #else
-      /* interface_mode */ /* WP_ENET_1000_BASE_X, */
-WP_ENET_SGMII_1000,
+      /* interface_mode */ WP_ENET_1000_BASE_X,
 #endif
       /* rx_iw_bkgnd */ 0,
    };
@@ -1233,17 +1235,13 @@ WP_ENET_SGMII_1000,
    enet_port_config.pkt_limits.max_rx_channels =
       NUM_OF_FAST_ENET_RX_CHANNELS;
    enet_port_config.flowmode = WP_FLOWMODE_FAST;   
-
    port_enet =
-      WP_PortCreate (WP_WINPATH (0), EGRESS_PORT, &enet_port_config);
-   terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
-
 #if 0
-   port_enet1 =
-      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET1, &enet_port_config);
-   terminate_on_error (port_enet, "WP_PortCreate() ENET1");
+      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET7, &enet_port_config);
+#else
+      WP_PortCreate (WP_WINPATH (0), EGRESS_PORT, &enet_port_config);
 #endif
-
+   terminate_on_error (port_enet, "WP_PortCreate() Fast ENET");
    enet_dev_config.max_tx_channels = NUM_OF_FAST_ENET_TX_CHANNELS;
 
 
@@ -1262,12 +1260,7 @@ WP_ENET_SGMII_1000,
                        &enet_dev_config);
    terminate_on_error (dev_enet, "WP_DeviceCreate() Fast Enet");
 
-#if 0
-   dev_enet1 =
-      WP_DeviceCreate (port_enet1, WP_PHY (0), WP_DEVICE_ENET,
-                       &enet_dev_config);
-   terminate_on_error (dev_enet, "WP_DeviceCreate() Fast Enet1");
-#endif
+
 
 
 #if  0
@@ -1344,12 +1337,14 @@ void WPE_CreateHierEnetPortDevice ()
    enet_port_config.pkt_limits.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;
    enet_port_config.pkt_limits.max_rx_channels = NUM_OF_HIER_ENET_RX_CHANNELS;
    enet_port_config.flowmode = WP_ENET_FMU_HIERARCHICAL_SHAPING_MODE;
-
    port_hier_enet =
+#if 0
+      WP_PortCreate (WP_WINPATH (0), WP_PORT_ENET8, &enet_port_config);
+#else
       WP_PortCreate (WP_WINPATH (0), INGRESS_PORT, &enet_port_config);
+#endif
    terminate_on_error (port_hier_enet,
                        "WP_PortCreate() Hierarchical ENET");
-
    hier_enet_dev_config.max_tx_channels = NUM_OF_HIER_ENET_TX_CHANNELS;
    dev_hier_enet =
       WP_DeviceCreate (port_hier_enet, WP_PHY (0),
@@ -1835,9 +1830,17 @@ void WPE_CreateHierHWEnetRxTxChannel ()
    WP_fmu_shaping_cir_eir cir_eir_shaping_param = {
 
       /* cir; */ CIR_EIR_RATE, 	/* bits/second */
-      /* cbs; */ 100000, 	/* Committed Burst Size in bits */
+#if 0
+      /* cbs; */ 1000, 		/* Committed Burst Size in bits */
+#else
+      /* cbs; */ 100000, 		/* Committed Burst Size in bits */
+#endif
       /* eir; */ CIR_EIR_RATE, 	/* bits/second */
-      /* ebs; */ 100000, 	/* Committed Burst Size in bits */
+#if 0
+      /* ebs; */ 1000, 		/* Committed Burst Size in bits */
+#else
+      /* ebs; */ 100000, 		/* Committed Burst Size in bits */
+#endif
       /* flags */ 0,
    };
 
@@ -1905,10 +1908,8 @@ void WPE_CreateL1FMUGroups (void)
       /* ebs */ 0,
       /* flags */ 0
    };
+
 #endif /*  */
-
-
-
    WP_fmu_shaping_wfq l1_group_shaping_params = {
 #if 0
       /* weight */ 1,
@@ -3163,26 +3164,24 @@ void WPE_CLI (void)
    while ((InputBuf[0] != 'q') && (InputBuf[0] != 'k'))
 
    {
-      printf ("\n");
+      printf ("\n\n\n");
       printf
-         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET4/ENET7/EGRESS),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
+         ("Enter: Enet->HierarchicalEnet: \n \t\t\t1-EnetPortDev(ENET4/ENET7/EXGRESS),       \n \t\t\t2-bPortEnet,       \n \t\t\t3-FlowAggHierarchicalEnet,  \n");
       printf
-         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev(ENET5/ENET3/ENET8/INGRESS),  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
+         ("       HierarchicalEnet->Enet: \n \t\t\t4-HierarchicalEnetPortDev(ENET3/ENET8/INGRESS),  \n \t\t\t5-bPoprtHierarchicalEnet, \n \t\t\t6-FlowAggEnet,       \n");
       printf
          ("       HostTermination: \n \t\t\t7-bPortHost,  \n \t\t\t8-FlowAggHost, \n \t\t\tq-Exit, \n \t\t\tr-Reboot, \n \t\t\tk-Kill(noDriverRelease) \n");
 
       printf
          ("       packet control : \n \t\t\tp-send packets\n");
       printf
-         ("\t\t\tb-get WP_ChannelQDepth(tx_gbe_channel[0])\n");
+         ("       QDepth control : \n \t\t\tb-get WP_ChannelQDepth(tx_gbe_channel[0])\n");
       printf
-         ("\t\t\ta-get all statistics)\n");
+         ("       All    control : \n \t\t\ta-get all statistics)\n");
       printf ("\t\t\t9-disable/enable thread)\n");
       printf ("\t\t\tc-print all error_name)\n");
       printf ("\t\t\td-print all wufe_error_name)\n");
-      printf ("\t\t\te-(switch NES on the EGRESS port)\n");
-      printf ("\t\t\tg-(adjust the delay(looply)\n");
-      printf ("\t\t\tw-(invoke winutil tool)\n");
+      printf ("\t\t\te-(switch NES)\n");
 
 #if 0
       gets (InputBuf);
@@ -3274,9 +3273,8 @@ void WPE_CLI (void)
 	}
       case 'd':
 	{
-#if 0
 		WP_U32 errno = 0;
-		for (errno = WUFE_ERR_HANDLE); 
+		for (errno = WUFE_ERR_HANDLE; 
 			errno <= WUFE_ERR_INVALID_PLL_CLOCK_RATE; 
 			errno ++)
 		{
@@ -3284,31 +3282,25 @@ void WPE_CLI (void)
 				errno, errno, 
 				WUFE_error_name[WP_ERROR(errno)]);
 		}
-#endif
 		break;
 	}
       case 'e':
-
-#define ME_FIELD_MASK(S, W)	(((1 << W) - 1) << (S))
-#define SERDES_NES_CTRL	MAP_SERDES4_IO_CTRL_4
-#define SERDES_IO_CTRL_MASK_ME	(0x003e0000)
-
-	tmp = *(volatile unsigned int *)(unsigned long)(SERDES_NES_CTRL	+ WPL_RIF_VIRTUAL(0, 0));
-
+	tmp = *(volatile unsigned int *)(unsigned long)(MAP_SERDES3_IO_CTRL_3 + WPL_RIF_VIRTUAL(0, 0));
 	printf ("current 0x1e0082c4=(%x)\n", tmp);
 	if (flag)
 	{
-		tmp = tmp & (~(ME_FIELD_MASK(5, 5)));
-		tmp = tmp | (0x04 << 5);
+		tmp = tmp & (~0x000003e0);
+		tmp = tmp | 0x00000080;
 		flag = 0;
 		printf ("set NES\n");
 	} else {
-		tmp = tmp & (~(ME_FIELD_MASK(5, 5)));
+		tmp = tmp & (~0x000003e0);
+		tmp = tmp;
 		flag = 1;
 		printf ("clear NES\n");
 	}
  	printf ("WPL_RIF_VIRTUAL=(%x)\n", WPL_RIF_VIRTUAL(0,0));
-	*(volatile unsigned int *)(unsigned long)(SERDES_NES_CTRL + WPL_RIF_VIRTUAL(0, 0)) = tmp;
+	*(volatile unsigned int *)(unsigned long)(0x1e0082c4 + WPL_RIF_VIRTUAL(0, 0)) = tmp;
 	break;
       case 'f':
          printf
@@ -3320,10 +3312,6 @@ void WPE_CLI (void)
             ("********************* WPE_ShowAvailableBusesMemory **********************   \n");
          WPE_ShowAvailableBusesMemory ();
          break;
-      case 'g':
-	jjj = (jjj + 1) % 10;
-	printf ("current jjj=(%d)\n", jjj);
-	break;
       case 'p':
 #if 1
    for (i = 0; i < 10; i++)
@@ -3347,9 +3335,6 @@ void WPE_CLI (void)
          printf
             ("************************* Exiting Driver Still Running! ******************* \n");
          break;
-	  case 'w':
-		system ("%s");
-		 break;
       default:
          printf ("Wrong Key(%x).\n\n", InputBuf[0]);
          break;
@@ -3426,6 +3411,7 @@ extern void WPI_HwWinnetSgmiiAnProceed(WP_U32 wpid, WP_U32 event_bits);
 void *LearningPoll(void *i)
 {
 	WP_U8 iii = 0;
+	WP_U8 jjj = 2;
 	WP_handle status = 0;
 	WP_U8 max_ch_tx = 0;
 	WP_U8 max_ch_rx = 0;
@@ -3474,19 +3460,12 @@ void *LearningPoll(void *i)
 		for (iii = 0; iii < jjj; iii ++)
 		{
 			WPL_Delay(DELAY_COUNT);
-			if (2 == iii)
-			{
-			}
 		}
 
 		if (g_threadStop)
 		{
 			continue;
 		}
-
-#if 1
-		g_threadStop = 1;
-#endif
 
 		printf ("change to (%s)count(%10d)\n", (WP_ENET_1000_BASE_X==interface_mode)?"WP_ENET_1000_BASE_X\t":"WP_ENET_SGMII_AN\t", switch_counter);
 
