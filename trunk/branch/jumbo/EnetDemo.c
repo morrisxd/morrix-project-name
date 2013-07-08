@@ -94,10 +94,14 @@ Full CLI Statistics
 #define MAXT_SIZE                255
 
 #if 0
+#if 0
 #define MTU_SIZE                 1536
 #else
 #define MTU_SIZE                 4536
 #endif
+#endif
+
+#if 0
 #define SDU_SIZE                 2048  // Must be > MTU_SIZE + 48
 #else
 #define MTU_SIZE_STD		 1500
