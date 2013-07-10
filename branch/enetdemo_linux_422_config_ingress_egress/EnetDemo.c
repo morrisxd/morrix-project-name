@@ -369,7 +369,6 @@ void app_overrun_callback (WP_U32 wpid, WP_U32 queue_id, WP_U32 overrun_count)
 }
 
 extern void usleep(WP_U32 period);
-WP_U32 g_callback = 0;
 int run = 0;
 sem_t clear_lock;
 sem_t sem_pool;
@@ -425,6 +424,12 @@ int main (int argc, WP_CHAR ** argv)
    WP_THREAD_ID this_thread;
    WP_handle status;
    WP_U32 i;
+
+   printf ("before lock init\n");
+   sem_init (&clear_lock, 0, 1);
+   sem_init (&sem, 0, 1);
+   printf ("after lock init\n");
+
 
    WPE_RegisterLogCbFunc ();
 
@@ -514,11 +519,6 @@ int main (int argc, WP_CHAR ** argv)
 
 
 #if 1
-	printf ("before lock init\n");
-
-       sem_init (&clear_lock, 0, 1);
-       sem_init (&sem, 0, 1);
-	printf ("after lock init\n");
 
 
 #ifdef LOCK_AT_START
@@ -592,10 +592,10 @@ void WPE_SysInit (void)
    WP_int_queue_table int_queue_tables = {
       {                         /*size, rate */
 
-       { 10, 1},                 /* WP_IRQT0  highest */
-       { 10, 1},                 /* WP_IRQT1 */
-       { 10, 1},                 /* WP_IRQT2 */
-       { 10, 1}                  /* WP_IRQT3  lowest */
+       { 65535, 1},                 /* WP_IRQT0  highest */
+       { 65535, 1},                 /* WP_IRQT1 */
+       { 65535, 1},                 /* WP_IRQT2 */
+       { 65535, 1}                  /* WP_IRQT3  lowest */
        }
    };
    WP_iw_global max_iw = {
@@ -2658,10 +2658,10 @@ typedef struct {
    WP_U32 info;
 } int_queue;
 
-#define MAX_I_Q	(10000)
+#define MAX_I_Q	(100)
 #define MAX_I_Q_ERROR	(MAX_I_Q+10)
 int_queue i_q [MAX_I_Q];
-WP_U32 empty = 0;
+WP_U32 empty = 1;
 WP_U32 used = 0;
 
 void clear_i_q (void)
@@ -2679,25 +2679,40 @@ void clear_i_q (void)
 
 WP_U32 iq_next_empty (void)
 {
-   clear_i_q ();
-
    while (i_q[empty].valid)
    {
       empty ++;
       if (MAX_I_Q == empty) empty = 0;
-      if (empty == used) return (empty); // we overwrite the last item in the queue
+      if (empty == used) 
+      {
+         if(0 == empty)
+         {
+            empty = MAX_I_Q - 1;
+         } else {
+            empty --;
+         }
+         return (empty); // we overwrite the last item in the queue
+      }
    }
    return empty;
 }
 
 WP_U32 iq_next_used (void)
 {
-   clear_i_q ();
    while (!i_q[used].valid)
    {
       used ++;
       if (used == MAX_I_Q) used = 0;
-      if (empty == used) return MAX_I_Q_ERROR;
+      if (empty == used) 
+      {
+         if(0 == used)
+         {
+            used = MAX_I_Q - 1;
+         } else {
+            used --;
+         }
+         return MAX_I_Q_ERROR;
+      }
    }
    return used;
 }
@@ -2709,29 +2724,23 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
    WP_U32 index = 0;
 
    g_intCnt ++;
-   clear_i_q ();
-   g_callback ++;
 
    sem_wait (&sem);
 
-if (1)
-{
-   index = iq_next_empty();
-if (0)
-{
-printf ("next_empty(%4d)\n", index);
-fflush(stdout);
-}
-   i_q[index].tag   = tag;
-   i_q[index].event = event;
-   i_q[index].info  = info;
-   i_q[index].valid = 1;
-}
-   sem_post(&sem);
+   if (1)
+   {
+      index = iq_next_empty();
+      i_q[index].tag   = tag;
+      i_q[index].event = event;
+      i_q[index].info  = info;
+      i_q[index].valid = 1;
+   }
 
    g_tag = tag;
    g_event = event;
    g_info = info;
+
+   sem_post(&sem);
 }
 
 
@@ -3559,28 +3568,36 @@ void *packet_dealer(void *i)
    WP_U32 tag=0, event=0, info=0;
    WP_U32 tag1=0, event1=0, info1=0;
 
+   while (0)
+   {
+      sem_wait (&sem);
+      printf ("g_intCnt(%d)\n", g_intCnt); 
+      sem_post (&sem);
+      WPL_Delay (1000);
+   }
+
+
    while (1)
    {
-//      if (!run) continue;
       sem_wait (&sem);
-if (1)
-{
-      index = iq_next_used ();
-printf ("next_used(%d)empty(%d)\n", index, empty);
-fflush(stdout);
-      if (MAX_I_Q_ERROR == index) 
-      { 
-printf ("nothing to deal with\n");
-fflush(stdout);
-         sem_post(&sem);
-WPL_Delay (10000);
-         continue;
+      if (1)
+      {
+         index = iq_next_used ();
+         printf ("next_used(%d)empty(%d)used(%d)\n", index, empty, used);
+         fflush(stdout);
+         if (MAX_I_Q_ERROR == index) 
+         { 
+            printf ("nothing to deal with\n");
+            fflush(stdout);
+            sem_post(&sem);
+            WPL_Delay (10000);
+            continue;
+         }
+         tag   = i_q[index].tag;
+         event = i_q[index].tag;
+         info  = i_q[index].tag;
+         i_q[index].valid = 0;
       }
-      tag   = i_q[index].tag;
-      event = i_q[index].tag;
-      info  = i_q[index].tag;
-      i_q[index].valid = 0;
-}
       tag1   = g_tag;
       event1 = g_event;
       info1  = g_info;
