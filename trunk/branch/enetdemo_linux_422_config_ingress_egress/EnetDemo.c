@@ -2717,7 +2717,7 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
 if (1)
 {
    index = iq_next_empty();
-if (1)
+if (0)
 {
 printf ("next_empty(%4d)\n", index);
 fflush(stdout);
@@ -2766,14 +2766,14 @@ fflush(stdout);
       {
          if (VERBOSE_PRT)	
          printf ("WP_HostReceive WP_ERR_HST_NO_DATA_TO_GET\n");
-   WPL_Delay(50000);
+//   WPL_Delay(50000);
          return;
       }
       else
       {
          if (VERBOSE_PRT)	
          printf ("WP_HostReceive error\n");
-   WPL_Delay(50000);
+//   WPL_Delay(50000);
          terminate_on_error (status, "WP_HostReceive Error()");
       }
    }
@@ -2808,7 +2808,7 @@ fflush(stdout);
    status = WP_PoolFree (segment.pool_handle, segment.data);
    terminate_on_error (status, "WP_PoolFree ()");
 
-   WPL_Delay(50000);
+//   WPL_Delay(50000);
 #if ENABLE_TRANSFER
 /*----------------------------------------------------*\
    we are going to make this endlessly !!!
@@ -3585,9 +3585,9 @@ WPL_Delay (10000);
       event1 = g_event;
       info1  = g_info;
       sem_post(&sem);
-WPL_Delay(10000);
 // continue;
       WPE_Receive_HostData_IRQ_X (tag, event, info);
+WPL_Delay (10000);
       if (0)	
       {
          printf ("packet_dealer: packet dealer ok(%8d)\n", index);
