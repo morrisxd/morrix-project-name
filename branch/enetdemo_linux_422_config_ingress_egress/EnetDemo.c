@@ -155,6 +155,8 @@ Full CLI Statistics
 #define VLAN_TAG_1                  1
 #define VLAN_TAG_2                  2 
 
+#define VERBOSE_PRT	0
+
 // Multicast
 #define NUM_OF_MC_GROUPS            1  // Must be ALWAYS 1 for this Test
 #define NUM_OF_MC_MEMBERS_PER_GROUP NUM_OF_HIER_ENET_FAS
@@ -355,11 +357,12 @@ WP_U32 g_threadStop = 1;
 extern void WPI_IntOverrunWrapper(WP_U32);
 void app_overrun_callback (WP_U32 wpid, WP_U32 queue_id, WP_U32 overrun_count)
 {
-      WPI_IntOverrunWrapper(0);
-#if 0
-   printf ("Overrun happenes: wpid(%2d), queue_id(%2d), overrun_cnt(%6d)", 
+#if 1
+   printf ("Overrun happenes: wpid(%2d), queue_id(%2d), overrun_cnt(%6d)\n", 
       wpid, queue_id, overrun_count);
+   fflush (stdout);
 #endif
+   WPI_IntOverrunWrapper(0);
 
    return;
 }
@@ -371,6 +374,7 @@ WP_U32 g_callback = 0;
 WP_U32      eoam_lock;
 WP_U32      clear_lock;
 WP_U32      packet_lock;
+WP_SEM_ID   sem_pool = 0;
 #define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
 
 WP_U32 interface_mode = 0;
@@ -415,6 +419,8 @@ void *clear_queue (void *i);
 int main (int argc, WP_CHAR ** argv)
 {
    WP_THREAD_ID learning_thread_id;
+   WP_THREAD_ID packet_thread_id;
+   WP_THREAD_ID clear_thread_id;
    WP_handle status;
    WP_U32 i;
 
@@ -510,6 +516,7 @@ int main (int argc, WP_CHAR ** argv)
 	WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &clear_lock);
 	WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &packet_lock);
 	printf ("after lock init\n");
+        WPL_SemInit (&sem_pool);
 
 
 #ifdef LOCK_AT_START
@@ -520,9 +527,11 @@ int main (int argc, WP_CHAR ** argv)
 
 
 	learning_thread_id = 0;
+	packet_thread_id = 0;
+	clear_thread_id = 0;
 #if 1
-	status = WPL_ThreadInit(&learning_thread_id, packet_dealer, 0);
-	terminate_on_error (status , "WPL_ThreadInit() learning");
+	status = WPL_ThreadInit(&packet_thread_id, packet_dealer, 0);
+	terminate_on_error (status , "WPL_ThreadInit() packet");
 	printf ("after Threadinit\n");
 
 	status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
@@ -530,13 +539,19 @@ int main (int argc, WP_CHAR ** argv)
 	printf ("after Threadinit\n");
 
 
-	status = WPL_ThreadInit(&learning_thread_id, clear_queue, 0);
+	status = WPL_ThreadInit(&clear_thread_id, clear_queue, 0);
 	terminate_on_error (status , "WPL_ThreadInit() clear_queue");
 	printf ("after Threadinit clear_queue\n");
 #endif
 
 #endif
 	i = 0;
+   {
+      struct sched_param params;
+      int ret = 0;
+      params.sched_priority = sched_get_priority_max (SCHED_FIFO);
+      ret = pthread_setschedparam(packet_thread_id, SCHED_FIFO, &params);
+   }
 
 #if 0
    for (i = 0; i < 10; i++)
@@ -2639,27 +2654,25 @@ WP_U32 used = 0;
 
 WP_U32 iq_next_empty (void)
 {
-   WP_U32 current = 0;
-   
-   current = empty;
-   while (i_q[empty].valid)
+   while (i_q[empty++].valid)
    {
-      if (++empty == MAX_I_Q) empty = 0;
-      if (empty == used) return (MAX_I_Q_ERROR);
+      if (MAX_I_Q == empty) empty = 0;
+      if (empty == used) return (empty); // we overwrite the last item in the queue
    }
    return empty;
 }
 
 WP_U32 iq_next_used (void)
 {
-   while (0 == i_q[used].valid)
+   while (0 == i_q[used++].valid)
    {
-      if (++used == MAX_I_Q) used = 0;
+      if (used == MAX_I_Q) used = 0;
       if (empty == used) return MAX_I_Q_ERROR;
    }
    return used;
 }
 
+WP_U32 g_intCnt = 0;
 
 void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
 {
@@ -2667,29 +2680,40 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
    static WP_U8 flag = 1;
    WP_U32 index = 0;
 
+   g_intCnt ++;
+
    if (flag)
    {
-      memset (i_q, 0, sizeof(int_queue)*10000);
+      memset (i_q, 0, sizeof(int_queue) * MAX_I_Q);
       flag = 0;
+      printf ("clear global array i_q finished\n");
    }
 
    g_callback ++;
 
+   WPL_SemIncrement (&sem_pool, 1);
+
+if (1)
+{
    index = iq_next_empty();
-   if ((MAX_I_Q_ERROR) == index) 
-   {
-      printf ("next empty error\n");
-      return; 
-   }
+printf ("next_empty(%4d)\n", index);
    i_q[index].tag   = tag;
    i_q[index].event = event;
    i_q[index].info  = info;
    i_q[index].valid = 1;
+}
+   g_tag = tag;
+   g_event = event;
+   g_info = info;
+   WPL_SemDecrement (&sem_pool, 1);
 
    // if (0 == (iii % 5000))
    {
-      printf ("WPE_Receive_HostData_IRQ: iii(%6d), callback(%6d)\n",iii,g_callback);
-      fflush(stdout);
+      if (0)	
+      {
+         printf ("WPE_Receive_HostData_IRQ:iii(%6d),callback(%6d)\n",iii,g_callback);
+         fflush(stdout);
+      }
    }
    WPL_Unlock(WPL_THREAD_LOCK_KEY, &packet_lock);
 }
@@ -2711,16 +2735,23 @@ void WPE_Receive_HostData_IRQ_X (WP_tag tag, WP_U32 event, WP_U32 info)
    data_unit.segment = &segment; /* Pointer to first segment.        */
    data_unit.n_segments = 1;    /* Number of available segments.    */
    status = WP_HostReceive (rx_host_channel, &data_unit);
-
+printf ("-->n_active(%d)segemtn(%d)intCnt(%6d)packet(%d)\n", 
+	data_unit.n_active, 
+	data_unit.n_segments,
+	g_intCnt, 
+	p_got);
+fflush(stdout);
    if (status != WP_OK)
    {
       if ((WP_ERROR (status) == WP_ERR_HST_NO_DATA_TO_GET))
       {
+         if (VERBOSE_PRT)	
          printf ("WP_HostReceive WP_ERR_HST_NO_DATA_TO_GET\n");
          return;
       }
       else
       {
+         if (VERBOSE_PRT)	
          printf ("WP_HostReceive error\n");
          terminate_on_error (status, "WP_HostReceive Error()");
       }
@@ -2730,8 +2761,11 @@ void WPE_Receive_HostData_IRQ_X (WP_tag tag, WP_U32 event, WP_U32 info)
 #if 1
    // if (0 == (p_got % DISPLAY_MATRIX))
    {
-      printf ("========> Receive Packet (%10d)\n", p_got);
-      fflush(stdout);
+      if (VERBOSE_PRT)	
+      {
+         printf ("========> Receive Packet (%10d)\n", p_got);
+         fflush(stdout);
+      }
    }
 #endif
 
@@ -3335,7 +3369,7 @@ void WPE_CLI (void)
 	{
 	WP_U32 depth = 0;
          WP_ChannelQDepth(tx_gbe_channel[0], &depth);
-	printf ("QDepth (%x)\n", depth);
+	printf ("QDepth (%x)empty(%d)used(%d)\n", depth, empty, used);
 	}
          break;
       case 'c':
@@ -3491,7 +3525,7 @@ void *clear_queue (void *i)
       WPL_Delay (DELAY_COUNT);
       // WPI_IntOverrunWrapper(0);
       // printf ("clear_queue: WPI_IntOverrunWrapper() called(%8d)\n", g_flushcnt++);
-      fflush(stdout);
+      // fflush(stdout);
       // WPL_Unlock(WPL_THREAD_LOCK_KEY, &clear_lock);
    }
 }
@@ -3500,25 +3534,38 @@ void *packet_dealer(void *i)
 {
    WP_U32 index = 0;
    WP_U32 tag=0, event=0, info=0;
+   WP_U32 tag1=0, event1=0, info1=0;
 
    while (1)
    {
       WPL_Lock (WPL_THREAD_LOCK_KEY, &packet_lock);
+
+      WPL_SemIncrement (&sem_pool, 1);
+
       index = iq_next_used ();
+printf ("next_used(%d)\n", index);
       if (MAX_I_Q_ERROR == index) 
       { 
          printf ("nothing to deal with\n");
          continue;
       }
+
       tag   = i_q[index].tag;
       event = i_q[index].tag;
       info  = i_q[index].tag;
       i_q[index].valid = 0;
 
+      tag1   = g_tag;
+      event1 = g_event;
+      info1  = g_info;
+      WPL_SemDecrement (&sem_pool, 1);
+
       WPE_Receive_HostData_IRQ_X (tag, event, info);
-      printf ("packet_dealer: packet dealer ok(%8d)\n", index);
-      fflush (stdout);
-      // WPL_Unlock(WPL_THREAD_LOCK_KEY, &packet_lock);
+      if (0)	
+      {
+         printf ("packet_dealer: packet dealer ok(%8d)\n", index);
+         fflush (stdout);
+      }
    }
 }
 
