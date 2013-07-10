@@ -2766,12 +2766,14 @@ fflush(stdout);
       {
          if (VERBOSE_PRT)	
          printf ("WP_HostReceive WP_ERR_HST_NO_DATA_TO_GET\n");
+   WPL_Delay(50000);
          return;
       }
       else
       {
          if (VERBOSE_PRT)	
          printf ("WP_HostReceive error\n");
+   WPL_Delay(50000);
          terminate_on_error (status, "WP_HostReceive Error()");
       }
    }
