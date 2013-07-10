@@ -57,6 +57,7 @@ Full CLI Statistics
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <semaphore.h>
 
 
 
@@ -87,7 +88,7 @@ Full CLI Statistics
 #define WPL_THREAD_LOCK_KEY \
    WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
 #define DELAY_COUNT	(100000*10)	// 2 seconds, micro seconds
-#define ENABLE_TRANSFER          (1)
+#define ENABLE_TRANSFER          (0)
 #define MAX_MACS                 4
 #define N_QNODES                 3
 #define N_POOLS                  4
@@ -362,19 +363,20 @@ void app_overrun_callback (WP_U32 wpid, WP_U32 queue_id, WP_U32 overrun_count)
       wpid, queue_id, overrun_count);
    fflush (stdout);
 #endif
-   WPI_IntOverrunWrapper(0);
+//    WPI_IntOverrunWrapper(0);
 
    return;
 }
 
-static WP_U32 iii = 0;
 extern void usleep(WP_U32 period);
 WP_U32 g_callback = 0;
 
-WP_U32      eoam_lock;
-WP_U32      clear_lock;
-WP_U32      packet_lock;
-WP_SEM_ID   sem_pool = 0;
+sem_t eoam_lock;
+sem_t clear_lock;
+sem_t packet_lock;
+sem_t sem_pool;
+sem_t sem;
+
 #define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
 
 WP_U32 interface_mode = 0;
@@ -411,6 +413,7 @@ void init_vars (void)
 	map_address_reg[WP_PORT_ENET12].serdes_io_ctrl = 0;
 }
 
+void   clear_i_q (void);
 void *clear_queue (void *i);
 
 /********************************************************************************
@@ -421,10 +424,13 @@ int main (int argc, WP_CHAR ** argv)
    WP_THREAD_ID learning_thread_id;
    WP_THREAD_ID packet_thread_id;
    WP_THREAD_ID clear_thread_id;
+   WP_THREAD_ID this_thread;
    WP_handle status;
    WP_U32 i;
 
    WPE_RegisterLogCbFunc ();
+
+   clear_i_q ();
 
 //----- Basic Functionality POS+Enet+Host ----//
    status = WP_DriverInit ();
@@ -512,17 +518,14 @@ int main (int argc, WP_CHAR ** argv)
 #if 1
 	printf ("before lock init\n");
 
-	WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &eoam_lock);
-	WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &clear_lock);
-	WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &packet_lock);
+       sem_init (&eoam_lock, 0, 0);
+       sem_init (&clear_lock, 0, 0);
+       sem_init (&packet_lock, 0, 1);
+       sem_init (&sem, 0, 1);
 	printf ("after lock init\n");
-        WPL_SemInit (&sem_pool);
 
 
 #ifdef LOCK_AT_START
-        // WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
-	// WPL_Lock(WPL_THREAD_LOCK_KEY, &eoam_lock);
-	// WPL_Lock(WPL_THREAD_LOCK_KEY, &clear_lock);
 #endif
 
 
@@ -549,8 +552,19 @@ int main (int argc, WP_CHAR ** argv)
    {
       struct sched_param params;
       int ret = 0;
-      params.sched_priority = sched_get_priority_max (SCHED_FIFO);
-      ret = pthread_setschedparam(packet_thread_id, SCHED_FIFO, &params);
+      this_thread = pthread_self();
+
+      params.sched_priority = sched_get_priority_max (SCHED_RR);
+      ret = pthread_setschedparam(this_thread, SCHED_RR, &params);
+
+      params.sched_priority = sched_get_priority_max (SCHED_RR) - 10;
+      ret = pthread_setschedparam(packet_thread_id, SCHED_RR, &params);
+
+      params.sched_priority = sched_get_priority_min (SCHED_RR);
+      ret = pthread_setschedparam(clear_thread_id, SCHED_RR, &params);
+
+      params.sched_priority = sched_get_priority_min (SCHED_RR);
+      ret = pthread_setschedparam(learning_thread_id, SCHED_RR, &params);
    }
 
 #if 0
@@ -2652,10 +2666,26 @@ int_queue i_q [MAX_I_Q];
 WP_U32 empty = 0;
 WP_U32 used = 0;
 
+void clear_i_q (void)
+{
+   int static flag = 1;
+
+   if (flag)
+   {
+      memset (i_q, 0, sizeof(int_queue) * MAX_I_Q);
+      flag = 0;
+      printf ("clear global array i_q finished\n");
+   }
+}
+
+
 WP_U32 iq_next_empty (void)
 {
-   while (i_q[empty++].valid)
+   clear_i_q ();
+
+   while (i_q[empty].valid)
    {
+      empty ++;
       if (MAX_I_Q == empty) empty = 0;
       if (empty == used) return (empty); // we overwrite the last item in the queue
    }
@@ -2664,8 +2694,10 @@ WP_U32 iq_next_empty (void)
 
 WP_U32 iq_next_used (void)
 {
-   while (0 == i_q[used++].valid)
+   clear_i_q ();
+   while (!i_q[used].valid)
    {
+      used ++;
       if (used == MAX_I_Q) used = 0;
       if (empty == used) return MAX_I_Q_ERROR;
    }
@@ -2676,27 +2708,18 @@ WP_U32 g_intCnt = 0;
 
 void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
 {
-     // WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
-   static WP_U8 flag = 1;
    WP_U32 index = 0;
 
    g_intCnt ++;
-
-   if (flag)
-   {
-      memset (i_q, 0, sizeof(int_queue) * MAX_I_Q);
-      flag = 0;
-      printf ("clear global array i_q finished\n");
-   }
-
+   clear_i_q ();
    g_callback ++;
 
-   WPL_SemIncrement (&sem_pool, 1);
+   sem_wait (&sem);
 
 if (1)
 {
    index = iq_next_empty();
-printf ("next_empty(%4d)\n", index);
+// printf ("next_empty(%4d)\n", index);
    i_q[index].tag   = tag;
    i_q[index].event = event;
    i_q[index].info  = info;
@@ -2705,17 +2728,7 @@ printf ("next_empty(%4d)\n", index);
    g_tag = tag;
    g_event = event;
    g_info = info;
-   WPL_SemDecrement (&sem_pool, 1);
-
-   // if (0 == (iii % 5000))
-   {
-      if (0)	
-      {
-         printf ("WPE_Receive_HostData_IRQ:iii(%6d),callback(%6d)\n",iii,g_callback);
-         fflush(stdout);
-      }
-   }
-   WPL_Unlock(WPL_THREAD_LOCK_KEY, &packet_lock);
+   sem_post(&sem);
 }
 
 
@@ -2735,12 +2748,15 @@ void WPE_Receive_HostData_IRQ_X (WP_tag tag, WP_U32 event, WP_U32 info)
    data_unit.segment = &segment; /* Pointer to first segment.        */
    data_unit.n_segments = 1;    /* Number of available segments.    */
    status = WP_HostReceive (rx_host_channel, &data_unit);
-printf ("-->n_active(%d)segemtn(%d)intCnt(%6d)packet(%d)\n", 
+if (1)
+{
+printf ("-->n_active(%d)segemtn(%d)intCnt(%6d)packet(%d)\r", 
 	data_unit.n_active, 
 	data_unit.n_segments,
 	g_intCnt, 
 	p_got);
 fflush(stdout);
+}
    if (status != WP_OK)
    {
       if ((WP_ERROR (status) == WP_ERR_HST_NO_DATA_TO_GET))
@@ -2787,6 +2803,7 @@ fflush(stdout);
    status = WP_PoolFree (segment.pool_handle, segment.data);
    terminate_on_error (status, "WP_PoolFree ()");
 
+   WPL_Delay(1000);
 #if ENABLE_TRANSFER
 /*----------------------------------------------------*\
    we are going to make this endlessly !!!
@@ -3521,12 +3538,12 @@ void *clear_queue (void *i)
 {
    while (1)
    {
-      WPL_Lock (WPL_THREAD_LOCK_KEY, &clear_lock);
+      sem_wait (&clear_lock);
       WPL_Delay (DELAY_COUNT);
       // WPI_IntOverrunWrapper(0);
       // printf ("clear_queue: WPI_IntOverrunWrapper() called(%8d)\n", g_flushcnt++);
       // fflush(stdout);
-      // WPL_Unlock(WPL_THREAD_LOCK_KEY, &clear_lock);
+      sem_post(&clear_lock);
    }
 }
 
@@ -3538,15 +3555,16 @@ void *packet_dealer(void *i)
 
    while (1)
    {
-      WPL_Lock (WPL_THREAD_LOCK_KEY, &packet_lock);
 
-      WPL_SemIncrement (&sem_pool, 1);
-
+      sem_wait (&sem);
+if (1)
+{
       index = iq_next_used ();
-printf ("next_used(%d)\n", index);
+// printf ("next_used(%d)empty(%d)\n", index, empty);
       if (MAX_I_Q_ERROR == index) 
       { 
-         printf ("nothing to deal with\n");
+//         printf ("nothing to deal with\n");
+         sem_post(&sem);
          continue;
       }
 
@@ -3554,12 +3572,12 @@ printf ("next_used(%d)\n", index);
       event = i_q[index].tag;
       info  = i_q[index].tag;
       i_q[index].valid = 0;
-
+}
       tag1   = g_tag;
       event1 = g_event;
       info1  = g_info;
-      WPL_SemDecrement (&sem_pool, 1);
-
+      sem_post(&sem);
+//continue;
       WPE_Receive_HostData_IRQ_X (tag, event, info);
       if (0)	
       {
@@ -3640,7 +3658,6 @@ void *LearningPoll(void *i)
 			WPL_IntDisable (0, WPL_SgmiiAn);
 			printf ("disable SgmiiAn interrupt\n");
 		}
-		WPL_Lock (WPL_THREAD_LOCK_KEY, &eoam_lock);
 
 		printf ("polling again(%d), enter to show the MENU\n", 
 				iii++);
@@ -3657,6 +3674,5 @@ void *LearningPoll(void *i)
 		status = WP_DeviceEnable(dev_enet, WP_DIRECTION_DUPLEX);
    		terminate_on_error (status, "WP_DeviceEnable Enet");
 
-		WPL_Unlock(WPL_THREAD_LOCK_KEY, &eoam_lock);
    	}
 }
