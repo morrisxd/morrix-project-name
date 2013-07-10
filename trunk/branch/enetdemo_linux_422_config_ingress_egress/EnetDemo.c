@@ -2719,7 +2719,11 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
 if (1)
 {
    index = iq_next_empty();
-// printf ("next_empty(%4d)\n", index);
+if (0)
+{
+printf ("next_empty(%4d)\n", index);
+fflush(stdout);
+}
    i_q[index].tag   = tag;
    i_q[index].event = event;
    i_q[index].info  = info;
