@@ -370,10 +370,8 @@ void app_overrun_callback (WP_U32 wpid, WP_U32 queue_id, WP_U32 overrun_count)
 
 extern void usleep(WP_U32 period);
 WP_U32 g_callback = 0;
-
-sem_t eoam_lock;
+int run = 0;
 sem_t clear_lock;
-sem_t packet_lock;
 sem_t sem_pool;
 sem_t sem;
 
@@ -518,9 +516,7 @@ int main (int argc, WP_CHAR ** argv)
 #if 1
 	printf ("before lock init\n");
 
-       sem_init (&eoam_lock, 0, 0);
-       sem_init (&clear_lock, 0, 0);
-       sem_init (&packet_lock, 0, 1);
+       sem_init (&clear_lock, 0, 1);
        sem_init (&sem, 0, 1);
 	printf ("after lock init\n");
 
@@ -537,14 +533,16 @@ int main (int argc, WP_CHAR ** argv)
 	terminate_on_error (status , "WPL_ThreadInit() packet");
 	printf ("after Threadinit\n");
 
+if (0)
+{
 	status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
 	terminate_on_error (status , "WPL_ThreadInit() learning");
 	printf ("after Threadinit\n");
 
-
 	status = WPL_ThreadInit(&clear_thread_id, clear_queue, 0);
 	terminate_on_error (status , "WPL_ThreadInit() clear_queue");
 	printf ("after Threadinit clear_queue\n");
+}
 #endif
 
 #endif
@@ -2719,7 +2717,7 @@ void WPE_Receive_HostData_IRQ (WP_tag tag, WP_U32 event, WP_U32 info)
 if (1)
 {
    index = iq_next_empty();
-if (0)
+if (1)
 {
 printf ("next_empty(%4d)\n", index);
 fflush(stdout);
@@ -2729,10 +2727,11 @@ fflush(stdout);
    i_q[index].info  = info;
    i_q[index].valid = 1;
 }
+   sem_post(&sem);
+
    g_tag = tag;
    g_event = event;
    g_info = info;
-   sem_post(&sem);
 }
 
 
@@ -2754,7 +2753,7 @@ void WPE_Receive_HostData_IRQ_X (WP_tag tag, WP_U32 event, WP_U32 info)
    status = WP_HostReceive (rx_host_channel, &data_unit);
 if (1)
 {
-printf ("-->n_active(%d)segemtn(%d)intCnt(%6d)packet(%d)\r", 
+printf ("-->n_active(%d)n_segment(%d)intCnt(%6d)packet(%d)\n", 
 	data_unit.n_active, 
 	data_unit.n_segments,
 	g_intCnt, 
@@ -2807,7 +2806,7 @@ fflush(stdout);
    status = WP_PoolFree (segment.pool_handle, segment.data);
    terminate_on_error (status, "WP_PoolFree ()");
 
-   WPL_Delay(1000);
+   WPL_Delay(50000);
 #if ENABLE_TRANSFER
 /*----------------------------------------------------*\
    we are going to make this endlessly !!!
@@ -3310,7 +3309,8 @@ void WPE_CLI (void)
       printf ("\t\t\tc-print all error_name)\n");
       printf ("\t\t\td-print all wufe_error_name)\n");
       printf ("\t\t\te-(switch NES), g-(flush interrupt queue)\n");
-
+fflush(stdout);
+   run = 1;
 #if 0
       gets (InputBuf);
 #else
@@ -3559,19 +3559,20 @@ void *packet_dealer(void *i)
 
    while (1)
    {
-
+//      if (!run) continue;
       sem_wait (&sem);
 if (1)
 {
       index = iq_next_used ();
-// printf ("next_used(%d)empty(%d)\n", index, empty);
+printf ("next_used(%d)empty(%d)\n", index, empty);
+fflush(stdout);
       if (MAX_I_Q_ERROR == index) 
       { 
-//         printf ("nothing to deal with\n");
+printf ("nothing to deal with\n");
+fflush(stdout);
          sem_post(&sem);
          continue;
       }
-
       tag   = i_q[index].tag;
       event = i_q[index].tag;
       info  = i_q[index].tag;
@@ -3581,7 +3582,8 @@ if (1)
       event1 = g_event;
       info1  = g_info;
       sem_post(&sem);
-//continue;
+WPL_Delay(10000);
+// continue;
       WPE_Receive_HostData_IRQ_X (tag, event, info);
       if (0)	
       {
