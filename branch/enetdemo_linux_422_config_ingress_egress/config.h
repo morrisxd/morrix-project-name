@@ -25,8 +25,15 @@ typedef struct map_register_group {
 #define ENET_NUMBER_TOTAL 	12
 map_register_group map_address_reg[WP_PORT_IW_HOST];
 
+/*-----------------------------------------------------------*\
+  It is very important.
+  When facing full speed 1G traffic generated from IXIA, 
+  the interrupt queue size MUST be larger than 253, or the system 
+  will die. 
+  253 is A VERY IMPORTANT critical threshold !!!!
+                        Morris
+                        Jul/11/2013
+\*-----------------------------------------------------------*/
 
 #define INT_QUEUE_SIZE	(254) // it will die if 253
-
-
 
