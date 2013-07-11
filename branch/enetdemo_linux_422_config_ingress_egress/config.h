@@ -26,7 +26,7 @@ typedef struct map_register_group {
 map_register_group map_address_reg[WP_PORT_IW_HOST];
 
 
-
+#define INT_QUEUE_SIZE	(254) // it will die if 253
 
 
 

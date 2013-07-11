@@ -592,10 +592,10 @@ void WPE_SysInit (void)
    WP_int_queue_table int_queue_tables = {
       {                         /*size, rate */
 
-       { 65535, 1},                 /* WP_IRQT0  highest */
-       { 65535, 1},                 /* WP_IRQT1 */
-       { 65535, 1},                 /* WP_IRQT2 */
-       { 65535, 1}                  /* WP_IRQT3  lowest */
+       {INT_QUEUE_SIZE, 1},                 /* WP_IRQT0  highest */
+       {INT_QUEUE_SIZE, 1},                 /* WP_IRQT1 */
+       {INT_QUEUE_SIZE, 1},                 /* WP_IRQT2 */
+       {INT_QUEUE_SIZE, 1}                  /* WP_IRQT3  lowest */
        }
    };
    WP_iw_global max_iw = {
