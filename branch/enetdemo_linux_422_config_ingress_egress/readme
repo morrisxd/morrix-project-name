@@ -1,0 +1,2 @@
+- 07/17/2013, disable WPL_IntOverrunQueues() & WPL_IntOverrunQueuesBSP() register in the WP_SysInit();
+

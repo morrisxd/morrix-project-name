@@ -3583,12 +3583,16 @@ void *packet_dealer(void *i)
       if (1)
       {
          index = iq_next_used ();
+#if 0
          printf ("next_used(%d)empty(%d)used(%d)\n", index, empty, used);
          fflush(stdout);
+#endif
          if (MAX_I_Q_ERROR == index) 
          { 
+#if 0
             printf ("nothing to deal with\n");
             fflush(stdout);
+#endif
             sem_post(&sem);
             WPL_Delay (10000);
             continue;
