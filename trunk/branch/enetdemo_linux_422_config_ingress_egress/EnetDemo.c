@@ -58,6 +58,7 @@ Full CLI Statistics
 #include <stdio.h>
 #include <string.h>
 #include <semaphore.h>
+#include <arpa/inet.h>
 
 
 
@@ -412,6 +413,8 @@ void init_vars (void)
 
 void   clear_i_q (void);
 void *clear_queue (void *i);
+extern WP_status WPI_HwInterruptQueueEnable (WP_U32 wpid, WP_U32 queue, WP_U32 bus);
+
 
 /********************************************************************************
  ***                        Functions Implementations: Main                   ***
@@ -496,6 +499,7 @@ int main (int argc, WP_CHAR ** argv)
       status = WP_ControlRegister(WP_EVENT_QUEUE_OVERRUN, 
                                        &app_overrun_callback);
       terminate_on_error(status, "WP_ControlRegister WP_EVENT_QUEUE_OVERRUN");
+   printf ("overrun is registered\n");
 
 #endif
 
@@ -523,7 +527,8 @@ int main (int argc, WP_CHAR ** argv)
 
 #ifdef LOCK_AT_START
 #endif
-
+   
+   WPI_HwInterruptQueueEnable (0, 0, 0);
 
 	learning_thread_id = 0;
 	packet_thread_id = 0;
@@ -2751,6 +2756,7 @@ void WPE_Receive_HostData_IRQ_X (WP_tag tag, WP_U32 event, WP_U32 info)
    WP_data_segment segment;
    WP_handle status;
    WP_U32 i;
+   WP_U32 ic_ir_h = 0, ic_ir_l = 0;
 
    while (1)
    {
@@ -2762,12 +2768,17 @@ void WPE_Receive_HostData_IRQ_X (WP_tag tag, WP_U32 event, WP_U32 info)
    status = WP_HostReceive (rx_host_channel, &data_unit);
 if (1)
 {
-printf ("-->n_active(%d)n_segment(%d)intCnt(%6d)packet(%d)\n", 
+   ic_ir_h = *(volatile unsigned int *)(unsigned long)(MAP_IC_IRPT_MIPS_0_H + WPL_RIF_VIRTUAL(0, 0));
+   ic_ir_l = *(volatile unsigned int *)(unsigned long)(MAP_IC_IRPT_MIPS_0_L + WPL_RIF_VIRTUAL(0, 0));
+   ic_ir_h = ntohl(ic_ir_h);
+   ic_ir_l = ntohl(ic_ir_h);
+   printf ("-->n_active(%d)n_segment(%d)intCnt(%6d)packet(%d)ic_ir_h(%x)ic_ir_l(%x)\n", 
 	data_unit.n_active, 
 	data_unit.n_segments,
 	g_intCnt, 
-	p_got);
-fflush(stdout);
+	p_got, 
+        ic_ir_h, ic_ir_l);
+   fflush(stdout);
 }
    if (status != WP_OK)
    {
@@ -3398,11 +3409,13 @@ fflush(stdout);
          WP_Display (0, WP_DISPLAY_DEVICE, WP_DISPLAY_DEFAULT, 0);
          break;
       case 'b':
-	{
-	WP_U32 depth = 0;
-         WP_ChannelQDepth(tx_gbe_channel[0], &depth);
-	printf ("QDepth (%x)empty(%d)used(%d)\n", depth, empty, used);
-	}
+	 {
+	    WP_U32 depth = 0;
+            WP_ChannelQDepth(tx_gbe_channel[0], &depth);
+	    printf ("QDepth (%x)empty(%d)used(%d)\n", depth, empty, used);
+
+            WPI_HwInterruptQueueEnable (0, 0, 0);
+	 }
          break;
       case 'c':
 	{
@@ -3567,6 +3580,8 @@ void *packet_dealer(void *i)
    WP_U32 index = 0;
    WP_U32 tag=0, event=0, info=0;
    WP_U32 tag1=0, event1=0, info1=0;
+
+if (0) return 0;
 
    while (0)
    {
