@@ -538,7 +538,7 @@ int main (int argc, WP_CHAR ** argv)
 	terminate_on_error (status , "WPL_ThreadInit() packet");
 	printf ("after Threadinit\n");
 
-if (0)
+if (1)
 {
 	status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
 	terminate_on_error (status , "WPL_ThreadInit() learning");
@@ -554,20 +554,27 @@ if (0)
 	i = 0;
    {
       struct sched_param params;
+      pthread_attr_t attr;
       int ret = 0;
+      int policy = 0;
+
       this_thread = pthread_self();
+      ret = pthread_attr_init(&attr);
 
-      params.sched_priority = sched_get_priority_max (SCHED_RR);
-      ret = pthread_setschedparam(this_thread, SCHED_RR, &params);
+//       policy = get_thread_policy( attr );
+      ret = pthread_attr_getschedpolicy( &attr, &policy );
 
-      params.sched_priority = sched_get_priority_max (SCHED_RR) - 10;
-      ret = pthread_setschedparam(packet_thread_id, SCHED_RR, &params);
+      params.sched_priority = sched_get_priority_min (policy);
+      ret = pthread_setschedparam(this_thread, policy, &params);
 
-      params.sched_priority = sched_get_priority_min (SCHED_RR);
-      ret = pthread_setschedparam(clear_thread_id, SCHED_RR, &params);
+      params.sched_priority = sched_get_priority_min (policy) + 10;
+      ret = pthread_setschedparam(packet_thread_id, policy, &params);
 
-      params.sched_priority = sched_get_priority_min (SCHED_RR);
-      ret = pthread_setschedparam(learning_thread_id, SCHED_RR, &params);
+      params.sched_priority = sched_get_priority_max (policy);
+      ret = pthread_setschedparam(clear_thread_id, policy, &params);
+
+      params.sched_priority = sched_get_priority_max (policy);
+      ret = pthread_setschedparam(learning_thread_id, policy, &params);
    }
 
 #if 0
@@ -3566,11 +3573,11 @@ void *clear_queue (void *i)
 {
    while (1)
    {
-      sem_wait (&clear_lock);
       WPL_Delay (DELAY_COUNT);
+      sem_wait (&clear_lock);
       // WPI_IntOverrunWrapper(0);
-      // printf ("clear_queue: WPI_IntOverrunWrapper() called(%8d)\n", g_flushcnt++);
-      // fflush(stdout);
+      printf ("clear_queue: WPI_IntOverrunWrapper() called(%8d)\n", g_flushcnt++);
+      fflush(stdout);
       sem_post(&clear_lock);
    }
 }
