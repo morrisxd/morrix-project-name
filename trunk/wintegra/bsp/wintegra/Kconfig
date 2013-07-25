@@ -1,0 +1,70 @@
+choice
+	prompt "Wintegra Processor type"
+        depends on WINTEGRA_WINPATH
+        default WINTEGRA_WINPATH3
+
+config WINTEGRA_WINPATH2
+        bool "Support for Wintegra Winpath2 device family"
+        select BOOT_ELF32
+        select IRQ_CPU
+        select SYS_HAS_CPU_MIPS32_R2
+        select DMA_COHERENT
+        select SYS_SUPPORTS_32BIT_KERNEL
+        select SYS_SUPPORTS_BIG_ENDIAN
+        select SYS_SUPPORTS_MULTITHREADING
+        help
+          Select WINTEGRA_WINPATH2 if configuring a Wintegra Winpath2 with a MIPS add-on board.
+
+config WINTEGRA_WINPATH3
+        bool "Support for Wintegra Winpath3 device family"
+        select BOOT_ELF32
+        select CEVT_R4K 
+        select IRQ_CPU
+        select SYS_HAS_CPU_MIPS32_R2
+        select DMA_COHERENT
+        select SYS_HAS_EARLY_PRINTK
+        select SYS_SUPPORTS_32BIT_KERNEL
+        select SYS_SUPPORTS_BIG_ENDIAN
+        select SYS_SUPPORTS_MULTITHREADING
+        select SERIAL_8250
+        select SERIAL_8250_WINPATH
+		select MIPS_CPU_SCACHE
+        help
+          Select WINTEGRA_WINPATH3 if configuring a Wintegra Winpath3 with a MIPS add-on board.
+
+endchoice
+
+config WINTEGRA_WDS2
+        bool "Support for Wintegra WDS2 board"
+        depends on WINTEGRA_WINPATH2
+        select WINTEGRA_DM9KS
+        help
+          Select WINTEGRA_WDS2 if configuring a Wintegra WDS2 board.
+
+config WINTEGRA_WINHDP2
+        bool "Support for Wintegra WinHDP2 board"
+        depends on WINTEGRA_WINPATH2
+        select WINTEGRA_DM9KS
+        help
+          Select WINTEGRA_WINHDP2 if configuring a Wintegra WinHDP2 board.
+          This will automatically select the Wintegra memory mapped PHY driver
+          (in PC203 mode) and onboard CPLD driver as loadable modules.
+
+config WINTEGRA_WDS3
+        bool "Support for Wintegra WDS3 board"
+        depends on WINTEGRA_WINPATH3
+        select WINTEGRA_INTERNAL_ENET
+        help
+          Select WINTEGRA_WDS3 if configuring a Wintegra WDS3 board.
+
+config WINTEGRA_UFE4_FRAMER_INTERRUPTS
+        bool "Support for Wintegra UFE4 board on WDS3"
+        depends on WINTEGRA_WDS3
+        help
+          Select WINTEGRA_UFE4_FRAMER_INTERRUPTS if configuring a UFE4 on a Wintegra WDS3 board.
+
+config SERIAL_8250_WINPATH
+        bool "Support WinPath UART interface"
+        depends on SERIAL_8250 && WINTEGRA_WINPATH
+        help
+          Say Y here if you have a WinPath based board.
