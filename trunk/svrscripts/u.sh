@@ -1,4 +1,9 @@
 #!/bin/bash
+
+. /users/dengmorr/.bashrc
+
+
+
 cd ~/wddk
 accurev update
 
