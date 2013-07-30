@@ -536,17 +536,17 @@ int main (int argc, WP_CHAR ** argv)
 #if 1
 	status = WPL_ThreadInit(&packet_thread_id, packet_dealer, 0);
 	terminate_on_error (status , "WPL_ThreadInit() packet");
-	printf ("after Threadinit\n");
+	printf ("after Threadinit-packet_dealer\n");
 
-if (1)
+if (0)
 {
 	status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
 	terminate_on_error (status , "WPL_ThreadInit() learning");
-	printf ("after Threadinit\n");
+	printf ("after Threadinit-learning\n");
 
 	status = WPL_ThreadInit(&clear_thread_id, clear_queue, 0);
 	terminate_on_error (status , "WPL_ThreadInit() clear_queue");
-	printf ("after Threadinit clear_queue\n");
+	printf ("after Threadinit-clear_queue\n");
 }
 #endif
 
@@ -557,24 +557,60 @@ if (1)
       pthread_attr_t attr;
       int ret = 0;
       int policy = 0;
+      int min, max;
 
       this_thread = pthread_self();
-      ret = pthread_attr_init(&attr);
+      printf ("thread id of myself(%d)\n", this_thread);
+      if ((ret = pthread_attr_init(&attr)))
+      {
+         return printf ("pthread_attr_init() failed with return val(%d)", ret);
+      }
 
-//       policy = get_thread_policy( attr );
-      ret = pthread_attr_getschedpolicy( &attr, &policy );
+      if ((ret = pthread_attr_getschedpolicy( &attr, &policy )))
+      {
+         return printf ("pthread_attr_getschedpolicy() failed with return val(%d)", 
+         			ret);
+      }
+      printf ("policy(%d)(%s)\n", policy, SCHED_RR==policy?"SCHED_RR"
+ 		: (SCHED_FIFO==policy?"SCHED_FIFO":"OTHER"));
 
-      params.sched_priority = sched_get_priority_min (policy);
-      ret = pthread_setschedparam(this_thread, policy, &params);
+      params.sched_priority = min = sched_get_priority_min (policy);
+      if (-1 == (min = pthread_setschedparam(this_thread, policy, &params)))
+      {
+         return printf ("pthread_setschedparam-1() failed with return val(%d)", 
+         			ret);
+      }
+      printf ("sched_priority_min(%d)policy(%d)\n", params.sched_priority, policy);
+      fflush(stdout);
 
-      params.sched_priority = sched_get_priority_min (policy) + 10;
-      ret = pthread_setschedparam(packet_thread_id, policy, &params);
+      params.sched_priority = max = sched_get_priority_max (policy);
+printf ("max(%d)\n", max);
 
-      params.sched_priority = sched_get_priority_max (policy);
-      ret = pthread_setschedparam(clear_thread_id, policy, &params);
 
-      params.sched_priority = sched_get_priority_max (policy);
-      ret = pthread_setschedparam(learning_thread_id, policy, &params);
+
+#if 1 
+
+      params.sched_priority = ret = sched_get_priority_min (policy);
+      if ((ret = pthread_setschedparam(packet_thread_id, policy, &params)))
+      {
+	 perror("Hello World:");
+         return printf ("pthread_setschedparam-2() failed with return val(%d)\n", 
+         			ret);
+      }
+#else
+      params.sched_priority = ret = sched_get_priority_min (policy);
+      if ((ret = pthread_setschedparam(clear_thread_id, policy, &params)))
+      {
+         return printf ("pthread_setschedparam-3() failed with return val(%d)\n", 
+         			ret);
+      }
+      params.sched_priority = ret = sched_get_priority_min (policy);
+      if ((ret = pthread_setschedparam(learning_thread_id, policy, &params)))
+      {
+         return printf ("pthread_setschedparam-4() failed with return val(%d)\n", 
+         			ret);
+      }
+#endif
    }
 
 #if 0
@@ -3573,7 +3609,7 @@ void *clear_queue (void *i)
 {
    while (1)
    {
-      WPL_Delay (DELAY_COUNT);
+      WPL_Delay (DELAY_COUNT * 10 );
       sem_wait (&clear_lock);
       // WPI_IntOverrunWrapper(0);
       printf ("clear_queue: WPI_IntOverrunWrapper() called(%8d)\n", g_flushcnt++);
