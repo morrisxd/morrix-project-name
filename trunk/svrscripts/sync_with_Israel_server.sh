@@ -13,6 +13,7 @@ ls -l
 # rsync -av versions/ 216.241.237.121:dps/
 done
 
+rsync -avz --bwlimit=100 --progress ${sourceLoc}bsps/mvl/monta-vista/40/mips ${targetRootRD}
 # rsync -avz --bwlimit=100 --progress ${sourceLoc}bsps/mvl/monta-vista/40/mips/docs-pro-0501140.iso ${targetRootRD}
 # rsync -avz --bwlimit=100 --progress ${sourceLoc}bsps/mvl/monta-vista/40/mips/src-pro-0501140.iso ${targetRootRD}
 rsync -avz --bwlimit=100 --progress /public/data/projects/winpath/sw_docs ${targetLoc}
@@ -26,7 +27,8 @@ rsync -avz --bwlimit=100 --progress ${sourceLoc}wddi/versions/181? ${targetLoc}w
 rsync -avz --bwlimit=100 --progress ${sourceLoc}wddi/versions/18?? ${targetLoc}wddi
 rsync -avz --bwlimit=100 --progress ${sourceLoc}wddi/versions/19?? ${targetLoc}wddi
 rsync -avz --bwlimit=100 --progress ${sourceLoc}winutil ${targetLoc}
-rsync -avz --bwlimit=100 --progress ~/WDDS_MAIN_DEV_refapps_morris_2 ${targetRoot}
 rsync -avz --bwlimit=100 --progress ~/WDDS_MAIN_DEV_refapps_morris_3 ${targetRootRD}
+rsync -avz --bwlimit=100 --progress ~/WDDS_4_3_X_DEV_morris_israel ${targetRoot}
 echo begin to sync 4_2_x
 rsync -avz --bwlimit=100 --progress ~/WDDS_4_2_X_DEV_morris ${targetRootRD}
+rsync -avz --bwlimit=100 --progress ~/WDDK_MAIN_DEV ${targetRootRD}
