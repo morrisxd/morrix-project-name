@@ -8,9 +8,6 @@ accurev update
 cd ~/WDDK_MAIN_DEV
 accurev update
 
-cd ~/WDDK_MAIN_DEV
-accurev update
-
 cd ~/WDDS_4_2_X_DEV_morris
 accurev update
 
