@@ -1,9 +1,5 @@
+filename=enetdemo_432_linux_g999.exe
 ctags -R
-make TEST=EnetDemo
-# copy_to_tftpboot.sh
-rsync -avz --progress bin/EnetDemo /tftpboot/enetdemo_422_linux_ingress.exe
-echo rsync bin/EnetDemo /tftpboot/enetdemo_422_linux_ingress.exe
-# cd bin
-# mv EnetDemo EnetDemo_lin.exe 
-# up EnetDemo_lin.exe bin
+make TEST=103011-swap_g999_to_enet.c && rsync -avz --progress bin/EnetDemo /tftpboot/${filename}
+echo rsync bin/EnetDemo /tftpboot/${filename}
 
