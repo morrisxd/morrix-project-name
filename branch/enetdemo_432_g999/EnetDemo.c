@@ -417,7 +417,7 @@ void *clear_queue (void *i);
 
 
 /********************************************************************************
- ***                        Functions Implementations: Main                   ***
+ ***.                        Functions Implementations: Main                   ***
  *******************************************************************************/
 int main (int argc, WP_CHAR ** argv)
 {
