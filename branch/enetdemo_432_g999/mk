@@ -1,0 +1,9 @@
+ctags -R
+make TEST=EnetDemo
+# copy_to_tftpboot.sh
+rsync -avz --progress bin/EnetDemo /tftpboot/enetdemo_422_linux_ingress.exe
+echo rsync bin/EnetDemo /tftpboot/enetdemo_422_linux_ingress.exe
+# cd bin
+# mv EnetDemo EnetDemo_lin.exe 
+# up EnetDemo_lin.exe bin
+

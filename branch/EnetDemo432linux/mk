@@ -1,8 +1,8 @@
 filename=enet_432_linux.exe
 oldfile=EnetDemo
+targetDir=/tftpboot
 ctags -R
-make TEST=$oldfile
-mv ./bin/$oldfile ./bin/$filename
+make TEST=$oldfile && mv ./bin/$oldfile ./bin/$filename && rsync ./bin/$filename ${targetDir}
+echo filename=$filename
 # echo cp bin/$oldfile{.exe} $filename
-
-copy_to_tftpboot.sh
+# copy_to_tftpboot.sh
