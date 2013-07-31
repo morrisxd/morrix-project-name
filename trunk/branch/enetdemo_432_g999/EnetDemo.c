@@ -413,7 +413,7 @@ void init_vars (void)
 
 void   clear_i_q (void);
 void *clear_queue (void *i);
-extern WP_status WPI_HwInterruptQueueEnable (WP_U32 wpid, WP_U32 queue, WP_U32 bus);
+// extern WP_status WPI_HwInterruptQueueEnable (WP_U32 wpid, WP_U32 queue, WP_U32 bus);
 
 
 /********************************************************************************
@@ -528,7 +528,7 @@ int main (int argc, WP_CHAR ** argv)
 #ifdef LOCK_AT_START
 #endif
    
-   WPI_HwInterruptQueueEnable (0, 0, 0);
+//   WPI_HwInterruptQueueEnable (0, 0, 0);
 
 	learning_thread_id = 0;
 	packet_thread_id = 0;
@@ -3457,7 +3457,7 @@ fflush(stdout);
             WP_ChannelQDepth(tx_gbe_channel[0], &depth);
 	    printf ("QDepth (%x)empty(%d)used(%d)\n", depth, empty, used);
 
-            WPI_HwInterruptQueueEnable (0, 0, 0);
+//            WPI_HwInterruptQueueEnable (0, 0, 0);
 	 }
          break;
       case 'c':
