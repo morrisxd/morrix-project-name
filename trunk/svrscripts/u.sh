@@ -6,6 +6,7 @@
 
 cd ~/wddk
 accurev update
+echo done >> done.log
 
 cd ~/WDDS_4_3_X_DEV_morris_israel
 accurev update
