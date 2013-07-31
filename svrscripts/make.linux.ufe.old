@@ -1,0 +1,3 @@
+make WPI_TARGET=mips_linux WPI_BOARD=wds WPI_HW_DEVICE=winpath3 DPS_IMAGES=local DPS_CACHE=no DPS_IMAGE_LIST=backhaul WUFE=ufe412 FRAMER=flexmux
+make WPI_TARGET=mips_linux WPI_BOARD=wds WPI_HW_DEVICE=winpath3 DPS_IMAGES=local DPS_CACHE=no DPS_IMAGE_LIST=winarrow WUFE=ufe412 FRAMER=flexmux
+
