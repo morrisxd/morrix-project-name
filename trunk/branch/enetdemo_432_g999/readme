@@ -1,0 +1,10 @@
+- 07/17/2013, disable WPL_IntOverrunQueues() & WPL_IntOverrunQueuesBSP() register 
+ 	in the WP_SysInit(); but i got nothing wrong. everything seems find still. 
+	it seems that there is no use of this overrun interrupt handler to the 
+	system. why?
+- 07/17/2013. 
+	now i'm reduce the size of the int_queue_table. 
+	size=200, it dead immediately
+	size=250, die immediately after start
+	size=253, PERFECT!
+
