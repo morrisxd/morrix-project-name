@@ -48,6 +48,7 @@ WPI_APP_BOARD  	?= wds
 
 WPI_HOST   	= linux
 UFE_TYPE        = ufe412
+# DPS_IMAGE_NAME  = wpi_dps_image_wireline
 DPS_IMAGE_NAME  = wpi_dps_image_backhaul
 
 WDDS_OBJECTS = objects
@@ -200,6 +201,14 @@ DEFINE_WEB = -DWEB
 WP_HW_WINPATHX = WP_HW_WINPATH3
 WP_BOARD_NAME=WP_BOARD_WDS3
 
+
+
+
+# DPS Image to use
+# DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)/$(WDDS_OBJECTS)/$(WPI_HOST)/$(WPI_APP_TARGET)/lib/$(DPS_IMAGE_NAME).o
+PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)/objects/$(WPI_HOST)/$(WPI_APP_TARGET)/lib/wpi_pps_image_iwgp_parser.o
+
+
 # Overwriting WDDI CFLAG define only because I like to be in control
 ifeq "$(WPI_APP_TARGET)" "mips_winmon"
 CFLAGS += -c -mips32 -G 0 -nostdinc -fno-builtin -fno-inline-functions -fsigned-char -Wpointer-arith -Wstrict-prototypes -Wformat -Wno-main -g -O2
@@ -241,7 +250,7 @@ ifneq "$(START_FILE)" ""
 	-cp $(WPI_START_FILE)/$(START_FILE) $(START_FILE)
 endif
 # Do the link	
-	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) \
+	$(CC) $(LDFLAGS) $(LDFLAGS2) -msoft-float -o $(TEST_EXE) $(LINK_FILE) $(TEST_OBJ) $(DPS_IMAGE_OBJ) $(PPS_IMAGE_OBJ) $(UFE4_EVENTS_OBJ) \
 	$(WDDI_LIBS) $(OTHER_LIB)
 
 # Clean up after everything that might have happened
