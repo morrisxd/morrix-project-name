@@ -4754,6 +4754,7 @@ WP_boolean WTE_Scenario_2(void)
    {
       WTE_SwapGroupAToG999Mode(max_g999_streams_in_use[WT_WINNET_GROUP_A]);
       WTE_SwapGroupBToG999Mode(max_g999_streams_in_use[WT_WINNET_GROUP_B]);
+WTE_DisplayFlowStats(flow_agg_host[0], "TEST");
       WTE_CreateGroupAG999Mode();
       WTE_CreateGroupBG999Mode();
 
