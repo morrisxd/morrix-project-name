@@ -320,3 +320,15 @@ rsync -av versions dengmorr@216.241.237.121:dps/
 server side: nc -kl 3333 > /dev/null
 client side: time nc -v -v -n ran1sw01 3333 < atm_ima_ufe.exe
 client side: time yes | nc -v -n ran1sw01 3333
+
+[40]
+pop -v <stream/snapshot name> -L <path to location outside of AccuRev> .
+
+Example from the manual:
+
+Using versions from stream QA, copy the subdirectory tree starting at the directory src to C:\httpd\test_site:
+> accurev pop -R -v QA -L C:\httpd\test_site \.\src
+
+/Tomas
+
+
