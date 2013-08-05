@@ -502,7 +502,8 @@ printf ("step 6\n");
       printf ("Test Failed\n");
    else
       printf ("Test Passed\n");
-   
+printf ("Press any key to close\n");
+getchar ();   
    WTE_Terminate(0);
 
   WTE_Terminate(0);
@@ -4755,6 +4756,7 @@ WP_boolean WTE_Scenario_2(void)
       WTE_SwapGroupAToG999Mode(max_g999_streams_in_use[WT_WINNET_GROUP_A]);
       WTE_SwapGroupBToG999Mode(max_g999_streams_in_use[WT_WINNET_GROUP_B]);
 WTE_DisplayFlowStats(flow_agg_host[0], "TEST");
+// WP_Display(0,flow_agg_host[0], WP_DISPLAY_DEFAULT,0);
       WTE_CreateGroupAG999Mode();
       WTE_CreateGroupBG999Mode();
 
