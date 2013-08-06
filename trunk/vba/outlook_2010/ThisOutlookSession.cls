@@ -12,12 +12,10 @@ Dim WithEvents myOlBar As Outlook.OutlookBarPane
 Attribute myOlBar.VB_VarHelpID = -1
 Dim WithEvents myExplorer As Outlook.Explorer
 Attribute myExplorer.VB_VarHelpID = -1
-
-
- 
- 
-
-
+Dim WithEvents myEmailItem As Outlook.MailItem
+Attribute myEmailItem.VB_VarHelpID = -1
+Public WithEvents myOlItems As Outlook.Items
+Attribute myOlItems.VB_VarHelpID = -1
 
 Private Sub Application_ItemLoad(ByVal Item As Object)
     ' MsgBox "world"
@@ -29,8 +27,32 @@ Private Sub Application_ItemSend(ByVal Item As Object, Cancel As Boolean)
 End Sub
 
 
+Private Sub Application_MAPILogonComplete()
+    ' MsgBox "logoned"
+End Sub
+
 Private Sub Application_NewMail()
-    MsgBox "You got an email !!!"
+    Dim myItem As Outlook.MailItem
+
+    Set myItem = Application.ActiveExplorer.Selection.Item(1)
+    
+    ' MsgBox "You got an email. Subject=[" & myItem.Subject & "], body=[" & myItem.Body & "]"
+End Sub
+
+Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
+    ' MsgBox "name=" & EntryIDCollection
+    Dim varEntryIDs
+    Dim objItem
+    
+    Dim i As Integer
+    
+    varEntryIDs = Split(EntryIDCollection, ",")
+    
+    For i = 0 To UBound(varEntryIDs)
+        Set objItem = Application.Session.GetItemFromID(varEntryIDs(i))
+        MsgBox "New Mail: Subject=" & objItem.Subject & ", Conent=[" & objItem.Body & "]"
+    Next
+    
 End Sub
 
 Private Sub Application_Quit()
@@ -39,12 +61,21 @@ End Sub
 
 Private Sub Application_Startup()
     ' MsgBox "Hello Outlook 2010"
-  Set myOlBar = Application.ActiveExplorer.Panes(1)
-  Set myExplorer = Application.ActiveExplorer
+    Set myOlBar = Application.ActiveExplorer.Panes(1)
+    Set myExplorer = Application.ActiveExplorer
+    Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderContacts).Items
+ 
 
 End Sub
 
 
+
+Private Sub myEmailItem_Open(Cancel As Boolean)
+    ' Set myEmailItem = Application.ActiveExplorer.CurrentItem
+
+
+    MsgBox "You have opened an email"
+End Sub
 
 Private Sub myExplorer_Activate()
     ' MsgBox "mail activated"
@@ -77,8 +108,16 @@ End Sub
 
  
 Public Sub Initialize_handler()
- 
- Set myOlExp = Application.ActiveExplorer
+    MsgBox "hi"
+    Set myOlExp = Application.ActiveExplorer
+
  
 End Sub
  
+Private Sub myOlItems_ItemAdd(ByVal Item As Object)
+    MsgBox "You got new email. Subject = [" & Item.Subject & "]"
+End Sub
+
+Private Sub myOlItems_ItemChange(ByVal Item As Object)
+    MsgBox "changed"
+End Sub
