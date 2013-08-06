@@ -42,7 +42,7 @@ End Sub
 Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
     ' MsgBox "name=" & EntryIDCollection
     Dim varEntryIDs
-    Dim objItem
+    Dim objItem As MailItem
     
     Dim i As Integer
     
@@ -50,7 +50,10 @@ Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
     
     For i = 0 To UBound(varEntryIDs)
         Set objItem = Application.Session.GetItemFromID(varEntryIDs(i))
-        MsgBox "New Mail: Subject=" & objItem.Subject & ", Conent=[" & objItem.Body & "]"
+        MsgBox "New Mail: Subject=" & objItem.Subject '& ", Conent=[" & objItem.Body & "]"
+        'objItem.BodyFormat = olFormatPlain
+        'emailshow.emailBody.Text = objItem.Body
+        'emailshow.Show
     Next
     
 End Sub
