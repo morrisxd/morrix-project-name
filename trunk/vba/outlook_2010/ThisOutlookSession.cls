@@ -50,7 +50,8 @@ Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
     
     For i = 0 To UBound(varEntryIDs)
         Set objItem = Application.Session.GetItemFromID(varEntryIDs(i))
-        MsgBox "New Mail: Subject=" & objItem.Subject '& ", Conent=[" & objItem.Body & "]"
+        MsgBox "NewMailEx: Subject=" & objItem.Subject & ", attachments=[" & objItem.Attachments.Count & "]"
+        Module1.SaveAttach objItem
         'objItem.BodyFormat = olFormatPlain
         'emailshow.emailBody.Text = objItem.Body
         'emailshow.Show
@@ -63,12 +64,17 @@ Private Sub Application_Quit()
 End Sub
 
 Private Sub Application_Startup()
+    Dim olApp As Outlook.Application
+    Dim objNS As Outlook.NameSpace
+    
     ' MsgBox "Hello Outlook 2010"
     Set myOlBar = Application.ActiveExplorer.Panes(1)
     Set myExplorer = Application.ActiveExplorer
-    Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderContacts).Items
- 
-
+    ' Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderContacts).Items
+    Set olApp = Outlook.Application
+    Set objNS = olApp.GetNamespace("MAPI")
+  ' default local Inbox
+    Set myOlItems = objNS.GetDefaultFolder(olFolderInbox).Items
 End Sub
 
 
@@ -93,7 +99,7 @@ Private Sub myExplorer_SelectionChange()
         For Each myEmail In ActiveExplorer.Selection
             If myEmail.Attachments.Count = 0 Then
             Else
-                MsgBox "You got [" & myEmail.Attachments.Count & "] " & "attachment(s)"
+                ' MsgBox "You got [" & myEmail.Attachments.Count & "] " & "attachment(s)"
             End If
         Next
         Set myEmail = Nothing
@@ -117,10 +123,12 @@ Public Sub Initialize_handler()
  
 End Sub
  
+
+
 Private Sub myOlItems_ItemAdd(ByVal Item As Object)
-    MsgBox "You got new email. Subject = [" & Item.Subject & "]"
+    MsgBox "ItemAdd"
 End Sub
 
 Private Sub myOlItems_ItemChange(ByVal Item As Object)
-    MsgBox "changed"
+    ' MsgBox "ItemChange"
 End Sub
