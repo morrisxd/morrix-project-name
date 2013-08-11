@@ -22,6 +22,8 @@ Dim myExcel As Excel.Application
 Dim xlBook As Excel.Workbook
 Dim xlSheet As Excel.Worksheet
 Dim excelsheet
+Dim myFolder As Outlook.Folder
+
 
 'Dim myExcel As Excel
 
@@ -69,9 +71,14 @@ Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
         End If
     Next
     
-    
-    
-    
+    ' #######################################################
+    ' #######################################################
+    ' #######################################################
+    ' #######################################################
+    ' #######################################################
+    ' #######################################################
+    ' MsgBox "Now we have all (" & objItem.Application.ActiveExplorer.CurrentFolder.Items.Count & ") emails. foldername=[" & objItem.Application.ActiveExplorer.CurrentFolder.FolderPath & "]"
+    ' MsgBox "count=" & myOlItems.Count
 End Sub
 
 Private Sub Application_Quit()
@@ -112,7 +119,7 @@ Private Sub myExplorer_SelectionChange()
 End Sub
 
 Private Sub myOlBar_BeforeNavigate(ByVal Shortcut As OutlookBarShortcut, Cancel As Boolean)
-    If Shortcut.name = "Notes" Then
+    If Shortcut.Name = "Notes" Then
         MsgBox "You cannot open the Notes folder."
         Cancel = True
     End If
@@ -124,37 +131,61 @@ End Sub
 Public Sub Initialize_handler()
     Dim olApp As Outlook.Application
     Dim objNS As Outlook.NameSpace
+    Dim folderArray As Variant
+    Dim folderPath
+    Dim i
     
     ' MsgBox "Hello Outlook 2010"
     Set myOlBar = Application.ActiveExplorer.Panes(1)
     Set myExplorer = Application.ActiveExplorer
     ' Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderInbox).Items
-    Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderInbox).Items
-    'Set olApp = Outlook.Application
-    'Set objNS = olApp.GetNamespace("MAPI")
-    ' default local Inbox
-    'Set myOlItems = objNS.GetDefaultFolder(olFolderInbox).Items
-
+    folderPath = "\\984745824@qq.com (1)\Inbox"
+    folderPath = Right(folderPath, Len(folderPath) - 2)
+    folderArray = Split(folderPath, "\")
+    Set myFolder = Application.Session.Folders.Item(folderArray(0))
+    
+    If Not myFolder Is Nothing Then
+        For i = 1 To UBound(folderArray, 1)
+            Dim subfolders As Outlook.Folders
+            Set subfolders = myFolder.Folders
+            Set myFolder = subfolders.Item(folderArray(i))
+            ' MsgBox "name=" & myFolder.Name
+            If UCase(Trim(myFolder.Name)) = "INBOX" Then
+                Set myOlItems = myFolder.Items
+            End If
+        Next
+        
+        If Not myOlItems Is Nothing Then
+            ' MsgBox "Email(s) inside Inbox =[" & myOlItems.Count & "]"
+        End If
+    Else
+        MsgBox "Can't get folder object"
+    End If
+    
     Set myOlExp = Application.ActiveExplorer
 End Sub
  
 
 
 Private Sub myOlExp_Activate()
-' kjl
+    ' kjl
+End Sub
+
+Private Sub myOlExp_SelectionChange()
+    ' msgbox
 End Sub
 
 Private Sub myOlItems_ItemAdd(ByVal Item As Object)
-    MsgBox "ItemAdd<" & Item.Subject
+    ' MsgBox "ItemAdd: subject=" & Item.Subject
     
 End Sub
 
 Private Sub myOlItems_ItemChange(ByVal Item As Object)
-    ' MsgBox "ItemChange"
+    ' MsgBox "ItemChange: new item subject=" & Item.Subject
 End Sub
 
 Sub show_all_folders()
-Set allFolders = Application.GetNamespace("MAPI").GetFolderFromID()
+    Set allFolders = Application.GetNamespace("MAPI").GetFolderFromID()
 End Sub
 
 Sub start_excel()
