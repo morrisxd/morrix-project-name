@@ -64,11 +64,13 @@ Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
         'objItem.BodyFormat = olFormatPlain
         'emailshow.emailBody.Text = objItem.Body
         'emailshow.Show
+        If UCase(Trim(objItem.Subject)) = "AUTOMATION PLEASE" Then
+            start_excel
+        End If
     Next
     
     
     
-    start_excel
     
 End Sub
 
