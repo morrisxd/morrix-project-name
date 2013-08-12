@@ -1,5 +1,7 @@
-Attribute VB_Name = "Module1"
+Attribute VB_Name = "Module11"
 Option Explicit
+Dim myDoc As Word.Application
+
 
 Public Sub SaveAttach(Item As Outlook.MailItem)
     SaveAttachment Item, "c:\mailattachments2\", "*"
@@ -31,3 +33,43 @@ Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*
     End If
     Set olAtt = Nothing
 End Sub
+
+
+
+Sub saveEmailToWord(ByRef mail As MailItem)
+    Dim newRange As Word.Range
+    Dim M As MailItem, Buf As MSForms.DataObject
+    
+     
+    
+    Set myDoc = CreateObject("Word.Application")
+    myDoc.Visible = True
+    myDoc.Documents.Open "C:\data\step2\email\log.docx"
+    ' myDoc.Documents(1).Range.Select
+    myDoc.Selection.StartOf Unit:=wdStory, Extend:=wdMove
+    ' myDoc.Selection.Paste
+    myDoc.Selection.Text = Chr(13) & "[Received Time] =====> " & mail.ReceivedTime & Chr(13) & "[Subject] =====> " & mail.Subject & " <=====" & Chr(13) & "[Content] =====>" & Chr(13) & mail.Body & Chr(13)
+    ' ##############################################
+    ' ##############################################
+    ' ##############################################
+    ' ##############################################
+    ' ##############################################
+    'Set M = mail.Application.ActiveExplorer.Selection.Item(1)
+    'Set Buf = New MSForms.DataObject
+    'mail.BodyFormat = olFormatHTML
+    'Buf.SetText mail.Body
+    'Buf.PutInClipboard
+
+
+    'myDoc.Documents(1).Range.Paste
+
+
+    myDoc.Documents(1).Range.Select
+    myDoc.Documents(1).Paragraphs.LineSpacingRule = wdLineSpaceSingle
+    
+    myDoc.Documents(1).Save
+    myDoc.Quit
+End Sub
+
+
+
