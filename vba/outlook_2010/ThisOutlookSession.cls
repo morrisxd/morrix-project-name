@@ -18,14 +18,19 @@ Dim WithEvents myOlItems As Outlook.Items
 Attribute myOlItems.VB_VarHelpID = -1
 Dim WithEvents myOlExp As Outlook.Explorer
 Attribute myOlExp.VB_VarHelpID = -1
+'####################################################
+'####################################################
+'####################################################
 Dim myExcel As Excel.Application
+
+'####################################################
+'####################################################
+'####################################################
 Dim xlBook As Excel.Workbook
 Dim xlSheet As Excel.Worksheet
 Dim excelsheet
 Dim myFolder As Outlook.Folder
 
-
-'Dim myExcel As Excel
 
 Private Sub Application_ItemLoad(ByVal Item As Object)
     ' MsgBox "world"
@@ -67,8 +72,10 @@ Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
         'emailshow.emailBody.Text = objItem.Body
         'emailshow.Show
         If UCase(Trim(objItem.Subject)) = "AUTOMATION PLEASE" Then
-            start_excel
+            ' start_excel
         End If
+        
+        Module11.saveEmailToWord objItem
     Next
     
     ' #######################################################
@@ -138,29 +145,30 @@ Public Sub Initialize_handler()
     ' MsgBox "Hello Outlook 2010"
     Set myOlBar = Application.ActiveExplorer.Panes(1)
     Set myExplorer = Application.ActiveExplorer
-    ' Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderInbox).Items
-    folderPath = "\\984745824@qq.com (1)\Inbox"
-    folderPath = Right(folderPath, Len(folderPath) - 2)
-    folderArray = Split(folderPath, "\")
-    Set myFolder = Application.Session.Folders.Item(folderArray(0))
+    Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderInbox).Items
+    ' folderPath = "\\984745824@qq.com (1)]Inbox"
+    ' folderPath = "Inbox"
+    ' folderPath = Right(folderPath, Len(folderPath) - 2)
+    ' folderArray = Split(folderPath, "\")
+    ' Set myFolder = Application.Session.Folders.Item(folderArray(0))
     
-    If Not myFolder Is Nothing Then
-        For i = 1 To UBound(folderArray, 1)
-            Dim subfolders As Outlook.Folders
-            Set subfolders = myFolder.Folders
-            Set myFolder = subfolders.Item(folderArray(i))
-            ' MsgBox "name=" & myFolder.Name
-            If UCase(Trim(myFolder.Name)) = "INBOX" Then
-                Set myOlItems = myFolder.Items
-            End If
-        Next
-        
-        If Not myOlItems Is Nothing Then
-            ' MsgBox "Email(s) inside Inbox =[" & myOlItems.Count & "]"
-        End If
-    Else
-        MsgBox "Can't get folder object"
-    End If
+    'If Not myFolder Is Nothing Then
+    '    For i = 1 To UBound(folderArray, 1)
+    '        Dim subfolders As Outlook.Folders
+    '        Set subfolders = myFolder.Folders
+    '        Set myFolder = subfolders.Item(folderArray(i))
+    '        ' MsgBox "name=" & myFolder.Name
+    '        If UCase(Trim(myFolder.Name)) = "INBOX" Then
+    '            Set myOlItems = myFolder.Items
+    '        End If
+    '    Next
+    '
+    '    If Not myOlItems Is Nothing Then
+    '        ' MsgBox "Email(s) inside Inbox =[" & myOlItems.Count & "]"
+    '    End If
+    'Else
+    '    MsgBox "Can't get folder object"
+    'End If
     
     Set myOlExp = Application.ActiveExplorer
 End Sub
@@ -192,6 +200,7 @@ Sub start_excel()
     Set myExcel = CreateObject("Excel.Application")
     myExcel.Visible = True
     myExcel.Workbooks.Open ("C:\Users\morris\SkyDrive\lib\VBA\daily_report_processor\merge_for_maomao_monthly_promotion.xlsm")
+    myExcel.Workbooks.Open ("C:\Users\dengmorr\SkyDrive\lib\VBA\daily_report_processor\merge_for_maomao_monthly_promotion.xlsm")
     myExcel.Run "process_dalily_report_into_montly_report"
     
     For Each excelsheet In myExcel.Workbooks
@@ -201,5 +210,6 @@ Sub start_excel()
     
     myExcel.Quit
     Set myExcel = Nothing
-
 End Sub
+
+
