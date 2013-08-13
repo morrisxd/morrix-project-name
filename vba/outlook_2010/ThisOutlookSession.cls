@@ -102,7 +102,7 @@ Private Sub myEmailItem_Open(Cancel As Boolean)
     ' Set myEmailItem = Application.ActiveExplorer.CurrentItem
 
 
-    MsgBox "You have opened an email"
+    ' MsgBox "You have opened an email"
 End Sub
 
 Private Sub myExplorer_Activate()
@@ -112,17 +112,17 @@ End Sub
 Private Sub myExplorer_SelectionChange()
     Dim myEmail As MailItem
     
-    If ActiveExplorer.Selection.Count = 0 Then
-        Exit Sub
-    Else
-        For Each myEmail In ActiveExplorer.Selection
-            If myEmail.Attachments.Count = 0 Then
-            Else
+    'If ActiveExplorer.Selection.Count = 0 Then
+        'Exit Sub
+    'Else
+        'For Each myEmail In ActiveExplorer.Selection
+            'If myEmail.Attachments.Count = 0 Then
+            'Else
                 ' MsgBox "You got [" & myEmail.Attachments.Count & "] " & "attachment(s)"
-            End If
-        Next
-        Set myEmail = Nothing
-    End If
+            'End If
+        'Next
+        'Set myEmail = Nothing
+    'End If
 End Sub
 
 Private Sub myOlBar_BeforeNavigate(ByVal Shortcut As OutlookBarShortcut, Cancel As Boolean)
@@ -133,7 +133,14 @@ Private Sub myOlBar_BeforeNavigate(ByVal Shortcut As OutlookBarShortcut, Cancel 
 End Sub
 
 
-
+'##################################################
+'##################################################
+'##################################################
+'##################################################
+'##################################################
+'##################################################
+'##################################################
+'##################################################
  
 Public Sub Initialize_handler()
     Dim olApp As Outlook.Application
@@ -141,6 +148,8 @@ Public Sub Initialize_handler()
     Dim folderArray As Variant
     Dim folderPath
     Dim i
+
+    
     
     ' MsgBox "Hello Outlook 2010"
     Set myOlBar = Application.ActiveExplorer.Panes(1)
