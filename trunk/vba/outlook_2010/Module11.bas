@@ -12,7 +12,7 @@ Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*
     Dim olAtt As Attachment
     Dim i As Integer
     Dim isFolderExists
-    Dim myDate
+    Dim mydate
     Dim yourDate
     Dim yourPath
     
@@ -23,6 +23,15 @@ Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*
     yourPath = path & "\" & yourDate & "\"
     
     Set isFolderExists = CreateObject("Scripting.FileSystemObject")
+    
+    If isFolderExists.FolderExists(path) = True Then
+        '
+    Else
+        ' MsgBox "path=" & path & "\" & yourDate
+        MkDir path
+        ' MsgBox "Dir created"
+    End If
+    
 
     If isFolderExists.FolderExists(yourPath) = True Then
         '
@@ -50,6 +59,22 @@ End Sub
 Sub saveEmailToWord(ByRef mail As MailItem)
     Dim newRange As Word.Range
     Dim M As MailItem, Buf As MSForms.DataObject
+    Dim insp As Outlook.Inspector
+    Dim doc As Word.Document
+    Dim app As Word.Application
+    Dim Format
+    Dim ActiveExplorer As Outlook.Explorer
+    Dim docFilename
+    Dim mydate, mytime, mysubject
+    
+    Set app = CreateObject("word.application")
+    Format = Word.WdSaveFormat.wdFormatDocumentDefault
+    Set ActiveExplorer = Application.Explorers.Application.ActiveExplorer
+    
+     ' Word.Application app = New Word.Application
+     ' Object Format = Word.WdSaveFormat.wdFormatDocumentDefault
+     ' Outlook.Explorer ActiveExplorer = this.Application.Explorers.Application.ActiveExplorer()
+
     
      
     
@@ -65,13 +90,26 @@ Sub saveEmailToWord(ByRef mail As MailItem)
     ' ##############################################
     ' ##############################################
     ' ##############################################
-    'Set M = mail.Application.ActiveExplorer.Selection.Item(1)
-    'Set Buf = New MSForms.DataObject
-    'mail.BodyFormat = olFormatHTML
-    'Buf.SetText mail.Body
-    'Buf.PutInClipboard
+    ' Set M = mail.Application.ActiveExplorer.Selection.Item(1)
+    ' Set Buf = New MSForms.DataObject
+    ' mail.BodyFormat = olFormatHTML
+    ' Buf.SetText mail.Body
+    ' Buf.SetText mail.GetInspector.WordEditor
+    ' Buf.PutInClipboard
+    Set insp = mail.GetInspector
+    Set doc = insp.WordEditor
 
-
+    mydate = Replace(Date, "/", "-")
+    mytime = Replace(Time, ":", "-")
+    mysubject = mail.Subject
+    mysubject = Replace(mysubject, "/", "-")
+    mysubject = Replace(mysubject, ":", "-")
+    mysubject = Replace(mysubject, "*", "-")
+    mysubject = Replace(mysubject, "?", "-")
+    docFilename = "c:\data\step2\email\" & mysubject & "_" & mydate & "_" & mytime
+    ' MsgBox docFilename
+    
+    doc.SaveAs2 docFilename
     'myDoc.Documents(1).Range.Paste
 
 
