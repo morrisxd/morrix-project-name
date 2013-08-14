@@ -12,26 +12,12 @@ Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*
     Dim olAtt As Attachment
     Dim i As Integer
     Dim isFolderExists
-    Dim myDate
+    Dim mydate
     Dim yourDate
     Dim yourPath
     
-    yourDate = Date
-    yourDate = Replace(yourDate, "/", "-")
-    ' MsgBox "date=" & yourDate
 
-    yourPath = path & "\" & yourDate & "\"
-    
-    Set isFolderExists = CreateObject("Scripting.FileSystemObject")
-
-    If isFolderExists.FolderExists(yourPath) = True Then
-        '
-    Else
-        ' MsgBox "path=" & path & "\" & yourDate
-        MkDir yourPath
-        ' MsgBox "Dir created"
-    End If
-    
+    yourPath = checkDirectory(path)
 
     If Item.Attachments.Count > 0 Then
         For i = 1 To Item.Attachments.Count
@@ -43,6 +29,7 @@ Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*
         Next
     End If
     Set olAtt = Nothing
+    Set isFolderExists = Nothing
 End Sub
 
 
@@ -50,6 +37,31 @@ End Sub
 Sub saveEmailToWord(ByRef mail As MailItem)
     Dim newRange As Word.Range
     Dim M As MailItem, Buf As MSForms.DataObject
+    Dim insp As Outlook.Inspector
+    Dim doc As Word.Document
+    Dim app As Word.Application
+    Dim Format
+    Dim ActiveExplorer As Outlook.Explorer
+    Dim docFilename
+    Dim mydate, mytime, mysubject
+    Dim path
+    Dim isFolderExists
+    Dim yourDate
+    Dim yourPath
+    
+    
+    path = "C:\data\step2\email\"
+    yourPath = checkDirectory(path)
+    
+    
+    Set app = CreateObject("word.application")
+    Format = Word.WdSaveFormat.wdFormatDocumentDefault
+    Set ActiveExplorer = Application.Explorers.Application.ActiveExplorer
+    
+     ' Word.Application app = New Word.Application
+     ' Object Format = Word.WdSaveFormat.wdFormatDocumentDefault
+     ' Outlook.Explorer ActiveExplorer = this.Application.Explorers.Application.ActiveExplorer()
+
     
      
     
@@ -65,13 +77,26 @@ Sub saveEmailToWord(ByRef mail As MailItem)
     ' ##############################################
     ' ##############################################
     ' ##############################################
-    'Set M = mail.Application.ActiveExplorer.Selection.Item(1)
-    'Set Buf = New MSForms.DataObject
-    'mail.BodyFormat = olFormatHTML
-    'Buf.SetText mail.Body
-    'Buf.PutInClipboard
+    ' Set M = mail.Application.ActiveExplorer.Selection.Item(1)
+    ' Set Buf = New MSForms.DataObject
+    ' mail.BodyFormat = olFormatHTML
+    ' Buf.SetText mail.Body
+    ' Buf.SetText mail.GetInspector.WordEditor
+    ' Buf.PutInClipboard
+    Set insp = mail.GetInspector
+    Set doc = insp.WordEditor
 
-
+    mydate = Replace(Date, "/", "-")
+    mytime = Replace(Time, ":", "-")
+    mysubject = mail.Subject
+    mysubject = Replace(mysubject, "/", "-")
+    mysubject = Replace(mysubject, ":", "-")
+    mysubject = Replace(mysubject, "*", "-")
+    mysubject = Replace(mysubject, "?", "-")
+    docFilename = yourPath & "\" & mydate & "_" & mytime & "_" & mysubject & ".docx"
+    ' MsgBox docFilename
+    
+    doc.SaveAs2 docFilename
     'myDoc.Documents(1).Range.Paste
 
 
@@ -83,4 +108,32 @@ Sub saveEmailToWord(ByRef mail As MailItem)
 End Sub
 
 
+
+Function checkDirectory(ByVal myDir)
+    Dim yourDate
+    Dim yourPath
+    Dim isFolderExists
+    
+    
+    yourDate = Date
+    yourDate = Replace(yourDate, "/", "-")
+    ' MsgBox "date=" & yourDate
+
+    myDir = myDir & "\"
+    yourPath = myDir & "\" & yourDate & "\"
+    checkDirectory = yourPath
+    ' MsgBox "yourpath=" & yourPath
+    
+    Set isFolderExists = CreateObject("Scripting.FileSystemObject")
+    
+    If isFolderExists.FolderExists(yourPath) = True Then
+        ' do nothing
+    Else
+        ' MsgBox "path=" & path & "\" & yourDate
+        MkDir yourPath
+        ' MsgBox "Dir created"
+    End If
+    
+    checkDirectory = yourPath
+End Function
 

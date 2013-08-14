@@ -16,31 +16,8 @@ Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*
     Dim yourDate
     Dim yourPath
     
-    yourDate = Date
-    yourDate = Replace(yourDate, "/", "-")
-    ' MsgBox "date=" & yourDate
 
-    yourPath = path & "\" & yourDate & "\"
-    
-    Set isFolderExists = CreateObject("Scripting.FileSystemObject")
-    
-    If isFolderExists.FolderExists(path) = True Then
-        '
-    Else
-        ' MsgBox "path=" & path & "\" & yourDate
-        MkDir path
-        ' MsgBox "Dir created"
-    End If
-    
-
-    If isFolderExists.FolderExists(yourPath) = True Then
-        '
-    Else
-        ' MsgBox "path=" & path & "\" & yourDate
-        MkDir yourPath
-        ' MsgBox "Dir created"
-    End If
-    
+    yourPath = checkDirectory(path)
 
     If Item.Attachments.Count > 0 Then
         For i = 1 To Item.Attachments.Count
@@ -52,6 +29,7 @@ Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*
         Next
     End If
     Set olAtt = Nothing
+    Set isFolderExists = Nothing
 End Sub
 
 
@@ -66,6 +44,15 @@ Sub saveEmailToWord(ByRef mail As MailItem)
     Dim ActiveExplorer As Outlook.Explorer
     Dim docFilename
     Dim mydate, mytime, mysubject
+    Dim path
+    Dim isFolderExists
+    Dim yourDate
+    Dim yourPath
+    
+    
+    path = "C:\data\step2\email\"
+    yourPath = checkDirectory(path)
+    
     
     Set app = CreateObject("word.application")
     Format = Word.WdSaveFormat.wdFormatDocumentDefault
@@ -106,7 +93,7 @@ Sub saveEmailToWord(ByRef mail As MailItem)
     mysubject = Replace(mysubject, ":", "-")
     mysubject = Replace(mysubject, "*", "-")
     mysubject = Replace(mysubject, "?", "-")
-    docFilename = "c:\data\step2\email\" & mysubject & "_" & mydate & "_" & mytime
+    docFilename = yourPath & "\" & mydate & "_" & mytime & "_" & mysubject & ".docx"
     ' MsgBox docFilename
     
     doc.SaveAs2 docFilename
@@ -121,4 +108,32 @@ Sub saveEmailToWord(ByRef mail As MailItem)
 End Sub
 
 
+
+Function checkDirectory(ByVal myDir)
+    Dim yourDate
+    Dim yourPath
+    Dim isFolderExists
+    
+    
+    yourDate = Date
+    yourDate = Replace(yourDate, "/", "-")
+    ' MsgBox "date=" & yourDate
+
+    myDir = myDir & "\"
+    yourPath = myDir & "\" & yourDate & "\"
+    checkDirectory = yourPath
+    ' MsgBox "yourpath=" & yourPath
+    
+    Set isFolderExists = CreateObject("Scripting.FileSystemObject")
+    
+    If isFolderExists.FolderExists(yourPath) = True Then
+        ' do nothing
+    Else
+        ' MsgBox "path=" & path & "\" & yourDate
+        MkDir yourPath
+        ' MsgBox "Dir created"
+    End If
+    
+    checkDirectory = yourPath
+End Function
 
