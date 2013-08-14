@@ -93,9 +93,19 @@ Sub saveEmailToWord(ByRef mail As MailItem)
     mysubject = Replace(mysubject, ":", "-")
     mysubject = Replace(mysubject, "*", "-")
     mysubject = Replace(mysubject, "?", "-")
-    docFilename = yourPath & "\" & mydate & "_" & mytime & "_" & mysubject & ".docx"
-    ' MsgBox docFilename
+    mysubject = Replace(mysubject, "<", "[")
+    mysubject = Replace(mysubject, ">", "]")
+    mysubject = Replace(mysubject, "|", "!")
+    mysubject = Replace(mysubject, "*", "x")
+    ' docFilename = Replace(docFilename, ":", "=")
     
+    If mail.Attachments.Count > 0 Then
+        docFilename = yourPath & "\" & mydate & "_" & mytime & "_[ATT]_" & mysubject & ".docx"
+    Else
+        docFilename = yourPath & "\" & mydate & "_" & mytime & "_" & mysubject & ".docx"
+    End If
+    
+    ' MsgBox docFilename
     doc.SaveAs2 docFilename
     'myDoc.Documents(1).Range.Paste
 
