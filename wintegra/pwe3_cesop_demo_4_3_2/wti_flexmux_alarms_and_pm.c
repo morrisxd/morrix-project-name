@@ -949,10 +949,13 @@ void service_pm_port_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
    WP_U32 count, line_port, max_line_ports;
    WP_U8 pm_point, status, state;
 
-// #ifdef VERBOSE
-//    printf("PM PORT:  device_id = %d, table_index = %d, timestamp = 0x%x\n",
-//           device_id, table_index, timestamp);
-// #endif
+#if 1
+// uncomment by Morris
+ #ifdef VERBOSE
+    printf("PM PORT:  device_id = %d, table_index = %d, timestamp = 0x%x\n",
+           device_id, table_index, timestamp);
+ #endif
+#endif
 
 #if WTI_FRAMER_OTE_TESTS
 #if 0//DEBUG
@@ -2032,7 +2035,7 @@ void WTI_enable_alarms(int type)
        {
           if (j == WPX_UFE_FRAMER_SDH_RS_TIM 
                 || j == WPX_UFE_FRAMER_SDH_HP_TIM
-                || j == WPX_UFE_FRAMER_SDH_HP_TIM
+                || j == WPX_UFE_FRAMER_SDH_LP_TIM
              )
           {
           } else {
