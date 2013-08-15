@@ -2030,7 +2030,15 @@ void WTI_enable_alarms(int type)
 
        for (j = start_alarm; j <= last_alarm; ++j)
        {
-          status = WPX_FRMR_DEV_DRV_SONET_SDH_EnableAlarm(j, j);
+          if (j == WPX_UFE_FRAMER_SDH_RS_TIM 
+                || j == WPX_UFE_FRAMER_SDH_HP_TIM
+                || j == WPX_UFE_FRAMER_SDH_HP_TIM
+             )
+          {
+          } else {
+              status = WPX_FRMR_DEV_DRV_SONET_SDH_EnableAlarm(j, j);
+	  }
+
           if (status != WPX_UFE_FRAMER_OK)
           {
              printf("********************************************************************\n"
