@@ -8,7 +8,7 @@ Public Sub SaveAttach(Item As Outlook.MailItem)
 End Sub
 '########################################
 
-Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*")
+Private Sub SaveAttachment(ByVal Item As Outlook.MailItem, path$, Optional condition$ = "*")
     Dim olAtt As Attachment
     Dim i As Integer
     Dim isFolderExists
@@ -23,9 +23,9 @@ Private Sub SaveAttachment(ByVal Item As Object, path$, Optional condition$ = "*
         For i = 1 To Item.Attachments.Count
             Set olAtt = Item.Attachments(i)
             ' save the attachment
-            If olAtt.FileName Like condition Then
+            ' If olAtt.FileName Like condition Then
                 olAtt.SaveAsFile yourPath & olAtt.FileName
-            End If
+            ' End If
         Next
     End If
     Set olAtt = Nothing
@@ -115,6 +115,12 @@ Sub saveEmailToWord(ByRef mail As MailItem)
     
     myDoc.Documents(1).Save
     myDoc.Quit
+    
+    Set app = Nothing
+    Set ActiveExplorer = Nothing
+    Set myDoc = Nothing
+    Set insp = Nothing
+    Set doc = Nothing
 End Sub
 
 
@@ -143,6 +149,8 @@ Function checkDirectory(ByVal myDir)
         MkDir yourPath
         ' MsgBox "Dir created"
     End If
+    
+    Set isFolderExists = Nothing
     
     checkDirectory = yourPath
 End Function
