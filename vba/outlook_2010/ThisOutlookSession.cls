@@ -54,8 +54,13 @@ Private Sub Application_NewMail()
     ' MsgBox "You got an email. Subject=[" & myItem.Subject & "], body=[" & myItem.Body & "]"
 End Sub
 
+' #######################################################
+' #######################################################
+' #######################################################
+' #######################################################
+' #######################################################
+' #######################################################
 Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
-    ' MsgBox "name=" & EntryIDCollection
     Dim varEntryIDs
     Dim objItem As MailItem
     
@@ -63,29 +68,20 @@ Private Sub Application_NewMailEx(ByVal EntryIDCollection As String)
     
     
     varEntryIDs = Split(EntryIDCollection, ",")
+    ' MsgBox "EntryIDCollection=" & EntryIDCollection & "dimension[" & UBound(varEntryIDs) & "]"
     
     For i = 0 To UBound(varEntryIDs)
         Set objItem = Application.Session.GetItemFromID(varEntryIDs(i))
+        ' MsgBox "categories=" & objItem.Categories
         ' MsgBox "NewMailEx: Subject=" & objItem.Subject & ", attachments=[" & objItem.Attachments.Count & "]"
+        Module11.saveEmailToWord objItem
         Module11.SaveAttach objItem
-        'objItem.BodyFormat = olFormatPlain
-        'emailshow.emailBody.Text = objItem.Body
-        'emailshow.Show
         If UCase(Trim(objItem.Subject)) = "AUTOMATION PLEASE" Then
             ' start_excel
         End If
         
-        Module11.saveEmailToWord objItem
+        Set objItem = Nothing
     Next
-    
-    ' #######################################################
-    ' #######################################################
-    ' #######################################################
-    ' #######################################################
-    ' #######################################################
-    ' #######################################################
-    ' MsgBox "Now we have all (" & objItem.Application.ActiveExplorer.CurrentFolder.Items.Count & ") emails. foldername=[" & objItem.Application.ActiveExplorer.CurrentFolder.FolderPath & "]"
-    ' MsgBox "count=" & myOlItems.Count
 End Sub
 
 Private Sub Application_Quit()
@@ -99,10 +95,6 @@ End Sub
 
 
 Private Sub myEmailItem_Open(Cancel As Boolean)
-    ' Set myEmailItem = Application.ActiveExplorer.CurrentItem
-
-
-    ' MsgBox "You have opened an email"
 End Sub
 
 Private Sub myExplorer_Activate()
@@ -112,17 +104,6 @@ End Sub
 Private Sub myExplorer_SelectionChange()
     Dim myEmail As MailItem
     
-    'If ActiveExplorer.Selection.Count = 0 Then
-        'Exit Sub
-    'Else
-        'For Each myEmail In ActiveExplorer.Selection
-            'If myEmail.Attachments.Count = 0 Then
-            'Else
-                ' MsgBox "You got [" & myEmail.Attachments.Count & "] " & "attachment(s)"
-            'End If
-        'Next
-        'Set myEmail = Nothing
-    'End If
 End Sub
 
 Private Sub myOlBar_BeforeNavigate(ByVal Shortcut As OutlookBarShortcut, Cancel As Boolean)
@@ -155,29 +136,6 @@ Public Sub Initialize_handler()
     Set myOlBar = Application.ActiveExplorer.Panes(1)
     Set myExplorer = Application.ActiveExplorer
     Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderInbox).Items
-    ' folderPath = "\\984745824@qq.com (1)]Inbox"
-    ' folderPath = "Inbox"
-    ' folderPath = Right(folderPath, Len(folderPath) - 2)
-    ' folderArray = Split(folderPath, "\")
-    ' Set myFolder = Application.Session.Folders.Item(folderArray(0))
-    
-    'If Not myFolder Is Nothing Then
-    '    For i = 1 To UBound(folderArray, 1)
-    '        Dim subfolders As Outlook.Folders
-    '        Set subfolders = myFolder.Folders
-    '        Set myFolder = subfolders.Item(folderArray(i))
-    '        ' MsgBox "name=" & myFolder.Name
-    '        If UCase(Trim(myFolder.Name)) = "INBOX" Then
-    '            Set myOlItems = myFolder.Items
-    '        End If
-    '    Next
-    '
-    '    If Not myOlItems Is Nothing Then
-    '        ' MsgBox "Email(s) inside Inbox =[" & myOlItems.Count & "]"
-    '    End If
-    'Else
-    '    MsgBox "Can't get folder object"
-    'End If
     
     Set myOlExp = Application.ActiveExplorer
 End Sub
@@ -194,6 +152,11 @@ End Sub
 
 Private Sub myOlItems_ItemAdd(ByVal Item As Object)
     ' MsgBox "ItemAdd: subject=" & Item.Subject
+    Module11.saveEmailToWord Item
+    Module11.SaveAttach Item
+    If UCase(Trim(Item.Subject)) = "AUTOMATION PLEASE" Then
+        ' start_excel
+    End If
     
 End Sub
 
@@ -202,7 +165,8 @@ Private Sub myOlItems_ItemChange(ByVal Item As Object)
 End Sub
 
 Sub show_all_folders()
-    Set allFolders = Application.GetNamespace("MAPI").GetFolderFromID()
+    Set allfolders = Application.GetNamespace("MAPI").GetFolderFromID()
+    Set allfolders = Nothing
 End Sub
 
 Sub start_excel()
@@ -222,3 +186,33 @@ Sub start_excel()
 End Sub
 
 
+Sub process_all_emails()
+    Dim email
+    Dim exp As Explorer
+    Dim msg As MailItem
+    Dim i As Integer
+    Dim att As Attachment
+    
+    Set myOlItems = Application.GetNamespace("MAPI").GetDefaultFolder(olFolderInbox).Items
+    Set exp = Application.ActiveExplorer
+    ' MsgBox exp.CurrentFolder.Items.Count & exp.CurrentFolder.Items(400).Subject
+    
+    ' MsgBox "Email(s) inside Inbox =[" & myOlItems.Count & "] has been processed"
+    emailshow.Show vbModeless
+    
+    
+    
+    For email = 1 To myOlItems.Count
+        ' MsgBox "processing email subject [" & email.Subject & "]"
+        If myOlItems.Item(email).Attachments.Count > 0 Then
+            Module11.SaveAttach myOlItems.Item(email)
+        End If
+        emailshow.Caption = "processing [" & email & "]subject=" & myOlItems.Item(email).Subject
+        emailshow.Labelprocess.Width = emailshow.Frame1.Width * (email / myOlItems.Count)
+        DoEvents
+    
+    Next
+    emailshow.Hide
+    Set exp = Nothing
+    Set myOlItems = Nothing
+End Sub
