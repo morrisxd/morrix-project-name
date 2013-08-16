@@ -1,2 +1,4 @@
 - UFE412 system init entry point: fr_system_init()
+	- WT_Np_UfeLineConfigureAndCreateT1 () --- create T1 lines
+ 	- WTUFE_config_lines ()
 - WDDI init entry point: np_init ()
