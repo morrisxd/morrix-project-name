@@ -1,0 +1,133 @@
+/*********************************************************************
+ * (C) Copyright Wintegra 2000-2002.  All rights reserved.
+ * WINTEGRA CONFIDENTIAL PROPRIETARY
+ * Contains Confidential Proprietary information of Wintegra.
+ * Reverse engineering is prohibited.
+ * The copyright notice does not imply publication.
+ *****************************************************************************
+/****************************************************************************
+*
+* File: tgu_an_restart.dpl
+*
+* Description: This file holds the code section of TGU that handles ER-43 bug.
+*              ER-43 description:
+*              Each time after plugging a cable in, or resetting the phy, there is
+*              a synchronization proccess. At very low probability - this proccess
+*              will get stuck, and no traffic can go through this port.
+*              In order to ReEnable this port, one should invoke an_restart in
+*              tcntr register of the relavent phy.
+*
+* Module Originator: Elad Jacob
+* Creation Date: August 9, 2011
+*
+* Change History:
+* +------------+--------------------+----------------------------------------
+* | Date       | By                 | Description
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+* |            |                    |
+* +------------+--------------------+----------------------------------------
+*
+*****************************************************************************/
+
+#include "tgu_an_restart.h"
+#include "shared.h"
+
+#ifdef _WINPATH_REV_WP3_ENABLE_
+
+section TGU_AN_RESTART
+{
+   register struct S_Tcr2Reg     Tcr2       = STATUS1_REG;
+   register                      Tcr3       = STATUS2_REG;
+   register                      TguCounter = r12;
+   register                      PortIndex  = r12;
+   register                      DivFactor  = r13;
+   register                      RegOffset  = r13;
+   register                      EnetPortsMask = r14;
+   register struct S_TandbgHwReg Tandbg = r15;
+   register struct S_TcntrHwReg  Tcntr  = r16;
+   register                      GroupOffset = r17;
+   register                      CounterOffset = r19;
+
+   global L_An_Restart_Tgu_Start;
+   
+  L_An_Restart_Tgu_Start:
+
+    TguCounter = Tcr2.CyclicCounter; // get the current counter from the TGU
+    DivFactor = Tcr2.DivFactor;
+    
+    // check next slot only when Counter reaches div_factor
+    if ( (TguCounter & DivFactor )!= 0)
+    {
+       _task_switch(r0, _TERMINATE);
+    }
+
+    CounterOffset = SGMII_TGU_SW_COUNTER_OFFSET; 
+    TguCounter =  _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset], 4);
+   
+   _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset]) += 1;
+
+   /* TGU Period is extended to also address 1000BaseX_AN case, which requires longer period time (*8 than SGMII_AN)*/
+   if ((TguCounter & SGMII_TGU_1000BaseX_DIV_FACTOR) != 0)
+   {
+      _task_switch(r0, _TERMINATE);
+   }
+
+   /* Initialize SW counter */
+   TguCounter = SGMII_TGU_SW_COUNTER_INIT_VAL;
+   _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset], 4) = TguCounter;
+
+
+
+   EnetPortsMask = Tcr3;
+      
+   while (EnetPortsMask != 0)
+   {
+      /* get the next port index by _ffs command
+       * Port Enet1 will be mapped to MSB bit and so on.
+      */
+      PortIndex = _ffs(EnetPortsMask);
+      SGMII_TGU_CLEAR_INDEX_FROM_PORT_MASK(EnetPortsMask, PortIndex);
+      
+      GroupOffset = (PortIndex / 2) * SGMII_TGU_NEXT_WINNET_OFFSET;
+      GroupOffset += (PortIndex % 2) * SGMII_TGU_NEXT_ENET_IN_WINNET_GROUP_OFFSET;
+
+      /* Obtain Tandbg register */
+      RegOffset = SGMII_TGU_WINNET_0_TANDBG_REG_OFFSET + GroupOffset;
+      
+      /* Clear Tandbg register and read right after to get Winnet state */
+      Tandbg = 0;
+      _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE) = Tandbg;
+
+      Tandbg = _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE);
+
+      /* Check if Tandbg has link_ok or an_disabled_link_ok 'on'*/
+      if ((Tandbg & SGMII_TGU_TANDBG_STUCK_BIT_MASK) == 0)
+      {
+         /* Obtain Tcntr register */
+         RegOffset = SGMII_TGU_WINNET_0_TCNTR_REG_OFFSET + GroupOffset;
+         
+         Tcntr = _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE);
+
+         /* Set Restart AN bit */
+         Tcntr.RestartAn = 1;         
+         _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE) = Tcntr;
+
+         /* In some unique cases, AN restart will not resolve the issue, so AN must be disabled and enabled again*/
+         /* This is done only for interfaced of AutoNegotioation type */
+         if (Tcntr.AnEnable)
+         {
+            /* Disable/Enable AN */
+            Tcntr.AnEnable = 0;
+            _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE) = Tcntr;
+            Tcntr.AnEnable = 1;
+            _mem(r0, B_RIF[RegOffset], SGMII_TGU_REG_SIZE) = Tcntr;
+         }         
+      }   
+   }
+
+   _task_switch(r0, _TERMINATE);   
+}
+
+#endif //_WINPATH_REV_WP3_ENABLE_
