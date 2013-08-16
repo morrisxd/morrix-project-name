@@ -319,7 +319,7 @@ void fr_system_init (WP_U32 ufe_port)
    memset (reconfigStm1_createE1_flag, 0, RECONFIG_TRUNK_MAX);
    
       /*Initialise and Configure the UFE System */ 
-#if UFE_LOOPBACK
+#if UFE_LOOPBACK //0=default
       WTUFE_config_system (UFE_LB_SYSTEM, ufe_port);
    Fprintf ("UFE System Configured\n");
    WTUFE_config_lines (UFE_LB_SYSTEM);
