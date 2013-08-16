@@ -1,0 +1,16 @@
+Loaded plugins: fastestmirror, security
+============================== Matched: evolution ==============================
+beagle-evolution.i386 : Beagle backend for evolution
+evolution.i386 : GNOME's next-generation groupware suite
+evolution-connector.i386 : Evolution plugin to interact with MS Exchange Server
+evolution-data-server.i386 : Backend data server for Evolution
+evolution-data-server-devel.i386 : Development files for building against
+                                 : evolution-data-server
+evolution-data-server-doc.i386 : Documentation files for evolution-data-server
+evolution-devel.i386 : Development files for building against evolution
+evolution-help.i386 : Help files for Evolution
+evolution-sharp.i386 : Evolution Data Server Mono Bindings
+evolution-sharp-devel.i386 : Development files for evolution-sharp
+evolution-webcal.i386 : A handler for webcal URIs
+nautilus-sendto.i386 : Nautilus context menu for sending files
+planner-eds.i386 : planner integration with evolution

@@ -1,0 +1,62 @@
+CAD Environment Initialization started...
+CAD Environment Initialization ended.
+This is in .cshrc
+end of .cshrc
+total 851324
+lrwxrwxrwx  1 dengmorr wheel        50 May 22 08:56 1537rd -> WDDS_4_2_X_DEV_421RC1_b1537_10112011_morris_may22/
+-rw-r--r--  1 dengmorr wheel 289980373 Jun  4 10:25 1851.tgz
+lrwxrwxrwx  1 dengmorr wheel        30 Mar 14 08:56 431 -> WDDS_MAIN_DEV_refapps_morris_3
+lrwxrwxrwx  1 dengmorr wheel        28 May 10 06:41 432 -> WDDS_4_3_X_DEV_morris_israel
+-rw-r--r--  1 dengmorr wheel 362833913 May 10 07:05 432.tgz
+lrwxrwxrwx  1 dengmorr wheel        29 Apr 15 09:48 43x -> WDDS_4_3_X_DEV_morris_israel/
+drwxr-xr-x  2 dengmorr wheel      4096 Jun 26 06:22 accurev
+lrwxrwxrwx  1 dengmorr wheel        52 Apr 25 06:53 asb -> WDDS_4_3_1_b1775_RC3_MNT_patch_20130101_neeraj_apps/
+-rw-r--r--  1 dengmorr wheel  21515928 Apr 25 06:27 asb_1775.tgz
+-rw-r--r--  1 dengmorr wheel 156456892 Apr 25 06:57 asb.tgz
+drwxr-xr-x  2 dengmorr wheel      4096 Jun 26 05:44 bin
+drwxr-xr-x  2 dengmorr wheel      4096 Nov 16  2012 chrome
+-rw-r--r--  1 dengmorr wheel        45 Jan 24 09:27 Dear
+drwxr-xr-x  3 dengmorr wheel      4096 Nov 18  2011 demo
+drwxr-xr-x  2 dengmorr wheel      4096 Nov 25  2011 Desktop
+-rw-r--r--  1 dengmorr wheel      1371 Jun 24 05:53 dirsize
+drwxr-xr-x 10 dengmorr wheel      4096 Mar  8 04:09 eclipse
+drwxr-xr-x  3 dengmorr wheel      4096 May 22 07:33 enea
+-rw-r--r--  1 dengmorr wheel      3545 Oct 19  2011 env.dengmorr
+lrwxrwxrwx  1 dengmorr wheel        46 Apr 12 08:12 ericsson -> WDDS_4_2_1_DEV_1537_UFE412_FOR_ERRICSON_morris
+drwxr-xr-x 11 dengmorr wheel      8192 Nov 21  2011 firefox
+drwxr-xr-x  3 dengmorr wheel      4096 Apr 18 11:04 gproj
+-rwxr-xr-x  1 dengmorr wheel      6875 May 26 04:51 hello
+-rw-r--r--  1 dengmorr wheel       121 May 26 04:51 hello.c
+drwxr-xr-x  4 dengmorr wheel      4096 Mar 22  2012 mitrastar
+drwxr-xr-x  2 dengmorr wheel      4096 Mar 20  2012 mycvs
+lrwxrwxrwx  1 root     root         11 Oct 18  2011 newlinks -> ../newlinks
+drwxr-xr-x  2 dengmorr wheel      4096 Mar 20 12:53 phy_from_e
+drwxr-xr-x  9 dengmorr wheel      4096 Apr 12 11:08 pkg
+drwxr-xr-x 52 dengmorr wheel      8192 Oct 15  2011 pkgsrc
+drwxr-xr-x  3 dengmorr wheel      4096 Apr  1 10:32 project
+drwxr-xr-x  3 dengmorr wheel      4096 Nov 11  2011 samples
+drwxr-xr-x  2 dengmorr wheel      4096 Jun 28 10:51 scripts
+drwxr-xr-x 13 dengmorr wheel      8192 Nov 16  2012 seamonkey
+drwxr-xr-x  2 dengmorr wheel     40960 Mar 14 08:51 tb
+drwxr-xr-x  2 dengmorr wheel      4096 Apr 19 12:03 test
+drwxr-xr-x  4 dengmorr wheel      4096 Mar 15 08:58 ufe
+lrwxrwxrwx  1 dengmorr wheel        22 Feb  3  2012 w -> WDDS_4_2_X_DEV_morris/
+drwxr-xr-x 13 dengmorr wheel      4096 May 22 07:36 WDDS_4_2_1_DEV_1537_UFE412_FOR_ERRICSON_morris
+drwxr-xr-x 12 dengmorr wheel      4096 May 22 08:56 WDDS_4_2_X_DEV_421RC1_b1537_10112011_morris_may22
+drwxr-xr-x 13 dengmorr wheel      4096 Jun 26 12:29 WDDS_4_2_X_DEV_morris
+drwxr-xr-x 13 dengmorr wheel      4096 Apr 25 06:52 WDDS_4_3_1_b1775_RC3_MNT_patch_20130101_neeraj_apps
+drwxr-xr-x 15 dengmorr wheel      4096 May 22 17:10 WDDS_4_3_X_DEV_morris_israel
+drwxr-xr-x 13 dengmorr wheel      4096 Jun 26 02:12 WDDS_MAIN_DEV_refapps_morris_2
+drwxr-xr-x 15 dengmorr wheel      4096 Jun 26 06:16 WDDS_MAIN_DEV_refapps_morris_3
+drwxr-xr-x  3 dengmorr wheel      4096 Apr 11  2012 winmon
+-rw-r--r--  1 dengmorr wheel  38905891 Sep 11  2012 winmon_4_3_0.tar.gz
+drwxr-xr-x  4 dengmorr wheel      4096 Mar  8 04:11 workspace
+-rw-r--r--  1 dengmorr wheel     80446 Jun  8 08:26 wpx_serdes.c
+lrwxrwxrwx  1 dengmorr wheel        30 Apr  1 11:57 ww -> WDDS_MAIN_DEV_refapps_morris_3
+lrwxrwxrwx  1 dengmorr wheel        31 Jun 26 05:23 www -> WDDS_MAIN_DEV_refapps_morris_3/
+drwxr-xr-x  2 dengmorr wheel      4096 May 16 10:52 xylao
+-rw-r--r--  1 dengmorr wheel     27288 May 16 10:53 xylao.tgz
+drwxr-xr-x  6 dengmorr wheel      4096 Mar  8 04:03 yacc
+lrwxrwxrwx  1 dengmorr wheel        70 May 16 11:08 yogev -> /users/yogevh/projects/winpath/WDDS_4_2_1_DEV_1537_UFE412_FOR_E_XAYLO/
+/home/dengmorr/gproj/morrix-project-name-read-only/unix manual/crondd
+Fri Jun 28 23:59:05 CST 2013
