@@ -334,3 +334,6 @@ Using versions from stream QA, copy the subdirectory tree starting at the direct
 [41]  nice google
 http://www.google.ca/
 
+[42] port forward
+ssh -C -g -D 2000 ran1sw08
+
