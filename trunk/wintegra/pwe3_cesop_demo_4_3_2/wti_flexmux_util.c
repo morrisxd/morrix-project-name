@@ -15,6 +15,7 @@
 
 #include <string.h>
 #include "wp_wddi.h"
+#include "morris_config.h"
 
 #ifndef WTI_FLEXMUX_UTIL_H
 #include "wti_flexmux_util.h"
@@ -2280,6 +2281,10 @@ WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,
       WTI_FlexmuxCheckStatus("WPX_FRMR_SOCKET_PDH_EnableTimeStamp", status, __LINE__);
    }
 
+#if USE_MORRIS_CONFIG
+   line_timing = USE_MORRIS_REF_CLOCK;
+#endif
+
    /* Set the PDH Tx line timing  */
    status = WPX_FRMR_SOCKET_PDH_SetClkRec(0, flexmux_id, client_port_id, line_timing);
    WTI_FlexmuxCheckStatus("WPX_FRMR_SOCKET_PDH_SetClkRec", status, __LINE__);
@@ -2313,7 +2318,10 @@ WP_S32 WTI_FlexmuxPDHTxTimingSet(WP_U8 flexmux_id,
    {
       WTI_FlexmuxTerminateOnError("Invalid line timing ", 0);
    }
-   
+  
+#if USE_MORRIS_CONFIG
+   line_timing = USE_MORRIS_REF_CLOCK;
+#endif 
 
    /* Set the PDH Tx line timing  */
    status = WPX_FRMR_SOCKET_PDH_SetClkRec(0, flexmux_id, client_port_id, line_timing);
