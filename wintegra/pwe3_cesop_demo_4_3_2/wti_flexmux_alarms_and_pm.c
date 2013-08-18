@@ -949,7 +949,7 @@ void service_pm_port_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
    WP_U32 count, line_port, max_line_ports;
    WP_U8 pm_point, status, state;
 
-#if 1
+#if MORRIS_PM_PORT_PRINT
 // uncomment by Morris
  #ifdef VERBOSE
     printf("PM PORT:  device_id = %d, table_index = %d, timestamp = 0x%x\n",
@@ -1024,7 +1024,9 @@ void service_pm_port_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
                status = WPX_FRMR_STATUS_PM_SONET_SDH_Port_ReadData(device_id, table_index, line_port, pm_point, &count);                  
                if (WPX_UFE_FRAMER_OK == status)
                {       
+#if MORRIS_ENABLE_PM_PRINT
                   if (enable_pm_print_port[pm_point])
+#endif
                      printf("line_port %u, pm_point %u, count %u\n", line_port, pm_point, count);
                   pm_ports_counter[line_port][pm_point] += count;
                }               
@@ -2010,7 +2012,7 @@ void WTI_enable_alarms(int type)
 #if WTI_FLEXMUX_ENABLE_ALARMS
    WP_boolean is_sdh = (type == 0);
    int j;
-   WP_U8 status;
+   WP_U8 status = 0;
    int start_alarm, last_alarm;
 
    WPX_FRMR_RegisterSonetSdhPathAlarmCallback(&cb_path_alarm);

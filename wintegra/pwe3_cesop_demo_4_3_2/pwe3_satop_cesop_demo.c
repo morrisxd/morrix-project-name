@@ -11724,7 +11724,7 @@ void CLI_F_Tdm2PsnCesopFlowAggPrefixHeaderModify(char *StrPrm)
 void CLI_F_Psn2TdmCesopFlowAggModify(char *StrPrm)
 {
    WP_U32 res, cmd, mod, index, val, val1;
-   WP_command command;
+   WP_command command = 0;
    WP_status status;
 
    res = sscanf(StrPrm, "%d %d %d %d %d", &cmd, &index, &mod, &val, &val1);
