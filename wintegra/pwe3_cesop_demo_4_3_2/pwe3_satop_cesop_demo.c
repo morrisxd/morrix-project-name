@@ -44,14 +44,19 @@
 #include "winutil/include/wpu_sa_alloc.h"
 #include "winutil/include/wpu_sa_limits.h"
 
-//#undef WT_UFE_FRAMER
+// #define WTI_CI_TESTING_MODE_UFE4 1
+// #define WT_TRIAL_MASK (1<<4)
 
+
+//#undef WT_UFE_FRAMER
 /*
  * Change here in manual compilation (37900b)
  */
 #define WTI_CESOP_TDI                               0                 /* use of TDM I/F */
-#define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0                 /* enable clock recovery module */
-#define WTI_CESOP_RX_TIMING_ENABLE                  0                 /* enable Rx timing direction */
+  #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1
+// #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0                 /* enable clock recovery module */
+#define WTI_CESOP_RX_TIMING_ENABLE                  1
+// #define WTI_CESOP_RX_TIMING_ENABLE                  0                 /* enable Rx timing direction */
 #define WTI_CESOP_REGRESSION_TEST                   0                 /* when '1' running in regression mode*/
 #define A_AUTOMATION                                0                 /* Should set to 1 for automation */
 
@@ -60,6 +65,7 @@
  */
 /* This is 37900b_UFE4_DCR and 37900b_UFE4_ACR correspondingly */
 #if WTI_CI_TESTING_MODE_UFE4 
+#error WTI_CI_TESTING_MODE_UFE4_defined
 #define WTI_CESOP_TDI                               0                 /* use of TDM I/F */
 #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1                 /* enable clock recovery module */
 #define WTI_CESOP_RX_TIMING_ENABLE                  1                 /* enable Rx timing direction */
@@ -67,6 +73,7 @@
 #define A_AUTOMATION                                0                 /* Should set to 1 for automation */
 /* This is 37900b_TDI_DCR and 37900b_TDI_ACR correspondingly */
 #elif WTI_CI_TESTING_MODE_TDI
+#error WTI_CI_TESTING_MODE_TDI_defined2
 #define WTI_CESOP_TDI                               1                 /* use of TDM I/F */
 #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1                 /* enable clock recovery module */
 #define WTI_CESOP_RX_TIMING_ENABLE                  1                 /* enable Rx timing direction */
@@ -567,6 +574,7 @@
 /*
  * Change here in manual compilation (37900b)
  */
+// #define WTI_CLOCK_REC_MODE                          1
 #define WTI_CLOCK_REC_MODE                          0        /* 1 - differential, 0 - adaptive */
 
 /*
