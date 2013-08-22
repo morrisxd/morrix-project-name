@@ -706,7 +706,9 @@ WUFE_status WT_UfeLinePWCreate(WUFE_test_system_setup *test_setup, WP_U32 create
 	      {
 	         if(test_setup->num_slots > 1)
 	         {
-	            CLI_F_Pwe3ChannelRxBufferSize("0 256");
+	            // CLI_F_Pwe3ChannelRxBufferSize("0 512");
+			sprintf(temp_buf, "0 %d", g_rxbuffersize);
+	            CLI_F_Pwe3ChannelRxBufferSize(temp_buf);
 	         }
 	         else
 	         {

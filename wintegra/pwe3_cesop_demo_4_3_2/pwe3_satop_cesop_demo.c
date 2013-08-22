@@ -198,7 +198,8 @@
 #if (WTI_XGI_MODE)
 #define WTI_ENET_MODE                               WP_ENET_LOOPBACK //NORMAL /* defines loopback or normal operation on ENET port */
 #else
-#define WTI_ENET_MODE                               WP_ENET_LOOPBACK/* defines loopback or normal operation on ENET port */
+#define WTI_ENET_MODE                               WP_ENET_NORMAL/* defines loopback or normal operation on ENET port */
+// #error WTI_ENET_MODE_loopbacked
 #endif // WTI_XGI_MODE
 
 #ifdef WP_HW_WINPATH2
@@ -3084,8 +3085,19 @@ void stall(WP_CHAR *f, WP_U32 line, WP_boolean suppress)
  * Output params:
  * Return val   :
  *****************************************************************************/
+extern WP_U32 global_jitter_buffer_size;
+WP_U32 g_rxbuffersize;
+
 WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 {
+   if (argc > 2)
+   {
+      global_jitter_buffer_size      	= atoi(argv[1]);
+      g_rxbuffersize 			= atoi(argv[2]);
+   } else {
+      return printf ("please input [filename j buf]\n");
+   }
+
 
    /* init the Demo structures */
    WTI_InitDemoStructures();
