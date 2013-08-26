@@ -53,10 +53,11 @@
  * Change here in manual compilation (37900b)
  */
 #define WTI_CESOP_TDI                               0                 /* use of TDM I/F */
-  #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1
-// #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0                 /* enable clock recovery module */
-#define WTI_CESOP_RX_TIMING_ENABLE                  1
-// #define WTI_CESOP_RX_TIMING_ENABLE                  0                 /* enable Rx timing direction */
+// and another REC_MODE
+//   #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1
+#define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0                 /* enable clock recovery module */
+// #define WTI_CESOP_RX_TIMING_ENABLE                  1
+#define WTI_CESOP_RX_TIMING_ENABLE                  0                 /* enable Rx timing direction */
 #define WTI_CESOP_REGRESSION_TEST                   0                 /* when '1' running in regression mode*/
 #define A_AUTOMATION                                0                 /* Should set to 1 for automation */
 
