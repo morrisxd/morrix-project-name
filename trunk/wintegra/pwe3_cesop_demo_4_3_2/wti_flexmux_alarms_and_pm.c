@@ -2035,10 +2035,15 @@ void WTI_enable_alarms(int type)
 
        for (j = start_alarm; j <= last_alarm; ++j)
        {
+#if MORRIS_SKIP_ALARMS
           if (j == WPX_UFE_FRAMER_SDH_RS_TIM 
                 || j == WPX_UFE_FRAMER_SDH_HP_TIM
                 || j == WPX_UFE_FRAMER_SDH_LP_TIM
              )
+#else
+#error ALARM_SHOULD_BE_DISABLED
+          if (0)
+#endif
           {
           } else {
               status = WPX_FRMR_DEV_DRV_SONET_SDH_EnableAlarm(j, j);
