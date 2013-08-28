@@ -1319,7 +1319,9 @@ void service_pm_ho_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
                   }
                   else
                   {                  
+#if MORRIS_DISABLE_MON_STATE
                      printf("GetMonitoringState for TU3 HO path %d:%d:%d with PM point %d failed with %s\n", stm4, stm1, stm0, pm_point, OMIINO_FRAMER_ErrorCodeToTxt(status)); 
+#endif
                   }  
 
                   /* In case of  TU3 we need get the PMs of the VC4 facility only with the first index of stm0=0 */
@@ -1355,7 +1357,9 @@ void service_pm_ho_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
                }
                else
                {                  
+#if MORRIS_DISABLE_MON_STATE
                   printf("GetMonitoringState for HO path %d:%d:%d with PM point %d failed with %s\n", stm4, stm1, stm0, pm_point, OMIINO_FRAMER_ErrorCodeToTxt(status)); 
+#endif
                }  
             }
          }
@@ -1609,7 +1613,9 @@ void service_pm_lo_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
                      }
                      else
                      {                        
+#if MORRIS_DISABLE_MON_STATE
                         printf("GetMonitoringState for LO path %d:%d:%d:%d:%d with PM point %d failed with %s\n", stm4, stm1, stm0, tug2, tu, pm_point, OMIINO_FRAMER_ErrorCodeToTxt(status));
+#endif
                      }                     
                   }
                }
@@ -1787,7 +1793,9 @@ void service_pm_pdh_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
             }
             else
             {            
+#if MORRIS_DISABLE_MON_STATE
                printf("GetMonitoringState for iSocketClientPDH %d with PM point %d failed with %s\n", iSocketClientPDH, pm_point, OMIINO_FRAMER_ErrorCodeToTxt(status)); 
+#endif
             }
          }
       }
