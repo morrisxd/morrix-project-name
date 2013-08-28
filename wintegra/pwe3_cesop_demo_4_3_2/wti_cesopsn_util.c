@@ -6456,9 +6456,16 @@ void WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4(WP_U32 line_index, WP_U32 
       /* Far-end Differential Reference Clock (DRC) frequency in Hz - not in use in ADAP*/
       the_system->clock_rec[line_index].remote_diff_ref_clock = 0;
       /* First filter factor */
+#if MORRIS_FACTOR
+      the_system->clock_rec[line_index].direct_factor = 26; //  27/30   28/33  29/34
+      /* Second  filter factor */
+      the_system->clock_rec[line_index].integration_factor = 28;
+#else
       the_system->clock_rec[line_index].direct_factor = 27; //  27/30   28/33  29/34
       /* Second  filter factor */
       the_system->clock_rec[line_index].integration_factor = 30;
+
+#endif
       /* The time in seconds between divisor updates */
       the_system->clock_rec[line_index].divisor_update_period = 4;
       /* The number of host clocks which consider phase error */
