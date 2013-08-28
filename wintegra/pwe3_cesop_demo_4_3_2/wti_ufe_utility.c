@@ -310,13 +310,14 @@ void  WT_UfeSystemCreate(WT_ufe *ufe)
    ufe_status = WUFE_UfeInit(&config);
    WT_UfeTerminateOnError(ufe_status,"WUFE_UfeInit",0,__LINE__);
 #if defined __WT_UFE412__ || defined __WT_UFE448__
-#if WTI_CESOP_REGRESSION_TEST
-
+// #if WTI_CESOP_REGRESSION_TEST
+#if MORRIS_ENABLE_FREERUN_MODE
+#error ________FREERUN_MODE_IS_ON_________
    /* In regression mode. UFE4 is master on the sonet clock so setting zarlink to freerun */
    printf("\nzarlink set to free-run mode\n");
    WUFE_BSSetExtPllFreeRunMode(ufe->ufe_id);
-
 #endif
+// #endif
 #endif
 
 #ifdef __WT_UFE412__

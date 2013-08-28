@@ -21,6 +21,7 @@
 
 #define MORRIS_FACTOR	(1)
 
+#define MORRIS_ENABLE_FREERUN_MODE	(0)
 
 #endif
 
