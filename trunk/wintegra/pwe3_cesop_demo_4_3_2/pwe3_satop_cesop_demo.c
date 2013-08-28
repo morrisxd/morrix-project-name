@@ -44,6 +44,10 @@
 #include "winutil/include/wpu_sa_alloc.h"
 #include "winutil/include/wpu_sa_limits.h"
 
+
+#include "morris_config.h"
+
+
 // #define WTI_CI_TESTING_MODE_UFE4 1
 // #define WT_TRIAL_MASK (1<<4)
 
@@ -53,11 +57,18 @@
  * Change here in manual compilation (37900b)
  */
 #define WTI_CESOP_TDI                               0                 /* use of TDM I/F */
-// and another REC_MODE
-//   #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1
-#define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0                 /* enable clock recovery module */
-// #define WTI_CESOP_RX_TIMING_ENABLE                  1
-#define WTI_CESOP_RX_TIMING_ENABLE                  0                 /* enable Rx timing direction */
+
+#if MORRIS_CR_ON
+/* and another REC_MODE */
+#define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1
+#define WTI_CESOP_RX_TIMING_ENABLE                  1
+#else
+#error _________CR_IS_OFF_NOW____________
+#define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0 /*enabl clock recovry module */
+#define WTI_CESOP_RX_TIMING_ENABLE                  0 /*enable Rx timing direction */
+#endif
+
+
 #define WTI_CESOP_REGRESSION_TEST                   0                 /* when '1' running in regression mode*/
 #define A_AUTOMATION                                0                 /* Should set to 1 for automation */
 
@@ -576,6 +587,7 @@
 /*
  * Change here in manual compilation (37900b)
  */
+// #error llllllllllllllllllllllllllllllllllllllllllllllllll
 // #define WTI_CLOCK_REC_MODE                          1
 #define WTI_CLOCK_REC_MODE                          0        /* 1 - differential, 0 - adaptive */
 

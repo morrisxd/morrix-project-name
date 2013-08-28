@@ -1039,7 +1039,9 @@ void service_pm_port_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
          }
          else
          {            
+#if MORRIS_DISABLE_MON_STATE
             printf("GetMonitoringState for line_port %d with PM point %d failed with %s\n", line_port, pm_point, OMIINO_FRAMER_ErrorCodeToTxt(status));
+#endif
          }         
       }
    }
