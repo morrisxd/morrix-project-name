@@ -7403,6 +7403,7 @@ void WTI_TransChannelTxConfig(WP_ch_trans_pwe3 *cfg_ptr)
 }
 
 #if WTI_PCE_CLASSIFIER
+extern WP_U32 isEnableSnake;
 /*****************************************************************************
  * Function name: WTI_PceRuleConfig
  * Description  : configure PCE Rule
@@ -7423,6 +7424,10 @@ void WTI_PceRuleConfig(WP_pce_rule_classification *cfg_ptr, WP_U32 pw_index)
 #endif/*UDP_DES_PORT_PCE_RULE*/
 
 
+
+
+   WP_U32 pw_index_in, num_of_lines;
+   pw_index_in = num_of_lines = 0;
 
 
 
@@ -7506,6 +7511,50 @@ void WTI_PceRuleConfig(WP_pce_rule_classification *cfg_ptr, WP_U32 pw_index)
    mpls &= 0xfffff000; /* Mask upper 20 bits (label only) */
    mpls >>= 12;
 #endif
+
+
+// #if WTI_CLOCK_REC_SNAKE_ENABLED
+if (isEnableSnake)
+{
+printf ("\n");
+printf ("==============>Snake is Enabled!\n");
+printf ("==============>Snake is Enabled!\n");
+printf ("==============>Snake is Enabled!\n");
+printf ("==============>Snake is Enabled!\n");
+printf ("==============>Snake is Enabled!\n");
+printf ("==============>Snake is Enabled!\n");
+printf ("==============>Snake is Enabled!\n");
+printf ("==============>Snake is Enabled!\n");
+   if(pw_index == 0)
+   {
+      pw_index_in = 62 + cr_snake_num_of_lines;
+      printf("SNAKE MODE: mpls %x ->",mpls);
+      mpls &= 0xFFFFF00F;
+      mpls |=  (pw_index_in << 4);
+      printf("%x  pw %d -> pw %d \n",mpls,pw_index_in,pw_index);
+   }
+   else if(pw_index == 63)
+   {
+      pw_index_in = 0;
+      printf("SNAKE MODE: mpls %x ->",mpls);
+      mpls &= 0xFFFFF00F;
+      mpls |=  (pw_index_in << 4);
+      printf("%x  pw %d -> pw %d \n",mpls,pw_index_in,pw_index);
+   }
+   else if(pw_index >= 64 && pw_index < (64+cr_snake_num_of_lines -1))
+   {
+      pw_index_in = pw_index-1;
+      printf("SNAKE MODE: mpls %x ->",mpls);
+      mpls &= 0xFFFFF00F;
+      mpls |=  (pw_index_in << 4);
+      printf("%x  pw %d -> pw %d \n",mpls,pw_index_in,pw_index);
+   }
+}
+// #endif
+
+
+
+
 
    cfg_ptr->tag = 1;
    cfg_ptr->match_action = WP_PCE_RULE_MATCH_ACCEPT;

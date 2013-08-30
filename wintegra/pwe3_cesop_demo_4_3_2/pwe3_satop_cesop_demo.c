@@ -63,7 +63,7 @@
 #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1
 #define WTI_CESOP_RX_TIMING_ENABLE                  1
 #else
-#error _________CR_IS_OFF_NOW____________
+// #error _________CR_IS_OFF_NOW____________
 #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0 /*enabl clock recovry module */
 #define WTI_CESOP_RX_TIMING_ENABLE                  0 /*enable Rx timing direction */
 #endif
@@ -3100,15 +3100,17 @@ void stall(WP_CHAR *f, WP_U32 line, WP_boolean suppress)
  *****************************************************************************/
 extern WP_U32 global_jitter_buffer_size;
 WP_U32 g_rxbuffersize;
+WP_U32 isEnableSnake;
 
 WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 {
-   if (argc > 2)
+   if (argc > 3)
    {
       global_jitter_buffer_size      	= atoi(argv[1]);
       g_rxbuffersize 			= atoi(argv[2]);
+      isEnableSnake			= atoi(argv[3]);
    } else {
-      return printf ("please input [filename j buf]\n");
+      return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable)]\n");
    }
 
 

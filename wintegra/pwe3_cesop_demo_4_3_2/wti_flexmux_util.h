@@ -69,7 +69,7 @@
 
 #if MORRIS_ENABLE_STM_1
 #define WTI_FLEXMUX_PHYSICAL_CONF WT_FLEXMUX_UFE_412_4_PORTS_OC3
-#error this_is_in_non_default_mode
+// #error this_is_in_non_default_mode
 #else
 #define WTI_FLEXMUX_PHYSICAL_CONF WT_FLEXMUX_UFE_412_1_PORT_OC12
 #endif

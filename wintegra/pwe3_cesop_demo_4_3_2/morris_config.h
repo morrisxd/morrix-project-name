@@ -11,7 +11,7 @@
 #define MORRIS_PM_PORT_PRINT_WITHOUT_COUNTER	(0)
 
 
-#define MORRIS_ENABLE_STM_1	(0)
+#define MORRIS_ENABLE_STM_1	(1)
 #define MORRIS_SKIP_ALARMS	(1)
 
 
@@ -22,7 +22,18 @@
 #define MORRIS_FACTOR	(1)
 
 #define MORRIS_ENABLE_FREERUN_MODE	(0)
+#define WTI_CLOCK_REC_SNAKE_ENABLED	(1)
 
+#ifndef MORRIS_SNAKE_NUM
+#define MORRIS_SNAKE_NUM
+WP_U32 cr_snake_num_of_lines = 63;
+#endif
+
+
+
+
+
+#define MORRIS_DISABLE_WHEN_STM_1	(0)
 #endif
 
 
