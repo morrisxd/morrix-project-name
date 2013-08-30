@@ -1786,7 +1786,9 @@ void service_pm_pdh_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
                   }
                   else
                   {                  
+#if MORRIS_DISABLE_WHEN_STM_1
                      printf("PDH_E1T1_ReadData for iSocketClientPDH %d with PM point %d failed with %s\n", iSocketClientPDH, pm_point, OMIINO_FRAMER_ErrorCodeToTxt(status));
+#endif
                   }               
                }
                
