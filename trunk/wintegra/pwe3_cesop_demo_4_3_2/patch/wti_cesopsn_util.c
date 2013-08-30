@@ -21,6 +21,7 @@
 
 #include "wpx_enet_phy.h"
 #include "wpx_pin_mux_selector.h"
+#include "wt_util.h"
 
 #ifdef WP_HW_WINPATH3
 #include "wpx_pinmux.h"
@@ -175,8 +176,6 @@ void    WPE_PtpPortStatistics(WP_handle ptp_port);
 #define WTI_XGI_TYPE                                WP_ENET_XAUI
 #define WPE_MAX_PTP_PORTS      8
 
-
-
 /*available ports*/
 #define WPE_CD0    0
 
@@ -200,7 +199,7 @@ WP_handle  ptp_cds[WPE_MAX_CD] ;
 WP_handle  emc_filter_handle[NUM_OF_EMC_FILTERS];
 WP_handle  flow_rule_handle[NUM_OF_EMC_FILTERS+1][NUM_OF_RULES_PER_FILTER];
 WP_handle  iw_sys;
-WP_U32     wpid =  WP_WINPATH(0);
+WP_U32     wpid =  WP_WINPATH(DEFAULT_WPID);
 WP_handle  iw_qnode,pool_host ;
 WP_U32  clock_frequency =0;
 WP_U32 pkt_id = 1;
@@ -271,6 +270,7 @@ void WTI_CesopSystemStart(void)
 {
    WP_status status = WP_OK;
 
+   WT_Start(__FILE__, NULL, __FILE__);
 
    /* initialize WDDI */
    status = WP_DriverInit();
@@ -301,7 +301,7 @@ void WTI_CesopSystemStart(void)
    pce_init.bridge_loop_prevention_mode = WP_ENABLE;
    pce_init.learning_mode = WP_DISABLE;
 
-   status = WP_ModuleInit(WP_SYSHANDLE(0), WP_WDDI_MODULE_PCE, &pce_init);
+   status = WP_ModuleInit(WP_SYSHANDLE(DEFAULT_WPID), WP_WDDI_MODULE_PCE, &pce_init);
    WTI_TerminateOnError(status, "WPI_PceModuleInit()", __LINE__);
 #endif
 
@@ -335,6 +335,7 @@ void WTI_CesopSystemStart(void)
    status = WP_SysCommit();
    WTI_TerminateOnError(status, "WP_SysCommit", __LINE__);
 
+   WT_Identify();
 
 #if WTI_PTP_ENABLE
    WPE_PTPConfig();
@@ -342,7 +343,7 @@ void WTI_CesopSystemStart(void)
 
 #if WTI_CES_SHAPING_ENABLED
    /* enable scheduler */
-   status = WP_SysPsuEnable(WP_WINPATH(0));
+   status = WP_SysPsuEnable(WP_WINPATH(DEFAULT_WPID));
 #endif
 
 #if WTI_CI_TESTING_MODE_TDI || WTI_CI_TESTING_MODE_UFE4
@@ -410,6 +411,7 @@ void WTI_SystemAlloc(void)
          printf("Test Abort. Can't allocate memory for the system\n");
          printf("Test Failed.\n");
          WP_DriverRelease();
+         WTI_Reboot();
       }
    }
 
@@ -514,7 +516,7 @@ void WTI_SystemInit(void)
    /* Select the relevant system features */
    WTI_SystemFeaturesSelect();
 
-   the_system->wpid = WP_WINPATH(0);
+   the_system->wpid = WP_WINPATH(DEFAULT_WPID);
 
    for (ii=0; ii<N_QNODES; ii++)
    {
@@ -899,7 +901,7 @@ void WTI_SystemSetup(void)
    set SERDES_CLK_OUT_0 0xbe008288
    select a clock  in serdes clk mux
 */
-   addr = (WP_U32 *)WPL_PHY_VIRTUAL(WP_WINPATH(0),0x1e008288);
+   addr = (WP_U32 *)WPL_PHY_VIRTUAL(WP_WINPATH(DEFAULT_WPID),0x1e008288);
    temp_val = 0x80000011;
    *(WP_U32 *) addr =  temp_val;
 
@@ -908,12 +910,12 @@ void WTI_SystemSetup(void)
 #endif  /* WP_HW_WINPATH3 */
 
    /* set winpath id */
-   the_system->wpid = WP_WINPATH(0);
+   the_system->wpid = WP_WINPATH(DEFAULT_WPID);
 
 #if WTI_PCE_CLASSIFIER
    int_ram_partition.policer_entries = 0;
    int_ram_partition.pce_hw_rules_num = 2 * WTI_MAX_PW;
-   WT_SetIntRamPartition(WP_WINPATH(0), &int_ram_partition);
+   WT_SetIntRamPartition(WP_WINPATH(DEFAULT_WPID), &int_ram_partition);
 #endif
 #if (!WTI_CESOP_TDI)
 #if defined __WT_UFE412__ || defined __WT_UFE448__
@@ -929,7 +931,7 @@ void WTI_SystemSetup(void)
 #if defined __WT_UFE412__ || defined __WT_UFE448__
 
    /* FPGA HW reset */
-   WPX_Ufe4HwReset(WP_WINPATH(0), 0);  /* ufe id, connector id as arguments */
+   WPX_Ufe4HwReset(WP_WINPATH(DEFAULT_WPID), 0);  /* ufe id, connector id as arguments */
 
    if (WTI_INITIALIZE_FIRMWARE)
    {
@@ -942,7 +944,7 @@ void WTI_SystemSetup(void)
 #if WTI_DUAL_EMPHY
 
       /* FPGA HW reset */
-      WPX_Ufe4HwReset(WP_WINPATH(0), 2);  /* ufe id, connector id as arguments */
+      WPX_Ufe4HwReset(WP_WINPATH(DEFAULT_WPID), 2);  /* ufe id, connector id as arguments */
 
       /* This PINMUX is OK for dual EMPHY mode */
       printf("WPX_CONFIGURE_UPI3_UFE412 ************\n\n\n");
@@ -3505,7 +3507,12 @@ void WTI_EnetDeviceConfig(WP_device_enet *cfg_ptr, WP_device_enet_ex *ex_cfg_ptr
       cfg_ptr->tx_bit_rate = 100000000;
 #else /* WP_HW_WINPATH3 */
 #if WTI_UFE_4_1_2
-   cfg_ptr->tx_bit_rate = 1000000000;
+   if(WTI_ENET_TYPE == WP_ENET_XAUI)
+   {
+      cfg_ptr->tx_bit_rate = WP_TX_BIT_RATE_UNLIMITED;
+   }  
+   else
+      cfg_ptr->tx_bit_rate = 1000000000;
 #else
    cfg_ptr->tx_bit_rate = WP_TX_BIT_RATE_UNLIMITED;
 #endif
@@ -3637,11 +3644,17 @@ void WTI_EnetPortCreate(void)
       }
    }
 #else /* WP_HW_WINPATH3 */
+   if(WTI_ENET_TYPE == WP_ENET_XAUI)
+   {     
+      status = WPX_BoardXgiConfig(0, WTI_ENET_PORT);
+      WTI_TerminateOnError(status, "WPX_BoardXgiConfig() WTI_ENET_PORT", __LINE__);
+   }
+   
 #if (WTI_ENET_MODE == WP_ENET_NORMAL)
-    status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_FALSE);
+    status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT,WPX_SERDES_NORMAL);
     WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_ENET_PORT", __LINE__);
 #else
-   status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_TRUE);
+   status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT,WPX_SERDES_LOOPBACK);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_ENET_PORT", __LINE__);
 #endif
 #endif
@@ -3707,10 +3720,10 @@ void WTI_EnetPortCreate(void)
    }
 #else /* WP_HW_WINPATH3 */
 #if (WTI_SECOND_ENET_MODE == WP_ENET_NORMAL)
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_SECOND_ENET_PORT, WP_FALSE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(DEFAULT_WPID), WTI_SECOND_ENET_PORT, WPX_SERDES_NORMAL);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_SECOND_ENET_PORT", __LINE__);
 #else
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_SECOND_ENET_PORT, WP_TRUE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(DEFAULT_WPID), WTI_SECOND_ENET_PORT,WPX_SERDES_LOOPBACK);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_SECOND_ENET_PORT", __LINE__);
 #endif
 #endif
@@ -3742,10 +3755,10 @@ void WTI_EnetPortCreate(void)
 #if WTI_4_ENET_DEVICES
 
 #if (WTI_THIRD_ENET_MODE == WP_ENET_NORMAL)
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_THIRD_ENET_PORT, WP_FALSE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(DEFAULT_WPID), WTI_THIRD_ENET_PORT, WPX_SERDES_NORMAL);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_THIRD_ENET_PORT", __LINE__);
 #else
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_THIRD_ENET_PORT, WP_TRUE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(DEFAULT_WPID), WTI_THIRD_ENET_PORT, WPX_SERDES_LOOPBACK);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_THIRD_ENET_PORT", __LINE__);
 #endif
 
@@ -3770,10 +3783,10 @@ void WTI_EnetPortCreate(void)
    WTI_TerminateOnError(status, "WP_DeviceModify() third enet device",__LINE__);
 
 #if (WTI_FOURTH_ENET_MODE == WP_ENET_NORMAL)
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_FOURTH_ENET_PORT, WP_FALSE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(DEFAULT_WPID), WTI_FOURTH_ENET_PORT, WPX_SERDES_NORMAL);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_FOURTH_ENET_PORT", __LINE__);
 #else
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_FOURTH_ENET_PORT, WP_TRUE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(DEFAULT_WPID), WTI_FOURTH_ENET_PORT, WPX_SERDES_LOOPBACK);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_FOURTH_ENET_PORT", __LINE__);
 #endif
 
@@ -3823,7 +3836,7 @@ WP_status status;
 
 
 
-   status  = WP_SysSchedulerCreate(WP_WINPATH(0), calendar);
+   status  = WP_SysSchedulerCreate(WP_WINPATH(DEFAULT_WPID), calendar);
    WTI_TerminateOnError(status,"WP_SysSchedulerCreate",__LINE__);
 }
 #endif  /* WTI_CES_SHAPING_MODE != 0 */
@@ -6016,7 +6029,7 @@ void WTI_SyncEthInit(void)
 #if WTI_DEBUG_LEVEL > 1
    printf("Sync Ethernet Config:\n");
 
-   WP_Display(WP_WINPATH(0),
+   WP_Display(WP_WINPATH(DEFAULT_WPID),
               WP_DISPLAY_SYNC_ENET,
               WP_DISPLAY_DEFAULT,
               NULL);
@@ -6330,7 +6343,7 @@ static void WTI_ZarlinkPllSetup(WPX_pll_cfg *pllConfigParam)
 #endif
 #endif //!defined(CHECKIN_TEST)
 
-WP_U32 global_jitter_buffer_size = 32;
+WP_U32 global_jitter_buffer_size = 4;
 
 #if WTI_CESOP_CLOCK_RECOVERY_ENABLE
 void WTI_ClockRecInitialParamsSet(WP_clock_rec_params *clock_rec_params)
@@ -6444,6 +6457,15 @@ void WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4(WP_U32 line_index, WP_U32 
       the_system->clock_rec[line_index ].average_divisor_factor = 10;
       /* Not in use in differential mode */
       the_system->clock_rec[line_index ].allowed_dummy_packets = 0;
+
+
+
+  /* Enahnced  mode */
+      the_system->clock_rec[line_index].enhanced_acr_mode =  WP_JITTER_BUFFER_LEVELING_EN;
+      the_system->clock_rec[line_index].jb_leveling_correction_size = 60;
+      the_system->clock_rec[line_index].jb_leveling_threshold_high = (global_jitter_buffer_size/2) + 4;
+      the_system->clock_rec[line_index].jb_leveling_threshold_low = (global_jitter_buffer_size/2) - 4;
+
    }
    else
    {
@@ -6456,16 +6478,9 @@ void WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4(WP_U32 line_index, WP_U32 
       /* Far-end Differential Reference Clock (DRC) frequency in Hz - not in use in ADAP*/
       the_system->clock_rec[line_index].remote_diff_ref_clock = 0;
       /* First filter factor */
-#if MORRIS_FACTOR
-      the_system->clock_rec[line_index].direct_factor = 26; //  27/30   28/33  29/34
+      the_system->clock_rec[line_index].direct_factor = 28; //  27/30   28/33  29/34
       /* Second  filter factor */
-      the_system->clock_rec[line_index].integration_factor = 28;
-#else
-      the_system->clock_rec[line_index].direct_factor = 27; //  27/30   28/33  29/34
-      /* Second  filter factor */
-      the_system->clock_rec[line_index].integration_factor = 30;
-
-#endif
+      the_system->clock_rec[line_index].integration_factor = 33;
       /* The time in seconds between divisor updates */
       the_system->clock_rec[line_index].divisor_update_period = 4;
       /* The number of host clocks which consider phase error */
@@ -6488,7 +6503,7 @@ void WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4(WP_U32 line_index, WP_U32 
          divisor_update_period windows */
       the_system->clock_rec[line_index].pm_error_threshold = 3000; 
 
-      /* Emahnced ACR mode */
+      /* Enahnced ACR mode */
       the_system->clock_rec[line_index].enhanced_acr_mode = WP_TS_DEV_BASED_SM_EN | WP_JITTER_BUFFER_LEVELING_EN;
       the_system->clock_rec[line_index].ts_dev_jump_threshold = 500;
       the_system->clock_rec[line_index].ts_dev_average_factor = 4;
@@ -6884,6 +6899,56 @@ WP_status WTI_ClockRecTdiDcoRegistersCheck(WP_U32 dco_id, WP_U32 clk_rec_reg0, W
    return status;
 }
 
+struct WPT_clock_rec_dco
+{
+   WP_U32 reg0; /* cfg (16) and div_int (16) */
+   WP_U32 reg1; /* div_frac (32) */
+   WP_U32 reg2; /* res (16) and clk_divider (16) */
+   WP_U32 rx_ts;
+   WP_U32 tx_ts;
+   WP_U32 fifo_stat;
+};
+
+typedef struct WPT_clock_rec_dco WPT_clock_rec_dco;
+
+#define WTI_CLOCK_REC_DCO_BASE 0x25400 // WP3 base
+#define WTI_CLOCK_REC_DCO_DELTA 0x18
+#define WTI_CLOCK_REC_DCO_REGISTER_OFFSET(t) \
+   (WTI_CLOCK_REC_DCO_BASE + WTI_CLOCK_REC_DCO_DELTA * (t))
+#define WTI_CLOCK_REC_DCO(reg_base, t) \
+   ((WPT_clock_rec_dco *) ((reg_base) + WTI_CLOCK_REC_DCO_REGISTER_OFFSET(t)))
+
+#define WTI_CLOCK_REC_EVENT_MASK 0xF
+#define WTI_CLOCK_REC_DIVIDER_MASK 0xFFFF
+
+
+WP_status WTI_ClockRecTdiDcoHwRegRead(WP_U32 wpid, WP_U32 dco_id, WP_U8 port_interface,
+                                     WP_clock_rec_tdi_dco_hw_reg *clock_rec_tdi_dco_hw_reg)
+{
+   WPT_clock_rec_dco *clock_rec_dco;
+   WP_U8 *reg_base;
+
+   /* Verify TDI port ID is in range (dco_id = tdi_interface) */
+   if (dco_id > WP_PORT_TDM16 - WP_PORT_TDM1)
+   {
+      return WP_ERR_CLOCK_REC_DCO_ID;
+   }
+
+   reg_base = WPL_RegBaseGet(wpid);
+
+   clock_rec_dco = WTI_CLOCK_REC_DCO(reg_base, dco_id);
+
+   WP_MEM_GET(clock_rec_tdi_dco_hw_reg->reg0, clock_rec_dco->reg0);
+   WP_MEM_GET(clock_rec_tdi_dco_hw_reg->reg1, clock_rec_dco->reg1);
+   WP_MEM_GET(clock_rec_tdi_dco_hw_reg->reg2, clock_rec_dco->reg2);
+   WP_MEM_GET(clock_rec_tdi_dco_hw_reg->fifo_reg, clock_rec_dco->fifo_stat);
+   clock_rec_tdi_dco_hw_reg->reg2 =
+      clock_rec_tdi_dco_hw_reg->reg2 & WTI_CLOCK_REC_DIVIDER_MASK;
+   clock_rec_tdi_dco_hw_reg->fifo_reg =
+      clock_rec_tdi_dco_hw_reg->fifo_reg & WTI_CLOCK_REC_EVENT_MASK;
+
+   return WP_OK;
+}
 
 WP_status WTI_ClockRecTdiDcoRegRead(WP_U32 dco_id, WP_U32 *reg0, WP_U32 *reg1,
                                     WP_U32 *reg2, WP_U32 *fifo_reg)
@@ -6891,13 +6956,13 @@ WP_status WTI_ClockRecTdiDcoRegRead(WP_U32 dco_id, WP_U32 *reg0, WP_U32 *reg1,
    WP_status status = WP_OK;
    WP_clock_rec_tdi_dco_hw_reg clock_rec_tdi_dco_hw_reg;
 
-   status = WP_ClockRecTdiDcoHwRegRead(the_system->wpid, dco_id,
+   status = WTI_ClockRecTdiDcoHwRegRead(the_system->wpid, dco_id,
                                        WP_IW_CESOP_PORT_TDM,
                                        &clock_rec_tdi_dco_hw_reg);
 
    if (status != WP_OK)
    {
-      printf("WP_ClockRecTdiDcoHwRegRead failed: %s\n", WP_error_name[WP_ERROR(status)]);
+      printf("WTI_ClockRecTdiDcoHwRegRead failed: %s\n", WP_error_name[WP_ERROR(status)]);
       return status;
    }
 
@@ -7421,10 +7486,9 @@ void WTI_PceRuleConfig(WP_pce_rule_classification *cfg_ptr, WP_U32 pw_index)
    WP_U16 dest_port;
    WP_U32 udp_offset;
 #endif/*UDP_DES_PORT_PCE_RULE*/
-
-
-
-
+#if WTI_CLOCK_REC_SNAKE_ENABLED
+   WP_U32 pw_index_in,num_of_lines;
+#endif
 
 
    memset(cfg_ptr, 0, sizeof(WP_pce_rule_classification));
@@ -7507,6 +7571,35 @@ void WTI_PceRuleConfig(WP_pce_rule_classification *cfg_ptr, WP_U32 pw_index)
    mpls >>= 12;
 #endif
 
+ 
+
+#if WTI_CLOCK_REC_SNAKE_ENABLED
+   if(pw_index == 0)
+   {
+      pw_index_in = 62 + cr_snake_num_of_lines;
+      printf("SNAKE MODE: mpls %x ->",mpls);
+      mpls &= 0xFFFFF00F;
+      mpls |=  (pw_index_in << 4);
+      printf("%x  pw %d -> pw %d \n",mpls,pw_index_in,pw_index);
+   }
+   else if(pw_index == 63)
+   {
+      pw_index_in = 0;
+      printf("SNAKE MODE: mpls %x ->",mpls);
+      mpls &= 0xFFFFF00F;
+      mpls |=  (pw_index_in << 4);
+      printf("%x  pw %d -> pw %d \n",mpls,pw_index_in,pw_index);
+   }
+   else if(pw_index >= 64 && pw_index < (64+cr_snake_num_of_lines -1))
+   {
+      pw_index_in = pw_index-1;
+      printf("SNAKE MODE: mpls %x ->",mpls);
+      mpls &= 0xFFFFF00F;
+      mpls |=  (pw_index_in << 4);
+      printf("%x  pw %d -> pw %d \n",mpls,pw_index_in,pw_index);
+   }
+#endif
+ 
    cfg_ptr->tag = 1;
    cfg_ptr->match_action = WP_PCE_RULE_MATCH_ACCEPT;
    cfg_ptr->enabled = WP_ENABLE;
@@ -7904,7 +7997,7 @@ void WTI_ShowMemStat(void)
    printf("Memory status: Host bus bytes left     = %d\n", bytes);
 
 #ifndef __linux__
-   status = WP_MemoryAvailable(WP_WINPATH(0), WP_HEAP_BUS, 0, &bytes);
+   status = WP_MemoryAvailable(WP_WINPATH(DEFAULT_WPID), WP_HEAP_BUS, 0, &bytes);
    printf("Memory status: Heap bytes left         = 0x%08x\n",bytes);
 #endif
    printf("/**********************************************************/\n");
@@ -7920,6 +8013,7 @@ void WTI_ShowMemStat(void)
 void WTI_Reboot(void)
 {
 #ifdef QUICK
+   WT_Reboot();
 #else
    exit(1);
 #endif
@@ -8078,7 +8172,7 @@ void    WPE_CreateIWQnode()
 
    qn_iw_config.adjunct_pool = adjunct_buffer_pool;
 
-   iw_qnode = WP_QNodeCreate(WP_WINPATH(0), WP_QNODE_IWQ | WP_QNODE_OPT_FMU, &qn_iw_config);
+   iw_qnode = WP_QNodeCreate(WP_WINPATH(DEFAULT_WPID), WP_QNODE_IWQ | WP_QNODE_OPT_FMU, &qn_iw_config);
    printf("WP_QNodeCreate iw_qnode 0x%08x\n",iw_qnode);
    WTI_TerminateOnError(iw_qnode, "WP_QNodeCreate()",__LINE__);
 
@@ -8638,6 +8732,9 @@ void terminate(WP_CHAR *s,WP_U32 line)
       printf(" %s  line %u\n", s,line);
       WP_DriverRelease();
       printf("Test Failed\n");
+#if _WT_MODULE_TEST_ENABLE_
+   WT_Reboot();
+#endif
       exit(0);
  }
 void App_TranslateAsciiToHex(WP_CHAR *Hex,WP_CHAR *Ascii,WP_U32 length)
