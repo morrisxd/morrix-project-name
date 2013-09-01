@@ -1,0 +1,27 @@
+#!/bin/bash
+rm ./bin/*
+
+echo touch pwe3_satop_cesop_demo.c 
+touch pwe3_satop_cesop_demo.c 
+
+echo =========================================
+echo make WDDS_DIR=../ \
+WDDI_TARGET_NAME=mips_winmon \
+WDDI_BOARD_NAME=wds \
+WDDI_HOST=linux \
+WDDI_HW_DEVICE=winpath3 \
+UFE_DIR=../ufe \
+UFE=ufe412 \
+FRAMER=flexmux
+echo =========================================
+
+make WDDS_DIR=../ \
+WDDI_TARGET_NAME=mips_winmon \
+WDDI_BOARD_NAME=wds \
+WDDI_HOST=linux \
+WDDI_HW_DEVICE=winpath3 \
+UFE_DIR=../ufe \
+UFE=ufe412 \
+FRAMER=flexmux \
+#&& rsync ./bin/pwe3_satop_cesop_demo.exe /tftpboot/
+echo rsync finished
