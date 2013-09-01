@@ -26,14 +26,14 @@
 
 #ifndef MORRIS_SNAKE_NUM
 #define MORRIS_SNAKE_NUM
-WP_U32 cr_snake_num_of_lines = 63;
+WP_U32 cr_snake_num_of_lines = 16;
 #endif
 
 
+#define MORRIS_CHANGE_LEVELING	(1)
 
 
-
-#define MORRIS_DISABLE_WHEN_STM_1	(0)
+#define MORRIS_DISABLE_ERROR_PRINT_WHEN_STM_1	(0)
 #endif
 
 

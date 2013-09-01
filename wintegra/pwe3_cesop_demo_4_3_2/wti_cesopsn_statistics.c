@@ -947,6 +947,9 @@ void CLI_F_ClockRecStatisticsNAN(char *StrPrm)
 }
 #endif   /* __WT_UFE412__ || __WT_UFE448__ */
 
+
+#if 0
+#error NO_MORE________________________________
 WP_U32 CLI_F_ClockRecStatisticsPPB(char *StrPrm)
 {
 #if defined __WT_UFE412__ || defined __WT_UFE448__
@@ -1224,7 +1227,16 @@ WP_U32 CLI_F_ClockRecStatisticsPPB(char *StrPrm)
                if (line_counter%max_lines_oc12 == 0 && line_counter != 0)
                   printf("\n\n");
 
-               printf("%-6d ",stats.ppb_service_to_nominal );
+#if WTI_CLOCK_REC_SNAKE_ENABLED 
+               if(pw_index == 0 || (pw_index >= 63 && pw_index <= (63+cr_snake_num_of_lines-2)))
+               {
+                  WTI_PRINT_WARNING(("%-6d ",stats.ppb_service_to_nominal ));
+               }
+               else
+#endif
+               {
+                  printf("%-6d ",stats.ppb_service_to_nominal );
+               }
 
                variance += ((stats.ppb_service_to_nominal - prev_avg_ppb) * (stats.ppb_service_to_nominal - prev_avg_ppb));
                avg_ppb+=stats.ppb_service_to_nominal;
@@ -1253,6 +1265,335 @@ WP_U32 CLI_F_ClockRecStatisticsPPB(char *StrPrm)
    return WT_PASS;
 #endif /* WT_UFE4 */
 }
+#else
+
+WP_U32 CLI_F_ClockRecStatisticsPPB(char *StrPrm)
+{
+#if defined __WT_UFE412__ || defined __WT_UFE448__
+#if WTI_CESOP_CLOCK_RECOVERY_ENABLE
+   WP_U32 line_index,cr_index,auto_check_mode=0,max_lines_oc12=0,pw_index;
+   WP_clock_rec_stats stats;
+   WP_status status;
+   WP_U32 t1, t2;
+   WP_S32 res,cmd,ppb_offset=0,ppb_margins=0,max_ppb=0,min_ppb=0,avg_ppb=0,prev_avg_ppb=0,variance=0,line_counter=0;
+   WP_U32 status_check = WT_PASS,see_all_mode=0;
+
+
+   /* default values */
+   ppb_offset =0;
+   ppb_margins = 1500;  /* 1 ppm */
+
+
+   res = sscanf(StrPrm, "%d %d %d", &cmd,&ppb_margins,&see_all_mode);
+   if (res != 1 && res != 2 && res != 3)
+   {
+      WTI_TerminatePrintError("Invalid number of parameters", __LINE__);
+      return WT_FAIL;
+   }
+
+   if (res == 2 && ppb_margins < 0)
+   {
+      WTI_TerminatePrintError("margin must be positive", __LINE__);
+      return WT_FAIL;
+   }
+
+
+   if(the_system->ufe.line_params[0].transfer_type == WUFE_SDH_TYPE_T1 ||
+      the_system->ufe.line_params[0].transfer_type == WUFE_SONET_TYPE_T1)
+   {  /* T1 */
+      max_lines_oc12 = 336;
+   }
+   else
+   { /* E1 */
+      max_lines_oc12 = 252;
+   }
+
+
+
+
+   Vt100GotoXy(1,1);
+   Vt100ClearScreen();
+
+
+/* calculate the average ppb */
+
+#if defined __WT_UFE412__ || defined __WT_UFE448__
+   for(pw_index = 0,line_counter=0; pw_index < total_number_of_pw; pw_index++)
+   {
+
+      line_index = the_system->pw[pw_index].line_index;
+
+      if(!the_system->clock_rec[line_index].operation_mode)
+      {
+         continue;
+      }
+
+      cr_index = the_system->clock_rec[line_index].clock_rec_if_id;
+
+      memset(&stats, 0, sizeof(WP_clock_rec_stats));
+      status = WP_ClockRecStatistics(the_system->wpid,cr_index, &stats,
+#if WTI_CESOP_TDI
+                                     WP_IW_CESOP_PORT_TDM
+#else
+                                     WP_IW_CESOP_PORT_UFE
+#endif
+         );
+      if (status != WP_OK)
+      {
+         printf("WP_ClockRecStatistics failed: %s\n", WP_error_name[WP_ERROR(status)]);
+         break;
+      }
+
+      avg_ppb+=stats.ppb_service_to_nominal;
+
+      line_counter++;
+   }
+
+   avg_ppb = avg_ppb/line_counter;
+   ppb_offset = avg_ppb;
+
+#endif
+
+   if (res != 1)
+   {
+      auto_check_mode =1;
+      max_ppb = ppb_offset + ppb_margins;
+      min_ppb = ppb_offset - ppb_margins;
+   }
+
+   if(auto_check_mode)
+   {
+
+      printf("--------------------------------------------------\n");
+      printf("---- CLOCK RECOVERY STATISTICS PPB AUTO CHECK ----\n");
+      printf("--------------------------------------------------\n");
+      printf("Check  %d < average ppb = %d < %d\n",min_ppb,ppb_offset,max_ppb);
+
+      memset(&stats, 0, sizeof(WP_clock_rec_stats));
+      status = WP_ClockRecStatistics(the_system->wpid,0, &stats,
+#if WTI_CESOP_TDI
+                                     WP_IW_CESOP_PORT_TDM
+#else
+                                     WP_IW_CESOP_PORT_UFE
+#endif
+         );
+
+//      /* First check ratios (offset = 0ppm)  */
+//      if(stats.ppb_socket_to_diff > ppb_margins ||  stats.ppb_socket_to_diff < -ppb_margins)
+//      {
+//         WTI_PRINT_WARNING(("socket to diff clock ppb:          %8d\n", stats.ppb_socket_to_diff ));
+//         status_check = WT_FAIL;
+//      }
+//      if(stats.ppb_socket_to_xo > ppb_margins ||  stats.ppb_socket_to_xo < -ppb_margins)
+//      {
+//         WTI_PRINT_WARNING(("socket to XO clock ppb:          %8d\n", stats.ppb_socket_to_xo ));
+//         status_check = WT_FAIL;
+//      }
+
+      /* Now check all lines  */
+
+      for(pw_index = 0,line_counter=0; pw_index < total_number_of_pw; pw_index++)
+      {
+         line_index = the_system->pw[pw_index].line_index;
+         
+         
+         if(!the_system->clock_rec[line_index].operation_mode)
+         {
+            continue;
+         }
+
+         cr_index = the_system->clock_rec[line_index].clock_rec_if_id;
+
+         memset(&stats, 0, sizeof(WP_clock_rec_stats));
+         status = WP_ClockRecStatistics(the_system->wpid,cr_index, &stats,
+#if WTI_CESOP_TDI
+                                        WP_IW_CESOP_PORT_TDM
+#else
+                                        WP_IW_CESOP_PORT_UFE
+#endif
+            );
+         if (status != WP_OK)
+         {
+            printf("WP_ClockRecStatistics failed: %s\n", WP_error_name[WP_ERROR(status)]);
+            break;
+         }
+
+         if(stats.ppb_service_to_nominal > max_ppb ||  stats.ppb_service_to_nominal < min_ppb)
+         {
+            WTI_PRINT_ERROR(("%3d(%3d):%8d ",line_counter,cr_index,stats.ppb_service_to_nominal ));
+            status_check = WT_FAIL;
+         }
+         else
+         {
+            if(see_all_mode)
+               WTI_PRINT_NOTE(("%3d(%3d):%8d ",line_counter,cr_index,stats.ppb_service_to_nominal ));
+
+         }
+
+         if (line_counter%7 == 6)
+            printf("\n");
+
+
+
+         line_counter++;
+      }
+      printf("\n");
+
+      return status_check;
+   }
+
+
+
+   while (1)
+   {
+      t1 = WP_TimeRead();
+
+      if (WTI_SampleSerial())
+      {
+         break;
+      }
+      while (1)
+      {
+         t2 = WP_TimeRead();
+         if( (t2-t1) >= FACTOR)
+         {
+
+            Vt100GotoXy(1,1);
+
+            /* find the first active line to print the general data */
+            for(pw_index = 0,line_counter=0; pw_index < total_number_of_pw; pw_index++)
+            {
+               line_index = the_system->pw[pw_index].line_index;
+
+
+               if(!the_system->clock_rec[line_index].operation_mode)
+               {
+                  continue;
+               }
+               else
+               {
+
+               memset(&stats, 0, sizeof(WP_clock_rec_stats));
+               status = WP_ClockRecStatistics(the_system->wpid,0, &stats,
+#if WTI_CESOP_TDI
+                                              WP_IW_CESOP_PORT_TDM
+#else
+                                              WP_IW_CESOP_PORT_UFE
+#endif
+                  );
+#if WTI_DUAL_EMPHY
+               WP_U32 first_line_second_ufe = 336;
+               WP_clock_rec_stats stats_second_ufe;
+
+               memset(&stats_second_ufe, 0, sizeof(WP_clock_rec_stats));
+               status = WP_ClockRecStatistics(the_system->wpid,first_line_second_ufe, &stats_second_ufe, WP_IW_CESOP_PORT_UFE);
+#endif
+
+               printf("--------------------------------------------------\n");
+               printf("---- CLOCK RECOVERY STATISTICS PPB ----\n");
+               printf("--------------------------------------------------\n");
+               printf("\n");
+
+#if defined __WT_UFE412__ || defined __WT_UFE448__
+#if WTI_DUAL_EMPHY
+               printf("First UFE ratios:\n");
+#endif
+               printf("socket to diff clock ppb:          %8d\n", stats.ppb_socket_to_diff );
+               printf("socket to XO clock ppb:            %8d\n", stats.ppb_socket_to_xo );
+#if WTI_DUAL_EMPHY
+               printf("Second UFE ratios:\n");
+               printf("socket to diff clock ppb:          %8d\n", stats_second_ufe.ppb_socket_to_diff );
+               printf("socket to XO clock ppb:            %8d\n", stats_second_ufe.ppb_socket_to_xo );
+#endif
+               printf("average ppb:                       %8d\n", avg_ppb );
+               printf("variance:                          %8d\n", variance );
+               printf("--------------------------------------------------\n");
+               printf("count/line/cr:service to nominal clock ppb:      \n");
+
+               break;
+               }
+            }
+
+
+            /* go over all the active lines*/
+              for(pw_index = 0,line_counter=0,avg_ppb=0,variance=0; pw_index < total_number_of_pw; pw_index++)
+            {
+               line_index = the_system->pw[pw_index].line_index;
+
+               if(!the_system->clock_rec[line_index].operation_mode)
+               {
+                  continue;
+               }
+
+
+               cr_index = the_system->clock_rec[line_index].clock_rec_if_id;
+
+               memset(&stats, 0, sizeof(WP_clock_rec_stats));
+               status = WP_ClockRecStatistics(the_system->wpid,cr_index,&stats,
+#if WTI_CESOP_TDI
+                                              WP_IW_CESOP_PORT_TDM
+#else
+                                              WP_IW_CESOP_PORT_UFE
+#endif
+                  );
+               if (status != WP_OK)
+               {
+                  printf("WP_ClockRecStatistics failed: %s\n", WP_error_name[WP_ERROR(status)]);
+                  break;
+               }
+
+
+               if (line_counter%24 == 0)
+                  printf("\n");
+
+
+               if (line_counter%max_lines_oc12 == 0 && line_counter != 0)
+                  printf("\n\n");
+
+#if WTI_CLOCK_REC_SNAKE_ENABLED 
+               if(pw_index == 0 || (pw_index >= 63 && pw_index <= (63+cr_snake_num_of_lines-2)))
+               {
+                  WTI_PRINT_WARNING(("%-6d ",stats.ppb_service_to_nominal ));
+               }
+               else
+#endif
+               {
+                  printf("%-6d ",stats.ppb_service_to_nominal );
+               }
+               
+
+              
+
+               variance += ((stats.ppb_service_to_nominal - prev_avg_ppb) * (stats.ppb_service_to_nominal - prev_avg_ppb));
+               avg_ppb+=stats.ppb_service_to_nominal;
+
+            line_counter++;
+            }
+
+            avg_ppb = avg_ppb/line_counter;
+            prev_avg_ppb = avg_ppb;
+            variance = variance / line_counter;
+
+
+#endif   /* __WT_UFE412__ || __WT_UFE448__ */
+
+
+            break;
+         }
+      }
+   }
+   printf("\n");
+   return WT_PASS;
+#else
+   return WT_FAIL;
+#endif
+#else  /* WT_UFE4 */
+   return WT_PASS;
+#endif /* WT_UFE4 */
+}
+
+
+#endif
 
 void CLI_F_ClockRecStatisticsReset(char *StrPrm)
 {

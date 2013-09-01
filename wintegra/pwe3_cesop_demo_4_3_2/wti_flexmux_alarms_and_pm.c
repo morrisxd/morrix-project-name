@@ -1786,7 +1786,7 @@ void service_pm_pdh_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
                   }
                   else
                   {                  
-#if MORRIS_DISABLE_WHEN_STM_1
+#if MORRIS_DISABLE_ERROR_PRINT_WHEN_STM_1
                      printf("PDH_E1T1_ReadData for iSocketClientPDH %d with PM point %d failed with %s\n", iSocketClientPDH, pm_point, OMIINO_FRAMER_ErrorCodeToTxt(status));
 #endif
                   }               
@@ -2051,6 +2051,9 @@ void WTI_enable_alarms(int type)
           if (j == WPX_UFE_FRAMER_SDH_RS_TIM 
                 || j == WPX_UFE_FRAMER_SDH_HP_TIM
                 || j == WPX_UFE_FRAMER_SDH_LP_TIM
+                || j == WPX_UFE_FRAMER_SONET_TIM_S
+                || j == WPX_UFE_FRAMER_SONET_TIM_P
+                || j == WPX_UFE_FRAMER_SONET_TIM_V
              )
 #else
 #error ALARM_SHOULD_BE_DISABLED

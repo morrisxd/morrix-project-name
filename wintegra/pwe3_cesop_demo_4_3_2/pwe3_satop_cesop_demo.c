@@ -3109,6 +3109,10 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       global_jitter_buffer_size      	= atoi(argv[1]);
       g_rxbuffersize 			= atoi(argv[2]);
       isEnableSnake			= atoi(argv[3]);
+      printf ("jitter_buffer_size(%d),rxbuffersize(%d),isEnableSnake(%d)\n", 
+         global_jitter_buffer_size, 
+         g_rxbuffersize,
+         isEnableSnake);
    } else {
       return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable)]\n");
    }
