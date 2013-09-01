@@ -3105,6 +3105,7 @@ WP_U32 g_num_of_e1 = 0;
 /*
  * for example:
  * setenv BOOT_CMD "eld 216.241.237.121 pwe3_satop_cesop_demo.exe;go 0x80400000 16 256 1 16"
+ * go [JB rxBuffer isSnakeOn numOfE1]
  */
 WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 {
