@@ -6493,9 +6493,16 @@ void WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4(WP_U32 line_index, WP_U32 
       the_system->clock_rec[line_index].ts_dev_jump_threshold = 500;
       the_system->clock_rec[line_index].ts_dev_average_factor = 4;
 
+#if MORRIS_CHANGE_LEVELING
+      the_system->clock_rec[line_index].jb_leveling_correction_size = 60;
+      the_system->clock_rec[line_index].jb_leveling_threshold_high = (global_jitter_buffer_size/2) + 4;
+      the_system->clock_rec[line_index].jb_leveling_threshold_low = (global_jitter_buffer_size/2) - 4;
+#else
+#error _____LEVELING_MUST_BE_CHANGED______
       the_system->clock_rec[line_index].jb_leveling_correction_size = 30;
       the_system->clock_rec[line_index].jb_leveling_threshold_high = (global_jitter_buffer_size/2) + 1;
       the_system->clock_rec[line_index].jb_leveling_threshold_low = (global_jitter_buffer_size/2) - 1;
+#endif
    }
 }
 
@@ -7402,6 +7409,10 @@ void WTI_TransChannelTxConfig(WP_ch_trans_pwe3 *cfg_ptr)
    cfg_ptr->rx_buffersize = 0;
 }
 
+
+
+
+
 #if WTI_PCE_CLASSIFIER
 extern WP_U32 isEnableSnake;
 /*****************************************************************************
@@ -7424,10 +7435,10 @@ void WTI_PceRuleConfig(WP_pce_rule_classification *cfg_ptr, WP_U32 pw_index)
 #endif/*UDP_DES_PORT_PCE_RULE*/
 
 
-
-
    WP_U32 pw_index_in, num_of_lines;
    pw_index_in = num_of_lines = 0;
+
+
 
 
 

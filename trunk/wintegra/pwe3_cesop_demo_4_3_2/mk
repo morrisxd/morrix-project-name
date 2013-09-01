@@ -2,7 +2,7 @@
 rm ./bin/*
 
 echo touch pwe3_satop_cesop_demo.c 
-touch pwe3_satop_cesop_demo.c 
+touch *.c 
 
 echo =========================================
 echo make WDDS_DIR=../ \
