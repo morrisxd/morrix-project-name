@@ -1303,7 +1303,11 @@ void service_pm_ho_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
                                                                                &count);
                         if (WPX_UFE_FRAMER_OK == status)
                         {
-                           //if (enable_pm_print_ho_path[pm_point])
+#if MORRIS_PM_COUNT_CLEAN
+                           if (count)
+#else
+                           if (enable_pm_print_ho_path[pm_point])
+#endif
                            printf("pm %u, ho %u:%u:%u, count %u\n", pm_point, stm4, stm1, stm0, count);
 //                           ho_index = 84 * stm1 + stm0;
                            ho_index = 84 * stm1 + 28 * stm0;
@@ -2049,6 +2053,9 @@ void WTI_enable_alarms(int type)
           if (j == WPX_UFE_FRAMER_SDH_RS_TIM 
                 || j == WPX_UFE_FRAMER_SDH_HP_TIM
                 || j == WPX_UFE_FRAMER_SDH_LP_TIM
+                || j == WPX_UFE_FRAMER_SONET_TIM_S
+                || j == WPX_UFE_FRAMER_SONET_TIM_P
+                || j == WPX_UFE_FRAMER_SONET_TIM_V
              )
 #else
 #error ALARM_SHOULD_BE_DISABLED
