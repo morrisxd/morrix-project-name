@@ -489,13 +489,22 @@ void service_path_alarm(WP_U8 device_id,
    WP_U32 type = info->TransferType;
 
    if (type >= WPX_UFE_FRAMER_WUFE_SDH_TYPE_T1 && type <= WPX_UFE_FRAMER_WUFE_SDH_TYPE_VCAT)
+#if MORRIS_ENABLE_PATH_ALARM
       printf("PATH ALARM: <%d:%d:%d:%d:%d>  %s %s\n",
              info->u.SDH.stm4, info->u.SDH.stm1, info->u.SDH.stm0, info->u.SDH.tug2, info->u.SDH.tu,
              line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+#else
+#endif
+
+
    else if (type >= WPX_UFE_FRAMER_WUFE_SONET_TYPE_T1 && type <= WPX_UFE_FRAMER_WUFE_SONET_TYPE_VCAT)
+#if MORRIS_ENABLE_PATH_ALARM
       printf("PATH ALARM: <%d:%d:%d:%d:%d>  %s %s\n",
              info->u.SONET.sts12, info->u.SONET.sts3, info->u.SONET.sts1, info->u.SONET.vt_group, info->u.SONET.vt,
              line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+#else
+#endif
+
    else
       printf("????? type = %d\n", type);
    printf("             alarm_category = %s %s\n",
@@ -526,9 +535,13 @@ void service_path_alarm(WP_U8 device_id,
 #ifdef VERBOSE
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *info = p_SDH_Sonet_line_endpoint_type;
 
+#if MORRIS_ENABLE_PATH_ALARM
    printf("PATH ALARM:  device %d <%d:%d:%d:%d>: alarm_category = %s %s\n",
           device_id, info->u.SDH.stm1, info->u.SDH.stm0, info->u.SDH.tug2, info->u.SDH.tu,
           line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+#else
+#endif
+
 #endif /* VERBOSE */
 #endif /* WTI_FRAMER_OTE_TESTS */
 #endif /* WTI_FLEXMUX_ENABLE_ALARMS */
@@ -544,6 +557,7 @@ void service_port_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, 
    sonet_sdh_level_alarm_status[line_port_id][alarm_category] = is_asserted;
 #else
 #ifdef VERBOSE
+// #error sldkfjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
    printf("PORT ALARM:  device %d, line_port_id = %d, alarm_category = %s %s\n",
           device, line_port_id, line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
 #endif /* VERBOSE */
@@ -567,7 +581,8 @@ void service_los_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, W
    record_action(22, WP_TimeRead());
 #endif
 
-#if !WTI_FRAMER_OTE_TESTS
+// #if !WTI_FRAMER_OTE_TESTS
+#if MORRIS_ENABLE_LOS_AIS
 #ifdef VERBOSE
 
    printf("PORT LOS ALARM:  device id %d, line_port_id = %d, %s %s\n", device, line_port_id,
@@ -703,8 +718,10 @@ void service_pdh_alarm(WP_U8 device, WP_U32 socket_client_pdh_id, WP_U8 alarm_ca
    pdh_level_alarm_status[socket_client_pdh_id][alarm_category] = is_asserted;
 #else
 #ifdef VERBOSE
+#if MORRIS_ENABLE_PDH_ALRAM_PRINT
    printf("PDH ALARM:  iSocketClientPDH = %d, alarm_category = %s is %s\n",
           socket_client_pdh_id, socket_client_side_alarm_names[alarm_category], is_asserted ? "asserted" : "unasserted");
+#endif
 #endif /* VERBOSE */
 #endif /* WTI_FRAMER_OTE_TESTS */
 #endif /* WTI_FLEXMUX_ENABLE_ALARMS */
@@ -740,17 +757,28 @@ void cb_path_alarm(WP_U8 device_id, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYP
    if (first_time)
    {
       first_time = 0;
+#if MORRIS_ENABLE_PATH_ALARM
       printf("PATH ALARM:  LTT = %s\n", line_transfer_type_names[type]);
+#else
+#endif
    }
 
    if (type >= WPX_UFE_FRAMER_WUFE_SDH_TYPE_T1 && type <= WPX_UFE_FRAMER_WUFE_SDH_TYPE_VCAT)
+#if MORRIS_ENABLE_PATH_ALARM
       printf("PATH ALARM: <%d:%d:%d:%d:%d>  %s %s\n",
              info->u.SDH.stm4, info->u.SDH.stm1, info->u.SDH.stm0, info->u.SDH.tug2, info->u.SDH.tu,
              line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+#else
+#endif
+
    else if (type >= WPX_UFE_FRAMER_WUFE_SONET_TYPE_T1 && type <= WPX_UFE_FRAMER_WUFE_SONET_TYPE_VCAT)
+#if MORRIS_ENABLE_PATH_ALARM
       printf("PATH ALARM: <%d:%d:%d:%d:%d>  %s %s\n",
              info->u.SONET.sts12, info->u.SONET.sts3, info->u.SONET.sts1, info->u.SONET.vt_group, info->u.SONET.vt,
              line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+#else
+#endif
+
    else
       printf("UNKNOWN PATH ALARM TYPE %d\n", type);
 
@@ -891,9 +919,13 @@ void cb_path_alarm_report_only(WP_U8 device_id,
 #ifdef VERBOSE
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *info = p_SDH_Sonet_line_endpoint_type;
 
+#if MORRIS_ENABLE_PATH_ALARM
    printf("PATH ALARM REPORTING::  device %d <%d:%d:%d:%d>: alarm_category = %s %s\n",
           device_id, info->u.SDH.stm1, info->u.SDH.stm0, info->u.SDH.tug2, info->u.SDH.tu,
           line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+#else
+#endif
+
 #endif
 #endif
 }
@@ -902,8 +934,10 @@ void cb_pdh_alarm_report_only(WP_U8 device_id, WP_U32 iSocketClientPDH, U8 alarm
 {
 #if WTI_FLEXMUX_ENABLE_ALARMS
 #ifdef VERBOSE
+#if MORRIS_ENABLE_PDH_ALRAM_PRINT
    printf("PDH ALARM REPORTING:  iSocketClientPDH = %d, alarm_category = %s is %s\n",
           iSocketClientPDH, socket_client_side_alarm_names[alarm_category], is_asserted ? "asserted" : "unasserted");
+#endif
 #endif
 #endif
 }
@@ -1026,6 +1060,8 @@ void service_pm_port_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
                {       
 #if MORRIS_ENABLE_PM_PRINT_COUNTER
                   if (enable_pm_print_port[pm_point])
+#else
+                  if (count)
 #endif
                      printf("line_port %u, pm_point %u, count %u\n", line_port, pm_point, count);
                   pm_ports_counter[line_port][pm_point] += count;
@@ -1068,10 +1104,11 @@ void service_pm_ho_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
    
    memset(&LineEndpointType, 0, sizeof(WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE));
    
-   
-// #ifdef VERBOSE
-//    printf("HO PATH:  device = %d, table_index = %d timestamp = 0x%x\n", device_id, table_index, timestamp);
-// #endif
+#if MORRIS_PRINT_HO_COUNTER   
+#ifdef VERBOSE
+printf("HO PATH:  device = %d, table_index = %d timestamp = 0x%x\n", device_id, table_index, timestamp);
+#endif
+#endif
 
 #if WTI_FRAMER_OTE_TESTS
 #if 0//DEBUG
@@ -1346,7 +1383,11 @@ void service_pm_ho_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
                                                                             &count);
                      if (WPX_UFE_FRAMER_OK == status)
                      {
+#if MORRIS_PM_COUNT_CLEAN
+                        if (count)
+#else
                         if (enable_pm_print_ho_path[pm_point])
+#endif
                            printf("ho %u:%u:%u, count %u\n", stm4, stm1, stm0, count);
                         ho_index = 3 * stm1 + stm0;
                         pm_ho_path_counter[ho_index][pm_point] += count;
