@@ -3101,20 +3101,24 @@ void stall(WP_CHAR *f, WP_U32 line, WP_boolean suppress)
 extern WP_U32 global_jitter_buffer_size;
 WP_U32 g_rxbuffersize;
 WP_U32 isEnableSnake;
+WP_U32 g_num_of_e1 = 0;
 
 WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 {
-   if (argc > 3)
+   if (argc > 4)
    {
       global_jitter_buffer_size      	= atoi(argv[1]);
       g_rxbuffersize 			= atoi(argv[2]);
       isEnableSnake			= atoi(argv[3]);
-      printf ("jitter_buffer_size(%d),rxbuffersize(%d),isEnableSnake(%d)\n", 
+      g_num_of_e1 			= atoi(argv[4]);
+      cr_snake_num_of_lines 		= g_num_of_e1;
+      printf ("jitterBufSize(%d),rxBufSize(%d),isEnableSnake(%d)numOfE1(%d)\n", 
          global_jitter_buffer_size, 
          g_rxbuffersize,
-         isEnableSnake);
+         isEnableSnake,
+	 cr_snake_num_of_lines);
    } else {
-      return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable)]\n");
+      return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable)] numOfE1\n");
    }
 
 
