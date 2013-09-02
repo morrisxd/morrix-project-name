@@ -2168,6 +2168,9 @@ const Y_MenuEntry V_PreDefinedSystemConfigurations []=
 
 #else /*not __WT_UFE3__*/
 #ifdef __WT_UFE412__
+/*--------------------------------------------------------------*\
+	we are using this
+\*--------------------------------------------------------------*/
 #if WTI_CESOP_MPLS_IW
 #if WTI_CESOP_CLOCK_RECOVERY_ENABLE
    { 63, TRUE, "System configurations: UFE4 Scenarios",{(Y_MenuEntry*) V_MainMenu}},
