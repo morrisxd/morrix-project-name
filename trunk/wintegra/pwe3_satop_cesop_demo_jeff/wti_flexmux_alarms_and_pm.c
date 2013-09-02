@@ -1449,7 +1449,7 @@ void service_pm_lo_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
 
 #if MORRIS_PRINT_LO_COUNTER
 #ifdef VERBOSE
-    printf("LO PATH:  device = %d, table_index = %d timestamp = 0x%x\n", device_id, table_index, timestamp);
+//    printf("LO PATH:  device = %d, table_index = %d timestamp = 0x%x\n", device_id, table_index, timestamp);
 #endif
 #endif
 
