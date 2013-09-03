@@ -1624,7 +1624,12 @@ const Y_MenuEntry V_UfeSetup []=
 #if WTI_CESOP_CLOCK_RECOVERY_ENABLE
 #ifdef WT_UFE_FRAMER
 #if WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING
-                  28
+                  // 28
+#if MORRIS_ENABLE_APS
+		  30
+#else
+#error UFE_ITEM_WITH_EXTRA_2
+#endif
 #else
                   27
 #endif
@@ -1696,8 +1701,13 @@ const Y_MenuEntry V_UfeSetup []=
 #if WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING
    {K_Leaf, TRUE, " -> CLI_F_Enable_PM_Print[0-Port,1-HOP,2-LOP,3-PDH][pm point][0-disable,1-enable]",   {(Y_MnuLeafP)CLI_F_Enable_PM_Print}},
 #endif
+
+#if MORRIS_ENABLE_APS
    {K_Leaf, TRUE, " -> CLI_F_ResetTimingData", {(Y_MnuLeafP) CLI_F_ResetTimingData}},
    {K_Leaf, TRUE, " -> CLI_F_APS_Time_Measure", {(Y_MnuLeafP) CLI_F_APS_Time_Measure}},
+#else
+#error MORRIS_ENABLE_APS_should_be_true
+#endif
 #endif    
 #endif /* ifdef  __WT_UFE3__ */
 
@@ -3144,7 +3154,7 @@ extern WP_U32 g_enableAPS;
  */
 WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 {
-   if (argc > 6)
+   if (argc > 5)
    {
       global_jitter_buffer_size      	= atoi(argv[1]);
       g_rxbuffersize 			= atoi(argv[2]);
@@ -3156,6 +3166,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)]\n");
    }
 
+   printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)]\n");
 
    /* init the Demo structures */
    WTI_InitDemoStructures();

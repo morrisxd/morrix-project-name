@@ -13,7 +13,7 @@
 #define MORRIS_PRINT_HO_COUNTER	(0)
 
 
-#define MORRIS_ENABLE_STM_1	(1)
+#define MORRIS_ENABLE_STM_1	(0)
 #define MORRIS_SKIP_ALARMS	(1)
 
 
