@@ -13,11 +13,11 @@
 #define MORRIS_PRINT_HO_COUNTER	(0)
 
 
-#define MORRIS_ENABLE_STM_1	(0)
+#define MORRIS_ENABLE_STM_1	(1)
 #define MORRIS_SKIP_ALARMS	(1)
 
 
-#define MORRIS_USE_VC4	(1)
+#define MORRIS_USE_VC4	(0)
 #define MORRIS_DISABLE_MON_STATE	(0)
 
 
@@ -43,7 +43,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 #define MORRIS_CHANGE_LEVELING_FOR_SNAKE	(1)
 
 
-#define MORRIS_DISABLE_ERROR_PRINT_WHEN_STM_1	(0)
+#define MORRIS_DISABLE_ERROR_PRINT_WHEN_STM_1	(1)
 
 #define MORRIS_DIRECT_FACTOR	(27)
 #define MORRIS_INTEGRATION_FACTOR	(30)
@@ -51,7 +51,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 
 
 #define MORRIS_ENABLE_APS	(1)
-
+#define MORRIS_SET_ALL_TO_HOLDOVER	(1)
 
 #endif
 

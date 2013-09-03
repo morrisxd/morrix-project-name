@@ -60,6 +60,25 @@ extern void WTI_TerminateOnError(WP_handle handle, WP_CHAR *s, WP_U32 line_num);
 #define DELAY_DURATION_IN_SECONDS (3*60)
 #endif
 
+#define MORRIS_TEMP_BUF_LEN	(256)
+void set_all_holdover (int pw)
+{
+   WP_U32 pw_index = 0, total_number_of_pw = 0;
+   char temp_buf[MORRIS_TEMP_BUF_LEN];
+
+   memset (temp_buf, 0, MORRIS_TEMP_BUF_LEN);
+
+   total_number_of_pw = pw;
+
+   for(pw_index = 0 ; pw_index < total_number_of_pw; pw_index++)
+   {
+      printf("set to holdover: HO %d\n",pw_index);
+
+      sprintf(temp_buf, "0 %d",pw_index );
+      CLI_F_ClockRecoveryHoldoverForce(temp_buf);
+   }
+}
+
 
 WUFE_status WT_UfeLinePWCreate(WUFE_test_system_setup *test_setup, WP_U32 create_line);
 void WT_UfeMPLS_L2_FA_Create(void);
@@ -6186,6 +6205,10 @@ void CLI_F_CR_101_SonetSdh_E1UnframedNoCas(char *StrPrm)
 
    WT_UfeMPLS_L2_FA_Create();
    WT_UfeLinePWCreate(&test_setup, 1);
+
+#if MORRIS_SET_ALL_TO_HOLDOVER
+   set_all_holdover (num_of_lines);
+#endif
 
 #ifdef WT_UFE_FRAMER
 
