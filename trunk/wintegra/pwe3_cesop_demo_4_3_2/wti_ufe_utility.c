@@ -134,14 +134,17 @@ void WT_UfeInitializeFirmware(WP_U32 ufe_id)
 #ifdef WT_UFE_FRAMER
 
 WP_U8 last_interrupt_mask;
+// extern WP_U32 WPI_TimeRead(WP_U32 *result);
+extern WP_status WPI_TimeRead(WP_U32 *result, WP_U32 wpid);
+WP_U32 timeResult = 0;
 
 void WT_ReinstateInterruptMask(WP_U32 wpid)
 {
 #if WTI_COLLECT_TIMING_INFORMATION
    WP_U8 pending;
    extern WP_U8 WPX_Ufe412CpldInterruptSourceGet(WP_U32 wpid);
-
-   record_action(15, WPI_TimeRead());
+   WPI_TimeRead(&timeResult, 0);
+   record_action(15, timeResult);
    pending = WPX_Ufe412CpldInterruptSourceGet(0);
    record_action(17, pending);
 #endif
@@ -173,7 +176,8 @@ void WT_Eint3Interrupt(WP_U32 wpid, WP_U32 signal_info)
    extern WP_U32 WPL_IC_IntmodeGet(WP_U32 wpid);
 
 #if WTI_COLLECT_TIMING_INFORMATION
-   record_action(13, WPI_TimeRead());
+   WPI_TimeRead(&timeResult, 0);
+   record_action(13, timeResult);
 #endif
 
    /* Recover the value of the CPLD interrupt mask at the time of the interrupt */
@@ -273,7 +277,8 @@ void WT_Eint3Interrupt(WP_U32 wpid, WP_U32 signal_info)
    }
 
 #if WTI_COLLECT_TIMING_INFORMATION
-   record_action(14, WPI_TimeRead());
+   WPI_TimeRead(&timeResult, 0);
+   record_action(14, timeResult);
 #endif
 
    if (is_framer_int_0 || is_framer_int_2)

@@ -540,6 +540,7 @@ void service_path_alarm(WP_U8 device_id,
 #else
 #ifdef VERBOSE
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *info = p_SDH_Sonet_line_endpoint_type;
+   info = p_SDH_Sonet_line_endpoint_type;
 
 #if MORRIS_ENABLE_PATH_ALARM
       if (is_asserted)
@@ -604,9 +605,12 @@ void service_los_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, W
    sonet_sdh_level_alarm_status[line_port_id][alarm_category] = is_asserted;
 #endif
 #if NO_APS_ON_LOS
+if (!g_enableAPS)
+{
 #if !WTI_FRAMER_OTE_TESTS
    printf("NO SWITCHING PERFORMED\n");
 #endif
+}
    return;
 #endif
 #if WTI_FRAMER_OTE_TESTS
@@ -933,6 +937,7 @@ void cb_path_alarm_report_only(WP_U8 device_id,
 #if WTI_FLEXMUX_ENABLE_ALARMS
 #ifdef VERBOSE
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *info = p_SDH_Sonet_line_endpoint_type;
+   info = p_SDH_Sonet_line_endpoint_type;
 
 #if MORRIS_ENABLE_PATH_ALARM
       if (is_asserted)
@@ -2088,6 +2093,8 @@ void process_framer_task_list(void)
    }
 }
 
+WP_U32 g_enableAPS = 1;
+
 void WTI_enable_alarms(int type)
 {
 #if WTI_FLEXMUX_ENABLE_ALARMS
@@ -2108,7 +2115,7 @@ void WTI_enable_alarms(int type)
       start_alarm = WPX_UFE_FRAMER_SDH_LOS;
       if (g_enableAPS)
       {
-         last_alarm = WPX_UFE_FRAMER_SDH_SDH_LOP;
+         last_alarm = WPX_UFE_FRAMER_SDH_LOS;
       } else {
          last_alarm = WPX_UFE_FRAMER_SDH_TU_LOP;
       }

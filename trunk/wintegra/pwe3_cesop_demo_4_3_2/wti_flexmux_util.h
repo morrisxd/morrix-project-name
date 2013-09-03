@@ -24,10 +24,10 @@
 #define USE_POLLING 0
 
 #if MORRIS_ENABLE_APS
+#define NO_APS_ON_LOS 0
+#else
 /* Used for testing alarms with ANT-20 */
 #define NO_APS_ON_LOS 1
-#else
-#define NO_APS_ON_LOS 0
 #endif
 
 

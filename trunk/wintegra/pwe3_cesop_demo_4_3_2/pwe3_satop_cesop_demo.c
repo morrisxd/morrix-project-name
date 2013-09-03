@@ -3127,12 +3127,15 @@ void show_start_params(void)
 	 cr_snake_num_of_lines);
 }
 
+void show_wddi_const(void);
+
 void show_config(void)
 {
    show_start_params ();
    show_wddi_const ();
 }
 
+extern WP_U32 g_enableAPS;
 
 /*
  * for example:
@@ -3141,15 +3144,16 @@ void show_config(void)
  */
 WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 {
-   if (argc > 4)
+   if (argc > 6)
    {
       global_jitter_buffer_size      	= atoi(argv[1]);
       g_rxbuffersize 			= atoi(argv[2]);
       isEnableSnake			= atoi(argv[3]);
       g_num_of_e1 			= atoi(argv[4]);
       cr_snake_num_of_lines 		= g_num_of_e1;
+      g_enableAPS 			= atoi(argv[5]);
    } else {
-      return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable)] numOfE1\n");
+      return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)]\n");
    }
 
 
@@ -17456,7 +17460,7 @@ void CLI_DebugMemDisplay (char *StrPrm)
 #if WTI_PCE_CLASSIFIER
 #include "wt_partition_ecc_util.c"
 /////////////////////////////////////////
-void show_wddi_const(void)
+void show_wddi_const()
 {
    printf (
       "=====>WPI_CLOCK_REC_PPM_DELTA_ALLOWED(%d)\n", 
@@ -17474,8 +17478,8 @@ void show_wddi_const(void)
 		MORRIS_CR_ON?"ON":"OFF",
                 MORRIS_ENABLE_STM_1?"STM-1":"STM-4");
    printf (
-      "=====>MORRIS_USE_VC4(%s)\n",
-		MORRIS_USE_VC4?"VC4":"VC3");
+      "=====>MORRIS_USE_VC4(%s), NO_APS_ON_LOS(%d)\n",
+		MORRIS_USE_VC4?"VC4":"VC3", NO_APS_ON_LOS);
    printf (
       "=====>MORRIS_ENABLE_FREERUN_MODE(%s),WTI_CLOCK_REC_SNAKE_ENABLED(%d)\n", 
 		MORRIS_ENABLE_FREERUN_MODE?"FREE-RUN":"LOCKED", 
@@ -17485,8 +17489,8 @@ void show_wddi_const(void)
                 MORRIS_CHANGE_LEVELING, 
                 MORRIS_CHANGE_LEVELING_FOR_SNAKE);
    printf (
-      "=====>WTI_CLOCK_REC_MODE(%s)\n", 
-		WTI_CLOCK_REC_MODE?"DCR":"ACR"
+      "=====>WTI_CLOCK_REC_MODE(%s), MORRIS_ENABLE_APS(%d),g_enableAPS(%d)\n", 
+		WTI_CLOCK_REC_MODE?"DCR":"ACR", MORRIS_ENABLE_APS, g_enableAPS
                 );
 }
 
