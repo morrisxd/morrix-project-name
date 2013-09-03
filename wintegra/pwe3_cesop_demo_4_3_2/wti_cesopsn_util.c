@@ -6457,9 +6457,16 @@ void WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4(WP_U32 line_index, WP_U32 
       the_system->clock_rec[line_index].remote_diff_ref_clock = 0;
       /* First filter factor */
 #if MORRIS_FACTOR
+#if MORRIS_FACTOR_FOR_SNAKE
+      the_system->clock_rec[line_index].direct_factor = MORRIS_DIRECT_FACTOR /*27*/; //  27/30   28/33  29/34
+      /* Second  filter factor */
+      the_system->clock_rec[line_index].integration_factor = MORRIS_INTEGRATION_FACTOR /*30*/;
+#else
+#error FACTOR_FOR_SNAKE_SHOULD_BE_DEFINED
       the_system->clock_rec[line_index].direct_factor = 26; //  27/30   28/33  29/34
       /* Second  filter factor */
       the_system->clock_rec[line_index].integration_factor = 28;
+#endif
 #else
       the_system->clock_rec[line_index].direct_factor = 27; //  27/30   28/33  29/34
       /* Second  filter factor */
@@ -6494,9 +6501,16 @@ void WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4(WP_U32 line_index, WP_U32 
       the_system->clock_rec[line_index].ts_dev_average_factor = 4;
 
 #if MORRIS_CHANGE_LEVELING
+#if MORRIS_CHANGE_LEVELING_FOR_SNAKE
+      the_system->clock_rec[line_index].jb_leveling_correction_size = 5;
+      the_system->clock_rec[line_index].jb_leveling_threshold_high = (global_jitter_buffer_size/2) + 2;
+      the_system->clock_rec[line_index].jb_leveling_threshold_low = (global_jitter_buffer_size/2) - 2;
+#else
+#error ___NOT_FOR_SNAKE_LEVELING___
       the_system->clock_rec[line_index].jb_leveling_correction_size = 60;
       the_system->clock_rec[line_index].jb_leveling_threshold_high = (global_jitter_buffer_size/2) + 4;
       the_system->clock_rec[line_index].jb_leveling_threshold_low = (global_jitter_buffer_size/2) - 4;
+#endif
 #else
 #error _____LEVELING_MUST_BE_CHANGED______
       the_system->clock_rec[line_index].jb_leveling_correction_size = 30;
