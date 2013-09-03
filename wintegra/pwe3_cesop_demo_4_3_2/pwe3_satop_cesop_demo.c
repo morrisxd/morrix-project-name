@@ -1206,6 +1206,7 @@ extern void CLI_F_UFETerminateRxTraffic                    (char *StrPrm);
 void CLI_F_UFEShallowLoopbackEnableDisable		   (char *StrPrm);
 void CLI_F_UFEPDHTxTimingSet		                   (char *StrPrm);
 void CLI_F_UFEDeepLoopbackEnableDisable                    (char *StrPrm);
+void CLI_F_APS_Time_Measure                                (char *StrPrm);
 #endif
 #endif
 extern void CLI_F_UfePDHClockSelect                        (char *StrPrm);
@@ -1636,7 +1637,7 @@ const Y_MenuEntry V_UfeSetup []=
 #if WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING
                   27
 #else
-                  26
+                  28
 #endif
 #else
                   11
@@ -1695,8 +1696,9 @@ const Y_MenuEntry V_UfeSetup []=
 #if WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING
    {K_Leaf, TRUE, " -> CLI_F_Enable_PM_Print[0-Port,1-HOP,2-LOP,3-PDH][pm point][0-disable,1-enable]",   {(Y_MnuLeafP)CLI_F_Enable_PM_Print}},
 #endif
+   {K_Leaf, TRUE, " -> CLI_F_ResetTimingData", {(Y_MnuLeafP) CLI_F_ResetTimingData}},
+   {K_Leaf, TRUE, " -> CLI_F_APS_Time_Measure", {(Y_MnuLeafP) CLI_F_APS_Time_Measure}},
 #endif    
-   
 #endif /* ifdef  __WT_UFE3__ */
 
 };
@@ -7922,7 +7924,11 @@ void CLI_F_Flexmux_SDHHOSSBitsGetRx(char *StrPrm)
    WTI_Flexmux_Sdh_Ho_SS_Bits_Get_Rx(flexmux_id,stm4,stm1,stm0,ho_type); 
 }
 
+void CLI_F_APS_Time_Measure(char *StrPrm)
+{
+   WTI_APS_Time_Measure();
 
+}
 void CLI_F_FlexmuxSquelch_RecClkSet(char *StrPrm)
 {
    WP_U8 res;

@@ -23,8 +23,13 @@
 
 #define USE_POLLING 0
 
+#if MORRIS_ENABLE_APS
 /* Used for testing alarms with ANT-20 */
 #define NO_APS_ON_LOS 1
+#else
+#define NO_APS_ON_LOS 0
+#endif
+
 
 #define WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE 16
 #define WTI_FLEXMUX_DBG_MODE 0
@@ -41,7 +46,12 @@
 #define WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING 1
 #endif
 
+#ifdef MORRIS_ENABLE_APS
+#define WTI_COLLECT_TIMING_INFORMATION 1  // APS and other actions
+#else
 #define WTI_COLLECT_TIMING_INFORMATION 0  // APS and other actions
+#endif
+
 #define WTI_COLLECT_TRACE_INFORMATION  0  // thread locking tracking
 
 #define WTI_FLEXMUX_ALARM_AND_PM_THREAD (WTI_FLEXMUX_ENABLE_ALARMS + WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING)

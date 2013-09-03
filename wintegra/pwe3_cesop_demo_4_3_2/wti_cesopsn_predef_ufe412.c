@@ -2124,7 +2124,7 @@ void CLI_F_SonetSdhT1UnframedNoCas(char *StrPrm)
 
 #endif
 
-#ifdef OTE_AUTOMATION
+#if 0//def OTE_AUTOMATION
 /* In case  using  the OTE automation we want to work with splitter, there we need to disable all the tx enable port except to the first port */
    CLI_F_FlexmuxPoke("0 0 0x88001040 0x00000001");
    CLI_F_FlexmuxPoke("0 0 0x88001044 0x00000001");
