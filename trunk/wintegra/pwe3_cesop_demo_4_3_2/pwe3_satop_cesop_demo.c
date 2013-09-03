@@ -1496,6 +1496,7 @@ extern void CLI_F_DisplayUfeEvents                         (char *StrPrm);
 #endif
 extern void CLI_F_Quit_No_Reset                            (char *StrPrm);
 extern void CLI_F_Quit                                     (char *StrPrm);
+extern void CLI_F_ShowConfig                                     (char *StrPrm);
 extern WTI_system *the_system;
 #if defined __WT_UFE412__ || defined __WT_UFE448__
 extern WUFE_test_system_setup test_setup;
@@ -1544,9 +1545,9 @@ extern const Y_MenuEntry V_ClockRecoveryIndMemDisplay    [];
 {
    {
 #if WTI_CESOP_CLOCK_RECOVERY_ENABLE
-      17
+      17 + MORRIS_EXTRA_MENU_ITEM	
 #else
-      16
+      16 + MORRIS_EXTRA_MENU_ITEM	
 #endif
       ,TRUE, "Main Menu",                                     {(Y_MenuEntry*) V_MainMenu}},
    {K_Menu, TRUE, " -> System setup",                         {(Y_MenuEntry*) V_Setup}},
@@ -1572,6 +1573,7 @@ extern const Y_MenuEntry V_ClockRecoveryIndMemDisplay    [];
    {K_Leaf, TRUE, " -> Memory Display",                       {(Y_MnuLeafP)   MemoryDisplay}},
    {K_Leaf, TRUE, " -> Quit without reset",                   {(Y_MnuLeafP)   CLI_F_Quit_No_Reset}},
    {K_Leaf, TRUE, " -> Quit",                                 {(Y_MnuLeafP)   CLI_F_Quit}},
+   {K_Leaf, TRUE, " -> show configuration",                   {(Y_MnuLeafP)   CLI_F_ShowConfig}},
 };
 
 Y_MenuEntry V_Setup []=
@@ -3105,6 +3107,26 @@ extern WP_U32 global_jitter_buffer_size;
 WP_U32 g_rxbuffersize;
 WP_U32 isEnableSnake;
 WP_U32 g_num_of_e1 = 0;
+
+
+void show_start_params(void)
+{
+      printf ("\n");
+      printf ("=====>");
+      printf ("JB(%d),rxBufSize(%d),isEnableSnake(%d)numOfE1(%d)\n", 
+         global_jitter_buffer_size, 
+         g_rxbuffersize,
+         isEnableSnake,
+	 cr_snake_num_of_lines);
+}
+
+void show_config(void)
+{
+   show_start_params ();
+   show_wddi_const ();
+}
+
+
 /*
  * for example:
  * setenv BOOT_CMD "eld 216.241.237.121 pwe3_satop_cesop_demo.exe;go 0x80400000 16 256 1 16"
@@ -3126,14 +3148,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 
    /* init the Demo structures */
    WTI_InitDemoStructures();
-      printf ("\n");
-      printf ("=====>");
-      printf ("JB(%d),rxBufSize(%d),isEnableSnake(%d)numOfE1(%d)\n", 
-         global_jitter_buffer_size, 
-         g_rxbuffersize,
-         isEnableSnake,
-	 cr_snake_num_of_lines);
-      show_wddi_const ();
+   show_config ();
    /* Start Menu Engine */
    CLI_T_Main();
 
@@ -15835,6 +15850,10 @@ void CLI_F_Quit_No_Reset(char *StrPrm)
    exit(1);
 }
 
+void CLI_F_ShowConfig (char *StrPrm)
+{
+   show_config ();
+}
 /***************************************************************
  * Func name  :
  * Description:
