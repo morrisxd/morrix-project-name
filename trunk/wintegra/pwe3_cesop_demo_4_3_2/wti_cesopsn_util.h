@@ -1337,6 +1337,8 @@ void WTI_TransChannelRxConfig(WP_ch_trans_pwe3 *cfg_ptr);
 void WTI_TransChannelTxConfig(WP_ch_trans_pwe3 *cfg_ptr);
 unsigned short WTI_IpChecksumCalc(unsigned char *buff, unsigned short len);
 void WTI_ShowMemStat(void);
+void WTI_FLR_Calculation(void);
+void WTI_FER_Calculation(void);
 void WTI_TermOnError(WP_handle handle, WP_CHAR *s, WP_U32 LineNum);
 void WTI_TerminatePrintError(WP_CHAR *s, WP_U32 LineNum);
 void WTI_Reboot(void);

@@ -490,18 +490,24 @@ void service_path_alarm(WP_U8 device_id,
 
    if (type >= WPX_UFE_FRAMER_WUFE_SDH_TYPE_T1 && type <= WPX_UFE_FRAMER_WUFE_SDH_TYPE_VCAT)
 #if MORRIS_ENABLE_PATH_ALARM
+      if (is_asserted)
+      {
       printf("PATH ALARM: <%d:%d:%d:%d:%d>  %s %s\n",
              info->u.SDH.stm4, info->u.SDH.stm1, info->u.SDH.stm0, info->u.SDH.tug2, info->u.SDH.tu,
              line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+      }
 #else
 #endif
 
 
    else if (type >= WPX_UFE_FRAMER_WUFE_SONET_TYPE_T1 && type <= WPX_UFE_FRAMER_WUFE_SONET_TYPE_VCAT)
 #if MORRIS_ENABLE_PATH_ALARM
+      if (is_asserted)
+      {
       printf("PATH ALARM: <%d:%d:%d:%d:%d>  %s %s\n",
              info->u.SONET.sts12, info->u.SONET.sts3, info->u.SONET.sts1, info->u.SONET.vt_group, info->u.SONET.vt,
              line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+      }
 #else
 #endif
 
@@ -536,9 +542,12 @@ void service_path_alarm(WP_U8 device_id,
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *info = p_SDH_Sonet_line_endpoint_type;
 
 #if MORRIS_ENABLE_PATH_ALARM
+      if (is_asserted)
+      {
    printf("PATH ALARM:  device %d <%d:%d:%d:%d>: alarm_category = %s %s\n",
           device_id, info->u.SDH.stm1, info->u.SDH.stm0, info->u.SDH.tug2, info->u.SDH.tu,
           line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+      }
 #else
 #endif
 
@@ -765,17 +774,23 @@ void cb_path_alarm(WP_U8 device_id, WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYP
 
    if (type >= WPX_UFE_FRAMER_WUFE_SDH_TYPE_T1 && type <= WPX_UFE_FRAMER_WUFE_SDH_TYPE_VCAT)
 #if MORRIS_ENABLE_PATH_ALARM
+      if (is_asserted)
+      {
       printf("PATH ALARM: <%d:%d:%d:%d:%d>  %s %s\n",
              info->u.SDH.stm4, info->u.SDH.stm1, info->u.SDH.stm0, info->u.SDH.tug2, info->u.SDH.tu,
              line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+      }
 #else
 #endif
 
    else if (type >= WPX_UFE_FRAMER_WUFE_SONET_TYPE_T1 && type <= WPX_UFE_FRAMER_WUFE_SONET_TYPE_VCAT)
 #if MORRIS_ENABLE_PATH_ALARM
+      if (is_asserted)
+      {
       printf("PATH ALARM: <%d:%d:%d:%d:%d>  %s %s\n",
              info->u.SONET.sts12, info->u.SONET.sts3, info->u.SONET.sts1, info->u.SONET.vt_group, info->u.SONET.vt,
              line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+      }
 #else
 #endif
 
@@ -920,9 +935,12 @@ void cb_path_alarm_report_only(WP_U8 device_id,
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE *info = p_SDH_Sonet_line_endpoint_type;
 
 #if MORRIS_ENABLE_PATH_ALARM
+      if (is_asserted)
+      {
    printf("PATH ALARM REPORTING::  device %d <%d:%d:%d:%d>: alarm_category = %s %s\n",
           device_id, info->u.SDH.stm1, info->u.SDH.stm0, info->u.SDH.tug2, info->u.SDH.tu,
           line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+      }
 #else
 #endif
 
@@ -1429,9 +1447,11 @@ void service_pm_lo_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
 
    memset(&LineEndpointType, 0, sizeof(WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE));
 
-// #ifdef VERBOSE
+#if MORRIS_PRINT_LO_COUNTER
+#ifdef VERBOSE
 //    printf("LO PATH:  device = %d, table_index = %d timestamp = 0x%x\n", device_id, table_index, timestamp);
-// #endif
+#endif
+#endif
 
 #if 0//DEBUG
    WP_S32 error;   
@@ -1644,7 +1664,11 @@ void service_pm_lo_path_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestam
 
                            if (WPX_UFE_FRAMER_OK == status)
                            {
+#if MORRIS_PRINT_LO_COUNTER
+                              if (count)
+#else
                               if (enable_pm_print_lo_path[pm_point])
+#endif
                                  printf("lo %u:%u:%u:%u:%u, count %u\n", stm4, stm1, stm0, tug2, tu, count);
                               lo_index = 84 * stm1 + 28 * stm0 + 4 * tug2 + tu;
                               pm_lo_path_counter[lo_index][pm_point] += count;
