@@ -3119,11 +3119,6 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       isEnableSnake			= atoi(argv[3]);
       g_num_of_e1 			= atoi(argv[4]);
       cr_snake_num_of_lines 		= g_num_of_e1;
-      printf ("jitterBufSize(%d),rxBufSize(%d),isEnableSnake(%d)numOfE1(%d)\n", 
-         global_jitter_buffer_size, 
-         g_rxbuffersize,
-         isEnableSnake,
-	 cr_snake_num_of_lines);
    } else {
       return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable)] numOfE1\n");
    }
@@ -3131,7 +3126,14 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 
    /* init the Demo structures */
    WTI_InitDemoStructures();
-
+      printf ("\n");
+      printf ("=====>");
+      printf ("JB(%d),rxBufSize(%d),isEnableSnake(%d)numOfE1(%d)\n", 
+         global_jitter_buffer_size, 
+         g_rxbuffersize,
+         isEnableSnake,
+	 cr_snake_num_of_lines);
+      show_wddi_const ();
    /* Start Menu Engine */
    CLI_T_Main();
 
@@ -17398,6 +17400,7 @@ void CLI_DebugMemDisplay (char *StrPrm)
 #ifdef __WT_UFE3__
 #include "wti_ufe_util.c"
 #else
+// #error UTILITY_MUST_BE_DEFINED	// morris
 #include "wti_ufe_utility.c"
 #endif
 #ifdef __WT_UFE3__
@@ -17412,5 +17415,12 @@ void CLI_DebugMemDisplay (char *StrPrm)
 #endif
 #if WTI_PCE_CLASSIFIER
 #include "wt_partition_ecc_util.c"
+/////////////////////////////////////////
+void show_wddi_const(void)
+{
+   printf ("=====>WPI_CLOCK_REC_PPM_DELTA_ALLOWED(%d)\n", WPI_CLOCK_REC_PPM_DELTA_ALLOWED);
+   printf ("=====>direct_factor(%d),integration_factor(%d)\n", MORRIS_DIRECT_FACTOR, MORRIS_INTEGRATION_FACTOR);
+}
+
 #endif
 

@@ -22,6 +22,7 @@
 
 
 #define MORRIS_FACTOR	(1)
+#define MORRIS_FACTOR_FOR_SNAKE	(1)
 
 #define MORRIS_ENABLE_FREERUN_MODE	(0)
 #define WTI_CLOCK_REC_SNAKE_ENABLED	(1)
@@ -38,12 +39,13 @@ WP_U32 cr_snake_num_of_lines = 16;
 
 
 #define MORRIS_CHANGE_LEVELING	(1)
+#define MORRIS_CHANGE_LEVELING_FOR_SNAKE	(1)
 
 
 #define MORRIS_DISABLE_ERROR_PRINT_WHEN_STM_1	(0)
 
-
-
+#define MORRIS_DIRECT_FACTOR	(27)
+#define MORRIS_INTEGRATION_FACTOR	(30)
 #define MORRIS_WDDI_CHANGE	"3rd change: in wddi/sources/include/core/features/wpi_adv_user.h #define WPI_CLOCK_REC_PPM_DELTA_ALLOWED             (50) youll need to recomile WDDI ....  "
 
 
