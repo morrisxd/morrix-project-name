@@ -17503,6 +17503,10 @@ void show_wddi_const()
       "=====>WTI_CLOCK_REC_MODE(%s), MORRIS_ENABLE_APS(%d),g_enableAPS(%d)\n", 
 		WTI_CLOCK_REC_MODE?"DCR":"ACR", MORRIS_ENABLE_APS, g_enableAPS
                 );
+   printf (
+      "=====>MORRIS_SET_ALL_TO_HOLDOVER(%d)\n", 
+		MORRIS_SET_ALL_TO_HOLDOVER
+                );
 }
 
 #endif
