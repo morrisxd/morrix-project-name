@@ -1486,6 +1486,9 @@ extern void CLI_F_SendLastCasHostCommand                   (char *StrPrm);
 extern void CLI_F_PwRegressionResultsCheck                 (char *StrPrm);
 extern void CLI_F_RegressionResultsCheck                   (char *StrPrm);
 extern void CLI_F_StatShowMem                              (char *StrPrm);
+extern void CLI_F_FLR_Calculation                              (char *StrPrm);
+extern void CLI_F_FER_Calculation                              (char *StrPrm);
+
 #if WTI_COLLECT_TRACKING_DATA
 extern void CLI_F_StatTimingData                           (char *StrPrm);
 extern void CLI_F_ResetTimingData                          (char *StrPrm);
@@ -2373,6 +2376,8 @@ const Y_MenuEntry V_Statistics []=
 #endif
 #endif
 #endif
+   {K_Leaf, TRUE, " -> FLR(Frame Loss Ratio) Calculation",                                                                                  {(Y_MnuLeafP)   CLI_F_FLR_Calculation}},
+   {K_Leaf, TRUE, " -> FER(Frame Error Ratio) Calculation",                                                                                  {(Y_MnuLeafP)   CLI_F_FER_Calculation}},
    {K_Leaf, TRUE, " -> Memory Status",                                                                                  {(Y_MnuLeafP)   CLI_F_StatShowMem}},
    {K_Leaf, TRUE, " -> Pwe3StatisticsClear [optional: highest port number]",                                            {(Y_MnuLeafP)   CLI_F_Pwe3StatisticsClear}},
    {K_Leaf, TRUE, " -> Pwe3StatisticsCheck [optional: check RX TS (0-uncheck, 1-check), optional: highest port number, optional: global display - 1 ]",              {(Y_MnuLeafP)   CLI_F_Pwe3StatisticsCheck}},
@@ -15884,6 +15889,16 @@ void CLI_F_Quit(char *StrPrm)
  * OutPut     :
  * Return Val :
  ***************************************************************/
+void CLI_F_FLR_Calculation(char *StrPrm)
+{
+   WTI_FLR_Calculation();
+}
+
+void CLI_F_FER_Calculation(char *StrPrm)
+{
+   WTI_FER_Calculation();
+}
+
 void CLI_F_StatShowMem(char *StrPrm)
 {
    WTI_ShowMemStat();

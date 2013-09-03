@@ -2575,6 +2575,135 @@ void WT_PrintTestInfo(WP_U32 status)
 		WTI_PRINT_ERROR((output_str));
 }
 
+
+void WTI_FLR_Calculation(void)
+{
+   struct t_64 {
+      WP_U32 high;
+      WP_U32 low;
+   } *temp_stat;
+  
+   WP_status status; 
+   WP_stats_emphy_trans_pwe3_tx  tx_stats;
+   WP_stats_iw_cesop_psn2tdm cesop_stats_psn2tdm;
+   WP_U32 pw_index;
+   WP_U64 dummy_packets, valid_packets;
+   WP_U64 stray_packets, malformed_packets, rdi_dropped_packets, cw_ais_dropped_packets;
+   WP_U64 temp1, temp2, frame_loss_ratio;
+
+for (pw_index = 0; pw_index < total_number_of_pw; pw_index ++)
+{
+   dummy_packets = valid_packets = 0;
+   stray_packets = malformed_packets = rdi_dropped_packets = cw_ais_dropped_packets = 0;
+
+   memset(&tx_stats,0,sizeof(WP_stats_emphy_trans_pwe3_tx));
+   memset(&cesop_stats_psn2tdm,0,sizeof(WP_stats_iw_cesop_psn2tdm));
+
+   status = WP_ChannelStatistics(the_system->pw[pw_index].trans_tx, &tx_stats);
+   if (status != WP_OK) {
+   	WTI_TerminateOnError(status, "WP_ChannelStatistics", __LINE__);
+   	return;
+   }
+   
+   dummy_packets = tx_stats.dummy_packet;
+   valid_packets = tx_stats.valid_packets;
+
+   status = WP_IwFlowStatistics(the_system->pw[pw_index].psn2tdm_flow_agg,
+                                   WP_IW_FLOW_STAT_CESOP_PSN2TDM,
+                                   &cesop_stats_psn2tdm);
+   if (status != WP_OK){
+      WTI_TerminateOnError(status, "WP_IwFlowStatistics", __LINE__);
+      return;
+   }
+
+   stray_packets = cesop_stats_psn2tdm.stray_packets;
+   malformed_packets = cesop_stats_psn2tdm.malformed_packets;
+   rdi_dropped_packets = cesop_stats_psn2tdm.rdi_dropped_packets;
+   cw_ais_dropped_packets = cesop_stats_psn2tdm.cw_ais_drop_packets;
+
+   temp1 = dummy_packets-(stray_packets + malformed_packets + cw_ais_dropped_packets + rdi_dropped_packets);
+   temp2 = valid_packets + temp1;
+
+   if (temp2 == 0) {
+   	printf("sum of valid and dropped packets is ZERO for PW %d!\n", pw_index);
+   	continue;
+   }
+   
+   frame_loss_ratio = temp1/temp2;
+
+   temp_stat = (struct t_64 *)&frame_loss_ratio;
+   printf("FLR for PW %d is:  %08x%08x\n", pw_index, temp_stat->high, temp_stat->low);
+}
+
+}
+
+void WTI_FER_Calculation(void)
+
+{
+   struct t_64 {
+      WP_U32 high;
+      WP_U32 low;
+   } *temp_stat;
+
+   WP_status status;     
+   WP_U32 pw_index;
+   WP_stats_emphy_trans_pwe3_tx  tx_stats;
+   WP_U64 dummy_packets, valid_packets, underrun_dataunit;
+   WP_U64 tx_dataunit_size, payload_size;
+   WP_U64 data_units_per_packet;
+   WP_U64 temp1, temp2, frame_error_ratio;
+
+for (pw_index = 0; pw_index < total_number_of_pw; pw_index ++)
+{
+   dummy_packets = valid_packets = underrun_dataunit = 0;
+
+   tx_dataunit_size = payload_size = 0;
+   data_units_per_packet = 0;
+
+   memset(&tx_stats,0,sizeof(WP_stats_emphy_trans_pwe3_tx));
+
+   status = WP_ChannelStatistics(the_system->pw[pw_index].trans_tx, &tx_stats);
+   if (status != WP_OK) {
+   	WTI_TerminateOnError(status, "WP_ChannelStatistics", __LINE__);
+   	return;
+   }
+   
+   dummy_packets = tx_stats.dummy_packet;
+   valid_packets = tx_stats.valid_packets;
+   underrun_dataunit = tx_stats.underrun_dataunit;
+
+   tx_dataunit_size = pw_info_base[pw_index].upi_trans_device.tx_dataunit_size;
+
+   payload_size = pw_info_base[pw_index].psn2tdm_agg_param.payload_size;
+
+   if (tx_dataunit_size == 0) {
+   	printf("tx_dataunit_size is ZERO for PW %d!\n", pw_index);
+   	continue;
+   }
+   
+   data_units_per_packet = payload_size/tx_dataunit_size;
+
+   if (data_units_per_packet == 0) {
+   	printf("data_units_per_packet is ZERO for PW %d!\n", pw_index);
+   	continue;
+   }
+
+   temp1 = dummy_packets + underrun_dataunit/data_units_per_packet;
+   temp2 = temp1 + valid_packets;
+
+   if (temp2 == 0) {
+   	printf("totoal data transmitted by channel %d is ZERO!\n", pw_index);
+   	continue;
+   }
+   
+   frame_error_ratio = temp1/temp2;
+   
+   temp_stat = (struct t_64 *)&frame_error_ratio;
+   printf("FER for PW %d is:  %08x%08x\n", pw_index, temp_stat->high, temp_stat->low);
+}
+
+}
+
 /*
  *
  * This function checks if the system is converged.
