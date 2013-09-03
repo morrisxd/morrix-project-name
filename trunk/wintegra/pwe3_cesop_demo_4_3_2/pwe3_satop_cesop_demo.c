@@ -17437,22 +17437,36 @@ void CLI_DebugMemDisplay (char *StrPrm)
 /////////////////////////////////////////
 void show_wddi_const(void)
 {
-   printf ("=====>WPI_CLOCK_REC_PPM_DELTA_ALLOWED(%d)\n", 
-			WPI_CLOCK_REC_PPM_DELTA_ALLOWED);
-   printf ("=====>direct_factor(%d),integration_factor(%d)\n", 
-			MORRIS_DIRECT_FACTOR, MORRIS_INTEGRATION_FACTOR);
-   printf ("=====>WTI_CESOP_CLOCK_RECOVERY_ENABLE(%d),WTI_CESOP_RX_TIMING_ENABLE(%d)\n", 
-			WTI_CESOP_CLOCK_RECOVERY_ENABLE, WTI_CESOP_RX_TIMING_ENABLE);
-   printf ("=====>MORRIS_CR_ON(%s),MORRIS_ENABLE_STM_1(%s)\n", 
-			MORRIS_CR_ON?"ON":"OFF", MORRIS_ENABLE_STM_1?"STM-1":"STM-4");
-   printf ("=====>MORRIS_USE_VC4(%s),MORRIS_ENABLE_STM_1(%s)\n", 
-			MORRIS_USE_VC4?"VC4":"VC3", MORRIS_ENABLE_STM_1?"STM-1":"STM-4");
-   printf ("=====>MORRIS_ENABLE_FREERUN_MODE(%s),WTI_CLOCK_REC_SNAKE_ENABLED(%d)\n", 
-			MORRIS_ENABLE_FREERUN_MODE?"FREE-RUN":"LOCKED", WTI_CLOCK_REC_SNAKE_ENABLED);
-   printf ("=====>MORRIS_CHANGE_LEVELING(%d),MORRIS_CHANGE_LEVELING_FOR_SNAKE(%d)\n", 
-                        MORRIS_CHANGE_LEVELING, MORRIS_CHANGE_LEVELING_FOR_SNAKE);
-   printf ("=====>WTI_CLOCK_REC_MODE(%s),(%d)\n", 
-			WTI_CLOCK_REC_MODE?"DCR":"ACR", 0);
+   printf (
+      "=====>WPI_CLOCK_REC_PPM_DELTA_ALLOWED(%d)\n", 
+		WPI_CLOCK_REC_PPM_DELTA_ALLOWED);
+   printf (
+      "=====>direct_factor(%d),integration_factor(%d)\n", 
+		MORRIS_DIRECT_FACTOR, 
+                MORRIS_INTEGRATION_FACTOR);
+   printf (
+      "=====>WTI_CESOP_CLOCK_RECOVERY_ENABLE(%d),WTI_CESOP_RX_TIMING_ENABLE(%d)\n", 
+		WTI_CESOP_CLOCK_RECOVERY_ENABLE, 
+                WTI_CESOP_RX_TIMING_ENABLE);
+   printf (
+      "=====>MORRIS_CR_ON(%s),MORRIS_ENABLE_STM_1(%s)\n", 
+		MORRIS_CR_ON?"ON":"OFF",
+                MORRIS_ENABLE_STM_1?"STM-1":"STM-4");
+   printf (
+      "=====>MORRIS_USE_VC4(%s)\n",
+		MORRIS_USE_VC4?"VC4":"VC3");
+   printf (
+      "=====>MORRIS_ENABLE_FREERUN_MODE(%s),WTI_CLOCK_REC_SNAKE_ENABLED(%d)\n", 
+		MORRIS_ENABLE_FREERUN_MODE?"FREE-RUN":"LOCKED", 
+                WTI_CLOCK_REC_SNAKE_ENABLED);
+   printf (
+      "=====>MORRIS_CHANGE_LEVELING(%d),MORRIS_CHANGE_LEVELING_FOR_SNAKE(%d)\n", 
+                MORRIS_CHANGE_LEVELING, 
+                MORRIS_CHANGE_LEVELING_FOR_SNAKE);
+   printf (
+      "=====>WTI_CLOCK_REC_MODE(%s)\n", 
+		WTI_CLOCK_REC_MODE?"DCR":"ACR"
+                );
 }
 
 #endif
