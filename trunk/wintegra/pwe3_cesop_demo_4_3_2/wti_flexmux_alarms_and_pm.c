@@ -2106,7 +2106,12 @@ void WTI_enable_alarms(int type)
    if (is_sdh)
    {
       start_alarm = WPX_UFE_FRAMER_SDH_LOS;
-      last_alarm = WPX_UFE_FRAMER_SDH_TU_LOP;
+      if (g_enableAPS)
+      {
+         last_alarm = WPX_UFE_FRAMER_SDH_SDH_LOP;
+      } else {
+         last_alarm = WPX_UFE_FRAMER_SDH_TU_LOP;
+      }
    }
    else
    {
@@ -2165,7 +2170,8 @@ void WTI_enable_alarms(int type)
       }
    }
 #endif
-
+if (!g_enableAPS)
+{
    if (is_sdh)
    {
       start_alarm = WPX_UFE_FRAMER_SDH_RS_EXC;
@@ -2205,7 +2211,7 @@ void WTI_enable_alarms(int type)
          printf("%s enabled\n", socket_client_side_alarm_names[j]);
 #endif
    }
-
+}
    printf("***************** ALARMS ENABLED ************************************\n");
 
 #endif
