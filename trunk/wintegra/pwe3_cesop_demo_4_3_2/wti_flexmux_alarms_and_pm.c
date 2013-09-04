@@ -609,6 +609,8 @@ if (!g_enableAPS)
 {
 #if !WTI_FRAMER_OTE_TESTS
    printf("NO SWITCHING PERFORMED\n");
+#else
+#error WTI_FRAMER_OTE_TESTS_should_not_be_defined
 #endif
 }
    return;
@@ -2123,7 +2125,12 @@ void WTI_enable_alarms(int type)
    else
    {
       start_alarm = WPX_UFE_FRAMER_SONET_LOS;
-      last_alarm = WPX_UFE_FRAMER_SONET_LOP_P;
+      if (g_enableAPS)
+      {
+         last_alarm = WPX_UFE_FRAMER_SONET_LOS;
+      } else {
+         last_alarm = WPX_UFE_FRAMER_SONET_LOP_P;
+      }
    }
 
        for (j = start_alarm; j <= last_alarm; ++j)

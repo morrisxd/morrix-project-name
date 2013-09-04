@@ -15893,6 +15893,9 @@ void CLI_F_Quit(char *StrPrm)
 	printf("System release\n");
 	WTI_SystemRelease();
 #endif
+   printf ("Rebooting now ...\n");
+   fflush((FILE *)1);
+   WPX_Reboot ();
    WP_DriverRelease();
 
 #ifdef __linux__
