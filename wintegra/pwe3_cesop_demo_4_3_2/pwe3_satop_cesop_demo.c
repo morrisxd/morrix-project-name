@@ -3124,6 +3124,7 @@ extern WP_U32 global_jitter_buffer_size;
 WP_U32 g_rxbuffersize;
 WP_U32 isEnableSnake;
 WP_U32 g_num_of_e1 = 0;
+WP_U32 g_force_holdover = 0;
 
 
 void show_start_params(void)
@@ -3154,7 +3155,7 @@ extern WP_U32 g_enableAPS;
  */
 WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 {
-   if (argc > 5)
+   if (argc > 6)
    {
       global_jitter_buffer_size      	= atoi(argv[1]);
       g_rxbuffersize 			= atoi(argv[2]);
@@ -3162,11 +3163,12 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       g_num_of_e1 			= atoi(argv[4]);
       cr_snake_num_of_lines 		= g_num_of_e1;
       g_enableAPS 			= atoi(argv[5]);
+      g_force_holdover 			= atoi(argv[6]);
    } else {
-      return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)]\n");
+      return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)] forceHO\n");
    }
 
-   printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)]\n");
+   printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)] forceHO\n");
 
    /* init the Demo structures */
    WTI_InitDemoStructures();
@@ -17508,7 +17510,7 @@ void show_wddi_const()
                 );
    printf (
       "=====>MORRIS_SET_ALL_TO_HOLDOVER(%d)\n", 
-		MORRIS_SET_ALL_TO_HOLDOVER
+		g_force_holdover
                 );
 }
 

@@ -6207,8 +6207,12 @@ void CLI_F_CR_101_SonetSdh_E1UnframedNoCas(char *StrPrm)
    WT_UfeLinePWCreate(&test_setup, 1);
 
 #if MORRIS_SET_ALL_TO_HOLDOVER
-   set_all_holdover (num_of_lines);
+#warning MORRIS_SET_ALL_TO_HOLDOVER_does_not_matter
 #endif
+   if (g_force_holdover)
+   {
+      set_all_holdover (num_of_lines);
+   }
 
 #ifdef WT_UFE_FRAMER
 
