@@ -17,7 +17,7 @@
 #define MORRIS_SKIP_ALARMS	(1)
 
 
-#define MORRIS_USE_VC4	(1)
+#define MORRIS_USE_VC4	(3)
 #define MORRIS_DISABLE_MON_STATE	(0)
 
 
