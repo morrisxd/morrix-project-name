@@ -567,9 +567,11 @@ void service_port_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, 
    sonet_sdh_level_alarm_status[line_port_id][alarm_category] = is_asserted;
 #else
 #ifdef VERBOSE
+#if MORRIS_DISABLE_PORT_ALARM_PRINT
 // #error sldkfjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
    printf("PORT ALARM:  device %d, line_port_id = %d, alarm_category = %s %s\n",
           device, line_port_id, line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+#endif
 #endif /* VERBOSE */
 #endif /* WTI_FRAMER_OTE_TESTS  */
 #endif /* WTI_FLEXMUX_ENABLE_ALARMS*/
@@ -612,19 +614,22 @@ if (!g_enableAPS)
 #else
 #error WTI_FRAMER_OTE_TESTS_should_not_be_defined
 #endif
-}
    return;
+}
 #endif
 #if WTI_FRAMER_OTE_TESTS
+#error WTI_FRAMER_OTE_TESTS_should_not_be_defined
    WPX_FRMR_PL_SONET_SDH_PORT_ForceB(transaction++, device, line_port_id);
 #else
    if ((result = WPX_FRMR_PL_SONET_SDH_PORT_GetForceState(device, line_port_id, &force_state)) == WPX_UFE_FRAMER_OK)
    {
 #if 1//DEBUG
+#if MORRIS_DISABLE_CURRENT_FORCE_STATE_PRINT
       if (force_state == WPX_UFE_FRAMER_PROTECTION_FORCE_A)
          printf("Current Force State is A\n");
       else if (force_state == WPX_UFE_FRAMER_PROTECTION_FORCE_B)
          printf("Current Force State is B\n");
+#endif
 #endif
 
       if (force_state == WPX_UFE_FRAMER_PROTECTION_FORCE_A)
@@ -634,7 +639,9 @@ if (!g_enableAPS)
             result = WPX_FRMR_PL_SONET_SDH_PORT_ForceB(transaction++, device, line_port_id);
             WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_ForceB", result, __LINE__);
 #if 1//DEBUG
+#if MORRIS_DISABLE_APS_PRINT
             printf("APS to protected port for line port #%d\n", line_port_id);
+#endif
 #endif
          }
          else
@@ -680,9 +687,11 @@ void service_k1_k2_signal(WP_U8 device, WP_U8 line_port_id, WP_U8 k1, WP_U8 k2)
 #if !WTI_FRAMER_OTE_TESTS
 #if WTI_FLEXMUX_ENABLE_ALARMS
 #ifdef VERBOSE
+#if MORRIS_DISABLE_K1K2_PRINT
 
    printf("K1K2 SIGNAL:  device = %d, iLinePort = %d K1 %d, K2 %d\n", device, line_port_id, k1, k2);
 
+#endif
 #endif
 #endif
 #endif
@@ -925,8 +934,10 @@ void cb_port_alarm_report_only(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_cat
 {
 #if WTI_FLEXMUX_ENABLE_ALARMS
 #ifdef VERBOSE
+#if MORRIS_DISABLE_PORT_ALARM_PRINT
    printf("PORT ALARM REPORTING::  line_port_id = %d, alarm_category = %s %s\n",
           line_port_id, line_side_alarm_names[alarm_category], is_asserted ? "Asserted" : "Unasserted");
+#endif
 #endif
 #endif
 }
