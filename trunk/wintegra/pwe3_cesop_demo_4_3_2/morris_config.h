@@ -9,11 +9,11 @@
 
 #define MORRIS_ENABLE_PM_PRINT_COUNTER	(1)
 #define MORRIS_PM_PORT_PRINT_WITHOUT_COUNTER	(0)
-#define MORRIS_PM_COUNT_CLEAN	(1)
+#define MORRIS_PM_COUNT_CLEAN	(0)
 #define MORRIS_PRINT_HO_COUNTER	(0)
 
 
-#define MORRIS_ENABLE_STM_1	(1)
+#define MORRIS_ENABLE_STM_1	(0)
 #define MORRIS_SKIP_ALARMS	(1)
 
 
@@ -28,7 +28,7 @@
 #define WTI_CLOCK_REC_SNAKE_ENABLED	(1)
 #define MORRIS_ENABLE_PDH_ALRAM_PRINT	(0)
 
-#define MORRIS_ENABLE_LOS_AIS	(1)
+#define MORRIS_ENABLE_LOS_AIS	(0)
 #define MORRIS_ENABLE_PATH_ALARM	(0)
 
 
@@ -52,6 +52,13 @@ WP_U32 cr_snake_num_of_lines = 16;
 
 #define MORRIS_ENABLE_APS	(1)	// can be set=1 forever
 #define MORRIS_SET_ALL_TO_HOLDOVER	(1)
+
+
+////////////////////////////////////////////////////////
+#define MORRIS_DISABLE_PORT_ALARM_PRINT	(0)
+#define MORRIS_DISABLE_K1K2_PRINT	(0)
+#define MORRIS_DISABLE_CURRENT_FORCE_STATE_PRINT	(0)
+#define MORRIS_DISABLE_APS_PRINT	(1)
 
 #endif
 
