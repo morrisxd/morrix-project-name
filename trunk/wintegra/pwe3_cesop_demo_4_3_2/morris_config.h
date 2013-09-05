@@ -59,6 +59,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 #define MORRIS_DISABLE_K1K2_PRINT	(0)
 #define MORRIS_DISABLE_CURRENT_FORCE_STATE_PRINT	(0)
 #define MORRIS_DISABLE_APS_PRINT	(1)
+#define MORRIS_ENABLE_ONLY_LOS	(1)
 
 #endif
 

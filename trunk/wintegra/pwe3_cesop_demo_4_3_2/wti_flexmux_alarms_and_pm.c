@@ -621,7 +621,7 @@ if (!g_enableAPS)
 #error WTI_FRAMER_OTE_TESTS_should_not_be_defined
    WPX_FRMR_PL_SONET_SDH_PORT_ForceB(transaction++, device, line_port_id);
 #else
-   if ((result = WPX_FRMR_PL_SONET_SDH_PORT_GetForceState(device, line_port_id, &force_state)) == WPX_UFE_FRAMER_OK)
+   if ((result = WPX_FRMR_PL_SONET_SDH_PORT_GetForceState(device, 0/*line_port_id*/, &force_state)) == WPX_UFE_FRAMER_OK)
    {
 #if 1//DEBUG
 #if MORRIS_DISABLE_CURRENT_FORCE_STATE_PRINT
@@ -634,13 +634,14 @@ if (!g_enableAPS)
 
       if (force_state == WPX_UFE_FRAMER_PROTECTION_FORCE_A)
       {
-         if (is_asserted)
+         // if (is_asserted)
+         if ((line_port_id & 1) == 0)
          {
-            result = WPX_FRMR_PL_SONET_SDH_PORT_ForceB(transaction++, device, line_port_id);
+            result = WPX_FRMR_PL_SONET_SDH_PORT_ForceB(transaction++, device, 0/*line_port_id*/);
             WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_ForceB", result, __LINE__);
 #if 1//DEBUG
 #if MORRIS_DISABLE_APS_PRINT
-            printf("APS to protected port for line port #%d\n", line_port_id);
+            printf("APS to protected port for line port (#%d)(%d)\n", line_port_id,is_asserted);
 #endif
 #endif
          }
@@ -651,12 +652,13 @@ if (!g_enableAPS)
       else if (force_state == WPX_UFE_FRAMER_PROTECTION_FORCE_B)
       {
 #if !WTI_FRAMER_OTE_TESTS
-         if (is_asserted)
+         // if (is_asserted)
+         if ((line_port_id & 1) == 1)
          {
-            result = WPX_FRMR_PL_SONET_SDH_PORT_ForceA(transaction++, device, line_port_id);
+            result = WPX_FRMR_PL_SONET_SDH_PORT_ForceA(transaction++, device, 0/*line_port_id*/);
             WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_ForceA", result, __LINE__);
 #if 1//DEBUG
-            printf("APS to working port for line port #%d\n", line_port_id);
+            printf("APS to working port for line port (#%d)(%d)\n", line_port_id,is_asserted);
 #endif
          }
          else
@@ -667,9 +669,13 @@ if (!g_enableAPS)
          printf("On %d:  force_state unknown %d\n", line_port_id, force_state);
    }
    else if (result == WPX_UFE_FRAMER_ERROR_PORT_RATE_NOT_CONFIGURED)
-      printf("GetForceState returns WPX_UFE_FRAMER_ERROR_PORT_RATE_NOT_CONFIGURED\n");
+   {
+      printf("GetForceState returns WPX_UFE_FRAMER_ERROR_PORT_RATE_NOT_CONFIGURED(%#d)(%d)\n", line_port_id, is_asserted);
+   }
    else
-      printf("GetForceState returns %d\n", result);
+   {
+      printf("GetForceState returns (%d)(%#d)(%d)\n", result, line_port_id, is_asserted);
+   }
 #endif
 
 #if WTI_COLLECT_TIMING_INFORMATION
@@ -837,6 +843,10 @@ void cb_port_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8
    port_alarm->alarm_category = alarm_category;
    port_alarm->is_asserted = is_asserted;
 
+#if MORRIS_ENABLE_ONLY_LOS
+#warning ONLY_LOS_IS_ENABLED
+   if (alarm_category == WPX_UFE_FRAMER_SDH_LOS) 
+#else
    if ((alarm_category == WPX_UFE_FRAMER_SDH_LOS)    ||
 #if !WTI_FRAMER_OTE_TESTS
        (alarm_category == WPX_UFE_FRAMER_SDH_LOF)    ||
@@ -844,6 +854,7 @@ void cb_port_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, WP_U8
 #endif
        (alarm_category == WPX_UFE_FRAMER_SONET_LOS)  ||
        (alarm_category == WPX_UFE_FRAMER_SONET_LOF))
+#endif
    {
 //       if (is_asserted)
 //       {
