@@ -606,7 +606,7 @@ void service_los_alarm(WP_U8 device, WP_U8 line_port_id, WP_U8 alarm_category, W
 #if WTI_FRAMER_OTE_TESTS
    sonet_sdh_level_alarm_status[line_port_id][alarm_category] = is_asserted;
 #endif
-#if NO_APS_ON_LOS
+// #if NO_APS_ON_LOS
 if (!g_enableAPS)
 {
 #if !WTI_FRAMER_OTE_TESTS
@@ -616,7 +616,7 @@ if (!g_enableAPS)
 #endif
    return;
 }
-#endif
+// #endif
 #if WTI_FRAMER_OTE_TESTS
 #error WTI_FRAMER_OTE_TESTS_should_not_be_defined
    WPX_FRMR_PL_SONET_SDH_PORT_ForceB(transaction++, device, line_port_id);
