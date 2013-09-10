@@ -313,7 +313,11 @@
 
 #define WTI_NUM_OF_VLAN_TAGS                        0
 
+#if MORRIS_DISABLE_VLAN_TAG
+#define WTI_VLAN_TAG_SIZE                           0
+#else
 #define WTI_VLAN_TAG_SIZE                           4
+#endif
 
 #if WTI_CESOP_MEF8_ENCAP
 #ifdef WTI_ETHERNET_HEADER_SIZE
