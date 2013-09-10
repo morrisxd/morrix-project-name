@@ -469,7 +469,13 @@
 #endif /* WTI_8K_CH_SETUP */
 
 /* TDM --> PSN */
+#if MORRIS_DISABLE_RTP
+#define WTI_TDM2PSN_RTP_MODE                        WP_DISABLE
+#else
 #define WTI_TDM2PSN_RTP_MODE                        WP_ENABLE
+#endif
+
+
 #define WTI_TDM2PSN_INTERRUPT_MODE                  WP_DISABLE
 #define WTI_TDM2PSN_INTERRUPT_QUEUE                 WP_IRQT1
 #define WTI_TDM2PSN_OOBC_INTERRUPT_MODE             WP_DISABLE
@@ -490,8 +496,21 @@
 #if WTI_CESOP_MEF8_ENCAP
 #define WTI_L3_HEADER_LEN                           0
 #else
+
+
+
+
+#if MORRIS_DISABLE_L3_HEADER
+#define WTI_L3_HEADER_LEN                           0
+#else
 #define WTI_L3_HEADER_LEN                           sizeof(WTI_ip_header)
-//#define WTI_L3_HEADER_LEN                           0
+#error WTI_L3_HEADER_LEN_should_not_be_defined
+#endif
+
+
+
+
+
 #endif
 #define WTI_SRC_IP_OFFSET                           12
 #define WTI_DEST_IP_OFFSET                          16
