@@ -75,7 +75,9 @@ void set_all_holdover (int pw)
       printf("set to holdover: HO %d\n",pw_index);
 
       sprintf(temp_buf, "0 %d",pw_index );
+#if WTI_CESOP_CLOCK_RECOVERY_ENABLE
       CLI_F_ClockRecoveryHoldoverForce(temp_buf);
+#endif
    }
 }
 

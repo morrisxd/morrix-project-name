@@ -24,4 +24,4 @@ UFE_DIR=../ufe \
 UFE=ufe412 \
 FRAMER=flexmux \
 && rsync ./bin/pwe3_satop_cesop_demo.exe /tftpboot/
-echo rsync finished
+echo rsync ./bin/pwe3_satop_cesop_demo.exe /tftpboot/ complete !
