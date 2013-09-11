@@ -170,6 +170,7 @@ void WT_UfeMPLS_L2_FA_Create(void)
 				// 0x81000005,
 				(0x88470000 | ((((WTI_MPLS_LABEL) >> 12) + WTI_MAX_PW + 1 + i) >> 4)),
 				((((((WTI_MPLS_LABEL) >> 12)  + WTI_MAX_PW + 1 + i) & 0xff) << 28) | 0x00ff0000));
+/////////////////////////////////////////////////////
 #else
 
 
@@ -773,7 +774,11 @@ WUFE_status WT_UfeLinePWCreate(WUFE_test_system_setup *test_setup, WP_U32 create
 	      sprintf(temp_buf, "0 45000000 811e0000 40110000 1a1a1a1a %d", line_index + 1);
 	      CLI_F_Tdm2PsnFlowAggIpHeader(temp_buf);
 	      CLI_F_Tdm2PsnFlowAggUdpHeader("0 1010 0001 0 0");
+#if MORRIS_CHANGE_RTP_HEADER
+	      CLI_F_Tdm2PsnFlowAggRtpHeader("0 80 0 0 0 0");
+#else
 	      CLI_F_Tdm2PsnFlowAggRtpHeader("0 50 0 0 0 0");
+#endif
 	      CLI_F_Tdm2PsnFlowAggControlWord("0 0 0 0");
 
 #if WTI_CESOP_CLOCK_RECOVERY_ENABLE
@@ -1990,7 +1995,12 @@ void CLI_F_SonetSdhE1FramedWithCas(char *StrPrm)
       /*UFE phy and pw configuration*/
       if (framing_mode == WUFE_UNFRAMED)
       {
+#if MORRIS_USE_SMALLEST_BUF_SIZE
+         sprintf(temp_buf, "0 %d %d 24 24",i,pw_index);
+#else
+#error USE_SMALLEST_BUF_SIZE_should_be_defined
          sprintf(temp_buf, "0 %d %d 64 64",i,pw_index);
+#endif
          CLI_F_PwConfigureUnframed(temp_buf);
       }
       else if (framing_mode == WUFE_FRAMED)

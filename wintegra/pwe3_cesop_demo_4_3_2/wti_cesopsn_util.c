@@ -5587,7 +5587,11 @@ void WTI_PceFilterConfig(WP_pce_filter_classification *cfg_ptr)
    memset(cfg_ptr, 0, sizeof(WP_pce_filter_classification));
 
    cfg_ptr->tag = 1;
+#if MORRIS_NEW_PCE
+   cfg_ptr->no_match_action = WP_PCE_FILTER_NO_MATCH_ACCEPT;
+#else
    cfg_ptr->no_match_action = WP_PCE_FILTER_NO_MATCH_DENY;
+#endif
    cfg_ptr->no_fields_action = WP_PCE_FILTER_NO_FIELDS_DENY;
    cfg_ptr->no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 #if (!WTI_CESOP_MPLS_IW)
