@@ -67,6 +67,14 @@ WP_U32 cr_snake_num_of_lines = 16;
 #define MORRIS_DISABLE_RTP	(1)
 #define MORRIS_DISABLE_L3_HEADER	(1)
 #define MORRIS_DISABLE_VLAN_TAG	(1)
+
+
+#define MORRIS_USE_SMALLEST_BUF_SIZE	(1)
+#define MORRIS_CHANGE_RTP_HEADER	(1)
+
+#define MORRIS_USE_1_PW	(0)
+#define MORRIS_NEW_PCE 	(0)
+
 #endif
 
 

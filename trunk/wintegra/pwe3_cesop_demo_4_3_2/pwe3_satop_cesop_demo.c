@@ -138,7 +138,12 @@
 #if WTI_DUAL_EMPHY
 #define WTI_MAX_PW                                  2688  /* 2688 *//* maximum number of PW's in a DUAL EMPHY PWE3 system (1344 PWs on each UFE device) */
 #else
+#if MORRIS_USE_1_PW
+#define WTI_MAX_PW                                  1
+#else
+// #error MORRIS_USE_1_PW_should_be_defined
 #define WTI_MAX_PW                                  1344          /* maximum number of PW's in PWE3 system */
+#endif
 #endif
 #elif defined __WT_UFE448__
 #define WTI_MAX_PW                                  2688          /* maximum number of PW's in PWE3 system */
@@ -302,7 +307,12 @@
 
 #if WTI_CESOP_MPLS_IW
 #define WTI_MPLSoPPP                                0xff030281
+#if MORRIS_USE_1_PW
+#define WTI_MPLS_LABEL                              0x001371ff
+#else
+// #error lksjdflkjslkfdjlkdsjflksdjflksajflksjdlkf
 #define WTI_MPLS_LABEL                              0x100001ff
+#endif
 
 #if ( WTI_CESOP_MPLS_OVER_ENET || WTI_CESOP_MEF8_ENCAP)
 #define WTI_ETHERNET_HEADER_SIZE                    14
@@ -420,6 +430,7 @@
 #if WTI_CESOP_TO_MPLS_FA_CASCADING
 /* PCE is currently supported only for the MPLS cascading configuration */
 #define WTI_PCE_CLASSIFIER                          1              /* PCE classifier is in use instead of the DFC */
+#warning we_are_using_pce
 #if WTI_PCE_CLASSIFIER
 #include "wt_partition_ecc_util.h"
 #endif
@@ -520,7 +531,17 @@
 #define WTI_DEST_IP_OFFSET                          16
 #define WTI_L4_HEADER_LEN                           sizeof(WTI_udp_header)
 #define WTI_L4_LENGTH_OFFSET                        4
-#define WTI_RTP_HEADER_LEN                          sizeof(WTI_rtp_header)
+
+
+
+#if MORRIS_DISABLE_RTP
+#define WTI_RTP_HEADER_LEN                          0 
+#else
+#define WTI_RTP_HEADER_LEN                        sizeof(WTI_rtp_header)
+#endif
+
+
+
 #define WTI_CONTROL_WORD_LEN                        4
 #define WTI_TDM2PSN_TIMESTAMP_MODE                  WP_IW_TIME_STAMP_DISABLE
 #define WTI_TDM2PSN_FBP_DROP_THRESHOLD              0xf
@@ -14305,8 +14326,11 @@ void CLI_F_MplsFlowAggPrefixHeaderMpls(char *StrPrm)
                 (WP_U32 *)&prefix_header_mpls[12],
                 (WP_U32 *)&prefix_header_mpls[16],
                 (WP_U32 *)&prefix_header_mpls[20]);
-
-   if (res != 7 && res != 3 && res != 2)
+#if MORRIS_DISABLE_VLAN_TAG
+   if (res != 7 && res != 3 && res != 2 && res != 6)
+#else
+   if (res != 7 && res != 3 && res != 2 )
+#endif
    {
       WTI_TerminatePrintError("MplsFlowAggPrefixHeaderMpls - Invalid number of parameters", __LINE__);
       return;

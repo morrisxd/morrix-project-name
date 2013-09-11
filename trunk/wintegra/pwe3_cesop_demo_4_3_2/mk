@@ -1,6 +1,8 @@
 #!/bin/bash
 rm ./bin/*
 
+filepath=/mnt/hgfs/TempTftp/
+filename=vm_pwe3.exe
 echo touch pwe3_satop_cesop_demo.c 
 touch *.c 
 
@@ -23,5 +25,5 @@ WDDI_HW_DEVICE=winpath3 \
 UFE_DIR=../ufe \
 UFE=ufe412 \
 FRAMER=flexmux \
-&& rsync ./bin/pwe3_satop_cesop_demo.exe /tftpboot/
-echo rsync ./bin/pwe3_satop_cesop_demo.exe /tftpboot/ complete !
+&& rsync ./bin/pwe3_satop_cesop_demo.exe ${filepath}${filename}
+echo rsync ./bin/pwe3_satop_cesop_demo.exe ${filepath}${filename} complete !
