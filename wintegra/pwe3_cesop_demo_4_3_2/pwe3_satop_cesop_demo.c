@@ -453,8 +453,9 @@
 
 #define N_IW_PSN2TDM_QUEUE_ADJUNCT_POOL_BUFFERS     (26*WTI_MAX_PW)
 #define N_IW_PSN2TDM_QUEUE_BUFFERS                  5000
-#define N_IW_PSN2TDM_QUEUE_BUFFER_SIZE              600 /* regular tests need only 512. 800 is for 30/24
+#define N_IW_PSN2TDM_QUEUE_BUFFER_SIZE              1124/* 600*/ /* regular tests need only 512. 800 is for 30/24
                                                            slots tests in CAS mode */
+// #error dddddddddddddddddddddddddddddd
 
 #if WTI_8K_CH_SETUP
 #define N_IW_TDM2PSN_QUEUE_ADJUNCT_POOL_BUFFERS     10
@@ -469,8 +470,13 @@
 #else
 #define N_IW_TDM2PSN_QUEUE_ADJUNCT_POOL_BUFFERS     10
 #define N_IW_TDM2PSN_QUEUE_BUFFERS                  5000
-#define N_IW_TDM2PSN_QUEUE_BUFFER_SIZE              600 /* regular tests need only 512. 800 is for 30/24
+#if MORRIS_ENLARGE_BUFFER_SIZE
+#define N_IW_TDM2PSN_QUEUE_BUFFER_SIZE              1024 /* regular tests need only 512. 800 is for 30/24
                                                            slots tests in CAS mode */
+#else
+#define N_IW_TDM2PSN_QUEUE_BUFFER_SIZE              1124 // 600 
+// #error BUFFER_SIZE_error_4
+#endif
 #if (WTI_CESOP_CLOCK_RECOVERY_ENABLE || WTI_CESOP_RX_TIMING_ENABLE)
 #define N_TRANS_TX_QUEUE_RINGS                      (WTI_MAX_PW)
 #define N_TRANS_TX_QUEUE_RING_LENGTH                64
@@ -632,8 +638,12 @@
  * Change here in manual compilation (37900b)
  */
 // #error llllllllllllllllllllllllllllllllllllllllllllllllll
-// #define WTI_CLOCK_REC_MODE                          1
+#if MORRIS_USE_ACR	
 #define WTI_CLOCK_REC_MODE                          0        /* 1 - differential, 0 - adaptive */
+#else
+#error NOT_DCR_NOW
+#define WTI_CLOCK_REC_MODE                          1
+#endif
 
 /*
  * Used for automatic compilation of tests
@@ -3212,7 +3222,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       g_isForceOffset			= atoi(argv[7]);
    } else {
       return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)] forceHO forcePPMoffset\n");
-   }
+   } 
 
    printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)] forceHO forcePPMoffset\n");
 
@@ -5265,7 +5275,7 @@ void CLI_F_Pwe3ChannelRxBufferSize(char *StrPrm)
    }
 
    pw_config.tdm2psn_flow_agg_config.payload_size = pw_config.rx_buffersize = val;
-
+printf ("===>payload_size(%d)\n", val);
    return;
 }
 
@@ -7202,7 +7212,7 @@ void CLI_F_PwConfigureUnframed(char *StrPrm)
    memcpy(pw_config.slots,slots,num_slots);
    pw_config.rx_data_unit_size = rx_dataunit_size;
    pw_config.tx_data_unit_size = tx_dataunit_size;
-
+printf ("===>tx_dataunitsize(%d)rx_dataunitsize(%d)\n", tx_dataunit_size, rx_dataunit_size);
    return;
 }
 

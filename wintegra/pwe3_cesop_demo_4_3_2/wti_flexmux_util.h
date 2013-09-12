@@ -66,8 +66,10 @@
 #if WTI_CESOP_CLOCK_RECOVERY_ENABLE
 #if MORRIS_USE_VC4
 #define WTI_FLEXMUX_UFE_FRAMER_WUFE_SDH_TYPE_VC WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC4 /* VC3 or VC4 (AU3 or AU4) */
+#warning it_is_au4_now
 #else
-#error ____VC3_IS_USED_NOW____
+#warning it_is_au3_now
+// #error ____VC3_IS_USED_NOW____
 #define WTI_FLEXMUX_UFE_FRAMER_WUFE_SDH_TYPE_VC WPX_UFE_FRAMER_WUFE_SDH_TYPE_VC3 /* VC3 or VC4 (AU3 or AU4) */
 #endif
 #else /* not WTI_CESOP_CLOCK_RECOVERY_ENABLE */
