@@ -1,10 +1,10 @@
 #!/bin/bash
 rm ./bin/*
 
-filepath=/tftpboot/
-filename=pwe3_satop_cesop_demo.exe
+filepath=/mnt/hgfs/TempTftp/
+filename=vm_pwe3.exe
 echo touch pwe3_satop_cesop_demo.c 
-touch *.c 
+touch *.c *.h
 
 echo =========================================
 echo make WDDS_DIR=../ \

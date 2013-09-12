@@ -17,7 +17,7 @@
 #define MORRIS_SKIP_ALARMS	(1)
 
 
-#define MORRIS_USE_VC4	(1)
+#define MORRIS_USE_VC4	(0)
 #define MORRIS_DISABLE_MON_STATE	(0)
 
 
@@ -45,8 +45,8 @@ WP_U32 cr_snake_num_of_lines = 16;
 
 #define MORRIS_DISABLE_ERROR_PRINT_WHEN_STM_1	(1)
 
-#define MORRIS_DIRECT_FACTOR	(27)
-#define MORRIS_INTEGRATION_FACTOR	(30)
+#define MORRIS_DIRECT_FACTOR	(26)
+#define MORRIS_INTEGRATION_FACTOR	(28)
 #define MORRIS_WDDI_CHANGE	"3rd change: in wddi/sources/include/core/features/wpi_adv_user.h #define WPI_CLOCK_REC_PPM_DELTA_ALLOWED             (50) youll need to recomile WDDI ....  "
 
 
@@ -64,17 +64,19 @@ WP_U32 cr_snake_num_of_lines = 16;
 ////////////////////////////////////////////////////////
 ///////////////////// for inter-operation //////////////
 ////////////////////////////////////////////////////////
-#define MORRIS_DISABLE_RTP	(1)
+#define MORRIS_DISABLE_RTP	(0)
 #define MORRIS_DISABLE_L3_HEADER	(1)
 #define MORRIS_DISABLE_VLAN_TAG	(1)
 
 
-#define MORRIS_USE_SMALLEST_BUF_SIZE	(1)
+#define MORRIS_USE_SMALLEST_BUF_SIZE	(0)
 #define MORRIS_CHANGE_RTP_HEADER	(1)
 
 #define MORRIS_USE_1_PW	(0)
 #define MORRIS_NEW_PCE 	(0)
 #define MORRIS_ADD_NEW_CALL_FREERUN	(1)
+
+#define MORRIS_USE_ACR	(1)
 
 #endif
 

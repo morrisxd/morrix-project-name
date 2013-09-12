@@ -1998,7 +1998,7 @@ void CLI_F_SonetSdhE1FramedWithCas(char *StrPrm)
 #if MORRIS_USE_SMALLEST_BUF_SIZE
          sprintf(temp_buf, "0 %d %d 24 24",i,pw_index);
 #else
-#error USE_SMALLEST_BUF_SIZE_should_be_defined
+// #error USE_SMALLEST_BUF_SIZE_should_be_defined
          sprintf(temp_buf, "0 %d %d 64 64",i,pw_index);
 #endif
          CLI_F_PwConfigureUnframed(temp_buf);
