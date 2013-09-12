@@ -74,6 +74,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 
 #define MORRIS_USE_1_PW	(0)
 #define MORRIS_NEW_PCE 	(0)
+#define MORRIS_ADD_NEW_CALL_FREERUN	(1)
 
 #endif
 

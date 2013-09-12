@@ -6506,7 +6506,8 @@ void WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4(WP_U32 line_index, WP_U32 
 
 #if MORRIS_CHANGE_LEVELING
 #if MORRIS_CHANGE_LEVELING_FOR_SNAKE
-      the_system->clock_rec[line_index].jb_leveling_correction_size = 5;
+#warning MORRIS_USE_CUSTOMER_LEVELING_VALUE
+      the_system->clock_rec[line_index].jb_leveling_correction_size = 30; // 5;
       the_system->clock_rec[line_index].jb_leveling_threshold_high = (global_jitter_buffer_size/2) + 2;
       the_system->clock_rec[line_index].jb_leveling_threshold_low = (global_jitter_buffer_size/2) - 2;
 #else
