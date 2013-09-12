@@ -321,6 +321,12 @@ void  WT_UfeSystemCreate(WT_ufe *ufe)
    /* In regression mode. UFE4 is master on the sonet clock so setting zarlink to freerun */
    printf("\nzarlink set to free-run mode\n");
    WUFE_BSSetExtPllFreeRunMode(ufe->ufe_id);
+   if (g_isForceOffset)
+   {
+      WUFE_BSSetExtPllFreeRunModeOffset(the_system->ufe.ufe_id,0x00700000);
+   }
+
+
 #endif
 // #endif
 #endif
