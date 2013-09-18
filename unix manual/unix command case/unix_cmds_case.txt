@@ -30,7 +30,7 @@ quit
 scp dengmorr@216.241.237.121:.ssh/* .
 
 [6]
-cat .ssh/id_rsa.pub ssh dengmorr@216.241.237.121 "cat - >> .ssh/authorized_keys"
+cat .ssh/id_rsa.pub | ssh dengmorr@216.241.237.121 "cat - >> .ssh/authorized_keys"
 
 
 
@@ -336,4 +336,7 @@ http://www.google.ca/
 
 [42] port forward
 ssh -C -g -D 2000 ran1sw08
+
+[43] last command parameter
+echo !$
 
