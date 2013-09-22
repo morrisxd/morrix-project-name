@@ -38,7 +38,8 @@
 //#define DEBUG_PRINT
 
 #ifdef DEBUG_PRINT
-#define MY_PRINTF(x, ...) printf(x, ##__VA_ARGS__)
+// #define MY_PRINTF(x, ...) printf(x, ##__VA_ARGS__)
+#define MY_PRINTF printf
 #else
 #define MY_PRINTF(x, ...)
 #endif
@@ -457,7 +458,7 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
    rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_LAST;
 
-   MY_PRINTF("\n---- Rule Creating -- 00 -------------------------------------------------\n",0);
+   MY_PRINTF("\n---- Rule Creating -- 00 -------------------------------------------------\n");
    WPE_TEST_CHECK_HANDLE(rule_handles[0],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    MY_PRINTF("rule_handle[0] = %X\n", rule_handles[0]);
@@ -466,7 +467,7 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
                      WPI_BASIC_ERROR(WP_ERR_PCE_FILTER_USED_RULES),
                      WP_PceFilterDelete(filter));
 
-   MY_PRINTF("\n---- Creating the same Rule  -- 00 ---------------------------------------\n",0);
+   MY_PRINTF("\n---- Creating the same Rule  -- 00 ---------------------------------------\n");
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_ALREADY_EXISTS),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
@@ -476,7 +477,7 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
                      WP_OK,
                      WP_PceRuleDisable(rule_handles[0]));
 
-   MY_PRINTF("\n---- Creating the disabled Rule  -- 00 -----------------------------------\n",0);
+   MY_PRINTF("\n---- Creating the disabled Rule  -- 00 -----------------------------------\n");
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_ALREADY_EXISTS),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
@@ -484,25 +485,25 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
 
    rule_cfg.rule_fields[0].value.mac_addr[0] = 0x35;
    rule_cfg.rule_fields[1].value.mac_addr[0] = 0x35;
-   MY_PRINTF("\n---- Rule Creating -- 35 ------------------------------------------------\n",0);
+   MY_PRINTF("\n---- Rule Creating -- 35 ------------------------------------------------\n");
    WPE_TEST_CHECK_HANDLE(rule_handles[1],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    MY_PRINTF("rule_handles[1] = %X\n", rule_handles[1]);
 
    rule_cfg.rule_fields[0].value.mac_addr[0] = 0x45;
    rule_cfg.rule_fields[1].value.mac_addr[0] = 0x45;
-   MY_PRINTF("\n---- Rule Creating -- 45 ------------------------------------------------\n",0);
+   MY_PRINTF("\n---- Rule Creating -- 45 ------------------------------------------------\n");
    WPE_TEST_CHECK_HANDLE(rule_handles[2],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    MY_PRINTF("rule_handles[2] = %X\n", rule_handles[2]);
 
-   MY_PRINTF("\n---- Rule Creating: should be the same ---------------------------------\n",0);
+   MY_PRINTF("\n---- Rule Creating: should be the same ---------------------------------\n");
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_ALREADY_EXISTS),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    MY_PRINTF("rule_handle = %X\n", rule_handle);
 
-   MY_PRINTF("\n---- Searching Rule Object: WP_ERR_PCE_OBJECT_NOT_FOUND --------------------\n",0);
+   MY_PRINTF("\n---- Searching Rule Object: WP_ERR_PCE_OBJECT_NOT_FOUND --------------------\n");
    rule_cfg.rule_fields[0].value.mac_addr[0] = 0x46;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_OBJECT_NOT_FOUND),
@@ -511,7 +512,7 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
                                        &rule_cfg));
    rule_cfg.rule_fields[0].value.mac_addr[0] = 0x45;
 
-   MY_PRINTF("\n---- Searching Rule Object: object was found -------------------------------\n",0);
+   MY_PRINTF("\n---- Searching Rule Object: object was found -------------------------------\n");
    WPE_TEST_CHECK_HANDLE(rule_handle,
                      WP_PceObjectSearch (WP_WINPATH(DEFAULT_WPID),
                                        WP_PCE_OBJECT_TYPE_RULE_CLASSIFICATION,
@@ -533,25 +534,25 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
 
    rule_cfg.rule_fields[5].field_id = WP_PCE_FIELD_ID_LAST;
 
-   MY_PRINTF("\n---- Extended Rule Creating --------------------------------------------\n",0);
+   MY_PRINTF("\n---- Extended Rule Creating --------------------------------------------\n");
    WPE_TEST_CHECK_HANDLE(rule_handles[3],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    MY_PRINTF("rule_handles[3] = %X\n", rule_handles[3]);
 
    rule_cfg.rule_fields[4].value.vlan_tag = 0x200;
-   MY_PRINTF("\n---- Extended Rule Creating: VLAN = 200 --------------------------------\n",0);
+   MY_PRINTF("\n---- Extended Rule Creating: VLAN = 200 --------------------------------\n");
    WPE_TEST_CHECK_HANDLE(rule_handles[4],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    MY_PRINTF("rule_handles[4] = %X\n", rule_handles[4]);
 
    rule_cfg.rule_fields[0].value.mac_addr[0] = 0x55;
    rule_cfg.rule_fields[1].value.mac_addr[0] = 0x55;
-   MY_PRINTF("\n---- Extended Rule Creating: MAC0 = 0x55 -------------------------------\n",0);
+   MY_PRINTF("\n---- Extended Rule Creating: MAC0 = 0x55 -------------------------------\n");
    WPE_TEST_CHECK_HANDLE(rule_handles[5],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    MY_PRINTF("rule_handles[5] = %X\n", rule_handles[5]);
 
-   MY_PRINTF("\n---- Extended Rule Creating: should be the same ------------------------\n",0);
+   MY_PRINTF("\n---- Extended Rule Creating: should be the same ------------------------\n");
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_ALREADY_EXISTS),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
@@ -653,7 +654,7 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
                                        WP_PCE_RULE_MODIFY_COMMAND_RESULT,
                                        &rule_cfg));
 
-   MY_PRINTF("\n---- Searching Extended Rule Object ---------------------------------\n",0);
+   MY_PRINTF("\n---- Searching Extended Rule Object ---------------------------------\n");
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_OBJECT_ILLEGAL_TYPE),
                      WP_PceObjectSearch (WP_WINPATH(DEFAULT_WPID),
@@ -668,7 +669,7 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
                                        &rule_cfg));
    rule_cfg.filter_handle = ext_filter;
 
-   MY_PRINTF("\n---- extended rule differs in the first rule entry ------------------\n",0);
+   MY_PRINTF("\n---- extended rule differs in the first rule entry ------------------\n");
    /* extended rule differs in the first rule entry */
    rule_cfg.rule_fields[0].value.mac_addr[0] = 0x54;
    WPE_TEST_CHECK_RESULT(rule_handle,
@@ -678,7 +679,7 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
                                        &rule_cfg));
    rule_cfg.rule_fields[0].value.mac_addr[0] = 0x55;
 
-   MY_PRINTF("\n---- extended rule differs in the second rule entry -----------------\n",0);
+   MY_PRINTF("\n---- extended rule differs in the second rule entry -----------------\n");
    /* extended rule differs in the second rule entry */
    rule_cfg.rule_fields[3].value.ipv4_addr = 0x12345678;
    WPE_TEST_CHECK_RESULT(rule_handle,
@@ -752,7 +753,7 @@ static void WPE_PceRulesTest(WP_U32 rules_num, WP_U32 seed)
 /***************************************************************
  * Many Rules Test
  **************************************************************/
-   MY_PRINTF("\n---- Many rules creating -------------------\n",0);
+   MY_PRINTF("\n---- Many rules creating -------------------\n");
    rule_cfg.filter_handle = filter;
    rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
    for(i=0; i<6; i++)
@@ -935,7 +936,7 @@ static void WPE_PceRemarkedFieldsTest(void)
    filter_clas.no_fields_action = WP_PCE_FILTER_NO_FIELDS_CONTINUE;
    filter_clas.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
-   MY_PRINTF("\n---- Remarked Fields Test ------------\n",0);
+   MY_PRINTF("\n---- Remarked Fields Test ------------\n");
    MY_PRINTF("\n------------- Filter %d Creating: REM MAC_SA ----------\n", filter_index);
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_REMARKED_MAC_SA;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
@@ -1112,7 +1113,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_handle temp_rule_handles[1000], rule_handle;
    WP_pce_result_flow_agg result_flow_agg;
 
-   MY_PRINTF("\n----------------   PCE Rule Results Test Start   -------------------\n\n",0);
+   MY_PRINTF("\n----------------   PCE Rule Results Test Start   -------------------\n\n");
    rule_cfg.filter_handle = results_special_filter;
    rule_cfg.enabled = WP_ENABLE;
    rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
@@ -1127,7 +1128,7 @@ static void WPE_PceRuleResultsTest(void)
 
    rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
 
-   MY_PRINTF("\n----------------   Results: EXT VLAN - ERRORS  -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: EXT VLAN - ERRORS  -------------------\n\n");
    rule_cfg.match_result[0].param.ext_vlan.vlan_tag = 0xABCD;
    rule_cfg.match_result[0].param.ext_vlan.mask = 0xEFFF;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE;
@@ -1151,7 +1152,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_TYPE_UNSUPPORTED),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 */
-   MY_PRINTF("\n----------------   Results: FLOW AGG - ERROR  -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: FLOW AGG - ERROR  -------------------\n\n");
 
    result_flow_agg.flow_aggregation = 0; /* wrong flow agregation handle */
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
@@ -1161,7 +1162,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_HANDLE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: 2 x FLOW AGG - ERROR   -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: 2 x FLOW AGG - ERROR   -------------------\n\n");
    result_flow_agg.flow_aggregation = flow_aggregation3; /* wrong flow agregation handle */
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[0].param.flow_agg = result_flow_agg;
@@ -1173,7 +1174,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_TYPE_REPEATED),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: CLAS RULE AGING usage - ERROR   -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: CLAS RULE AGING usage - ERROR   -------------------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[0].param.flow_agg = result_flow_agg;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_AGING;
@@ -1185,7 +1186,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_AGING_USAGE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: size exceeeded - ERROR   -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: size exceeeded - ERROR   -------------------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[0].param.flow_agg = result_flow_agg;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
@@ -1205,7 +1206,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_SIZE_EXCEEDED),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: two updatings (HFR) - ERROR   -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: two updatings (HFR) - ERROR   -------------------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_IN_IW_PORT_UPDATE;
    rule_cfg.match_result[0].param.iw_port.iw_port_handle = bport_iw3;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
@@ -1216,7 +1217,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_UPDATES_EXCEEDED),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: two updatings (HFR) - ERROR   -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: two updatings (HFR) - ERROR   -------------------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_MPLS_LABEL;
    rule_cfg.match_result[0].param.mpls_label_remarking.mpls_label = 0x31A6D;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_OUT_IW_PORT_UPDATE;
@@ -1227,7 +1228,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_UPDATES_EXCEEDED),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: Illegal MPLS label - ERROR   -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: Illegal MPLS label - ERROR   -------------------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_MPLS_LABEL;
    rule_cfg.match_result[0].param.mpls_label_remarking.mpls_label = 0x1FFFFF;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
@@ -1236,7 +1237,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_MPLS_LABEL),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: Create legal MPLS label: (0xAB123) -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: Create legal MPLS label: (0xAB123) -------------------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_MPLS_LABEL;
    rule_cfg.match_result[0].param.mpls_label_remarking.mpls_label = 0xAB123;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
@@ -1250,7 +1251,7 @@ static void WPE_PceRuleResultsTest(void)
                      WP_PceRuleModify(temp_rule_handles[temp_rule_index], WP_PCE_RULE_MODIFY_COMMAND_MATCH_ACTION, &rule_cfg));
    rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
 
-   MY_PRINTF("\n----------------   Results: FAGG & MPLS label: (0xEA031) -------------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: FAGG & MPLS label: (0xEA031) -------------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_MPLS_LABEL;
    rule_cfg.match_result[0].param.mpls_label_remarking.mpls_label = 0xEA031;
@@ -1261,7 +1262,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: FAGG & MPLS label & VID : size exceeded error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: FAGG & MPLS label & VID : size exceeded error -----------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].param.mpls_label_remarking.mpls_label = 0xEA031;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_MPLS_LABEL;
@@ -1276,7 +1277,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_SIZE_EXCEEDED),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: type 0 error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: type 0 error -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[0] = 16;
@@ -1290,68 +1291,68 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_TYPE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: rem val 0 error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: rem val 0 error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: ext vlan pri val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: ext vlan pri val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_EXT_VLAN_PRIO;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[0] = 0xA;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: ext vlan dei val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: ext vlan dei val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_EXT_VLAN_DEI;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[0] = 0x3;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: ext vlan prio dei val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: ext vlan prio dei val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_EXT_VLAN_PRIO_DEI;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[0] = 0x15;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: type 1 error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: type 1 error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[1] = 45;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_TYPE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: rem val 1 error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: rem val 1 error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[1] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[1] = 0x71;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: int vlan pri val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: int vlan pri val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[1] = WP_PCE_RESULT_PPR_TYPE_INT_VLAN_PRIO;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[1] = 0xAA;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: int vlan dei val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: int vlan dei val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[1] = WP_PCE_RESULT_PPR_TYPE_INT_VLAN_DEI;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[1] = 0x5;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: int vlan prio dei val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: int vlan prio dei val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[1] = WP_PCE_RESULT_PPR_TYPE_INT_VLAN_PRIO_DEI;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[1] = 0x17;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: type 2 error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: type 2 error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[1] = 0xA;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[2] = 59;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[2] = 0x1;
@@ -1359,14 +1360,14 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_TYPE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: rem val 2 error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: rem val 2 error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[2] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[2] = 0x10;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: type 3 error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: type 3 error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[2] = 0xA;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[3] = 72;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[3] = 0x1;
@@ -1374,35 +1375,35 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_TYPE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: rem val 3 error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: rem val 3 error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[3] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[3] = 0x10;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: tos dscp val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: tos dscp val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[3] = WP_PCE_RESULT_PPR_TYPE_TOS_DSCP;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[3] = 0x45;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: tos prec val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: tos prec val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[3] = WP_PCE_RESULT_PPR_TYPE_TOS_PRECEDENCE;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[3] = 0xE;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: tos dscp val error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: tos dscp val error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[3] = WP_PCE_RESULT_PPR_TYPE_TOS_DSCP_DROP_PRECEDENCE;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[3] = 0x8;
    WPE_TEST_CHECK_RESULT(rule_handle,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_ILLEGAL_VALUE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: nothing to change error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: nothing to change error -----------\n\n");
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[1] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[2] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1411,7 +1412,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_PPR_NOTHING_TO_CHANGE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 0x7 0x1 0xE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 0x7 0x1 0xE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
@@ -1426,7 +1427,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 0x7 XXX XXX ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 0x7 XXX XXX ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
@@ -1437,7 +1438,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX XXX 0x1 0xE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX XXX 0x1 0xE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1448,7 +1449,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX 0x7 XXX 0xE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX 0x7 XXX 0xE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1459,7 +1460,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX 0x7 XXX XXX ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX 0x7 XXX XXX ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1470,7 +1471,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX XXX XXX 0xE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX XXX XXX 0xE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1481,7 +1482,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 0x7 XXX 0xE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 0x7 XXX 0xE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
@@ -1492,7 +1493,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 0x7 0x1 XXX ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 0x7 0x1 XXX ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
@@ -1503,7 +1504,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX 0x7 0x1 0xE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: XXX 0x7 0x1 0xE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1514,7 +1515,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 XXX 0x1 0xE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref rem: 0x9 XXX 0x1 0xE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
@@ -1525,7 +1526,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: evpt 3 idei 1 XXX dscp 0x15 ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: evpt 3 idei 1 XXX dscp 0x15 ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_EXT_VLAN_PRIO;
@@ -1540,7 +1541,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: edei 1 ivpt 5 rem2 0x9 tos 0xED ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: edei 1 ivpt 5 rem2 0x9 tos 0xED ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_EXT_VLAN_DEI;
@@ -1555,7 +1556,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: edpt 0xE idpt 0xB rem2 0x4 precedence 0x5 ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: edpt 0xE idpt 0xB rem2 0x4 precedence 0x5 ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_EXT_VLAN_PRIO_DEI;
@@ -1570,7 +1571,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: edpt 0xA XXX XXX dscp/prec 0x3 ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: edpt 0xA XXX XXX dscp/prec 0x3 ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_EXT_VLAN_PRIO_DEI;
@@ -1583,7 +1584,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: edpt 0xA XXX & FLOW AGG ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: edpt 0xA XXX & FLOW AGG ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_EXT_VLAN_PRIO_DEI;
@@ -1597,7 +1598,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: rem0 0xE idpt 0xB & FLOW AGG & LRN FLOW AGG & FS change-------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: rem0 0xE idpt 0xB & FLOW AGG & LRN FLOW AGG & FS change-------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
@@ -1616,7 +1617,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO masked & MPLS label error ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO masked & MPLS label error ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -1631,7 +1632,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_COMBINATION),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: IN IW PORT illegal handle ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: IN IW PORT illegal handle ----------------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_IN_IW_PORT_UPDATE;
    rule_cfg.match_result[0].param.iw_port.iw_port_handle = filter_set_lvl1_handle;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
@@ -1639,7 +1640,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_HANDLE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: IN IW PORT ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: IN IW PORT ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_IN_IW_PORT_UPDATE;
    rule_cfg.match_result[0].param.iw_port.iw_port_handle = bport_iw3;
@@ -1647,7 +1648,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: FS CHANGE IN IW PORT ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: FS CHANGE IN IW PORT ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FILTER_SET_CHANGE;
    rule_cfg.match_result[0].param.change_fs.filter_set_handle = filter_set_lvl1_handle;
@@ -1657,7 +1658,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: UPD EXT VID ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: UPD EXT VID ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE;
    rule_cfg.match_result[0].param.ext_vlan.vlan_tag = 0x1234;
@@ -1666,7 +1667,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: UPD INT VID ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: UPD INT VID ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
    rule_cfg.match_result[0].param.int_vlan.vlan_tag = 0xABCD;
@@ -1675,7 +1676,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref_vprio 0x7 (see 0xE) pref_exp 0x5 XXX XXX ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref_vprio 0x7 (see 0xE) pref_exp 0x5 XXX XXX ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_VLAN_PRIO;
@@ -1688,7 +1689,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: ING POLICER COLOR RED  ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: ING POLICER COLOR RED  ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INGRESS_POLICER_INPUT_COLOR;
    rule_cfg.match_result[0].param.policer_color.color = WP_IW_TCM_INPUT_COLOR_RED;
@@ -1696,7 +1697,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 5  ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 5  ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_NUM_OF_MPLS_HEADERS_TO_POP;
    rule_cfg.match_result[0].param.num_mpls_headers_to_pop.number = 5;
@@ -1704,7 +1705,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 3 & ING POLICER COLOR YELLOW  ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 3 & ING POLICER COLOR YELLOW  ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_NUM_OF_MPLS_HEADERS_TO_POP;
    rule_cfg.match_result[0].param.num_mpls_headers_to_pop.number = 3;
@@ -1714,7 +1715,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 3 & ING POLICER COLOR YELLOW & IW OUT PORT ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 3 & ING POLICER COLOR YELLOW & IW OUT PORT ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_NUM_OF_MPLS_HEADERS_TO_POP;
    rule_cfg.match_result[0].param.num_mpls_headers_to_pop.number = 3;
@@ -1734,7 +1735,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 3 & ING POLICER COLOR GREEN & IW OUT PORT & FS_CHANGE ---\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 3 & ING POLICER COLOR GREEN & IW OUT PORT & FS_CHANGE ---\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_NUM_OF_MPLS_HEADERS_TO_POP;
    rule_cfg.match_result[0].param.num_mpls_headers_to_pop.number = 3;
@@ -1748,7 +1749,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & EXT VID 0x0AFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & EXT VID 0x0AFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_NUM_OF_MPLS_HEADERS_TO_POP;
    rule_cfg.match_result[0].param.num_mpls_headers_to_pop.number = 4;
@@ -1764,7 +1765,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & EXT VLAN 0xCAFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & EXT VLAN 0xCAFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[4] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_NUM_OF_MPLS_HEADERS_TO_POP;
    rule_cfg.match_result[0].param.num_mpls_headers_to_pop.number = 4;
@@ -1780,7 +1781,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[4] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_NUM_OF_MPLS_HEADERS_TO_POP;
    rule_cfg.match_result[0].param.num_mpls_headers_to_pop.number = 4;
@@ -1812,7 +1813,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[4] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
    rule_cfg.match_result[0].param.ext_vlan.mask = WP_PCE_MASK_VLAN_FULL;
@@ -1827,7 +1828,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[4] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
    rule_cfg.match_result[0].param.ext_vlan.mask = WP_PCE_MASK_VLAN_ID;
@@ -1842,7 +1843,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[4] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
    rule_cfg.match_result[0].param.ext_vlan.mask = WP_PCE_MASK_VLAN_FULL;
@@ -1857,7 +1858,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[4] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
    rule_cfg.match_result[0].param.ext_vlan.mask = WP_PCE_MASK_VLAN_ID;
@@ -1874,7 +1875,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[4] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
    rule_cfg.match_result[0].param.ext_vlan.mask = WP_PCE_MASK_VLAN_FULL;
@@ -1889,7 +1890,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_COMBINATION),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: NUM MPLS POP 4 & ING POLICER COLOR RED & INT VLAN 0xFACE EXT VLAN 0xCAFE ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[4] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INT_VLAN_UPDATE;
    rule_cfg.match_result[0].param.ext_vlan.mask = WP_PCE_MASK_VLAN_FULL;
@@ -1904,7 +1905,7 @@ static void WPE_PceRuleResultsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), temp_rule_handles[temp_rule_index], 0, 0);
 #endif
 
-   MY_PRINTF("\n----------------   Results: MAC SA REMARK: 0A CE CA FE FA CE ---------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: MAC SA REMARK: 0A CE CA FE FA CE ---------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_MAC_SA;
    rule_cfg.match_result[0].param.mac_remarking.mac_addr[0] = 0x0A;
@@ -1917,7 +1918,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: MAC DA REMARK: 01 02 03 04 05 06 ---------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: MAC DA REMARK: 01 02 03 04 05 06 ---------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_MAC_DA;
    for(i=0; i<6; i++)
@@ -1926,7 +1927,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: MAC DA REMARK & FS_CHANGE error ---------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: MAC DA REMARK & FS_CHANGE error ---------------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_MAC_DA;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_FILTER_SET_CHANGE;
    rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
@@ -1934,7 +1935,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_SIZE_EXCEEDED),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: USER SPECIFIC REMARK: 0x11 0x12 0x13 0x14 0x15 0x16 0x17 ---------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: USER SPECIFIC REMARK: 0x11 0x12 0x13 0x14 0x15 0x16 0x17 ---------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_REMARK_USER_SPECIFIC;
    for(i=0; i<WP_PCE_USER_SPECIFIC_FIELD_SIZE; i++)
@@ -1943,7 +1944,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PRIORITY MAPPING: 0xDB ---------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PRIORITY MAPPING: 0xDB ---------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PRIORITY_MAPPING;
    rule_cfg.match_result[0].param.priority_mapping.value = 0xDB;
@@ -1951,7 +1952,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PRIORITY MAPPING: 0xDB & FAGG & LRN_FAGG & FS_CHANGE -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PRIORITY MAPPING: 0xDB & FAGG & LRN_FAGG & FS_CHANGE -----------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PRIORITY_MAPPING;
    rule_cfg.match_result[0].param.priority_mapping.value = 0xDB;
@@ -1965,7 +1966,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: policer error handle -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: policer error handle -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PRIORITY_MAPPING;
    rule_cfg.match_result[0].param.priority_mapping.value = 0xDB;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_FLOW_AGG;
@@ -1977,7 +1978,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_HANDLE),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: policer, policer action, FAGG, PRIO MAP -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: policer, policer action, FAGG, PRIO MAP -----------\n\n");
    WPE_TEST_CHECK_HANDLE(policer_action_handle,
       WP_PolicerActionCreate(WP_WINPATH(DEFAULT_WPID), &policer_action));
    WPE_TEST_CHECK_HANDLE(policer_action_handle,
@@ -2009,7 +2010,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: cong prof index: 0xFFFF error -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: cong prof index: 0xFFFF error -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_CONGESTION_PROFILE;
    rule_cfg.match_result[0].param.congestion_profile.index = 0xFFFF;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
@@ -2017,7 +2018,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_CONG_PROF_INDEX),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: cong prof index: 0x03FF & REDIRECT_TO_COMPATIBLE -----\n\n",0);
+   MY_PRINTF("\n----------------   Results: cong prof index: 0x03FF & REDIRECT_TO_COMPATIBLE -----\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_CONGESTION_PROFILE;
    rule_cfg.match_result[0].param.congestion_profile.index = 0x3FF;
@@ -2026,7 +2027,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: policer w/o action, PPR (1) -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: policer w/o action, PPR (1) -----------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INGRESS_POLICER;
    rule_cfg.match_result[0].param.ingress_policer.policer = policer_without_action;
@@ -2040,7 +2041,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: policer w/o action, policer color (1) -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: policer w/o action, policer color (1) -----------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INGRESS_POLICER_INPUT_COLOR;
    rule_cfg.match_result[0].param.policer_color.color = WP_IW_TCM_INPUT_COLOR_RED;
@@ -2050,7 +2051,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: policer, policer action, policer color -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: policer, policer action, policer color -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_INGRESS_POLICER_INPUT_COLOR;
    rule_cfg.match_result[0].param.policer_color.color = WP_IW_TCM_INPUT_COLOR_RED;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_INGRESS_POLICER;
@@ -2060,7 +2061,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_COMBINATION),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: flow agg, prio mapping, NMHP -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: flow agg, prio mapping, NMHP -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_NUM_OF_MPLS_HEADERS_TO_POP;
    rule_cfg.match_result[0].param.num_mpls_headers_to_pop.number = 3;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_FLOW_AGG;
@@ -2072,7 +2073,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_COMBINATION),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: flow agg, prio mapping, PPR (1) -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: flow agg, prio mapping, PPR (1) -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[0].param.flow_agg.flow_aggregation = flow_aggregation3;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
@@ -2088,7 +2089,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_COMBINATION),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: flow agg, learning flow agg, PPR (4) -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: flow agg, learning flow agg, PPR (4) -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[0].param.flow_agg.flow_aggregation = flow_aggregation3;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LEARNING_FLOW_AGG;
@@ -2104,7 +2105,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_COMBINATION),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: pref_vprio 0x7 (see 0xE) pref_exp 0x5 XXX XXX & NMHP ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: pref_vprio 0x7 (see 0xE) pref_exp 0x5 XXX XXX & NMHP ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_VLAN_PRIO;
@@ -2119,7 +2120,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: PREF PRIO: XXX pref_exp 0x5 XXX XXX & NMHP ----------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: PREF PRIO: XXX pref_exp 0x5 XXX XXX & NMHP ----------------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
@@ -2133,7 +2134,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: flow agg, PPR (1, 3 & 4) -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: flow agg, PPR (1, 3 & 4) -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[0].param.flow_agg.flow_aggregation = flow_aggregation3;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
@@ -2149,7 +2150,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_COMBINATION),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: priority mapping, PPR (1, 3 & 4) -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: priority mapping, PPR (1, 3 & 4) -----------\n\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PRIORITY_MAPPING;
    rule_cfg.match_result[0].param.priority_mapping.value = 0xDB;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
@@ -2165,7 +2166,7 @@ static void WPE_PceRuleResultsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_RESULT_ILLEGAL_COMBINATION),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: priority mapping, PPR (1, 2 & 3) -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: priority mapping, PPR (1, 2 & 3) -----------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PRIORITY_MAPPING;
    rule_cfg.match_result[0].param.priority_mapping.value = 0xDB;
@@ -2181,7 +2182,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: flow agg, PPR (1, 2 & 3) -----------\n\n",0);
+   MY_PRINTF("\n----------------   Results: flow agg, PPR (1, 2 & 3) -----------\n\n");
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[0].param.flow_agg.flow_aggregation = flow_aggregation3;
@@ -2197,7 +2198,7 @@ static void WPE_PceRuleResultsTest(void)
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
-   MY_PRINTF("\n----------------   Results: Remove the created rules --------------\n\n",0);
+   MY_PRINTF("\n----------------   Results: Remove the created rules --------------\n\n");
    for(i=0;i<=temp_rule_index; i++)
    {
       WPE_TEST_CHECK_RESULT(status,
@@ -2205,7 +2206,7 @@ static void WPE_PceRuleResultsTest(void)
                         WP_PceRuleDelete(temp_rule_handles[i]));
    }
 
-   MY_PRINTF("\n----------------   PCE Rule Results Test Finish  -------------------\n\n",0);
+   MY_PRINTF("\n----------------   PCE Rule Results Test Finish  -------------------\n\n");
 }
 
 static void WPE_PceNewFieldsTest(void)
@@ -2221,7 +2222,7 @@ static void WPE_PceNewFieldsTest(void)
    filter_clas.no_match_result[0].result_type = WP_PCE_RESULT_LAST;
 
    MY_PRINTF("\n---- Single Filter (filter2) Creating: \n  "
-      "ETHER ENCAP TYPE & VLAN TYPE & PPPoE SID & PPPoE PID & IPV4_MORE_FRAGMENTS ----------\n",0);
+      "ETHER ENCAP TYPE & VLAN TYPE & PPPoE SID & PPPoE PID & IPV4_MORE_FRAGMENTS ----------\n");
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_ETHER_ENCAP_TYPE;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_clas.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
@@ -2249,7 +2250,7 @@ static void WPE_PceNewFieldsTest(void)
 
    MY_PRINTF("\n---- Extended Filter (ext_filter2) Creating: \n  "
       "IPV6 FLOW & MPLSH1 & MPLSH5 & Num MPLSH & \n"
-      "GRE Prot & GRE key & PARSER_FLAGS & MPLSH2 & MPLSH3 ------\n", 0);
+      "GRE Prot & GRE key & PARSER_FLAGS & MPLSH2 & MPLSH3 ------\n");
 
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_FLOW_LABEL;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
@@ -2302,7 +2303,7 @@ static void WPE_PceNewFieldsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), ext_filter2, 0, 0);
 #endif
 
-   MY_PRINTF("\n---- MPLSHDR 4 error mask check ----------\n",0);
+   MY_PRINTF("\n---- MPLSHDR 4 error mask check ----------\n");
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_MPLS_HEADER4;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_clas.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_USED;
@@ -2319,7 +2320,7 @@ static void WPE_PceNewFieldsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_FILTER_NON_CONTINOUS_MASK),
                      WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_clas));
 
-   MY_PRINTF("\n---- IPv6 lflow number error mask check ----------\n",0);
+   MY_PRINTF("\n---- IPv6 lflow number error mask check ----------\n");
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_FLOW_LABEL;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_clas.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_USED;
@@ -2331,7 +2332,7 @@ static void WPE_PceNewFieldsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_FILTER_ILLEGAL_MASK),
                      WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_clas));
 
-   MY_PRINTF("\n---- VLAN Type error mask check ----------\n",0);
+   MY_PRINTF("\n---- VLAN Type error mask check ----------\n");
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_VLAN_TYPE;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_clas.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_USED;
@@ -2343,7 +2344,7 @@ static void WPE_PceNewFieldsTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_FILTER_ILLEGAL_MASK),
                      WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_clas));
 
-   MY_PRINTF("\n---- IPv4 Src error mask check ----------\n",0);
+   MY_PRINTF("\n---- IPv4 Src error mask check ----------\n");
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_IPV4_SA;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_clas.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_USED;
@@ -2358,7 +2359,7 @@ static void WPE_PceNewFieldsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), filter_1bit_mask, 0, 0);
 #endif
 
-   MY_PRINTF("\n---- Parser Flags error mask check ----------\n",0);
+   MY_PRINTF("\n---- Parser Flags error mask check ----------\n");
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_PARSER_FLAGS;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_clas.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_USED;
@@ -2382,7 +2383,7 @@ static void WPE_PceNewFieldsTest(void)
 
    MY_PRINTF("\n---- Extended Filter (ext_filter3) Creating: \n  "
       "IPv6 SA HIGH & IPv6 SA LOW (mask 01 FF FF FF FF FF FF C0 \n"
-      "IPv6 DA HIGH & IPv6 DA LOW (mask 3F FF FF FF FF FF FF FE  ------\n", 0);
+      "IPv6 DA HIGH & IPv6 DA LOW (mask 3F FF FF FF FF FF FF FE  ------\n");
 
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_SA_HIGH;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
@@ -2417,7 +2418,7 @@ static void WPE_PceNewFieldsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), ext_filter3, 0, 0);
 #endif
 
-   MY_PRINTF("\n---- rule2 (on filter2) creating ----------\n",0);
+   MY_PRINTF("\n---- rule2 (on filter2) creating ----------\n");
    rule_cfg.enabled = WP_ENABLE;
    rule_cfg.match_action = WP_PCE_RULE_MATCH_CONTINUE;
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_LAST;
@@ -2452,7 +2453,7 @@ static void WPE_PceNewFieldsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), rule_1bit_mask, 0, 0);
 #endif
 
-   MY_PRINTF("\n---- Extended Rule (ext_filter2) Creating ----------\n",0);
+   MY_PRINTF("\n---- Extended Rule (ext_filter2) Creating ----------\n");
    rule_cfg.filter_handle = ext_filter2;
    rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_FLOW_LABEL;
    rule_cfg.rule_fields[0].value.ipv6_flow_label = 0x7ACE4F;
@@ -2481,21 +2482,21 @@ static void WPE_PceNewFieldsTest(void)
    WP_Display(WP_WINPATH(DEFAULT_WPID), ext_rule2, 0, 0);
 #endif
 
-   MY_PRINTF("\n---- Rule field IPv6 flow label wrong vaue: check error ----------\n",0);
+   MY_PRINTF("\n---- Rule field IPv6 flow label wrong vaue: check error ----------\n");
    rule_cfg.rule_fields[0].value.ipv6_flow_label = 0x22E12345;
    WPE_TEST_CHECK_RESULT(rule3,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_ILLEGAL_IPV6_FLOW_NUMBER),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    rule_cfg.rule_fields[0].value.ipv6_flow_label = 0xEA58D3;
 
-   MY_PRINTF("\n---- Rule field MPLS HEADER wrong vaue: check error ----------\n",0);
+   MY_PRINTF("\n---- Rule field MPLS HEADER wrong vaue: check error ----------\n");
    rule_cfg.rule_fields[2].value.mpls_header = 0x1555555;
    WPE_TEST_CHECK_RESULT(rule3,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_ILLEGAL_MPLS_HEADER),
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    rule_cfg.rule_fields[2].value.mpls_header = 0x555555;
 
-   MY_PRINTF("\n---- Rule field number of MPLS headers wrong vaue: check error ----------\n",0);
+   MY_PRINTF("\n---- Rule field number of MPLS headers wrong vaue: check error ----------\n");
    rule_cfg.rule_fields[3].value.num_of_mpls_headers = 17;
    WPE_TEST_CHECK_RESULT(rule3,
                      WPI_BASIC_ERROR(WP_ERR_PCE_RULE_ILLEGAL_NUM_OF_MPLS_HEADERS),
@@ -2503,7 +2504,7 @@ static void WPE_PceNewFieldsTest(void)
    rule_cfg.rule_fields[3].value.num_of_mpls_headers = 2;
 
    rule_cfg.filter_handle = filter2;
-   MY_PRINTF("\n---- Rule field ENCAPSULATION wrong vaue: check error ----------\n",0);
+   MY_PRINTF("\n---- Rule field ENCAPSULATION wrong vaue: check error ----------\n");
    rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_ETHER_ENCAP_TYPE;
    rule_cfg.rule_fields[0].value.ether_encap_type = WP_ENCAPSULATION_TYPE_UNKNOWN+1;
    WPE_TEST_CHECK_RESULT(rule3,
@@ -2511,7 +2512,7 @@ static void WPE_PceNewFieldsTest(void)
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
    rule_cfg.rule_fields[0].value.ether_encap_type = WP_ENCAPSULATION_TYPE_PURE_LLC;
 
-   MY_PRINTF("\n---- Rule field VLAN type wrong vaue: check error ----------\n",0);
+   MY_PRINTF("\n---- Rule field VLAN type wrong vaue: check error ----------\n");
    rule_cfg.rule_fields[1].field_id = WP_PCE_FIELD_ID_VLAN_TYPE;
    rule_cfg.rule_fields[1].value.vlan_type = WP_VLAN_TYPE_S_PLUS_C_VLAN_TAGGED+3;
    WPE_TEST_CHECK_RESULT(rule3,
@@ -2521,7 +2522,7 @@ static void WPE_PceNewFieldsTest(void)
 
    MY_PRINTF("\n---- Extended Rule (ext_rule3) Creating: \n  "
       "IPv6 SA HIGH 01 23 45 66 77 88 99 AA & IPv6 SA LOW FF BB CC DD EE DC BA FF (mask 01 FF FF FF FF FF FF C0 \n"
-      "IPv6 DA HIGH 12 23 34 56 78 88 76 54 & IPv6 DA LOW FF AB BA CA FE FA CE FF (mask 3F FF FF FF FF FF FF FE  ------\n", 0);
+      "IPv6 DA HIGH 12 23 34 56 78 88 76 54 & IPv6 DA LOW FF AB BA CA FE FA CE FF (mask 3F FF FF FF FF FF FF FE  ------\n");
    rule_cfg.filter_handle = ext_filter3;
 
    rule_cfg.rule_fields[0].field_id = WP_PCE_FIELD_ID_IPV6_SA_HIGH;
@@ -2604,8 +2605,8 @@ static void WPE_PceFiltersTest(void)
 /***************************************************************
  * Single Filter Test
  **************************************************************/
-   MY_PRINTF("\n---- Single Filter Test ------------\n",0);
-   MY_PRINTF("\n------------- Single Filter Creating: MAC_DA MAC_SA ----------\n",0);
+   MY_PRINTF("\n---- Single Filter Test ------------\n");
+   MY_PRINTF("\n------------- Single Filter Creating: MAC_DA MAC_SA ----------\n");
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_clas.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
@@ -2667,12 +2668,12 @@ static void WPE_PceFiltersTest(void)
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterModify(filter_temp1, WP_PCE_FILTER_MODIFY_COMMAND_RESULT, &filter_clas));
-   MY_PRINTF("\n---- The Filter Modified (with no match result)\n",0);
+   MY_PRINTF("\n---- The Filter Modified (with no match result)\n");
 
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterDelete(filter_temp1));
-   MY_PRINTF("\n---- The Filter (with no match result) Deleted \n",0);
+   MY_PRINTF("\n---- The Filter (with no match result) Deleted \n");
 
    WPE_TEST_CHECK_HANDLE(results_special_filter,
                      WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_clas));
@@ -2713,7 +2714,7 @@ static void WPE_PceFiltersTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_FILTER_MODIFY_ILLEGAL_COMMAND),
                      WP_PceFilterModify(filter, 100 /* wrong filter modify command */, &filter_clas));
 
-   MY_PRINTF("\n---- One More Single Filter (filter1) Creating: MAC_DA MAC_SA ----------\n",0);
+   MY_PRINTF("\n---- One More Single Filter (filter1) Creating: MAC_DA MAC_SA ----------\n");
    WPE_TEST_CHECK_HANDLE(filter1,
                      WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_clas));
    MY_PRINTF("\n---- Single Filter (filter1) Created: 0x%X ----------\n", (WP_U32) filter1);
@@ -2721,8 +2722,8 @@ static void WPE_PceFiltersTest(void)
 /***************************************************************
  * Extended Filter Test
  **************************************************************/
-   MY_PRINTF("\n---- Extended Filter Test ------------\n",0);
-   MY_PRINTF("\n------------- Extended Filter Creating: MAC_DA MAC_SA IPV4_SA IPV4_DA VLAN_ID ----------\n",0);
+   MY_PRINTF("\n---- Extended Filter Test ------------\n");
+   MY_PRINTF("\n------------- Extended Filter Creating: MAC_DA MAC_SA IPV4_SA IPV4_DA VLAN_ID ----------\n");
    filter_clas.filter_fields[0].field_id = WP_PCE_FIELD_ID_MAC_DA;
    filter_clas.filter_fields[0].field_mode = WP_PCE_FIELD_MODE_COMPARE_EXACT_MATCH;
    filter_clas.filter_fields[0].mask_mode = WP_PCE_FIELD_MASK_NOT_USED;
@@ -2752,7 +2753,7 @@ static void WPE_PceFiltersTest(void)
                      WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_clas));
    MY_PRINTF("\n---- Extended Filter Created: 0x%X ----------\n", (WP_U32) ext_filter);
 
-   MY_PRINTF("\n---- One More Extended Filter Creating: MAC_DA MAC_SA IPV4_SA IPV4_DA VLAN_ID ----------\n",0);
+   MY_PRINTF("\n---- One More Extended Filter Creating: MAC_DA MAC_SA IPV4_SA IPV4_DA VLAN_ID ----------\n");
    WPE_TEST_CHECK_HANDLE(ext_filter1,
                      WP_PceFilterCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_FILTER_CLASSIFICATION, &filter_clas));
    MY_PRINTF("\n---- Extended Filter Created: 0x%X ----------\n", (WP_U32) ext_filter1);
@@ -2762,7 +2763,7 @@ static void WPE_PceDeleteFiltersTest(void)
 {
    WP_status status;
 
-   MY_PRINTF("Deleting filters test started.\n",0);
+   MY_PRINTF("Deleting filters test started.\n");
    MY_PRINTF("Filter delete 0x%X\n", filter);
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
@@ -2781,22 +2782,22 @@ static void WPE_PceDeleteFiltersTest(void)
                          WPI_BASIC_ERROR(WP_ERR_HANDLE),
                          WP_PceFilterDelete(filter));
 
-   MY_PRINTF("Filter 1 delete\n",0);
+   MY_PRINTF("Filter 1 delete\n");
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterDelete(filter1));
 
-   MY_PRINTF("Extended filter delete\n",0);
+   MY_PRINTF("Extended filter delete\n");
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterDelete(ext_filter));
 
-   MY_PRINTF("Extended filter 1 delete\n",0);
+   MY_PRINTF("Extended filter 1 delete\n");
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterDelete(ext_filter1));
 
-   MY_PRINTF("Deleting filters test finished.\n",0);
+   MY_PRINTF("Deleting filters test finished.\n");
 }
 
 static void WPE_PceFilterSetsCreateTest(void)
@@ -2834,7 +2835,7 @@ static void WPE_PceFilterSetsCreateTest(void)
                      WP_PceFilterSetCreate(WP_WINPATH(DEFAULT_WPID), &fs_level1_1));
    fs_level1_1.filters[0] = filter1;
 
-   MY_PRINTF("\n---- Level 1 Filter Set Creating: -------------------------\n",0);
+   MY_PRINTF("\n---- Level 1 Filter Set Creating: -------------------------\n");
    WPE_TEST_CHECK_HANDLE(filter_set_lvl1_handle,
                      WP_PceFilterSetCreate(WP_WINPATH(DEFAULT_WPID), &fs_level1_1));
    MY_PRINTF("\n---- Level 1 Filter Set  Created: 0x%X ----------\n", (WP_U32) filter_set_lvl1_handle);
@@ -2853,7 +2854,7 @@ static void WPE_PceFilterSetsCreateTest(void)
    fs_level1_2.filters[5] = filter1;
    fs_level1_2.filters[6] = WP_UNUSED;
 
-   MY_PRINTF("\n---- Level 1 Filter Set 2 Creating: -------------------------\n",0);
+   MY_PRINTF("\n---- Level 1 Filter Set 2 Creating: -------------------------\n");
    WPE_TEST_CHECK_HANDLE(filter_set_lvl1_handle2,
                      WP_PceFilterSetCreate(WP_WINPATH(DEFAULT_WPID), &fs_level1_2));
    MY_PRINTF("\n---- Level 1 Filter Set  Created: 0x%X ----------\n", (WP_U32) filter_set_lvl1_handle2);
@@ -2886,7 +2887,7 @@ static void WPE_PceFilterSetsCreateTest(void)
                      WP_PceFilterSetCreate(WP_WINPATH(DEFAULT_WPID), &fs_level0));
    fs_level0.next_filter_set = filter_set_lvl1_handle;
 
-   MY_PRINTF("\n---- Level 0 Filter Set Creating: -------------------------\n",0);
+   MY_PRINTF("\n---- Level 0 Filter Set Creating: -------------------------\n");
    WPE_TEST_CHECK_HANDLE(filter_set_lvl0_handle,
                      WP_PceFilterSetCreate(WP_WINPATH(DEFAULT_WPID), &fs_level0));
    MY_PRINTF("\n---- Level 0 Filter Set  Created: 0x%X ----------\n", (WP_U32) filter_set_lvl0_handle);
@@ -2897,7 +2898,7 @@ static void WPE_PceFilterSetsCreateTest(void)
                      WP_PceFilterSetCreate(WP_WINPATH(DEFAULT_WPID), &fs_level0));
    fs_level0.next_filter_set = filter_set_lvl1_handle;
 
-   MY_PRINTF("\n---- Level 0 Filter Set Modifying: Test Error cases -----------\n",0);
+   MY_PRINTF("\n---- Level 0 Filter Set Modifying: Test Error cases -----------\n");
    WPE_TEST_CHECK_RESULT(status,
                      WPI_BASIC_ERROR(WP_ERR_HANDLE),
                      WP_PceFilterSetModify(filter+100, WP_PCE_FILTER_SET_MODIFY_COMMAND_NEXT_FS, &fs_level0));
@@ -2942,21 +2943,21 @@ static void WPE_PceFilterSetsCreateTest(void)
                      WPI_BASIC_ERROR(WP_ERR_UNSUPPORTED_COMMAND),
                      WP_PceFilterSetModify(filter_set_lvl1_handle, 100 /* wrong command */, &fs_level0));
 
-   MY_PRINTF("\n---- Level 0 Filter Set Modifying: the next fs NULL -------------\n",0);
+   MY_PRINTF("\n---- Level 0 Filter Set Modifying: the next fs NULL -------------\n");
    fs_level0.next_filter_set = WP_UNUSED;
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterSetModify(filter_set_lvl0_handle, WP_PCE_FILTER_SET_MODIFY_COMMAND_NEXT_FS, &fs_level0));
    fs_level0.next_filter_set = filter_set_lvl1_handle;
 
-   MY_PRINTF("\n---- Level 0 Filter Set Modifying: the next fs FS2  -------------\n",0);
+   MY_PRINTF("\n---- Level 0 Filter Set Modifying: the next fs FS2  -------------\n");
    fs_level0.next_filter_set = filter_set_lvl1_handle2;
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterSetModify(filter_set_lvl0_handle, WP_PCE_FILTER_SET_MODIFY_COMMAND_NEXT_FS, &fs_level0));
    fs_level0.next_filter_set = filter_set_lvl1_handle;
 
-   MY_PRINTF("\n---- Level 0 Filter Set Modifying: the filters -------------\n",0);
+   MY_PRINTF("\n---- Level 0 Filter Set Modifying: the filters -------------\n");
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterSetModify(filter_set_lvl0_handle, WP_PCE_FILTER_SET_MODIFY_COMMAND_FILTERS, &fs_level1_2));
@@ -3020,7 +3021,7 @@ static void WPE_PceFilterSetsLevelsTest(void)
       MY_PRINTF("\n---- Filter[%d] Created: 0x%X ----------\n", i, (WP_U32) filters[i]);
    }
 
-   MY_PRINTF("\n---- Creating 22 Filters Sets, 2 for each level ------------\n",0);
+   MY_PRINTF("\n---- Creating 22 Filters Sets, 2 for each level ------------\n");
    for(i=0; i<=WP_PCE_FILTER_SET_MAX_LEVEL; i++)
    {
       fs_config.filter_set_level = i;
@@ -3081,7 +3082,7 @@ static void WPE_PceFilterSetsLevelsTest(void)
       MY_PRINTF("rules[%d] = %X\n", i, rules[i]);
    }
 
-   MY_PRINTF("\n---- Modifying Filters Sets, the NEXT_FS command ------------\n",0);
+   MY_PRINTF("\n---- Modifying Filters Sets, the NEXT_FS command ------------\n");
    for(i=0; i<=WP_PCE_FILTER_SET_MAX_LEVEL; i++)
    {
       if(i>0)
@@ -3104,7 +3105,7 @@ static void WPE_PceFilterSetsLevelsTest(void)
       }
    }
 
-   MY_PRINTF("\n---- Modifying Rule Results to Jump ------------\n",0);
+   MY_PRINTF("\n---- Modifying Rule Results to Jump ------------\n");
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_FILTER_SET_CHANGE;
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_LAST;
    for(i=0; i<PCE_FS_LEVEL_FILTERS_NUM; i++)
@@ -3137,7 +3138,7 @@ static void WPE_PceFilterSetsLevelsTest(void)
                   WP_PceRuleModify(rules[i], WP_PCE_RULE_MODIFY_COMMAND_RESULT, &rule_cfg));
    }
 
-   MY_PRINTF("\n---- Check Filter Set Modifications ------------\n",0);
+   MY_PRINTF("\n---- Check Filter Set Modifications ------------\n");
    for(i=3; i<=7; i++)
    {
       j=i-1;
@@ -3215,7 +3216,7 @@ static void WPE_PceFilterSetsDeleteTest(void)
 {
    WP_handle status;
 
-   MY_PRINTF("Deleting filter sets test started.\n",0);
+   MY_PRINTF("Deleting filter sets test started.\n");
 
    WPE_TEST_CHECK_RESULT(status,
                      WPI_BASIC_ERROR(WP_ERR_HANDLE),
@@ -3233,22 +3234,22 @@ static void WPE_PceFilterSetsDeleteTest(void)
                      WPI_BASIC_ERROR(WP_ERR_PCE_FILTER_SET_IN_USE),
                      WP_PceFilterSetDelete(filter_set_lvl1_handle2));
 
-   MY_PRINTF("Level 0 Filter set delete.\n",0);
+   MY_PRINTF("Level 0 Filter set delete.\n");
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterSetDelete(filter_set_lvl0_handle));
 
-   MY_PRINTF("Level 1 Filter set delete.\n",0);
+   MY_PRINTF("Level 1 Filter set delete.\n");
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterSetDelete(filter_set_lvl1_handle));
 
-   MY_PRINTF("Level 1 Filter set 2 delete.\n",0);
+   MY_PRINTF("Level 1 Filter set 2 delete.\n");
    WPE_TEST_CHECK_RESULT(status,
                      WP_OK,
                      WP_PceFilterSetDelete(filter_set_lvl1_handle2));
 
-   MY_PRINTF("Deleting filter sets test finished.\n",0);
+   MY_PRINTF("Deleting filter sets test finished.\n");
 }
 
 /***************************************************************
