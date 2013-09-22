@@ -1,0 +1,5 @@
+filename=95101-pce_classification_unit_test
+ctags -R
+time make TEST=${filename}.c 2>&1 && rsync -avz --progress bin/${filename} /tftpboot/${filename}.exe
+echo rsync bin/$filename /tftpboot/${filename}.exe
+
