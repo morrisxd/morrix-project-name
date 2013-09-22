@@ -32,7 +32,7 @@ do \
       data_unit.segment->pool_handle,                 \
       (WP_U32) data_unit.segment->next,               \
       data_unit.segment->displacement);               \
-   MY_PRINTF("Packet Data:",0);                         \
+   MY_PRINTF("Packet Data:");                         \
    MY_PRINTF("ascii_buffer = %s\n", ascii_buffer);    \
 } while (0)
 
@@ -125,34 +125,34 @@ WP_U32 WPT_DisplayBPortStats( WP_handle port_handle, WP_CHAR* type)
    WP_IwBridgingStatistics( port_handle, &bport_stats );
    STATS_PRINTF ("\n%s Bridge port statistics of port %d (%x)\n",
            type,(port_handle & 0x000000ff),port_handle);
-   STATS_PRINTF ("============================================\n",0);
-   STATS_PRINTF ("Rx Valid Packets:                       ",0);
+   STATS_PRINTF ("============================================\n");
+   STATS_PRINTF ("Rx Valid Packets:                       ");
    PRINT_STAT_FIELD(bport_stats.rx_valid_packets);
-   STATS_PRINTF ("\nDiscard VLAN acceptable filter:         ",0);
+   STATS_PRINTF ("\nDiscard VLAN acceptable filter:         ");
    PRINT_STAT_FIELD(bport_stats.discard_vlan_acceptable_filter);
-   STATS_PRINTF ("\nDiscard ingress filter:                 ",0);
+   STATS_PRINTF ("\nDiscard ingress filter:                 ");
    PRINT_STAT_FIELD(bport_stats.discard_ingress_filter);
-   STATS_PRINTF ("\nDiscard bridge classifier:              ",0);
+   STATS_PRINTF ("\nDiscard bridge classifier:              ");
    PRINT_STAT_FIELD(bport_stats.discard_bridge_classifier);
-   STATS_PRINTF ("\nDiscard unknown MAC SA:                 ",0);
+   STATS_PRINTF ("\nDiscard unknown MAC SA:                 ");
    PRINT_STAT_FIELD(bport_stats.discard_unk_macsa);
-   /* STATS_PRINTF ("\nDiscard egress filter:                  ",0);
+   /* STATS_PRINTF ("\nDiscard egress filter:                  ");
    PRINT_STAT_FIELD(bport_stats.discard_egress_filter); */
-   STATS_PRINTF ("\nDeny MAC SA:                            ",0);
+   STATS_PRINTF ("\nDeny MAC SA:                            ");
    PRINT_STAT_FIELD(bport_stats.deny_mac_sa);
-   STATS_PRINTF ("\nDeny MAC DA:                            ",0);
+   STATS_PRINTF ("\nDeny MAC DA:                            ");
    PRINT_STAT_FIELD(bport_stats.deny_mac_da);
-   STATS_PRINTF ("\nRx BC valid packets:                    ",0);
+   STATS_PRINTF ("\nRx BC valid packets:                    ");
    PRINT_STAT_FIELD(bport_stats.rx_bc_valid_packets);
-   STATS_PRINTF ("\nRx MC valid packets:                    ",0);
+   STATS_PRINTF ("\nRx MC valid packets:                    ");
    PRINT_STAT_FIELD(bport_stats.rx_mc_valid_packets);
-   STATS_PRINTF ("\nForwarded UC packets:                   ",0);
+   STATS_PRINTF ("\nForwarded UC packets:                   ");
    PRINT_STAT_FIELD(bport_stats.forwarded_uc_packets);
-   STATS_PRINTF ("\nForwarded BC packets:                   ",0);
+   STATS_PRINTF ("\nForwarded BC packets:                   ");
    PRINT_STAT_FIELD(bport_stats.forwarded_bc_packets);
-   STATS_PRINTF ("\nForwarded MC packets:                   ",0);
+   STATS_PRINTF ("\nForwarded MC packets:                   ");
    PRINT_STAT_FIELD(bport_stats.forwarded_mc_packets);
-   STATS_PRINTF ("\nProtocol Error      :                   ",0);
+   STATS_PRINTF ("\nProtocol Error      :                   ");
    PRINT_STAT_FIELD(bport_stats.protocol_error);
 
    for(i=0; i<WP_IW_DFC_MAX_NUM_OF_FILTERS; i++)
@@ -173,10 +173,10 @@ WP_U32 WPT_DisplayBPortStats( WP_handle port_handle, WP_CHAR* type)
       }
    }
 
-   STATS_PRINTF ("\ningress_policer_non_conforming_packets: ",0);
+   STATS_PRINTF ("\ningress_policer_non_conforming_packets: ");
    PRINT_STAT_FIELD(bport_stats.ingress_policer_non_conforming_packets);
 
-   STATS_PRINTF("\n\n",0);
+   STATS_PRINTF("\n\n");
    rx_packets = (WP_U32)bport_stats.rx_valid_packets;
    return rx_packets;
 }
@@ -193,32 +193,32 @@ WP_U32 WPT_DisplayRoutePortStats(WP_handle port_handle, WP_CHAR* type)
    WP_IwPortStatistics(port_handle, &rport_stats );
    STATS_PRINTF ("\n%s Route port statistics of port %d (%x)\n",
            type,(port_handle & 0x000000ff),port_handle);
-   STATS_PRINTF ("\n============================================\n",0);
-   STATS_PRINTF ("\nRx Valid Packets:                       ",0);
+   STATS_PRINTF ("\n============================================\n");
+   STATS_PRINTF ("\nRx Valid Packets:                       ");
    PRINT_STAT_FIELD(rport_stats.rx_valid_packets);
-   STATS_PRINTF ("\nrx_ipv4_option_packets:                 ",0);
+   STATS_PRINTF ("\nrx_ipv4_option_packets:                 ");
    PRINT_STAT_FIELD(rport_stats.rx_ipv4_option_packets);
-   STATS_PRINTF ("\nrx_non_ip_packets:                      ",0);
+   STATS_PRINTF ("\nrx_non_ip_packets:                      ");
    PRINT_STAT_FIELD(rport_stats.rx_non_ip_packets);
-   STATS_PRINTF ("\nrx_compressed_packets:                  ",0);
+   STATS_PRINTF ("\nrx_compressed_packets:                  ");
    PRINT_STAT_FIELD(rport_stats.rx_compressed_packets);
-   STATS_PRINTF ("\nrx_valid_mpls_packets:                  ",0);
+   STATS_PRINTF ("\nrx_valid_mpls_packets:                  ");
    PRINT_STAT_FIELD(rport_stats.rx_valid_mpls_packets);
-   STATS_PRINTF ("\nrx_protocol_error:                      ",0);
+   STATS_PRINTF ("\nrx_protocol_error:                      ");
    PRINT_STAT_FIELD(rport_stats.rx_protocol_error);
-   STATS_PRINTF ("\nrx_checksum_error:                      ",0);
+   STATS_PRINTF ("\nrx_checksum_error:                      ");
    PRINT_STAT_FIELD(rport_stats.rx_checksum_error);
-   STATS_PRINTF ("\nrx_discard_classifier:                  ",0);
+   STATS_PRINTF ("\nrx_discard_classifier:                  ");
    PRINT_STAT_FIELD(rport_stats.rx_discard_classifier);
-   STATS_PRINTF ("\nrx_mpls_lookup_drop:                    ",0);
+   STATS_PRINTF ("\nrx_mpls_lookup_drop:                    ");
    PRINT_STAT_FIELD(rport_stats.rx_mpls_lookup_drop);
-   STATS_PRINTF ("\ntx_forwarded_packets:                   ",0);
+   STATS_PRINTF ("\ntx_forwarded_packets:                   ");
    PRINT_STAT_FIELD(rport_stats.tx_forwarded_packets);
-   STATS_PRINTF ("\nrx_ipv6_hop_by_hop_host_term:           ",0);
+   STATS_PRINTF ("\nrx_ipv6_hop_by_hop_host_term:           ");
    PRINT_STAT_FIELD(rport_stats.rx_ipv6_hop_by_hop_host_term);
-   STATS_PRINTF ("\nrx_ipv6_link_local_host_term:           ",0);
+   STATS_PRINTF ("\nrx_ipv6_link_local_host_term:           ");
    PRINT_STAT_FIELD(rport_stats.rx_ipv6_link_local_host_term);
-   STATS_PRINTF ("\nrx_discard_lpm:                         ",0);
+   STATS_PRINTF ("\nrx_discard_lpm:                         ");
    PRINT_STAT_FIELD(rport_stats.rx_discard_lpm);
 
    for(i=0; i<WP_IW_DFC_MAX_NUM_OF_FILTERS; i++)
@@ -239,10 +239,10 @@ WP_U32 WPT_DisplayRoutePortStats(WP_handle port_handle, WP_CHAR* type)
       }
    }
 
-   STATS_PRINTF ("\ningress_policer_non_conforming_packets: ",0);
+   STATS_PRINTF ("\ningress_policer_non_conforming_packets: ");
    PRINT_STAT_FIELD(rport_stats.ingress_policer_non_conforming_packets);
 
-   STATS_PRINTF("\n\n",0);
+   STATS_PRINTF("\n\n");
    rx_packets = (WP_U32)rport_stats.rx_valid_packets;
    return rx_packets;
 }
@@ -279,20 +279,20 @@ WP_U32 WPT_DisplayFlowStats(WP_handle agg, WP_CHAR *type)
                        &iw_flow_stats);
    STATS_PRINTF ("\n%s Aggregation flow statistics of flow %d (%x)\n",
            type,(agg & 0x000000ff),agg);
-   STATS_PRINTF ("==========================================================\n",0);
-   STATS_PRINTF ("Forward Packet:          ",0);
+   STATS_PRINTF ("==========================================================\n");
+   STATS_PRINTF ("Forward Packet:          ");
    PRINT_STAT_FIELD(iw_flow_stats.forward_packet);
-   STATS_PRINTF( "\nFBP Drop Packets:        ",0);
+   STATS_PRINTF( "\nFBP Drop Packets:        ");
    PRINT_STAT_FIELD(iw_flow_stats.fbp_drop_packets);
-   STATS_PRINTF( "\nMTU Drop Packets:        ",0);
+   STATS_PRINTF( "\nMTU Drop Packets:        ");
    PRINT_STAT_FIELD(iw_flow_stats.mtu_drop_packets);
-   STATS_PRINTF( "\nTTL Drop Packets:        ",0);
+   STATS_PRINTF( "\nTTL Drop Packets:        ");
    PRINT_STAT_FIELD(iw_flow_stats.ttl_drop_packets);
-   STATS_PRINTF( "\nTX Queue Drop Packets:   ",0);
+   STATS_PRINTF( "\nTX Queue Drop Packets:   ");
    PRINT_STAT_FIELD(iw_flow_stats.tx_queue_drop_packets);
-   STATS_PRINTF( "\nMPLS Drop:               ",0);
+   STATS_PRINTF( "\nMPLS Drop:               ");
    PRINT_STAT_FIELD(iw_flow_stats.mpls_drop);
-   STATS_PRINTF("\n\n",0);
+   STATS_PRINTF("\n\n");
    forward_packets = (WP_U32)iw_flow_stats.forward_packet;
    return forward_packets;
 }
@@ -311,20 +311,20 @@ WP_U32 WPT_DisplayGenericFlowStats(WP_handle agg, WP_CHAR *type)
                        &iw_flow_stats);
    STATS_PRINTF ("\n%s Generic Flow Aggregation (%x) statistics \n",
            type, agg);
-   STATS_PRINTF ("==========================================================\n",0);
-   STATS_PRINTF ("Forward Packet:                  ",0);
+   STATS_PRINTF ("==========================================================\n");
+   STATS_PRINTF ("Forward Packet:                  ");
    PRINT_STAT_FIELD(iw_flow_stats.forward_packet);
-   STATS_PRINTF ("\nForwarded Bytes:                 ",0);
+   STATS_PRINTF ("\nForwarded Bytes:                 ");
    PRINT_STAT_FIELD(iw_flow_stats.forwarded_bytes);
-   STATS_PRINTF( "\nMTU Drop Packets:                ",0);
+   STATS_PRINTF( "\nMTU Drop Packets:                ");
    PRINT_STAT_FIELD(iw_flow_stats.mtu_drop_packets);
-   STATS_PRINTF( "\nTX Queue Drop Packets:           ",0);
+   STATS_PRINTF( "\nTX Queue Drop Packets:           ");
    PRINT_STAT_FIELD(iw_flow_stats.tx_queue_drop_packets);
-   STATS_PRINTF( "\nDenied Packets:                  ",0);
+   STATS_PRINTF( "\nDenied Packets:                  ");
    PRINT_STAT_FIELD(iw_flow_stats.denied_packets);
-   STATS_PRINTF( "\nPolicer Non-Conforming Packets:  ",0);
+   STATS_PRINTF( "\nPolicer Non-Conforming Packets:  ");
    PRINT_STAT_FIELD(iw_flow_stats.policer_non_conforming_packets);
-   STATS_PRINTF("\n\n",0);
+   STATS_PRINTF("\n\n");
    forward_packets = (WP_U32)iw_flow_stats.forward_packet;
    return forward_packets;
 }
@@ -340,7 +340,7 @@ WP_U32 WPT_DisplayDeviceStats(WP_handle device_handle, WP_device device, WP_CHAR
    WP_status status;
    STATS_PRINTF ("\n%s Device statistics of device %d (%x)\n",
            type,(device_handle & 0x000000ff),device_handle);
-   STATS_PRINTF ("============================================\n",0);
+   STATS_PRINTF ("============================================\n");
 
    switch (device)
    {
@@ -348,10 +348,10 @@ WP_U32 WPT_DisplayDeviceStats(WP_handle device_handle, WP_device device, WP_CHAR
          memset( &stats_hs_enet, 0, sizeof(WP_stats_enet) );
          if((status = WP_DeviceStatistics(device_handle, &stats_hs_enet)))
          {
-            STATS_PRINTF("GetStatistics error\n",0);
+            STATS_PRINTF("GetStatistics error\n");
             return 0;
          }
-         STATS_PRINTF("\nStatistics for HS ENET device:\n",0);
+         STATS_PRINTF("\nStatistics for HS ENET device:\n");
          temp1 = stats_hs_enet.rx_packets;
          temp2 = stats_hs_enet.rx_packets >> 32;
          STATS_PRINTF("rx_packets:           %.8x%.8x\n", temp2,temp1);
@@ -385,11 +385,11 @@ WP_U32 WPT_DisplayDeviceStats(WP_handle device_handle, WP_device device, WP_CHAR
          temp1 = stats_hs_enet.tx_frames;
          temp2 = stats_hs_enet.tx_frames >> 32;
          STATS_PRINTF("tx_good_frames:       %.8x%.8x\n", temp2,temp1);
-         STATS_PRINTF("\n",0);
+         STATS_PRINTF("\n");
          temp1 = stats_hs_enet.rx_host_frames;
          temp2 = stats_hs_enet.rx_host_frames >> 32;
          STATS_PRINTF("rx_host_frames:       %.8x%.8x\n", temp2,temp1);
-         STATS_PRINTF("\n",0);
+         STATS_PRINTF("\n");
 /*
          STATS_PRINTF("SERIAL DPS IF tx_frames:               %.8x\n", stats_hs_enet.serial_dps_if_stats.tx_frames);
          STATS_PRINTF("SERIAL DPS IF tx_bytes:                %.8x\n", stats_hs_enet.serial_dps_if_stats.tx_bytes);
@@ -410,16 +410,16 @@ void WTE_DisplayEnetDeviceStats(WP_handle device_handle, WP_CHAR* type)
    WP_status status;
    STATS_PRINTF ("\n%s Device statistics of device %d (%x)\n",
            type,(device_handle & 0x000000ff),device_handle);
-   STATS_PRINTF ("============================================\n",0);
+   STATS_PRINTF ("============================================\n");
 
    memset( &stats_hs_enet, 0, sizeof(WP_stats_enet) );
    if((status = WP_DeviceStatistics(device_handle, &stats_hs_enet)))
    {
-      STATS_PRINTF("GetStatistics error\n",0);
+      STATS_PRINTF("GetStatistics error\n");
       return;
    }
-   STATS_PRINTF("\nEnet device statistics:\n",0);
-   STATS_PRINTF("Hardware statistics:\n",0);
+   STATS_PRINTF("\nEnet device statistics:\n");
+   STATS_PRINTF("Hardware statistics:\n");
    temp1 = stats_hs_enet.rx_packets;
    temp2 = stats_hs_enet.rx_packets >> 32;
    STATS_PRINTF("rx_packets:           %.8x%.8x\n", temp2,temp1);
@@ -596,7 +596,7 @@ void WTE_DisplayEnetDeviceStats(WP_handle device_handle, WP_CHAR* type)
    temp2 = stats_hs_enet.tx_fragments >> 32;
    STATS_PRINTF("tx_fragments:         %.8x%.8x\n", temp2,temp1);
 
-   STATS_PRINTF("DPS statistics:\n",0);
+   STATS_PRINTF("DPS statistics:\n");
    temp1 = stats_hs_enet.rx_err_overrun;
    temp2 = stats_hs_enet.rx_err_overrun >> 32;
    STATS_PRINTF("rx_err_overrun:       %.8x%.8x\n", temp2,temp1);
@@ -627,9 +627,9 @@ void WTE_DisplayEnetDeviceStats(WP_handle device_handle, WP_CHAR* type)
    temp1 = stats_hs_enet.rx_host_frames;
    temp2 = stats_hs_enet.rx_host_frames >> 32;
    STATS_PRINTF("rx_host_frames:       %.8x%.8x\n", temp2,temp1);
-   STATS_PRINTF("\n",0);
+   STATS_PRINTF("\n");
 
-   STATS_PRINTF("Serial DPS IF statistics (CFU statistics):\n",0);
+   STATS_PRINTF("Serial DPS IF statistics (CFU statistics):\n");
    temp1 = stats_hs_enet.serial_dps_if_stats.tx_frames;
    temp2 = stats_hs_enet.serial_dps_if_stats.tx_frames >> 32;
    STATS_PRINTF("Serial DPS IF tx frames            %.8x%.8x\n", temp2,temp1);
@@ -648,7 +648,7 @@ void WTE_DisplayEnetDeviceStats(WP_handle device_handle, WP_CHAR* type)
    temp1 = stats_hs_enet.serial_dps_if_stats.rx_dropped_frames;
    temp2 = stats_hs_enet.serial_dps_if_stats.rx_dropped_frames >> 32;
    STATS_PRINTF("Serial DPS IF rx dropped frames    %.8x%.8x\n", temp2,temp1);
-   STATS_PRINTF("\n",0);
+   STATS_PRINTF("\n");
 }
 
 void WTE_DisplayXgiDeviceStats(WP_handle device_handle, WP_CHAR* type)
@@ -659,7 +659,7 @@ void WTE_DisplayXgiDeviceStats(WP_handle device_handle, WP_CHAR* type)
    WP_status status;
    STATS_PRINTF ("\n%s Device statistics of device %d (%x)\n",
            type,(device_handle & 0x000000ff),device_handle);
-   STATS_PRINTF ("============================================\n",0);
+   STATS_PRINTF ("============================================\n");
 
    memset( &xgi_stats, 0, sizeof(WP_stats_xgi) );
 
@@ -667,11 +667,11 @@ void WTE_DisplayXgiDeviceStats(WP_handle device_handle, WP_CHAR* type)
 
    if((status = WP_DeviceStatistics(device_handle, xgi_statistics)))
    {
-      STATS_PRINTF("GetStatistics error\n",0);
+      STATS_PRINTF("GetStatistics error\n");
       return;
    }
-   STATS_PRINTF("\nXGI device statistics:\n",0);
-   STATS_PRINTF("Hardware statistics:\n",0);
+   STATS_PRINTF("\nXGI device statistics:\n");
+   STATS_PRINTF("Hardware statistics:\n");
 
    temp1 = xgi_statistics->rx_packets;
    temp2 = xgi_statistics->rx_packets >> 32;
@@ -797,7 +797,7 @@ void WTE_DisplayXgiDeviceStats(WP_handle device_handle, WP_CHAR* type)
    temp2 = xgi_statistics->tx_err_packets >> 32;
    STATS_PRINTF("tx_err_packets:                    %.8x%.8x\n", temp2,temp1);
 
-   STATS_PRINTF("DPS statistics:\n",0);
+   STATS_PRINTF("DPS statistics:\n");
    temp1 = xgi_statistics->rx_err_overrun;
    temp2 = xgi_statistics->rx_err_overrun >> 32;
    STATS_PRINTF("rx_err_overrun:                    %.8x%.8x\n", temp2,temp1);
@@ -825,13 +825,13 @@ void WTE_DisplayXgiDeviceStats(WP_handle device_handle, WP_CHAR* type)
    temp1 = xgi_statistics->tx_frames;
    temp2 = xgi_statistics->tx_frames >> 32;
    STATS_PRINTF("tx_good_frames:                    %.8x%.8x\n", temp2,temp1);
-   STATS_PRINTF("\n",0);
+   STATS_PRINTF("\n");
    temp1 = xgi_statistics->rx_host_frames;
    temp2 = xgi_statistics->rx_host_frames >> 32;
    STATS_PRINTF("rx_host_frames:                    %.8x%.8x\n", temp2,temp1);
-   STATS_PRINTF("\n",0);
+   STATS_PRINTF("\n");
 
-   STATS_PRINTF("Serial DPS IF statistics (CFU statistics) :\n",0);
+   STATS_PRINTF("Serial DPS IF statistics (CFU statistics) :\n");
    temp1 = xgi_statistics->serial_dps_if_stats.tx_frames;
    temp2 = xgi_statistics->serial_dps_if_stats.tx_frames >> 32;
    STATS_PRINTF("Serial DPS IF tx frames            %.8x%.8x\n", temp2,temp1);
@@ -928,7 +928,7 @@ WP_U8 WPE_DataUnitReceive(WP_handle rx_channel_handle, WP_U8 *hexa_ret)
          /* print segment */
          MY_PRINTF("recieved %d segments, %d long each\n", data_unit.n_active, curr_buff_ptr->data_size);
          WP_MEM_BYTES_GET(((WP_U8 *)hexa_buffer),curr_buff_ptr->data,curr_buff_ptr->data_size);
-         MY_PRINTF("after mem set\n",0);
+         MY_PRINTF("after mem set\n");
          for (j = 0; j < data_unit.n_active; ++j)
          {
             for(k=0;k<curr_buff_ptr->data_size;++k)
@@ -936,9 +936,9 @@ WP_U8 WPE_DataUnitReceive(WP_handle rx_channel_handle, WP_U8 *hexa_ret)
                hexa_ret[k] = (WP_U8)(hexa_buffer[k]);
                MY_PRINTF("%2.2x", (WP_U8)hexa_buffer[k]);
                if ((k % 12) == 11)
-                  MY_PRINTF("\n",0);
+                  MY_PRINTF("\n");
             }
-            MY_PRINTF("\n\n",0);
+            MY_PRINTF("\n\n");
 
             WP_PoolFree(curr_buff_ptr->pool_handle, curr_buff_ptr->data);
             MY_PRINTF("next = %d \n", (WP_U32)curr_buff_ptr->next);
@@ -968,7 +968,7 @@ WP_U8 WPE_DataUnitReceive(WP_handle rx_channel_handle, WP_U8 *hexa_ret)
    }
    else
    {
-      MY_PRINTF("Received packet:\n",0);
+      MY_PRINTF("Received packet:\n");
    }
    return result;
 }
@@ -1211,7 +1211,7 @@ void WPE_DataUnitSendToEnet(const WP_CHAR* mac_dst, const WP_CHAR* mac_src,
       break;
    case WP_HDLC:
       data_unit.type = WP_DATA_PPP_HDLC;
-      MY_PRINTF("data_unit.type = WP_DATA_PPP_HDLC\n",0);
+      MY_PRINTF("data_unit.type = WP_DATA_PPP_HDLC\n");
       break;
    default:
       printf("ERROR: unsupported tx channel subtype for this test !!!\n");
@@ -1283,7 +1283,7 @@ void WPE_DataUnitSendToEnet(const WP_CHAR* mac_dst, const WP_CHAR* mac_src,
    WP_MEM_BYTES_FILL(km_data, '0', iw_buffer_data->size);
    MY_PRINTF("km_data = 0x%08X hex_buffer = 0x%08X iw_buffer_data->size = %d\n", (WP_U32) km_data, (WP_U32) hex_buffer, iw_buffer_data->size);
    WP_MEM_BYTES_SET(km_data, hex_buffer, data_unit.data_size);
-   MY_PRINTF("3\n",0);
+   MY_PRINTF("3\n");
 
    MY_PRINTF_DATA_UNIT(data_unit);
 
@@ -1345,7 +1345,7 @@ void WPE_CommonDataUnitSend(const WP_CHAR* mac_dst, const WP_CHAR* mac_src, cons
       break;
    case WP_HDLC:
       data_unit.type = WP_DATA_PPP_HDLC;
-      MY_PRINTF("data_unit.type = WP_DATA_PPP_HDLC\n",0);
+      MY_PRINTF("data_unit.type = WP_DATA_PPP_HDLC\n");
       break;
    default:
       printf("ERROR: unsupported tx channel subtype for this test !!!\n");
@@ -1609,7 +1609,7 @@ void WPE_CommonDataUnitSend(const WP_CHAR* mac_dst, const WP_CHAR* mac_src, cons
    WP_MEM_BYTES_FILL(km_data, '0', iw_buffer_data->size);
    MY_PRINTF("km_data = 0x%08X hex_buffer = 0x%08X iw_buffer_data->size = %d\n", (WP_U32) km_data, (WP_U32) hex_buffer, iw_buffer_data->size);
    WP_MEM_BYTES_SET(km_data, hex_buffer, data_unit.data_size);
-   MY_PRINTF("3\n",0);
+   MY_PRINTF("3\n");
 
    MY_PRINTF_DATA_UNIT(data_unit);
 
@@ -1667,7 +1667,7 @@ WP_U8 WPE_DataUnitSendReceive(const WP_CHAR* mac_dst, const WP_CHAR* mac_src, co
 
    WPE_DataUnitSendToEnet(mac_dst, mac_src, svlan, cvlan, ip_dst, ip_src, tx_channel_handle);
    MY_PRINTF("SENDRECV: Packet no %d is sent.\n", packet_counter);
-   MY_PRINTF("SENDRECV: Pause of about 10 seconds ...\n",0);
+   MY_PRINTF("SENDRECV: Pause of about 10 seconds ...\n");
 #ifdef WINSIM
    WP_Delay(20000000);
 #else
@@ -1753,7 +1753,7 @@ void WPE_PrintPceGlobalStats(void)
    WP_U32 temp1, temp2;
    WP_PceGlobalStatistics(WP_WINPATH(DEFAULT_WPID), &pce_global_stats);
 
-   MY_PRINTF("\n\nPCE Global Statistics\n",0);
+   MY_PRINTF("\n\nPCE Global Statistics\n");
 
    temp1 = pce_global_stats.parser_header_access_errors;
    temp2 = pce_global_stats.parser_header_access_errors >> 32;
@@ -1771,7 +1771,7 @@ void WPE_PrintPceGlobalStats(void)
    temp2 = pce_global_stats.parser_accept >> 32;
    MY_PRINTF("parser_accept               %08X %08X\n", temp2, temp1);
 
-   MY_PRINTF("\n\n",0);
+   MY_PRINTF("\n\n");
 }
 
 void WPE_PrintPceFilterStats(WP_handle filter)
@@ -1797,7 +1797,7 @@ void WPE_PrintPceFilterStats(WP_handle filter)
    temp2 = pce_filter_stats[index].no_matched_pkts >> 32;
    STATS_PRINTF("no_matched_pkts        %08X %08X\n", temp2, temp1);
 
-   STATS_PRINTF("\n\n\n",0);
+   STATS_PRINTF("\n\n\n");
 }
 
 void WPE_ResetPceFilterStats(WP_handle filter)
@@ -2457,7 +2457,7 @@ void WT_CreateFlowAggregationsAndBports(void)
    WP_U16 i, j;
    WP_status status;
 
-   MY_PRINTF("Creating Temp Flow aggregation ...\n",0);
+   MY_PRINTF("Creating Temp Flow aggregation ...\n");
    tx_agg_bridging->txfunc = wt_temp_host_rx_channel;
    wt_temp_flow_aggregation = WP_IwFlowAggregationCreate(WP_WINPATH(DEFAULT_WPID), WP_IW_VLAN_AWARE_BRIDGING_MODE, &tx_agg_bridging);
    WPE_TerminateOnError(wt_temp_flow_aggregation,"WP_IwFlowAggregationCreate()", __LINE__);
