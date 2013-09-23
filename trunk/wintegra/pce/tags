@@ -37,18 +37,19 @@ LEARNING_QUEUE_SIZE	95101-pce_classification_unit_test.c	92;"	d	file:
 MAX_CH_RATE	95101-pce_classification_unit_test.c	87;"	d	file:
 MAX_PACKET_SIZE	95101-pce_classification_unit_test.c	98;"	d	file:
 MIN_CH_RATE	95101-pce_classification_unit_test.c	86;"	d	file:
+MORRIS_UPDATE_VLAN	morris_config.h	7;"	d
 MY_PRINTF	95101-pce_classification_unit_test.c	42;"	d	file:
 MY_PRINTF	95101-pce_classification_unit_test.c	44;"	d	file:
 MY_PRINTF_DATA_UNIT	wt_pce_misc.c	10;"	d	file:
 Main	95101-pce_classification_unit_test.c	/^WP_S32 Main(WP_S32 argc, WP_CHAR **argv)$/;"	f
 NUM_OF_AAL5_CH	95101-pce_classification_unit_test.c	73;"	d	file:
 OBJ_DIR	makefile	/^OBJ_DIR = $(TEST_DIR)\/bin$/;"	m
-PCE_FS_LEVEL_FILTERS_NUM	95101-pce_classification_unit_test.c	2990;"	d	file:
+PCE_FS_LEVEL_FILTERS_NUM	95101-pce_classification_unit_test.c	3008;"	d	file:
 PHY_BOARD_LIB_DIR	makefile	/^PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)\/$(WPI_APP_BOARD)\/lib$/;"	m
 PHY_DIR	makefile	/^PHY_DIR = $(WDDI_DIR)\/phy$/;"	m
 POOL_LIMIT	95101-pce_classification_unit_test.c	72;"	d	file:
 PPS_IMAGE_OBJ	makefile	/^PPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_APP_TARGET)\/lib\/wpi_pps_image_iwgp_parser.o$/;"	m
-PRINTF	95101-pce_classification_unit_test.c	4262;"	d	file:
+PRINTF	95101-pce_classification_unit_test.c	4280;"	d	file:
 PRINT_STAT_FIELD	wt_pce_misc.c	6;"	d	file:
 PRINT_STAT_FIELD	wt_pce_misc.c	8;"	d	file:
 QN_IW_N_BUFFERS	95101-pce_classification_unit_test.c	100;"	d	file:
