@@ -1599,7 +1599,13 @@ static void WPE_PceRuleResultsTest(void)
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
    MY_PRINTF("\n----------------   Results: PREF PRIO: rem0 0xE idpt 0xB & FLOW AGG & LRN FLOW AGG & FS change-------\n\n");
+
    rule_cfg.rule_fields[0].value.mac_addr[5] = temp_rule_index;
+#if MORRIS_UPDATE_VLAN
+   rule_cfg.match_result[0].result_type = WP_PCE_RESULT_EXT_VLAN_UPDATE;
+   rule_cfg.match_result[0].param.ext_vlan.vlan_tag = 0x1234;
+   rule_cfg.match_result[0].param.ext_vlan.mask = WP_PCE_FIELD_MASK_VLAN_ID;
+#else
    rule_cfg.match_result[0].result_type = WP_PCE_RESULT_PREFIX_PRIORITY_REMARKING;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[0] = WP_PCE_RESULT_PPR_TYPE_PREFIX_REMARKING_VAL;
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[0] = 0xE;
@@ -1607,6 +1613,8 @@ static void WPE_PceRuleResultsTest(void)
    rule_cfg.match_result[0].param.prefix_priority_remarking.value[0] = 0xB;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[2] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
    rule_cfg.match_result[0].param.prefix_priority_remarking.remarking_type[3] = WP_PCE_RESULT_PPR_TYPE_DO_NOT_CHANGE;
+#endif
+
    rule_cfg.match_result[1].result_type = WP_PCE_RESULT_FLOW_AGG;
    rule_cfg.match_result[1].param.flow_agg.flow_aggregation = flow_aggregation3;
    rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LEARNING_FLOW_AGG;
@@ -1614,6 +1622,16 @@ static void WPE_PceRuleResultsTest(void)
    rule_cfg.match_result[3].result_type = WP_PCE_RESULT_FILTER_SET_CHANGE;
    rule_cfg.match_result[3].param.change_fs.filter_set_handle = filter_set_lvl1_handle;
    rule_cfg.match_result[4].result_type = WP_PCE_RESULT_LAST;
+
+#if MORRIS_UPDATE_VLAN
+// #warning MORRIS_UPDATE_VLAN_defined
+   rule_cfg.match_result[1].result_type = WP_PCE_RESULT_FILTER_SET_CHANGE;
+   rule_cfg.match_result[1].param.change_fs.filter_set_handle = filter_set_lvl1_handle;
+   rule_cfg.match_result[2].result_type = WP_PCE_RESULT_LAST;
+#else
+#error MORRIS_UPDATE_VLAN_should_be_defined
+#endif 
+
    temp_rule_index++; WPE_TEST_CHECK_HANDLE(temp_rule_handles[temp_rule_index],
                      WP_PceRuleCreate(WP_WINPATH(DEFAULT_WPID), WP_PCE_RULE_CLASSIFICATION, &rule_cfg));
 
