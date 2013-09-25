@@ -1,4 +1,4 @@
-make TEST=gige_loopback.c 2>&1 | tee make.log
+make TEST=gige_loopback.c 2>&1 | tee make.log | less
 copy_to_tftpboot.sh
 
 
