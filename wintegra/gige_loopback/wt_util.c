@@ -71,7 +71,7 @@ void WT_TranslateAsciiToHex(WP_CHAR *Hex, WP_CHAR *Ascii,
 {
    WP_S32 i, first = 0, second = 0;
 
-   for (i=0;i<length;i++) {
+   for (i=0;i<(WP_S32)length;i++) {
       if (Ascii[2*i] >= '0' && Ascii[2*i] <= '9')
          first = Ascii[2*i] - '0';
       if (Ascii[2*i] >= 'a' && Ascii[2*i] <= 'f')
