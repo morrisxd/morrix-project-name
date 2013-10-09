@@ -1,0 +1,23 @@
+C-R-E=excel
+C-R-W=word
+C-R-M=mindjet
+C-R-J=juniper network
+C-R-8=teraterm@com8
+C-R-9=teraterm@com9
+C-R-H=photoshop
+C-R-K=kingsoft
+C-R-R=ORZclockcountdown
+C-R-V=gvim
+C-R-Q=qq-download
+C-R-P=foxit pdf
+C-R-O=outlook
+C-R-I=internet explorer(standard mode)
+C-S=I=internet explorer(no plugins mode)
+C-R-U=uploadhelper
+C-R-T=task scheduler
+C-R-F=firefox
+C-R-C=google chrome
+C-R-Z=tdxw
+C-R-N=notepad
+C-R-'='=notepad++
+C-R-D=n/a
