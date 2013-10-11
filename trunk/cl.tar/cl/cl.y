@@ -16,6 +16,7 @@ Jutta Degener, 1995
       location & value. Success !
       may/30/2013
    - something wrong if typedef (func)(para list)
+     if only i see (func_name), i take 'func_name' as function type definitioin. because i think it must be "typedef (*fname)(int i, float f); but it was a mistake. i should fix it.
  */
 
 %{
