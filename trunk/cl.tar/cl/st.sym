@@ -3,13 +3,10 @@ Variable Name  Location  Domain         Line Numbers
 
 Typedef  Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
-     (FUNCPTR)      +22                          +26 
-      (pencil)      +19                          +17 
-       (UINT8)      +28                          +30 
-         (myp)       +5                          +42 
-         (USI)      +31                           +5 
-    (FUNCPTR2)      +23                          +27 
-        (mypp)      +18                          +47 
-     (pencil2)      +21                          +21 
-    (findProc)      +15                          +44 
-    (ushort_t)      +36                           +6 
+     (myunion)       +9                          +22 
+(a_7nd_struct)      +51                           +3 
+    (funcProc)      +19                          +14 
+      (ccchar)      +22                          +17 
+    (ushort_t)      +32                           +4 
+(a_2nd_struct)      +41                           +2 
+      (mylong)      +20                          +24 
