@@ -8,6 +8,7 @@ sudo apt-get install -y screen \
 && sudo apt-get install -y curl \
 && sudo apt-get install -y eclipse-platform \
 && sudo apt-get install -y byacc \
+&& sudo apt-get install -y flex \
 && sudo apt-get install -y sysvbanner \
 && sudo apt-get install -y mldonkey-server \
 && sudo apt-get install -y subversion \
