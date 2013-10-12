@@ -274,7 +274,7 @@ declaration
                     td_func = 0;
                     PRINTF("//clear:td_func//");
                     column = column + 17;
-                 } else {
+		 } else {
                     // normal type
                     sprintf (saved_identifier, "%s", g_cur_sym); 
                     PRINTF ("//EOT(%s)//",g_cur_sym);
@@ -439,14 +439,7 @@ direct_declarator
                   break;
                }
             }
-	| '(' declarator {TYPEDEF_FUNC} ')' {
-	#if 0
-                    // puts("&&&&&");column+=5;
-                    td_func = 0;
-                    PRINTF ("//clear:td_func-NOTYPEDEF0//");
-                    column = column + 19;
-        #endif
-		}
+	| '(' declarator {TYPEDEF_FUNC} ')'
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
 	| direct_declarator '(' {
@@ -457,7 +450,7 @@ direct_declarator
 	parameter_type_list ')' {
 		tmp=in_none; in_funcdef = 0;PRINTF("//OUTOF-FUNC//");
 		column += 14;
-		td_func = 0;
+		// td_func = 0;
 		}
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'
