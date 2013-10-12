@@ -17,6 +17,8 @@ int myfunc (int n, char * pName)
 
 void myfunc2 (int i, void (*p)(int age, char *sex));
 void (myfunc4)(int i, float s);
+typedef int (*myfunc6)(int i, float fnum);
+typedef int (myfunc5)(int i, float fnum2);
 
 int p = 9;
 
