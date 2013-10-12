@@ -41,13 +41,13 @@ extern int column;
 #undef PRINTF_INIT_DECLARATOR
 #endif
 
-#define PRINTF myprintf
+#define PRINTF printf
 
 void myprintf()
 {
 }
 
-#define TYPEDEF_FUNC {td_func=1;PRINTF("//FUNCTYPEDEF(%s)//", g_cur_sym); column = column + strlen(g_cur_sym) + 17; st_insert_typedef(g_cur_sym, lineno, column);}
+#define TYPEDEF_FUNC {td_func=1;PRINTF("//set:td_func(%s)//", g_cur_sym); column = column + strlen(g_cur_sym) + 17; st_insert_typedef(g_cur_sym, lineno, column);}
 
 /*
  * These macro has no use indeed, the code was written firstly not so good,
@@ -68,6 +68,7 @@ pos tmp = in_none;
 
 int td_func = 0;
 int in_typedef = 0;
+int in_funcdef = 0;
 
 // #define YYSTYPE treenode *
 
@@ -255,8 +256,8 @@ declaration
            {
               if (td_func)
 	      {
-	         PRINTF("//td_func(%d)//",td_func);
-                 column = column + 1 + 13;
+	         // PRINTF("//td_func(%d)//",td_func);
+                 // column = column + 1 + 13;
               }
               if (in_typedef)
               {
@@ -264,8 +265,8 @@ declaration
                  {
                     // function type
                     td_func = 0;
-                    PRINTF("//clearFunctypedef//");
-                    column = column + 20;
+                    PRINTF("//clear:td_func//");
+                    column = column + 17;
                  } else {
                     // normal type
                     sprintf (saved_identifier, "%s", g_cur_sym); 
@@ -277,13 +278,13 @@ declaration
                  }
                  in_typedef = 0;
 //		 puts("//outoftypedef#2//");
-              } else {
+              } else { // no typedef now
                  if (td_func)
                  {
                     // function pointer definition
                     td_func = 0;
-                    PRINTF ("//clear:td_func//");
-                    column = column + 17;
+                    PRINTF ("//clear:td_func-NOTYPEDEF//");
+                    column = column + 19;
                  } else {
                  }
               }
@@ -430,10 +431,25 @@ direct_declarator
                   break;
                }
             }
-	| '(' declarator {TYPEDEF_FUNC} ')'
+	| '(' declarator {TYPEDEF_FUNC} ')' {
+	#if 0
+                    // puts("&&&&&");column+=5;
+                    td_func = 0;
+                    PRINTF ("//clear:td_func-NOTYPEDEF0//");
+                    column = column + 19;
+        #endif
+		}
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' {tmp = in_para_list;} parameter_type_list ')' {tmp=in_none;}
+	| direct_declarator '(' {
+		tmp = in_para_list;
+		in_funcdef = 1;
+		PRINTF("//IN-FUNC//"); column+=11;
+		} 
+	parameter_type_list ')' {
+		tmp=in_none; in_funcdef = 0;PRINTF("//OUTOF-FUNC//");
+		column += 14;
+		}
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'
 	;
