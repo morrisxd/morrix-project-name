@@ -1,0 +1,16 @@
+[1] typedef can ONLY define one of struct_or_union and function. eg:
+	typedef struct m {
+	   int i;
+	}m;
+    or 
+        typedef (*func)(int i);
+    which means typedef can not define struct_or_union and function 
+    at the SAME time.
+[2] in typedef struct_or_union, there maybe a function declaration. eg
+   typedef struct m {
+      int (func)(int i);
+   }
+   This is legal. i have to clear the function declaration first 
+   and then clear the struct typedef.
+[3] i'm using function's parameter list as end of function declaration.
+   //OUTOF-FUNC//
