@@ -1,0 +1,2208 @@
+From: <Saved by Windows Internet Explorer 8>
+Subject: Sample: Syntax of The C Programming Language
+Date: Fri, 10 Apr 2009 23:38:57 +0800
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.csci.csusb.edu/dick/samples/c.syntax.html
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.3790.4325
+
+=EF=BB=BF<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Sample: Syntax of The C Programming Language</TITLE>
+<META content=3D"text/html; charset=3Dutf-8" http-equiv=3DContent-Type>
+<STYLE type=3Dtext/css>BODY {
+	FONT-FAMILY: serif
+}
+H1 {
+	FONT-FAMILY: sans-serif
+}
+H2 {
+	FONT-FAMILY: sans-serif
+}
+H3 {
+	FONT-FAMILY: sans-serif
+}
+H4 {
+	FONT-FAMILY: sans-serif
+}
+CODE {
+	FONT-FAMILY: monospace
+}
+PRE {
+	FONT-FAMILY: monospace
+}
+TT {
+	FONT-FAMILY: monospace
+}
+HR {
+	COLOR: black
+}
+A {
+	FONT-WEIGHT: bolder
+}
+.InlineFormula {
+	FONT-STYLE: italic
+}
+.Formula {
+	FONT-STYLE: italic; PADDING-LEFT: 10px
+}
+.Let {
+	BORDER-BOTTOM: thin solid; BORDER-LEFT: thin solid; PADDING-BOTTOM: =
+10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; BORDER-TOP: thin solid; =
+BORDER-RIGHT: thin solid; PADDING-TOP: 10px
+}
+.Net {
+	BORDER-BOTTOM: red thin solid; BORDER-LEFT: red thin solid; =
+PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; =
+BORDER-TOP: red thin solid; BORDER-RIGHT: red thin solid; PADDING-TOP: =
+10px
+}
+.Case {
+	BORDER-BOTTOM: blue thin solid; BORDER-LEFT: blue thin solid; =
+PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; =
+BORDER-TOP: blue thin solid; BORDER-RIGHT: blue thin solid; PADDING-TOP: =
+10px
+}
+</STYLE>
+
+<META name=3DGENERATOR content=3D"MSHTML 8.00.6001.18702"></HEAD>
+<BODY aLink=3D#ff0000 link=3D#0000ff bgColor=3D#e0ffe0 text=3D#000000 =
+vLink=3D#8000af>
+<FORM method=3Dget =
+action=3Dhttp://www.csci.csusb.edu/dick/samples/lookup.php>[<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Main =
+Content">Skip=20
+Navigation</A>] [<A href=3D"http://www.csusb.edu/">CSUSB</A>] / [<A=20
+href=3D"http://nsci.csusb.edu/">CNS</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/">Comp Sci Dept</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/dick/">R J Botting</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/index.html">Samples</A>] =
+/ <A=20
+name=3Dtop_of_page>c.syntax </A><BR>[<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/">Index</A>] [<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Contents">Co=
+ntents</A>]=20
+[<A href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.txt">Source =
+Text</A>]=20
+[<A =
+href=3D"http://www.csci.csusb.edu/dick/samples/about.html">About</A>] =
+[<A=20
+href=3D"http://www.csci.csusb.edu/dick/maths/intro_characters.html">Notat=
+ion</A>]=20
+[<A=20
+href=3D"http://www.csci.csusb.edu/dick/maths/intro_copyright.html">Copyri=
+ght</A>]=20
+[<A href=3D"http://www.csci.csusb.edu/dick/samples/comment.html"=20
+target=3DSendEMail>Comment/Contact</A>] [Search <INPUT size=3D10 =
+name=3Dsearch> <INPUT=20
+value=3Dc.syntax.mth type=3Dhidden name=3Dfrom> <INPUT value=3DGo =
+type=3Dsubmit>] <BR>Fri=20
+Sep 28 16:10:30 PDT 2007 </FORM>
+<HR>
+<A name=3DContents>
+<H3>Contents</H3></A>
+<UL class=3DContents>
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Syntax of =
+The C Programming Language">Syntax=20
+  of The C Programming Language</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Cross-Reffer=
+ences">:=20
+  Cross-Refferences</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Notation">: =
+
+  Notation</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Lexemes">:=20
+  Lexemes</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Expressions"=
+>:=20
+  Expressions</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Operators">:=
+=20
+  : Operators</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Arithmetic">=
+: :=20
+  Arithmetic</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Shifts">: : =
+
+  Shifts</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Relations">:=
+=20
+  : Relations</A>=20
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Bitwise =
+Expressions">:=20
+  : Bitwise Expressions</A>=20
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Logical =
+Expressions">:=20
+  : Logical Expressions</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Conditional =
+Expressions">:=20
+  : Conditional Expressions</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Assignment =
+Statements">:=20
+  : Assignment Statements</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Declarations=
+">:=20
+  Declarations</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Types">: :=20
+  Types</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Initializati=
+on">: :=20
+  Initialization</A>=20
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Structs =
+and Unions">:=20
+  : Structs and Unions</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Enums">: :=20
+  Enums</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Functions">:=
+=20
+  : Functions</A>=20
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Main =
+Function">: :=20
+  Main Function</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Pointers">: =
+
+  : Pointers</A>=20
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Functions =
+and Arrays">:=20
+  : Functions and Arrays</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Statements">=
+:=20
+  Statements</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Branch">: : =
+
+  Branch</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Structured">=
+: :=20
+  Structured</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Compound">: =
+
+  : Compound</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Pre-Processo=
+r Commands">:=20
+  Pre-Processor Commands</A> </LI></UL><A name=3D"Main Content">
+<HR>
+</A>
+<OL><A name=3D"Syntax of The C Programming Language">
+  <H1>Syntax of The C Programming Language</H1></A>
+  <OL class=3DSection><A name=3DCross-Refferences>
+    <H2>Cross-Refferences</H2></A>
+    <LI><A name=3DASCII>ASCII</A>::=3D See <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/comp.text.ASCII.html">http=
+://www.csci.csusb.edu/dick/samples/comp.text.ASCII.html</A>=20
+
+    <P>Used_in The definition of C++ [<A=20
+    href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html">=20
+    c++.syntax.html </A>]=20
+    <P>Used_in The definition of Java [<A=20
+    href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html">=20
+    java.syntax.html </A>] <A name=3DNotation>
+    <H2>Notation</H2></A>This uses my XBNF Extended BNF Notation where =
+"|"=20
+    indicates "or", "(...)" indicates priority. For more information see =
+[<A=20
+    href=3D"http://csci.csusb.edu/dick/maths/intro_ebnf.html"> =
+intro_ebnf.html=20
+    </A>]=20
+    <P>The following abbreviations are also used:=20
+    <HR>
+
+    <OL class=3DBox>
+      <LI><A name=3DO>O</A>(_)::=3D 0 or 1 occurrences,=20
+      <LI><A name=3DN>N</A>(_)::=3D 1 or more occurrence=20
+      <LI><A name=3DL>L</A>(_)::=3D a comma separated list=20
+      <LI><A name=3D#>#</A>(_)::=3D 0 or more occurrences.=20
+      <P></P>
+      <LI><A name=3DS>S</A>(E,Op)::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#serial_opera=
+tor_expression">serial_operator_expression</A>(E,=20
+      Op)=20
+      <LI><A=20
+      =
+name=3Dserial_operator_expression>serial_operator_expression</A>(E,Op)::=3D=
+ E=20
+      #(Op E). <PRE> 		S(E,Op) =3D E Op E Op E Op ... E</PRE></LI></OL>
+    <HR>
+
+    <P>It also uses the following shorthand=20
+    <P><A name=3DLexemes>
+    <H2>Lexemes</H2></A>
+    <OL class=3DSection>
+      <LI><A name=3Didentifier>identifier</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#nondigit">no=
+ndigit</A>=20
+      #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#nondigit">no=
+ndigit</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#digit">digit=
+</A>),=20
+
+      <P></P>
+      <LI><A name=3Dnondigit>nondigit</A>::=3D"_" | "a" | "A" | "b" | =
+"B" | "c" |=20
+      "C" | "d" | "D" | "e" | "E" | "f" | "F" | "g" | "G" | "h" | "H" | =
+"i" |=20
+      "I" | "j" | "J" | "k" | "K" | "l" | "L" | "m" | "M" | "n" | "N" | =
+"o" |=20
+      "O" | "p" | "P" | "q" | "Q" | "r" | "R" | "s" | "S" | "t" | "T" | =
+"u" |=20
+      "U" | "v" | "V" | "w" | "W" | "x" | "X" | "y" | "Y" | "z" | "Z",=20
+      <P></P>
+      <LI><A name=3Ddigit>digit</A>::=3D"0" | "1" | "2" | "3" | "4" | =
+"5" | "6" |=20
+      "7" | "8" | "9",=20
+      <P></P>
+      <LI><A name=3Dpunctuator>punctuator</A>::=3D"[" | "]" | "(" | ")" =
+| "{" | "}"=20
+      | "*" | "," | ":" | "=3D" | ";" | "..." | "#",=20
+      <P></P>
+      <LI><A name=3Doperator>operator</A>::=3D"[" | "]" | "(" | ")" | =
+"." | "-&gt;"=20
+      | "++" | "--" | "&amp;" | "*" | "+" | "-" | "~" | "!" | "sizeof" | =
+"/" |=20
+      "%" | "&lt;&lt;" | "&gt;&gt;" | "&lt;" | "&gt;" | "&lt;=3D" | =
+"&gt;=3D" | "=3D=3D"=20
+      | "!=3D" | "^" | "|" | "&amp;&amp;" | "||" | "?" | ":" | "=3D" | =
+"*=3D" | "/=3D" |=20
+      "%=3D" | "+=3D" | "-=3D" | "&lt;&lt;=3D" | "&gt;&gt;=3D" | =
+"&amp;=3D" | "^=3D" | "||=3D" |=20
+      "," | "#" | "##",=20
+      <P></P>
+      <LI><A name=3Dinfix>infix</A>::=3D "-&gt;" | "&amp;" | "*" | "+" | =
+"-" | "/" |=20
+      "%" | "&lt;&lt;" | "&gt;&gt;" | "&lt;" | "&gt;" | "&lt;=3D" | =
+"&gt;=3D" | "=3D=3D"=20
+      | "!=3D" | "^" | "|" | "&amp;&amp;" | "||" | "=3D" | "*=3D" | =
+"/=3D" | "%=3D" | "+=3D"=20
+      | "-=3D" | "&lt;&lt;=3D" | "&gt;&gt;=3D" | "&amp;=3D" | "^=3D" | =
+"||=3D" | "," ,=20
+      <P></P>
+      <LI><A name=3Dprefix>prefix</A>::=3D "++" | "--" | "&amp;" | "*" | =
+"+" | "-" |=20
+      "~" | "!" | "sizeof" ,=20
+      <P>
+      <P></P>
+      <LI><A name=3Dpostfix>postfix</A>::=3D "++" | "--",=20
+      <P></P>
+      <LI><A name=3Dinteger_suffix>integer_suffix</A>::=3D#(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unsigned_suf=
+fix">unsigned_suffix</A>)=20
+      | #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#long_suffix"=
+>long_suffix</A>),=20
+
+      <P></P>
+      <LI><A name=3Dunsigned_suffix>unsigned_suffix</A>::=3D"u" | "U",=20
+      <P></P>
+      <LI><A name=3Dlong_suffix>long_suffix</A>::=3D"l" | "L",=20
+      <P></P>
+      <LI><A name=3Dsign>sign</A>::=3D"+" | "-",=20
+      <P></P>
+      <LI><A name=3Doctal_constant>octal_constant</A>::=3D"0" #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#octal_digit"=
+>octal_digit</A>),=20
+
+      <P></P>
+      <LI><A name=3Doctal_digit>octal_digit</A>::=3D"0" | "1" | "2" | =
+"3" | "4" |=20
+      "5" | "6" | "7",=20
+      <P></P>
+      <LI><A name=3Dhex_constant>hex_constant</A>::=3D("0x" | "0X") (<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#hex_digit">h=
+ex_digit</A>),=20
+
+      <P></P>
+      <LI><A name=3Dhex_digit>hex_digit</A>::=3D"0" | "1" | "2" | "3" | =
+"4" | "5" |=20
+      "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f" | "A" | =
+"B" |=20
+      "C" | "D" | "E" | "F",=20
+      <P></P>
+      <LI><A name=3Ddecimal_constant>decimal_constant</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#non_zero_dig=
+it">non_zero_digit</A>=20
+      #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#digit">digit=
+</A>),=20
+
+      <P></P>
+      <LI><A name=3Dnon_zero_digit>non_zero_digit</A>::=3D"1" | "2" | =
+"3" | "4" |=20
+      "5" | "6" | "7" | "8" | "9",=20
+      <P></P>
+      <LI><A name=3Dinteger_constant>integer_constant</A>::=3D(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#decimal_cons=
+tant">decimal_constant</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#octal_consta=
+nt">octal_constant</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#hex_constant=
+">hex_constant</A>)=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#integer_suff=
+ix">integer_suffix</A>,=20
+
+      <P></P>
+      <LI><A name=3Dfloat_suffix>float_suffix</A>::=3D"f" | "l" | "F" | =
+"L",=20
+      <P></P>
+      <LI><A name=3Dfraction>fraction</A>::=3D#<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#digit">digit=
+</A>=20
+      "." <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#digit">digit=
+</A>=20
+      #<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#digit">digit=
+</A>,=20
+
+      <P></P>
+      <LI><A name=3Dexponent_part>exponent_part</A>::=3D("e" | "E") <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#sign">sign</=
+A>=20
+      #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#digit">digit=
+</A>),=20
+
+      <P></P>
+      <LI><A name=3Dfloat_constant>float_constant</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#fraction">fr=
+action</A>=20
+      (<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#exponent_par=
+t">exponent_part</A>|)=20
+      (<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#float_suffix=
+">float_suffix</A>|)|(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#decimal_cons=
+tant">decimal_constant</A>=20
+      (<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#exponent_par=
+t">exponent_part</A>|)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#float_suffix=
+">float_suffix</A>,=20
+
+      <P></P>
+      <LI><A name=3Denumeration_constant>enumeration_constant</A>::=3D<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>,=20
+
+      <P></P>
+      <LI><A name=3Dchar_constant>char_constant</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#char">char</=
+A>~(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#double_quote=
+">double_quote</A>|<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#eoln">eoln</=
+A>|<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#backslash">b=
+ackslash</A>)|=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#escape_seque=
+nce">escape_sequence</A>,=20
+
+      <P></P>
+      <LI><A name=3Descape_sequence>escape_sequence</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#backslash">b=
+ackslash</A>=20
+      (<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#char">char</=
+A>=20
+      | "0" #<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#octal_digit"=
+>octal_digit</A>=20
+      |"0x"#<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#hexadecimal_=
+digit">hexadecimal_digit</A>),=20
+
+      <P></P>
+      <LI><A name=3Dcharacter_constant>character_constant</A>::=3D"'" <A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#char_constan=
+t">char_constant</A>"'"=20
+      ,=20
+      <P>constant :=3D::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#float_consta=
+nt">float_constant</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#integer_cons=
+tant">integer_constant</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#enumeration_=
+constant">enumeration_constant</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#character_co=
+nstant">character_constant</A>,=20
+
+      <P></P>
+      <LI><A name=3Dstring__char>string__char</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#char">char</=
+A>~(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#double_quote=
+">double_quote</A>|<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#eoln">eoln</=
+A>|<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#backslash">b=
+ackslash</A>)|=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#escape_seque=
+nce">escape_sequence</A>,=20
+
+      <P></P>
+      <LI><A name=3Dstring_literal>string_literal</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#double_quote=
+">double_quote</A>=20
+      #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#string_char"=
+>string_char</A>)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#double_quote=
+">double_quote</A>,=20
+
+      <P></P></LI></OL>
+    <P>. . . . . . . . . ( end of section <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Lexemes">Lex=
+emes</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Contents">&l=
+t;&lt;</A>Contents=20
+    | End<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#__End">&gt;&=
+gt;</A>=20
+    <A name=3DExpressions>
+    <H2>Expressions</H2></A>
+    <OL class=3DSection>
+      <P>Expressions are made up by applying operators to <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#primary_expr=
+essions">primary_expressions</A>.=20
+
+      <LI><A name=3Dprimary_expression>primary_expression</A>::=3D <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#variable">va=
+riable</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant">co=
+nstant</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#string_liter=
+al">string_literal</A>=20
+      | "(" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>=20
+      ")",=20
+      <P></P>
+      <LI><A name=3Dvariable>variable</A>::=3D <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      &amp; <SPAN class=3DInlineFormula>declared and in scope of=20
+      declaration</SPAN>.=20
+      <LI><A name=3Dargument_list>argument_list</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#List">List</=
+A>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>),=20
+
+      <P><A name=3DOperators>
+      <H3>Operators</H3></A>
+      <TABLE border=3D1>
+        <TBODY>
+        <TR>
+          <TH>Symbol
+          <TH>See=20
+        <TR>
+          <TD>"("... ")"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#primary_expr=
+ession">primary_expression</A>=20
+            <A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#cast_express=
+ion">cast_expression</A>=20
+            function_call=20
+        <TR>
+          <TD>"."
+          <TD>part of a structure=20
+        <TR>
+          <TD>"-"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#additive_exp=
+ression">additive_expression</A>=20
+            <A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>=20
+
+        <TR>
+          <TD>"-&gt;"
+          <TD>part of a pointed at structure=20
+        <TR>
+          <TD>"--"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>=20
+            <A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#postfix_expr=
+ession">postfix_expression</A>=20
+
+        <TR>
+          <TD>"-=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"&amp;"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#AND_expressi=
+on">AND_expression</A>=20
+            bitwise Boolean=20
+        <TR>
+          <TD>"&amp;=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"&amp;"
+          <TD>address_of <A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>=20
+
+        <TR>
+          <TD>"&amp;&amp;"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#logical_AND_=
+expression">logical_AND_expression</A>=20
+
+        <TR>
+          <TD>"*"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#multiplicati=
+ve_expression">multiplicative_expression</A>=20
+            contents of pointer <A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>=20
+
+        <TR>
+          <TD>"*=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"+"=20
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#additive_exp=
+ression">additive_expression</A>=20
+            <A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>=20
+
+        <TR>
+          <TD>"++"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>=20
+            <A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#postfix_expr=
+ession">postfix_expression</A>=20
+
+        <TR>
+          <TD>"+=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"~"
+          <TD>bitwise negation prefix=20
+        <TR>
+          <TD>"!"
+          <TD>logical negation prefix=20
+        <TR>
+          <TD>"!=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#equality_exp=
+ression">equality_expression</A>=20
+
+        <TR>
+          <TD>"sizeof"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>=20
+
+        <TR>
+          <TD>"/"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#multiplicati=
+ve_expression">multiplicative_expression</A>=20
+            divide=20
+        <TR>
+          <TD>"/=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"%"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#multiplicati=
+ve_expression">multiplicative_expression</A>=20
+            mod=20
+        <TR>
+          <TD>"%=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"&lt;"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#relational_e=
+xpression">relational_expression</A>=20
+
+        <TR>
+          <TD>"&lt;&lt;"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#shift_expres=
+sion">shift_expression</A>=20
+            left=20
+        <TR>
+          <TD>"&lt;&lt;=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"&lt;=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#relational_e=
+xpression">relational_expression</A>=20
+
+        <TR>
+          <TD>"&gt;"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#relational_e=
+xpression">relational_expression</A>=20
+
+        <TR>
+          <TD>"&gt;&gt;"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#shift_expres=
+sion">shift_expression</A>=20
+            right=20
+        <TR>
+          <TD>"&gt;=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#relational_e=
+xpression">relational_expression</A>=20
+
+        <TR>
+          <TD>"&gt;&gt;=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"=3D=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#equality_exp=
+ression">equality_expression</A>=20
+
+        <TR>
+          <TD>"=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"^"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#XOR_expressi=
+on">XOR_expression</A>=20
+            exclusive-or bitwise=20
+        <TR>
+          <TD>"^=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>"|"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#OR_expressio=
+n">OR_expression</A>=20
+            bitwise or=20
+        <TR>
+          <TD>"||"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#logical_OR_e=
+xpression">logical_OR_expression</A>=20
+
+        <TR>
+          <TD>"||=3D"
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+
+        <TR>
+          <TD>..."?"... ":"...
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#conditional_=
+expression">conditional_expression</A>=20
+
+        <TR>
+          <TD>","
+          <TD><A=20
+            =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>=20
+            (discard previous value) </TR></TBODY></TABLE>
+      <P>
+      <P><A name=3DArithmetic>
+      <H3>Arithmetic</H3></A>
+      <LI><A name=3Dpost_fix>post_fix</A>::=3D"++" | "--",=20
+      <P></P>
+      <LI><A name=3Dpost_fix_expression>post_fix_expression</A>::=3D(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#primary_expr=
+ession">primary_expression</A>)=20
+      #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#post_fix">po=
+st_fix</A>),=20
+
+      <P></P>
+      <LI><A name=3Dunary_operator>unary_operator</A>::=3D"&amp;" | "*" =
+| "+" | "-"=20
+      | "!" | "-",=20
+      <P></P>
+      <LI><A name=3Dpre_fix>pre_fix</A>::=3D"++" | "--" | "sizeof",=20
+      <P></P>
+      <LI><A name=3Dunary_expression>unary_expression</A>::=3D#(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#pre">pre</A>=
+-<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#fix">fix</A>=
+)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#post_fix_exp=
+ression">post_fix_expression</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_operat=
+or">unary_operator</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#cast_express=
+ion">cast_expression</A>=20
+      | "sizeof" "(" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#type_name">t=
+ype_name</A>")",=20
+
+      <P></P>
+      <LI><A name=3Dcast_expression>cast_expression</A>::=3D#(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#type_name">t=
+ype_name</A>)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>.=20
+      This implies that casts are done after doing post-fix operations.. =
+
+      <P></P>
+      <LI><A =
+name=3Dmultiplicative_expression>multiplicative_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#cast_express=
+ion">cast_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#multiplicati=
+ve_operator">multiplicative_operator</A>).=20
+      [<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#serial_opera=
+tor_expression">=20
+      serial_operator_expression </A>]=20
+      <P>The rule above means that 'casts' are done before =
+multiplication and=20
+      division, and that multiplication and division are done from left =
+to=20
+      right.=20
+      <P></P>
+      <LI><A =
+name=3Dmultiplicative_operator>multiplicative_operator</A>::=3D"*" |=20
+      "%" | "/",=20
+      <P></P>
+      <LI><A name=3Dadditive_expression>additive_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#multiplicati=
+ve_expression">multiplicative_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#additive_ope=
+rator">additive_operator</A>).=20
+      This means that addition and subtraction occurs after =
+multiplication and=20
+      from left to right.=20
+      <P></P>
+      <LI><A name=3Dadditive_operator>additive_operator</A>::=3D"+" | =
+"-",=20
+      <P><A name=3DShifts>
+      <H3>Shifts</H3></A>
+      <LI><A name=3Dshift_expression>shift_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#additive_exp=
+ression">additive_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#shift_operat=
+or">shift_operator</A>),=20
+
+      <P></P>
+      <LI><A name=3Dshift_operator>shift_operator</A>::=3D"&gt;&gt;" | =
+"&lt;&lt;",=20
+      "&lt;&lt;" is left shift of bits (multiply by 2), and "&gt;&gt;" =
+is the=20
+      reverse and divides by 2.=20
+      <P><A name=3DRelations>
+      <H3>Relations</H3></A>
+      <LI><A name=3Drelational_expression>relational_expression</A>::=3D =
+<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#shift_expres=
+sion">shift_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#relational_o=
+perator">relational_operator</A>),=20
+
+      <P></P>
+      <LI><A =
+name=3Drelational_operator>relational_operator</A>::=3D"&lt;" | "&gt;"=20
+      | "&lt;=3D" | "&gt;=3D",=20
+      <P></P>
+      <LI><A name=3Dequality_expression>equality_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#relational_e=
+xpression">relational_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#equality_ope=
+rator">equality_operator</A>),=20
+
+      <P></P>
+      <LI><A name=3Dequality_operator>equality_operator</A>::=3D"=3D=3D" =
+| "!=3D",=20
+      <P><A name=3D"Bitwise Expressions">
+      <H3>Bitwise Expressions</H3></A>These use the lowest level machine =
+code=20
+      operations that manipulate the bits in words. They are very fast =
+and=20
+      powerful. They are mostly used in system programming: drivers, =
+operating=20
+      systems, compilers, interpreters, shells, ... . They are also a =
+very fast=20
+      and tight coding for subsets of small sets: one bit per element =
+has 1 for=20
+      membership and 0 for nonmembership. For example if a class can =
+meet on any=20
+      collection of the 5 working days in a week (Monday=3D1, ..., =
+Friday=3D5) then <PRE> 		FRWTM</PRE><PRE> 		10101 =3D MWF</PRE>
+      <P>
+      <P>
+      <TABLE border=3D1>
+        <TBODY>
+        <TR>
+          <TH>Decimal
+          <TH>Binary (last 4 bits/ 1 byte)=20
+        <TR>
+          <TD>0
+          <TD>0000=20
+        <TR>
+          <TD>1
+          <TD>0001=20
+        <TR>
+          <TD>2
+          <TD>0010=20
+        <TR>
+          <TD>3
+          <TD>0011=20
+        <TR>
+          <TD>4
+          <TD>0100=20
+        <TR>
+          <TD>5
+          <TD>0101=20
+        <TR>
+          <TD>6
+          <TD>0110=20
+        <TR>
+          <TD>7
+          <TD>0111=20
+        <TR>
+          <TD>8
+          <TD>1000 </TR></TBODY></TABLE>
+      <P></P>
+      <LI><A name=3DAND_expression>AND_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#equality_exp=
+ression">equality_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#and_operator=
+">and_operator</A>),=20
+
+      <P></P>
+      <LI><A name=3Dand_operator>and_operator</A>::=3D"&amp;", This =
+operator takes=20
+      each bit in the value of its arguments in turn to calculate the =
+bit in the=20
+      answer. A bit is 1 if and only if both arguments have bits in that =
+place=20
+      that are 1.=20
+      <TABLE border=3D1>
+        <TBODY>
+        <TR>
+          <TH>Decimal
+          <TH>Binary=20
+        <TR>
+          <TD>3=20
+          <TD>0011=20
+        <TR>
+          <TD>5=20
+          <TD>0101=20
+        <TR>
+          <TD>3&amp;5
+          <TD>0001 </TR></TBODY></TABLE>
+      <P></P>
+      <LI><A name=3DXOR_expression>XOR_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#AND_expressi=
+on">AND_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#XOR_operator=
+">XOR_operator</A>),=20
+
+      <P></P>
+      <LI><A name=3DXOR_operator>XOR_operator</A>::=3D"^", XOR is short =
+for=20
+      eXclusive-OR. The n'th bit in the value is 1 precisly when the =
+n'th bits=20
+      in the two arguments are different.=20
+      <TABLE border=3D1>
+        <TBODY>
+        <TR>
+          <TH>Decimal
+          <TH>Binary=20
+        <TR>
+          <TD>3=20
+          <TD>0011=20
+        <TR>
+          <TD>5=20
+          <TD>0101=20
+        <TR>
+          <TD>3^5
+          <TD>0110 </TR></TBODY></TABLE>
+      <P></P>
+      <LI><A name=3DOR_expression>OR_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#XOR_expressi=
+on">XOR_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#OR_operator"=
+>OR_operator</A>),=20
+
+      <P></P>
+      <LI><A name=3DOR_operator>OR_operator</A>::=3D"|", This operator =
+takes each=20
+      bit in the value of its arguments in turn to calculate the bit in =
+the=20
+      answer. The n'th bit is 1 if either n'th bits is 1.=20
+      <TABLE border=3D1>
+        <TBODY>
+        <TR>
+          <TH>Decimal
+          <TH>Binary=20
+        <TR>
+          <TD>3=20
+          <TD>0011=20
+        <TR>
+          <TD>5=20
+          <TD>0101=20
+        <TR>
+          <TD>3|5
+          <TD>0111 </TR></TBODY></TABLE>
+      <P><A name=3D"Logical Expressions">
+      <H3>Logical Expressions</H3></A>In C, logical false is reresented =
+by any=20
+      zero value and true by any nonzero value. Here is a list of =
+operators <BR>
+      <OL class=3DList>
+        <LI><A name=3Dand>and</A>::=3D"&amp;&amp;".=20
+        <LI><A name=3Dor>or</A>::=3D"||",=20
+        <LI><A name=3Dnot>not</A>::=3D"!", </LI></OL><BR>
+      <P></P>
+      <LI><A =
+name=3Dlogical_AND_expression>logical_AND_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#OR_expressio=
+n">OR_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#logical_AND_=
+operator">logical_AND_operator</A>),=20
+
+      <P></P>
+      <LI><A name=3Dlogical_AND_operator>logical_AND_operator</A>::=3D<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#and">and</A>=
+,=20
+      A&amp;&amp;B is true precisely when both A and B evaluate to be =
+true. If A=20
+      evaluates to false, B is not evaluated.=20
+      <P></P>
+      <LI><A =
+name=3Dlogical_OR_expression>logical_OR_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#logical_AND_=
+expression">logical_AND_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#logical_OR_o=
+perator">logical_OR_operator</A>),=20
+
+      <P></P>
+      <LI><A name=3Dlogical_OR_operator>logical_OR_operator</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#or">or</A>, =
+
+      A||B is true if A evaluates to be true, or when A is false and B =
+evaluates=20
+      to be true. If both evaluate to false (zero) then A||B is false.=20
+      <P><A name=3D"Conditional Expressions">
+      <H3>Conditional Expressions</H3></A>
+      <LI><A =
+name=3Dconditional_expression>conditional_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#logical_OR_e=
+xpression">logical_OR_expression</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#logical_OR_e=
+xpression">logical_OR_expression</A>=20
+      "?" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>=20
+      ":" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#conditional_=
+expression">conditional_expression</A>,=20
+
+      <P><A name=3D"Assignment Statements">
+      <H3>Assignment Statements</H3></A>
+      <LI><A =
+name=3Dassignment_expression>assignment_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#S">S</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#unary_expres=
+sion">unary_expression</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_o=
+perator">assignment_operator</A>),=20
+
+      <P></P>
+      <LI><A =
+name=3Dassignment_operator>assignment_operator</A>::=3D"=3D" | "*=3D" |=20
+      "/=3D" | "%=3D" | "+=3D" | "&lt;&lt;=3D" | "&gt;&gt;=3D" | =
+"&amp;=3D" | "^=3D" | "|=3D",=20
+      <P></P>
+      <LI><A name=3Dexpression>expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#List">List</=
+A>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+      ),=20
+      <P></P>
+      <LI><A name=3Dconstant_expression>constant_expression</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#conditional_=
+expression">conditional_expression</A>,=20
+
+      <P></P></LI></OL>
+    <P>. . . . . . . . . ( end of section <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Expressions"=
+>Expressions</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Contents">&l=
+t;&lt;</A>Contents=20
+    | End<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#__End">&gt;&=
+gt;</A>=20
+    <A name=3DDeclarations>
+    <H2>Declarations</H2></A>
+    <OL class=3DSection>
+      <LI><A name=3Ddeclaration>declaration</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declaration_=
+specifier">declaration_specifier</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declarator_l=
+ist">declarator_list</A>,=20
+
+      <P></P>
+      <LI><A name=3Ddeclarator_list>declarator_list</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#List">List</=
+A>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declarator_i=
+nitialized">declarator_initialized</A>),=20
+
+      <P></P>
+      <LI><A =
+name=3Ddeclaration_specifier>declaration_specifier</A>::=3D(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#storage_clas=
+s">storage_class</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#type_specifi=
+er">type_specifier</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#type_qualifi=
+er">type_qualifier</A>),=20
+
+      <P></P>
+      <LI><A name=3Dstorage_class>storage_class</A>::=3D"typedef" | =
+"extern" |=20
+      "static" | "auto" | "register",=20
+      <P><A name=3DTypes>
+      <H3>Types</H3></A>
+      <LI><A name=3Dtype_specifier>type_specifier</A>::=3D"void" | =
+"char" | "short"=20
+      | "int" | "long" | "float" | "double" | "signed" | "unsigned" | <A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#struct_union=
+_specifier">struct_union_specifier</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#enumeration_=
+specifier">enumeration_specifier</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#typedef_name=
+">typedef_name</A>,=20
+
+      <P></P>
+      <LI><A name=3Dtype-qualifier>type-qualifier</A>::=3D"const" | =
+"volatile",=20
+      <P></P>
+      <LI><A name=3Dtypedef_name>typedef_name</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>,=20
+      <A name=3DInitialization>
+      <H3>Initialization</H3></A>
+      <LI><A name=3Dinitializer>initializer</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#assignment_e=
+xpression">assignment_expression</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#initializer_=
+list">initializer_list</A>,=20
+
+      <P></P>
+      <LI><A name=3Dinitializer_list>initializer_list</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#List">List</=
+A>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#initializer"=
+>initializer</A>),=20
+
+      <P></P>
+      <LI><A =
+name=3Ddeclarator_initialized>declarator_initialized</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declarator">=
+declarator</A>=20
+      ("=3D" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#initializer"=
+>initializer</A>),=20
+      <A name=3D"Structs and Unions">
+      <H3>Structs and Unions</H3></A>
+      <LI><A name=3Dstructure_declarator>structure_declarator</A>::=3D<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declarator">=
+declarator</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declarator">=
+declarator</A>=20
+      ":" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant_exp=
+ression">constant_expression</A>,=20
+
+      <P></P>
+      <LI><A =
+name=3Dstructure_declarator_list>structure_declarator_list</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#List">List</=
+A>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#structure_de=
+clarator">structure_declarator</A>),=20
+
+      <P></P>
+      <LI><A =
+name=3Dstructure_declaration>structure_declaration</A>::=3D(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#type_specifi=
+er">type_specifier</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#type_qualifi=
+er">type_qualifier</A>)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#structure_de=
+clarator_list">structure_declarator_list</A>=20
+      ";" ,=20
+      <P></P>
+      <LI><A =
+name=3Dstruct_union_specifier>struct_union_specifier</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#struct_union=
+">struct_union</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#struct_union=
+">struct_union</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      "{"<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#structure_de=
+clarator_list">structure_declarator_list</A>=20
+      "}",=20
+      <P></P>
+      <LI><A name=3Dstruct_union>struct_union</A>::=3D( "struct" | =
+"union" ),=20
+      <P><A name=3DEnums>
+      <H3>Enums</H3></A>
+      <LI><A name=3Denumeration_value>enumeration_value</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#enumeration_=
+constant">enumeration_constant</A>=20
+      ("=3D" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant_exp=
+ression">constant_expression</A>|)=20
+
+      <P></P>
+      <LI><A name=3Denumeration_list>enumeration_list</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#List">List</=
+A>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#enumeration_=
+value">enumeration_value</A>=20
+      ),=20
+      <P></P>
+      <LI><A =
+name=3Denumeration_specifier>enumeration_specifier</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#enumeration_=
+identifier">enumeration_identifier</A>=20
+      | "enum" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      "{"<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#enumeration_=
+list">enumeration_list</A>"}",=20
+
+      <P><A name=3DFunctions>
+      <H3>Functions</H3></A>
+      <LI><A name=3Dfunction_definition>function_definition</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declaration_=
+specifier">declaration_specifier</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declarator">=
+declarator</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declaration_=
+list">declaration_list</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#compound_sta=
+tement">compound_statement</A>,=20
+
+      <LI><A =
+name=3Dparameter_declaration>parameter_declaration</A>::=3D#<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declaration_=
+specifier">declaration_specifier</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declarator">=
+declarator</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#abstract_dec=
+larator">abstract_declarator</A>,=20
+
+      <P></P>
+      <LI><A name=3Dparameter_list>parameter_list</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#List">List</=
+A>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#parameter_de=
+claration">parameter_declaration</A>)=20
+      (",..."|),=20
+      <P><A name=3D"Main Function">
+      <H3>Main Function</H3></A>A complete C program has to have a =
+function with=20
+      name 'main'. This is the function called by the operating system. =
+It must=20
+      return an <SPAN class=3DInlineFormula>int</SPAN> value indicating =
+whether=20
+      the prograam executed correctly or if there was an error. In UNIX, =
+the=20
+      main program returns 0 to indicate no errors. Their are several =
+valid=20
+      forms:=20
+      <LI><SPAN class=3DFormula>int main()</SPAN>=20
+      <LI><SPAN class=3DFormula>int main(argc, argv)</SPAN>=20
+      <LI><SPAN class=3DFormula>int main(argc, argv, envp)</SPAN> The =
+parameters=20
+      are set up by the operating system when the program starts. The=20
+      traditional <SPAN class=3DInlineFormula>arg</SPAN> stands for =
+<SPAN=20
+      class=3DInlineFormula>argument</SPAN>.=20
+      <P><A name=3DPointers>
+      <H3>Pointers</H3></A>
+      <LI><A name=3Dpointer>pointer</A>::=3D#( "*" | #<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#type_qualifi=
+er">type_qualifier</A>),=20
+
+      <P></P>
+      <LI><A name=3Ddeclarator>declarator</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#pointer">poi=
+nter</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#direct_decla=
+rator">direct_declarator</A>,=20
+
+      <P><A name=3D"Functions and Arrays">
+      <H3>Functions and Arrays</H3></A>
+      <LI><A name=3Dpost_declarator>post_declarator</A>::=3D"["<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant_exp=
+ression">constant_expression</A>"]"=20
+      | "("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#parameter_li=
+st">parameter_list</A>")"=20
+      | "("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier_l=
+ist">identifier_list</A>")"=20
+
+      <P></P>
+      <LI><A name=3Ddirect_declarator>direct_declarator</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      | "("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declarator">=
+declarator</A>")"=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#direct_decla=
+rator">direct_declarator</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#post_declara=
+tor">post_declarator</A>,=20
+
+      <P></P>
+      <LI><A name=3Dabstract_declarator>abstract_declarator</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#pointer">poi=
+nter</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#pointer">poi=
+nter</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#direct_abstr=
+act_declarator">direct_abstract_declarator</A>,=20
+
+      <P></P>
+      <LI><A =
+name=3Ddirect_abstract_declarator>direct_abstract_declarator</A>::=3D=20
+      "(" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#abstract_dec=
+larator">abstract_declarator</A>=20
+      ")" | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#O">O</A>( =
+<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#direct_abstr=
+act_declarator">direct_abstract_declarator</A>)=20
+      <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#O">O</A>("["=
+=20
+      <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#O">O</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant_exp=
+ression">constant_expression</A>)=20
+      "]" | "(" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#O">O</A>(<A =
+
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#parameter_li=
+st">parameter_list</A>)=20
+      ")" ), </LI></OL>
+    <P>. . . . . . . . . ( end of section <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Declarations=
+">Declarations</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Contents">&l=
+t;&lt;</A>Contents=20
+    | End<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#__End">&gt;&=
+gt;</A>=20
+    <A name=3DStatements>
+    <H2>Statements</H2></A>
+    <OL class=3DSection>
+      <LI><A name=3Dstatement>statement</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#labeled_stat=
+ement">labeled_statement</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#compound_sta=
+tement">compound_statement</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression_s=
+tatement">expression_statement</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#selection_st=
+atement">selection_statement</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#iteration_st=
+atement">iteration_statement</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#jump_stateme=
+nt">jump_statement</A>=20
+      <A name=3DBranch>
+      <H3>Branch</H3></A>
+      <LI><A name=3Djump_statement>jump_statement</A>::=3D"goto" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>";"=20
+      | "continue" ";" | "break;" | "return" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>=20
+      ";", <A name=3DStructured>
+      <H3>Structured</H3></A>
+      <LI><A name=3Dloop>loop</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#iteration_st=
+atement">iteration_statement</A>.=20
+
+      <LI><A =
+name=3Diteration_statement>iteration_statement</A>::=3D"while" "("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>")"=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>=20
+      | "do" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>=20
+      "while" "("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>")"=20
+      ";" | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#for_statemen=
+t">for_statement</A>.=20
+
+      <P></P>
+      <LI><A name=3Dfor_statement>for_statement</A>::=3D"for" "("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>=20
+      ";" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>=20
+      ";" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>")"=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>,=20
+
+      <P></P>
+      <LI><A name=3Dselection_statement>selection_statement</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#if_statement=
+">if_statement</A>=20
+      | "switch" "("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>")"=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>,=20
+
+      <LI><A name=3Dif_statement>if_statement</A>::=3D"if ("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>")"=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>=20
+      | "if" "("<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>")"=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>=20
+      "else" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>.=20
+
+      <P></P>
+      <LI><A name=3Dexpression_statement>expression_statement</A>::=3D =
+<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#expression">=
+expression</A>=20
+      ";",=20
+      <P></P>
+      <LI><A name=3Dlabeled_statement>labeled_statement</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      ":" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>=20
+      | "case" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant_exp=
+ression">constant_expression</A>=20
+      ":" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>=20
+      | "default" ":" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>,=20
+      <A name=3DCompound>
+      <H3>Compound</H3></A>
+      <LI><A name=3Dcompound_statement>compound_statement</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#block">block=
+</A>=20
+      | "{" #<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>=20
+      "}",=20
+      <P></P>
+      <LI><A name=3Dblock>block</A>::=3D"{" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declaration"=
+>declaration</A>=20
+      #<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#declaration"=
+>declaration</A>=20
+      #<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#statement">s=
+tatement</A>=20
+      "}",=20
+      <P>
+      <P></P></LI></OL>
+    <P>. . . . . . . . . ( end of section <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Statements">=
+Statements</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Contents">&l=
+t;&lt;</A>Contents=20
+    | End<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#__End">&gt;&=
+gt;</A>=20
+    <A name=3D"Pre-Processor Commands">
+    <H2>Pre-Processor Commands</H2></A>
+    <OL class=3DSection>
+      <P>
+      <LI><A name=3Dpreprocess_token>preprocess_token</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant">co=
+nstant</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#string_liter=
+al">string_literal</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#operator">op=
+erator</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#punctuator">=
+punctuator</A>=20
+      | <SPAN class=3DInlineFormula><A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#each">each</=
+A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Non">Non</A>=
+-<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#white">white=
+</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#space">space=
+</A>=20
+      <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#not">not</A>=
+=20
+      <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#one">one</A>=
+=20
+      <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#of">of</A>=20
+      <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#the">the</A>=
+=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#previous">pr=
+evious</A></SPAN>,=20
+
+      <P></P>
+      <LI><A name=3Dheader_char>header_char</A>::=3D<SPAN =
+class=3DInlineFormula><A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#any">any</A>=
+ <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#character">c=
+haracter</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#except">exce=
+pt</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#and">and</A>=
+ |=20
+      &gt;</SPAN>,=20
+      <P></P>
+      <LI><A name=3Dheader_name>header_name</A>::=3D#(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#header_char"=
+>header_char</A>),=20
+
+      <P></P>
+      <LI><A name=3Dnew_line>new_line</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#character">c=
+haracter</A>,=20
+
+      <P></P>
+      <LI><A name=3DLeft_paren>Left_paren</A>::=3D<SPAN =
+class=3DInlineFormula><A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#left">left</=
+A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#parenthesis"=
+>parenthesis</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#with">with</=
+A>=20
+      <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#no">no</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#white">white=
+</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#space">space=
+</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#before">befo=
+re</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#it">it</A></=
+SPAN>,=20
+
+      <P></P>
+      <LI><A name=3Dcontrol_line>control_line</A>::=3D"#include" (#(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#preprocess_t=
+oken">preprocess_token</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#header_name"=
+>header_name</A>)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      | "#define" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#preprocess_t=
+oken">preprocess_token</A>)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      | "#define" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#left_paren">=
+left_paren</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier_l=
+ist">identifier_list</A>=20
+      #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#preprocess_t=
+oken">preprocess_token</A>)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>,=20
+      | "#undef" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      | "#line" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#preprocess_t=
+oken">preprocess_token</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      | "#error" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#preprocess_t=
+oken">preprocess_token</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      | "#pragma" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#preprocess_t=
+oken">preprocess_token</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      | "#"<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>,=20
+
+      <P></P>
+      <LI><A name=3Dendif_line>endif_line</A>::=3D"#endif" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>,=20
+
+      <P></P>
+      <LI><A name=3Delif_group>elif_group</A>::=3D"#elif" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant_exp=
+ression">constant_expression</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#pp_group">pp=
+_group</A>,=20
+
+      <P></P>
+      <LI><A name=3Delse_group>else_group</A>::=3D"#else" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#pp_group">pp=
+_group</A>,=20
+
+      <P></P>
+      <LI><A name=3Dif_group>if_group</A>::=3D("#if" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#constant_exp=
+ression">constant_expression</A>=20
+      | "#ifdef" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>=20
+      | "#ifndef" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#identifier">=
+identifier</A>)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#pp_group">pp=
+_group</A>,=20
+
+      <P></P>
+      <LI><A name=3Dif_part>if_part</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#if_group">if=
+_group</A>=20
+      #(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#elif_group">=
+elif_group</A>)=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#else_group">=
+else_group</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#endif_line">=
+endif_line</A>,=20
+
+      <P></P>
+      <LI><A name=3Dpp_part>pp_part</A>::=3D#<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#preprocess_t=
+oken">preprocess_token</A>=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#new_line">ne=
+w_line</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#if_part">if_=
+part</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#control_line=
+">control_line</A>,=20
+
+      <P></P>
+      <LI><A name=3Dpp_group>pp_group</A>::=3D#(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#pp_part">pp_=
+part</A>),=20
+      </LI></OL>
+    <P>. . . . . . . . . ( end of section <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Pre-Processo=
+r Commands">Pre-Processor=20
+    Commands</A>) <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Contents">&l=
+t;&lt;</A>Contents=20
+    | End<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#__End">&gt;&=
+gt;</A>=20
+    </P></LI></OL>
+  <P>. . . . . . . . . ( end of section <A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Syntax of =
+The C Programming Language">Syntax=20
+  of The C Programming Language</A>) <A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Contents">&l=
+t;&lt;</A>Contents=20
+  | End<A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#__End">&gt;&=
+gt;</A>=20
+  </P></OL><A name=3D__End>
+<H3>End</H3></A></BODY></HTML>

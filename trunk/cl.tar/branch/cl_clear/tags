@@ -1,0 +1,331 @@
+CAH_EM4_DeInitEntity	cah_126e1.i	/^CAH_EM4_DeInitEntity (DWORD dwPos)$/
+CAH_EM4_DetectCardState	cah_126e1.i	/^CAH_EM4_DetectCardState (DWORD dwPos, BOOL * pbAct/
+CAH_EM4_EnablePrbs	cah_126e1.i	/^CAH_EM4_EnablePrbs (DWORD dwPos, UINT32 byPortNo, /
+CAH_EM4_EnableReTiming	cah_126e1.i	/^CAH_EM4_EnableReTiming (DWORD dwPos, BYTE byPortNo/
+CAH_EM4_ForceAIS	cah_126e1.i	/^CAH_EM4_ForceAIS (DWORD dwPos, int nport, eEM4SWIT/
+CAH_EM4_Get19MClkState	cah_126e1.i	/^CAH_EM4_Get19MClkState (DWORD dwPos, BOOL *pbActiv/
+CAH_EM4_Get8KClkState	cah_126e1.i	/^CAH_EM4_Get8KClkState (DWORD dwPos, BOOL *pbActive/
+CAH_EM4_GetFpgaVersion	cah_126e1.i	/^CAH_EM4_GetFpgaVersion (DWORD dwPos, char *pucFpga/
+CAH_EM4_GetInnerB1Err	cah_126e1.i	/^CAH_EM4_GetInnerB1Err (DWORD dwPos, BYTE byPortNo,/
+CAH_EM4_GetLpAlmState	cah_126e1.i	/^CAH_EM4_GetLpAlmState (DWORD dwPos, UINT8 byPortNo/
+CAH_EM4_GetLpBipCount	cah_126e1.i	/^CAH_EM4_GetLpBipCount (DWORD dwPos, BYTE byPortNo,/
+CAH_EM4_GetPllState	cah_126e1.i	/^CAH_EM4_GetPllState (DWORD dwPos, BOOL * pbPllLock/
+CAH_EM4_GetPpiAlmState	cah_126e1.i	/^CAH_EM4_GetPpiAlmState (DWORD dwPos, UINT8 byPortN/
+CAH_EM4_GetPpiBipCount	cah_126e1.i	/^CAH_EM4_GetPpiBipCount (DWORD dwPos, BYTE byPortNo/
+CAH_EM4_GetPrbsErrCount	cah_126e1.i	/^CAH_EM4_GetPrbsErrCount (DWORD dwPos, UINT32 byPor/
+CAH_EM4_GetPrbsState	cah_126e1.i	/^CAH_EM4_GetPrbsState (DWORD dwPos, BYTE byPortNo, /
+CAH_EM4_GetRxExpLpPsl	cah_126e1.i	/^CAH_EM4_GetRxExpLpPsl (DWORD dwPos, BYTE byPortNo,/
+CAH_EM4_GetRxExpLpTti	cah_126e1.i	/^CAH_EM4_GetRxExpLpTti (DWORD dwPos, BYTE byPortNo,/
+CAH_EM4_GetRxRcvLpPsl	cah_126e1.i	/^CAH_EM4_GetRxRcvLpPsl (DWORD dwPos, UINT32 byPortN/
+CAH_EM4_GetRxRcvLpTti	cah_126e1.i	/^CAH_EM4_GetRxRcvLpTti (DWORD dwPos, BYTE byPortNo,/
+CAH_EM4_GetSlip	cah_126e1.i	/^CAH_EM4_GetSlip (DWORD dwPos, BYTE byPortNo, DWORD/
+CAH_EM4_GetTdmLinkErr	cah_126e1.i	/^CAH_EM4_GetTdmLinkErr (DWORD dwPos, DWORD *pdwTdmE/
+CAH_EM4_GetTimingRef	cah_126e1.i	/^CAH_EM4_GetTimingRef (DWORD dwPos, BYTE byClockNum/
+CAH_EM4_GetTuAlmState	cah_126e1.i	/^CAH_EM4_GetTuAlmState (DWORD dwPos, UINT8 byPortNo/
+CAH_EM4_GetTxLpTti	cah_126e1.i	/^CAH_EM4_GetTxLpTti (DWORD dwPos, BYTE byPortNo, TT/
+CAH_EM4_InitEntity	cah_126e1.i	/^CAH_EM4_InitEntity (ENTITY_T etEntity, DWORD dwPos/
+CAH_EM4_Initialize	cah_126e1.i	/^CAH_EM4_Initialize (DWORD dwPos)$/
+CAH_EM4_SetInsertAlm	cah_126e1.i	/^CAH_EM4_SetInsertAlm (DWORD dwPos, BYTE byPortNo, /
+CAH_EM4_SetPortLoopback	cah_126e1.i	/^CAH_EM4_SetPortLoopback (DWORD dwPos, BYTE byPortN/
+CAH_EM4_SetRxExpLpPsl	cah_126e1.i	/^CAH_EM4_SetRxExpLpPsl (DWORD dwPos, BYTE byPortNo,/
+CAH_EM4_SetRxExpLpTti	cah_126e1.i	/^CAH_EM4_SetRxExpLpTti (DWORD dwPos, UINT32 byPortN/
+CAH_EM4_SetRxLpPslEnable	cah_126e1.i	/^CAH_EM4_SetRxLpPslEnable (DWORD dwPos, BYTE byPort/
+CAH_EM4_SetRxLpTtiAisEnable	cah_126e1.i	/^CAH_EM4_SetRxLpTtiAisEnable (DWORD dwPos, BYTE byP/
+CAH_EM4_SetRxLpTtiAlmEnable	cah_126e1.i	/^CAH_EM4_SetRxLpTtiAlmEnable (DWORD dwPos, BYTE byP/
+CAH_EM4_SetRxLpTtiMode	cah_126e1.i	/^CAH_EM4_SetRxLpTtiMode (DWORD dwPos, UINT32 byPort/
+CAH_EM4_SetRxTxLpPsl	cah_126e1.i	/^CAH_EM4_SetRxTxLpPsl (DWORD dwPos, BYTE byPortNo, /
+CAH_EM4_SetTimingRef	cah_126e1.i	/^CAH_EM4_SetTimingRef (DWORD dwPos, BYTE byPort, BY/
+CAH_EM4_SetTxLpPsl	cah_126e1.i	/^CAH_EM4_SetTxLpPsl (DWORD dwPos, BYTE byPortNo, BY/
+CAH_EM4_SetTxLpTti	cah_126e1.i	/^CAH_EM4_SetTxLpTti (DWORD dwPos, UINT32 byPortNo, /
+CAH_EM4_SetTxLpTtiMode	cah_126e1.i	/^CAH_EM4_SetTxLpTtiMode (DWORD dwPos, UINT32 byPort/
+CAH_EM4_activateEntity	cah_126e1.i	/^CAH_EM4_activateEntity (DWORD dwPos, BOOL b_warm)$/
+CAH_EM4_blockAIS	cah_126e1.i	/^CAH_EM4_blockAIS (DWORD dwPos, BOOL bEnable)$/
+CAH_EM4_deActEntity	cah_126e1.i	/^CAH_EM4_deActEntity (DWORD dwPos)$/
+CAH_EM4_enableLOMLOF	cah_126e1.i	/^CAH_EM4_enableLOMLOF (ENTITY_T entity, int chip, i/
+CAH_EM4_enablePlm	cah_126e1.i	/^CAH_EM4_enablePlm (DWORD dwPos, UINT32 ulChip, UIN/
+CAH_EM4_enablePort	cah_126e1.i	/^CAH_EM4_enablePort (DWORD dwPos, UINT32 ulChip, UI/
+CAH_EM4_forceInsertAis	cah_126e1.i	/^CAH_EM4_forceInsertAis (DWORD dwPos, UINT32 ulChip/
+CAH_EM4_forceInsertRdi	cah_126e1.i	/^CAH_EM4_forceInsertRdi (DWORD dwPos, UINT32 ulChip/
+CAH_EM4_forceRDI	cah_126e1.i	/^CAH_EM4_forceRDI (DWORD dwPos, int nport, eEM4SWIT/
+CAH_EM4_forceReportEpg	cah_126e1.i	/^CAH_EM4_forceReportEpg (DWORD dwPos)$/
+CAH_EM4_forceRptDefect	cah_126e1.i	/^CAH_EM4_forceRptDefect (DWORD dwPos, UINT32 ulChip/
+CAH_EM4_getLatchStatus	cah_126e1.i	/^CAH_EM4_getLatchStatus (DWORD dwPos)$/
+CAH_EM4_getLpPmPara	cah_126e1.i	/^CAH_EM4_getLpPmPara (DWORD dwPos, UINT32 ulChip, U/
+CAH_EM4_getPortState	cah_126e1.i	/^CAH_EM4_getPortState (DWORD dwPos, UINT32 ulChip, /
+CAH_EM4_getPortType	cah_126e1.i	/^CAH_EM4_getPortType (DWORD dwPos, UINT32 ulChip, U/
+CAH_EM4_getPrbsMode	cah_126e1.i	/^CAH_EM4_getPrbsMode (DWORD dwPos, UINT32 ulChip, U/
+CAH_EM4_initModule	cah_126e1.i	/^CAH_EM4_initModule ()$/
+CAH_EM4_loadModule	cah_126e1.i	/^CAH_EM4_loadModule ()$/
+CAH_EM4_setPdhPortMode	cah_126e1.i	/^CAH_EM4_setPdhPortMode (DWORD dwPos, UINT32 ulChip/
+CAH_EM4_setTransFunc	cah_126e1.i	/^CAH_EM4_setTransFunc (CahEm4pTransFunc pfunc)$/
+CAH_EM4_setTransPsl	cah_126e1.i	/^CAH_EM4_setTransPsl (DWORD dwPos, UINT32 ulChip, U/
+CTD_StrError	cah_126e1.i	/^static __inline const char *CTD_StrError(int code)/
+__attribute__	cah_126e1.i	/^}__attribute__ ((packed))  PORT_STATUS_T;  $/
+bar	hello.c	/^char * bar (float f)$/
+block_test	hello.c	/^int block_test (int n)$/
+bpc_dcm_rst_al	cah_126e1.i	/^bpc_dcm_rst_al (void)$/
+bpc_dcm_st	cah_126e1.i	/^bpc_dcm_st (void)$/
+bpc_mgt_8k_mon_p	cah_126e1.i	/^bpc_mgt_8k_mon_p (void)$/
+bpc_mgt_8k_mon_w	cah_126e1.i	/^bpc_mgt_8k_mon_w (void)$/
+bpc_mgt_descram	cah_126e1.i	/^bpc_mgt_descram (int ch, int en)$/
+bpc_mgt_up_scram	cah_126e1.i	/^bpc_mgt_up_scram (int en)$/
+bpc_mgt_wps	cah_126e1.i	/^bpc_mgt_wps (void)$/
+bpc_rst	cah_126e1.i	/^bpc_rst (void)$/
+bpc_rst_mgt_fifo	cah_126e1.i	/^bpc_rst_mgt_fifo (void)$/
+buffer_reset	cah_126e1.i	/^int buffer_reset (void)$/
+cah_em4Info	cah_126e1.i	/^cah_em4Info (void)$/
+cah_em4_Dpr	cah_126e1.i	/^cah_em4_Dpr ()$/
+cah_em4_GetSlip	cah_126e1.i	/^cah_em4_GetSlip (int dwPos, UINT32 byPortNo, UINT3/
+cah_em4_IndRead	cah_126e1.i	/^UINT16 cah_em4_IndRead(UINT32 dwbaseAddr ,     UIN/
+cah_em4_Info	cah_126e1.i	/^cah_em4_Info ()$/
+cah_em4_InitAlmID	cah_126e1.i	/^cah_em4_InitAlmID (CAH_EM4_ENTITY_DATA_T * pEntity/
+cah_em4_InitTiming	cah_126e1.i	/^void cah_em4_InitTiming (void)$/
+cah_em4_IsLatchIntEnable	cah_126e1.i	/^cah_em4_IsLatchIntEnable (UINT32 entity)$/
+cah_em4_ManualInsertPayloadAIS	cah_126e1.i	/^int cah_em4_ManualInsertPayloadAIS (int byPortNo, /
+cah_em4_OpenEx	cah_126e1.i	/^cah_em4_OpenEx (void)$/
+cah_em4_PollBusyBit	cah_126e1.i	/^UINT16 cah_em4_PollBusyBit(UINT32 dwBaseAddr, UINT/
+cah_em4_ReadRegister	cah_126e1.i	/^UINT16 cah_em4_ReadRegister(UINT32 dwBaseAddr, UIN/
+cah_em4_WriteRegister	cah_126e1.i	/^UINT16 cah_em4_WriteRegister(UINT32 dwBaseAddr,   /
+cah_em4_addSsfFc	cah_126e1.i	/^cah_em4_addSsfFc (ENTITY_T entity, int port)$/
+cah_em4_chkId	cah_126e1.i	/^cah_em4_chkId (ENTITY_T entity, int port)$/
+cah_em4_chkdwPos	cah_126e1.i	/^cah_em4_chkdwPos (DWORD dwPos)$/
+cah_em4_clearAlmForced	cah_126e1.i	/^cah_em4_clearAlmForced (CAH_EM4_ENTITY_DATA_T * pE/
+cah_em4_deInitEntity	cah_126e1.i	/^cah_em4_deInitEntity (DWORD dwPos)$/
+cah_em4_detectCardStateEx	cah_126e1.i	/^cah_em4_detectCardStateEx (CAH_EM4_ENTITY_DATA_T */
+cah_em4_dwPos2ent	cah_126e1.i	/^cah_em4_dwPos2ent (DWORD dwPos)$/
+cah_em4_dwPos2id	cah_126e1.i	/^cah_em4_dwPos2id (DWORD dwPos)$/
+cah_em4_e1_poh_clr_degrade	cah_126e1.i	/^void cah_em4_e1_poh_clr_degrade (void *baseaddr,in/
+cah_em4_e1_poh_rx_mask_int	cah_126e1.i	/^void cah_em4_e1_poh_rx_mask_int(void *baseaddr)$/
+cah_em4_e1_poh_set_degrade	cah_126e1.i	/^void cah_em4_e1_poh_set_degrade (void *baseaddr,in/
+cah_em4_e1_tb_outloop_disable	cah_126e1.i	/^void  cah_em4_e1_tb_outloop_disable(void *baseaddr/
+cah_em4_e1desync_default	cah_126e1.i	/^void cah_em4_e1desync_default(void *baseaddr)$/
+cah_em4_e1inloop	cah_126e1.i	/^int cah_em4_e1inloop (void * base, int port, int e/
+cah_em4_e1outloop	cah_126e1.i	/^int cah_em4_e1outloop (void * base, int port, int /
+cah_em4_e1sync_default	cah_126e1.i	/^void cah_em4_e1sync_default(void *baseaddr)$/
+cah_em4_enableLatchInt	cah_126e1.i	/^cah_em4_enableLatchInt (UINT32 entity, BOOL Enable/
+cah_em4_enableLatchIntr	cah_126e1.i	/^cah_em4_enableLatchIntr (void *baseaddr, int flag)/
+cah_em4_enablePlm	cah_126e1.i	/^cah_em4_enablePlm (void *baseaddr, UINT32 ulChip, /
+cah_em4_enableTim	cah_126e1.i	/^cah_em4_enableTim (void *baseaddr, UINT32 ulChip, /
+cah_em4_enableTimAis	cah_126e1.i	/^cah_em4_enableTimAis (void *baseaddr, UINT32 ulChi/
+cah_em4_enableTimRdi	cah_126e1.i	/^cah_em4_enableTimRdi (void *baseaddr, UINT32 ulChi/
+cah_em4_ent2Id	cah_126e1.i	/^cah_em4_ent2Id (ENTITY_T entity)$/
+cah_em4_ent2chipno	cah_126e1.i	/^cah_em4_ent2chipno (ENTITY_T entity)$/
+cah_em4_ent2fd	cah_126e1.i	/^cah_em4_ent2fd (ENTITY_T ent)$/
+cah_em4_fd2ent	cah_126e1.i	/^cah_em4_fd2ent (int fd)$/
+cah_em4_fd2entptr	cah_126e1.i	/^cah_em4_fd2entptr (int fd)$/
+cah_em4_fid2name	cah_126e1.i	/^cah_em4_fid2name (int id, char *pname)$/
+cah_em4_findCall2	cah_126e1.i	/^cah_em4_findCall2 (ENTITY_T entity, void *pfun, in/
+cah_em4_forceAis	cah_126e1.i	/^cah_em4_forceAis (void *baseaddr, int port, eEM4SW/
+cah_em4_forceRdi	cah_126e1.i	/^cah_em4_forceRdi (void *baseaddr, int port, eEM4SW/
+cah_em4_getAlarmId	cah_126e1.i	/^cah_em4_getAlarmId (CAH_EM4_ENTITY_DATA_T * pEntit/
+cah_em4_getAlarmType	cah_126e1.i	/^cah_em4_getAlarmType (CAH_EM4_ENTITY_DATA_T * pEnt/
+cah_em4_getChipBase	cah_126e1.i	/^cah_em4_getChipBase (int slot, int chipno)$/
+cah_em4_getEntity	cah_126e1.i	/^cah_em4_getEntity (ENTITY_T ent)$/
+cah_em4_getEntityBase	cah_126e1.i	/^cah_em4_getEntityBase (ENTITY_T ent, int port)$/
+cah_em4_getEntityPtr	cah_126e1.i	/^cah_em4_getEntityPtr (ENTITY_T entity)$/
+cah_em4_getFarCrcErrCount	cah_126e1.i	/^cah_em4_getFarCrcErrCount (void *base, int port)$/
+cah_em4_getJ2Acc	cah_126e1.i	/^cah_em4_getJ2Acc (void *baseaddr, int port, unsign/
+cah_em4_getPhyLos	cah_126e1.i	/^cah_em4_getPhyLos (DWORD dwPos, UINT8 byPortNo, CT/
+cah_em4_getPlm	cah_126e1.i	/^cah_em4_getPlm (ALARM_REGISTER_T * alarmCtrlReg)$/
+cah_em4_getPlmStatus	cah_126e1.i	/^cah_em4_getPlmStatus (CAH_EM4_ENTITY_DATA_T * pEnt/
+cah_em4_getRdi	cah_126e1.i	/^cah_em4_getRdi (ALARM_REGISTER_T * alarmCtrlReg)$/
+cah_em4_getRfi	cah_126e1.i	/^cah_em4_getRfi (ALARM_REGISTER_T * alarmCtrlReg)$/
+cah_em4_getTim	cah_126e1.i	/^cah_em4_getTim (ALARM_REGISTER_T * alarmCtrlReg)$/
+cah_em4_getTimStatus	cah_126e1.i	/^cah_em4_getTimStatus (CAH_EM4_ENTITY_DATA_T * pEnt/
+cah_em4_getTimingRef	cah_126e1.i	/^WORD cah_em4_getTimingRef (BYTE mid_port, BYTE *by/
+cah_em4_getTslNow	cah_126e1.i	/^cah_em4_getTslNow (void *baseaddr, int port, unsig/
+cah_em4_getUneq	cah_126e1.i	/^cah_em4_getUneq (ALARM_REGISTER_T * alarmCtrlReg)$/
+cah_em4_get_j2acc	cah_126e1.i	/^cah_em4_get_j2acc (void *baseaddr, int port, unsig/
+cah_em4_get_j2exp	cah_126e1.i	/^cah_em4_get_j2exp (void *baseaddr, int port, unsig/
+cah_em4_gete1outloop	cah_126e1.i	/^int cah_em4_gete1outloop (void * base, int port)$/
+cah_em4_getprbsname	cah_126e1.i	/^cah_em4_getprbsname (int tempStatus, char *almType/
+cah_em4_hash	cah_126e1.i	/^cah_em4_hash (int sn)$/
+cah_em4_id2name	cah_126e1.i	/^cah_em4_id2name (int id)$/
+cah_em4_initBpc	cah_126e1.i	/^int cah_em4_initBpc (void)$/
+cah_em4_initChip	cah_126e1.i	/^cah_em4_initChip (ENTITY_T entity)$/
+cah_em4_initERdi	cah_126e1.i	/^cah_em4_initERdi (void *baseaddr, eEM4SWITCH flag)/
+cah_em4_initFusion	cah_126e1.i	/^cah_em4_initFusion (void)$/
+cah_em4_initLink	cah_126e1.i	/^cah_em4_initLink (void)$/
+cah_em4_initModule	cah_126e1.i	/^cah_em4_initModule ()$/
+cah_em4_initPortMap	cah_126e1.i	/^int cah_em4_initPortMap (void)$/
+cah_em4_initPsl	cah_126e1.i	/^cah_em4_initPsl (void *baseaddr, unsigned short ps/
+cah_em4_initReiRdiRfi	cah_126e1.i	/^cah_em4_initReiRdiRfi (void *baseaddr, eEM4SWITCH /
+cah_em4_initVars	cah_126e1.i	/^cah_em4_initVars (CAH_EM4_ENTITY_DATA_T * pEntity,/
+cah_em4_init_fus	cah_126e1.i	/^void cah_em4_init_fus (void)$/
+cah_em4_init_nothing	cah_126e1.i	/^cah_em4_init_nothing ()$/
+cah_em4_insertUpAis	cah_126e1.i	/^cah_em4_insertUpAis (ENTITY_T entity, UINT32 ulChi/
+cah_em4_intConnect	cah_126e1.i	/^cah_em4_intConnect (ENTITY_T entity)$/
+cah_em4_intUnConnect	cah_126e1.i	/^cah_em4_intUnConnect (ENTITY_T entity)$/
+cah_em4_isAlarmCleared	cah_126e1.i	/^cah_em4_isAlarmCleared (UINT16 wTemp, CAH_EM4_ENTI/
+cah_em4_isAlarmRised	cah_126e1.i	/^cah_em4_isAlarmRised (UINT16 wTemp, CAH_EM4_ENTITY/
+cah_em4_isAlmForced	cah_126e1.i	/^cah_em4_isAlmForced (CAH_EM4_ENTITY_DATA_T * pEnti/
+cah_em4_isAlmRPTNow	cah_126e1.i	/^cah_em4_isAlmRPTNow (CAH_EM4_ENTITY_DATA_T * pEnti/
+cah_em4_isAlmSet	cah_126e1.i	/^cah_em4_isAlmSet (CAH_EM4_ENTITY_DATA_T * pEntity,/
+cah_em4_isCardOn	cah_126e1.i	/^cah_em4_isCardOn (int instance)$/
+cah_em4_isEntLive	cah_126e1.i	/^cah_em4_isEntLive (int fd)$/
+cah_em4_isPDHAlarmCleared	cah_126e1.i	/^cah_em4_isPDHAlarmCleared (UINT16 wTemp, CAH_EM4_E/
+cah_em4_isPDHAlarmRised	cah_126e1.i	/^cah_em4_isPDHAlarmRised (UINT16 wTemp, CAH_EM4_ENT/
+cah_em4_isPDHAlmForced	cah_126e1.i	/^cah_em4_isPDHAlmForced (CAH_EM4_ENTITY_DATA_T * pE/
+cah_em4_isPDHAlmRPTNow	cah_126e1.i	/^cah_em4_isPDHAlmRPTNow (CAH_EM4_ENTITY_DATA_T * pE/
+cah_em4_isPDHAlmSet	cah_126e1.i	/^cah_em4_isPDHAlmSet (CAH_EM4_ENTITY_DATA_T * pEnti/
+cah_em4_isPDHRiseOrClear	cah_126e1.i	/^cah_em4_isPDHRiseOrClear (CAH_EM4_ENTITY_DATA_T * /
+cah_em4_isPLMEnable	cah_126e1.i	/^cah_em4_isPLMEnable (CAH_EM4_ENTITY_DATA_T * pEnti/
+cah_em4_isRiseOrClear	cah_126e1.i	/^cah_em4_isRiseOrClear (CAH_EM4_ENTITY_DATA_T * pEn/
+cah_em4_isTTI16Byte	cah_126e1.i	/^cah_em4_isTTI16Byte (CAH_EM4_ENTITY_DATA_T * pEnti/
+cah_em4_isTimEnable	cah_126e1.i	/^cah_em4_isTimEnable (CAH_EM4_ENTITY_DATA_T * pEnti/
+cah_em4_isrFunc	cah_126e1.i	/^cah_em4_isrFunc (FPGA_HANDLE handle, FPGA_HOOK_ARG/
+cah_em4_latch	cah_126e1.i	/^cah_em4_latch ()$/
+cah_em4_loadModule	cah_126e1.i	/^cah_em4_loadModule ()$/
+cah_em4_mapPort	cah_126e1.i	/^cah_em4_mapPort (int port)$/
+cah_em4_pohRead	cah_126e1.i	/^cah_em4_pohRead (void *base, int port, unsigned sh/
+cah_em4_pohWrite	cah_126e1.i	/^cah_em4_pohWrite (void *base, int port, unsigned s/
+cah_em4_pollBit	cah_126e1.i	/^cah_em4_pollBit (unsigned short *baseaddr, int off/
+cah_em4_pollBitDmapper	cah_126e1.i	/^cah_em4_pollBitDmapper (unsigned short *baseaddr, /
+cah_em4_port2chip	cah_126e1.i	/^cah_em4_port2chip (int port)$/
+cah_em4_portCfg1	cah_126e1.i	/^cah_em4_portCfg1 (void *baseaddr)$/
+cah_em4_portCfg2	cah_126e1.i	/^cah_em4_portCfg2 (void *baseaddr)$/
+cah_em4_prbsEnable	cah_126e1.i	/^cah_em4_prbsEnable (ENTITY_T entity, UINT32 ulChip/
+cah_em4_printf	cah_126e1.i	/^cah_em4_printf (char *msg, ...)$/
+cah_em4_rd	cah_126e1.i	/^cah_em4_rd (void *base, int offset)$/
+cah_em4_readChReg	cah_126e1.i	/^cah_em4_readChReg (CAH_EM4_ENTITY_DATA_T * pEntity/
+cah_em4_readCrc4Reg	cah_126e1.i	/^cah_em4_readCrc4Reg (void *base, int port)$/
+cah_em4_readCrc4RemoteReg	cah_126e1.i	/^cah_em4_readCrc4RemoteReg (void *base, int port, U/
+cah_em4_readDemapper	cah_126e1.i	/^cah_em4_readDemapper (void *base, int port, unsign/
+cah_em4_readPdhAlarm	cah_126e1.i	/^cah_em4_readPdhAlarm(void *base, int port)$/
+cah_em4_readPortSchemeLos	cah_126e1.i	/^int cah_em4_readPortSchemeLos (int groupport , int/
+cah_em4_registerCall	cah_126e1.i	/^cah_em4_registerCall (PMyFun pFun, int port, int a/
+cah_em4_revise	cah_126e1.i	/^cah_em4_revise (int isCall)$/
+cah_em4_setConsequentAction	cah_126e1.i	/^cah_em4_setConsequentAction (void *baseaddr, int p/
+cah_em4_setDegThreshold	cah_126e1.i	/^cah_em4_setDegThreshold (void *baseaddr, int port,/
+cah_em4_setGlobalRegister	cah_126e1.i	/^cah_em4_setGlobalRegister (void *baseaddr)$/
+cah_em4_setIntMask	cah_126e1.i	/^cah_em4_setIntMask (void *baseaddr, int port, eEM4/
+cah_em4_setPdhPortMode	cah_126e1.i	/^cah_em4_setPdhPortMode (ENTITY_T entity, UINT32 ul/
+cah_em4_setPrbs	cah_126e1.i	/^cah_em4_setPrbs (void *baseaddr, eEM4SWITCH flag)$/
+cah_em4_setPrbs2	cah_126e1.i	/^cah_em4_setPrbs2 (void *baseaddr, int port, eEM4SW/
+cah_em4_setTimingRef84	cah_126e1.i	/^int cah_em4_setTimingRef84 (port_mid, byClockNum, /
+cah_em4_setTtiMode	cah_126e1.i	/^cah_em4_setTtiMode (void *baseaddr, UINT32 ulChip,/
+cah_em4_setTxj2	cah_126e1.i	/^cah_em4_setTxj2 (void *baseaddr, const unsigned ch/
+cah_em4_set_inloopretiming	cah_126e1.i	/^cah_em4_set_inloopretiming (void *baseaddr, int po/
+cah_em4_set_j2exp	cah_126e1.i	/^cah_em4_set_j2exp (void *baseaddr, int port, const/
+cah_em4_show	cah_126e1.i	/^cah_em4_show (char *fmt, ...)$/
+cah_em4_showbuild	cah_126e1.i	/^cah_em4_showbuild (void)$/
+cah_em4_simslip	cah_126e1.i	/^cah_em4_simslip (ENTITY_T entity, UINT32 ulPort, i/
+cah_em4_trace	cah_126e1.i	/^cah_em4_trace (int level, char *msg, ...)$/
+cah_em4_wasteOfTime	cah_126e1.i	/^double cah_em4_wasteOfTime ()$/
+cah_em4_wr	cah_126e1.i	/^cah_em4_wr (void *base, int offset, unsigned short/
+cah_em4_writeChReg	cah_126e1.i	/^cah_em4_writeChReg (CAH_EM4_ENTITY_DATA_T * pEntit/
+cahem4setTxj2_2	cah_126e1.i	/^cahem4setTxj2_2 (void *baseaddr, unsigned short po/
+cahem4tree	cah_126e1.i	/^cahem4tree (void)$/
+cahem4tree2	cah_126e1.i	/^cahem4tree2 (int hash)$/
+check_type	c2.l	/^int check_type()$/
+clear_IO_payload_si	cah_126e1.i	/^int clear_IO_payload_si (io)$/
+clr_payload_ais	cah_126e1.i	/^int clr_payload_ais (int port)$/
+comment	c2.l	/^comment()$/
+conflict	y.output	/^38: reduce\/reduce conflict (reduce 151, reduce 15/
+count	c2.l	/^void count()$/
+e1_dcm_state	cah_126e1.i	/^e1_dcm_state (void *baseaddr)$/
+e1_init	cah_126e1.i	/^e1_init (void)$/
+em4AllInLoop	cah_126e1.i	/^em4AllInLoop (int flag)$/
+em4BpcShow	cah_126e1.i	/^em4BpcShow ()$/
+em4GetBipTest	cah_126e1.i	/^int em4GetBipTest (int port)$/
+em4GetExpPslTest	cah_126e1.i	/^int em4GetExpPslTest (int port)$/
+em4GetExpTtiTest	cah_126e1.i	/^int em4GetExpTtiTest (int port)$/
+em4GetPpiBipTest	cah_126e1.i	/^int em4GetPpiBipTest (int port)$/
+em4GetPrbsErrTest	cah_126e1.i	/^int em4GetPrbsErrTest (int port)$/
+em4GetPrbsStateTest	cah_126e1.i	/^int em4GetPrbsStateTest (int port)$/
+em4GetRxRcvPslTest	cah_126e1.i	/^int em4GetRxRcvPslTest (int port)$/
+em4GetTslAcc	cah_126e1.i	/^em4GetTslAcc (int ent, int port)$/
+em4Map1Rd	cah_126e1.i	/^em4Map1Rd (int page, int off)$/
+em4Map1Wr	cah_126e1.i	/^em4Map1Wr (int page, int off, unsigned short val)$/
+em4Map2Rd	cah_126e1.i	/^em4Map2Rd (int page, int off)$/
+em4Map2Wr	cah_126e1.i	/^em4Map2Wr (int page, int off, unsigned short val)$/
+em4MapRd	cah_126e1.i	/^em4MapRd (int page, int off, unsigned short *pU1, /
+em4MapShow	cah_126e1.i	/^em4MapShow ()$/
+em4Mi	cah_126e1.i	/^em4Mi (void)$/
+em4SetExpPslTest	cah_126e1.i	/^int em4SetExpPslTest (int port, int c2)$/
+em4SetExpTtiTest	cah_126e1.i	/^int em4SetExpTtiTest (int port)$/
+em4SetPsl	cah_126e1.i	/^em4SetPsl (int ent, unsigned short port, unsigned /
+em4SetPsl2	cah_126e1.i	/^em4SetPsl2 (void *baseaddr, unsigned short port, u/
+em4SetPslexp	cah_126e1.i	/^em4SetPslexp (void *baseaddr, unsigned short port,/
+em4SetTbLoop	cah_126e1.i	/^void em4SetTbLoop (void)$/
+em4ShowAlarms	cah_126e1.i	/^em4ShowAlarms (int ulPort)$/
+em4ShowCons	cah_126e1.i	/^em4ShowCons (int port)$/
+em4ShowEnable	cah_126e1.i	/^em4ShowEnable (int ulPort)$/
+em4ShowIntMask	cah_126e1.i	/^em4ShowIntMask (int ulPort)$/
+em4ShowJ2Acc	cah_126e1.i	/^em4ShowJ2Acc (int ent, int port)$/
+em4ShowJ2Exp	cah_126e1.i	/^em4ShowJ2Exp (int entity, int port)$/
+em4ShowPageAddr	cah_126e1.i	/^em4ShowPageAddr (void)$/
+em4ShowPortMap	cah_126e1.i	/^int em4ShowPortMap (void)$/
+em4TtiRxTest	cah_126e1.i	/^int em4TtiRxTest (int n)$/
+em4TtiTxTest	cah_126e1.i	/^int em4TtiTxTest (int port)$/
+em4_PollBit	cah_126e1.i	/^em4_PollBit (DWORD dwPos, DWORD addrOffset, int by/
+em4_bpc_rd	cah_126e1.i	/^em4_bpc_rd (int page, int off)$/
+em4_bpc_wr	cah_126e1.i	/^em4_bpc_wr (int page, int off, unsigned short val)/
+em4_fus_rd	cah_126e1.i	/^em4_fus_rd (void)$/
+em4_getSlotFrom126port	cah_126e1.i	/^int em4_getSlotFrom126port (int port, int enable)$/
+em4_queryPortFromSlot	cah_126e1.i	/^int em4_queryPortFromSlot(int slot)$/
+em4help	cah_126e1.i	/^em4help (void)$/
+em4showsample	cah_126e1.i	/^em4showsample (void)$/
+f1	hello.c	/^int f1 (int USI)$/
+ffuuu	t1.c	/^int ffuuu ( int n)$/
+foo	hello.c	/^int foo (int id)$/
+funA	hello.c	/^int funA (int age, char * name)$/
+hash	symtab.c	/^hash(char *key)$/
+init_rpm	sdd_si.c	/^init_rpm (void)$/
+isIOAbsent	cah_126e1.i	/^isIOAbsent(int port, unsigned char *pIO)$/
+mgt_pwr	cah_126e1.i	/^mgt_pwr (int flag)$/
+notshowfan	sdd_si.c	/^int notshowfan (void)$/
+pbFpgaIntrDisable	cah_126e1.i	/^pbFpgaIntrDisable (int handle)$/
+pbFpgaIntrEnable	cah_126e1.i	/^pbFpgaIntrEnable (int handle)$/
+pbFpgaIsrEnable	cah_126e1.i	/^pbFpgaIsrEnable (int chip)$/
+pbFpgaIsrHookAdd	cah_126e1.i	/^pbFpgaIsrHookAdd (int fpga, int bank, int device, /
+pbFpgaIsrHookDel	cah_126e1.i	/^pbFpgaIsrHookDel (int handle)$/
+primary_expression	cl.y	/^primary_expression$/
+printSymTab	symtab.c	/^printSymTab(FILE * listing)$/
+printTypedefTab	symtab.c	/^printTypedefTab(FILE * listing)$/
+print_st	symtab.c	/^void print_st (void)$/
+release_table	symtab.c	/^release_table (void)$/
+release_typedef_table	symtab.c	/^release_typedef_table (void)$/
+report_fan_failur_or_absent	sdd_si.c	/^int report_fan_failur_or_absent (int pos)$/
+sdd_SI_ActivateCard	sdd_si.c	/^sdd_SI_ActivateCard (SDD_SI_DATA_T * pData, SDD_AR/
+sdd_SI_DeactivateCard	sdd_si.c	/^sdd_SI_DeactivateCard (SDD_SI_DATA_T * pData, SDD_/
+sdd_SI_DeinitCard	sdd_si.c	/^sdd_SI_DeinitCard (SDD_SI_DATA_T * pData, SDD_AREA/
+sdd_SI_DisplayData	sdd_si.c	/^sdd_SI_DisplayData (SCREEN_T * session, SDD_SI_DAT/
+sdd_SI_GetBoardTemperature	sdd_si.c	/^sdd_SI_GetBoardTemperature (SDD_SI_DATA_T * pData,/
+sdd_SI_GetLedState	sdd_si.c	/^sdd_SI_GetLedState (SDD_SI_DATA_T * pData, SDD_ARE/
+sdd_SI_GetMdi	sdd_si.c	/^sdd_SI_GetMdi (SDD_SI_DATA_T * pData, SDD_AREA_IND/
+sdd_SI_GetRtcTime	sdd_si.c	/^sdd_SI_GetRtcTime (SDD_SI_DATA_T * pData, SDD_AREA/
+sdd_SI_InitCard	sdd_si.c	/^sdd_SI_InitCard (SDD_SI_DATA_T * pData, SDD_SLOT_I/
+sdd_SI_MergeInputData	sdd_si.c	/^sdd_SI_MergeInputData (SDD_SI_DATA_T * pPermData, /
+sdd_SI_PollChanges	sdd_si.c	/^sdd_SI_PollChanges (SDD_SI_DATA_T * pData)$/
+sdd_SI_SetAlarmOut	sdd_si.c	/^sdd_SI_SetAlarmOut (SDD_SI_DATA_T * pData, SDD_ARE/
+sdd_SI_SetBoardTempThreshold	sdd_si.c	/^sdd_SI_SetBoardTempThreshold (SDD_SI_DATA_T * pDat/
+sdd_SI_SetLedState	sdd_si.c	/^sdd_SI_SetLedState (SDD_SI_DATA_T * pData, SDD_ARE/
+sdd_SI_SetMdo	sdd_si.c	/^sdd_SI_SetMdo (SDD_SI_DATA_T * pData, SDD_AREA_IND/
+sdd_SI_SetRtcTime	sdd_si.c	/^sdd_SI_SetRtcTime (SDD_SI_DATA_T * pData, SDD_AREA/
+sdd_SetDAC5571FanSpeed	sdd_si.c	/^sdd_SetDAC5571FanSpeed (unsigned char addr, unsign/
+sdd_fan_dog	sdd_si.c	/^int sdd_fan_dog (void)$/
+sdd_fan_feed_dog	sdd_si.c	/^int sdd_fan_feed_dog (void)$/
+sdd_init_fan	sdd_si.c	/^sdd_init_fan (int pos)$/
+sdd_read_fan	sdd_si.c	/^sdd_read_fan (int fan, int pos)$/
+sdd_scan_fan_and_power	sdd_si.c	/^int sdd_scan_fan_and_power (SDD_SI_DATA_T * pData,/
+sdd_si_ApplyOutBits	sdd_si.c	/^sdd_si_ApplyOutBits (SDD_SI_DATA_T * pData)$/
+sdd_si_GetDevBaseAddr	sdd_si.c	/^sdd_si_GetDevBaseAddr (SDD_SI_DEV_TYPE_T devType)$/
+sdd_si_InitFans	sdd_si.c	/^sdd_si_InitFans (int fan, int rpm, int pos)$/
+sdd_si_SwitchI2cBus	sdd_si.c	/^sdd_si_SwitchI2cBus (UINT16 devId)$/
+sdd_si_start_fan_dog	sdd_si.c	/^sdd_si_start_fan_dog (SDD_SI_DATA_T * pData)$/
+set_c1j1_a	cah_126e1.i	/^set_c1j1_a (unsigned short row, unsigned short col/
+set_c1j1_b	cah_126e1.i	/^set_c1j1_b (unsigned short row, unsigned short col/
+set_ioN_ais	cah_126e1.i	/^int set_ioN_ais (int io)$/
+set_payload_ais	cah_126e1.i	/^int set_payload_ais (int port)$/
+showfan	sdd_si.c	/^int showfan (void)$/
+st_insert	symtab.c	/^st_insert(char *name, int lineno, int loc)$/
+st_insert_typedef	symtab.c	/^st_insert_typedef (char *name, int lineno, int loc/
+st_lookup	symtab.c	/^st_lookup(char *name)$/
+st_lookup_typedef	symtab.c	/^st_lookup_typedef(char *name)$/
+testgettiming	cah_126e1.i	/^int testgettiming (byclocknum)$/
+wydact	cah_126e1.i	/^wydact (void)$/
+wydinit	cah_126e1.i	/^wydinit ()$/
+yylex	c.l	/^%%$/
+yyparse	cl.y	/^%%$/
+yywrap	c2.l	/^yywrap()$/
