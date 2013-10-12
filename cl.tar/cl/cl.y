@@ -41,13 +41,28 @@ extern int column;
 #undef PRINTF_INIT_DECLARATOR
 #endif
 
+
+int td_func = 0;
+int in_typedef = 0;
+int in_funcdef = 0;
+int in_struct_union = 0;
+
+
 #define PRINTF printf
 
 void myprintf()
 {
 }
 
-#define TYPEDEF_FUNC {td_func=1;PRINTF("//set:td_func(%s)//", g_cur_sym); column = column + strlen(g_cur_sym) + 17; st_insert_typedef(g_cur_sym, lineno, column);}
+#define TYPEDEF_FUNC { \
+   if (!in_funcdef) \
+   { \
+      td_func=1; \
+      PRINTF("//set:td_func(%s)//", g_cur_sym); \
+      column = column + strlen(g_cur_sym) + 17; \
+      st_insert_typedef(g_cur_sym, lineno, column); \
+   } \
+}
 
 /*
  * These macro has no use indeed, the code was written firstly not so good,
@@ -66,9 +81,6 @@ typedef enum{
 
 pos tmp = in_none;
 
-int td_func = 0;
-int in_typedef = 0;
-int in_funcdef = 0;
 
 // #define YYSTYPE treenode *
 
@@ -254,14 +266,9 @@ declaration
 	: declaration_specifiers ';'
 	| declaration_specifiers init_declarator_list ';' 
            {
-              if (td_func)
-	      {
-	         // PRINTF("//td_func(%d)//",td_func);
-                 // column = column + 1 + 13;
-              }
               if (in_typedef)
               {
-                 if (td_func) 
+                 if (td_func && (0 == in_struct_union)) 
                  {
                     // function type
                     td_func = 0;
@@ -275,6 +282,7 @@ declaration
                     st_insert_typedef (saved_identifier,lineno, column);
                     in_typedef = 0; 
 //		    puts("//outoftypedef//");
+                    if (in_struct_union) in_struct_union = 0;
                  }
                  in_typedef = 0;
 //		 puts("//outoftypedef#2//");
@@ -348,8 +356,8 @@ struct_or_union_specifier
 	;
 
 struct_or_union
-	: STRUCT
-	| UNION
+	: STRUCT {in_struct_union = 1; PRINTF("//set:in_struct//");}
+	| UNION  {in_struct_union = 1; PRINTF("//set:in_union//");}
 	;
 
 struct_declaration_list
@@ -449,6 +457,7 @@ direct_declarator
 	parameter_type_list ')' {
 		tmp=in_none; in_funcdef = 0;PRINTF("//OUTOF-FUNC//");
 		column += 14;
+		td_func = 0;
 		}
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'

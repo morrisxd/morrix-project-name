@@ -16,4 +16,14 @@ int myfunc (int n, char * pName)
 }
 
 void myfunc2 (int i, void (*p)(int age, char *sex));
+void (myfunc4)(int i, float s);
+
+int p = 9;
+
+typedef struct mystruct2 {
+   int i;
+   int (myfunct3)(int flag, float salary);
+} mystruct2;
+
+mystruct2 mys;
 
