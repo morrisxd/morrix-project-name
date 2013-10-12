@@ -10,7 +10,7 @@
 # filename.c
 # YACC   = bison
 YFLAGS = -d -v
-OBJS = cl.o c.o symtab.o
+OBJS = cl2.o c.o symtab.o
 cl:	$(OBJS)
 	cc $(OBJS) -ll -o cl
 clean:
