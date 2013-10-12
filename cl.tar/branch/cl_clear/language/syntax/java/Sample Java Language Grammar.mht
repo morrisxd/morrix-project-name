@@ -1,0 +1,1504 @@
+From: <Saved by Windows Internet Explorer 8>
+Subject: Sample: Java Language Grammar
+Date: Fri, 10 Apr 2009 23:40:20 +0800
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://www.csci.csusb.edu/dick/samples/java.syntax.html
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.3790.4325
+
+=EF=BB=BF<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Sample: Java Language Grammar</TITLE>
+<META content=3D"text/html; charset=3Dutf-8" http-equiv=3DContent-Type>
+<STYLE type=3Dtext/css>BODY {
+	FONT-FAMILY: serif
+}
+H1 {
+	FONT-FAMILY: sans-serif
+}
+H2 {
+	FONT-FAMILY: sans-serif
+}
+H3 {
+	FONT-FAMILY: sans-serif
+}
+H4 {
+	FONT-FAMILY: sans-serif
+}
+CODE {
+	FONT-FAMILY: monospace
+}
+PRE {
+	FONT-FAMILY: monospace
+}
+TT {
+	FONT-FAMILY: monospace
+}
+HR {
+	COLOR: black
+}
+A {
+	FONT-WEIGHT: bolder
+}
+.InlineFormula {
+	FONT-STYLE: italic
+}
+.Formula {
+	FONT-STYLE: italic; PADDING-LEFT: 10px
+}
+.Let {
+	BORDER-BOTTOM: thin solid; BORDER-LEFT: thin solid; PADDING-BOTTOM: =
+10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; BORDER-TOP: thin solid; =
+BORDER-RIGHT: thin solid; PADDING-TOP: 10px
+}
+.Net {
+	BORDER-BOTTOM: red thin solid; BORDER-LEFT: red thin solid; =
+PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; =
+BORDER-TOP: red thin solid; BORDER-RIGHT: red thin solid; PADDING-TOP: =
+10px
+}
+.Case {
+	BORDER-BOTTOM: blue thin solid; BORDER-LEFT: blue thin solid; =
+PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; =
+BORDER-TOP: blue thin solid; BORDER-RIGHT: blue thin solid; PADDING-TOP: =
+10px
+}
+</STYLE>
+
+<META name=3DGENERATOR content=3D"MSHTML 8.00.6001.18702"></HEAD>
+<BODY aLink=3D#ff0000 link=3D#0000ff bgColor=3D#e0ffe0 text=3D#000000 =
+vLink=3D#8000af>
+<FORM method=3Dget =
+action=3Dhttp://www.csci.csusb.edu/dick/samples/lookup.php>[<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Main =
+Content">Skip=20
+Navigation</A>] [<A href=3D"http://www.csusb.edu/">CSUSB</A>] / [<A=20
+href=3D"http://nsci.csusb.edu/">CNS</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/">Comp Sci Dept</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/dick/">R J Botting</A>] / [<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/index.html">Samples</A>] =
+/ <A=20
+name=3Dtop_of_page>java.syntax </A><BR>[<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/">Index</A>] [<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Contents"=
+>Contents</A>]=20
+[<A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.txt">Source=20
+Text</A>] [<A=20
+href=3D"http://www.csci.csusb.edu/dick/samples/about.html">About</A>] =
+[<A=20
+href=3D"http://www.csci.csusb.edu/dick/maths/intro_characters.html">Notat=
+ion</A>]=20
+[<A=20
+href=3D"http://www.csci.csusb.edu/dick/maths/intro_copyright.html">Copyri=
+ght</A>]=20
+[<A href=3D"http://www.csci.csusb.edu/dick/samples/comment.html"=20
+target=3DSendEMail>Comment/Contact</A>] [Search <INPUT size=3D10 =
+name=3Dsearch> <INPUT=20
+value=3Djava.syntax.mth type=3Dhidden name=3Dfrom> <INPUT value=3DGo =
+type=3Dsubmit>]=20
+<BR>Tue Sep 18 15:25:57 PDT 2007 </FORM>
+<HR>
+<A name=3DContents>
+<H3>Contents</H3></A>
+<UL class=3DContents>
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Java =
+Language Grammar">Java=20
+  Language Grammar</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Note">:=20
+  Note</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Notation"=
+>:=20
+  Notation</A>=20
+  <LI><A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Java =
+imports C!">:=20
+  Java imports C!</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Lexemes">=
+:=20
+  Lexemes</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Comments =
+in Java">:=20
+  Comments in Java</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Compilati=
+on Units">:=20
+  Compilation Units</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Declarati=
+ons">:=20
+  Declarations</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+s">:=20
+  Statements</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+ns">:=20
+  Expressions</A>=20
+  <LI><A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Types">: =
+
+  Types</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Compound =
+Names">:=20
+  Compound Names</A>=20
+  <LI><A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Glossary"=
+>:=20
+  Glossary</A> </LI></UL><A name=3D"Main Content">
+<HR>
+</A>
+<OL><A name=3D"Java Language Grammar">
+  <H1>Java Language Grammar</H1></A>
+  <OL class=3DSection>This syntax is based on the 1.0 and 1.1 =
+specifications:=20
+    <CITE>The Java Language Specification(1.0Alpha3)</CITE> [<A=20
+    =
+href=3D"http://java.dnx.com/1.0alpha3/doc/javaspec/javaspec_11.html#HEADI=
+NG75">=20
+    HEADING75 in javaspec_11 </A>] I'm extending it to include the small =
+changes=20
+    made in Java2.0.=20
+    <P>For more general information follow these pointers: [<A=20
+    href=3D"http://csci.csusb.edu/dick/samples/java.html"> java.html =
+</A>] [<A=20
+    href=3D"http://csci.csusb.edu/dick/samples/java.glossary.html">=20
+    java.glossary.html </A>] For information on semantics and =
+pre-defined=20
+    classes follow these pointers: [<A=20
+    href=3D"http://csci.csusb.edu/dick/samples/java.semantics.html">=20
+    java.semantics.html </A>] , [<A=20
+    href=3D"http://csci.csusb.edu/dick/samples/java.html"> java.html =
+</A>] , [<A=20
+    href=3D"http://csci.csusb.edu/dick/samples/java.classes.html">=20
+    java.classes.html </A>]=20
+    <P><A name=3DNote>
+    <H2>Note</H2></A>This is a simplified grammar for a Java compilation =
+unit. A=20
+    Java program consists of one or more compilation units. <A =
+name=3DNotation>
+    <H2>Notation</H2></A>This uses my XBNF Extended BNF Notation where =
+"|"=20
+    indicates "or", "(...)" indicates priority. <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+_)=20
+    stands for 0 or 1 occurrences, <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#N">N</A>(=
+_)=20
+    for 1 or more occurrence, <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+_)=20
+    for a comma separated list, and #(_) for 0 or more occurrences. For =
+more=20
+    information see [<A =
+href=3D"http://csci.csusb.edu/dick/maths/intro_ebnf.html">=20
+    intro_ebnf.html </A>]=20
+    <LI><A name=3DO>O</A>::=3Doptional=20
+    <LI><A name=3DN>N</A>::=3Done or more of=20
+    <LI><A name=3DL>L</A>::=3Dlist of=20
+    <P><A name=3D"Java imports C!">
+    <H2>Java imports C!</H2></A>Much of the Java Syntax is based on the =
+syntax=20
+    of <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A> =
+
+    and/or <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>+=
++.=20
+    <LI><A name=3Draw_C>raw_C</A>::=3D See <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html">http://www.=
+csci.csusb.edu/dick/samples/c.syntax.html</A>.=20
+
+    <P>The following formalizes the use of terms and definitions from =
+the syntax=20
+    of <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A> =
+
+    here. It also changes some names in the <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A> =
+
+    syntax to those used in the Java syntax. </P>
+    <LI><A name=3DC>C</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#raw_C">ra=
+w_C</A>(expression=3D&gt;<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>,=20
+    statement=3D&gt;<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>).=20
+
+    <P><A name=3DLexemes>
+    <H2>Lexemes</H2></A>Quoted text signifies literal terminals. The =
+following=20
+    are defined as in <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A> =
+[<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#Lexemes"> =
+Lexemes=20
+    in c.syntax </A>]=20
+    <LI><A name=3DIdentifier>Identifier</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+identifier.=20
+
+    <LI><A name=3DNumber>Number</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+integer_constant=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+float_constant.=20
+    --??=20
+    <LI><A name=3DString>String</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+string_constant.=20
+
+    <LI><A name=3DCharacter>Character</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+character_constant.=20
+
+    <P><A name=3D"Comments in Java">
+    <H2>Comments in Java</H2></A>
+    <HR>
+
+    <OL class=3DBox>
+      <LI>// text <PRE>          All characters from // to the end of =
+the line are ignored.</PRE>
+      <LI>/* text */ <PRE>          All characters from /* to */ are =
+ignored.</PRE>
+      <LI>/** text */ <PRE>          These comments are treated =
+specially when they occur</PRE><PRE>          immediately before any =
+declaration. They should not be used any</PRE><PRE>          other place =
+in the code. These comments indicate that the</PRE><PRE>          =
+enclosed text should be included in automatically generated</PRE><PRE>   =
+       documentation as a description of the declared =
+item.</PRE></LI></OL>
+    <HR>
+
+    <LI><A name=3Dcomment>comment</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+comment=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>+=
++.comment=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Doc_Comme=
+nt">Doc_Comment</A>.=20
+
+    <LI><A name=3DDoc_Comment>Doc_Comment</A>::=3D<SPAN=20
+    class=3DInlineFormula>documentation comment</SPAN>::=3D "/**" <SPAN=20
+    class=3DInlineFormula>documentation</SPAN> "*/". <A =
+name=3D"Compilation Units">
+    <H2>Compilation Units</H2></A>A Java program consists of one or more =
+
+    compilation units.=20
+    <LI><A name=3DJava_Program>Java_Program</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#N">N</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Compilati=
+on_Unit">Compilation_Unit</A>).=20
+
+    <P>A compilation unit can identify its <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#package">=
+package</A>,=20
+    import any number of other packages, classes, or interfaces, and can =
+declare=20
+    any number of classes and interfaces: </P>
+    <LI><A name=3DCompilation_Unit>Compilation_Unit</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Package_S=
+tatement">Package_Statement</A>)=20
+    #(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Import_St=
+atement">Import_Statement</A>)=20
+    #(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Type_Decl=
+aration">Type_Declaration</A>).=20
+
+    <LI><A name=3DPackage_Statement>Package_Statement</A>::=3D "package" =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Package_N=
+ame">Package_Name</A>=20
+    ";".=20
+    <LI><A name=3DImport_Statement>Import_Statement</A>::=3D "import" =
+(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Package_N=
+ame">Package_Name</A>=20
+    "." "*" | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Nam=
+e">Class_Name</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Interface=
+_Name">Interface_Name</A>=20
+    ) ";".=20
+    <P><BR>(<A name=3Dpackage>package</A>): Note that a file can only =
+place items=20
+    into at most one package. Packages are a collection of comparatively =
+
+    unrelated classes and interfaces that are stored in <SPAN=20
+    class=3DInlineFormula>a single directory</SPAN> named after the =
+package, and=20
+    imported by using the '.' notation: <PRE>		import =
+mystuff.Fun;</PRE>would import the content of a class in file=20
+    <SPAN class=3DInlineFormula>Fun.class</SPAN> in directory <SPAN=20
+    class=3DInlineFormula>mystuff</SPAN>. The code for <SPAN=20
+    class=3DInlineFormula>Fun</SPAN> must be in a file which states with =
+<PRE> 		package mystuff</PRE>
+    <P><A name=3DDeclarations>
+    <H2>Declarations</H2></A>
+    <LI><A name=3DType_Declaration>Type_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Dec=
+laration">Class_Declaration</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Interface=
+_Declaration">Interface_Declaration</A>=20
+    | ";".=20
+    <P></P>
+    <LI><A name=3DClass_Declaration>Class_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Doc_Comme=
+nt">Doc_Comment</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Modifiers">Possible_Modifiers</A>=20
+    "class" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Ext=
+ension">Class_Extension</A>)=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Implement=
+s">Implements</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Set_Of_In=
+ner_declarations">Set_Of_Inner_declarations</A>.=20
+
+    <P></P>
+    <LI><A name=3DClass_Extension>Class_Extension</A>::=3D"extends" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Nam=
+e">Class_Name</A>.=20
+    -- the default is to extend the class called Object.=20
+    <P></P>
+    <LI><A name=3Dextension>extension</A>::gloss=3D<SPAN =
+class=3DInlineFormula>The=20
+    addition and replacement of fields and the redefinition, addition, =
+and <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#implement=
+ation">implementation</A>=20
+    of methods in an existing class or interface</SPAN>.=20
+    <LI><A name=3Dimplement>implement</A>::gloss=3D<SPAN =
+class=3DInlineFormula>To=20
+    provide detailed code that satisfies a particular interface</SPAN>.=20
+    <P></P>
+    <LI><A name=3DImplements>Implements</A>::=3D"implements" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Interface=
+_Name">Interface_Name</A>).=20
+    -- A class implements an interface if it defines the things that are =
+merely=20
+    described or specified in that interface.=20
+    <P></P>
+    <LI><A =
+name=3DSet_Of_Inner_declarations>Set_Of_Inner_declarations</A>::=3D"{"=20
+    #(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Inner_Dec=
+laration">Inner_Declaration</A>)=20
+    "}".=20
+    <P></P>
+    <LI><A name=3Dinterface>interface</A>::gloss=3D<SPAN =
+class=3DInlineFormula>A=20
+    description of how to use a set of classes, without definition of =
+how they=20
+    work</SPAN>.=20
+    <LI><A name=3DInterface_Declaration>Interface_Declaration</A>::=3D =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Doc_Comme=
+nt">Doc_Comment</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Modifiers">Possible_Modifiers</A>=20
+    "interface" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Interface=
+_extension">Interface_extension</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Set_Of_Ab=
+stract_Method_declarations">Set_Of_Abstract_Method_declarations</A>,=20
+    -- an interface never implements anything but can extend other =
+interfaces.=20
+    <LI><A name=3DInterface_extension>Interface_extension</A>::=3D =
+"extends" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Interface=
+_Name">Interface_Name</A>),=20
+    -- interfaces can only extend interfaces.=20
+    <P></P>
+    <LI><A name=3DInner_Declaration>Inner_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Doc_Comme=
+nt">Doc_Comment</A>)=20
+    ( <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Method_De=
+claration">Method_Declaration</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Construct=
+or_Declaration">Constructor_Declaration</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field_Dec=
+laration">Field_Declaration</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Nested_Cl=
+ass_Declaration">Nested_Class_Declaration</A>=20
+    ) | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Static_In=
+itializer">Static_Initializer</A>=20
+    | ";".=20
+    <P></P>
+    <LI><A name=3DMethod_Declaration>Method_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Modifiers">Possible_Modifiers</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Returned_=
+Type_Description">Returned_Type_Description</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Parameter=
+_List">Parameter_List</A>)=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Array_Indicators">Possible_Array_Indicators</A>=20
+    ( <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Block">Bl=
+ock</A>=20
+    | ";" ).=20
+    <P></P>
+    <LI><A=20
+    =
+name=3DSet_Of_Abstract_Method_declarations>Set_Of_Abstract_Method_declara=
+tions</A>::=3D"{"=20
+    #<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Abstract_=
+Method_declaration">Abstract_Method_declaration</A>=20
+    "}".=20
+    <LI><A =
+name=3DAbstract_Method_declaration>Abstract_Method_declaration</A>::=3D=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Modifiers">Possible_Modifiers</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Returned_=
+Type_Description">Returned_Type_Description</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Parameter=
+_List">Parameter_List</A>)=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Array_Indicators">Possible_Array_Indicators</A>=20
+    ";".=20
+    <P></P>
+    <LI><A =
+name=3DReturned_Type_Description>Returned_Type_Description</A>::=3D=3D =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#void">voi=
+d</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Type">Typ=
+e</A>.=20
+
+    <LI><A name=3Dvoid>void</A>::lexeme=3D "<A name=3Dvoid>void</A>", =
+indicating that=20
+    nothing is returned and that the method may not be invoked as part =
+of an=20
+    expression.=20
+    <P></P>
+    <LI><A =
+name=3DConstructor_Declaration>Constructor_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Modifiers">Possible_Modifiers</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Ide=
+ntifier">Class_Identifier</A>=20
+    "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Parameter=
+_List">Parameter_List</A>)=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Construct=
+or_Body">Constructor_Body</A>.=20
+
+    <LI><A name=3DConstructor_Body>Constructor_Body</A>::=3D"{" O( =
+"super" "(" L(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>)=20
+    ")" ";" ) <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+s">Statements</A>=20
+    "}". A Constructor can call the constructor of the parent class =
+before=20
+    starting to construct <SPAN class=3DInlineFormula>this</SPAN> =
+object.=20
+    <P></P>
+    <LI><A name=3DClass_Identifier>Class_Identifier</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifer=
+">Identifer</A>=20
+    &amp; <SPAN class=3DInlineFormula>the name of the class of object =
+being=20
+    constructed</SPAN>.=20
+    <P></P>
+    <LI><A name=3DField_Declaration>Field_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Modifiers">Possible_Modifiers</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Type">Typ=
+e</A>=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field_Dec=
+larator">Field_Declarator</A>)=20
+    ";". A field can be either variable or constant. A constant field =
+has=20
+    "final" as a modifier. A variable field does not.=20
+    <P></P>
+    <LI><A name=3DField_Declarator>Field_Declarator</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Array_Indicators">Possible_Array_Indicators</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+"=3D"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field_Ini=
+tializer">Field_Initializer</A>).=20
+
+    <P>
+    <P></P>
+    <LI><A name=3DField_Initializer>Field_Initializer</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    | "{" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+ <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field_Ini=
+tializer">Field_Initializer</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+",")=20
+    ) "}".=20
+    <P></P>
+    <LI><A name=3DStatic_Initializer>Static_Initializer</A>::=3D =
+"static" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Block">Bl=
+ock</A>=20
+
+    <P></P>
+    <LI><A name=3DParameter_List>Parameter_List</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Parameter=
+">Parameter</A>).=20
+
+    <P></P>
+    <LI><A name=3DParameter>Parameter</A>::=3D O("final") <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Type_Spec=
+ifier">Type_Specifier</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Array_Indicators">Possible_Array_Indicators</A>.=20
+    In Java 1.1 and upwards parameters can be constants and described as =
+final,=20
+    but in Java 1.0 they were always variable.=20
+    <P></P>
+    <LI><A =
+name=3DNested_Class_Declaration>Nested_Class_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Static_Ne=
+sted_Class">Static_Nested_Class</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Member_Ne=
+sted_Class">Member_Nested_Class</A>.=20
+    -- In Jav 1.1 and later.=20
+    <P></P>
+    <LI><A =
+name=3DMember_Nested_Class>Member_Nested_Class</A>::=3DClass_Declaration.=
+=20
+    -- when inside another class and with no static modifier. -- Java =
+1.1 and=20
+    above only.=20
+    <P></P>
+    <LI><A =
+name=3DStatic_Nested_Class>Static_Nested_Class</A>::=3DClass_Declaration.=
+=20
+    -- when inside another class and with a static modifier. -- Java 1.1 =
+and=20
+    above only.=20
+    <P>
+    <P><A name=3DStatements>
+    <H2>Statements</H2></A>Java Statements follow rules very like those =
+of <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A> =
+[<A=20
+    =
+href=3D"http://csci.csusb.edu/dick/samples/c.syntax.html#Statements">=20
+    Statements in c.syntax </A>] For example=20
+    <LI><A name=3Dif_statement>if_statement</A>::=3D See <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c.syntax.html#if_statement=
+">http://www.csci.csusb.edu/dick/samples/c.syntax.html#if_statement</A>. =
+
+
+    <LI><A name=3Dfor_statement>for_statement</A>::=3D See <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/c++.syntax.html#if_stateme=
+nt">http://www.csci.csusb.edu/dick/samples/c++.syntax.html#if_statement</=
+A>.=20
+
+    <P></P>
+    <LI><A name=3DStatement>Statement</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+statement(statement=3D&gt;<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>,=20
+    expression=3D&gt;<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>)=20
+    ~ <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+goto_statement=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Non_C_Sta=
+tement">Non_C_Statement</A>.=20
+    -- Java reserves goto as a word but has no goto statement.=20
+    <P><BR></P>
+    <LI>(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#above">ab=
+ove</A>)|-<SPAN=20
+    class=3DFormula><A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>=20
+    =3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Local_Fie=
+ld_Declaration">Local_Field_Declaration</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ";" | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Block">Bl=
+ock</A>=20
+    | "if" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+"else"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>)=20
+    | "while" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>=20
+    | "do" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>=20
+    "while" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ")" ";" | "switch" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Block">Bl=
+ock</A>=20
+    | "return" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>)=20
+    ";" | "case" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ":" | "default" ":" | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    ":" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>=20
+    | "break" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>)=20
+    ";" | "continue" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>)=20
+    ";" | ";" | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Non_C_Sta=
+tement">Non_C_Statement</A>.</SPAN>=20
+
+    <P></P>
+    <LI><A =
+name=3DLocal_Field_Declaration>Local_Field_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Modifiers">Possible_Modifiers</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Type">Typ=
+e</A>=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field_Dec=
+larator">Field_Declarator</A>)=20
+    ";". Since Java 1.0 a local field can be either variable or =
+constant. A=20
+    constant field has "final" as a modifier. A variable does not. In =
+Java 1.0=20
+    local fields were always variable and were called variables.=20
+    <P></P>
+    <LI><A name=3DNon_C_Statement>Non_C_Statement</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Try_block=
+">Try_block</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Synchroni=
+zed_statement">Synchronized_statement</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Throw_sta=
+tement">Throw_statement</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Local_Cla=
+ss_Declaration">Local_Class_Declaration</A>,=20
+    -- Local Class Definitions were not permitted in Java 1.0 but are =
+allowed in=20
+    Java 1.1.=20
+    <P></P>
+    <LI><A name=3DTry_block>Try_block</A>::=3D"try" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Block">Bl=
+ock</A>=20
+    #("catch" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Parameter=
+">Parameter</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Block">Bl=
+ock</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+"finally"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Block">Bl=
+ock</A>),=20
+
+    <P></P>
+    <LI><A=20
+    =
+name=3DSynchronized_statement>Synchronized_statement</A>::=3D"synchronize=
+d" "("=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Block">Bl=
+ock</A>.=20
+    -- makes sure that only one thread at a time executes the block.=20
+    <P></P>
+    <LI><A name=3DThrow_statement>Throw_statement</A>::=3D"throw" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ";" .=20
+    <P></P>
+    <LI><A name=3DOld_Non_C_Statement>Old_Non_C_Statement</A>::=3D"try" =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>=20
+    #("catch" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Parameter=
+">Parameter</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>)=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+"finally"=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>)=20
+    | "synchronized" "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>=20
+    | "throw" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>=20
+    ";" .=20
+    <P></P>
+    <LI><A name=3DBlock>Block</A>::=3D"{" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+s">Statements</A>=20
+    "}".=20
+    <P></P>
+    <LI><A name=3DStatements>Statements</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#N">N</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Statement=
+">Statement</A>).=20
+    -- one or more statements.=20
+    <P></P>
+    <LI><A =
+name=3DLocal_Class_Declaration>Local_Class_Declaration</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Dec=
+laration">Class_Declaration</A>,=20
+    -- a feature added in Java 1.1.=20
+    <P><A name=3DExpressions>
+    <H2>Expressions</H2></A>Expressions follow rules very like those of =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A> =
+[<A=20
+    =
+href=3D"http://csci.csusb.edu/dick/samples/c.syntax.html#Expression">=20
+    Expression in c.syntax </A>]=20
+    <LI><A name=3DExpression>Expression</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+expression(expression=3D&gt;<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Expressio=
+n">Expression</A>)=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Non_C_Exp=
+ression">Non_C_Expression</A>.=20
+
+    <P>Here is a quick description of a Java Expression E ignoring the=20
+    precedence of operators: </P>
+    <LI><A name=3DAbstract_syntax>Abstract_syntax</A>::=3D=20
+    <HR>
+
+    <OL class=3DBox>
+      <LI><A name=3DE>E</A>::=3D<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+expression.=20
+      All Java expressions have one of the following forms: <BR>
+      <LI>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>)=
+|-<SPAN=20
+      class=3DFormula>E=3D=3D&gt;<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field">Fi=
+eld</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Literal">=
+Literal</A>=20
+      | E <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Infix">In=
+fix</A>=20
+      E | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Prefix">P=
+refix</A>=20
+      E | E <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Postfix">=
+Postfix</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Condition=
+al_E">Conditional_E</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Other_E">=
+Other_E</A>.</SPAN>=20
+
+      <P>
+      <P></P>
+      <LI><A name=3DInfix>Infix</A>::=3D "+" | "-" | "*" | "/" | "%" | =
+"^" | "&amp;"=20
+      | "|" | "&amp;&amp;" | "||" | "&lt;&lt;" | "&gt;&gt;" | =
+"&gt;&gt;&gt;" |=20
+      "=3D" | "+=3D" | "-=3D" | "*=3D" | "/=3D" | "%=3D" | "^=3D" | =
+"&amp;=3D" | "|=3D" |=20
+      "&lt;&lt;=3D" | "&gt;&gt;=3D" | "&gt;&gt;&gt;=3D" | "&lt;" | =
+"&gt;" | "&lt;=3D" |=20
+      "&gt;=3D" | "=3D=3D" | "!=3D" | "." | "," . <BR>
+      <LI>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Infix">In=
+fix</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>)=
+|-<SPAN=20
+      class=3DFormula>Infix =3D <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+infix=20
+      ~ "-&gt;" | "&lt;&lt;&lt;" | "&lt;&lt;&lt;=3D". Java has a left =
+circular=20
+      shift operator but no explicit dereferencing operator.</SPAN>=20
+      <P></P>
+      <LI><A name=3DPrefix>Prefix</A>::=3D "++" | "--" | "-" | "~" | "!" =
+. <BR>
+      <LI>(<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Prefix">P=
+refix</A>,=20
+      <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>)=
+|-<SPAN=20
+      class=3DFormula>Prefix =3D <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#C">C</A>.=
+infix=20
+      ~ "*". -- no explicit de-reference in Java.</SPAN>=20
+      <P></P>
+      <LI><A name=3DPostfix>Postfix</A>::=3D "++" | "--".=20
+      <P></P>
+      <LI><A name=3DConditional_E>Conditional_E</A>::=3DE "?" E ":" E.=20
+      <P></P>
+      <LI><A name=3DOther_E>Other_E</A>::=3D E "[" E "]" | "(" E ")" | =
+"(" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Type">Typ=
+e</A>=20
+      ")" E | E "(" <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Arg_List"=
+>Arg_List</A>)=20
+      ")".=20
+      <P></P>
+      <LI><A name=3DArg_List>Arg_List</A>::=3D <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+E).=20
+
+      <LI><A name=3DLiteral>Literal</A>::=3D <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Boolean">=
+Boolean</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Object">O=
+bject</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Number">N=
+umber</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#String">S=
+tring</A>=20
+      | <A=20
+      =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Character=
+">Character</A>.=20
+
+      <P></P></LI></OL>
+    <HR>
+
+    <LI><A name=3DNon_C_Expression>Non_C_Expression</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#run_time_=
+type_test_expression">run_time_type_test_expression</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#object_cr=
+eation_expression">object_creation_expression</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#anonymous=
+_class_object">anonymous_class_object</A>,=20
+
+    <P></P>
+    <LI><A=20
+    =
+name=3Drun_time_type_test_expression>run_time_type_test_expression</A>::=3D=
+E=20
+    "instanceof" ( <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Nam=
+e">Class_Name</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Interface=
+_Name">Interface_Name</A>=20
+    ),=20
+    <LI><A=20
+    =
+name=3Dobject_creation_expression>object_creation_expression</A>::=3D"new=
+" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Nam=
+e">Class_Name</A>=20
+    "(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Arg_List"=
+>Arg_List</A>)")"=20
+    | "new" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Type_Spec=
+ifier">Type_Specifier</A>=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#N">N</A>(=
+=20
+    "[" E "]" ) <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Array_Indicators">Possible_Array_Indicators</A>=20
+    | "new" "(" E ")".=20
+    <P></P>
+    <LI><A name=3Danonymous_class_object>anonymous_class_object</A>::=3D =
+"new" ( <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Anonymous=
+_Class">Anonymous_Class</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Anonymous=
+_Interface">Anonymous_Interface</A>),=20
+    -- added in Java 1.1 these permit creation of a single object that =
+is an=20
+    instance of a class described in the same statement by extending an =
+existing=20
+    class or interface.=20
+    <P></P>
+    <LI><A name=3DAnonymous_Class>Anonymous_Class</A>::=3D Class_Name =
+"(" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Optional_=
+List_of_Expressions">Optional_List_of_Expressions</A>=20
+    ")" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Set_of_In=
+ner_Declarations">Set_of_Inner_Declarations</A>.=20
+    Note: the form is a constructor plus a set of extensions to the =
+class. <PRE> 	ClockWatcher timer =3D new ClockWatcher( clock1 ){ int =
+count; void tick(){count++;} };</PRE>
+    <P>Anonymous_Interface=3D Interface_Name "()" <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Set_Of_Ab=
+stract_Method_declarations">Set_Of_Abstract_Method_declarations</A>.=20
+
+    <P></P>
+    <LI><A =
+name=3DOptional_List_of_Expressions>Optional_List_of_Expressions</A>::=3D=
+=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#O">O</A>(=
+=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#L">L</A>(=
+=20
+    <A =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#E">E</A> =
+)=20
+    ).=20
+    <P></P>
+    <LI><A name=3DBoolean>Boolean</A>::=3D"true" | "false".=20
+    <LI><A name=3DObject>Object</A>::=3D"null" | "super" | "this".=20
+    <P>
+    <P><A name=3DTypes>
+    <H2>Types</H2></A>
+    <LI><A name=3DType>Type</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Type_Spec=
+ifier">Type_Specifier</A>=20
+    <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Possible_=
+Array_Indicators">Possible_Array_Indicators</A>.=20
+
+    <LI><A =
+name=3DPossible_Array_Indicators>Possible_Array_Indicators</A>::=3D#("[" =
+
+    "]").=20
+    <P></P>
+    <LI><A name=3DType_Specifier>Type_Specifier</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Primitive=
+_data_type">Primitive_data_type</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Nam=
+e">Class_Name</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Interface=
+_Name">Interface_Name</A>.=20
+
+    <LI><A =
+name=3DPrimitive_data_type>Primitive_data_type</A>::=3D"boolean" | =
+"byte"=20
+    | "char" | "short" | "int" | "float" | "long" | "double". Note: =
+these all=20
+    have defined lengths and default initial values. For example, a =
+<SPAN=20
+    class=3DInlineFormula>char</SPAN> is a 16-bit international <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#UNICODE">=
+UNICODE</A>=20
+    character and a <SPAN class=3DInlineFormula>byte</SPAN> is an 8-bit =
+<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#ASCII">AS=
+CII</A>=20
+    character.=20
+    <P></P>
+    <LI><A name=3DPossible_Modifiers>Possible_Modifiers</A>::=3D#(<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Modifier"=
+>Modifier</A>).=20
+
+    <P></P>
+    <LI><A name=3DModifier>Modifier</A>::=3D "public" | "private" | =
+"protected" |=20
+    "static" | "final" | "native" | "synchronized" | "abstract" | =
+"threadsafe" |=20
+    "transient". [<A=20
+    =
+href=3D"http://csci.csusb.edu/dick/samples/java.glossary.html#Modifiers">=
+=20
+    Modifiers in java.glossary </A>] <A name=3D"Compound Names">
+    <H2>Compound Names</H2></A>
+    <LI><A name=3DPackage_Name>Package_Name</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Package_N=
+ame">Package_Name</A>=20
+    "." <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>.=20
+
+    <P></P>
+    <LI><A name=3DClass_Name>Class_Name</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Package_N=
+ame">Package_Name</A>=20
+    "." <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>.=20
+
+    <P></P>
+    <LI><A name=3DInterface_Name>Interface_Name</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Package_N=
+ame">Package_Name</A>=20
+    "." <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>.=20
+
+    <P></P>
+    <LI><A name=3DField>Field</A>::=3D <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Package_N=
+ame">Package_Name</A>=20
+    "." <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Class_Nam=
+e">Class_Name</A>=20
+    "." <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>=20
+    | <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field">Fi=
+eld</A>=20
+    "." <A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Identifie=
+r">Identifier</A>.=20
+    A field can be either variable or constant. A constant field is =
+declared=20
+    with a "final" as a modifier. A variable is declared without a =
+"final".=20
+    <LI><A name=3DVariable>Variable</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field">Fi=
+eld</A>,=20
+    a variable is a field that has no "final" in its declaration.=20
+    <LI><A name=3DConstant>Constant</A>::=3D<A=20
+    =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Field">Fi=
+eld</A>,=20
+    a constant is a field that has a "final" modifier in its =
+declaration. <A=20
+    name=3DGlossary>
+    <H2>Glossary</H2></A>
+    <LI><A name=3DTBA>TBA</A>::=3D"To Be Announced".=20
+    <LI><A name=3DASCII>ASCII</A>::=3D See <A=20
+    =
+href=3D"http://csci.csusb.edu/dick/samples/comp.text.ASCII.html">http://c=
+sci.csusb.edu/dick/samples/comp.text.ASCII.html</A>.=20
+    -- "America Standard Code for Information Interchange".=20
+    <P></P>
+    <LI><A name=3DUNICODE>UNICODE</A>::=3D See <A=20
+    href=3D"http://www.unicode.org/">http://www.unicode.org/</A>.=20
+    <P></P></LI></OL>
+  <P>. . . . . . . . . ( end of section <A=20
+  href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Java =
+Language Grammar">Java=20
+  Language Grammar</A>) <A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#Contents"=
+>&lt;&lt;</A>Contents=20
+  | End<A=20
+  =
+href=3D"http://www.csci.csusb.edu/dick/samples/java.syntax.html#__End">&g=
+t;&gt;</A>=20
+  </P></OL><A name=3D__End>
+<H3>End</H3></A></BODY></HTML>

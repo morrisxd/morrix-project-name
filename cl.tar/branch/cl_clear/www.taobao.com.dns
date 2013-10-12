@@ -1,0 +1,26 @@
+
+; <<>> DiG 9.8.1-P1 <<>> www.taobao.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 6144
+;; flags: qr rd ra; QUERY: 1, ANSWER: 9, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;www.taobao.com.			IN	A
+
+;; ANSWER SECTION:
+www.taobao.com.		706	IN	CNAME	www.gslb.taobao.com.danuoyi.tbcache.com.
+www.gslb.taobao.com.danuoyi.tbcache.com. 255 IN	CNAME scorpio.danuoyi.tbcache.com.
+scorpio.danuoyi.tbcache.com. 71	IN	A	119.167.151.241
+scorpio.danuoyi.tbcache.com. 71	IN	A	119.167.235.251
+scorpio.danuoyi.tbcache.com. 71	IN	A	101.226.178.51
+scorpio.danuoyi.tbcache.com. 71	IN	A	119.167.235.241
+scorpio.danuoyi.tbcache.com. 71	IN	A	119.167.195.241
+scorpio.danuoyi.tbcache.com. 71	IN	A	101.226.181.141
+scorpio.danuoyi.tbcache.com. 71	IN	A	119.167.201.251
+
+;; Query time: 245 msec
+;; SERVER: 8.26.56.26#53(8.26.56.26)
+;; WHEN: Sun Jun  2 09:34:24 2013
+;; MSG SIZE  rcvd: 216
+
