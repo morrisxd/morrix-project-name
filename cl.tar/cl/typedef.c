@@ -20,3 +20,8 @@ typedef int (*fptr)(int argc, char **argv);
 
 int f1(int i);
 
+int main(int i)
+{
+   int j;
+}
+
