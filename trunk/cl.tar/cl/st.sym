@@ -3,7 +3,10 @@ Variable Name  Location  Domain         Line Numbers
 
 Typedef  Name  Location  Domain         Line Numbers
 -------------- --------  -------------- ------------
-           (p)      +87                          +18 
+     (myfunc4)      +40                          +19 
+   (mystruct2)      +32                          +26 
     (mystruct)      +54                           +5 
+    (myfunct3)      +44                          +25 
+           (f)     +118                           +3 
         (uint)      +41                           +1 
         (fptr)      +38                           +3 
