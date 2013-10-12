@@ -41,8 +41,13 @@ extern int column;
 #undef PRINTF_INIT_DECLARATOR
 #endif
 
+#define PRINTF myprintf
 
-#define TYPEDEF_FUNC {td_func=1;printf("//FUNCTYPEDEF(%s)//", g_cur_sym);st_insert_typedef(g_cur_sym, lineno, column);}
+void myprintf()
+{
+}
+
+#define TYPEDEF_FUNC {td_func=1;PRINTF("//FUNCTYPEDEF(%s)//", g_cur_sym); column = column + strlen(g_cur_sym) + 17; st_insert_typedef(g_cur_sym, lineno, column);}
 
 /*
  * These macro has no use indeed, the code was written firstly not so good,
@@ -248,28 +253,37 @@ declaration
 	: declaration_specifiers ';'
 	| declaration_specifiers init_declarator_list ';' 
            {
-              if (td_func)printf("//td_func(%d)//",td_func);
+              if (td_func)
+	      {
+	         PRINTF("//td_func(%d)//",td_func);
+                 column = column + 1 + 13;
+              }
               if (in_typedef)
               {
                  if (td_func) 
                  {
                     // function type
                     td_func = 0;
-                    printf("//clearFunctypedef//");
+                    PRINTF("//clearFunctypedef//");
+                    column = column + 20;
                  } else {
                     // normal type
                     sprintf (saved_identifier, "%s", g_cur_sym); 
-                    printf ("//EOT(%s)//",g_cur_sym);
+                    PRINTF ("//EOT(%s)//",g_cur_sym);
+                    column = column + strlen(g_cur_sym) + 9;
                     st_insert_typedef (saved_identifier,lineno, column);
-                    in_typedef = 0;
+                    in_typedef = 0; 
+//		    puts("//outoftypedef//");
                  }
                  in_typedef = 0;
+//		 puts("//outoftypedef#2//");
               } else {
                  if (td_func)
                  {
                     // function pointer definition
                     td_func = 0;
-                    printf ("//clear:td_func//");
+                    PRINTF ("//clear:td_func//");
+                    column = column + 17;
                  } else {
                  }
               }
@@ -404,12 +418,13 @@ direct_declarator
                switch (tmp) {
                case in_para_list:
 #if 1
-                  printf("//PARA(%s)//", g_cur_sym);
+                  PRINTF("//PARA(%s)//", g_cur_sym);
                   column = column + strlen(g_cur_sym) + 10;
 #endif
                   break;
                case in_struct_or_union:
-                  printf ("//VAR(%s)//", g_cur_sym);
+                  PRINTF ("//VAR(%s)//", g_cur_sym);
+                  column = column + strlen(g_cur_sym) + 9;
                   break;
                default:
                   break;
@@ -418,7 +433,7 @@ direct_declarator
 	| '(' declarator {TYPEDEF_FUNC} ')'
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' {tmp=in_para_list;} parameter_type_list ')' {tmp=in_none;}
+	| direct_declarator '(' {tmp = in_para_list;} parameter_type_list ')' {tmp=in_none;}
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'
 	;
@@ -578,7 +593,7 @@ yyerror(s)
 char *s;
 {
 	fflush(stdout);
-	printf("\n%*s\n%*s(line(%d:%d))SYM(%s)\n", column, "^", column, s, lineno, column, g_cur_sym);
+	printf ("\n%*s\n%*s(line(%d:%d))SYM(%s)\n", column, "^", column, s, lineno, column, g_cur_sym);
 }
 
 #include "string.h"
