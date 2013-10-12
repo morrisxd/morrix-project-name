@@ -27,6 +27,14 @@ IS			(u|U|l|L)*
 
 #include "y.tab.h"
 
+#define PRINTF hisprintf
+
+
+void hisprintf()
+{
+}
+
+
 int lineno = 1;
 
 void count();
@@ -205,7 +213,7 @@ int check_type()
    {
       p = st_lookup_typedef (g_cur_sym);
       if (p) {
-         printf ("//TYPE[%s]//", g_cur_sym);
+         PRINTF ("//TYPE[%s]//", g_cur_sym);
          return (TYPE_NAME);
       }
    }

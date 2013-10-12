@@ -15,4 +15,3 @@ struct this_is_a_struct {
 
 
 ushort_t myshort = 9;
-
