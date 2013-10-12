@@ -15,3 +15,8 @@ struct this_is_a_struct {
 
 
 ushort_t myshort = 9;
+
+typedef int (*fptr)(int argc, char **argv);
+
+int f1(int i);
+
