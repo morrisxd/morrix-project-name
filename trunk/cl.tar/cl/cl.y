@@ -352,14 +352,14 @@ type_specifier
 	;
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
-	| struct_or_union '{' struct_declaration_list '}'
-	| struct_or_union IDENTIFIER %prec LOWER_THAN_BRACE {in_struct_union = 0;printf("//OUTOFSTRUCT//");}
+	: struct_or_union IDENTIFIER '{' struct_declaration_list '}' {printf ("//OUTOFSTRUCT1//");}
+	| struct_or_union '{' struct_declaration_list '}' {printf("//OUTOFSTRUCT2//");}
+	| struct_or_union IDENTIFIER %prec LOWER_THAN_BRACE {printf("//OUTOFSTRUCT3//");}
 	;
 
 struct_or_union
-	: STRUCT {in_struct_union = 1; PRINTF("//set:in_struct//");}
-	| UNION  {in_struct_union = 1; PRINTF("//set:in_union//");}
+	: STRUCT {in_struct_union ++ ; PRINTF("//set:in_struct//");}
+	| UNION  {in_struct_union ++ ; PRINTF("//set:in_union//");}
 	;
 
 struct_declaration_list
