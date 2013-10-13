@@ -56,7 +56,7 @@ char chsharp = 0;
 "do"			{ count(); return(DO); }
 "double"		{ count(); return(DOUBLE); }
 "else"			{ count(); return(ELSE); }
-"enum"			{ count(); return(ENUM); }
+"enum"			{ count(); in_enum = 1; return(ENUM); }
 "extern"		{ count(); return(EXTERN); }
 "inline"		{ count(); /*return(INLINE);*/ }
 "__inline"		{ count(); /*return(INLINE2);*/ }

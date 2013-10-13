@@ -46,6 +46,7 @@ int td_func = 0;
 int in_typedef = 0;
 int in_funcdef = 0;
 int in_struct_union = 0;
+int in_enum = 0;
 
 
 #define PRINTF printf
@@ -268,7 +269,7 @@ declaration
            {
               if (in_typedef)
               {
-                 if (td_func && (0 == in_struct_union)) 
+                 if (td_func && (0 == in_struct_union) &&(0==in_enum)) 
                  {
                     // function type
                     td_func = 0;
@@ -277,12 +278,13 @@ declaration
 		 } else {
                     // normal type
                     sprintf (saved_identifier, "%s", g_cur_sym); 
-                    PRINTF ("//EOT(%s)//",g_cur_sym);
+                    PRINTF ("//EOT(%s)(%d)//",g_cur_sym, in_enum);
                     column = column + strlen(g_cur_sym) + 9;
                     st_insert_typedef (saved_identifier,lineno, column);
                     in_typedef = 0; 
 //		    puts("//outoftypedef//");
                     if (in_struct_union) in_struct_union = 0;
+		    if (in_enum) in_enum = 0;
                  }
                  in_typedef = 0;
 //		 puts("//outoftypedef#2//");
@@ -352,7 +354,7 @@ type_specifier
 struct_or_union_specifier
 	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
 	| struct_or_union '{' struct_declaration_list '}'
-	| struct_or_union IDENTIFIER %prec LOWER_THAN_BRACE
+	| struct_or_union IDENTIFIER %prec LOWER_THAN_BRACE {in_struct_union = 0;printf("//OUTOFSTRUCT//");}
 	;
 
 struct_or_union

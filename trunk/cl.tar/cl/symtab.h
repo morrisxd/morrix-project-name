@@ -49,6 +49,6 @@ typedef struct BucketListRec {
 extern BucketList st_lookup ( char * name );
 extern BucketList st_lookup_typedef(char *name);
 
-
+extern int in_enum;
 
 #endif
