@@ -47,6 +47,12 @@
 [9] enum unrecognized.
    typedef enum {TCL_INT, TCL_DOUBLE, TCL_EITHER} Tcl_ValueType;
    the above grammar keyword 'enum' was not recognized.
+   fix: set flag when found 'enum'
 
+[10] struct inside struct error
+   typedef struct m {
+   	int i;
+	int (myfunc)(struct mystruct myvar, int i); <=== this error
+   };
 
 
