@@ -430,10 +430,10 @@ direct_declarator
                   break;
                }
             }
-	| '(' declarator {TYPEDEF_FUNC} ')'
+	| '(' declarator ')'
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' {tmp = in_para_list;} parameter_type_list ')' {tmp=in_none;}
+	| direct_declarator '(' parameter_type_list ')' 
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'
 	;
@@ -490,7 +490,7 @@ direct_abstract_declarator
 	| direct_abstract_declarator '[' ']'
 	| direct_abstract_declarator '[' constant_expression ']'
 	| '(' ')'
-	| '(' {tmp=in_para_list;} parameter_type_list ')' {tmp=in_none;}
+	| '(' parameter_type_list ')'
 	| direct_abstract_declarator '(' ')'
 	| direct_abstract_declarator '(' parameter_type_list ')'
 	;

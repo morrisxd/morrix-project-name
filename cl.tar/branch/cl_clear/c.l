@@ -206,6 +206,8 @@ int check_type()
  *
  *   return(IDENTIFIER);
  */
+
+ #if 1
    BucketList p;
    char temp [MAXSYMLEN];
 
@@ -217,6 +219,7 @@ int check_type()
          return (TYPE_NAME);
       }
    }
+#endif
    
 /*
  * it actually will only return IDENTIFIER. 
