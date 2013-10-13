@@ -29,3 +29,4 @@ typedef struct mystruct2 {
 
 mystruct2 mys;
 
+typedef int (myfunc7)(int i, float fnum2);

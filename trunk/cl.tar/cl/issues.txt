@@ -54,5 +54,7 @@
    	int i;
 	int (myfunc)(struct mystruct myvar, int i); <=== this error
    };
-
+   this is because we don't differentiate the 'typedef struct' 
+   and the inside 'int (myfunc)(struct mystruct myvar)'. 
+   should i setup level in analyze 'struct'?
 

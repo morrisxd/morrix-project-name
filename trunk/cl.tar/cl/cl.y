@@ -278,7 +278,7 @@ declaration
 		 } else {
                     // normal type
                     sprintf (saved_identifier, "%s", g_cur_sym); 
-                    PRINTF ("//EOT(%s)(%d)//",g_cur_sym, in_enum);
+                    PRINTF ("//EOT(%s)(%d)//",g_cur_sym, in_struct_union);
                     column = column + strlen(g_cur_sym) + 9;
                     st_insert_typedef (saved_identifier,lineno, column);
                     in_typedef = 0; 
@@ -354,7 +354,7 @@ type_specifier
 struct_or_union_specifier
 	: struct_or_union IDENTIFIER '{' struct_declaration_list '}' {printf ("//OUTOFSTRUCT1//");}
 	| struct_or_union '{' struct_declaration_list '}' {printf("//OUTOFSTRUCT2//");}
-	| struct_or_union IDENTIFIER %prec LOWER_THAN_BRACE {printf("//OUTOFSTRUCT3//");}
+	| struct_or_union IDENTIFIER %prec LOWER_THAN_BRACE {printf("//OUTOFSTRUCT3//");in_struct_union=0;}
 	;
 
 struct_or_union
