@@ -1,0 +1,14 @@
+#!/bin/bash
+
+$?=3
+
+while [ $? -gt 0 ]
+do
+	svn commit -m"clear@`date`"
+	if [ $? -gt 0 ]
+	then
+		sleep 5
+		$?=3
+ 	fi
+
+done
