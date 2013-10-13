@@ -1,7 +1,15 @@
 #!/bin/bash
 rm ./bin/*
 
-filepath=/tftpboot/
+hn=`hostname`
+echo hostname=[$hn]
+
+if [ $hn = "ubuntu" ]; then
+	filepath=/mnt/hgfs/Temp/
+else
+	filepath=/tftpboot/
+fi 
+
 filename=pwe3_satop_cesop_demo.exe
 echo touch pwe3_satop_cesop_demo.c 
 touch *.c *.h
