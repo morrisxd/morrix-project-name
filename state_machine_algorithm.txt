@@ -1,0 +1,40 @@
+switch (status) {
+	case 1:
+		switch (event) {
+			case MAMA_CALL_U_BACK:
+				status = 7;
+				break;
+			case MAMA_BIT_U:
+				status =9;
+				break;
+			default:
+				status = 107;
+				say_yes ();
+				break;
+		}
+		break;
+	case 2:
+		switch (event) {
+			case PAPA_COME_BACK:
+				status = 99;
+				break;
+			case PAPA_GO_OUT:
+				status = 78;
+				break;
+			case PAPA_AWAKE:
+				status = 399;
+				break;
+			default:
+				status = 694;
+				break;
+		}
+	case 3:
+		switch (event) {
+			case GETTING_COLDER:
+				status = 899;
+				break;
+			case GETTING_WARMMER:
+				status = 1024;
+				break;
+		}
+}
