@@ -38,6 +38,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 #endif
 
 #define MORRIS_EXTRA_MENU_ITEM 	(1)
+#define MORRIS_PREDEFINED_MENU	(1)
 
 #define MORRIS_CHANGE_LEVELING	(1)
 #define MORRIS_CHANGE_LEVELING_FOR_SNAKE	(1)
