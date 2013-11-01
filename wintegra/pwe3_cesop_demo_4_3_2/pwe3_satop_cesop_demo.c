@@ -2300,6 +2300,10 @@ const Y_MenuEntry V_PreDefinedSystemConfigurations []=
    {K_Leaf, TRUE, " -> CR 103, T1, Framed, No Cas. Multiple PWs per line [NUM_OF_LINES][0-SDH, 1-SONET, 2-CAD][#PWs/line][recovered PW]",   {(Y_MnuLeafP) CLI_F_CR_103_SonetSdh_T1FramedNoCas_MultiplePwPerLine}},
    {K_Leaf, TRUE, " -> CR 104, E1, Unframed, No Cas. Remove/recreate all PW/lines. [NUM_OF_LINES][0-SDH, 1-SONET, 2-CAD][0-remove PW, 1-remove PW+Lines]",  {(Y_MnuLeafP) CLI_F_CR_104_SonetSdh_E1UnframedNoCas_AddRemovePwLine}},
    {K_Leaf, TRUE, " -> CR 104, T1, Unframed, No Cas. Remove/recreate all PW/lines. [NUM_OF_LINES][0-SDH, 1-SONET, 2-CAD][0-remove PW, 1-remove PW+Lines]",  {(Y_MnuLeafP) CLI_F_CR_104_SonetSdh_T1UnframedNoCas_AddRemovePwLine}},
+#if MORRIS_PREDEFINED_MENU
+#warning COMPILING_+PREDEFINED_MENU
+#endif
+
 #if WTI_CESOP_CLOCK_RECOVERY_ENABLE
    /* Clock Recovery Tests */
    {K_Leaf, TRUE, " -> CR 104, E1, Framed, No Cas. Remove/recreate all PW/lines. [NUM_OF_LINES][0-SDH, 1-SONET, 2-CAD][0-remove PW, 1-remove PW+Lines]",  {(Y_MnuLeafP) CLI_F_CR_104_SonetSdh_E1FramedNoCas_AddRemovePwLine}},
