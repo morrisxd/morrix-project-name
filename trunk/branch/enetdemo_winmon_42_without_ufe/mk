@@ -1,7 +1,10 @@
 ctags -R
 make TEST=EnetDemo
 # copy_to_tftpboot.sh
-cp bin/EnetDemo /tftpboot/enetdemo_linux_422.exe
+# cp bin/EnetDemo /tftpboot/enetdemo_linux_422.exe
+rsync -avz --progress ./bin/EnetDemo.exe /tftpboot/enetdemo_winmon_42_without_ufe.exe
+echo rsync -avz --progress ./bin/EnetDemo.exe /tftpboot/enetdemo_winmon_42_without_ufe.exe
+
 # cd bin
 # mv EnetDemo EnetDemo_lin.exe 
 # up EnetDemo_lin.exe bin
