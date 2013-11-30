@@ -1,6 +1,8 @@
 /*
-    Syn Flood DOS with LINUX sockets
-    */
+ *    Syn Flood DOS with LINUX sockets
+ * 	important:
+ * 	30-Nov-Saturday-2013 - ip 'id' field must change all the time
+ */
 #include<stdio.h>
 #include<string.h>		//memset
 #include<sys/socket.h>
