@@ -1,5 +1,14 @@
 #!/bin/bash
+surfix=''
+echo $surfix
 rm ./bin/*
+pwd | grep "wilbur"
+if test $? -eq 0  
+then
+   echo "this is in WILBUR code"
+   surfix='wilbur'
+fi
+
 
 hn=`hostname`
 echo hostname=[$hn]
@@ -10,9 +19,12 @@ else
 	filepath=/tftpboot/
 fi 
 
-filename=pwe3_satop_cesop_demo.exe
+filename=pwe3_satop_cesop_demo_${surfix}.exe
+
+# exit
+
 echo touch pwe3_satop_cesop_demo.c 
-touch *.c *.h
+touch *.c 
 
 echo =========================================
 echo make WDDS_DIR=../ \
