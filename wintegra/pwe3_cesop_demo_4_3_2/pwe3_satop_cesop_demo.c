@@ -142,7 +142,8 @@
 #define WTI_MAX_PW                                  1
 #else
 // #error MORRIS_USE_1_PW_should_be_defined
-#define WTI_MAX_PW                                  1344          /* maximum number of PW's in PWE3 system */
+#define WTI_MAX_PW                                  1344 /* 0x540 */ /* maximum number of PW's in PWE3 system */
+// #error ___________________________________CURRENT_VAL_IS_USING
 #endif
 #endif
 #elif defined __WT_UFE448__
@@ -310,7 +311,7 @@
 #if MORRIS_USE_1_PW
 #define WTI_MPLS_LABEL                              0x001371ff
 #else
-// #error lksjdflkjslkfdjlkdsjflksdjflksajflksjdlkf
+// #error ______________________________________CURRENT_VAL_IS_USED
 #define WTI_MPLS_LABEL                              0x100001ff
 #endif
 
