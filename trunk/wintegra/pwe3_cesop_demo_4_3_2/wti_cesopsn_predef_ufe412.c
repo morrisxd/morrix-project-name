@@ -162,15 +162,18 @@ void WT_UfeMPLS_L2_FA_Create(void)
 		CLI_F_Tdm2PsnFlowAggEnetHeaderMpls("0 aa aa aa aa aa aa bb bb bb bb bb bb 8847");
 #if MORRIS_DISABLE_VLAN_TAG
 		CLI_F_MplsFlowAggPrefixLength("0 14");
+#warning set_mpls_label_here
 		sprintf(temp_buf,
 				"0 %x %x %x %x %x",
 				3*i,
 				3*i+1,
-				3*i+2,
+				3*i+2,	// <----- vlan, i=0,1,2,3,,,,
 				// 0x81000005,
 				(0x88470000 | ((((WTI_MPLS_LABEL) >> 12) + WTI_MAX_PW + 1 + i) >> 4)),
 				((((((WTI_MPLS_LABEL) >> 12)  + WTI_MAX_PW + 1 + i) & 0xff) << 28) | 0x00ff0000));
-/////////////////////////////////////////////////////
+#ifdef MORRIS_MPLS_LABEL
+// the above code is setting up the MPLS & PW label
+#endif
 #else
 
 
@@ -186,7 +189,7 @@ void WT_UfeMPLS_L2_FA_Create(void)
 
 
 #endif
-		/*                              [mac destination] [mac source] [vlan] [type] [mpls header] */
+		/*  [mac destination] [mac source] [vlan] [type] [mpls header] */
 		CLI_F_MplsFlowAggPrefixHeaderMpls(temp_buf);
 		sprintf(temp_buf, "0 %d %d %d", 2, 28, 41); /* remark offsets for VLAN priority and PSN tunnel EXP bits */
 
@@ -6237,7 +6240,10 @@ void CLI_F_CR_101_SonetSdh_E1UnframedNoCas(char *StrPrm)
    WPX_Ufe412CpldInterruptMaskSet(0, SERIAL_X_CPLD_INTERRUPT_MASK);
 #endif
 
+#ifdef MORRIS_MPLS_LABEL
+#endif
    WT_UfeMPLS_L2_FA_Create();
+
    WT_UfeLinePWCreate(&test_setup, 1);
 
 #if MORRIS_SET_ALL_TO_HOLDOVER
@@ -11619,6 +11625,7 @@ void CLI_F_SonetSdhE3DS3Combined(char *StrPrm)
    for (i=0;i<WTI_MAX_NUM_OF_MPLS_FA;++i)
    {
 #if WTI_CESOP_MPLS_OVER_ENET
+#warning overwrite_mpls_label_here
       /* create the l2 router MPLS flow aggregations */
       CLI_F_Tdm2PsnFlowAggEnetHeaderMpls("0 aa aa aa aa aa aa bb bb bb bb bb bb 8847");
       CLI_F_MplsFlowAggPrefixLength("0 18");
