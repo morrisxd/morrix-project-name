@@ -2354,6 +2354,8 @@ const Y_MenuEntry V_PreDefinedSystemConfigurations []=
    {K_Leaf, TRUE, " -> E1, Sonet/Sdh, error_ReEnable_line. [0- SDH, 1- SONET]",                           {(Y_MnuLeafP) CLI_F_error_ReEnable_line}},
    {K_Leaf, TRUE, " -> E1, Sonet/Sdh, Error_Enable_Disable_Disable. [0- SDH, 1- SONET]",                  {(Y_MnuLeafP) CLI_F_Error_Enable_Disable_Disable}},
    {K_Leaf, TRUE, " -> E1, Sonet/Sdh, Error_Enable_Before_Create. [0- SDH, 1- SONET]",                    {(Y_MnuLeafP) CLI_F_Error_Enable_Before_Create}},
+#ifdef MORRIS_CLI_ENTRY
+#endif
    {K_Leaf, TRUE, " -> CR 101, E1, Sonet/Sdh/CAD, Unframed, Without Cas. [NUM_OF_LINES][0- SDH, 1- SONET, 2- CAD]",                            {(Y_MnuLeafP) CLI_F_CR_101_SonetSdh_E1UnframedNoCas}},
    {K_Leaf, TRUE, " -> CR 101, T1, Sonet/Sdh/CAD, Unframed, Without Cas. [NUM_OF_LINES][0- SDH, 1- SONET, 2- CAD]",                            {(Y_MnuLeafP) CLI_F_CR_101_SonetSdh_T1UnframedNoCas}},
    {K_Leaf, TRUE, " -> CR 101, E1, Sonet/Sdh/CAD, Framed, Without Cas. [NUM_OF_LINES][0- SDH, 1- SONET, 2- CAD]",                              {(Y_MnuLeafP) CLI_F_CR_101_SonetSdh_E1FramedNoCas}},
@@ -3182,6 +3184,7 @@ extern WP_U32 global_jitter_buffer_size;
 WP_U32 g_rxbuffersize;
 WP_U32 isEnableSnake;
 WP_U32 g_num_of_e1 = 0;
+WP_U32 g_num_of_pw = 0;
 WP_U32 g_force_holdover = 0;
 WP_U32 g_isForceOffset = 0;
 
@@ -3214,7 +3217,7 @@ extern WP_U32 g_enableAPS;
  */
 WP_S32 main(WP_S32 argc, WP_CHAR **argv)
 {
-   if (argc > 7)
+   if (argc > 8)
    {
       global_jitter_buffer_size      	= atoi(argv[1]);
       g_rxbuffersize 			= atoi(argv[2]);
@@ -3224,6 +3227,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       g_enableAPS 			= atoi(argv[5]);
       g_force_holdover 			= atoi(argv[6]);
       g_isForceOffset			= atoi(argv[7]);
+      g_num_of_pw 			= atoi(argv[8]);
    } else {
       return printf ("please input [filename jitter_buf_size(8) rx_buf_size(256) isSnake(1=enable) numOfE1 aps(1=enable)] forceHO forcePPMoffset\n");
    } 
@@ -3234,6 +3238,15 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
    WTI_InitDemoStructures();
    show_config ();
    /* Start Menu Engine */
+
+#ifdef MORRIS_CLI_ENTRY
+   {
+      char command[129];
+      sprintf (command, "41 %d 0", g_num_of_pw);
+      printf ("command=(%s)\n", command);
+      CLI_F_CR_101_SonetSdh_E1UnframedNoCas (command);
+   }
+#endif
    CLI_T_Main();
 
    return 0;
