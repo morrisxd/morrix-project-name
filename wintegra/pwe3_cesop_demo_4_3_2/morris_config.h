@@ -13,7 +13,7 @@
 #define MORRIS_PRINT_HO_COUNTER	(0)
 
 
-#define MORRIS_ENABLE_STM_1	(0)
+#define MORRIS_ENABLE_STM_1	(1)
 #define MORRIS_SKIP_ALARMS	(1)
 
 
@@ -78,6 +78,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 #define MORRIS_ADD_NEW_CALL_FREERUN	(1)
 
 #define MORRIS_USE_ACR	(1)
+#define MORRIS_CLI_ENTRY	(1)
 
 #endif
 

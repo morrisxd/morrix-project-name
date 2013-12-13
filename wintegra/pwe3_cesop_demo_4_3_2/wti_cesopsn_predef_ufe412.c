@@ -6161,6 +6161,12 @@ void CLI_F_CR_101_SonetSdh_E1UnframedNoCas(char *StrPrm)
    WP_U8 flexmux_mode=0;
 #endif
 
+#ifdef MORRIS_CLI_ENTRY 
+   printf ("Hello World(%s)\n", StrPrm);
+   printf ("Hello World(%s)\n", StrPrm);
+   printf ("Hello World(%s)\n", StrPrm);
+   printf ("Hello World(%s)\n", StrPrm);
+#endif
 
    /* Read parameters from user */
    /*Interface: 0 -SDH, 1- SONET, 2 -CAD*/
