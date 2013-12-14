@@ -1,2 +1,9 @@
-[1]
+[1] to find the multicast group usage, search the code below:
+
+/* Create TX flow aggregation */
+WPE_TxAggCreate ();
+WPE_AddL3GroupMember (default_agg_host, h_iw_port_general_host);
+WPE_AddL3GroupMember (gbe[1].agg_enet, gbe[1].bport_enet);
+
+[2]
 

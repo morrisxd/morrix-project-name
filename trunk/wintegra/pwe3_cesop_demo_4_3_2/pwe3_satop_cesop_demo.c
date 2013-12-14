@@ -14592,6 +14592,9 @@ void CLI_F_MplsFlowAggCreate(char *StrPrm)
           &mpls_layer2_agg_cfg.mpls_push_headers[0],
           WTI_MPLS_LABEL_SIZE);
    mpls_flow_cfg.mpls_label >>= 12;
+#if MORRIS_MPLS_LABEL
+   // mpls_label = 0x10541 as original value from the parameter
+#endif
 
    mpls_flow_cfg.deny_mode = 0;
    the_system->psn2tdm_mpls_flow_handle[val] =

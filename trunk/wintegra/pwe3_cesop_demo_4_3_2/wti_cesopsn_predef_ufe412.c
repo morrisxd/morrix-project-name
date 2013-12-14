@@ -189,6 +189,9 @@ void WT_UfeMPLS_L2_FA_Create(void)
 
 
 #endif
+#ifdef MORRIS_MPLS_LABEL
+// the above code is setting up the MPLS & PW label
+#endif
 		/*  [mac destination] [mac source] [vlan] [type] [mpls header] */
 		CLI_F_MplsFlowAggPrefixHeaderMpls(temp_buf);
 		sprintf(temp_buf, "0 %d %d %d", 2, 28, 41); /* remark offsets for VLAN priority and PSN tunnel EXP bits */
