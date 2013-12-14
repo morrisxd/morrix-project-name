@@ -1041,7 +1041,7 @@ void CLI_WinUtilModifyTA_Table (WP_CHAR *StrPrm)
   status =  WPU_TA(0, (void*)baseIndex ,WPU_TA_CMD_GET_ONE_BASE, &ta);
   F_menu_TermOnError(status, "WPU_TA(0, baseIndex, WPU_TA_CMD_GET_ONE_BASE,ta)", __LINE__);
   sprintf(strParam, "mm %X %X", \
-          ta.bases[baseIndex] + tableIndex*tableSize + entryIndex*(4), newVal);
+          ta.bases_info[baseIndex].addr + tableIndex*tableSize + entryIndex*(4), newVal);
   WPU_WinutilCall(strParam);
 }
 
@@ -1099,12 +1099,12 @@ void CLI_WinUtilDisplayTA_Table (WP_CHAR *StrPrm)
   }
  status =  WPU_TA(0, (void*)baseIndex ,WPU_TA_CMD_GET_ONE_BASE, &ta);
  F_menu_TermOnError(status, "WPU_TA(0, baseIndex, WPU_TA_CMD_GET_ONE_BASE,ta)", __LINE__);
- if((ta.bases[baseIndex]&0xF0000000) == 0xF0000000)
+ if((ta.bases_info[baseIndex].addr&0xF0000000) == 0xF0000000)
  {
    WPU_DUMP("Register is uninitialized\n");
    return;
  }
- sprintf(strParam,"md %X :%d",(ta.bases[baseIndex] & 0xFFFFFFF0)+entryIndex*entrySize,entrySize);
+ sprintf(strParam,"md %X :%d",(ta.bases_info[baseIndex].addr & 0xFFFFFFF0)+entryIndex*entrySize,entrySize);
  WPU_DUMP("Printing Base Index: %d, Entry: %d\n",baseIndex, entryIndex);
  WPU_DUMP("-----------------------------------------------------\n");
  WPU_WinutilCall(strParam);

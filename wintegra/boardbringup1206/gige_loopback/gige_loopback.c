@@ -1735,14 +1735,23 @@ void CLI_PollPacket_Interface1()
       WP_U32 a = 0;
       printf("\npoll for packet rx to enet %d\n", WT_ENET_INTERFACE_1- WP_PORT_ENET1 + 1);
       while(a++ < 5)
+      {
         rx_data(iw_ch_g1);
+	printf ("take a delay 1\n");
+	fflush ((FILE *)1);
+	WPL_Delay (100000);
+      }
 }
 void CLI_PollPacket_Interface2()
 {
       WP_U32 a = 0;
       printf("\npoll for packet rx to enet %d\n", WT_ENET_INTERFACE_2 - WP_PORT_ENET1 + 1);
       while(a++ < 5)
+      {
         rx_data(iw_ch_g2);
+	fflush ((FILE *)1);
+	WPL_Delay (100000);
+      }
 }
 
 void CLI_ProgramQuit()
@@ -1846,7 +1855,11 @@ void iw_host_tx_data(WP_handle flow_agg_handle, WP_handle iwtx_handle, WP_handle
    data_unit.n_active = 1;
 
    tx_buf.data_size = data_unit.data_size;
-   data_ptr = WP_PoolAlloc(pool);
+   if (NULL == (data_ptr = WP_PoolAlloc(pool)))
+   {
+      printf ("WP_PoolAlloc failed\n");
+      return ;
+   }
    tx_buf.data = data_ptr;
    tx_buf.pool_handle = pool;
    tx_buf.displacement = 0;
@@ -1854,15 +1867,25 @@ void iw_host_tx_data(WP_handle flow_agg_handle, WP_handle iwtx_handle, WP_handle
    tx_buf.next = NULL;
    tx_buf.buffer_class = 0;
 
+#if 1
+   data_unit.control =
+         WP_HT_IW_B_MODE_FIELD(WP_HT_IW_B_FAST_MODE) |
+         WP_HT_IW_B_VA_DEST_TYPE_FIELD(WP_HT_IW_B_VA_DESTINATION_FLOW_AGG);
+#else
    data_unit.control =
          WP_HT_IW_B_MODE_FIELD(WP_HT_IW_B_FAST_MODE)|
          WP_HT_IW_B_VA_DEST_TYPE_FIELD(WP_HT_IW_B_VA_DESTINATION_FLOW_AGG)|
          WP_HT_IW_FSP_FLOW_AGG_FIELD( flow_agg_handle) |
          WP_HT_IW_CRC_FIELD(0);
+#endif
    data_unit.segment = (&tx_buf);
    data_unit.n_segments = 1;
    data_unit.n_active = 1;
+#if 1
    data_unit.type = WP_DATA_IW;
+#else
+   data_unit.type = WP_DATA_ENET;
+#endif
    data_unit.data_return = 0;
    data_unit.status = 0;
 /*
@@ -1872,6 +1895,7 @@ void iw_host_tx_data(WP_handle flow_agg_handle, WP_handle iwtx_handle, WP_handle
 */
 
    /*strcpy (ascii_buffer,"1213141516171001000101010800");*/
+   memset (ascii_buffer, 0, DATA_LENGTH*2);
    strcpy (ascii_buffer,"aabbccddeeffaabbccddee000800");
    strcat (ascii_buffer,"45040020");/* tos = 4 */
    strcat (ascii_buffer,"001b0000");
@@ -1882,6 +1906,7 @@ void iw_host_tx_data(WP_handle flow_agg_handle, WP_handle iwtx_handle, WP_handle
    strcat (ascii_buffer,"001b77c0");
    strcat (ascii_buffer,"00a4c5ff");
 
+   memset (hexa_buffer, 0, DATA_LENGTH);
    WT_TranslateAsciiToHexGIGEGIGE(hexa_buffer,ascii_buffer,DATA_LENGTH);
 
    WP_MEM_BYTES_FILL(data_ptr, 0, tx_buf.data_size);
@@ -1900,6 +1925,12 @@ void iw_host_tx_data(WP_handle flow_agg_handle, WP_handle iwtx_handle, WP_handle
       status = WP_HostSend(iwtx_handle, &data_unit);
       terminate_on_error(status, "WP_HostSend()");
 
+
+
+
+      printf ("take a delay\n");
+      fflush ((FILE*)1);
+      WPL_Delay (100000);
 }
 
 
@@ -1950,3 +1981,10 @@ terminate_on_error(WP_handle handle, WP_CHAR *s)
    }
 
 }
+
+
+#include "wt_new_automation.c"
+#include "wt_debug_menu.c"
+#include "wt_util.c"
+#include "wt_statistics_functions.c"
+

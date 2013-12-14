@@ -5,17 +5,17 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.6	//
 API_DIR	makefile	/^API_DIR = $(WDDI_DIR)$(WDDI_SOURCES)\/api$/;"	m
-API_DIR_X	makefile	/^API_DIR_X = $(WDDI_DIR)$(WDDI_SOURCES)\/winutil\/api\/include\/winpath3$/;"	m
-ASIX_ISR	gige_loopback.c	218;"	d	file:
+ASIX_ISR	gige_loopback.c	225;"	d	file:
 ASIX_ISR	wt_new_automation.c	286;"	d	file:
 ASIX_ISR	wt_new_automation.h	51;"	d
-AUTO	gige_loopback.c	189;"	d	file:
+AUTO	gige_loopback.c	196;"	d	file:
 AUTO	wt_new_automation.c	257;"	d	file:
 AUTO	wt_new_automation.h	22;"	d
 BIN_DIR	makefile	/^BIN_DIR = $(TEST_DIR)\/bin$/;"	m
-BOARD_DIR	makefile	/^BOARD_DIR = $(WDDI_DIR)\/board\/$(WPI_BOARD)_$(HW_DEVICE)$/;"	m
+BOARD_DIR	makefile	/^BOARD_DIR = $(WDDI_DIR)\/board\/$(WPI_APP_BOARD)_$(WPI_APP_HW_DEVICE)$/;"	m
 BOARD_LIB	makefile	/^BOARD_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_board.a$/;"	m
-BUFFER_SIZE	gige_loopback.c	359;"	d	file:
+BOARD_WDS_COMMON_DIR	makefile	/^BOARD_WDS_COMMON_DIR = $(WDDI_DIR)\/board\/wds_common$/;"	m
+BUFFER_SIZE	gige_loopback.c	366;"	d	file:
 BUFFER_SIZE	wt_debug_menu.h	29;"	d
 CLI_APILevel_EndLog	wt_debug_menu.c	/^void CLI_APILevel_EndLog ()$/;"	f
 CLI_APILevel_StartLog	wt_debug_menu.c	/^void CLI_APILevel_StartLog ()$/;"	f
@@ -101,35 +101,35 @@ CLI_WinUtilWingineUtilization	wt_debug_menu.c	/^void CLI_WinUtilWingineUtilizati
 CLI_gen_helpfile	wt_debug_menu.c	/^void CLI_gen_helpfile (void)$/;"	f
 CLI_setWPID	wt_debug_menu.c	/^void CLI_setWPID (WP_CHAR * StrPrm)$/;"	f
 CloseFile	wt_debug_menu.c	/^void CloseFile (void)$/;"	f
-DATA_LENGTH	gige_loopback.c	515;"	d	file:
-DEBUG_MODE	gige_loopback.c	520;"	d	file:
+DATA_LENGTH	gige_loopback.c	522;"	d	file:
+DEBUG_MODE	gige_loopback.c	527;"	d	file:
 DEFINE_WEB	makefile	/^DEFINE_WEB = -DWEB$/;"	m
-DEV1_TAG	gige_loopback.c	553;"	d	file:
-DEV2_TAG	gige_loopback.c	554;"	d	file:
+DEV1_TAG	gige_loopback.c	560;"	d	file:
+DEV2_TAG	gige_loopback.c	561;"	d	file:
 DPS_IMAGE_NAME	makefile	/^DPS_IMAGE_NAME  = wpi_dps_image_backhaul$/;"	m
-DPS_IMAGE_OBJ	makefile	/^DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/$(DPS_IMAGE_NAME).o$/;"	m
+DPS_IMAGE_OBJ	makefile	/^DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_APP_TARGET)\/lib\/$(DPS_IMAGE_NAME).o$/;"	m
 Desc	gige_loopback.c	/^   char *Desc;$/;"	m	struct:__anon2	file:
 Desc	wt_new_automation.c	/^   char              *Desc;$/;"	m	struct:__anon9	file:
 Desc	wt_new_automation.h	/^   char              *Desc;$/;"	m	struct:__anon6
 DispCmds	wt_debug_menu.c	/^display_cmd DispCmds[] = {$/;"	v
-ERROR	gige_loopback.c	232;"	d	file:
+ERROR	gige_loopback.c	239;"	d	file:
 ERROR	wt_new_automation.c	301;"	d	file:
 ERROR	wt_new_automation.h	66;"	d
 E_MenuNodeType	gige_loopback.c	/^} E_MenuNodeType;$/;"	t	typeref:enum:__anon1	file:
 E_MenuNodeType	wt_new_automation.c	/^} E_MenuNodeType;$/;"	t	typeref:enum:__anon8	file:
 E_MenuNodeType	wt_new_automation.h	/^} E_MenuNodeType;$/;"	t	typeref:enum:__anon5
 EvaluateControlString	wt_new_automation.c	/^void EvaluateControlString(WP_U8 *InputBuf,WP_U32 demo_mode)$/;"	f
-FALSE	gige_loopback.c	240;"	d	file:
-FALSE	gige_loopback.c	244;"	d	file:
+FALSE	gige_loopback.c	247;"	d	file:
+FALSE	gige_loopback.c	251;"	d	file:
 FALSE	wt_new_automation.c	309;"	d	file:
 FALSE	wt_new_automation.c	313;"	d	file:
 FALSE	wt_new_automation.h	74;"	d
 FALSE	wt_new_automation.h	78;"	d
-FALSE_M	gige_loopback.c	246;"	d	file:
+FALSE_M	gige_loopback.c	253;"	d	file:
 FALSE_M	wt_new_automation.c	315;"	d	file:
 FALSE_M	wt_new_automation.h	80;"	d
-FATAL_MENU_SIZE	gige_loopback.c	374;"	d	file:
-FATAL_MENU_SIZE	gige_loopback.c	377;"	d	file:
+FATAL_MENU_SIZE	gige_loopback.c	381;"	d	file:
+FATAL_MENU_SIZE	gige_loopback.c	384;"	d	file:
 FATAL_MENU_SIZE	wt_debug_menu.h	44;"	d
 FATAL_MENU_SIZE	wt_debug_menu.h	47;"	d
 F_DisplayFlowStats	gige_loopback.c	/^void F_DisplayFlowStats (WP_handle agg)$/;"	f
@@ -145,18 +145,17 @@ F_SetUpperMenu	wt_new_automation.c	/^void F_SetUpperMenu   (void)$/;"	f
 F_menu_TermOnError	wt_debug_menu.c	/^void F_menu_TermOnError (WP_handle handle, WP_CHAR * s, WP_U32 LineNum)$/;"	f
 FillAutomationArray	wt_new_automation.c	/^WP_U32 FillAutomationArray(WP_CHAR *InputBuf, WP_CHAR *params_string,WP_U32 demo_mode)$/;"	f
 GRAM_RIF_SWAP_OFFSET	wt_new_automation.c	212;"	d	file:
-HELP	gige_loopback.c	247;"	d	file:
+HELP	gige_loopback.c	254;"	d	file:
 HELP	wt_new_automation.c	316;"	d	file:
 HELP	wt_new_automation.h	81;"	d
-HOST_NAME_LEN	gige_loopback.c	204;"	d	file:
+HOST_NAME_LEN	gige_loopback.c	211;"	d	file:
 HOST_NAME_LEN	wt_new_automation.c	272;"	d	file:
 HOST_NAME_LEN	wt_new_automation.h	37;"	d
-HW_DEVICE	makefile	/^HW_DEVICE       = winpath3$/;"	m
-INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(API_DIR_X) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(WINUTIL_DIR) \\$/;"	m
-INST_NUM	gige_loopback.c	197;"	d	file:
+INCLUDES	makefile	/^INCLUDES =  -I. -I$(API_DIR) -I$(VENEER_DIR) -I$(BOARD_DIR) -I$(BOARD_WDS_COMMON_DIR) -I$(WINUTIL_DIR) \\$/;"	m
+INST_NUM	gige_loopback.c	204;"	d	file:
 INST_NUM	wt_new_automation.c	265;"	d	file:
 INST_NUM	wt_new_automation.h	30;"	d
-INVALID_SOCKET	gige_loopback.c	205;"	d	file:
+INVALID_SOCKET	gige_loopback.c	212;"	d	file:
 INVALID_SOCKET	wt_new_automation.c	273;"	d	file:
 INVALID_SOCKET	wt_new_automation.h	38;"	d
 InitBoard	gige_loopback.c	/^void InitBoard ()$/;"	f
@@ -173,103 +172,104 @@ LWIP_COMPAT_SOCKETS	wt_new_automation.c	128;"	d	file:
 Leaf	gige_loopback.c	/^      Y_MnuLeafP Leaf;$/;"	m	union:__anon2::__anon3	file:
 Leaf	wt_new_automation.c	/^      Y_MnuLeafP     Leaf;$/;"	m	union:__anon9::__anon10	file:
 Leaf	wt_new_automation.h	/^      Y_MnuLeafP     Leaf;$/;"	m	union:__anon6::__anon7
-MANUAL	gige_loopback.c	188;"	d	file:
+MANUAL	gige_loopback.c	195;"	d	file:
 MANUAL	wt_new_automation.c	256;"	d	file:
 MANUAL	wt_new_automation.h	21;"	d
-MAP_GS_IC_INTMODE	gige_loopback.c	215;"	d	file:
+MAP_GS_IC_INTMODE	gige_loopback.c	222;"	d	file:
 MAP_GS_IC_INTMODE	wt_new_automation.c	283;"	d	file:
 MAP_GS_IC_INTMODE	wt_new_automation.h	48;"	d
-MAP_GS_IC_SEIR	gige_loopback.c	209;"	d	file:
+MAP_GS_IC_SEIR	gige_loopback.c	216;"	d	file:
 MAP_GS_IC_SEIR	wt_new_automation.c	277;"	d	file:
 MAP_GS_IC_SEIR	wt_new_automation.h	42;"	d
-MAP_GS_IC_SEMR0	gige_loopback.c	210;"	d	file:
+MAP_GS_IC_SEMR0	gige_loopback.c	217;"	d	file:
 MAP_GS_IC_SEMR0	wt_new_automation.c	278;"	d	file:
 MAP_GS_IC_SEMR0	wt_new_automation.h	43;"	d
-MAP_GS_IC_SEMR1	gige_loopback.c	211;"	d	file:
+MAP_GS_IC_SEMR1	gige_loopback.c	218;"	d	file:
 MAP_GS_IC_SEMR1	wt_new_automation.c	279;"	d	file:
 MAP_GS_IC_SEMR1	wt_new_automation.h	44;"	d
-MAP_GS_IC_SYIR	gige_loopback.c	208;"	d	file:
+MAP_GS_IC_SYIR	gige_loopback.c	215;"	d	file:
 MAP_GS_IC_SYIR	wt_new_automation.c	276;"	d	file:
 MAP_GS_IC_SYIR	wt_new_automation.h	41;"	d
-MAP_GS_IC_SYMR0	gige_loopback.c	212;"	d	file:
+MAP_GS_IC_SYMR0	gige_loopback.c	219;"	d	file:
 MAP_GS_IC_SYMR0	wt_new_automation.c	280;"	d	file:
 MAP_GS_IC_SYMR0	wt_new_automation.h	45;"	d
-MAP_GS_IC_SYMR1	gige_loopback.c	213;"	d	file:
+MAP_GS_IC_SYMR1	gige_loopback.c	220;"	d	file:
 MAP_GS_IC_SYMR1	wt_new_automation.c	281;"	d	file:
 MAP_GS_IC_SYMR1	wt_new_automation.h	46;"	d
-MAX_CONTROL_STRING_SIZE	gige_loopback.c	199;"	d	file:
+MAX_CONTROL_STRING_SIZE	gige_loopback.c	206;"	d	file:
 MAX_CONTROL_STRING_SIZE	wt_new_automation.c	267;"	d	file:
 MAX_CONTROL_STRING_SIZE	wt_new_automation.h	32;"	d
-MAX_TTL_FILE_SIZE	gige_loopback.c	198;"	d	file:
+MAX_TTL_FILE_SIZE	gige_loopback.c	205;"	d	file:
 MAX_TTL_FILE_SIZE	wt_new_automation.c	266;"	d	file:
 MAX_TTL_FILE_SIZE	wt_new_automation.h	31;"	d
-MSGMAXSIZE	gige_loopback.c	202;"	d	file:
+MORRIS_HEADER_FILES	makefile	/^MORRIS_HEADER_FILES = $(WPI_WDDS_DIR)\/wddi\/sources\/winutil\/api\/include\/winpath3\/$/;"	m
+MORRIS_HEADER_FILES_2	makefile	/^MORRIS_HEADER_FILES_2 = $(WPI_WDDS_DIR)\/wddi\/sources\/winutil\/api\/include\/$/;"	m
+MSGMAXSIZE	gige_loopback.c	209;"	d	file:
 MSGMAXSIZE	wt_new_automation.c	270;"	d	file:
 MSGMAXSIZE	wt_new_automation.h	35;"	d
 Menu	gige_loopback.c	/^      void *Menu;$/;"	m	union:__anon2::__anon3	file:
 Menu	wt_new_automation.c	/^      void           *Menu;$/;"	m	union:__anon9::__anon10	file:
 Menu	wt_new_automation.h	/^      void           *Menu;$/;"	m	union:__anon6::__anon7
 NO_INPUT	wt_debug_menu.c	63;"	d	file:
-NO_OF_THREADS	gige_loopback.c	360;"	d	file:
+NO_OF_THREADS	gige_loopback.c	367;"	d	file:
 NO_OF_THREADS	wt_debug_menu.h	30;"	d
 Node	gige_loopback.c	/^   } Node;$/;"	m	struct:__anon2	typeref:union:__anon2::__anon3	file:
 Node	wt_new_automation.c	/^   }  Node;$/;"	m	struct:__anon9	typeref:union:__anon9::__anon10	file:
 Node	wt_new_automation.h	/^   }  Node;$/;"	m	struct:__anon6	typeref:union:__anon6::__anon7
 OBJ_DIR	makefile	/^OBJ_DIR = $(TEST_DIR)\/bin$/;"	m
-OK	gige_loopback.c	227;"	d	file:
-OK	gige_loopback.c	230;"	d	file:
+OK	gige_loopback.c	234;"	d	file:
+OK	gige_loopback.c	237;"	d	file:
 OK	wt_new_automation.c	296;"	d	file:
 OK	wt_new_automation.c	299;"	d	file:
 OK	wt_new_automation.h	61;"	d
 OK	wt_new_automation.h	64;"	d
-PERF_MENU_SIZE	gige_loopback.c	366;"	d	file:
-PERF_MENU_SIZE	gige_loopback.c	369;"	d	file:
+PERF_MENU_SIZE	gige_loopback.c	373;"	d	file:
+PERF_MENU_SIZE	gige_loopback.c	376;"	d	file:
 PERF_MENU_SIZE	wt_debug_menu.h	36;"	d
 PERF_MENU_SIZE	wt_debug_menu.h	39;"	d
-PHY_BOARD_LIB_DIR	makefile	/^PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)\/$(WPI_BOARD)\/lib$/;"	m
+PHY_BOARD_LIB_DIR	makefile	/^PHY_BOARD_LIB_DIR = $(WPI_HT_DIR)\/$(WPI_APP_BOARD)\/lib$/;"	m
 PHY_DIR	makefile	/^PHY_DIR = $(WDDI_DIR)\/phy$/;"	m
-PHY_LIB	makefile	/^PHY_LIB = $(PHY_BOARD_LIB_DIR)\/wpx_phy.a$/;"	m
-POOL_LIMIT	gige_loopback.c	576;"	d	file:
-PRINT_STAT_FIELD	gige_loopback.c	153;"	d	file:
+POOL_LIMIT	gige_loopback.c	583;"	d	file:
+PRINT_STAT_FIELD	gige_loopback.c	160;"	d	file:
 PRINT_STAT_FIELD	wt_util.h	62;"	d
-QUEUESIZE	gige_loopback.c	200;"	d	file:
+QUEUESIZE	gige_loopback.c	207;"	d	file:
 QUEUESIZE	wt_new_automation.c	268;"	d	file:
 QUEUESIZE	wt_new_automation.h	33;"	d
 RA_WDDI_VERS	makefile	/^RA_WDDI_VERS    = 4 # my own variable, because wddi 3 and 4 have slight compilation differences$/;"	m
-REGULAR	gige_loopback.c	192;"	d	file:
+REGULAR	gige_loopback.c	199;"	d	file:
 REGULAR	wt_new_automation.c	260;"	d	file:
 REGULAR	wt_new_automation.h	25;"	d
-SERVER_PORT	gige_loopback.c	201;"	d	file:
+SERVER_PORT	gige_loopback.c	208;"	d	file:
 SERVER_PORT	wt_new_automation.c	269;"	d	file:
 SERVER_PORT	wt_new_automation.h	34;"	d
-SOCKET_ERROR	gige_loopback.c	206;"	d	file:
+SOCKET_ERROR	gige_loopback.c	213;"	d	file:
 SOCKET_ERROR	wt_new_automation.c	274;"	d	file:
 SOCKET_ERROR	wt_new_automation.h	39;"	d
-SPECIAL	gige_loopback.c	193;"	d	file:
+SPECIAL	gige_loopback.c	200;"	d	file:
 SPECIAL	wt_new_automation.c	261;"	d	file:
 SPECIAL	wt_new_automation.h	26;"	d
 SPECIAL_FLAG	makefile	/^SPECIAL_FLAG = -lpthread$/;"	m
-START_SCHEDULER	gige_loopback.c	511;"	d	file:
-STATUS	gige_loopback.c	392;"	d	file:
-STATUS	gige_loopback.c	394;"	d	file:
+START_SCHEDULER	gige_loopback.c	518;"	d	file:
+STATUS	gige_loopback.c	399;"	d	file:
+STATUS	gige_loopback.c	401;"	d	file:
 STATUS	wt_debug_menu.h	63;"	d
 STATUS	wt_debug_menu.h	65;"	d
 STRINGIFY	wt_util.h	78;"	d
 STRINGIFY_	wt_util.h	79;"	d
-STR_ENTER_COMMAND	gige_loopback.c	251;"	d	file:
+STR_ENTER_COMMAND	gige_loopback.c	258;"	d	file:
 STR_ENTER_COMMAND	wt_new_automation.c	320;"	d	file:
 STR_ENTER_COMMAND	wt_new_automation.h	85;"	d
-STR_HOT_KEYS	gige_loopback.c	250;"	d	file:
+STR_HOT_KEYS	gige_loopback.c	257;"	d	file:
 STR_HOT_KEYS	wt_new_automation.c	319;"	d	file:
 STR_HOT_KEYS	wt_new_automation.h	84;"	d
-STR_MENU_ERR	gige_loopback.c	252;"	d	file:
+STR_MENU_ERR	gige_loopback.c	259;"	d	file:
 STR_MENU_ERR	wt_new_automation.c	321;"	d	file:
 STR_MENU_ERR	wt_new_automation.h	86;"	d
 STR_MENU_HDR	gige_loopback.c	/^char *STR_MENU_HDR = { "  GigE Loopback Test" };$/;"	v
-STR_STAR	gige_loopback.c	249;"	d	file:
+STR_STAR	gige_loopback.c	256;"	d	file:
 STR_STAR	wt_new_automation.c	318;"	d	file:
 STR_STAR	wt_new_automation.h	83;"	d
-SYSTEM_ONE_MAX_FLOWS	gige_loopback.c	577;"	d	file:
+SYSTEM_ONE_MAX_FLOWS	gige_loopback.c	584;"	d	file:
 SetDebugUpperMenu	wt_debug_menu.c	/^void SetDebugUpperMenu (Y_MenuEntry * MenuPtr)$/;"	f
 SetFileName	wt_debug_menu.c	/^void SetFileName (WP_CHAR * str)$/;"	f
 StatField	wt_statistics_functions.c	/^typedef union StatField$/;"	u	file:
@@ -280,21 +280,21 @@ TEST_NAME	makefile	/^TEST_NAME = $(basename $(TEST))$/;"	m
 TEST_OBJ	makefile	/^TEST_OBJ = $(patsubst %.c, $(OBJ_DIR)\/%.o, $(TEST_NAME).c)$/;"	m
 TLOG_FUNCTION	makefile	/^TLOG_FUNCTION = WT_LOG_PRINTF$/;"	m
 TLOG_LEVEL	makefile	/^TLOG_LEVEL=1$/;"	m
-TRACE_MENU_SIZE	gige_loopback.c	375;"	d	file:
-TRACE_MENU_SIZE	gige_loopback.c	378;"	d	file:
+TRACE_MENU_SIZE	gige_loopback.c	382;"	d	file:
+TRACE_MENU_SIZE	gige_loopback.c	385;"	d	file:
 TRACE_MENU_SIZE	wt_debug_menu.h	45;"	d
 TRACE_MENU_SIZE	wt_debug_menu.h	48;"	d
 TRSserials	wt_debug_menu.c	/^const display_cmd TRSserials[] = {$/;"	v
-TRUE	gige_loopback.c	236;"	d	file:
 TRUE	gige_loopback.c	243;"	d	file:
+TRUE	gige_loopback.c	250;"	d	file:
 TRUE	wt_new_automation.c	305;"	d	file:
 TRUE	wt_new_automation.c	312;"	d	file:
 TRUE	wt_new_automation.h	70;"	d
 TRUE	wt_new_automation.h	77;"	d
-TRUE_M	gige_loopback.c	245;"	d	file:
+TRUE_M	gige_loopback.c	252;"	d	file:
 TRUE_M	wt_new_automation.c	314;"	d	file:
 TRUE_M	wt_new_automation.h	79;"	d
-TTL	gige_loopback.c	194;"	d	file:
+TTL	gige_loopback.c	201;"	d	file:
 TTL	wt_new_automation.c	262;"	d	file:
 TTL	wt_new_automation.h	27;"	d
 TranslateAsciiToHex	wt_new_automation.c	/^void TranslateAsciiToHex(WP_U8 *Hex,WP_CHAR *Ascii,WP_U32 length)$/;"	f
@@ -302,17 +302,19 @@ TranslateHexToAscii	wt_new_automation.c	/^void TranslateHexToAscii(WP_CHAR *Hex,
 Type	gige_loopback.c	/^   E_MenuNodeType Type;$/;"	m	struct:__anon2	file:
 Type	wt_new_automation.c	/^   E_MenuNodeType    Type;$/;"	m	struct:__anon9	file:
 Type	wt_new_automation.h	/^   E_MenuNodeType    Type;$/;"	m	struct:__anon6
+UFE4_EVENTS_OBJ	makefile	/^UFE4_EVENTS_OBJ = $(WPI_UFE4_OBJ)\/wufei_events.o$/;"	m
 UFE4_FPGA_DIR	makefile	/^UFE4_FPGA_DIR = $(WPX_UFE_DIR)\/fpga\/ufe4$/;"	m
 UFE_API_DIR	makefile	/^UFE_API_DIR = $(WPX_UFE_DIR)\/api$/;"	m
-UFE_DIR	makefile	/^UFE_DIR = $(WDDI_DIR)\/phy\/wpx_ufe$/;"	m
-UFE_FRAMER_DIR	makefile	/^UFE_FRAMER_DIR = $(UFE_DIR)\/wpx_frmr\/flexmux$/;"	m
-UFE_FRAMER_INC	makefile	/^UFE_FRAMER_INC = -I$(UFE_FRMR_DIR)\/flexmux -I$(UFE_FRMR_DIR) -I$(UFE_FRMR_FLEXMUX_DIR) -I$(UFE_FRMR_FLEXMUX_DIR)\/common\/inc -I$(UFE_FRMR_FLEXMUX_DIR)\/library\/00_api_layer\/inc -I$(UFE_FRMR_FLEXMUX_DIR)\/library\/04_low_level_comms_layer\/inc$/;"	m
-UFE_FRMR_DIR	makefile	/^UFE_FRMR_DIR = $(WPX_UFE_DIR)\/wpx_frmr$/;"	m
+UFE_DIR	makefile	/^UFE_DIR = $(WPI_WDDS_DIR)\/ufe$/;"	m
+UFE_FRAMER_DIR	makefile	/^UFE_FRAMER_DIR = $(WPX_UFE_DIR)\/wpx_frmr\/device_driver$/;"	m
+UFE_FRAMER_INC	makefile	/^UFE_FRAMER_INC = -I$(UFE_FRAMER_DIR) -I$(UFE_FRAMER_DIR)\/library\/00_api_layer\/inc -I$(UFE_FRAMER_DIR)\/library\/04_low_level_comms_layer\/inc -I$(UFE_FRAMER_DIR)\/common\/inc$/;"	m
+UFE_FRAMER_LIB	makefile	/^UFE_FRAMER_LIB = $(UFE_LIB_DIR)\/wpx_phy_ufe_framer.a$/;"	m
 UFE_FRMR_FLEXMUX_DIR	makefile	/^UFE_FRMR_FLEXMUX_DIR = $(UFE_FRMR_DIR)\/device_driver$/;"	m
 UFE_INC	makefile	/^UFE_INC = -I$(UFE_API_DIR) -I$(UFE4_FPGA_DIR)$/;"	m
+UFE_LIB	makefile	/^UFE_LIB = $(UFE_LIB_DIR)\/wpx_ufe.a$/;"	m
 UFE_LIB_DIR	makefile	/^UFE_LIB_DIR = $(PHY_BOARD_LIB_DIR)\/..\/$(UFE_TYPE)\/lib$/;"	m
 UFE_TYPE	makefile	/^UFE_TYPE        = ufe412$/;"	m
-USE_MULTI_THREADING_FINE_GRAIN_LOCKING_WDDI	gige_loopback.c	358;"	d	file:
+USE_MULTI_THREADING_FINE_GRAIN_LOCKING_WDDI	gige_loopback.c	365;"	d	file:
 USE_MULTI_THREADING_FINE_GRAIN_LOCKING_WDDI	wt_debug_menu.h	28;"	d
 VENEER_DIR	makefile	/^VENEER_DIR = $(WDDI_DIR)\/sources\/veneer$/;"	m
 V_CurrMenuP	wt_new_automation.c	/^static Y_MenuEntry *V_CurrMenuP = &V_MainMenu[0];$/;"	v	file:
@@ -338,8 +340,8 @@ WDDI_LIB_DIR	makefile	/^WDDI_LIB_DIR = $(WPI_HT_DIR)\/lib$/;"	m
 WDDI_SOURCES	makefile	/^WDDI_SOURCES = \/sources$/;"	m
 WDDS_OBJECTS	makefile	/^WDDS_OBJECTS = objects$/;"	m
 WEB_7SEG_DISP	wt_new_automation.c	228;"	d	file:
-WEB_CPLD_LED_1	gige_loopback.c	219;"	d	file:
-WEB_CPLD_LED_1	gige_loopback.c	221;"	d	file:
+WEB_CPLD_LED_1	gige_loopback.c	226;"	d	file:
+WEB_CPLD_LED_1	gige_loopback.c	228;"	d	file:
 WEB_CPLD_LED_1	wt_new_automation.c	287;"	d	file:
 WEB_CPLD_LED_1	wt_new_automation.c	289;"	d	file:
 WEB_CPLD_LED_1	wt_new_automation.h	52;"	d
@@ -359,9 +361,9 @@ WEB_WINPATH_BASE	wt_new_automation.c	217;"	d	file:
 WEB_WINPATH_BASE	wt_new_automation.c	221;"	d	file:
 WEB_WINPATH_MASK	wt_new_automation.c	226;"	d	file:
 WEB_WINPATH_SIZE	wt_new_automation.c	225;"	d	file:
-WINFARM_NUMBER	gige_loopback.c	383;"	d	file:
-WINFARM_NUMBER	gige_loopback.c	385;"	d	file:
-WINFARM_NUMBER	gige_loopback.c	388;"	d	file:
+WINFARM_NUMBER	gige_loopback.c	390;"	d	file:
+WINFARM_NUMBER	gige_loopback.c	392;"	d	file:
+WINFARM_NUMBER	gige_loopback.c	395;"	d	file:
 WINFARM_NUMBER	wt_debug_menu.h	54;"	d
 WINFARM_NUMBER	wt_debug_menu.h	56;"	d
 WINFARM_NUMBER	wt_debug_menu.h	59;"	d
@@ -375,96 +377,103 @@ WPE_PrintFlowStats	wt_statistics_functions.c	/^void WPE_PrintFlowStats(WP_handle
 WPE_PrintIWPortStats	wt_statistics_functions.c	/^void WPE_PrintIWPortStats(WP_handle iw_port_handle, WP_route_port_stats* iwport_stats)$/;"	f
 WPE_PrintStatHsEnet	wt_statistics_functions.c	/^void WPE_PrintStatHsEnet(WP_handle hs_device, WP_stats_enet* enet_stats)$/;"	f
 WPE_StatField	wt_statistics_functions.c	/^} WPE_StatField;$/;"	t	typeref:union:StatField	file:
-WPI_BOARD	makefile	/^WPI_BOARD  	= wds$/;"	m
-WPI_GPIO	wt_util.c	161;"	d	file:
+WPI_APP_BOARD	makefile	/^WPI_APP_BOARD  	?= wds$/;"	m
+WPI_APP_BOARD	makefile	/^WPI_APP_BOARD      = wds$/;"	m
+WPI_APP_BOARD	makefile	/^WPI_APP_BOARD      = wds_sl$/;"	m
+WPI_APP_HW_DEVICE	makefile	/^WPI_APP_HW_DEVICE       = winpath2$/;"	m
+WPI_APP_HW_DEVICE	makefile	/^WPI_APP_HW_DEVICE       = winpath3$/;"	m
+WPI_APP_HW_DEVICE	makefile	/^WPI_APP_HW_DEVICE       ?= winpath3$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET 	= mips_linux_$(WPI_APP_HW_DEVICE)$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET 	= mips_winmon_$(WPI_APP_HW_DEVICE)$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET 	?= mips_winmon$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET     = mips_linux$/;"	m
+WPI_APP_TARGET	makefile	/^WPI_APP_TARGET     = mips_winmon$/;"	m
+WPI_GPIO	wt_util.c	168;"	d	file:
 WPI_HOST	makefile	/^WPI_HOST   	= linux$/;"	m
-WPI_HTB_DIR	makefile	/^WPI_HTB_DIR = $(WPI_HT_DIR)\/$(WPI_BOARD)$/;"	m
-WPI_HT_DIR	makefile	/^WPI_HT_DIR = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)$/;"	m
-WPI_PLATFORM_DIR	makefile	/^WPI_PLATFORM_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
-WPI_START_FILE	makefile	/^WPI_START_FILE = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib$/;"	m
-WPI_TARGET	makefile	/^WPI_TARGET 	= mips_linux_$(HW_DEVICE)$/;"	m
-WPI_TARGET	makefile	/^WPI_TARGET 	= mips_winmon$/;"	m
-WPI_TARGET	makefile	/^WPI_TARGET 	= mips_winmon_$(HW_DEVICE)$/;"	m
-WPI_TARGET_MIPS_LINUX	gige_loopback.c	134;"	d	file:
+WPI_HTB_DIR	makefile	/^WPI_HTB_DIR = $(WPI_HT_DIR)\/$(WPI_APP_BOARD)$/;"	m
+WPI_HT_DIR	makefile	/^WPI_HT_DIR = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_APP_TARGET)$/;"	m
+WPI_PLATFORM_DIR	makefile	/^WPI_PLATFORM_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_APP_TARGET)$/;"	m
+WPI_START_FILE	makefile	/^WPI_START_FILE = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_APP_TARGET)\/lib$/;"	m
+WPI_TARGET_MIPS_LINUX	gige_loopback.c	145;"	d	file:
 WPI_TARGET_MIPS_LINUX	wt_util.h	48;"	d
-WPI_TARGET_MIPS_LINUX_AUTO_MEMMAP	gige_loopback.c	138;"	d	file:
+WPI_TARGET_MIPS_LINUX_AUTO_MEMMAP	gige_loopback.c	149;"	d	file:
 WPI_TARGET_MIPS_LINUX_AUTO_MEMMAP	wt_util.h	52;"	d
-WPI_TARGET_MIPS_WEB2_VXWORKS	gige_loopback.c	133;"	d	file:
+WPI_TARGET_MIPS_WEB2_VXWORKS	gige_loopback.c	144;"	d	file:
 WPI_TARGET_MIPS_WEB2_VXWORKS	wt_util.h	47;"	d
-WPI_TARGET_MIPS_WEB2_WINMON	gige_loopback.c	132;"	d	file:
+WPI_TARGET_MIPS_WEB2_WINMON	gige_loopback.c	143;"	d	file:
 WPI_TARGET_MIPS_WEB2_WINMON	wt_util.h	46;"	d
-WPI_TARGET_MIPS_WEB_KMODULE	gige_loopback.c	131;"	d	file:
+WPI_TARGET_MIPS_WEB_KMODULE	gige_loopback.c	142;"	d	file:
 WPI_TARGET_MIPS_WEB_KMODULE	wt_util.h	45;"	d
-WPI_TARGET_MIPS_WEB_LINUX	gige_loopback.c	130;"	d	file:
+WPI_TARGET_MIPS_WEB_LINUX	gige_loopback.c	141;"	d	file:
 WPI_TARGET_MIPS_WEB_LINUX	wt_util.h	44;"	d
-WPI_TARGET_MIPS_WEB_VXWORKS	gige_loopback.c	117;"	d	file:
+WPI_TARGET_MIPS_WEB_VXWORKS	gige_loopback.c	128;"	d	file:
 WPI_TARGET_MIPS_WEB_VXWORKS	wt_util.h	31;"	d
-WPI_TARGET_MIPS_WEB_VXWORKS_DUAL	gige_loopback.c	127;"	d	file:
+WPI_TARGET_MIPS_WEB_VXWORKS_DUAL	gige_loopback.c	138;"	d	file:
 WPI_TARGET_MIPS_WEB_VXWORKS_DUAL	wt_util.h	41;"	d
-WPI_TARGET_MIPS_WEB_WINMON	gige_loopback.c	118;"	d	file:
+WPI_TARGET_MIPS_WEB_WINMON	gige_loopback.c	129;"	d	file:
 WPI_TARGET_MIPS_WEB_WINMON	wt_util.h	32;"	d
-WPI_TARGET_MIPS_WEB_WINMON_DUAL	gige_loopback.c	128;"	d	file:
+WPI_TARGET_MIPS_WEB_WINMON_DUAL	gige_loopback.c	139;"	d	file:
 WPI_TARGET_MIPS_WEB_WINMON_DUAL	wt_util.h	42;"	d
-WPI_TARGET_MIPS_WEB_WINMON_GDB	gige_loopback.c	121;"	d	file:
+WPI_TARGET_MIPS_WEB_WINMON_GDB	gige_loopback.c	132;"	d	file:
 WPI_TARGET_MIPS_WEB_WINMON_GDB	wt_util.h	35;"	d
-WPI_TARGET_MIPS_WINMON	gige_loopback.c	119;"	d	file:
+WPI_TARGET_MIPS_WINMON	gige_loopback.c	130;"	d	file:
 WPI_TARGET_MIPS_WINMON	wt_util.h	33;"	d
-WPI_TARGET_MIPS_WINMON_AUTO_MEMMAP	gige_loopback.c	137;"	d	file:
+WPI_TARGET_MIPS_WINMON_AUTO_MEMMAP	gige_loopback.c	148;"	d	file:
 WPI_TARGET_MIPS_WINMON_AUTO_MEMMAP	wt_util.h	51;"	d
-WPI_TARGET_MIPS_WINMON_WINPATH3	gige_loopback.c	120;"	d	file:
+WPI_TARGET_MIPS_WINMON_WINPATH3	gige_loopback.c	131;"	d	file:
 WPI_TARGET_MIPS_WINMON_WINPATH3	wt_util.h	34;"	d
-WPI_TARGET_PPC_LINUX	gige_loopback.c	136;"	d	file:
+WPI_TARGET_PPC_LINUX	gige_loopback.c	147;"	d	file:
 WPI_TARGET_PPC_LINUX	wt_util.h	50;"	d
-WPI_TARGET_PPC_WEB2_VXWORKS	gige_loopback.c	135;"	d	file:
+WPI_TARGET_PPC_WEB2_VXWORKS	gige_loopback.c	146;"	d	file:
 WPI_TARGET_PPC_WEB2_VXWORKS	wt_util.h	49;"	d
-WPI_TARGET_PPC_WEB_VXWORKS	gige_loopback.c	122;"	d	file:
+WPI_TARGET_PPC_WEB_VXWORKS	gige_loopback.c	133;"	d	file:
 WPI_TARGET_PPC_WEB_VXWORKS	wt_util.h	36;"	d
-WPI_TARGET_PPC_WEB_VXWORKS_DUAL	gige_loopback.c	129;"	d	file:
+WPI_TARGET_PPC_WEB_VXWORKS_DUAL	gige_loopback.c	140;"	d	file:
 WPI_TARGET_PPC_WEB_VXWORKS_DUAL	wt_util.h	43;"	d
-WPI_TARGET_PPC_WEB_WINMON	gige_loopback.c	123;"	d	file:
+WPI_TARGET_PPC_WEB_WINMON	gige_loopback.c	134;"	d	file:
 WPI_TARGET_PPC_WEB_WINMON	wt_util.h	37;"	d
-WPI_TARGET_PPC_WINMON	gige_loopback.c	124;"	d	file:
+WPI_TARGET_PPC_WINMON	gige_loopback.c	135;"	d	file:
 WPI_TARGET_PPC_WINMON	wt_util.h	38;"	d
-WPI_TARGET_VERILOG	gige_loopback.c	125;"	d	file:
+WPI_TARGET_VERILOG	gige_loopback.c	136;"	d	file:
 WPI_TARGET_VERILOG	wt_util.h	39;"	d
-WPI_TARGET_WINSIM	gige_loopback.c	126;"	d	file:
+WPI_TARGET_WINSIM	gige_loopback.c	137;"	d	file:
 WPI_TARGET_WINSIM	wt_util.h	40;"	d
-WPI_T_DIR	makefile	/^WPI_T_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
+WPI_T_DIR	makefile	/^WPI_T_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_APP_TARGET)$/;"	m
 WPI_UFE4_DIR	makefile	/^WPI_UFE4_DIR = $(WPI_HTB_DIR)\/$(UFE_TYPE)$/;"	m
 WPI_UFE4_OBJ	makefile	/^WPI_UFE4_OBJ = $(WPI_UFE4_DIR)\/obj$/;"	m
 WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..\/..\/..$/;"	m
-WPX_UFE_DIR	makefile	/^WPX_UFE_DIR = $(PHY_DIR)\/wpx_ufe$/;"	m
+WPX_UFE_DIR	makefile	/^WPX_UFE_DIR = $(WPI_WDDS_DIR)\/ufe$/;"	m
 WP_BOARD_NAME	makefile	/^WP_BOARD_NAME=WP_BOARD_WDS3$/;"	m
 WP_HW_WINPATHX	makefile	/^WP_HW_WINPATHX = WP_HW_WINPATH3$/;"	m
-WS_PACKET_LENGTH	gige_loopback.c	203;"	d	file:
+WS_PACKET_LENGTH	gige_loopback.c	210;"	d	file:
 WS_PACKET_LENGTH	wt_new_automation.c	271;"	d	file:
 WS_PACKET_LENGTH	wt_new_automation.h	36;"	d
 WTI_DebugAlloc	wt_debug_menu.c	/^WP_status WTI_DebugAlloc (const WP_CHAR * file, WP_U32 line, WP_U32 bus,$/;"	f
-WTI_MAX	gige_loopback.c	114;"	d	file:
+WTI_MAX	gige_loopback.c	125;"	d	file:
 WTI_MAX	wt_util.h	28;"	d
-WTI_MIN	gige_loopback.c	115;"	d	file:
+WTI_MIN	gige_loopback.c	126;"	d	file:
 WTI_MIN	wt_util.h	29;"	d
-WT_BRG_UPI1	gige_loopback.c	158;"	d	file:
-WT_BRG_UPI1	gige_loopback.c	162;"	d	file:
-WT_BRG_UPI1	gige_loopback.c	166;"	d	file:
+WT_BRG_UPI1	gige_loopback.c	165;"	d	file:
+WT_BRG_UPI1	gige_loopback.c	169;"	d	file:
+WT_BRG_UPI1	gige_loopback.c	173;"	d	file:
 WT_BRG_UPI1	wt_util.h	67;"	d
 WT_BRG_UPI1	wt_util.h	71;"	d
 WT_BRG_UPI1	wt_util.h	75;"	d
-WT_BRG_UPI2	gige_loopback.c	159;"	d	file:
-WT_BRG_UPI2	gige_loopback.c	163;"	d	file:
-WT_BRG_UPI2	gige_loopback.c	167;"	d	file:
+WT_BRG_UPI2	gige_loopback.c	166;"	d	file:
+WT_BRG_UPI2	gige_loopback.c	170;"	d	file:
+WT_BRG_UPI2	gige_loopback.c	174;"	d	file:
 WT_BRG_UPI2	wt_util.h	68;"	d
 WT_BRG_UPI2	wt_util.h	72;"	d
 WT_BRG_UPI2	wt_util.h	76;"	d
 WT_CallTraceCallback	wt_debug_menu.c	/^void WT_CallTraceCallback (WP_CHAR * file, WP_CHAR * function, WP_U32 line)$/;"	f
-WT_DEBUG_CALLBACK	wt_util.c	17;"	d	file:
+WT_DEBUG_CALLBACK	wt_util.c	24;"	d	file:
 WT_DebugCallback	wt_debug_menu.c	/^WP_status WT_DebugCallback (const WP_CHAR * file, const WP_CHAR * function,$/;"	f
-WT_ENET_INTERFACE_1	gige_loopback.c	523;"	d	file:
-WT_ENET_INTERFACE_1	gige_loopback.c	526;"	d	file:
-WT_ENET_INTERFACE_1	gige_loopback.c	532;"	d	file:
-WT_ENET_INTERFACE_2	gige_loopback.c	524;"	d	file:
-WT_ENET_INTERFACE_2	gige_loopback.c	527;"	d	file:
-WT_ENET_INTERFACE_2	gige_loopback.c	533;"	d	file:
+WT_ENET_INTERFACE_1	gige_loopback.c	530;"	d	file:
+WT_ENET_INTERFACE_1	gige_loopback.c	533;"	d	file:
+WT_ENET_INTERFACE_1	gige_loopback.c	539;"	d	file:
+WT_ENET_INTERFACE_2	gige_loopback.c	531;"	d	file:
+WT_ENET_INTERFACE_2	gige_loopback.c	534;"	d	file:
+WT_ENET_INTERFACE_2	gige_loopback.c	540;"	d	file:
 WT_ExampleDebugAreaCallback	wt_debug_menu.c	/^void WT_ExampleDebugAreaCallback (WP_U32 wpid, WP_U32 size_allocated,$/;"	f
 WT_FailAndContinue	wt_util.c	/^void WT_FailAndContinue(void)$/;"	f
 WT_FailAndTerminate	wt_util.c	/^void WT_FailAndTerminate(void)$/;"	f
@@ -472,8 +481,8 @@ WT_Gets	wt_new_automation.c	/^WP_CHAR *WT_Gets(char *str)$/;"	f
 WT_GpioCommit	wt_util.c	/^WP_status WT_GpioCommit(void)$/;"	f
 WT_Identify	wt_util.c	/^void WT_Identify(void)$/;"	f
 WT_ItdmGpioCommit	wt_util.c	/^WP_status WT_ItdmGpioCommit(void)$/;"	f
-WT_LOG	gige_loopback.c	140;"	d	file:
-WT_MAX	gige_loopback.c	112;"	d	file:
+WT_LOG	gige_loopback.c	94;"	d	file:
+WT_MAX	gige_loopback.c	123;"	d	file:
 WT_MAX	wt_util.h	26;"	d
 WT_PassAndContinue	wt_util.c	/^void WT_PassAndContinue(void)$/;"	f
 WT_PassAndTerminate	wt_util.c	/^void WT_PassAndTerminate(void)$/;"	f
@@ -482,8 +491,8 @@ WT_TerminateOnError	wt_util.c	/^void WT_TerminateOnError(WP_handle handle, WP_CH
 WT_TranslateAsciiToHex	wt_util.c	/^void WT_TranslateAsciiToHex(WP_CHAR *Hex, WP_CHAR *Ascii,$/;"	f
 WT_TranslateAsciiToHexGIGEGIGE	gige_loopback.c	/^void WT_TranslateAsciiToHexGIGEGIGE (WP_CHAR * Hex, WP_CHAR * Ascii,$/;"	f
 WT_WddiLogged	wt_debug_menu.c	/^WP_status WT_WddiLogged (WP_S32 level, const WP_CHAR * string)$/;"	f
-WU_ALL_MENU_SIZE	gige_loopback.c	365;"	d	file:
-WU_ALL_MENU_SIZE	gige_loopback.c	368;"	d	file:
+WU_ALL_MENU_SIZE	gige_loopback.c	372;"	d	file:
+WU_ALL_MENU_SIZE	gige_loopback.c	375;"	d	file:
 WU_ALL_MENU_SIZE	wt_debug_menu.h	35;"	d
 WU_ALL_MENU_SIZE	wt_debug_menu.h	38;"	d
 WriteToFile	wt_debug_menu.c	/^void WriteToFile (WP_CHAR * str)$/;"	f
@@ -493,15 +502,19 @@ Y_MenuEntry	wt_new_automation.h	/^}  Y_MenuEntry;$/;"	t	typeref:struct:__anon6
 Y_MnuLeafP	gige_loopback.c	/^typedef void (*Y_MnuLeafP) (char *);$/;"	t	file:
 Y_MnuLeafP	wt_new_automation.c	/^typedef void (*Y_MnuLeafP) (char *);$/;"	t	file:
 Y_MnuLeafP	wt_new_automation.h	/^typedef void (*Y_MnuLeafP) (char *);$/;"	t
+_GIGE_LOOPBACK_C__	gige_loopback.c	10;"	d	file:
 _WEB_H	wt_new_automation.c	201;"	d	file:
 _WT_DEBUG_MENU_C_	wt_debug_menu.c	2;"	d	file:
-_WT_DEBUG_MENU_H_	gige_loopback.c	356;"	d	file:
+_WT_DEBUG_MENU_H_	gige_loopback.c	363;"	d	file:
 _WT_DEBUG_MENU_H_	wt_debug_menu.h	26;"	d
-_WT_NEW_AUTOMATION_	gige_loopback.c	183;"	d	file:
+_WT_NEW_AUTOMATION_	gige_loopback.c	190;"	d	file:
 _WT_NEW_AUTOMATION_	wt_new_automation.c	251;"	d	file:
 _WT_NEW_AUTOMATION_	wt_new_automation.h	16;"	d
-_WT_UTIL	gige_loopback.c	94;"	d	file:
+_WT_STATISTICS_H__	wt_statistics_functions.h	2;"	d
+_WT_UTIL	gige_loopback.c	106;"	d	file:
 _WT_UTIL	wt_util.h	10;"	d
+__WT_STATISTICS_C__	wt_statistics_functions.c	10;"	d	file:
+__WT_UTIL_C__	wt_util.c	9;"	d	file:
 __asix__	wt_new_automation.c	145;"	d	file:
 __dm9k__	wt_new_automation.c	147;"	d	file:
 __wintegra__	wt_new_automation.c	149;"	d	file:

@@ -5134,6 +5134,8 @@ void WTI_FlowAggregationTdm2PsnConfig(WP_iw_agg_cesop *cfg_ptr, int pw_index, in
 
 #endif /* (!WTI_CESOP_NATIVE_MPLS_IW && !WTI_CESOP_TO_MPLS_FA_CASCADING) */
 
+#if MORRIS_MPLS_LABEL
+#endif
    /* set mpls label */
    /* if wish to give offset add to pw_index here: */
    mpls_label = WTI_MPLS_LABEL + ((pw_index)<< 12);
