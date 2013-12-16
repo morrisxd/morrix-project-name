@@ -9,18 +9,27 @@ then
    surfix='wilbur'
 fi
 
+hostname | grep "ubuntu"
+if test $? -eq 0
+then
+   echo "this is in vmware player"
+   surfix='vmplayer'
+fi
+echo surfix=$surfix
 
 hn=`hostname`
 echo hostname=[$hn]
 
-if [ $hn = "ubuntu" ]; then
+
+if [ $hn = 'ubuntu' ]
+then
 	filepath=/mnt/hgfs/Temp/
 else
 	filepath=/tftpboot/
 fi 
 
 filename=pwe3_satop_cesop_demo_${surfix}.exe
-
+echo filename=$filename
 # exit
 
 echo touch pwe3_satop_cesop_demo.c 
@@ -36,6 +45,7 @@ UFE_DIR=../ufe \
 UFE=ufe412 \
 FRAMER=flexmux
 echo =========================================
+
 
 make WDDS_DIR=../ \
 WDDI_TARGET_NAME=mips_winmon \
