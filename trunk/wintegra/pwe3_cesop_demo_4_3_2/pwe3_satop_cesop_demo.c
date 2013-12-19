@@ -233,7 +233,11 @@
 #ifdef WP_BOARD_WDS3_SL
 #define WTI_ENET_PORT                               WP_PORT_ENET11      /* ENET port */
 #else   /* NOT  WP_BOARD_WDS3_SL */
+#if 	MORRIS_USE_ENET
+#define WTI_ENET_PORT                               WP_PORT_ENET7      /* ENET port */
+#else
 #define WTI_ENET_PORT                               WP_PORT_ENET13      /* ENET port */
+#endif
 #endif  /* NOT WP_BOARD_WDS3_SL */
 #define WTI_ENET_TYPE                               WP_ENET_1000_BASE_X /* WP_ENET_1000_BASE_X or  WP_ENET_1000_BASE_X_AN */
 #define WTI_GMII_TYPE                               WTI_GMII_OV_FIBER
@@ -10305,6 +10309,7 @@ void CLI_F_PwCreate(char *StrPrm)
  * Input      :
  * OutPut     :
  * Return Val :
+ *	- WTI_PwCreate()
  ***************************************************************/
 void CLI_F_PwCreateCascaded(char *StrPrm)
 {
@@ -14617,6 +14622,7 @@ void CLI_F_MplsFlowAggCreate(char *StrPrm)
           &mpls_layer2_agg_cfg.mpls_push_headers[0],
           WTI_MPLS_LABEL_SIZE);
    mpls_flow_cfg.mpls_label >>= 12;	// morris: start from 10541
+   mpls_flow_cfg.mpls_label += MORRIS_MPLS_INCREAMENT2;	// morris: start from 10541
 #if MORRIS_MPLS_LABEL
    // mpls_label = 0x10541 as original value from the parameter
 #endif
