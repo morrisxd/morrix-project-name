@@ -1,0 +1,1915 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+AIS	np_common.h	/^    u8 AIS;$/;"	m	struct:STRU_STM1_E1T1_ALARM_INFO_TAG
+AIS_CI	np_common.h	/^    u8 AIS_CI;$/;"	m	struct:STRU_STM1_E1T1_ALARM_INFO_TAG
+ARGLIST_BUFLEN	xml_operation.c	47;"	d	file:
+ARGV_MAX_CHARACTERS	xml_operation.c	48;"	d	file:
+ATTACH_CLIENT_SIG	spp_wddi_common.h	93;"	d
+ATTACH_NPUMON_SIG	spp_wddi_common.h	118;"	d
+ATTACH_SERVER_SIG	spp_wddi_common.h	92;"	d
+ATTRIBUTE_POS	xml_operation.c	55;"	d	file:
+AppRxEvent	np_app.c	/^static void AppRxEvent(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f	file:
+BFD_OVERETH	np_common.h	45;"	d
+BPORT_DEFAULT_VLAN_TAG	np_common.h	113;"	d
+BVCI	spp_npu_link.h	/^	u16 BVCI;             \/*bvci used in downlink classify*\/$/;"	m	struct:STRU_SET_DOWNLINK_PATH_RULE_TAG
+BVCI	spp_npu_link.h	/^	u16 BVCI;$/;"	m	struct:STRU_DELETE_DOWNLINK_PATH_RULE_TAG
+BVCI	spp_npu_link.h	/^    BVCI$/;"	e	enum:__anon28
+BVCInew	spp_npu_link.h	/^	u16 BVCInew;$/;"	m	struct:STRU_SET_DOWNLINK_PATH_RULE_TAG
+Bport_bfd_handle	np_common.h	/^    WP_handle Bport_bfd_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+Bport_enet1_handle	np_common.h	/^    WP_handle Bport_enet1_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+Bport_enet2host_handle	np_common.h	/^    WP_handle Bport_enet2host_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+Bport_mac_filter_from_eth2_handle	np_common.h	/^    WP_handle Bport_mac_filter_from_eth2_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+Bport_mac_filter_handle	np_common.h	/^    WP_handle Bport_mac_filter_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+CLASS_POS	xml_operation.c	53;"	d	file:
+CLIENT_NAME	spp_wddi_common.h	16;"	d
+CLI_ASSERT	xml_operation.c	29;"	d	file:
+CLI_OPTION_BITMAP	xml_operation.c	66;"	d	file:
+CLI_OPTION_CALLBACK	xml_operation.c	70;"	d	file:
+CLI_OPTION_DNS_NAME	xml_operation.c	68;"	d	file:
+CLI_OPTION_ENUM	xml_operation.c	60;"	d	file:
+CLI_OPTION_FLOAT	xml_operation.c	62;"	d	file:
+CLI_OPTION_INT_LIST	xml_operation.c	63;"	d	file:
+CLI_OPTION_IPV4_ADDRESS	xml_operation.c	61;"	d	file:
+CLI_OPTION_IP_ENDPOINT_ADDRESS	xml_operation.c	64;"	d	file:
+CLI_OPTION_NAME_ONLY	xml_operation.c	59;"	d	file:
+CLI_OPTION_S64	xml_operation.c	67;"	d	file:
+CLI_OPTION_STRING	xml_operation.c	58;"	d	file:
+CLI_OPTION_STRING_LIST	xml_operation.c	65;"	d	file:
+CLI_OPTION_U64	xml_operation.c	57;"	d	file:
+COMMON_MAX_STRING_LENGTH	wddi_log.c	42;"	d	file:
+Channel_FR_PrioRx0_host_handle	np_common.h	/^    WP_handle Channel_FR_PrioRx0_host_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+Channel_IP_PrioRx0_host_handle	np_common.h	/^    WP_handle Channel_IP_PrioRx0_host_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+DATA_LENGTH	np_app.c	898;"	d	file:
+DEBUG_NAME	spp_wddi_common.h	17;"	d
+DEL_DL_RULE_TALBE_BASED_ON_BVCI	spp_npu_link.h	/^    DEL_DL_RULE_TALBE_BASED_ON_BVCI,$/;"	e	enum:__anon14
+DEL_DL_RULE_TALBE_BASED_ON_DPORT	spp_npu_link.h	/^    DEL_DL_RULE_TALBE_BASED_ON_DPORT,$/;"	e	enum:__anon14
+DEL_DL_RULE_TALBE_BASED_ON_DPORT_BVCI	spp_npu_link.h	/^    DEL_DL_RULE_TALBE_BASED_ON_DPORT_BVCI,$/;"	e	enum:__anon14
+DEL_UL_RULE_TALBE_BASED_ON_PORT	spp_npu_link.h	/^    DEL_UL_RULE_TALBE_BASED_ON_PORT,$/;"	e	enum:__anon14
+DEL_UL_RULE_TALBE_BASED_ON_PORT_NRI	spp_npu_link.h	/^    DEL_UL_RULE_TALBE_BASED_ON_PORT_NRI,$/;"	e	enum:__anon14
+DEL_UL_UPDATE_BVCI_TALBE_BASED_ON_PORT	spp_npu_link.h	/^    DEL_UL_UPDATE_BVCI_TALBE_BASED_ON_PORT$/;"	e	enum:__anon14
+DEL_UL_UPDATE_BVCI_TALBE_BASED_ON_PORT_BVCI	spp_npu_link.h	/^    DEL_UL_UPDATE_BVCI_TALBE_BASED_ON_PORT_BVCI,$/;"	e	enum:__anon14
+DL_LINK	spp_npu_link.h	/^    DL_LINK,$/;"	e	enum:__anon28
+DL_ROUTE	spp_npu_link.h	/^    DL_ROUTE,$/;"	e	enum:__anon28
+DebugType	spp_npu_link.h	/^	u32 DebugType;$/;"	m	struct:STRU_DEBUG_CHANNEL_TAG
+DeleteMode	spp_npu_link.h	/^    u32 DeleteMode;  \/*DEL_UL_RULE_TALBE_BASED_ON_PORT$/;"	m	struct:STRU_DELETE_UPLINKPATH_RULE_TAG
+DportGrpaggInfo	np_common.h	/^}DportGrpaggInfo;$/;"	t	typeref:struct:DportGrpaggInfo_TAG
+DportGrpaggInfo_TAG	np_common.h	/^typedef struct DportGrpaggInfo_TAG$/;"	s
+DportGrpagg_handle	np_app.c	/^DportGrpaggInfo DportGrpagg_handle[65535] = {0};$/;"	v
+DportGrpflow_handle	np_app.c	/^WP_handle DportGrpflow_handle[65535] = {0};$/;"	v
+DportStartValue	spp_npu_link.h	/^	u16 DportStartValue;  \/*begin value of the port group,port group size = PortPoolSize*\/$/;"	m	struct:STRU_SET_DOWNLINK_PATH_RULE_TAG
+DportStartValue	spp_npu_link.h	/^    u16 DportStartValue;  \/*used when delete,delete DportStartValue~PortEndValue*\/$/;"	m	struct:STRU_DELETE_DOWNLINK_PATH_RULE_TAG
+E1MapTable	np_ufe_fr.c	/^u32 E1MapTable[N_UFE_MAX_LINES_T1]= {0};$/;"	v
+E1T1OptMode	np_common.h	/^}E1T1OptMode;$/;"	t	typeref:enum:__anon8
+E1T1_alarm	np_common.h	/^	STRU_STM1_E1T1_ALARM_INFO E1T1_alarm[SPP_MAX_STM1_PORT_NUM][SPP_MAX_TRUNK_NUM];$/;"	m	struct:STRU_STM1_SDH_ALARM_INFO_TAG
+E1T1type	np_common.h	/^    u32 E1T1type;      \/*NPU_MODE_T1 OR NPU_MODE_E1*\/$/;"	m	struct:STRU_STM1_CFG_INFO_TAG
+E1T1type	spp_npu_link.h	/^}E1T1type;$/;"	t	typeref:enum:__anon12
+E1_status	npu_main.c	/^u8 E1_status[SPP_MAX_STM1_PORT_NUM][SPP_MAX_TRUNK_NUM] = {{LINK_STATUS_DOWN},};$/;"	v
+E1_status_firsttime	npu_main.c	/^u8 E1_status_firsttime[SPP_MAX_STM1_PORT_NUM][SPP_MAX_TRUNK_NUM] = {{0},};$/;"	v
+E1_status_old	npu_main.c	/^u8 E1_status_old[SPP_MAX_STM1_PORT_NUM][SPP_MAX_TRUNK_NUM] = {{LINK_STATUS_DOWN},};$/;"	v
+EMPTY_CLI_ATTRIBUTE_VALUE	xml_operation.c	121;"	d	file:
+END_OF_CLI_ATTRIBUTE	xml_operation.c	122;"	d	file:
+END_OF_CLI_METHOD	xml_operation.c	193;"	d	file:
+END_OF_ENUM_INSTANCE	xml_operation.c	107;"	d	file:
+ENEA_RELEASE	np_common.h	43;"	d
+ERR_BVCI_FLOW_ADD	np_common.h	131;"	d
+ERR_BVCI_FLOW_DELETE	np_common.h	132;"	d
+ERR_DL_RELEASE_RESOURCE	np_common.h	136;"	d
+ERR_DOWNLINX_FLOW_ADD	np_common.h	127;"	d
+ERR_DOWNLINX_FLOW_DELETE	np_common.h	129;"	d
+ERR_DOWNLINX_FLOW_EXIST	np_common.h	133;"	d
+ERR_GET_LINX_INFO	spp_npu_link.h	442;"	d
+ERR_GET_VPORT_INFO	spp_npu_link.h	443;"	d
+ERR_LINX_ALLOC	spp_npu_link.h	440;"	d
+ERR_LINX_CLOSE	spp_npu_link.h	433;"	d
+ERR_LINX_DISCONNECTED	spp_npu_link.h	450;"	d
+ERR_LINX_FIND_SERVER	spp_npu_link.h	439;"	d
+ERR_LINX_FREE_SIG	spp_npu_link.h	438;"	d
+ERR_LINX_GET_SENDER	spp_npu_link.h	437;"	d
+ERR_LINX_HUNT	spp_npu_link.h	434;"	d
+ERR_LINX_HUNT_TMOUT	spp_npu_link.h	436;"	d
+ERR_LINX_OPEN	spp_npu_link.h	432;"	d
+ERR_LINX_RCV_TMOUT	spp_npu_link.h	435;"	d
+ERR_LINX_RSV_FAIL	spp_npu_link.h	445;"	d
+ERR_LINX_RSV_OVER_SIZE	spp_npu_link.h	448;"	d
+ERR_LINX_RSV_TMOUT	spp_npu_link.h	446;"	d
+ERR_LINX_SEND	spp_npu_link.h	441;"	d
+ERR_UL_RELEASE_RESOURCE	np_common.h	135;"	d
+ERR_UNKNOWN_ARG	spp_npu_link.h	449;"	d
+ERR_UPLINX_FLOW_ADD	np_common.h	126;"	d
+ERR_UPLINX_FLOW_ADD_ARP_FAIL	np_common.h	137;"	d
+ERR_UPLINX_FLOW_DELETE	np_common.h	128;"	d
+ETH_ALEN	np_app.c	39;"	d	file:
+ETH_ALEN	npu_main.c	80;"	d	file:
+ETH_P_8021Q	npu_main.c	56;"	d	file:
+ETH_status	npu_main.c	/^u8 ETH_status[2] = {LINK_STATUS_DOWN,};$/;"	v
+ETH_status_firsttime	npu_main.c	/^u8 ETH_status_firsttime[2] = {0,};$/;"	v
+ETH_status_old	npu_main.c	/^u8 ETH_status_old[2] = {LINK_STATUS_DOWN,};$/;"	v
+EthNumber	spp_npu_link.h	/^	u32 EthNumber;\/* 1 :traffic, 2 NPU<->NPU*\/$/;"	m	struct:STRU_GET_ETH_STATICS_TAG
+Eth_Regs	npu_main.c	/^struct Eth_Regs {$/;"	s	file:
+FALSE	xml_operation.c	26;"	d	file:
+FILE_NOPATH	wddi_log.h	42;"	d
+FRAG_SIZE	np_common.h	49;"	d
+FRAME_MAX_LENGTH	npu_main.c	55;"	d	file:
+FR_CHANNEL_INFO	np_common.h	/^}FR_CHANNEL_INFO;$/;"	t	typeref:struct:FR_CHANNEL_INFO_TAG
+FR_CHANNEL_INFO_TAG	np_common.h	/^typedef struct FR_CHANNEL_INFO_TAG$/;"	s
+FULSE	spp_wddi_common.h	6;"	d
+Flag	spp_npu_link.h	/^	u16 Flag;              \/*LOCAL_FLAG or PEER_FLAG*\/$/;"	m	struct:STRU_NSVC_TABLE_TAG
+Flag	spp_npu_link.h	/^	u16 Flag;         \/*LOCAL_FLAG or PEER_FLAG*\/$/;"	m	struct:STRU_IP_EP_TAG
+Fprintf	np_common.h	77;"	d
+Fprintf	np_common.h	82;"	d
+FrVportAcitveNum	spp_npu_link.h	/^	u32 FrVportAcitveNum;  \/*number of active nsvc(vfort)FrVportAcitveNum=0 packet will be droped*\/$/;"	m	struct:STRU_SET_FR_DOWNLINKPATH_LINK_TABLE_TAG
+Fuse0	xs_ioctl.h	/^    unsigned int Fuse0;$/;"	m	struct:__anon32
+Fuse1	xs_ioctl.h	/^    unsigned int Fuse1;$/;"	m	struct:__anon32
+GET_TBL_ITEM	spp_npu_link.h	/^}GET_TBL_ITEM;$/;"	t	typeref:enum:__anon28
+GatewayIP	np_common.h	/^	u32 GatewayIP;$/;"	m	struct:STRU_ROUTE_INFO_TAG
+GroupNum	np_common.h	/^	WP_U32 GroupNum;$/;"	m	struct:NP_TRUNK_INFO_TAG
+Groupid	np_common.h	/^	WP_U32 Groupid[32];$/;"	m	struct:NP_TRUNK_INFO_TAG
+HAVE_LINUX_IF_TUN_H	tun_dev.c	23;"	d	file:
+HOST_NS_BSSGP_STATICS	np_common.h	/^}HOST_NS_BSSGP_STATICS;$/;"	t	typeref:struct:__anon5
+HWno	np_ufe_fr.c	3096;"	d	file:
+IFNAME_MAX_LENGTH	xml_operation.c	77;"	d	file:
+IFNAMSIZ	xml_operation.c	18;"	d	file:
+IF_NAME	tun_dev.c	24;"	d	file:
+IP_ADDRESS_MAX_LENGTH	xml_operation.c	78;"	d	file:
+IP_DEFRAG	np_common.h	47;"	d
+IP_FRAG	np_common.h	46;"	d
+InterMemLeftByte	spp_npu_link.h	/^	u32 InterMemLeftByte;$/;"	m	struct:STRU_MEMORY_STATICS_TAG
+InterMemTotalByte	np_common.h	/^	u32 InterMemTotalByte;$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+InterMemTotalByte	spp_npu_link.h	/^	u32 InterMemTotalByte;$/;"	m	struct:STRU_MEMORY_STATICS_TAG
+Ip	np_common.h	/^	WP_U32 Ip;$/;"	m	struct:NP_ARP_INFO_TAG
+IpDst	np_common.h	/^    u32 IpDst;$/;"	m	struct:STRU_ROUTE_INFO_TAG
+IpDst	spp_npu_link.h	/^	u32 IpDst;$/;"	m	struct:STRU_IP_EP_TAG
+IpEp	spp_npu_link.h	/^	STRU_IP_EP IpEp[64];\/*max ip_ep is 64 for load banlence*\/$/;"	m	struct:STRU_SET_UPLINKPATH_LINK_TABLE_TAG
+IpEpAcitveNum	spp_npu_link.h	/^	u32 IpEpAcitveNum;  \/*the number of active link,IpEpAcitveNum = 0 then all packet will be droped*\/$/;"	m	struct:STRU_SET_UPLINKPATH_LINK_TABLE_TAG
+L	spp_npu_link.h	22;"	d
+LEARNING_QUEUE_SIZE	np_app.c	114;"	d	file:
+LINK_STATUS_DISABLED	spp_npu_link.h	/^	LINK_STATUS_DISABLED\/*link is not configured*\/$/;"	e	enum:__anon17
+LINK_STATUS_DOWN	spp_npu_link.h	/^	LINK_STATUS_DOWN = 0,$/;"	e	enum:__anon17
+LINK_STATUS_UP	spp_npu_link.h	/^	LINK_STATUS_UP,$/;"	e	enum:__anon17
+LINX_CLIENT_PRINT	spp_wddi_server.c	56;"	d	file:
+LINX_SIGNAL	spp_wddi_common.h	/^union LINX_SIGNAL$/;"	u
+LINX_SIG_BASE	spp_wddi_common.h	32;"	d
+LOCAL_FLAG	spp_npu_link.h	/^	LOCAL_FLAG =0,$/;"	e	enum:__anon15
+LOCKFILE	npu_main.c	613;"	d	file:
+LOCKMODE	npu_main.c	614;"	d	file:
+LOF	np_common.h	/^    u8 LOF;$/;"	m	struct:STRU_STM1_E1T1_ALARM_INFO_TAG
+LOS	np_common.h	/^	u8 LOS;$/;"	m	struct:STRU_STM1_E1T1_ALARM_INFO_TAG
+Lineindex	spp_npu_link.h	/^    u32 Lineindex;$/;"	m	struct:STRU_GET_UFE_LINE_TAG
+MAP_WN1_TANDBG1	npu_main.c	472;"	d	file:
+MAP_WN1_TSTAT_0	npu_main.c	469;"	d	file:
+MAP_WN1_TSTAT_1	npu_main.c	470;"	d	file:
+MAP_WN2_TANDBG0	npu_main.c	473;"	d	file:
+MAP_WN2_TSTAT_0	npu_main.c	471;"	d	file:
+MAX_ARPS	spp_wddi_server.c	52;"	d	file:
+MAX_BFD_DETECTION_TIME	np_app.c	141;"	d	file:
+MAX_BFD_RX_SESSIONS	np_app.c	143;"	d	file:
+MAX_BFD_TRANSMISSION_RATE	np_app.c	139;"	d	file:
+MAX_BFD_TX_SESSIONS	np_app.c	144;"	d	file:
+MAX_BVCIS	spp_wddi_server.c	53;"	d	file:
+MAX_FLOWS	spp_wddi_server.c	51;"	d	file:
+MAX_LOG_STR_LEN	wddi_log.h	41;"	d
+MAX_PORTS	spp_wddi_server.c	50;"	d	file:
+MAX_TRUNKS	spp_wddi_server.c	54;"	d	file:
+METHOD_ACCESSIBLE	xml_operation.c	73;"	d	file:
+METHOD_NOT_ACCESSIBLE	xml_operation.c	74;"	d	file:
+METHOD_POS	xml_operation.c	54;"	d	file:
+MIN_BFD_DETECTION_TIME	np_app.c	142;"	d	file:
+MIN_BFD_TRANSMISSION_RATE	np_app.c	140;"	d	file:
+MMAP_IOCTL_ENABLE_BUS_ERR_SIG	xs_ioctl.h	7;"	d
+MMAP_IOCTL_KERNEL_BUS_ERR_REPORT	xs_ioctl.h	8;"	d
+MMAP_IOCTL_READ_BOARD_GEN_CONF	xs_ioctl.h	10;"	d
+MMAP_IOCTL_REPLACE_BUS_ERR_KERNEL_REPORT_WITH_SIGNAL	xs_ioctl.h	9;"	d
+MMAP_IOCTL_SUPPRESS_DUP_SIGNAL	xs_ioctl.h	6;"	d
+MODIFY_RULE_TABLE	spp_npu_link.h	/^	MODIFY_RULE_TABLE,$/;"	e	enum:__anon14
+Mac	np_common.h	/^	WP_U8 Mac[6];$/;"	m	struct:NP_ARP_INFO_TAG
+MacOld	np_common.h	/^	WP_U8 MacOld[6];$/;"	m	struct:NP_ARP_INFO_TAG
+NODE	spp_wddi_server.h	/^typedef struct NODE$/;"	s
+NODE	spp_wddi_server.h	/^}NODE;$/;"	t	typeref:struct:NODE
+NPUMON_NAME	spp_wddi_common.h	18;"	d
+NPUMON_NO_ARGS	spp_npu_link.h	469;"	d
+NPU_ACK_SIG	spp_wddi_common.h	39;"	d
+NPU_BLOCK	spp_npu_link.h	/^    NPU_BLOCK = 0,$/;"	e	enum:__anon19
+NPU_CFG_SIG	spp_wddi_common.h	45;"	d
+NPU_DEBUG_CHANNEL	spp_npu_link.h	773;"	d
+NPU_DEBUG_FILE_DISABLE	np_common.h	94;"	d
+NPU_DEBUG_FILE_ENABLE	np_common.h	85;"	d
+NPU_DELETE_DOWNLINK_PATH_RULE	spp_npu_link.h	580;"	d
+NPU_DELETE_FR_DOWNLINK_PATH_RULE_ERROR	spp_npu_link.h	421;"	d
+NPU_DELETE_FR_UPLINK_PATH_RULE_ERROR	spp_npu_link.h	418;"	d
+NPU_DELETE_UPDATE_BVCI_PATH_RULE	spp_npu_link.h	548;"	d
+NPU_DELETE_UPLINK_PATH_RULE	spp_npu_link.h	505;"	d
+NPU_DISPLAY_CONFIG_INFO	spp_npu_link.h	768;"	d
+NPU_E1T1_CLOCK_MASTER	spp_npu_link.h	/^    NPU_E1T1_CLOCK_MASTER,$/;"	e	enum:__anon12
+NPU_E1T1_CLOCK_SLAVE	spp_npu_link.h	/^    NPU_E1T1_CLOCK_SLAVE,$/;"	e	enum:__anon12
+NPU_E1T1_CRC16	spp_npu_link.h	/^    NPU_E1T1_CRC16,$/;"	e	enum:__anon12
+NPU_E1T1_CRC32	spp_npu_link.h	/^    NPU_E1T1_CRC32$/;"	e	enum:__anon12
+NPU_ECHO_SIG	spp_wddi_common.h	34;"	d
+NPU_FILTER_DPORT_UDP_BFD	np_app.c	132;"	d	file:
+NPU_FILTER_DPORT_UDP_FMC	np_app.c	136;"	d	file:
+NPU_FILTER_DPORT_UDP_IP_UL	np_app.c	135;"	d	file:
+NPU_FILTER_DST_MAC	np_app.c	131;"	d	file:
+NPU_FILTER_MASK_ALL	np_app.c	121;"	d	file:
+NPU_FILTER_MASK_ALL	np_app.c	126;"	d	file:
+NPU_FILTER_MASK_DEFRAG	np_app.c	122;"	d	file:
+NPU_FILTER_MASK_DEFRAG	np_app.c	127;"	d	file:
+NPU_FILTER_MASK_MAC	np_app.c	123;"	d	file:
+NPU_FILTER_MASK_MAC	np_app.c	128;"	d	file:
+NPU_FILTER_NUM	np_app.c	119;"	d	file:
+NPU_FILTER_SIP_UDP_PEER	np_app.c	133;"	d	file:
+NPU_FILTER_UDP_DEFRAG	np_app.c	134;"	d	file:
+NPU_FR_RX_MAXT	np_common.h	53;"	d
+NPU_FR_RX_MAXT_PRI	np_common.h	55;"	d
+NPU_FR_TX_MAXT	np_common.h	54;"	d
+NPU_GET_CMD_BASE	spp_npu_link.h	406;"	d
+NPU_GET_CPU_STATICS	spp_npu_link.h	714;"	d
+NPU_GET_DPORT_STATISTIC_INFO	spp_npu_link.h	770;"	d
+NPU_GET_ETH_STATICS	spp_npu_link.h	670;"	d
+NPU_GET_ETH_STATICS_ERROR	spp_npu_link.h	422;"	d
+NPU_GET_FLOW_STATICS	spp_npu_link.h	767;"	d
+NPU_GET_MEMORY_STATICS	spp_npu_link.h	720;"	d
+NPU_GET_NS_BSSGP_STATICS_STATICS	spp_npu_link.h	726;"	d
+NPU_GET_REQUEST_ACK_SIG	spp_wddi_common.h	110;"	d
+NPU_GET_REQUEST_TYPE	spp_wddi_common.h	29;"	d
+NPU_GET_RXFR_STATICS	spp_npu_link.h	698;"	d
+NPU_GET_RXFR_STATICS_ERROR	spp_npu_link.h	424;"	d
+NPU_GET_STM1_E1T1_STATUS	spp_npu_link.h	753;"	d
+NPU_GET_TABLE_ITEM	spp_npu_link.h	771;"	d
+NPU_GET_TRUNK_INFO	spp_npu_link.h	769;"	d
+NPU_GET_TXFR_STATICS	spp_npu_link.h	706;"	d
+NPU_GET_TXFR_STATICS_ERROR	spp_npu_link.h	425;"	d
+NPU_GET_UFE_LINE	spp_npu_link.h	765;"	d
+NPU_GET_UFE_PHY	spp_npu_link.h	766;"	d
+NPU_GET_UFE_SYS	spp_npu_link.h	764;"	d
+NPU_GET_UPI_GROUP_STATICS	spp_npu_link.h	679;"	d
+NPU_GET_UPI_STATICS_ERROR	spp_npu_link.h	423;"	d
+NPU_GET_UPI_STM1_STATICS	spp_npu_link.h	736;"	d
+NPU_GET_UPI_TRUNK_STATICS	spp_npu_link.h	689;"	d
+NPU_HOST_OLP	np_common.h	50;"	d
+NPU_HOST_RSV_PACKET_INFO	spp_wddi_server.h	/^}NPU_HOST_RSV_PACKET_INFO;$/;"	t	typeref:struct:NPU_HOST_RSV_PACKET_INFO_TAG
+NPU_HOST_RSV_PACKET_INFO_TAG	spp_wddi_server.h	/^typedef struct NPU_HOST_RSV_PACKET_INFO_TAG$/;"	s
+NPU_INITALIZED	np_common.h	/^    NPU_INITALIZED = 0,$/;"	e	enum:__anon7
+NPU_INVALID	spp_npu_link.h	/^    NPU_INVALID = 0,$/;"	e	enum:__anon11
+NPU_LOG_ALERT	spp_npu_link.h	/^	NPU_LOG_ALERT,$/;"	e	enum:__anon18
+NPU_LOG_CRIT	spp_npu_link.h	/^	NPU_LOG_CRIT,$/;"	e	enum:__anon18
+NPU_LOG_DEBUG	spp_npu_link.h	/^	NPU_LOG_DEBUG = 0,$/;"	e	enum:__anon18
+NPU_LOG_EMERG	spp_npu_link.h	/^	NPU_LOG_EMERG$/;"	e	enum:__anon18
+NPU_LOG_ERR	spp_npu_link.h	/^	NPU_LOG_ERR,$/;"	e	enum:__anon18
+NPU_LOG_INFO	spp_npu_link.h	/^ 	NPU_LOG_INFO,$/;"	e	enum:__anon18
+NPU_LOG_NOTICE	spp_npu_link.h	/^	NPU_LOG_NOTICE,$/;"	e	enum:__anon18
+NPU_LOG_WARNING	spp_npu_link.h	/^	NPU_LOG_WARNING,$/;"	e	enum:__anon18
+NPU_MODE_E1	spp_npu_link.h	/^    NPU_MODE_E1 = 0,$/;"	e	enum:__anon12
+NPU_MODE_FR	spp_npu_link.h	/^    NPU_MODE_FR = 0,$/;"	e	enum:__anon10
+NPU_MODE_IP	spp_npu_link.h	/^    NPU_MODE_IP$/;"	e	enum:__anon10
+NPU_MODE_T1	spp_npu_link.h	/^    NPU_MODE_T1,$/;"	e	enum:__anon12
+NPU_MODIFY_FR_DOWNLINK_PATH_RULE_ERROR	spp_npu_link.h	420;"	d
+NPU_MODIFY_FR_UPLINK_PATH_RULE_ERROR	spp_npu_link.h	417;"	d
+NPU_MON_CMD	spp_npu_link.h	/^}NPU_MON_CMD;$/;"	t	typeref:enum:__anon22
+NPU_MON_CMD_CC	spp_npu_link.h	/^	NPU_MON_CMD_CC$/;"	e	enum:__anon22
+NPU_MON_CMD_CD	spp_npu_link.h	/^	NPU_MON_CMD_CD,$/;"	e	enum:__anon22
+NPU_MON_CMD_DC	spp_npu_link.h	/^	NPU_MON_CMD_DC,$/;"	e	enum:__anon22
+NPU_MON_CMD_DD	spp_npu_link.h	/^	NPU_MON_CMD_DD,$/;"	e	enum:__anon22
+NPU_MON_CMD_TI	spp_npu_link.h	/^	NPU_MON_CMD_TI,$/;"	e	enum:__anon22
+NPU_MON_CMD_TI4	spp_npu_link.h	/^	NPU_MON_CMD_TI4,$/;"	e	enum:__anon22
+NPU_MON_CMD_TR	spp_npu_link.h	/^	NPU_MON_CMD_TR,$/;"	e	enum:__anon22
+NPU_MON_CMD_XL	spp_npu_link.h	/^    NPU_MON_CMD_XL,$/;"	e	enum:__anon22
+NPU_MON_CMD_XM	spp_npu_link.h	/^    NPU_MON_CMD_XM=0,$/;"	e	enum:__anon22
+NPU_MON_CMD_XRU	spp_npu_link.h	/^	NPU_MON_CMD_XRU,$/;"	e	enum:__anon22
+NPU_MON_GET_CAPTURE_FILE	spp_npu_link.h	734;"	d
+NPU_MON_SET_CAPTURE_START	spp_npu_link.h	604;"	d
+NPU_MON_SET_CAPTURE_STOP	spp_npu_link.h	606;"	d
+NPU_NONPOOL	spp_npu_link.h	/^    NPU_NONPOOL$/;"	e	enum:__anon20
+NPU_NPUMON_CAPTURE_DISABLE	spp_npu_link.h	/^    NPU_NPUMON_CAPTURE_DISABLE = 0$/;"	e	enum:__anon13
+NPU_NPUMON_CAPTURE_ENABLE	spp_npu_link.h	/^    NPU_NPUMON_CAPTURE_ENABLE = 1,$/;"	e	enum:__anon13
+NPU_NSE_AGG_OFF	spp_npu_link.h	/^    NPU_NSE_AGG_OFF = 0,$/;"	e	enum:__anon21
+NPU_NSE_AGG_ON	spp_npu_link.h	/^    NPU_NSE_AGG_ON$/;"	e	enum:__anon21
+NPU_POOL	spp_npu_link.h	/^    NPU_POOL = 0,$/;"	e	enum:__anon20
+NPU_PRIORITY_MSG	np_common.h	51;"	d
+NPU_RECEIVE_IOCTL_RECONFIG_TIMEOUT	spp_wddi_common.h	23;"	d
+NPU_RECEIVE_IOCTL_TIMEOUT	spp_wddi_common.h	22;"	d
+NPU_RECEIVE_TIMEOUT	spp_wddi_common.h	20;"	d
+NPU_REQUEST_SIG	spp_wddi_common.h	96;"	d
+NPU_SERVER_TIMEOUT	spp_wddi_common.h	21;"	d
+NPU_SET_CMD_BASE	spp_npu_link.h	407;"	d
+NPU_SET_DOWNLINK_PATH_LINK_TABLE	spp_npu_link.h	524;"	d
+NPU_SET_DOWNLINK_PATH_RULE	spp_npu_link.h	564;"	d
+NPU_SET_FR_DOWNLINK_PATH_LINK_TABLE	spp_npu_link.h	593;"	d
+NPU_SET_FR_DOWNLINK_PATH_RULE_ERROR	spp_npu_link.h	419;"	d
+NPU_SET_FR_UPLINK_PATH_RULE_ERR	spp_npu_link.h	416;"	d
+NPU_SET_INITIAL_CONFIG_ERR	spp_npu_link.h	415;"	d
+NPU_SET_LMI_PVC_STATUS	spp_npu_link.h	610;"	d
+NPU_SET_LMI_PVC_STATUS_FAIL	spp_npu_link.h	429;"	d
+NPU_SET_LOG_DEBUG_LEVEL	spp_npu_link.h	618;"	d
+NPU_SET_NONPOOL_STATE	spp_npu_link.h	641;"	d
+NPU_SET_NPUMON_CMD_ALREAD_START_ERROR	spp_npu_link.h	427;"	d
+NPU_SET_NPUMON_CMD_PORT_ERROR	spp_npu_link.h	426;"	d
+NPU_SET_NSEAGG_FLAG	spp_npu_link.h	647;"	d
+NPU_SET_NS_BSSGP_STATICS_ZERO	spp_npu_link.h	635;"	d
+NPU_SET_RECONFIG	spp_npu_link.h	472;"	d
+NPU_SET_REQUEST_ACK_SIG	spp_wddi_common.h	103;"	d
+NPU_SET_REQUEST_TYPE	spp_wddi_common.h	28;"	d
+NPU_SET_UPDATE_BVCI_PATH_RULE	spp_npu_link.h	535;"	d
+NPU_SET_UPLINK_PATH_LINK_TABLE	spp_npu_link.h	523;"	d
+NPU_SET_UPLINK_PATH_RULE	spp_npu_link.h	491;"	d
+NPU_UDP_CHKSUM	spp_wddi_server.h	48;"	d
+NPU_UDP_ETHPACK_LEN_MAX	spp_wddi_server.h	19;"	d
+NPU_UDP_ETHPACK_PROTECTION	spp_wddi_server.h	20;"	d
+NPU_UDP_ETH_TYPE_IPV4	spp_wddi_server.h	22;"	d
+NPU_UDP_IPV4_CKSUM	spp_wddi_server.h	46;"	d
+NPU_UDP_IPV4_ID	spp_wddi_server.h	38;"	d
+NPU_UDP_IPV4_LEN	spp_wddi_server.h	34;"	d
+NPU_UDP_IPV4_OFF	spp_wddi_server.h	40;"	d
+NPU_UDP_IPV4_PRO_UDP	spp_wddi_server.h	44;"	d
+NPU_UDP_IPV4_TOS	spp_wddi_server.h	36;"	d
+NPU_UDP_IPV4_TTL	spp_wddi_server.h	42;"	d
+NPU_UDP_IPV4_VER	spp_wddi_server.h	32;"	d
+NPU_UDP_MAC_ADDR_LEN	spp_wddi_server.h	15;"	d
+NPU_UDP_VLAN_DIS	spp_wddi_server.h	28;"	d
+NPU_UDP_VLAN_EN	spp_wddi_server.h	16;"	d
+NPU_UDP_VLAN_EN	spp_wddi_server.h	26;"	d
+NPU_UDP_VLAN_TYPE_TAG	spp_wddi_server.h	24;"	d
+NPU_UNBLOCK	spp_npu_link.h	/^    NPU_UNBLOCK$/;"	e	enum:__anon19
+NPU_UNINITALIZED	np_common.h	/^    NPU_UNINITALIZED$/;"	e	enum:__anon7
+NPU_VALID	spp_npu_link.h	/^    NPU_VALID$/;"	e	enum:__anon11
+NPU_VERSION_NUM	spp_npu_link.h	31;"	d
+NPU_VLAN_DISABLE	spp_npu_link.h	/^    NPU_VLAN_DISABLE$/;"	e	enum:__anon9
+NPU_VLAN_ENABLE	spp_npu_link.h	/^    NPU_VLAN_ENABLE = 0,$/;"	e	enum:__anon9
+NPU_WAIT_FINISHED	np_common.h	52;"	d
+NPU_WAIT_TIME	np_common.h	58;"	d
+NPU_WAIT_TIME	np_common.h	60;"	d
+NP_ALARM_STATUS	np_common.h	/^}NP_ALARM_STATUS;$/;"	t	typeref:struct:NP_ALARM_STATUS_TAG
+NP_ALARM_STATUS_TAG	np_common.h	/^typedef struct NP_ALARM_STATUS_TAG$/;"	s
+NP_ARP_INFO	np_common.h	/^}NP_ARP_INFO;$/;"	t	typeref:struct:NP_ARP_INFO_TAG
+NP_ARP_INFO_TAG	np_common.h	/^typedef struct NP_ARP_INFO_TAG$/;"	s
+NP_DL_FLOW_INFO	np_common.h	/^}NP_DL_FLOW_INFO;$/;"	t	typeref:struct:NP_DL_FLOW_INFO_TAG
+NP_DL_FLOW_INFO_TAG	np_common.h	/^typedef struct NP_DL_FLOW_INFO_TAG$/;"	s
+NP_Flag	np_common.h	/^}NP_Flag;$/;"	t	typeref:enum:__anon7
+NP_HwWinGineUtil	np_ufe_fr.c	/^void NP_HwWinGineUtil(WPU_util_info* utilization, WP_U32  *wcom_av )$/;"	f
+NP_NSEAGG_FLAG	spp_npu_link.h	/^}NP_NSEAGG_FLAG;$/;"	t	typeref:enum:__anon21
+NP_Pool_Flag	spp_npu_link.h	/^}NP_Pool_Flag;$/;"	t	typeref:enum:__anon20
+NP_SYSTEM_INFO	np_common.h	/^}NP_SYSTEM_INFO;$/;"	t	typeref:struct:NP_SYSTEM_INFO_TAG
+NP_SYSTEM_INFO_TAG	np_common.h	/^typedef struct NP_SYSTEM_INFO_TAG$/;"	s
+NP_TRUNK_INFO	np_common.h	/^}NP_TRUNK_INFO;$/;"	t	typeref:struct:NP_TRUNK_INFO_TAG
+NP_TRUNK_INFO_TAG	np_common.h	/^typedef struct NP_TRUNK_INFO_TAG$/;"	s
+NP_UL_FLOW_INFO	np_common.h	/^}NP_UL_FLOW_INFO;$/;"	t	typeref:struct:NP_UL_FLOW_INFO_TAG
+NP_UL_FLOW_INFO_TAG	np_common.h	/^typedef struct NP_UL_FLOW_INFO_TAG$/;"	s
+NP_UPDATE_BVCI_FLOW_INFO	np_common.h	/^}NP_UPDATE_BVCI_FLOW_INFO;$/;"	t	typeref:struct:NP_UPDATE_BVCI_FLOW_INFO_TAG
+NP_UPDATE_BVCI_FLOW_INFO_TAG	np_common.h	/^typedef struct NP_UPDATE_BVCI_FLOW_INFO_TAG$/;"	s
+NRI	np_common.h	/^	WP_U32 NRI;$/;"	m	struct:NP_UL_FLOW_INFO_TAG
+NRIValue	spp_npu_link.h	/^    u32 NRIValue;     \/*1~255*\/$/;"	m	struct:STRU_SET_UPLINKPATH_RULE_TAG
+NRIValue	spp_npu_link.h	/^    u32 NRIValue;\/*vfport&NRIValue can identify a uplink flow *\/$/;"	m	struct:STRU_DELETE_UPLINKPATH_RULE_TAG
+NRI_bitLen	np_common.h	/^	u32 NRI_bitLen;	     \/*gloable configure value is 1~8*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+NSEI	spp_npu_link.h	/^        u16 NSEI;			  \/* for FR ,bvci+ DportGrp[n..m] ==> NSEI+ BVCInew *\/$/;"	m	union:STRU_SET_DOWNLINK_PATH_RULE_TAG::__anon27
+NSEI	spp_npu_link.h	/^    u16 NSEI;              \/*a part of NSEI_BVCInew*\/$/;"	m	struct:STRU_SET_FR_DOWNLINKPATH_LINK_TABLE_TAG
+NS_BVCI	np_common.h	/^	WP_U16  NS_BVCI;$/;"	m	struct:NP_UPDATE_BVCI_FLOW_INFO_TAG
+NS_BVCI	spp_npu_link.h	/^	u16  NS_BVCI;       \/*new BVCI*\/$/;"	m	struct:STRU_SET_UPDATE_BVCI_PATH_RULE_TAG
+NS_BVCI_old	np_common.h	/^	WP_U16  NS_BVCI_old;$/;"	m	struct:NP_UPDATE_BVCI_FLOW_INFO_TAG
+NS_BVCI_old	spp_npu_link.h	/^	u16  NS_BVCI_old;    \/*vfport&NS_BVCI_old can identify a flow *\/$/;"	m	struct:STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG
+NS_BVCI_old	spp_npu_link.h	/^	u16  NS_BVCI_old;   \/*old BVCI*\/$/;"	m	struct:STRU_SET_UPDATE_BVCI_PATH_RULE_TAG
+NUM_OF_BUFS	np_ufe_fr.c	169;"	d	file:
+NUM_OF_FRAMES	np_ufe_fr.c	167;"	d	file:
+N_ETH_HT_RX_CHANNEL_TAG_BASE	np_common.h	143;"	d
+N_ETH_MAX_HT_CHANNEL	np_common.h	140;"	d
+N_FLOWS	np_app.c	109;"	d	file:
+N_FR_HT_RX_CHANNEL_TAG_BASE	np_common.h	142;"	d
+N_FR_MAX_IW_RX_CHANNEL	np_common.h	111;"	d
+N_FR_MAX_IW_TX_CHANNEL	np_common.h	110;"	d
+N_FR_MAX_RX_HT_CHANNEL	np_common.h	109;"	d
+N_FR_MAX_SDU	np_common.h	112;"	d
+N_IW_AGGS	np_app.c	111;"	d	file:
+N_IW_PORTS	np_app.c	110;"	d	file:
+N_MAX_IP_FRAME_SIZE	np_common.h	114;"	d
+N_MAX_SPE_PER_STM1	np_common.h	106;"	d
+N_UFE_CORES	np_common.h	100;"	d
+N_UFE_MAX_LINES_E1	np_common.h	102;"	d
+N_UFE_MAX_LINES_SPE_E1	np_common.h	104;"	d
+N_UFE_MAX_LINES_SPE_T1	np_common.h	105;"	d
+N_UFE_MAX_LINES_T1	np_common.h	101;"	d
+N_UFE_MAX_PHYS	np_common.h	103;"	d
+N_UFE_SPE_MAX_INDX	np_common.h	107;"	d
+Np_Get_Utilization	np_ufe_fr.c	/^void Np_Get_Utilization(STRU_CPU_STATICS *get_cpu_statics)$/;"	f
+Np_ShowMemoryAvailable	np_ufe_fr.c	/^void Np_ShowMemoryAvailable(STRU_MEMORY_STATICS *get_memory_statics)$/;"	f
+NsvcGrp	spp_npu_link.h	/^	STRU_NSVC_TABLE NsvcGrp[16];  \/*NSEI => NsvcGrp max nsvc is 16 for fr load banlence*\/$/;"	m	struct:STRU_SET_FR_DOWNLINKPATH_LINK_TABLE_TAG
+OPMODE_E1_FALSE	np_common.h	/^	OPMODE_E1_FALSE = 0x0010,$/;"	e	enum:__anon8
+OPMODE_E1_TRUE_CRC4	np_common.h	/^	OPMODE_E1_TRUE_CRC4 = 0x0008,$/;"	e	enum:__anon8
+OPMODE_T1_D4	np_common.h	/^	OPMODE_T1_D4 = 0x0001,$/;"	e	enum:__anon8
+OPMODE_T1_ESF	np_common.h	/^	OPMODE_T1_ESF   = 0x0002,$/;"	e	enum:__anon8
+OTUNSETDEBUG	tun_dev.c	67;"	d	file:
+OTUNSETIFF	tun_dev.c	68;"	d	file:
+OTUNSETNOCSUM	tun_dev.c	66;"	d	file:
+OTUNSETOWNER	tun_dev.c	70;"	d	file:
+OTUNSETPERSIST	tun_dev.c	69;"	d	file:
+O_NOFOLLOW	npu_main.c	1369;"	d	file:
+O_NOFOLLOW	tun_dev.c	782;"	d	file:
+Operate_mode	spp_npu_link.h	/^}Operate_mode;$/;"	t	typeref:enum:__anon10
+OptMode	spp_npu_link.h	/^	u32 OptMode;          \/*SET_RULE_TABLE$/;"	m	struct:STRU_SET_DOWNLINK_PATH_RULE_TAG
+OptMode	spp_npu_link.h	/^    u32  OptMode;        \/*DEL_UL_UPDATE_BVCI_TALBE_BASED_ON_PORT_BVCI$/;"	m	struct:STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG
+OptMode	spp_npu_link.h	/^    u32  OptMode;       \/*SET_RULE_TABLE*\/$/;"	m	struct:STRU_SET_UPDATE_BVCI_PATH_RULE_TAG
+OptMode	spp_npu_link.h	/^    u32 OptMode;          \/*DEL_DL_RULE_TALBE_BASED_ON_DPORT$/;"	m	struct:STRU_DELETE_DOWNLINK_PATH_RULE_TAG
+OptMode	spp_npu_link.h	/^    u32 OptMode;      \/*SET_RULE_TABLE$/;"	m	struct:STRU_SET_UPLINKPATH_RULE_TAG
+Opt_Mode	np_common.h	/^    u32 Opt_Mode;      \/* details in E1T1OptMode struct ,for T1 means framing for Ericsson *\/$/;"	m	struct:STRU_E1_TRUNK_INFO_TAG
+OpterateMode	np_common.h	/^	u32 OpterateMode;    \/*NPU_MODE_FR or NPU_MODE_IP*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+PCAPFILENAMELEN	spp_npu_link.h	653;"	d
+PCI_CONSOLE_SIZE	xs_ioctl.h	23;"	d
+PEER_FLAG	spp_npu_link.h	/^    PEER_FLAG = 16$/;"	e	enum:__anon15
+POOL_LIMIT	np_app.c	113;"	d	file:
+PROGNAME_POS	xml_operation.c	52;"	d	file:
+PVCQos	np_common.h	/^	STRU_PVC_QOS_INFO PVCQos[1025];\/*dlci 0~1024*\/$/;"	m	struct:STRU_E1_GROUP_INFO_TAG
+PacketMemLeftByte	spp_npu_link.h	/^    u32 PacketMemLeftByte;$/;"	m	struct:STRU_MEMORY_STATICS_TAG
+PacketMemTotalByte	np_common.h	/^    u32 PacketMemTotalByte;$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+PacketMemTotalByte	spp_npu_link.h	/^    u32 PacketMemTotalByte;$/;"	m	struct:STRU_MEMORY_STATICS_TAG
+ParamMemLeftByte	spp_npu_link.h	/^	u32 ParamMemLeftByte;$/;"	m	struct:STRU_MEMORY_STATICS_TAG
+ParamMemTotalByte	np_common.h	/^	u32 ParamMemTotalByte;$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+ParamMemTotalByte	spp_npu_link.h	/^	u32 ParamMemTotalByte;$/;"	m	struct:STRU_MEMORY_STATICS_TAG
+PcapFileName	spp_npu_link.h	/^	char PcapFileName[PCAPFILENAMELEN];$/;"	m	struct:STRU_NPUMON_INFO_TAG
+PortDst	spp_npu_link.h	/^	u16 PortDst;$/;"	m	struct:STRU_IP_EP_TAG
+PortNumber	spp_npu_link.h	/^    u32 PortNumber;$/;"	m	struct:STRU_GET_UFE_TAG
+PortPoolSize	np_common.h	/^	u32 PortPoolSize;    \/*how many port from DportStartValue*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+PortSize	np_common.h	/^	u16 PortSize;$/;"	m	struct:DportGrpaggInfo_TAG
+PortSize	spp_npu_link.h	/^    u16 PortSize;$/;"	m	struct:STRU_SET_DOWNLINK_PATH_RULE_TAG
+PortSrc	spp_npu_link.h	/^	u32 PortSrc;      \/*vfport+NRIValue => PortSrc*\/$/;"	m	struct:STRU_SET_UPLINKPATH_RULE_TAG
+PortSrc	spp_npu_link.h	/^    u32 PortSrc;        \/*PortSrc => IpEp[64]*\/$/;"	m	struct:STRU_SET_UPLINKPATH_LINK_TABLE_TAG
+QNCallback	np_app.c	/^WP_S32 QNCallback(WP_S32 status) {$/;"	f
+QosEn	np_common.h	/^    WP_U32    QosEn;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+RAI	np_common.h	/^    u8 RAI;$/;"	m	struct:STRU_STM1_E1T1_ALARM_INFO_TAG
+RAI_CI	np_common.h	/^    u8 RAI_CI;$/;"	m	struct:STRU_STM1_E1T1_ALARM_INFO_TAG
+RECONFIG_TRUNK_MAX	np_ufe_fr.c	173;"	d	file:
+RX_ETH_BFD_INT_TAG	np_common.h	146;"	d
+RX_ETH_BFD_INT_TMO_TAG	np_common.h	147;"	d
+RX_ETH_INT_PRIO_MSG_TAG	np_common.h	148;"	d
+RX_ETH_INT_TAG	np_common.h	145;"	d
+RX_FR_INT_PRIO_MSG_TAG	np_common.h	149;"	d
+Rport_enet1_hanlde	np_common.h	/^    WP_handle Rport_enet1_hanlde; \/*route port*\/$/;"	m	struct:NP_SYSTEM_INFO_TAG
+SDH_AU_AIS	np_common.h	/^	u8 SDH_AU_AIS;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_AU_LOP	np_common.h	/^	u8 SDH_AU_LOP;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_HP_DEG	np_common.h	/^	u8 SDH_HP_DEG;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_HP_EXC	np_common.h	/^	u8 SDH_HP_EXC;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_HP_LOM	np_common.h	/^	u8 SDH_HP_LOM;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_HP_PLM	np_common.h	/^	u8 SDH_HP_PLM;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_HP_RDI	np_common.h	/^	u8 SDH_HP_RDI;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_HP_TIM	np_common.h	/^	u8 SDH_HP_TIM;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_HP_UNEQ	np_common.h	/^	u8 SDH_HP_UNEQ;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_LOF	np_common.h	/^	u8 SDH_LOF;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_LOS	np_common.h	/^	u8 SDH_LOS;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_LP_DEG	np_common.h	/^	u8 SDH_LP_DEG;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_LP_EXC	np_common.h	/^	u8 SDH_LP_EXC;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_LP_PLM	np_common.h	/^	u8 SDH_LP_PLM;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_LP_RDI	np_common.h	/^	u8 SDH_LP_RDI;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_LP_TIM	np_common.h	/^	u8 SDH_LP_TIM;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_LP_UNEQ	np_common.h	/^	u8 SDH_LP_UNEQ;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_MS_AIS	np_common.h	/^	u8 SDH_MS_AIS;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_MS_DEG	np_common.h	/^	u8 SDH_MS_DEG;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_MS_EXC	np_common.h	/^	u8 SDH_MS_EXC;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_MS_RDI	np_common.h	/^	u8 SDH_MS_RDI;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_OOF	np_common.h	/^	u8 SDH_OOF;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_RS_TIM	np_common.h	/^	u8 SDH_RS_TIM;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_TU_AIS	np_common.h	/^	u8 SDH_TU_AIS;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_TU_LOP	np_common.h	/^	u8 SDH_TU_LOP;$/;"	m	struct:STRU_STM1_SDH_ALARM_TAG
+SDH_alarm	np_common.h	/^	STRU_STM1_SDH_ALARM SDH_alarm[SPP_MAX_STM1_PORT_NUM];$/;"	m	struct:STRU_STM1_SDH_ALARM_INFO_TAG
+SERDES3_IO_CTRL_0	npu_main.c	/^    u32 SERDES3_IO_CTRL_0;$/;"	m	struct:Eth_Regs	file:
+SERDES3_IO_CTRL_1	npu_main.c	/^    u32 SERDES3_IO_CTRL_1;$/;"	m	struct:Eth_Regs	file:
+SERDES3_IO_CTRL_2	npu_main.c	/^    u32 SERDES3_IO_CTRL_2;$/;"	m	struct:Eth_Regs	file:
+SERDES3_IO_CTRL_3	npu_main.c	/^    u32 SERDES3_IO_CTRL_3;$/;"	m	struct:Eth_Regs	file:
+SERDES3_IO_CTRL_4	npu_main.c	/^    u32 SERDES3_IO_CTRL_4;$/;"	m	struct:Eth_Regs	file:
+SERDES3_IO_STAT	npu_main.c	/^    u32 SERDES3_IO_STAT;$/;"	m	struct:Eth_Regs	file:
+SERDES_INTERRUPT_1	npu_main.c	/^    u32 SERDES_INTERRUPT_1;$/;"	m	struct:Eth_Regs	file:
+SERDES_INTERRUPT_1_MASK	npu_main.c	/^    u32 SERDES_INTERRUPT_1_MASK;$/;"	m	struct:Eth_Regs	file:
+SERDES_MUX_CTRL_0	npu_main.c	/^    u32 SERDES_MUX_CTRL_0;$/;"	m	struct:Eth_Regs	file:
+SERDES_RX_MUX_CONTROL_0	npu_main.c	/^    u32 SERDES_RX_MUX_CONTROL_0;$/;"	m	struct:Eth_Regs	file:
+SERDES_RX_MUX_CONTROL_1	npu_main.c	/^    u32 SERDES_RX_MUX_CONTROL_1;$/;"	m	struct:Eth_Regs	file:
+SERVER_NAME	spp_wddi_common.h	15;"	d
+SET_PVC_DISABLE	spp_npu_link.h	/^    SET_PVC_DISABLE$/;"	e	enum:__anon16
+SET_PVC_ENABLE	spp_npu_link.h	/^    SET_PVC_ENABLE =0,$/;"	e	enum:__anon16
+SET_RULE_TABLE	spp_npu_link.h	/^    SET_RULE_TABLE = 0,$/;"	e	enum:__anon14
+SPPMAXPARA	spp_npu_link.h	800;"	d
+SPP_MAX_GROUP_NUM	spp_npu_link.h	411;"	d
+SPP_MAX_ROUTE_NUM	spp_npu_link.h	413;"	d
+SPP_MAX_STM1_PORT_NUM	spp_npu_link.h	409;"	d
+SPP_MAX_TRUNK_NUM	spp_npu_link.h	410;"	d
+SPP_RECEIVE_SIG	spp_wddi_common.h	63;"	d
+SPP_SEND_SIG	spp_wddi_common.h	50;"	d
+START_SCHEDULER	np_common.h	48;"	d
+STATISTICS_ENABLE	np_app.c	116;"	d	file:
+STATUS_OK	spp_npu_link.h	30;"	d
+STM1_status	npu_main.c	/^u8 STM1_status[SPP_MAX_STM1_PORT_NUM] = {LINK_STATUS_DOWN,};$/;"	v
+STM1_status_firsttime	npu_main.c	/^u8 STM1_status_firsttime[SPP_MAX_STM1_PORT_NUM] = {0,};$/;"	v
+STM1_status_flag	npu_main.c	/^u8 STM1_status_flag[SPP_MAX_STM1_PORT_NUM] = {LINK_STATUS_DOWN,};$/;"	v
+STM1_status_old	npu_main.c	/^u8 STM1_status_old[SPP_MAX_STM1_PORT_NUM] = {LINK_STATUS_DOWN,};$/;"	v
+STRING_LIST_MAX	xml_operation.c	49;"	d	file:
+STRU_BPORT_STATICS	spp_npu_link.h	/^    STRU_BPORT_STATICS;$/;"	t	typeref:struct:STRU_BPORT_STATICS_TAG
+STRU_BPORT_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_BPORT_STATICS_TAG$/;"	s
+STRU_CPU_STATICS	spp_npu_link.h	/^}STRU_CPU_STATICS;$/;"	t	typeref:struct:STRU_CPU_STATICS_TAG
+STRU_CPU_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_CPU_STATICS_TAG$/;"	s
+STRU_DEBUG_CHANNEL	spp_npu_link.h	/^}STRU_DEBUG_CHANNEL;$/;"	t	typeref:struct:STRU_DEBUG_CHANNEL_TAG
+STRU_DEBUG_CHANNEL_TAG	spp_npu_link.h	/^typedef struct STRU_DEBUG_CHANNEL_TAG$/;"	s
+STRU_DELETE_DOWNLINK_PATH_RULE	spp_npu_link.h	/^}STRU_DELETE_DOWNLINK_PATH_RULE;$/;"	t	typeref:struct:STRU_DELETE_DOWNLINK_PATH_RULE_TAG
+STRU_DELETE_DOWNLINK_PATH_RULE_TAG	spp_npu_link.h	/^typedef struct STRU_DELETE_DOWNLINK_PATH_RULE_TAG$/;"	s
+STRU_DELETE_UPDATE_BVCI_PATH_RULE	spp_npu_link.h	/^}STRU_DELETE_UPDATE_BVCI_PATH_RULE;$/;"	t	typeref:struct:STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG
+STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG	spp_npu_link.h	/^typedef struct STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG$/;"	s
+STRU_DELETE_UPLINKPATH_RULE_TAG	spp_npu_link.h	/^typedef struct STRU_DELETE_UPLINKPATH_RULE_TAG$/;"	s
+STRU_DELETE_UPLINK_PATH_RULE	spp_npu_link.h	/^}STRU_DELETE_UPLINK_PATH_RULE;$/;"	t	typeref:struct:STRU_DELETE_UPLINKPATH_RULE_TAG
+STRU_E1_GROUP_INFO	np_common.h	/^}STRU_E1_GROUP_INFO;$/;"	t	typeref:struct:STRU_E1_GROUP_INFO_TAG
+STRU_E1_GROUP_INFO_TAG	np_common.h	/^typedef struct STRU_E1_GROUP_INFO_TAG$/;"	s
+STRU_E1_TRUNK_INFO	np_common.h	/^}STRU_E1_TRUNK_INFO;$/;"	t	typeref:struct:STRU_E1_TRUNK_INFO_TAG
+STRU_E1_TRUNK_INFO_TAG	np_common.h	/^typedef struct STRU_E1_TRUNK_INFO_TAG$/;"	s
+STRU_ETH_STATICS	spp_npu_link.h	/^} STRU_ETH_STATICS;$/;"	t	typeref:struct:STRU_ETH_STATICS_TAG
+STRU_ETH_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_ETH_STATICS_TAG$/;"	s
+STRU_GET_CPU_STATICS	spp_npu_link.h	/^}STRU_GET_CPU_STATICS;$/;"	t	typeref:struct:STRU_GET_CPU_STATICS_TAG
+STRU_GET_CPU_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_CPU_STATICS_TAG$/;"	s
+STRU_GET_DPORT_STATISTICS	spp_npu_link.h	/^}STRU_GET_DPORT_STATISTICS;$/;"	t	typeref:struct:STRU_GET_DPORT_TAG
+STRU_GET_DPORT_TAG	spp_npu_link.h	/^typedef struct STRU_GET_DPORT_TAG$/;"	s
+STRU_GET_ETH_STATICS	spp_npu_link.h	/^}STRU_GET_ETH_STATICS;$/;"	t	typeref:struct:STRU_GET_ETH_STATICS_TAG
+STRU_GET_ETH_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_ETH_STATICS_TAG$/;"	s
+STRU_GET_MEMORY_STATICS	spp_npu_link.h	/^}STRU_GET_MEMORY_STATICS;$/;"	t	typeref:struct:STRU_GET_MEMORY_STATICS_TAG
+STRU_GET_MEMORY_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_MEMORY_STATICS_TAG$/;"	s
+STRU_GET_NS_BSSGP_STATICS	spp_npu_link.h	/^}STRU_GET_NS_BSSGP_STATICS;$/;"	t	typeref:struct:STRU_GET_NS_BSSGP_STATICS_TAG
+STRU_GET_NS_BSSGP_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_NS_BSSGP_STATICS_TAG$/;"	s
+STRU_GET_RXFR_STATICS	spp_npu_link.h	/^}STRU_GET_RXFR_STATICS;$/;"	t	typeref:struct:STRU_GET_RXFR_STATICS_TAG
+STRU_GET_RXFR_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_RXFR_STATICS_TAG$/;"	s
+STRU_GET_TABLE_ITEM	spp_npu_link.h	/^}STRU_GET_TABLE_ITEM;$/;"	t	typeref:struct:STRU_GET_TBLITEM_TAG
+STRU_GET_TBLITEM_TAG	spp_npu_link.h	/^typedef struct STRU_GET_TBLITEM_TAG$/;"	s
+STRU_GET_TRUNKINFO	spp_npu_link.h	/^}STRU_GET_TRUNKINFO;$/;"	t	typeref:struct:STRU_GET_TRUNKINFO_TAG
+STRU_GET_TRUNKINFO_TAG	spp_npu_link.h	/^typedef struct STRU_GET_TRUNKINFO_TAG$/;"	s
+STRU_GET_TXFR_STATICS	spp_npu_link.h	/^}STRU_GET_TXFR_STATICS;$/;"	t	typeref:struct:STRU_GET_TXFR_STATICS_TAG
+STRU_GET_TXFR_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_TXFR_STATICS_TAG$/;"	s
+STRU_GET_UFE	spp_npu_link.h	/^}STRU_GET_UFE;$/;"	t	typeref:struct:STRU_GET_UFE_TAG
+STRU_GET_UFE_LINE	spp_npu_link.h	/^}STRU_GET_UFE_LINE;$/;"	t	typeref:struct:STRU_GET_UFE_LINE_TAG
+STRU_GET_UFE_LINE_TAG	spp_npu_link.h	/^typedef struct STRU_GET_UFE_LINE_TAG$/;"	s
+STRU_GET_UFE_TAG	spp_npu_link.h	/^typedef struct STRU_GET_UFE_TAG$/;"	s
+STRU_GET_UPI_GROUP_STATICS	spp_npu_link.h	/^}STRU_GET_UPI_GROUP_STATICS;$/;"	t	typeref:struct:STRU_GET_UPI_GROUP_STATICS_TAG
+STRU_GET_UPI_GROUP_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_UPI_GROUP_STATICS_TAG$/;"	s
+STRU_GET_UPI_STM1_STATICS	spp_npu_link.h	/^}STRU_GET_UPI_STM1_STATICS;$/;"	t	typeref:struct:STRU_GET_UPI_STM1_STATICS_TAG
+STRU_GET_UPI_STM1_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_UPI_STM1_STATICS_TAG$/;"	s
+STRU_GET_UPI_TRUNK_STATICS	spp_npu_link.h	/^}STRU_GET_UPI_TRUNK_STATICS;$/;"	t	typeref:struct:STRU_GET_UPI_TRUNK_STATICS_TAG
+STRU_GET_UPI_TRUNK_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_GET_UPI_TRUNK_STATICS_TAG$/;"	s
+STRU_IP_EP	spp_npu_link.h	/^}STRU_IP_EP;$/;"	t	typeref:struct:STRU_IP_EP_TAG
+STRU_IP_EP_TAG	spp_npu_link.h	/^typedef struct STRU_IP_EP_TAG$/;"	s
+STRU_LINX_SERVER_INFO	spp_wddi_server.h	/^}STRU_LINX_SERVER_INFO;$/;"	t	typeref:struct:STRU_LINX_SERVER_INFO_TAG
+STRU_LINX_SERVER_INFO_TAG	spp_wddi_server.h	/^typedef struct STRU_LINX_SERVER_INFO_TAG$/;"	s
+STRU_MEMORY_STATICS	spp_npu_link.h	/^}STRU_MEMORY_STATICS;$/;"	t	typeref:struct:STRU_MEMORY_STATICS_TAG
+STRU_MEMORY_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_MEMORY_STATICS_TAG$/;"	s
+STRU_NPUMON_INFO	spp_npu_link.h	/^}STRU_NPUMON_INFO;$/;"	t	typeref:struct:STRU_NPUMON_INFO_TAG
+STRU_NPUMON_INFO_TAG	spp_npu_link.h	/^typedef struct STRU_NPUMON_INFO_TAG$/;"	s
+STRU_NPU_ETH_HDR	spp_wddi_server.h	/^    STRU_NPU_ETH_HDR;$/;"	t	typeref:struct:__anon43
+STRU_NPU_ETH_VLAN_HDR	spp_wddi_server.h	/^    STRU_NPU_ETH_VLAN_HDR;$/;"	t	typeref:struct:__anon44
+STRU_NPU_GET_STM1_E1T1_STATUS	spp_npu_link.h	/^}STRU_NPU_GET_STM1_E1T1_STATUS;$/;"	t	typeref:struct:STRU_NPU_GET_STM1_E1T1_STATUS_TAG
+STRU_NPU_GET_STM1_E1T1_STATUS_TAG	spp_npu_link.h	/^typedef struct STRU_NPU_GET_STM1_E1T1_STATUS_TAG$/;"	s
+STRU_NPU_IP_HDR	spp_wddi_server.h	/^    STRU_NPU_IP_HDR;$/;"	t	typeref:struct:__anon45
+STRU_NPU_SET_LMI_PVC_STATUS	spp_npu_link.h	/^}STRU_NPU_SET_LMI_PVC_STATUS;$/;"	t	typeref:struct:STRU_NPU_SET_LMI_PVC_STATUS_TAG
+STRU_NPU_SET_LMI_PVC_STATUS_TAG	spp_npu_link.h	/^typedef struct STRU_NPU_SET_LMI_PVC_STATUS_TAG$/;"	s
+STRU_NPU_SET_LOG_DEBUG_LEVEL	spp_npu_link.h	/^}STRU_NPU_SET_LOG_DEBUG_LEVEL;$/;"	t	typeref:struct:STRU_NPU_SET_LOG_DEBUG_LEVEL_TAG
+STRU_NPU_SET_LOG_DEBUG_LEVEL_TAG	spp_npu_link.h	/^typedef struct STRU_NPU_SET_LOG_DEBUG_LEVEL_TAG$/;"	s
+STRU_NPU_UDP_HDR	spp_wddi_server.h	/^    STRU_NPU_UDP_HDR;$/;"	t	typeref:struct:__anon46
+STRU_NSVC_TABLE	spp_npu_link.h	/^}STRU_NSVC_TABLE;$/;"	t	typeref:struct:STRU_NSVC_TABLE_TAG
+STRU_NSVC_TABLE_TAG	spp_npu_link.h	/^typedef struct STRU_NSVC_TABLE_TAG$/;"	s
+STRU_NS_BSSGP_STATICS	spp_npu_link.h	/^}STRU_NS_BSSGP_STATICS;$/;"	t	typeref:struct:STRU_NS_BSSGP_STATICS_TAG
+STRU_NS_BSSGP_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_NS_BSSGP_STATICS_TAG$/;"	s
+STRU_PEER_VPORT_INFO	spp_wddi_server.h	/^}STRU_PEER_VPORT_INFO;$/;"	t	typeref:struct:STRU_PEER_VPORT_INFO_TAG
+STRU_PEER_VPORT_INFO_TAG	spp_wddi_server.h	/^typedef struct STRU_PEER_VPORT_INFO_TAG$/;"	s
+STRU_PVC_QOS_INFO	np_common.h	/^}STRU_PVC_QOS_INFO;$/;"	t	typeref:struct:STRU_PVC_QOS_INFO_TAG
+STRU_PVC_QOS_INFO_TAG	np_common.h	/^typedef struct STRU_PVC_QOS_INFO_TAG$/;"	s
+STRU_ROUTE_INFO	np_common.h	/^}STRU_ROUTE_INFO;$/;"	t	typeref:struct:STRU_ROUTE_INFO_TAG
+STRU_ROUTE_INFO_TAG	np_common.h	/^typedef struct STRU_ROUTE_INFO_TAG$/;"	s
+STRU_RXFR_STATICS	spp_npu_link.h	/^    STRU_RXFR_STATICS;$/;"	t	typeref:struct:STRU_RXFR_STATICS_TAG
+STRU_RXFR_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_RXFR_STATICS_TAG$/;"	s
+STRU_SET_DOWNLINK_PATH_LINK_TABLE	spp_npu_link.h	/^typedef STRU_SET_UPLINK_PATH_LINK_TABLE STRU_SET_DOWNLINK_PATH_LINK_TABLE;\/*For IP<->IP*\/$/;"	t
+STRU_SET_DOWNLINK_PATH_RULE	spp_npu_link.h	/^}STRU_SET_DOWNLINK_PATH_RULE;$/;"	t	typeref:struct:STRU_SET_DOWNLINK_PATH_RULE_TAG
+STRU_SET_DOWNLINK_PATH_RULE_TAG	spp_npu_link.h	/^typedef struct STRU_SET_DOWNLINK_PATH_RULE_TAG$/;"	s
+STRU_SET_FR_DOWNLINKPATH_LINK_TABLE_TAG	spp_npu_link.h	/^typedef struct STRU_SET_FR_DOWNLINKPATH_LINK_TABLE_TAG$/;"	s
+STRU_SET_FR_DOWNLINK_PATH_LINK_TABLE	spp_npu_link.h	/^}STRU_SET_FR_DOWNLINK_PATH_LINK_TABLE;$/;"	t	typeref:struct:STRU_SET_FR_DOWNLINKPATH_LINK_TABLE_TAG
+STRU_SET_INITAIL_CONFIG	np_common.h	/^}STRU_SET_INITAIL_CONFIG;$/;"	t	typeref:struct:STRU_SET_INITAIL_CONFIG_TAG
+STRU_SET_INITAIL_CONFIG_TAG	np_common.h	/^typedef struct STRU_SET_INITAIL_CONFIG_TAG$/;"	s
+STRU_SET_NPU_NONPOOL_STATE	spp_npu_link.h	/^}STRU_SET_NPU_NONPOOL_STATE;$/;"	t	typeref:struct:STRU_SET_NPU_NONPOOL_STATE_TAG
+STRU_SET_NPU_NONPOOL_STATE_TAG	spp_npu_link.h	/^typedef struct STRU_SET_NPU_NONPOOL_STATE_TAG$/;"	s
+STRU_SET_NPU_NSEAGG_FLAG	spp_npu_link.h	/^}STRU_SET_NPU_NSEAGG_FLAG;$/;"	t	typeref:struct:STRU_SET_NPU_NSEAGG_FLAG_TAG
+STRU_SET_NPU_NSEAGG_FLAG_TAG	spp_npu_link.h	/^typedef struct STRU_SET_NPU_NSEAGG_FLAG_TAG$/;"	s
+STRU_SET_NS_BSSGP_STATICS_ZERO	spp_npu_link.h	/^}STRU_SET_NS_BSSGP_STATICS_ZERO;$/;"	t	typeref:struct:STRU_SET_NS_BSSGP_STATICS_ZERO_TAG
+STRU_SET_NS_BSSGP_STATICS_ZERO_TAG	spp_npu_link.h	/^typedef struct STRU_SET_NS_BSSGP_STATICS_ZERO_TAG$/;"	s
+STRU_SET_UPDATE_BVCI_PATH_RULE	spp_npu_link.h	/^}STRU_SET_UPDATE_BVCI_PATH_RULE;$/;"	t	typeref:struct:STRU_SET_UPDATE_BVCI_PATH_RULE_TAG
+STRU_SET_UPDATE_BVCI_PATH_RULE_TAG	spp_npu_link.h	/^typedef struct STRU_SET_UPDATE_BVCI_PATH_RULE_TAG$/;"	s
+STRU_SET_UPLINKPATH_LINK_TABLE_TAG	spp_npu_link.h	/^typedef struct STRU_SET_UPLINKPATH_LINK_TABLE_TAG$/;"	s
+STRU_SET_UPLINKPATH_RULE_TAG	spp_npu_link.h	/^typedef struct STRU_SET_UPLINKPATH_RULE_TAG$/;"	s
+STRU_SET_UPLINK_PATH_LINK_TABLE	spp_npu_link.h	/^}STRU_SET_UPLINK_PATH_LINK_TABLE;$/;"	t	typeref:struct:STRU_SET_UPLINKPATH_LINK_TABLE_TAG
+STRU_SET_UPLINK_PATH_RULE	spp_npu_link.h	/^}STRU_SET_UPLINK_PATH_RULE;$/;"	t	typeref:struct:STRU_SET_UPLINKPATH_RULE_TAG
+STRU_STM1_ALARM_INFO	np_common.h	/^}STRU_STM1_ALARM_INFO;$/;"	t	typeref:struct:STRU_STM1_SDH_ALARM_INFO_TAG
+STRU_STM1_CFG_INFO	np_common.h	/^}STRU_STM1_CFG_INFO;$/;"	t	typeref:struct:STRU_STM1_CFG_INFO_TAG
+STRU_STM1_CFG_INFO_TAG	np_common.h	/^typedef struct STRU_STM1_CFG_INFO_TAG$/;"	s
+STRU_STM1_E1T1_ALARM_INFO	np_common.h	/^}STRU_STM1_E1T1_ALARM_INFO;$/;"	t	typeref:struct:STRU_STM1_E1T1_ALARM_INFO_TAG
+STRU_STM1_E1T1_ALARM_INFO_TAG	np_common.h	/^typedef struct STRU_STM1_E1T1_ALARM_INFO_TAG$/;"	s
+STRU_STM1_E1T1_STATUS	spp_npu_link.h	/^}STRU_STM1_E1T1_STATUS;$/;"	t	typeref:struct:STRU_STM1_E1T1_STATUS_TAG
+STRU_STM1_E1T1_STATUS_TAG	spp_npu_link.h	/^typedef struct STRU_STM1_E1T1_STATUS_TAG$/;"	s
+STRU_STM1_RECFG	np_common.h	/^}STRU_STM1_RECFG;$/;"	t	typeref:struct:STRU_STM1_RECFG_TAG
+STRU_STM1_RECFG_TAG	np_common.h	/^typedef struct STRU_STM1_RECFG_TAG$/;"	s
+STRU_STM1_SDH_ALARM	np_common.h	/^}STRU_STM1_SDH_ALARM;$/;"	t	typeref:struct:STRU_STM1_SDH_ALARM_TAG
+STRU_STM1_SDH_ALARM_INFO_TAG	np_common.h	/^typedef struct STRU_STM1_SDH_ALARM_INFO_TAG$/;"	s
+STRU_STM1_SDH_ALARM_TAG	np_common.h	/^typedef struct STRU_STM1_SDH_ALARM_TAG$/;"	s
+STRU_TXFR_STATICS	spp_npu_link.h	/^    STRU_TXFR_STATICS;$/;"	t	typeref:struct:STRU_TXFR_STATICS_TAG
+STRU_TXFR_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_TXFR_STATICS_TAG$/;"	s
+STRU_UPI_STATICS	spp_npu_link.h	/^    STRU_UPI_STATICS;$/;"	t	typeref:struct:STRU_UPI_STATICS_TAG
+STRU_UPI_STATICS_TAG	spp_npu_link.h	/^typedef struct STRU_UPI_STATICS_TAG$/;"	s
+STRU_VPORT_INFO	spp_wddi_server.h	/^}STRU_VPORT_INFO;$/;"	t	typeref:struct:STRU_VPORT_INFO_TAG
+STRU_VPORT_INFO_TAG	spp_wddi_server.h	/^typedef struct STRU_VPORT_INFO_TAG$/;"	s
+STRU_VPORT_NPUMON	spp_wddi_server.h	/^}STRU_VPORT_NPUMON;$/;"	t	typeref:struct:STRU_VPORT_NPUMON_TAG
+STRU_VPORT_NPUMON_TAG	spp_wddi_server.h	/^typedef struct STRU_VPORT_NPUMON_TAG$/;"	s
+StatField	np_stats.c	/^typedef union StatField$/;"	u	file:
+StatIwFlowAggregation	np_stats.c	/^void StatIwFlowAggregation(WP_handle flow_handle)$/;"	f
+TEST	xml_operation.c	2520;"	d	file:
+TRUE	spp_wddi_common.h	10;"	d
+TRUE	xml_operation.c	22;"	d	file:
+TYPE_DEF	spp_npu_link.h	11;"	d
+TYPE_DEF	xml_operation.c	40;"	d	file:
+Table_Optmode	spp_npu_link.h	/^}Table_Optmode;$/;"	t	typeref:enum:__anon14
+TrunkNumber	spp_npu_link.h	/^	unsigned int TrunkNumber;$/;"	m	struct:STRU_NPUMON_INFO_TAG
+TxBssgpBytes	np_common.h	/^	WP_U64 TxBssgpBytes;$/;"	m	struct:__anon5
+TxBssgpDataPackets	np_common.h	/^	WP_U64 TxBssgpDataPackets;$/;"	m	struct:__anon5
+TxBssgpSignalPackets	np_common.h	/^	WP_U64 TxBssgpSignalPackets;$/;"	m	struct:__anon5
+TxNsBytes	np_common.h	/^   	WP_U64 TxNsBytes;$/;"	m	struct:__anon5
+TxNsDataPackets	np_common.h	/^	WP_U64 TxNsDataPackets;$/;"	m	struct:__anon5
+TxNsSignalPackets	np_common.h	/^	WP_U64 TxNsSignalPackets;$/;"	m	struct:__anon5
+UDP_BFD_PORT	np_common.h	151;"	d
+UDP_BFD_TMP_SPORT	np_common.h	152;"	d
+UFE_CLOCK_MASTER_MODE	np_common.h	73;"	d
+UFE_CLOCK_SLAVE_MODE	np_common.h	74;"	d
+UFE_ID	np_common.h	108;"	d
+UFE_LB_LINE	np_common.h	123;"	d
+UFE_LB_SYSTEM	np_common.h	122;"	d
+UFE_LOOPBACK	np_common.h	42;"	d
+UFE_NO_LOOPBK	np_common.h	124;"	d
+UL_LINK	spp_npu_link.h	/^    UL_LINK,$/;"	e	enum:__anon28
+UL_ROUTE	spp_npu_link.h	/^    UL_ROUTE = 0,$/;"	e	enum:__anon28
+UNUSED	spp_wddi_server.h	13;"	d
+USED	spp_wddi_server.h	12;"	d
+USE_WDDI_LOG	np_common.h	44;"	d
+UsedFlag	np_common.h	/^	WP_U32 UsedFlag;$/;"	m	struct:NP_DL_FLOW_INFO_TAG
+UsedFlag	np_common.h	/^	WP_U32 UsedFlag;$/;"	m	struct:NP_UL_FLOW_INFO_TAG
+UsedFlag	np_common.h	/^    WP_U32 UsedFlag;$/;"	m	struct:NP_UPDATE_BVCI_FLOW_INFO_TAG
+UsedFlag	spp_wddi_server.h	/^	unsigned int   UsedFlag;$/;"	m	struct:STRU_VPORT_INFO_TAG
+UsedFlag	spp_wddi_server.h	/^    unsigned int   UsedFlag;$/;"	m	struct:STRU_LINX_SERVER_INFO_TAG
+VPORT_PORT_CLOSE_SIG	spp_wddi_common.h	85;"	d
+VPORT_PORT_OPEN_SIG	spp_wddi_common.h	77;"	d
+VP_TYPE_FR	spp_npu_link.h	27;"	d
+VP_TYPE_LINX	spp_npu_link.h	28;"	d
+VP_TYPE_UDP	spp_npu_link.h	26;"	d
+Valid_flag	spp_npu_link.h	/^}Valid_flag;$/;"	t	typeref:enum:__anon11
+VlanFlag	np_common.h	/^    u32 VlanFlag;        \/*NPU_VLAN_ENABLE or NPU_VLAN_DISABLE*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+VlanTag	np_common.h	/^	u32 VlanTag;         \/*vlan tag value only valid when VlanFlag = NPU_VLAN_ENABLE*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+Vlan_Flage	spp_npu_link.h	/^}Vlan_Flage;$/;"	t	typeref:enum:__anon9
+Vport_status	spp_npu_link.h	/^}Vport_status;$/;"	t	typeref:enum:__anon16
+WDDI_ERR	wddi_log.h	172;"	d
+WDDI_INFO	wddi_log.h	79;"	d
+WDDI_INFONL	wddi_log.h	60;"	d
+WDDI_PRINT	wddi_log.h	134;"	d
+WDDI_STRING	wddi_log.h	143;"	d
+WDDI_WARNING	wddi_log.h	98;"	d
+WDDI_WARNINGNL	wddi_log.h	117;"	d
+WN2_IFC_0	npu_main.c	/^    u32 WN2_IFC_0;$/;"	m	struct:Eth_Regs	file:
+WN2_TADIR_0	npu_main.c	/^    u32 WN2_TADIR_0;$/;"	m	struct:Eth_Regs	file:
+WN2_TADIR_1	npu_main.c	/^    u32 WN2_TADIR_1;$/;"	m	struct:Eth_Regs	file:
+WN2_TANDBG_0	npu_main.c	/^    u32 WN2_TANDBG_0;$/;"	m	struct:Eth_Regs	file:
+WN2_TANDBG_1	npu_main.c	/^    u32 WN2_TANDBG_1;$/;"	m	struct:Eth_Regs	file:
+WN2_TCNTR_0	npu_main.c	/^    u32 WN2_TCNTR_0;$/;"	m	struct:Eth_Regs	file:
+WN2_TCNTR_1	npu_main.c	/^    u32 WN2_TCNTR_1;$/;"	m	struct:Eth_Regs	file:
+WN2_TSTAT_0	npu_main.c	/^    u32 WN2_TSTAT_0;$/;"	m	struct:Eth_Regs	file:
+WN2_TSTAT_1	npu_main.c	/^    u32 WN2_TSTAT_1;$/;"	m	struct:Eth_Regs	file:
+WN2_WNC1	npu_main.c	/^    u32 WN2_WNC1;$/;"	m	struct:Eth_Regs	file:
+WN2_WNC2	npu_main.c	/^    u32 WN2_WNC2;$/;"	m	struct:Eth_Regs	file:
+WN3_IFC_0	npu_main.c	/^    u32 WN3_IFC_0;$/;"	m	struct:Eth_Regs	file:
+WN3_TANDBG_0	npu_main.c	/^    u32 WN3_TANDBG_0;$/;"	m	struct:Eth_Regs	file:
+WN3_TANDBG_1	npu_main.c	/^    u32 WN3_TANDBG_1;$/;"	m	struct:Eth_Regs	file:
+WN3_TCNTR_0	npu_main.c	/^    u32 WN3_TCNTR_0;$/;"	m	struct:Eth_Regs	file:
+WN3_TCNTR_1	npu_main.c	/^    u32 WN3_TCNTR_1;$/;"	m	struct:Eth_Regs	file:
+WN3_TSTAT_0	npu_main.c	/^    u32 WN3_TSTAT_0;$/;"	m	struct:Eth_Regs	file:
+WN3_TSTAT_1	npu_main.c	/^    u32 WN3_TSTAT_1;$/;"	m	struct:Eth_Regs	file:
+WN3_WNC1	npu_main.c	/^    u32 WN3_WNC1;$/;"	m	struct:Eth_Regs	file:
+WN3_WNC2	npu_main.c	/^    u32 WN3_WNC2;$/;"	m	struct:Eth_Regs	file:
+WPE_BfdRxSessionBuild	np_app.c	/^void WPE_BfdRxSessionBuild(NP_SYSTEM_INFO *the_system)$/;"	f
+WPE_BfdTxSessionBuild	np_app.c	/^void WPE_BfdTxSessionBuild(NP_SYSTEM_INFO *the_system)$/;"	f
+WPE_PrintIWPortStats	np_stats.c	/^void WPE_PrintIWPortStats(WP_route_port_stats* iwport_stats)$/;"	f
+WPE_StatField	np_stats.c	/^} WPE_StatField;$/;"	t	typeref:union:StatField	file:
+WPI_HANDLE_INDEX	np_app.c	96;"	d	file:
+WPI_HANDLE_INDEX	np_ufe_fr.c	44;"	d	file:
+WPI_INDEX_MASK	np_app.c	94;"	d	file:
+WPI_INDEX_MASK	np_ufe_fr.c	42;"	d	file:
+WPI_MASK_BITS	np_app.c	93;"	d	file:
+WPI_MASK_BITS	np_ufe_fr.c	41;"	d	file:
+WPI_NSVC_REMOTE_BIT_MASK	np_app.c	1976;"	d	file:
+WPI_PTR	np_common.h	/^typedef WP_U32 WPI_PTR;$/;"	t
+WPI_SHIFT_MASK	np_app.c	95;"	d	file:
+WPI_SHIFT_MASK	np_ufe_fr.c	43;"	d	file:
+WPI_VALID_BIT_MASK	np_app.c	3190;"	d	file:
+WPL_INTRPT_MASK_EXTERNAL_H	np_app.c	4779;"	d	file:
+WPL_INTRPT_MASK_EXTERNAL_L	np_app.c	4778;"	d	file:
+WPL_INTRPT_REGISTER_GET	np_app.c	4783;"	d	file:
+WPL_INTRPT_REGISTER_SET	np_app.c	4784;"	d	file:
+WPL_MAILBOX_LOCK_KEY	np_ufe_fr.c	3690;"	d	file:
+WPL_MAILBOX_LOCK_KEY	wti_flexmux_util.c	249;"	d	file:
+WPL_SIGNAL_RT_BUSERR	np_app.c	901;"	d	file:
+WPL_SIGNAL_RT_OV	np_app.c	900;"	d	file:
+WPL_SIGNAL_RT_SER	np_app.c	899;"	d	file:
+WP_ETH_MAX_RSV_HIPRIO_NUMBER	np_common.h	161;"	d
+WP_ETH_MAX_RSV_LOWPRIO_NUMBER	np_common.h	160;"	d
+WP_FR_MAX_RSV_HIPRIO_NUMBER	np_common.h	158;"	d
+WP_FR_MAX_RSV_LOWPRIO_NUMBER	np_common.h	157;"	d
+WP_PRIORIYT_MSG_FR_TYPE	np_common.h	154;"	d
+WP_PRIORIYT_MSG_IP_TYPE	np_common.h	155;"	d
+WTI_FLEXMUX_CLOCK_REC_GAIN_FAST	wti_flexmux_util.h	50;"	d
+WTI_FLEXMUX_CLOCK_REC_GAIN_SLOW	wti_flexmux_util.h	51;"	d
+WTI_FLEXMUX_DBG_MODE	wti_flexmux_util.h	35;"	d
+WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING	wti_flexmux_util.h	37;"	d
+WTI_FLEXMUX_NUM_DEVICES	wti_flexmux_util.h	33;"	d
+WTI_FLEXMUX_PHYSICAL_CONF	wti_flexmux_util.h	45;"	d
+WTI_FLEXMUX_PHYSICAL_CONF	wti_flexmux_util.h	47;"	d
+WTI_FLEXMUX_RECV_PDH_LINE_CLK_0	wti_flexmux_util.h	53;"	d
+WTI_FLEXMUX_RECV_PDH_LINE_CLK_1	wti_flexmux_util.h	54;"	d
+WTI_FLEXMUX_UFE_FRAMER_WUFE_SDH_TYPE_VC	wti_flexmux_util.h	40;"	d
+WTI_FLEXMUX_UFE_FRAMER_WUFE_SDH_TYPE_VC	wti_flexmux_util.h	42;"	d
+WTI_FLEXMUX_UTIL_H	wti_flexmux_util.h	18;"	d
+WTI_FlexmuxCheckPrbsResult	wti_flexmux_util.c	/^WP_U8 WTI_FlexmuxCheckPrbsResult(U8 flexmux_id, WP_U32 client_port_id, WUFE_un_framed framing_mode)$/;"	f
+WTI_FlexmuxCheckStatus	wti_flexmux_util.c	/^void WTI_FlexmuxCheckStatus(WP_CHAR * Message, WP_U8 status, WP_U32 line)$/;"	f
+WTI_FlexmuxClientPortIndexGet	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxClientPortIndexGet(WP_U32 ufe_line_index, WUFE_line_transf_type transfer_type)$/;"	f
+WTI_FlexmuxConnectionCreate	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxConnectionDelete	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxConnectionDelete(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxDisableLoopback	wti_flexmux_util.c	/^WP_U8 WTI_FlexmuxDisableLoopback(U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxDisplayVersionAndConfig	wti_flexmux_util.c	/^void WTI_FlexmuxDisplayVersionAndConfig(WP_U32 flexmux_id)$/;"	f
+WTI_FlexmuxEnableLoopback	wti_flexmux_util.c	/^WP_U8 WTI_FlexmuxEnableLoopback(U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxForceA	wti_flexmux_util.c	/^void WTI_FlexmuxForceA(WP_U32 line_port_id)$/;"	f
+WTI_FlexmuxForceB	wti_flexmux_util.c	/^void WTI_FlexmuxForceB(WP_U32 line_port_id)$/;"	f
+WTI_FlexmuxGetLoopbackState	wti_flexmux_util.c	/^WP_U8 WTI_FlexmuxGetLoopbackState(U8 flexmux_id, WP_U32 line_port_id, WP_U32 client_port_id, WTI_flexmux_loopback_mode loopback_type)$/;"	f
+WTI_FlexmuxInit	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxInit(WP_U32 upi_index,$/;"	f
+WTI_FlexmuxLinePortConfig	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxLinePortConfig(WP_U8 flexmux_id,$/;"	f
+WTI_FlexmuxLinePortIndexGet	wti_flexmux_util.c	/^WP_S32 WTI_FlexmuxLinePortIndexGet(WP_U32 ufe_line_index, WP_U32 flexmux_id)$/;"	f
+WTI_FlexmuxPDHOutputClockSet	wti_flexmux_util.c	/^void WTI_FlexmuxPDHOutputClockSet(WP_U8 output_select, WP_U32 line_index,WUFE_line_transf_type transfer_type,WP_U32 clock_rate)$/;"	f
+WTI_FlexmuxTerminateOnError	wti_flexmux_util.c	/^void WTI_FlexmuxTerminateOnError(WP_CHAR * pFatalErrorMessage, WP_U8 error_code)$/;"	f
+WTI_Flexmux_connection_registry	wti_flexmux_util.h	/^} WTI_Flexmux_connection_registry;$/;"	t	typeref:struct:__anon40
+WTI_Flexmux_device_registry	wti_flexmux_util.h	/^} WTI_Flexmux_device_registry;$/;"	t	typeref:struct:__anon42
+WTI_Flexmux_global_setup	wti_flexmux_util.h	/^} WTI_Flexmux_global_setup;$/;"	t	typeref:struct:__anon39
+WTI_Flexmux_line_port_registry	wti_flexmux_util.h	/^} WTI_Flexmux_line_port_registry;$/;"	t	typeref:struct:__anon41
+WTI_MAX_FLEXMUX_DEVICES_SUPPORTED_BY_DRIVER	wti_flexmux_util.h	32;"	d
+WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE	wti_flexmux_util.h	34;"	d
+WTI_Np_FlexmuxClientPortIndexGet	np_ufe_fr.c	/^WP_S32 WTI_Np_FlexmuxClientPortIndexGet(WP_U32 ufe_line_index, WUFE_line_transf_type transfer_type)$/;"	f
+WTI_Np_FlexmuxLinePortIndexGet	np_ufe_fr.c	/^WP_S32 WTI_Np_FlexmuxLinePortIndexGet(WP_U32 ufe_line_index, WP_U32 flexmux_id)$/;"	f
+WTI_UFE412_REVA	wti_flexmux_util.c	28;"	d	file:
+WTI_flexmux_connection_type	wti_flexmux_util.h	/^}WTI_flexmux_connection_type;$/;"	t	typeref:enum:__anon38
+WTI_flexmux_line_port_mode	wti_flexmux_util.h	/^}WTI_flexmux_line_port_mode;$/;"	t	typeref:enum:__anon37
+WTI_flexmux_loopback_mode	wti_flexmux_util.h	/^}WTI_flexmux_loopback_mode;$/;"	t	typeref:enum:__anon36
+WTI_flexmux_physical_conf	wti_flexmux_util.h	/^}WTI_flexmux_physical_conf;$/;"	t	typeref:enum:__anon35
+WTI_flexmux_take_framer_lock	wti_flexmux_util.c	/^void WTI_flexmux_take_framer_lock(void)$/;"	f
+WTUFE_Reconfig_Fr_Channel	np_ufe_fr.c	/^WP_status WTUFE_Reconfig_Fr_Channel(WP_U32 card, WP_U32 trunk,WP_U32 tsgroup,WP_U32 dlci,STRU_SET_INITAIL_CONFIG *p2)$/;"	f
+WTUFE_Reconfig_Stm1	np_ufe_fr.c	/^WP_status WTUFE_Reconfig_Stm1(WP_U32 stm1id, WP_U32 line_index_base,STRU_STM1_RECFG *reconfig_info,STRU_SET_INITAIL_CONFIG *p2)$/;"	f
+WTUFE_Reconfig_Stm1_All	np_ufe_fr.c	/^WP_status WTUFE_Reconfig_Stm1_All(STRU_SET_INITAIL_CONFIG *p1, STRU_SET_INITAIL_CONFIG *p2)$/;"	f
+WTUFE_Reconfig_Stm1_inLoop	np_ufe_fr.c	/^WP_status WTUFE_Reconfig_Stm1_inLoop(WP_U32 stm1id, WP_U32 trunkid, WP_U32 groupid, WP_U32 line_index_base,STRU_STM1_RECFG *reconfig_info,STRU_SET_INITAIL_CONFIG *p2)$/;"	f
+WTUFE_Reconfig_phys	np_ufe_fr.c	/^WP_status WTUFE_Reconfig_phys(WP_U32 trunkid,WP_U32 groupid,WP_U32 slot_selection,WP_U32 crc_type)$/;"	f
+WTUFE_UPI_PORT_1	np_common.h	119;"	d
+WTUFE_UPI_PORT_2	np_common.h	120;"	d
+WTUFE_config_lines	np_ufe_fr.c	/^static void WTUFE_config_lines(WP_U32 line_lb_mode)$/;"	f	file:
+WTUFE_config_phys	np_ufe_fr.c	/^void WTUFE_config_phys(WP_U32 line_index,WP_U32 groupId,WP_U32 slot_selection,WP_U32 line_index_base\/*,WP_handle *phy_handle,WP_handle *device_handle*\/)$/;"	f
+WTUFE_config_system	np_ufe_fr.c	/^static void WTUFE_config_system( WP_U32 ufe_lb_mode,WP_U32 ufe_port)$/;"	f	file:
+WT_Eint3Interrupt	np_ufe_fr.c	/^void WT_Eint3Interrupt(WP_U32 wpid, WP_U32 signal_info)$/;"	f
+WT_FLEXMUX_CONNECTION_TYPE_DS3	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_DS3,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED_CAS	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_E1_FRAMED_CAS,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_E1_UNFRAMED	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_E1_UNFRAMED,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_E3	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_E3,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_STS12	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_STS12,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_STS1_SPE	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_STS1_SPE,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_STS3	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_STS3,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED_CAS	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_T1_FRAMED_CAS,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_T1_UNFRAMED	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_T1_UNFRAMED,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_VC11	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC11,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_VC12	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC12,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_VC3	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC3,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_VC4	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC4,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_VC4_4C	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VC4_4C,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_VCAT	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VCAT,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_VT1_5	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VT1_5,$/;"	e	enum:__anon38
+WT_FLEXMUX_CONNECTION_TYPE_VT2	wti_flexmux_util.h	/^    WT_FLEXMUX_CONNECTION_TYPE_VT2,$/;"	e	enum:__anon38
+WT_FLEXMUX_DEEP_LINE_LOOPBACK	wti_flexmux_util.h	/^    WT_FLEXMUX_DEEP_LINE_LOOPBACK,$/;"	e	enum:__anon36
+WT_FLEXMUX_DEEP_SYSTEM_LOOPBACK	wti_flexmux_util.h	/^    WT_FLEXMUX_DEEP_SYSTEM_LOOPBACK,$/;"	e	enum:__anon36
+WT_FLEXMUX_LINE_PORT_OC12	wti_flexmux_util.h	/^    WT_FLEXMUX_LINE_PORT_OC12,$/;"	e	enum:__anon37
+WT_FLEXMUX_LINE_PORT_OC3	wti_flexmux_util.h	/^    WT_FLEXMUX_LINE_PORT_OC3,$/;"	e	enum:__anon37
+WT_FLEXMUX_LINE_PORT_STM1	wti_flexmux_util.h	/^    WT_FLEXMUX_LINE_PORT_STM1,$/;"	e	enum:__anon37
+WT_FLEXMUX_LINE_PORT_STM4	wti_flexmux_util.h	/^    WT_FLEXMUX_LINE_PORT_STM4$/;"	e	enum:__anon37
+WT_FLEXMUX_NONE_LOOPBACK	wti_flexmux_util.h	/^    WT_FLEXMUX_NONE_LOOPBACK,$/;"	e	enum:__anon36
+WT_FLEXMUX_SHALLOW_LINE_LOOPBACK	wti_flexmux_util.h	/^    WT_FLEXMUX_SHALLOW_LINE_LOOPBACK,$/;"	e	enum:__anon36
+WT_FLEXMUX_SHALLOW_SYSTEM_LOOPBACK	wti_flexmux_util.h	/^    WT_FLEXMUX_SHALLOW_SYSTEM_LOOPBACK,$/;"	e	enum:__anon36
+WT_FLEXMUX_UFE_412_1_PORT_OC12	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_412_1_PORT_OC12,$/;"	e	enum:__anon35
+WT_FLEXMUX_UFE_412_1_PORT_OC12_PLUS_1_PROTECTION	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_412_1_PORT_OC12_PLUS_1_PROTECTION,$/;"	e	enum:__anon35
+WT_FLEXMUX_UFE_412_2_PORTS_OC3	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_412_2_PORTS_OC3,$/;"	e	enum:__anon35
+WT_FLEXMUX_UFE_412_4_PORTS_OC3	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_412_4_PORTS_OC3,$/;"	e	enum:__anon35
+WT_FLEXMUX_UFE_412_4_PORTS_OC3_PLUS_4_PROTECTION	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_412_4_PORTS_OC3_PLUS_4_PROTECTION,$/;"	e	enum:__anon35
+WT_FLEXMUX_UFE_448_16_PORTS_OC3	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_448_16_PORTS_OC3,$/;"	e	enum:__anon35
+WT_FLEXMUX_UFE_448_4_PORTS_OC12	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_448_4_PORTS_OC12,$/;"	e	enum:__anon35
+WT_FLEXMUX_UFE_448_4_PORTS_OC12_PLUS_4_PROTECTION	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_448_4_PORTS_OC12_PLUS_4_PROTECTION,$/;"	e	enum:__anon35
+WT_FLEXMUX_UFE_448_8_PORTS_OC3_PLUS_8_PROTECTION	wti_flexmux_util.h	/^    WT_FLEXMUX_UFE_448_8_PORTS_OC3_PLUS_8_PROTECTION$/;"	e	enum:__anon35
+WT_MAX_CH_RATE	np_common.h	117;"	d
+WT_MIN_CH_RATE	np_common.h	116;"	d
+WT_Np_UfeLineConfigureAndCreateE1	np_ufe_fr.c	/^void WT_Np_UfeLineConfigureAndCreateE1(WP_U32 line_index, WP_U16 framing_mode, WP_U8 cas_enable,WP_U32 line_lb_mode,WP_U32 clock_mode)$/;"	f
+WT_Np_UfeLineConfigureAndCreateT1	np_ufe_fr.c	/^void WT_Np_UfeLineConfigureAndCreateT1(WP_U32 line_index, WP_U16 framing_mode, WP_U8 cas_enable,WP_U32 line_lb_mode,WP_U32 clock_mode)$/;"	f
+WT_Np_UfeLineCreate	np_ufe_fr.c	/^void WT_Np_UfeLineCreate(WP_U32 line_index,WUFE_line_sdh *line_cfg,WT_ufe_line_sdh_params *line_sdh_params,WP_U32 line_lb_mode)$/;"	f
+WT_Np_UfeLineSdhConfig	np_ufe_fr.c	/^void WT_Np_UfeLineSdhConfig(WT_ufe_line_sdh_params *line_sdh_params,$/;"	f
+WT_SerdesInterrupt	np_ufe_fr.c	/^void WT_SerdesInterrupt(WP_U32 wpid, WP_U32 signal_info)$/;"	f
+WT_SgmiiAnInterrupt	np_ufe_fr.c	/^void WT_SgmiiAnInterrupt(WP_U32 wpid, WP_U32 signal_info)$/;"	f
+WT_TranslateAsciiToHexGIGEGIGE	np_app.c	/^void WT_TranslateAsciiToHexGIGEGIGE(WP_CHAR *Hex, WP_CHAR *Ascii,$/;"	f
+WT_UFE_HANDLE_INVALID	np_ufe_fr.c	182;"	d	file:
+WT_UfeTerminateOnError	np_ufe_fr.c	/^static void WT_UfeTerminateOnError(WP_handle handle, WP_CHAR *s,WP_U32 id,WP_U32 LineNum)$/;"	f	file:
+WT_ufe_line_sdh_params	wti_flexmux_util.h	/^} WT_ufe_line_sdh_params;$/;"	t	typeref:struct:__anon33
+WT_ufe_line_sonet_params	wti_flexmux_util.h	/^} WT_ufe_line_sonet_params;$/;"	t	typeref:struct:__anon34
+WUFE_UFE4	np_ufe_fr.c	33;"	d	file:
+WinGinUtili	spp_npu_link.h	/^	u32 WinGinUtili[12];\/*winpath3 has 12 wingin max*\/$/;"	m	struct:STRU_CPU_STATICS_TAG
+XML_PARSER_BUFFER_SIZE	xml_operation.c	76;"	d	file:
+XS_CONSOLE_BUF_DESC	xs_ioctl.h	/^} XS_CONSOLE_BUF_DESC;$/;"	t	typeref:struct:__anon29
+XS_FILE_DESC	xs_ioctl.h	/^} XS_FILE_DESC;$/;"	t	typeref:struct:__anon30
+XS_IOCTL_CONSOLE_READ	xs_ioctl.h	13;"	d
+XS_IOCTL_CONSOLE_WRITE	xs_ioctl.h	12;"	d
+XS_IOCTL_ENV_GET	xs_ioctl.h	19;"	d
+XS_IOCTL_ENV_GET32	xs_ioctl.h	21;"	d
+XS_IOCTL_FLASH_PROG	xs_ioctl.h	18;"	d
+XS_IOCTL_FW_VERSION	xs_ioctl.h	16;"	d
+XS_IOCTL_I2C_PROG	xs_ioctl.h	17;"	d
+XS_IOCTL_OS_VALUE	xs_ioctl.h	4;"	d
+XS_IOCTL_RESET	xs_ioctl.h	15;"	d
+XS_IOCTL_REV_GET	xs_ioctl.h	20;"	d
+XS_IOCTL_THERMO_READ	xs_ioctl.h	14;"	d
+XS_REV_DESC	xs_ioctl.h	/^} XS_REV_DESC;$/;"	t	typeref:struct:__anon32
+XS_THERMO_DESC	xs_ioctl.h	/^} XS_THERMO_DESC;$/;"	t	typeref:struct:__anon31
+_GNU_SOURCE	spp_wddi_server.c	32;"	d	file:
+_TUN_DEV_H	tun_dev.h	2;"	d
+_WDDI_LOG_H	wddi_log.h	30;"	d
+__LITTLE_ENDIAN_BITFIELD	npu_main.c	54;"	d	file:
+__NPU_COMMON_H	np_common.h	2;"	d
+__SPP_NPU_LINK_H	spp_npu_link.h	2;"	d
+__WDDI_COMMON_H	spp_wddi_common.h	2;"	d
+__WDDI_SERVER_H	spp_wddi_server.h	4;"	d
+__XS_IOCTL_H	xs_ioctl.h	2;"	d
+_cli_attribute_t	xml_operation.c	/^typedef struct _cli_attribute_t$/;"	s	file:
+_expat_data	xml_operation.c	/^typedef struct _expat_data$/;"	s	file:
+accessible	xml_operation.c	/^    int    accessible;$/;"	m	struct:__anon2	file:
+ack	npu_main.c	/^float ack = 0;$/;"	v
+add_dl_rule_and_build	spp_wddi_server.c	/^int add_dl_rule_and_build()$/;"	f
+adminState	np_common.h	/^    u8    adminState;\/*0:enable 1:disable*\/$/;"	m	struct:STRU_PVC_QOS_INFO_TAG
+agg_FR_PrioRx0_host_handle	np_common.h	/^    WP_handle agg_FR_PrioRx0_host_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_after_defrag	np_common.h	/^    WP_handle agg_after_defrag;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_bfd_rx_handle	np_common.h	/^    WP_handle agg_bfd_rx_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_bfd_tx_handle	np_common.h	/^    WP_handle agg_bfd_tx_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_dl_dportGrp_handle	np_common.h	/^    WP_handle agg_dl_dportGrp_handle;$/;"	m	struct:NP_DL_FLOW_INFO_TAG
+agg_dl_ip2iptx2Enet1	spp_wddi_server.h	/^	u32 agg_dl_ip2iptx2Enet1;$/;"	m	struct:STRU_VPORT_INFO_TAG
+agg_dl_ip_to_enet2_handle	np_common.h	/^    WP_handle agg_dl_ip_to_enet2_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_downlink_tx2fr_device	np_common.h	/^    WP_handle agg_downlink_tx2fr_device;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+agg_downlink_tx2peerfr	spp_wddi_server.h	/^	WP_handle agg_downlink_tx2peerfr;$/;"	m	struct:STRU_PEER_VPORT_INFO_TAG
+agg_enet2_to_enet1	np_common.h	/^    WP_handle agg_enet2_to_enet1;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_enet2_to_fr	np_common.h	/^    WP_handle agg_enet2_to_fr;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+agg_enet_1	np_app.c	/^WP_handle agg_enet_1, agg_enet_2;$/;"	v
+agg_enet_2	np_app.c	/^WP_handle agg_enet_1, agg_enet_2;$/;"	v
+agg_enet_PrioRx0_host_handle	np_common.h	/^    WP_handle agg_enet_PrioRx0_host_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_enet_default_host_handle	np_common.h	/^    WP_handle agg_enet_default_host_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_enet_dfc_1	np_app.c	/^WP_handle agg_enet_dfc_1, agg_enet_dfc_2;$/;"	v
+agg_enet_dfc_2	np_app.c	/^WP_handle agg_enet_dfc_1, agg_enet_dfc_2;$/;"	v
+agg_fr_rx_host_flow	np_common.h	/^    WP_handle agg_fr_rx_host_flow;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+agg_fr_to_enet2	np_common.h	/^    WP_handle agg_fr_to_enet2;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+agg_host_arp_agg	np_common.h	/^    WP_handle agg_host_arp_agg;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_ip2iptx2host	spp_wddi_server.h	/^	u32 agg_ip2iptx2host;$/;"	m	struct:STRU_VPORT_INFO_TAG
+agg_ipfrag	np_common.h	/^	WP_handle agg_ipfrag;$/;"	m	struct:NP_ARP_INFO_TAG
+agg_mac_filter_from_eth2_handle	np_common.h	/^    WP_handle agg_mac_filter_from_eth2_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_mac_filter_handle	np_common.h	/^    WP_handle agg_mac_filter_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+agg_tx2Enet1	np_common.h	/^    WP_handle agg_tx2Enet1;\/*dps will modify ip_dst port_src &port_dst*\/$/;"	m	struct:FR_CHANNEL_INFO_TAG
+agg_tx2Enet1ModifyFlag	np_common.h	/^    WP_handle agg_tx2Enet1ModifyFlag;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+agg_tx2eth1	np_common.h	/^	WP_handle agg_tx2eth1;$/;"	m	struct:NP_ARP_INFO_TAG
+agg_ul_ip2iptx2Enet1	spp_wddi_server.h	/^	u32 agg_ul_ip2iptx2Enet1;$/;"	m	struct:STRU_VPORT_INFO_TAG
+agg_ul_ip2iptx2Enet1ModifyFlag	spp_wddi_server.h	/^	u32 agg_ul_ip2iptx2Enet1ModifyFlag;$/;"	m	struct:STRU_VPORT_INFO_TAG
+agg_ul_ip_to_enet2_handle	spp_wddi_server.h	/^	u32 agg_ul_ip_to_enet2_handle;$/;"	m	struct:STRU_VPORT_INFO_TAG
+agg_updateBVCI_handle	np_common.h	/^    WP_handle agg_updateBVCI_handle;$/;"	m	struct:NP_UPDATE_BVCI_FLOW_INFO_TAG
+alarm_cback_S1	wti_flexmux_util.c	/^void alarm_cback_S1(U8 iDevice, U8 iLinePort, U8 S1)$/;"	f
+alarm_cback_client	wti_flexmux_util.c	/^void alarm_cback_client(U8 iDevice,$/;"	f
+alarm_cback_discrete	wti_flexmux_util.c	/^void alarm_cback_discrete(U8  iDevice,$/;"	f
+alarm_cback_k1k2	wti_flexmux_util.c	/^void alarm_cback_k1k2(U8 iDevice,$/;"	f
+alarm_cback_path	wti_flexmux_util.c	/^void alarm_cback_path(U8 iDevice,$/;"	f
+alarm_cback_pm_client	wti_flexmux_util.c	/^void alarm_cback_pm_client(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f
+alarm_cback_pm_discrete	wti_flexmux_util.c	/^void alarm_cback_pm_discrete(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f
+alarm_cback_pm_hpath	wti_flexmux_util.c	/^void alarm_cback_pm_hpath(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f
+alarm_cback_pm_lpath	wti_flexmux_util.c	/^void alarm_cback_pm_lpath(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f
+alarm_cback_pm_port	wti_flexmux_util.c	/^void alarm_cback_pm_port(U8 iDevice, U8 iTableIndex, U32 TimeStamp)$/;"	f
+alarm_cback_port	wti_flexmux_util.c	/^void alarm_cback_port(U8 iDevice, U8 iLinePort, U8 AlarmCategory, U8 IsAsserted)$/;"	f
+already_running	npu_main.c	/^int already_running(const char *filename)$/;"	f
+appname	np_app.c	/^WP_CHAR appname[] = "spp npu";$/;"	v
+argc_local	xml_operation.c	/^    int     argc_local;$/;"	m	struct:_expat_data	file:
+argv_local	xml_operation.c	/^    char** argv_local;$/;"	m	struct:_expat_data	file:
+arp_ht	spp_wddi_server.c	/^struct hsearch_data *arp_ht;$/;"	v	typeref:struct:hsearch_data
+arp_nodehead	spp_wddi_server.c	/^struct NODE* arp_nodehead=NULL;$/;"	v	typeref:struct:NODE
+attributes	xml_operation.c	/^    cli_attribute_t *attributes;$/;"	m	struct:__anon3	file:
+bad_ip_version	spp_npu_link.h	/^    u64 bad_ip_version;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+bc	np_common.h	/^	u32	  bc;$/;"	m	struct:STRU_PVC_QOS_INFO_TAG
+bc	np_common.h	/^    WP_U32    bc;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+be	np_common.h	/^	u32	  be;$/;"	m	struct:STRU_PVC_QOS_INFO_TAG
+be	np_common.h	/^    WP_U32    be;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+bfd_rx_table_handle	np_common.h	/^    WP_handle bfd_rx_table_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+bfd_tx_table_handle	np_common.h	/^    WP_handle bfd_tx_table_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+bolck_mode_flag	spp_npu_link.h	/^}bolck_mode_flag;$/;"	t	typeref:enum:__anon19
+bport_conf	np_app.c	/^WP_bridge_port bport_conf[1] =$/;"	v
+bridge_bport_conf	np_app.c	/^WP_bridge_port bridge_bport_conf[1] =$/;"	v
+bridge_host_agg_cfg	np_app.c	/^WP_iw_agg_bridging bridge_host_agg_cfg[] =$/;"	v
+bridge_iw_agg_cfg	np_app.c	/^WP_iw_agg_directmap bridge_iw_agg_cfg [1] = {$/;"	v
+bssgp_in_octets	spp_npu_link.h	/^	u64  bssgp_in_octets; \/*in direction, equal to NS unit data counter*\/$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+bssgp_in_packets	spp_npu_link.h	/^	u64  bssgp_in_packets;$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+bssgp_in_packets_signalling	spp_npu_link.h	/^	u64  bssgp_in_packets_signalling;\/*not BSSGP unit packet*\/$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+bssgp_out_octets	spp_npu_link.h	/^	u64  bssgp_out_octets;\/*out direction,equal to NS unit data counter*\/$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+bssgp_out_packets	spp_npu_link.h	/^	u64  bssgp_out_packets;$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+bssgp_out_packets_signalling	spp_npu_link.h	/^	u64  bssgp_out_packets_signalling;$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+buf	np_app.c	/^WP_CHAR buf[4096];$/;"	v
+buf	xs_ioctl.h	/^    unsigned char *buf;$/;"	m	struct:__anon30
+buf	xs_ioctl.h	/^    unsigned char buf[PCI_CONSOLE_SIZE];$/;"	m	struct:__anon29
+bufLen	xs_ioctl.h	/^    int bufLen;$/;"	m	struct:__anon29
+buffer_data_2048	np_app.c	/^WP_pool_buffer_data buffer_data_2048[] = {$/;"	v
+buffer_data_defrag	np_app.c	/^WP_pool_buffer_data buffer_data_defrag[] = {$/;"	v
+buffer_data_frag	np_app.c	/^WP_pool_buffer_data buffer_data_frag[] = {$/;"	v
+bvci_nodehead	spp_wddi_server.h	/^	struct NODE* bvci_nodehead;$/;"	m	struct:STRU_VPORT_INFO_TAG	typeref:struct:STRU_VPORT_INFO_TAG::NODE
+bvci_t	xml_operation.c	/^typedef  u16 bvci_t;$/;"	t	file:
+calendar	np_app.c	/^WP_calendar_wheel calendar[2] =$/;"	v
+captureEnableFlag	spp_wddi_server.h	/^	u32 captureEnableFlag;\/*NPU_NPUMON_CAPTURE_DISABLE or NPU_NPUMON_CAPTURE_ENABLE*\/$/;"	m	struct:STRU_VPORT_NPUMON_TAG
+card	np_common.h	/^	unsigned int card:3;$/;"	m	struct:__anon6
+card	np_common.h	/^    WP_U32    card;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+cas_enable	wti_flexmux_util.h	/^    WUFE_cas_enable       cas_enable;$/;"	m	struct:__anon33
+cas_enable	wti_flexmux_util.h	/^    WUFE_cas_enable       cas_enable;$/;"	m	struct:__anon34
+ch_config_iw	np_app.c	/^WP_ch_iw_rx ch_config_iw[1]=$/;"	v
+ch_config_iw_fr	np_ufe_fr.c	/^WP_ch_iw_rx ch_config_iw_fr[1]=$/;"	v
+ch_config_iw_tx_fr	np_ufe_fr.c	/^WP_ch_iw_tx ch_config_iw_tx_fr[1] =$/;"	v
+ch_enet	np_app.c	/^WP_ch_enet ch_enet[1] =$/;"	v
+ch_info	spp_wddi_server.h	/^	FR_CHANNEL_INFO ch_info;$/;"	m	struct:STRU_VPORT_INFO_TAG
+check	np_app.c	/^	WP_U16	check;$/;"	m	struct:iphdr	file:
+check	np_app.c	/^	WP_U16	check;$/;"	m	struct:udphdr	file:
+check	npu_main.c	/^	__sum16	check;$/;"	m	struct:iphdr	file:
+check	npu_main.c	/^	__sum16	check;$/;"	m	struct:udphdr	file:
+checksum_error	spp_npu_link.h	/^    u64 checksum_error;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+cir	np_common.h	/^	u32	  cir;$/;"	m	struct:STRU_PVC_QOS_INFO_TAG
+cir	np_common.h	/^    WP_U32    cir;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+class_table	xml_operation.c	/^static cli_class_t class_table[] =$/;"	v	file:
+cli_apply_conf_files	xml_operation.c	/^cli_apply_conf_files( glob_t glob_p,STRU_SET_INITAIL_CONFIG *np_configure_ptr )$/;"	f
+cli_apply_configuration_files_from_dir	xml_operation.c	/^cli_apply_configuration_files_from_dir(char* configuration_dir,STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f
+cli_attribute_t	xml_operation.c	/^} cli_attribute_t;$/;"	t	typeref:struct:_cli_attribute_t	file:
+cli_class_t	xml_operation.c	/^} cli_class_t;$/;"	t	typeref:struct:__anon3	file:
+cli_completion_str	xml_operation.c	/^char cli_completion_str[4096];$/;"	v
+cli_e1_port_create_internal	xml_operation.c	/^cli_e1_port_create_internal(cli_attribute_t *arglist,STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+cli_enum_instance_t	xml_operation.c	/^} cli_enum_instance_t;$/;"	t	typeref:struct:__anon1	file:
+cli_error_str	xml_operation.c	/^char cli_error_str[256];$/;"	v
+cli_find_class	xml_operation.c	/^cli_find_class(int argc_local, char** argv_local, cli_class_t *class)$/;"	f	file:
+cli_find_method	xml_operation.c	/^cli_find_method(int argc, char** argv,cli_method_t *method_table, cli_method_t *method)$/;"	f	file:
+cli_frame_relay_fraction_create_internal	xml_operation.c	/^static void cli_frame_relay_fraction_create_internal(cli_attribute_t *arglist, STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+cli_frame_relay_pvc_create_internal	xml_operation.c	/^cli_frame_relay_pvc_create_internal(cli_attribute_t *arglist, STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+cli_ip_create_internal	xml_operation.c	/^static void cli_ip_create_internal(cli_attribute_t *arglist,STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+cli_ip_route_create_internal	xml_operation.c	/^static void cli_ip_route_create_internal(cli_attribute_t *arglist,STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+cli_method_t	xml_operation.c	/^} cli_method_t;$/;"	t	typeref:struct:__anon2	file:
+cli_sgsn_pool_create_internal	xml_operation.c	/^cli_sgsn_pool_create_internal(cli_attribute_t *arglist, STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+cli_stm1_interface_create_internal	xml_operation.c	/^static void cli_stm1_interface_create_internal(cli_attribute_t *arglist,STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+cli_t1_port_create_internal	xml_operation.c	/^cli_t1_port_create_internal(cli_attribute_t *arglist,STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+cli_vlan_endpoint_create_internal	xml_operation.c	/^static void cli_vlan_endpoint_create_internal(cli_attribute_t *arglist,STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f	file:
+client	spp_wddi_server.h	/^	LINX_SPID      client;$/;"	m	struct:STRU_VPORT_INFO_TAG
+client	spp_wddi_server.h	/^    LINX_SPID   client;$/;"	m	struct:STRU_VPORT_NPUMON_TAG
+clientAlrmStr	wti_flexmux_util.c	/^static char clientAlrmStr[6][8] =$/;"	v	file:
+clk	npu_main.c	/^long clk;$/;"	v
+clock_mode	np_common.h	/^	u32 clock_mode;    \/*NPU_E1T1_CLOCK_MASTER$/;"	m	struct:STRU_E1_TRUNK_INFO_TAG
+clock_mode	wti_flexmux_util.h	/^    WP_U32 clock_mode;$/;"	m	struct:__anon33
+clock_rec_line_params	wti_flexmux_util.h	/^    WUFE_line_clock_rec_params *clock_rec_line_params;$/;"	m	struct:__anon33
+clock_rec_line_params	wti_flexmux_util.h	/^    WUFE_line_clock_rec_params *clock_rec_line_params;$/;"	m	struct:__anon34
+cmd	spp_npu_link.h	/^    unsigned int cmd;    \/**\/$/;"	m	struct:STRU_NPUMON_INFO_TAG
+cmd	spp_wddi_common.h	/^	u32 cmd;$/;"	m	struct:stru_npu_get_request_ack_sig
+cmd	spp_wddi_common.h	/^	u32 cmd;$/;"	m	struct:stru_npu_request_sig
+cmdType	spp_wddi_common.h	/^	u32 cmdType;$/;"	m	struct:stru_npu_request_sig
+completion_handler	xml_operation.c	/^    void (*completion_handler)(struct _cli_attribute_t *arglist);$/;"	m	struct:_cli_attribute_t	file:
+configuration_files_exist	npu_main.c	/^int configuration_files_exist(char* directory)$/;"	f
+context	np_app.c	/^WP_context context[1] =$/;"	v
+context_config	np_app.c	/^WP_iw_ip_defrag_context context_config[1] =$/;"	v
+copy128bytes	np_app.c	/^static inline void copy128bytes(uint8_t *dst, const uint8_t *src)$/;"	f	file:
+copy16bytes	np_app.c	/^static inline void copy16bytes(uint8_t *dst, const uint8_t *src)$/;"	f	file:
+copy32bytes	np_app.c	/^static inline void copy32bytes(uint8_t *dst, const uint8_t *src)$/;"	f	file:
+copy64bytes	np_app.c	/^static inline void copy64bytes(uint8_t *dst, const uint8_t *src)$/;"	f	file:
+crc_type	np_common.h	/^    u8 crc_type;             \/*NPU_E1T1_CRC16$/;"	m	struct:STRU_E1_GROUP_INFO_TAG
+creat_IwHostTxChannel	np_app.c	/^void creat_IwHostTxChannel(WP_handle flow_agg)$/;"	f
+create_ht_link	spp_wddi_server.c	/^void create_ht_link(NODE **nodehead,char *key)$/;"	f
+create_tapcfg	tun_dev.c	/^void create_tapcfg(STRU_SET_INITAIL_CONFIG *initial_cfg)$/;"	f
+current_filename	xml_operation.c	/^static char* current_filename; \/\/The name of the currently parsed XML file$/;"	v	file:
+daddr	np_app.c	/^	WP_U32	daddr;$/;"	m	struct:iphdr	file:
+daddr	npu_main.c	/^	__be32	daddr;$/;"	m	struct:iphdr	file:
+data_ptr	np_app.c	/^static WP_U8 *data_ptr;$/;"	v	file:
+data_ptr	np_ufe_fr.c	/^static WP_U8 *data_ptr;$/;"	v	file:
+data_unit	np_app.c	/^static WP_data_unit data_unit;$/;"	v	file:
+data_unit	np_ufe_fr.c	/^static WP_data_unit data_unit= {0};$/;"	v	file:
+debug_log_file	spp_wddi_server.c	/^FILE *debug_log_file = NULL;$/;"	v
+default_host_aggregation	np_app.c	/^WP_handle default_host_aggregation;$/;"	v
+default_value	xml_operation.c	/^    void* default_value;$/;"	m	struct:_cli_attribute_t	file:
+defrag_group	np_app.c	/^WP_iw_ip_defrag_group defrag_group[1] =$/;"	v
+deny_cfm_frames	spp_npu_link.h	/^    u32 deny_cfm_frames;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+deny_mac_da	spp_npu_link.h	/^    u64 deny_mac_da;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+deny_mac_sa	spp_npu_link.h	/^    u64 deny_mac_sa;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+description	xml_operation.c	/^    char* description;$/;"	m	struct:__anon2	file:
+description	xml_operation.c	/^    char* description;$/;"	m	struct:__anon3	file:
+description	xml_operation.c	/^    char* description;$/;"	m	struct:_cli_attribute_t	file:
+dest	np_app.c	/^	WP_U16	dest;$/;"	m	struct:udphdr	file:
+dest	npu_main.c	/^	__be16	dest;$/;"	m	struct:udphdr	file:
+devNo	xs_ioctl.h	/^    int  devNo;$/;"	m	struct:__anon31
+device_handle	np_common.h	/^    WP_handle device_handle;\/*host device*\/$/;"	m	struct:FR_CHANNEL_INFO_TAG
+device_iw_handle	np_common.h	/^    WP_handle device_iw_handle;\/*iw device*\/$/;"	m	struct:FR_CHANNEL_INFO_TAG
+dfc_sys_info	np_app.c	/^WP_dfc_sys_info dfc_sys_info[1] =$/;"	v
+discard_bridge_classifier	spp_npu_link.h	/^    u64 discard_bridge_classifier; \/* for backward compatibility *\/$/;"	m	struct:STRU_BPORT_STATICS_TAG
+discard_dfc_filter	spp_npu_link.h	/^    u64 discard_dfc_filter[32];$/;"	m	struct:STRU_BPORT_STATICS_TAG
+discard_ingress_filter	spp_npu_link.h	/^    u64 discard_ingress_filter;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+discard_pce_filter	spp_npu_link.h	/^    u64 discard_pce_filter[256];$/;"	m	struct:STRU_BPORT_STATICS_TAG
+discard_unk_macsa	spp_npu_link.h	/^    u64 discard_unk_macsa;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+discard_vlan_acceptable_filter	spp_npu_link.h	/^    u64 discard_vlan_acceptable_filter;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+displayUfeEvents	np_ufe_fr.c	/^void displayUfeEvents(void)$/;"	f
+display_arp_ht_link	spp_wddi_server.c	/^void display_arp_ht_link(void)$/;"	f
+display_config_info	spp_wddi_server.c	/^void display_config_info(void)$/;"	f
+display_dl_link_table_ht_link	spp_wddi_server.c	/^void display_dl_link_table_ht_link(void)$/;"	f
+display_dl_route_ht_link	spp_wddi_server.c	/^void display_dl_route_ht_link(WP_U16 DportStartValue,WP_U16 bvci,u32 OptMode)$/;"	f
+display_eth_regs	npu_main.c	/^void display_eth_regs(struct Eth_Regs* pregs)$/;"	f
+display_ul_link_table_ht_link	spp_wddi_server.c	/^void display_ul_link_table_ht_link(void)$/;"	f
+display_ul_route_ht_link	spp_wddi_server.c	/^void display_ul_route_ht_link(void)$/;"	f
+display_update_bvci_ht_link	spp_wddi_server.c	/^void display_update_bvci_ht_link(void)$/;"	f
+display_vport_ht_link	spp_wddi_server.c	/^void display_vport_ht_link(void)$/;"	f
+dl_rule_build_waittime	npu_main.c	/^unsigned int dl_rule_build_waittime = 0;$/;"	v
+dl_rule_list	spp_wddi_server.c	/^struct dl_rule_node * dl_rule_list = NULL;$/;"	v	typeref:struct:dl_rule_node
+dl_rule_node	spp_wddi_server.c	/^struct dl_rule_node$/;"	s	file:
+dl_rule_node_count	spp_wddi_server.c	/^unsigned int dl_rule_node_count = 0;$/;"	v
+dlci	np_common.h	/^	unsigned int dlci:16;$/;"	m	struct:__anon6
+dlci	np_common.h	/^    WP_U32    dlci;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+dlci	spp_npu_link.h	/^	unsigned int dlci;$/;"	m	struct:STRU_NPUMON_INFO_TAG
+downlink_ht	spp_wddi_server.c	/^struct hsearch_data *downlink_ht;$/;"	v	typeref:struct:hsearch_data
+downlink_nodehead	spp_wddi_server.c	/^struct NODE* downlink_nodehead=NULL;$/;"	v	typeref:struct:NODE
+dportID	spp_npu_link.h	/^    u16 dportID;$/;"	m	struct:STRU_GET_DPORT_TAG
+dps_rx_bytes	spp_npu_link.h	/^    u64 dps_rx_bytes;$/;"	m	struct:STRU_ETH_STATICS_TAG
+dps_rx_dropped_frames	spp_npu_link.h	/^    u64 dps_rx_dropped_frames;$/;"	m	struct:STRU_ETH_STATICS_TAG
+dps_rx_frames	spp_npu_link.h	/^    u64 dps_rx_frames;$/;"	m	struct:STRU_ETH_STATICS_TAG
+dps_rx_pce_denied_frames	spp_npu_link.h	/^    u64 dps_rx_pce_denied_frames;$/;"	m	struct:STRU_ETH_STATICS_TAG
+dps_tx_bytes	spp_npu_link.h	/^    u64 dps_tx_bytes;$/;"	m	struct:STRU_ETH_STATICS_TAG
+dps_tx_frames	spp_npu_link.h	/^    u64 dps_tx_frames;$/;"	m	struct:STRU_ETH_STATICS_TAG
+dump_eth_regs	npu_main.c	/^void dump_eth_regs(struct Eth_Regs* pregs)$/;"	f
+e1_port_attribute_table	xml_operation.c	/^static cli_attribute_t e1_port_attribute_table[] =$/;"	v	file:
+e1_port_cable_impedance_enums	xml_operation.c	/^static cli_enum_instance_t e1_port_cable_impedance_enums[] =$/;"	v	file:
+e1_port_channelized_enums	xml_operation.c	/^static cli_enum_instance_t e1_port_channelized_enums[] =$/;"	v	file:
+e1_port_clock_mode_enums	xml_operation.c	/^static cli_enum_instance_t e1_port_clock_mode_enums[] =$/;"	v	file:
+e1_port_line_code_enums	xml_operation.c	/^static cli_enum_instance_t e1_port_line_code_enums[] =$/;"	v	file:
+e1_port_method_table	xml_operation.c	/^static cli_method_t e1_port_method_table[] =$/;"	v	file:
+e1_status	np_common.h	/^    u32 e1_status;$/;"	m	struct:NP_ALARM_STATUS_TAG
+e1t1_status	spp_npu_link.h	/^	u8 e1t1_status[SPP_MAX_TRUNK_NUM];\/*LINK_STATUS_UP or LINK_STATUS_DOWN or LINK_STATUS_DISABLED*\/$/;"	m	struct:STRU_STM1_E1T1_STATUS_TAG
+emphy_config	np_ufe_fr.c	/^WP_port_upi_emphy_ext emphy_config[1] =$/;"	v
+emphy_iw_config	np_ufe_fr.c	/^static WP_port_upi_iw_ext emphy_iw_config[1] =$/;"	v	file:
+enet_iw_agg_cfg	np_app.c	/^WP_iw_agg_directmap_enet enet_iw_agg_cfg[1] =$/;"	v
+enet_iw_agg_defrag_cfg	np_app.c	/^WP_iw_agg_directmap_enet enet_iw_agg_defrag_cfg[1] =$/;"	v
+enet_iw_flow_defrag_aggregation	np_app.c	/^WP_handle enet_iw_flow_defrag_aggregation;$/;"	v
+enet_stat_get	np_stats.c	/^WP_status enet_stat_get(WP_U32 ethno, void *p) {$/;"	f
+enet_to_enet_classification_filter_cfg	np_app.c	/^static WP_classification_filter enet_to_enet_classification_filter_cfg[NPU_FILTER_NUM] =$/;"	v	file:
+enet_to_enet_dfc_flow_info	np_app.c	/^static WP_dfc_flow_info enet_to_enet_dfc_flow_info[NPU_FILTER_NUM] =$/;"	v	file:
+enet_to_enet_flow_policy_cfg	np_app.c	/^static WP_flow_class_rule enet_to_enet_flow_policy_cfg[NPU_FILTER_NUM] =$/;"	v	file:
+eth_link_status	npu_main.c	/^int eth_link_status(int port)$/;"	f
+ether_dhost	spp_wddi_server.h	/^    u8	ether_dhost[6];$/;"	m	struct:__anon43
+ether_dhost	spp_wddi_server.h	/^    u8   ether_dhost[6];$/;"	m	struct:__anon44
+ether_shost	spp_wddi_server.h	/^    u8	ether_shost[6];$/;"	m	struct:__anon43
+ether_shost	spp_wddi_server.h	/^    u8    ether_shost[6];$/;"	m	struct:__anon44
+ether_type	spp_wddi_server.h	/^    u16	ether_type;$/;"	m	struct:__anon43
+ether_type	spp_wddi_server.h	/^    u16   ether_type;$/;"	m	struct:__anon44
+ether_type_tag	spp_wddi_server.h	/^    u16   ether_type_tag;                \/* 0x8100 always *\/$/;"	m	struct:__anon44
+ethhdr	np_app.c	/^struct ethhdr {$/;"	s	file:
+ethhdr	npu_main.c	/^struct ethhdr {$/;"	s	file:
+expat_data_t	xml_operation.c	/^} expat_data_t;$/;"	t	typeref:struct:_expat_data	file:
+expat_parser	xml_operation.c	/^expat_parser(char* filename,STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f
+ext_device_enet	np_app.c	/^WP_device_enet_ex ext_device_enet[1] =$/;"	v
+external_name	xml_operation.c	/^    const char* external_name; \/\/name or alias used in some other context (like sangoma options, etc$/;"	m	struct:__anon1	file:
+facility	wddi_log.c	/^static const unsigned int facility = LOG_LOCAL0;  \/* Default log facility. *\/$/;"	v	file:
+field	np_stats.c	/^    WP_U64 field;$/;"	m	union:StatField	file:
+filename_current	xml_operation.c	/^static char filename_current[64] = "";$/;"	v	file:
+find_configuration_files	xml_operation.c	/^find_configuration_files(glob_t *pglob, char* directory)$/;"	f	file:
+flexmux_build_personality	wti_flexmux_util.h	/^    WP_U8                                           flexmux_build_personality;$/;"	m	struct:__anon39
+flexmux_build_personality	wti_flexmux_util.h	/^    WP_U8 flexmux_build_personality;$/;"	m	struct:__anon42
+flexmux_hw_config	wti_flexmux_util.h	/^    WTI_flexmux_physical_conf                       flexmux_hw_config;$/;"	m	struct:__anon39
+flexmux_hw_config	wti_flexmux_util.h	/^    WTI_flexmux_physical_conf flexmux_hw_config;$/;"	m	struct:__anon42
+flexmux_id	wti_flexmux_util.h	/^    WP_U8                                           flexmux_id;$/;"	m	struct:__anon39
+flexmux_loopback_mode	wti_flexmux_util.h	/^    WTI_flexmux_loopback_mode                       flexmux_loopback_mode;$/;"	m	struct:__anon39
+flexmux_mode	wti_flexmux_util.h	/^    WP_U8                                           flexmux_mode;$/;"	m	struct:__anon39
+flexmux_mode	wti_flexmux_util.h	/^    WP_U8 flexmux_mode;$/;"	m	struct:__anon42
+flexmux_reg	wti_flexmux_util.h	/^WTI_Flexmux_device_registry flexmux_reg[WTI_MAX_FLEXMUX_DEVICES_SUPPORTED_BY_DRIVER];$/;"	v
+flowHandle	np_common.h	/^	WP_handle flowHandle;$/;"	m	struct:NP_ARP_INFO_TAG
+flowHandle	np_common.h	/^	WP_handle flowHandle;$/;"	m	struct:NP_DL_FLOW_INFO_TAG
+flowHandle_bvci	np_common.h	/^	WP_handle flowHandle_bvci;$/;"	m	struct:NP_UPDATE_BVCI_FLOW_INFO_TAG
+flow_bdf_handle	np_common.h	/^    WP_handle flow_bdf_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+flow_default_mfc	np_common.h	/^    WP_handle flow_default_mfc;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+flow_enet2_to_fr	np_common.h	/^    WP_handle flow_enet2_to_fr;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+flow_mac_filter_handle	np_common.h	/^    WP_handle flow_mac_filter_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+flow_ul_tx2enet1	spp_wddi_server.h	/^	u32 flow_ul_tx2enet1;$/;"	m	struct:STRU_VPORT_INFO_TAG
+forwarded_bc_packets	spp_npu_link.h	/^    u64 forwarded_bc_packets;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+forwarded_mc_packets	spp_npu_link.h	/^    u64 forwarded_mc_packets;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+forwarded_uc_packets	spp_npu_link.h	/^    u64 forwarded_uc_packets;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+forwarding_action	np_app.c	/^WP_flow_class_forwarding_action forwarding_action;$/;"	v
+fr_addr_t	np_common.h	/^}fr_addr_t;$/;"	t	typeref:struct:__anon6
+fr_buffer_pool	np_ufe_fr.c	/^WP_handle fr_buffer_pool;$/;"	v
+fr_device_config	np_ufe_fr.c	/^WP_device_emphy_fr fr_device_config[1] =$/;"	v
+fr_dl_bvci_nodehead	spp_wddi_server.c	/^struct NODE* fr_dl_bvci_nodehead[MAX_FLOWS]={NULL};$/;"	v	typeref:struct:NODE
+fr_dl_dport_nodehead	spp_wddi_server.c	/^struct NODE* fr_dl_dport_nodehead[MAX_FLOWS]={NULL};$/;"	v	typeref:struct:NODE
+fr_dl_link_table_ht	spp_wddi_server.c	/^struct hsearch_data *fr_dl_link_table_ht;$/;"	v	typeref:struct:hsearch_data
+fr_dl_link_table_nodehead	spp_wddi_server.c	/^struct NODE* fr_dl_link_table_nodehead=NULL;$/;"	v	typeref:struct:NODE
+fr_iw_host_device	np_ufe_fr.c	/^WP_handle fr_iw_host_port,fr_iw_host_device;$/;"	v
+fr_iw_host_port	np_ufe_fr.c	/^WP_handle fr_iw_host_port,fr_iw_host_device;$/;"	v
+fr_system_init	np_ufe_fr.c	/^void fr_system_init(WP_U32 ufe_port)$/;"	f
+fr_to_enet2_agg_cfg	np_app.c	/^WP_iw_agg_directmap fr_to_enet2_agg_cfg [1] = {$/;"	v
+fr_ul_link_table_ht	spp_wddi_server.c	/^struct hsearch_data *fr_ul_link_table_ht;$/;"	v	typeref:struct:hsearch_data
+fr_ul_link_table_nodehead	spp_wddi_server.c	/^struct NODE* fr_ul_link_table_nodehead=NULL;$/;"	v	typeref:struct:NODE
+fragGrpHandle	np_common.h	/^	WP_handle fragGrpHandle;$/;"	m	struct:NP_ARP_INFO_TAG
+frag_group	np_app.c	/^WP_iw_ip_frag_group frag_group[1] =$/;"	v
+frag_off	np_app.c	/^	WP_U16	frag_off;$/;"	m	struct:iphdr	file:
+frag_off	npu_main.c	/^	__be16	frag_off;$/;"	m	struct:iphdr	file:
+frame_relay_fraction_attribute_table	xml_operation.c	/^static cli_attribute_t frame_relay_fraction_attribute_table[] =$/;"	v	file:
+frame_relay_fraction_crc_type_enums	xml_operation.c	/^static cli_enum_instance_t frame_relay_fraction_crc_type_enums[] =$/;"	v	file:
+frame_relay_fraction_interface_type_enums	xml_operation.c	/^static cli_enum_instance_t frame_relay_fraction_interface_type_enums[] =$/;"	v	file:
+frame_relay_fraction_lmi_standard_enums	xml_operation.c	/^static cli_enum_instance_t frame_relay_fraction_lmi_standard_enums[] =$/;"	v	file:
+frame_relay_fraction_method_table	xml_operation.c	/^static cli_method_t frame_relay_fraction_method_table[] =$/;"	v	file:
+frame_relay_pvc_attribute_table	xml_operation.c	/^static cli_attribute_t frame_relay_pvc_attribute_table[] =$/;"	v	file:
+frame_relay_pvc_method_table	xml_operation.c	/^static cli_method_t frame_relay_pvc_method_table[] =$/;"	v	file:
+framed	wti_flexmux_util.h	/^    WUFE_un_framed        framed;$/;"	m	struct:__anon33
+framed	wti_flexmux_util.h	/^    WUFE_un_framed        framed;$/;"	m	struct:__anon34
+free_argv_local	xml_operation.c	/^free_argv_local(char** argv_local)$/;"	f	file:
+g_LinxSeverInfo	spp_wddi_server.c	/^STRU_LINX_SERVER_INFO g_LinxSeverInfo={NULL,UNUSED};$/;"	v
+g_LinxSeverRxEththreadInfo	spp_wddi_server.c	/^STRU_LINX_SERVER_INFO g_LinxSeverRxEththreadInfo={NULL,UNUSED};$/;"	v
+g_LinxSeverRxFrthreadInfo	spp_wddi_server.c	/^STRU_LINX_SERVER_INFO g_LinxSeverRxFrthreadInfo={NULL,UNUSED};$/;"	v
+g_Vport_no	spp_wddi_server.c	/^u16 g_Vport_no;$/;"	v
+g_dlci	xml_operation.c	/^u32 g_stm1_id,g_trunk_id,g_group_id,g_dlci;$/;"	v
+g_eth_regs_down	npu_main.c	/^struct Eth_Regs g_eth_regs_up,g_eth_regs_down,g_eth_regs_last,g_eth_regs_tmp;$/;"	v	typeref:struct:
+g_eth_regs_last	npu_main.c	/^struct Eth_Regs g_eth_regs_up,g_eth_regs_down,g_eth_regs_last,g_eth_regs_tmp;$/;"	v	typeref:struct:
+g_eth_regs_tmp	npu_main.c	/^struct Eth_Regs g_eth_regs_up,g_eth_regs_down,g_eth_regs_last,g_eth_regs_tmp;$/;"	v	typeref:struct:
+g_eth_regs_up	npu_main.c	/^struct Eth_Regs g_eth_regs_up,g_eth_regs_down,g_eth_regs_last,g_eth_regs_tmp;$/;"	v	typeref:struct:Eth_Regs
+g_group_id	xml_operation.c	/^u32 g_stm1_id,g_trunk_id,g_group_id,g_dlci;$/;"	v
+g_logLevel	spp_wddi_server.c	/^int g_logLevel =2;\/*AppRxEvent can't use log*\/$/;"	v
+g_npNseAggFlag	npu_main.c	/^int g_npNseAggFlag=NPU_NSE_AGG_OFF;$/;"	v
+g_np_reconfig	spp_wddi_server.c	/^STRU_SET_INITAIL_CONFIG g_np_reconfig = {0};$/;"	v
+g_npinitial	spp_wddi_server.c	/^STRU_SET_INITAIL_CONFIG g_npinitial = {0};$/;"	v
+g_npinitialFlag	npu_main.c	/^int g_npinitialFlag=NPU_UNINITALIZED;$/;"	v
+g_npnonpoolFlag	npu_main.c	/^int g_npnonpoolFlag=NPU_POOL;$/;"	v
+g_stm1_id	xml_operation.c	/^u32 g_stm1_id,g_trunk_id,g_group_id,g_dlci;$/;"	v
+g_tapfd	tun_dev.c	/^int g_tapfd;$/;"	v
+g_trunk_id	xml_operation.c	/^u32 g_stm1_id,g_trunk_id,g_group_id,g_dlci;$/;"	v
+gbe_dev	np_app.c	/^WP_device_enet gbe_dev[1] =$/;"	v
+gbe_rx_filters	np_app.c	/^WP_enet_filters gbe_rx_filters[1] =$/;"	v
+gbe_s	np_app.c	/^WP_port_enet gbe_s[1] =$/;"	v
+gbedev1	np_app.c	/^WP_handle gbep1, gbep2, gbedev1, gbedev2;$/;"	v
+gbedev2	np_app.c	/^WP_handle gbep1, gbep2, gbedev1, gbedev2;$/;"	v
+gbep1	np_app.c	/^WP_handle gbep1, gbep2, gbedev1, gbedev2;$/;"	v
+gbep2	np_app.c	/^WP_handle gbep1, gbep2, gbedev1, gbedev2;$/;"	v
+getAppnameByPID	npu_main.c	/^int getAppnameByPID(char *buf,pid_t pid)$/;"	f
+getSystemResultBycmd	npu_main.c	/^int getSystemResultBycmd(const char *cmd)$/;"	f
+get_arglist	xml_operation.c	/^get_arglist(int argc,char** argv,cli_attribute_t *arglist,cli_method_t *method,cli_attribute_t *attributes)$/;"	f	file:
+get_attribute	xml_operation.c	/^get_attribute(char* parameter,cli_attribute_t *attributes,cli_attribute_t *attribute)$/;"	f	file:
+get_attribute_from_arglist	xml_operation.c	/^get_attribute_from_arglist(cli_attribute_t *arglist,const char* attr_name)$/;"	f	file:
+get_enum_from_arglist	xml_operation.c	/^static int get_enum_from_arglist(cli_attribute_t *arglist,char* attr_name, char string[])$/;"	f	file:
+get_ifname	tun_dev.c	/^char* get_ifname(void){ return IF_NAME;}$/;"	f
+get_ip_address_from_arglist	xml_operation.c	/^static int get_ip_address_from_arglist(cli_attribute_t *arglist,char* attr_name, ip_address_t * ip_address)$/;"	f	file:
+get_string_from_arglist	xml_operation.c	/^static int get_string_from_arglist(cli_attribute_t *arglist,char* attr_name, char* string)$/;"	f	file:
+get_time	npu_main.c	/^long get_time(struct timeval *tv)$/;"	f
+get_u16_from_arglist	xml_operation.c	/^static int get_u16_from_arglist(cli_attribute_t *arglist,char* attr_name, u16 * integer)$/;"	f	file:
+get_u32_from_arglist	xml_operation.c	/^static int get_u32_from_arglist(cli_attribute_t *arglist,char* attr_name, u32 * integer)$/;"	f	file:
+get_u8_from_arglist	xml_operation.c	/^static int get_u8_from_arglist(cli_attribute_t *arglist,char* attr_name, u8 * integer)$/;"	f	file:
+getmodulebyname	npu_main.c	/^int getmodulebyname(const char *name)$/;"	f
+getpath	npu_main.c	/^int getpath(char *buf)$/;"	f
+gettid	npu_main.c	42;"	d	file:
+group	np_common.h	/^    WP_U32    group;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+group	spp_npu_link.h	/^	unsigned int group;$/;"	m	struct:STRU_NPUMON_INFO_TAG
+groupValid	np_common.h	/^    u8 groupValid;          \/*NPU_VALID or NPU_INVALID*\/$/;"	m	struct:STRU_E1_GROUP_INFO_TAG
+group_info	np_common.h	/^    STRU_E1_GROUP_INFO group_info[SPP_MAX_GROUP_NUM];$/;"	m	struct:STRU_E1_TRUNK_INFO_TAG
+group_info	np_common.h	/^    STRU_E1_GROUP_INFO group_info[SPP_MAX_GROUP_NUM];$/;"	m	struct:STRU_STM1_RECFG_TAG
+groupid	spp_npu_link.h	/^	u32 groupid; \/*0~31*\/$/;"	m	struct:STRU_GET_UPI_GROUP_STATICS_TAG
+groupid_t	xml_operation.c	/^typedef  u16 groupid_t; \/\/ATM1$/;"	t	file:
+h_dest	np_app.c	/^	WP_U8	h_dest[ETH_ALEN];	\/* destination eth addr	*\/$/;"	m	struct:ethhdr	file:
+h_dest	np_app.c	/^	WP_U8	h_dest[ETH_ALEN];$/;"	m	struct:vlan_ethhdr	file:
+h_dest	npu_main.c	/^	unsigned char	h_dest[ETH_ALEN];	\/* destination eth addr	*\/$/;"	m	struct:ethhdr	file:
+h_dest	npu_main.c	/^	unsigned char	h_dest[ETH_ALEN];$/;"	m	struct:vlan_ethhdr	file:
+h_proto	np_app.c	/^	WP_U16		h_proto;		\/* packet type ID field	*\/$/;"	m	struct:ethhdr	file:
+h_proto	npu_main.c	/^	__be16		h_proto;		\/* packet type ID field	*\/$/;"	m	struct:ethhdr	file:
+h_source	np_app.c	/^	WP_U8	h_source[ETH_ALEN];	\/* source ether addr	*\/$/;"	m	struct:ethhdr	file:
+h_source	np_app.c	/^	WP_U8	h_source[ETH_ALEN];$/;"	m	struct:vlan_ethhdr	file:
+h_source	npu_main.c	/^	unsigned char	h_source[ETH_ALEN];	\/* source ether addr	*\/$/;"	m	struct:ethhdr	file:
+h_source	npu_main.c	/^	unsigned char	h_source[ETH_ALEN];$/;"	m	struct:vlan_ethhdr	file:
+h_vlan_TCI	np_app.c	/^	WP_U16		h_vlan_TCI;$/;"	m	struct:vlan_ethhdr	file:
+h_vlan_TCI	npu_main.c	/^	__be16		h_vlan_TCI;$/;"	m	struct:vlan_ethhdr	file:
+h_vlan_encapsulated_proto	np_app.c	/^	WP_U16		h_vlan_encapsulated_proto;$/;"	m	struct:vlan_ethhdr	file:
+h_vlan_encapsulated_proto	npu_main.c	/^	__be16		h_vlan_encapsulated_proto;$/;"	m	struct:vlan_ethhdr	file:
+h_vlan_proto	np_app.c	/^	WP_U16		h_vlan_proto;$/;"	m	struct:vlan_ethhdr	file:
+h_vlan_proto	npu_main.c	/^	__be16		h_vlan_proto;$/;"	m	struct:vlan_ethhdr	file:
+handle	np_common.h	/^	WP_handle handle;$/;"	m	struct:DportGrpaggInfo_TAG
+handle_rx_eth_packet	npu_main.c	/^void handle_rx_eth_packet(int *Param)$/;"	f
+handle_rx_fr_packet	npu_main.c	/^void handle_rx_fr_packet(int *Param)$/;"	f
+hash_config	np_app.c	/^WP_iw_ip_defrag_hash hash_config[1] =$/;"	v
+high	np_stats.c	/^        WP_U32 high;$/;"	m	struct:StatField::__anon4	file:
+ht	spp_wddi_server.c	/^struct hsearch_data *ht;$/;"	v	typeref:struct:hsearch_data
+ht_key	spp_wddi_server.h	/^    char *ht_key;$/;"	m	struct:NODE
+id	np_app.c	/^	WP_U16	id;$/;"	m	struct:iphdr	file:
+id	npu_main.c	/^	__be16	id;$/;"	m	struct:iphdr	file:
+ifIpNetMask	np_common.h	/^	u32 ifIpNetMask;     \/*tap0 interface netmask*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+ifIpaddr	np_common.h	/^	u32 ifIpaddr;        \/*tap0 interface ipaddr*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+ifMACsrc	np_common.h	/^	u8  ifMACsrc[6];     \/*tap0 interface MAC SRC*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+ifType	spp_npu_link.h	/^	int ifType;\/*VP_TYPE_UDP OR VP_TYPE_FR*\/$/;"	m	struct:STRU_NPUMON_INFO_TAG
+ifType	spp_wddi_server.h	/^	int ifType;\/*VP_TYPE_UDP OR VP_TYPE_FR*\/$/;"	m	struct:STRU_VPORT_NPUMON_TAG
+ihl	np_app.c	/^	WP_U8	ihl:4,$/;"	m	struct:iphdr	file:
+ihl	npu_main.c	/^	__u8	ihl:4,$/;"	m	struct:iphdr	file:
+ingress_policer_non_conforming_packets	spp_npu_link.h	/^    u64 ingress_policer_non_conforming_packets;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+init_total_meminfo	np_app.c	/^void init_total_meminfo(void)$/;"	f
+input	np_ufe_fr.c	/^WP_CHAR input[20];$/;"	v
+inside_attribute	xml_operation.c	/^    char inside_attribute;$/;"	m	struct:_expat_data	file:
+inside_class	xml_operation.c	/^    char inside_class;$/;"	m	struct:_expat_data	file:
+int_queue_tables	np_app.c	/^WP_int_queue_table int_queue_tables = {{{30000, 1}, {3000, 1}, {10, 1}, {10, 1}}};$/;"	v
+ip_address_t	xml_operation.c	/^typedef  u32 ip_address_t;$/;"	t	file:
+ip_attribute_table	xml_operation.c	/^static cli_attribute_t ip_attribute_table[] =$/;"	v	file:
+ip_defrag_context_pool	np_app.c	/^WP_handle ip_defrag_context_pool;$/;"	v
+ip_defrag_group	np_common.h	/^    WP_handle ip_defrag_group;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+ip_defrag_hash_pool	np_app.c	/^WP_handle ip_defrag_hash_pool;$/;"	v
+ip_dst	spp_wddi_server.h	/^    u32 ip_dst;	        \/* source and dest address *\/$/;"	m	struct:__anon45
+ip_frag_sys	np_app.c	/^WP_iw_ip_fragmentation_system ip_frag_sys[1] =$/;"	v
+ip_frag_system_handle	np_app.c	/^WP_handle ip_frag_system_handle;$/;"	v
+ip_id	spp_wddi_server.h	/^    u16	ip_id;			\/* identification *\/$/;"	m	struct:__anon45
+ip_len	spp_wddi_server.h	/^    u16	ip_len;			\/* total length *\/$/;"	m	struct:__anon45
+ip_method_table	xml_operation.c	/^static cli_method_t ip_method_table[] =$/;"	v	file:
+ip_off	spp_wddi_server.h	/^    u16	ip_off;			\/* fragment offset field *\/$/;"	m	struct:__anon45
+ip_p	spp_wddi_server.h	/^    u8	ip_p;			\/* protocol *\/$/;"	m	struct:__anon45
+ip_protocol_error	spp_npu_link.h	/^    u64 ip_protocol_error;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+ip_route_attribute_table	xml_operation.c	/^static cli_attribute_t ip_route_attribute_table[] =$/;"	v	file:
+ip_route_method_table	xml_operation.c	/^static cli_method_t ip_route_method_table[] =$/;"	v	file:
+ip_src	spp_wddi_server.h	/^    u32 ip_src;$/;"	m	struct:__anon45
+ip_sum	spp_wddi_server.h	/^    u16	ip_sum;			\/* checksum *\/$/;"	m	struct:__anon45
+ip_tos	spp_wddi_server.h	/^    u8	ip_tos;			\/* type of service *\/$/;"	m	struct:__anon45
+ip_ttl	spp_wddi_server.h	/^    u8	ip_ttl;			\/* time to live *\/$/;"	m	struct:__anon45
+ip_vhl	spp_wddi_server.h	/^    u8	ip_vhl;			\/* version << 4 | header length >> 2 *\/$/;"	m	struct:__anon45
+ipaddr	spp_npu_link.h	/^	unsigned int ipaddr;$/;"	m	struct:STRU_NPUMON_INFO_TAG
+ipaddr	spp_wddi_server.h	/^	unsigned int ipaddr;\/*if ifType = VP_TYPE_UDP then it will be used*\/$/;"	m	struct:STRU_VPORT_NPUMON_TAG
+ipaddr_dst	spp_wddi_common.h	/^	u32 ipaddr_dst;$/;"	m	struct:stru_spp_receive_sig
+ipaddr_dst	spp_wddi_common.h	/^	u32 ipaddr_dst;$/;"	m	struct:stru_spp_send_sig
+ipaddr_dst	spp_wddi_server.h	/^	u32 ipaddr_dst;$/;"	m	struct:NPU_HOST_RSV_PACKET_INFO_TAG
+ipaddr_src	spp_wddi_common.h	/^	u32 ipaddr_src;$/;"	m	struct:stru_spp_receive_sig
+ipaddr_src	spp_wddi_common.h	/^	u32 ipaddr_src;$/;"	m	struct:stru_vport_open_sig
+ipaddr_src	spp_wddi_common.h	/^    u32 ipaddr_src;$/;"	m	struct:stru_spp_send_sig
+ipaddr_src	spp_wddi_server.h	/^	u32 ipaddr_src;$/;"	m	struct:NPU_HOST_RSV_PACKET_INFO_TAG
+ipaddr_src	spp_wddi_server.h	/^	unsigned int   ipaddr_src;$/;"	m	struct:STRU_VPORT_INFO_TAG
+ipdefrag_agg	np_app.c	/^WP_handle ipdefrag_agg;$/;"	v
+iphdr	np_app.c	/^struct iphdr {$/;"	s	file:
+iphdr	npu_main.c	/^struct iphdr {$/;"	s	file:
+is_class	xml_operation.c	/^is_class(const char* name)$/;"	f	file:
+is_initialized	wti_flexmux_util.h	/^    WP_boolean is_initialized;$/;"	m	struct:__anon40
+is_initialized	wti_flexmux_util.h	/^    WP_boolean is_initialized;$/;"	m	struct:__anon41
+is_initialized	wti_flexmux_util.h	/^    WP_boolean is_initialized;$/;"	m	struct:__anon42
+iw_enet_1	np_app.c	/^WP_handle iw_enet_1, iw_enet_2, iw_enet_3, iw_enet_1_tag, iw_enet_2_tag, iw_enet_3_tag;$/;"	v
+iw_enet_1_tag	np_app.c	/^WP_handle iw_enet_1, iw_enet_2, iw_enet_3, iw_enet_1_tag, iw_enet_2_tag, iw_enet_3_tag;$/;"	v
+iw_enet_2	np_app.c	/^WP_handle iw_enet_1, iw_enet_2, iw_enet_3, iw_enet_1_tag, iw_enet_2_tag, iw_enet_3_tag;$/;"	v
+iw_enet_2_tag	np_app.c	/^WP_handle iw_enet_1, iw_enet_2, iw_enet_3, iw_enet_1_tag, iw_enet_2_tag, iw_enet_3_tag;$/;"	v
+iw_enet_3	np_app.c	/^WP_handle iw_enet_1, iw_enet_2, iw_enet_3, iw_enet_1_tag, iw_enet_2_tag, iw_enet_3_tag;$/;"	v
+iw_enet_3_tag	np_app.c	/^WP_handle iw_enet_1, iw_enet_2, iw_enet_3, iw_enet_1_tag, iw_enet_2_tag, iw_enet_3_tag;$/;"	v
+iw_fr_buffer_pool	np_ufe_fr.c	/^WP_handle iw_fr_buffer_pool;$/;"	v
+iw_host_dev	np_app.c	/^WP_handle iwp_host, iw_host_dev;$/;"	v
+iw_port_stat	np_stats.c	/^void iw_port_stat(WP_handle iw_port) {$/;"	f
+iw_route_port_stat	np_stats.c	/^WP_U32 iw_route_port_stat(WP_handle iw_port)$/;"	f
+iw_rx_host_handle	np_app.c	/^WP_handle iw_rx_host_handle;$/;"	v
+iw_sys_bridging	np_app.c	/^WP_handle iw_sys_bridging;$/;"	v
+iw_sys_one	np_app.c	/^WP_iw_sys_bridging iw_sys_one[1]=$/;"	v
+iw_tx_host_handle	np_app.c	/^WP_handle iw_tx_host_handle;$/;"	v
+iwp_host	np_app.c	/^WP_handle iwp_host, iw_host_dev;$/;"	v
+len	np_app.c	/^	WP_U16	len;$/;"	m	struct:udphdr	file:
+len	npu_main.c	/^	__be16	len;$/;"	m	struct:udphdr	file:
+len	spp_npu_link.h	/^	unsigned int len;$/;"	m	struct:STRU_NPUMON_INFO_TAG
+len	spp_wddi_server.h	/^	u32 len;$/;"	m	struct:STRU_VPORT_NPUMON_TAG
+len	xs_ioctl.h	/^    unsigned int   len;$/;"	m	struct:__anon30
+length	spp_wddi_common.h	/^	u32 length;$/;"	m	struct:stru_spp_receive_sig
+length	spp_wddi_common.h	/^	u32 length;$/;"	m	struct:stru_spp_send_sig
+length	spp_wddi_server.h	/^	u32 length;$/;"	m	struct:NPU_HOST_RSV_PACKET_INFO_TAG
+level	spp_npu_link.h	/^	u32 level;   \/*$/;"	m	struct:STRU_NPU_SET_LOG_DEBUG_LEVEL_TAG
+lineAlrmStr	wti_flexmux_util.c	/^static char lineAlrmStr[54][12] =$/;"	v	file:
+line_port_mode	wti_flexmux_util.h	/^    WP_U8 line_port_mode;$/;"	m	struct:__anon41
+line_ports_reg	wti_flexmux_util.h	/^    WTI_Flexmux_line_port_registry line_ports_reg[WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE];$/;"	m	struct:__anon42
+link_status	spp_npu_link.h	/^}link_status;$/;"	t	typeref:enum:__anon17
+linx	spp_wddi_server.h	/^	LINX *linx;$/;"	m	struct:STRU_LINX_SERVER_INFO_TAG
+linx_init	spp_wddi_server.c	/^int linx_init(void)$/;"	f
+linx_init_thread_rx_eth	spp_wddi_server.c	/^int linx_init_thread_rx_eth(void)$/;"	f
+linx_init_thread_rx_fr	spp_wddi_server.c	/^int linx_init_thread_rx_fr(void)$/;"	f
+list_of_enums	xml_operation.c	/^    cli_enum_instance_t* list_of_enums;$/;"	m	struct:_cli_attribute_t	file:
+local_remote_flag	spp_npu_link.h	/^}local_remote_flag;$/;"	t	typeref:enum:__anon15
+lockfile	npu_main.c	/^int lockfile(int fd)$/;"	f
+log_debug_level	spp_npu_link.h	/^}log_debug_level;$/;"	t	typeref:enum:__anon18
+loopback	wti_flexmux_util.h	/^    WUFE_line_loopback_type loopback;$/;"	m	struct:__anon33
+loopback	wti_flexmux_util.h	/^    WUFE_line_loopback_type loopback;$/;"	m	struct:__anon34
+loopbkflag	np_ufe_fr.c	/^int loopbkflag[N_UFE_MAX_LINES_T1] ={0};$/;"	v
+low	np_stats.c	/^        WP_U32 low;$/;"	m	struct:StatField::__anon4	file:
+main	npu_main.c	/^int main(int argc, char **argv)$/;"	f
+mandatory_arguments	xml_operation.c	/^    char** mandatory_arguments;$/;"	m	struct:__anon2	file:
+mask	np_common.h	/^	u32 mask;$/;"	m	struct:STRU_ROUTE_INFO_TAG
+max	npu_main.c	/^long max = 0, min = LONG_MAX;$/;"	v
+max	xml_operation.c	/^    u64 max;$/;"	m	struct:_cli_attribute_t	file:
+max_frame_size	np_common.h	/^	u16 max_frame_size;      \/*MTU on this phy*\/$/;"	m	struct:STRU_E1_GROUP_INFO_TAG
+max_iw	np_app.c	/^WP_iw_global  max_iw[1] = {$/;"	v
+max_line_ports	wti_flexmux_util.h	/^    WP_U8 max_line_ports;$/;"	m	struct:__anon42
+method	xml_operation.c	/^    method_handler_t method;$/;"	m	struct:__anon2	file:
+method_handler_t	xml_operation.c	/^typedef void(*method_handler_t)(cli_attribute_t *arglist,STRU_SET_INITAIL_CONFIG *np_configure_ptr);$/;"	t	file:
+methods	xml_operation.c	/^    cli_method_t *methods;$/;"	m	struct:__anon3	file:
+mii_mgmt_cfg	np_app.c	/^WP_mii_mgmt mii_mgmt_cfg[1] =$/;"	v
+min	npu_main.c	/^long max = 0, min = LONG_MAX;$/;"	v
+min	xml_operation.c	/^    u64 min;$/;"	m	struct:_cli_attribute_t	file:
+my_exit	npu_main.c	/^void my_exit(int status, void *arg)$/;"	f
+name	xml_operation.c	/^    const char* name; \/\/Name of this instance$/;"	m	struct:__anon1	file:
+name	xml_operation.c	/^    const char* name;$/;"	m	struct:__anon2	file:
+name	xml_operation.c	/^    const char* name;$/;"	m	struct:__anon3	file:
+name	xml_operation.c	/^    const char* name;$/;"	m	struct:_cli_attribute_t	file:
+next	spp_wddi_server.c	/^    struct dl_rule_node * next;$/;"	m	struct:dl_rule_node	typeref:struct:dl_rule_node::dl_rule_node	file:
+next	spp_wddi_server.h	/^    struct NODE *next;$/;"	m	struct:NODE	typeref:struct:NODE::NODE
+nonpoolflag	spp_npu_link.h	/^    u32 nonpoolflag;$/;"	m	struct:STRU_SET_NPU_NONPOOL_STATE_TAG
+np_BFD_flowAdd	np_app.c	/^void np_BFD_flowAdd(NP_SYSTEM_INFO* the_system)$/;"	f
+np_Channel_is_None	np_ufe_fr.c	/^WP_status np_Channel_is_None(WP_U32 stm1Id, WP_U32 trunkid, WP_U32 groupid)$/;"	f
+np_DeviceDelete	np_ufe_fr.c	/^void np_DeviceDelete(WP_U32 trunkid,WP_U32 groupid)$/;"	f
+np_Ufe_Phy_Delete	np_ufe_fr.c	/^WP_status np_Ufe_Phy_Delete(WP_U32 trunkid,WP_U32 groupid)$/;"	f
+np_bfd_flow_statistics	np_stats.c	/^void np_bfd_flow_statistics(WP_handle BfdAggHandle)$/;"	f
+np_bfd_sesstion_statistics	np_stats.c	/^void np_bfd_sesstion_statistics(WP_handle rx_table_handle)$/;"	f
+np_check_ufe4_e1t1_status	np_ufe_fr.c	/^int np_check_ufe4_e1t1_status(WP_U32 LinePort ,WP_U32 lineIndex)$/;"	f
+np_check_ufe4_stm1_status	np_ufe_fr.c	/^int np_check_ufe4_stm1_status(WP_U32 LinePort)$/;"	f
+np_clear_ns_bssgp_statics	spp_wddi_server.c	/^int np_clear_ns_bssgp_statics(u32 vport)$/;"	f
+np_close_fr_vport	np_ufe_fr.c	/^int np_close_fr_vport(WP_U32 vfport)$/;"	f
+np_close_vport_for_client	spp_wddi_server.c	/^int np_close_vport_for_client(LINX_SPID client)$/;"	f
+np_close_vport_for_npumon	spp_wddi_server.c	/^int np_close_vport_for_npumon(LINX_SPID client)$/;"	f
+np_config_all_phys	np_ufe_fr.c	/^void np_config_all_phys(void)$/;"	f
+np_configure_ptr	xml_operation.c	/^	STRU_SET_INITAIL_CONFIG *np_configure_ptr; \/\/new added$/;"	m	struct:_expat_data	file:
+np_control_interrupt	np_app.c	/^void np_control_interrupt(u8 flag,u8 Irqnum)$/;"	f
+np_creat_fr_host_channel	np_ufe_fr.c	/^void np_creat_fr_host_channel(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_creat_fr_iw_channel	np_ufe_fr.c	/^void np_creat_fr_iw_channel(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_creat_fr_vport	np_ufe_fr.c	/^int np_creat_fr_vport(WP_U32 vfport)$/;"	f
+np_create_arp_hq	np_app.c	/^void np_create_arp_hq()$/;"	f
+np_delete_fr_host_channel	np_ufe_fr.c	/^void np_delete_fr_host_channel(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_delete_fr_iw_channel	np_ufe_fr.c	/^void np_delete_fr_iw_channel(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_disable_fr_host_channel	np_ufe_fr.c	/^void np_disable_fr_host_channel(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_disable_fr_iw_channel	np_ufe_fr.c	/^void np_disable_fr_iw_channel(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_dispaly_system_flow_agg	np_ufe_fr.c	/^void np_dispaly_system_flow_agg(void)$/;"	f
+np_display_all_ufe4_e1t1_status	np_ufe_fr.c	/^void np_display_all_ufe4_e1t1_status()$/;"	f
+np_display_defrag_info	np_app.c	/^void np_display_defrag_info(WP_handle handle)$/;"	f
+np_display_dport_flow_info	np_app.c	/^void np_display_dport_flow_info(u16 dport)$/;"	f
+np_display_flow_agg	np_ufe_fr.c	/^void np_display_flow_agg(WP_U32 vport)$/;"	f
+np_display_frag_flow_info	spp_wddi_server.c	/^void np_display_frag_flow_info(void)$/;"	f
+np_display_frag_info	np_app.c	/^void np_display_frag_info(WP_handle group_handle)$/;"	f
+np_display_iw_port_stat	np_app.c	/^void np_display_iw_port_stat(void)$/;"	f
+np_display_table_item	np_app.c	/^void np_display_table_item(STRU_GET_TABLE_ITEM *pstru_get_tblItem)$/;"	f
+np_display_ufe4_e1t1_status	np_ufe_fr.c	/^void np_display_ufe4_e1t1_status(WP_U32 LinePort ,WP_U32 lineIndex)$/;"	f
+np_display_ufe4_shd_status	np_ufe_fr.c	/^void np_display_ufe4_shd_status(void)$/;"	f
+np_display_ufe_line	np_ufe_fr.c	/^void np_display_ufe_line(WP_U32 lineIndex)$/;"	f
+np_display_ufe_phy	np_ufe_fr.c	/^void np_display_ufe_phy(WP_U32 vport)$/;"	f
+np_display_ufe_system	np_ufe_fr.c	/^void np_display_ufe_system(void)$/;"	f
+np_dl_enet2_to_fr_rule_add	np_app.c	/^int np_dl_enet2_to_fr_rule_add(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_dl_ip_forward_to_enet2_create	np_app.c	/^int np_dl_ip_forward_to_enet2_create(void)$/;"	f
+np_dl_link_table_set	np_app.c	/^int np_dl_link_table_set(STRU_SET_FR_DOWNLINK_PATH_LINK_TABLE * link_table)$/;"	f
+np_dl_release_FMC_resource	np_app.c	/^void np_dl_release_FMC_resource(u16 DportStartValue)$/;"	f
+np_dl_release_vport_resource	np_app.c	/^int np_dl_release_vport_resource(u32 vport)$/;"	f
+np_dl_route_table_add	np_app.c	/^int np_dl_route_table_add(STRU_SET_DOWNLINK_PATH_RULE * rule)$/;"	f
+np_dl_route_table_delete	np_app.c	/^int np_dl_route_table_delete(WP_U16 DportStartValue,WP_U16 bvci,WP_U32 OptMode)$/;"	f
+np_dst_mac_filter_flowAdd	np_app.c	/^void np_dst_mac_filter_flowAdd(NP_SYSTEM_INFO* the_system)$/;"	f
+np_enable_fr_host_channel	np_ufe_fr.c	/^void np_enable_fr_host_channel(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_enable_fr_iw_channel	np_ufe_fr.c	/^void np_enable_fr_iw_channel(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_enable_vport_capture_for_npumon	spp_wddi_server.c	/^int np_enable_vport_capture_for_npumon(STRU_NPUMON_INFO * info,LINX_SPID client)$/;"	f
+np_enet2_to_enet1_rule_add	np_app.c	/^int np_enet2_to_enet1_rule_add(void)$/;"	f
+np_eth_host_receive	np_app.c	/^int np_eth_host_receive(WP_handle rx_host_handle,WP_S32 *DataLength, WP_CHAR* pTxData)$/;"	f
+np_eth_host_send	np_app.c	/^void np_eth_host_send(WP_S32 DataLength, WP_CHAR* pTxData)$/;"	f
+np_flow_host	np_app.c	/^WP_handle np_flow_host[10];$/;"	v
+np_frIwSystemCreate	np_ufe_fr.c	/^void np_frIwSystemCreate(NP_SYSTEM_INFO *np_system)$/;"	f
+np_fr_host_receive	np_ufe_fr.c	/^int np_fr_host_receive(WP_handle rx_host_handle,WP_S32 *DataLength, WP_CHAR* pTxData)$/;"	f
+np_fr_host_send	np_ufe_fr.c	/^void np_fr_host_send(WP_handle tx_host_handle,WP_S32 DataLength, WP_CHAR* pTxData,WP_U32 dlci,WP_U32 port)$/;"	f
+np_fraddr_pack	np_ufe_fr.c	/^WP_U32 np_fraddr_pack(WP_U32 card, WP_U32 trunk, WP_U32 tsgroup, WP_U32 dlci)$/;"	f
+np_fraddr_unpack	np_ufe_fr.c	/^void np_fraddr_unpack(WP_U32 frport, WP_U32* card, WP_U32* trunk, WP_U32* tsgroup, WP_U32* dlci)$/;"	f
+np_get_ns_bssgp_statics	spp_wddi_server.c	/^int np_get_ns_bssgp_statics(u32 vport,STRU_GET_NS_BSSGP_STATICS * statics)$/;"	f
+np_get_slots_selection	spp_wddi_server.c	/^int np_get_slots_selection(u32 card,u32 trunk,u32 group)$/;"	f
+np_get_system_info	np_app.c	/^NP_SYSTEM_INFO *np_get_system_info(void)$/;"	f
+np_get_ufe4_aralm_info	np_ufe_fr.c	/^STRU_STM1_ALARM_INFO* np_get_ufe4_aralm_info(void)$/;"	f
+np_handle_ethernet_frame	npu_main.c	/^void np_handle_ethernet_frame(char * buffer, int lenth, int tapfd)$/;"	f
+np_handle_fr_frame	npu_main.c	/^void np_handle_fr_frame(char * buffer, int lenth, u32 vfport)$/;"	f
+np_handle_fr_priority_frame	npu_main.c	/^void np_handle_fr_priority_frame(char * buffer, int lenth)$/;"	f
+np_host_set_ns_bssgp_statics	spp_wddi_server.c	/^void np_host_set_ns_bssgp_statics(u8 * buf,u32 len,HOST_NS_BSSGP_STATICS * statics)$/;"	f
+np_init	np_app.c	/^WP_S32 np_init(void)$/;"	f
+np_initial_fr_qnode	np_ufe_fr.c	/^void np_initial_fr_qnode(WP_U32 ufe_port)$/;"	f
+np_ipdefrag_flow_add	np_app.c	/^int np_ipdefrag_flow_add(void)$/;"	f
+np_mon_send_capture_data	spp_wddi_server.c	/^int np_mon_send_capture_data(char * buffer, u32 len,LINX_SPID client,int direction,u8 type)$/;"	f
+np_poll_report_alarm	npu_main.c	/^int np_poll_report_alarm(void)$/;"	f
+np_reconfig_vlan_in_iwPort	np_app.c	/^void np_reconfig_vlan_in_iwPort(void)$/;"	f
+np_reconfig_vlan_in_routeSystem	np_app.c	/^void np_reconfig_vlan_in_routeSystem(void)$/;"	f
+np_send2eth_route_flow_add	np_app.c	/^void np_send2eth_route_flow_add(NP_ARP_INFO * arpInfo)$/;"	f
+np_send2eth_route_system_create	np_app.c	/^void np_send2eth_route_system_create(void)$/;"	f
+np_set_over_interrupt	np_app.c	/^void np_set_over_interrupt(void)$/;"	f
+np_set_ufe4_E1T1_aralm_info	np_ufe_fr.c	/^void np_set_ufe4_E1T1_aralm_info(WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE * pLineEndpoint, WP_U32 AlarmCategory, WP_U32 IsAsserted)$/;"	f
+np_set_ufe4_E1T1_aralm_info_fromClientPort	np_ufe_fr.c	/^void np_set_ufe4_E1T1_aralm_info_fromClientPort( WP_U32 ClientPort, WP_U32 AlarmCategory, WP_U32 IsAsserted)$/;"	f
+np_set_ufe4_aralm_info	np_ufe_fr.c	/^void np_set_ufe4_aralm_info(WP_U32 LinePort, WP_U32 AlarmCategory, WP_U32 IsAsserted)$/;"	f
+np_system	np_app.c	/^NP_SYSTEM_INFO np_system = {0};$/;"	v
+np_ufe4_ararm_info	np_ufe_fr.c	/^STRU_STM1_ALARM_INFO np_ufe4_ararm_info={0};$/;"	v
+np_ufe_release	np_ufe_fr.c	/^void np_ufe_release(void)$/;"	f
+np_ul_fr_to_enet2_create	np_app.c	/^int np_ul_fr_to_enet2_create(FR_CHANNEL_INFO * ch_info)$/;"	f
+np_ul_ip_forward_to_enet2_create	np_app.c	/^int np_ul_ip_forward_to_enet2_create(STRU_VPORT_INFO  *VportInfo)$/;"	f
+np_ul_link_table_delete	np_app.c	/^int np_ul_link_table_delete(WP_U32 portsrc)$/;"	f
+np_ul_link_table_set	np_app.c	/^int np_ul_link_table_set(STRU_SET_UPLINK_PATH_LINK_TABLE *link_table)$/;"	f
+np_ul_release_vport_resource	np_app.c	/^int np_ul_release_vport_resource(u32 vport)$/;"	f
+np_ul_route_table_add	np_app.c	/^int np_ul_route_table_add(STRU_SET_UPLINK_PATH_RULE *uplink_rule)$/;"	f
+np_ul_route_table_delete	np_app.c	/^int np_ul_route_table_delete(WP_U32 vfport,WP_U32 NRIValue)$/;"	f
+np_updateBVCI_flow_add	np_app.c	/^int np_updateBVCI_flow_add(STRU_SET_UPDATE_BVCI_PATH_RULE *rule)$/;"	f
+np_updateBVCI_flow_delete	np_app.c	/^int np_updateBVCI_flow_delete(WP_U32 vfport,WP_U16 NS_BVCI_old,WP_U32 OptMode)$/;"	f
+np_update_mac_in_route_system	np_app.c	/^void np_update_mac_in_route_system(NP_ARP_INFO *arpInfo )$/;"	f
+np_waittime	npu_main.c	/^int np_waittime = NPU_WAIT_TIME;$/;"	v
+npu_BfdInit	np_app.c	/^void npu_BfdInit(void)$/;"	f
+npu_BfdModuleInit	np_app.c	/^void npu_BfdModuleInit(void)$/;"	f
+npu_ack	spp_wddi_common.h	/^	struct stru_npu_ack_sig npu_ack;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_npu_ack_sig
+npu_cfg	spp_wddi_common.h	/^	struct stru_npu_cfg_sig npu_cfg;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_npu_cfg_sig
+npu_clear_vport_info	spp_wddi_server.c	/^int npu_clear_vport_info(u32 port_src,u8 vp_type)$/;"	f
+npu_dispatch_packet_to_client	spp_wddi_server.c	/^int npu_dispatch_packet_to_client(NPU_HOST_RSV_PACKET_INFO *StruRsvPacketInfo)$/;"	f
+npu_dl_link_table_delete	spp_wddi_server.c	/^int npu_dl_link_table_delete(WP_U32 vfort)$/;"	f
+npu_enable_ufe_serdes_interrupt	np_ufe_fr.c	/^void npu_enable_ufe_serdes_interrupt(void)$/;"	f
+npu_fr_channel_stat_clear	np_stats.c	/^int npu_fr_channel_stat_clear(WP_handle channelHandle ,int RxorTx)\/*1 Rx ,0 Tx*\/$/;"	f
+npu_get_arp_info	spp_wddi_server.c	/^NP_ARP_INFO * npu_get_arp_info(u32 ip)$/;"	f
+npu_get_dl_link_table_info	spp_wddi_server.c	/^STRU_SET_FR_DOWNLINK_PATH_LINK_TABLE * npu_get_dl_link_table_info(u16 NSEI)$/;"	f
+npu_get_dl_route_table_info	spp_wddi_server.c	/^NP_DL_FLOW_INFO * npu_get_dl_route_table_info(char * key)$/;"	f
+npu_get_downlink_info	spp_wddi_server.c	/^NP_DL_FLOW_INFO * npu_get_downlink_info(u16 DportStartValue,u16 bvci)$/;"	f
+npu_get_initial_cfg_info	spp_wddi_server.c	/^STRU_SET_INITAIL_CONFIG * npu_get_initial_cfg_info(void)$/;"	f
+npu_get_np_reconfig	spp_wddi_server.c	/^STRU_SET_INITAIL_CONFIG * npu_get_np_reconfig(void)$/;"	f
+npu_get_peer_vport_info	spp_wddi_server.c	/^STRU_PEER_VPORT_INFO * npu_get_peer_vport_info(u32 port_src)$/;"	f
+npu_get_request_ack	spp_wddi_common.h	/^	struct stru_npu_get_request_ack_sig npu_get_request_ack;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_npu_get_request_ack_sig
+npu_get_server_linx_info	spp_wddi_server.c	/^STRU_LINX_SERVER_INFO * npu_get_server_linx_info(void)$/;"	f
+npu_get_server_rx_eth_thread_linx_info	spp_wddi_server.c	/^STRU_LINX_SERVER_INFO * npu_get_server_rx_eth_thread_linx_info(void)$/;"	f
+npu_get_server_rx_fr_thread_linx_info	spp_wddi_server.c	/^STRU_LINX_SERVER_INFO * npu_get_server_rx_fr_thread_linx_info(void)$/;"	f
+npu_get_trunk_info	spp_wddi_server.c	/^NP_TRUNK_INFO * npu_get_trunk_info(u32 Trunkid)$/;"	f
+npu_get_ul_bvci_table_info	spp_wddi_server.c	/^NP_UPDATE_BVCI_FLOW_INFO * npu_get_ul_bvci_table_info(char * key)$/;"	f
+npu_get_ul_link_table_info	spp_wddi_server.c	/^STRU_SET_UPLINK_PATH_LINK_TABLE * npu_get_ul_link_table_info(u32 PortSrc)$/;"	f
+npu_get_update_bvci_info	spp_wddi_server.c	/^NP_UPDATE_BVCI_FLOW_INFO * npu_get_update_bvci_info(u32 vfport, u16 NS_BVCI_old)$/;"	f
+npu_get_uplink_info	spp_wddi_server.c	/^NP_UL_FLOW_INFO * npu_get_uplink_info(u32 vfport,u32 NRIValue)$/;"	f
+npu_get_vport_info	spp_wddi_server.c	/^STRU_VPORT_INFO * npu_get_vport_info(u32 port_src)$/;"	f
+npu_handle_heart_beat	npu_main.c	/^void npu_handle_heart_beat(int heartfd)$/;"	f
+npu_handle_linx_msg	spp_wddi_server.c	/^int npu_handle_linx_msg(void)$/;"	f
+npu_hanlde_npumon_request	spp_wddi_server.c	/^int npu_hanlde_npumon_request(STRU_NPUMON_INFO * info,LINX_SPID client)$/;"	f
+npu_init_arp_info	spp_wddi_server.c	/^void npu_init_arp_info(void)$/;"	f
+npu_init_downlink_info	spp_wddi_server.c	/^void npu_init_downlink_info(void)$/;"	f
+npu_init_fr_dl_link_table_info	spp_wddi_server.c	/^void npu_init_fr_dl_link_table_info(void)$/;"	f
+npu_init_fr_ul_link_table_info	spp_wddi_server.c	/^void npu_init_fr_ul_link_table_info(void)$/;"	f
+npu_init_peer_vport_info	spp_wddi_server.c	/^void npu_init_peer_vport_info(void)$/;"	f
+npu_init_trunk_info	spp_wddi_server.c	/^void npu_init_trunk_info(void)$/;"	f
+npu_init_update_bvci_info	spp_wddi_server.c	/^void npu_init_update_bvci_info(void)$/;"	f
+npu_init_uplink_info	spp_wddi_server.c	/^void npu_init_uplink_info(void)$/;"	f
+npu_init_vport_info	spp_wddi_server.c	/^void npu_init_vport_info(void)$/;"	f
+npu_mon_capture_packet	spp_wddi_server.c	/^void npu_mon_capture_packet(char * buffer, u32 len,u32 port,int direction)$/;"	f
+npu_printf_debugReg	np_app.c	/^npu_printf_debugReg(void)$/;"	f
+npu_request	spp_wddi_common.h	/^	struct stru_npu_request_sig npu_request;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_npu_request_sig
+npu_send_fr_packet	np_ufe_fr.c	/^void npu_send_fr_packet(WP_U8 *p, WP_U32 len,WP_U32 vfport)$/;"	f
+npu_send_udp_packet	spp_wddi_server.c	/^int npu_send_udp_packet(u8* p, u32 len,u32 ipaddr_src,u32 ipaddr_dst,u32 port_src, u32 port_dst)$/;"	f
+npu_set_arp_info	spp_wddi_server.c	/^int npu_set_arp_info(u32 ip, NP_ARP_INFO* arpinfo)$/;"	f
+npu_set_downlink_info	spp_wddi_server.c	/^int npu_set_downlink_info(NP_DL_FLOW_INFO* flowinfo)$/;"	f
+npu_set_fr_dl_link_table_info	spp_wddi_server.c	/^int npu_set_fr_dl_link_table_info(STRU_SET_FR_DOWNLINK_PATH_LINK_TABLE* linkInfo)$/;"	f
+npu_set_fr_ul_link_table_info	spp_wddi_server.c	/^int npu_set_fr_ul_link_table_info(STRU_SET_UPLINK_PATH_LINK_TABLE* linkInfo)$/;"	f
+npu_set_initial_cfg_info	spp_wddi_server.c	/^u32 npu_set_initial_cfg_info(char *filename, STRU_SET_INITAIL_CONFIG *np_configure_ptr)$/;"	f
+npu_set_peer_vport_info	spp_wddi_server.c	/^STRU_PEER_VPORT_INFO * npu_set_peer_vport_info(u32 port_src)$/;"	f
+npu_set_request_ack	spp_wddi_common.h	/^	struct stru_npu_set_request_ack_sig npu_set_request_ack;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_npu_set_request_ack_sig
+npu_set_server_linx_info	spp_wddi_server.c	/^void npu_set_server_linx_info(LINX * linx)$/;"	f
+npu_set_server_rx_eth_thread_linx_info	spp_wddi_server.c	/^void npu_set_server_rx_eth_thread_linx_info(LINX * linx)$/;"	f
+npu_set_server_rx_fr_thread_linx_info	spp_wddi_server.c	/^void npu_set_server_rx_fr_thread_linx_info(LINX * linx)$/;"	f
+npu_set_trunk_info	spp_wddi_server.c	/^int npu_set_trunk_info(u32 trunkid, NP_TRUNK_INFO* trunkinfo)$/;"	f
+npu_set_update_bvci_info	spp_wddi_server.c	/^int npu_set_update_bvci_info(u32 vfport, u16 NS_BVCI_old, NP_UPDATE_BVCI_FLOW_INFO* flowinfo,STRU_VPORT_INFO  *VportInfo)$/;"	f
+npu_set_uplink_info	spp_wddi_server.c	/^int npu_set_uplink_info(NP_UL_FLOW_INFO* flowinfo)$/;"	f
+npu_set_vport_info	spp_wddi_server.c	/^int npu_set_vport_info(LINX_SPID client,u8 vp_type,u32 ipaddr_src,u32 port_src)$/;"	f
+npu_udp_cal_chksum	spp_wddi_server.c	/^u16 npu_udp_cal_chksum(u8 *pu8ChkData, u32 u32ChkDataLen)$/;"	f
+npu_ufe_reconfig_clock_mode	np_ufe_fr.c	/^void npu_ufe_reconfig_clock_mode( WP_U32 line_index ,WP_U32 trans_type ,WP_U32 clock_mode)$/;"	f
+npu_upi_stat_clear	np_stats.c	/^int npu_upi_stat_clear(WP_U32 trunkid,WP_U32 groupid)$/;"	f
+npumon_capture	spp_npu_link.h	/^}npumon_capture;$/;"	t	typeref:enum:__anon13
+npumon_capture_enable_flag	np_common.h	/^    WP_U32    npumon_capture_enable_flag;\/*NPU_NPUMON_CAPTURE_ENABLE NPU_NPUMON_CAPTURE_DISALBE*\/$/;"	m	struct:NP_SYSTEM_INFO_TAG
+npumon_info	spp_wddi_server.h	/^	STRU_VPORT_NPUMON npumon_info;$/;"	m	struct:STRU_VPORT_INFO_TAG
+nri_t	xml_operation.c	/^typedef  u32 nri_t;$/;"	t	file:
+nri_valid_talbe	spp_wddi_server.h	/^	u16 nri_valid_talbe[257];$/;"	m	struct:STRU_VPORT_INFO_TAG
+ns_bssgp_statics	spp_npu_link.h	/^    STRU_NS_BSSGP_STATICS ns_bssgp_statics;$/;"	m	struct:STRU_GET_NS_BSSGP_STATICS_TAG
+ns_bssgp_statics	spp_wddi_server.h	/^	HOST_NS_BSSGP_STATICS ns_bssgp_statics;\/*for ip*\/$/;"	m	struct:STRU_VPORT_INFO_TAG
+ns_in_octets	spp_npu_link.h	/^	u64  ns_in_octets; \/*in direction,equal to NS unit + NS signal *\/$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+ns_in_packets	spp_npu_link.h	/^	u64  ns_in_packets;$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+ns_in_packets_signalling	spp_npu_link.h	/^	u64  ns_in_packets_signalling;$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+ns_out_octets	spp_npu_link.h	/^	u64  ns_out_octets;$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+ns_out_packets	spp_npu_link.h	/^	u64  ns_out_packets;$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+ns_out_packets_signalling	spp_npu_link.h	/^	u64  ns_out_packets_signalling;$/;"	m	struct:STRU_NS_BSSGP_STATICS_TAG
+nseAggFlag	spp_npu_link.h	/^    u32 nseAggFlag;$/;"	m	struct:STRU_SET_NPU_NSEAGG_FLAG_TAG
+nsei_portSrc	spp_npu_link.h	/^	}nsei_portSrc;$/;"	m	struct:STRU_SET_DOWNLINK_PATH_RULE_TAG	typeref:union:STRU_SET_DOWNLINK_PATH_RULE_TAG::__anon27
+nsei_t	xml_operation.c	/^typedef  u16 nsei_t;$/;"	t	file:
+nsvci_t	xml_operation.c	/^typedef  u16 nsvci_t;$/;"	t	file:
+numrsv	npu_main.c	/^long numrsv=0;$/;"	v
+om_arg_nsei_bsc	xml_operation.c	/^u32 om_arg_nsei_bsc;$/;"	v
+optional_arguments	xml_operation.c	/^    char** optional_arguments;$/;"	m	struct:__anon2	file:
+pargv	spp_wddi_common.h	/^    u8  pargv[1];$/;"	m	struct:stru_npu_request_sig
+parse_error	xml_operation.c	/^static char parse_error; \/\/Global variable used to signal errors found during parsing of XML files.$/;"	v	file:
+parser	xml_operation.c	/^    XML_Parser parser;$/;"	m	struct:_expat_data	file:
+part	np_stats.c	/^    } part;$/;"	m	union:StatField	typeref:struct:StatField::__anon4	file:
+pattern	np_ufe_fr.c	/^WP_U8 pattern = 0x01;$/;"	v
+payload_size	np_ufe_fr.c	/^WP_U32 payload_size=100;$/;"	v
+pcimem_copy	np_app.c	/^void * pcimem_copy(void * dst, const void * src, int n)$/;"	f
+pdata	spp_wddi_common.h	/^	u8  pdata[1];$/;"	m	struct:stru_npu_get_request_ack_sig
+pdata	spp_wddi_common.h	/^	u8  pdata[1];$/;"	m	struct:stru_spp_receive_sig
+pdata	spp_wddi_common.h	/^	u8 pdata[1];$/;"	m	struct:stru_spp_send_sig
+pdata	spp_wddi_server.h	/^	u8  *pdata; \/*udp payload*\/$/;"	m	struct:NPU_HOST_RSV_PACKET_INFO_TAG
+peer_vport_ht	spp_wddi_server.c	/^struct hsearch_data *peer_vport_ht;$/;"	v	typeref:struct:hsearch_data
+phy_handle	np_common.h	/^    WP_handle phy_handle;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+pipeAlarm	npu_main.c	/^static int pipeAlarm[2]={0};$/;"	v	file:
+pipeReadEventNum	npu_main.c	/^int pipeReadEventNum =0;$/;"	v
+pipeWriteEventNum	np_app.c	/^int pipeWriteEventNum =0;$/;"	v
+pipefd	npu_main.c	/^int pipefd[2]={0};$/;"	v
+pipefdRxEth	npu_main.c	/^int pipefdRxEth[2]={0};$/;"	v
+pipefdRxEthHprio	npu_main.c	/^int pipefdRxEthHprio[2]={0};$/;"	v
+pipefd_RxFrHprio	npu_main.c	/^int pipefd_RxFrHprio[2]={0};$/;"	v
+pipefull	np_app.c	/^int pipefull = 0;$/;"	v
+pipefullEthH	np_app.c	/^int pipefullEthH =0;$/;"	v
+pipefullEthL	np_app.c	/^int pipefullEthL =0;$/;"	v
+pipefullFRH	np_app.c	/^int pipefullFRH = 0;$/;"	v
+pkt_limits	np_ufe_fr.c	/^WP_port_pkt_limits pkt_limits[1] =$/;"	v
+pool_2048	np_app.c	/^WP_handle pool_256,pool_2048,pool_defrag,pool_frag;$/;"	v
+pool_256	np_app.c	/^WP_handle pool_256,pool_2048,pool_defrag,pool_frag;$/;"	v
+pool_defrag	np_app.c	/^WP_handle pool_256,pool_2048,pool_defrag,pool_frag;$/;"	v
+pool_frag	np_app.c	/^WP_handle pool_256,pool_2048,pool_defrag,pool_frag;$/;"	v
+pool_ring_host	np_app.c	/^WP_handle pool_ring_host;$/;"	v
+port	spp_wddi_common.h	/^    u32 port;$/;"	m	struct:stru_spp_receive_sig
+port	spp_wddi_server.h	/^    u32 port; \/*dst port*\/$/;"	m	struct:NPU_HOST_RSV_PACKET_INFO_TAG
+portDst	spp_npu_link.h	/^		u32 portDst;      \/*for IP interface portDst+NS_BVCI_old=>NS_BVCI*\/$/;"	m	union:STRU_SET_UPDATE_BVCI_PATH_RULE_TAG::__anon25
+portDst	spp_npu_link.h	/^		u32 portDst;      \/*for IP interface,Max is 3200 ,value is 0~64k*\/$/;"	m	union:STRU_SET_UPLINKPATH_RULE_TAG::__anon23
+portDst	spp_npu_link.h	/^        u32 portDst; 	 \/*for IP interface portDst+NS_BVCI_old=>NS_BVCI*\/$/;"	m	union:STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG::__anon26
+portDst	spp_npu_link.h	/^        u32 portDst; 	 \/*for IP interface*\/$/;"	m	union:STRU_DELETE_UPLINKPATH_RULE_TAG::__anon24
+portSrc	np_common.h	/^	WP_U32 portSrc;$/;"	m	struct:NP_UL_FLOW_INFO_TAG
+portSrc	spp_npu_link.h	/^	unsigned int portSrc;$/;"	m	struct:STRU_NPUMON_INFO_TAG
+portSrc	spp_npu_link.h	/^        u16 portSrc;          \/*for IP *\/$/;"	m	union:STRU_SET_DOWNLINK_PATH_RULE_TAG::__anon27
+port_config_ufe	np_ufe_fr.c	/^WP_port_upi port_config_ufe[1] =$/;"	v
+port_dst	spp_wddi_common.h	/^	u32 port_dst;$/;"	m	struct:stru_spp_send_sig
+port_ptr	spp_wddi_server.c	/^char port_ptr[MAX_PORTS];$/;"	v
+port_src	spp_wddi_common.h	/^	u16 port_src;$/;"	m	struct:stru_spp_receive_sig
+port_src	spp_wddi_common.h	/^	u32 port_src;$/;"	m	struct:stru_spp_send_sig
+port_src	spp_wddi_common.h	/^	u32 port_src;$/;"	m	struct:stru_vport_close_sig
+port_src	spp_wddi_common.h	/^	u32 port_src;$/;"	m	struct:stru_vport_open_sig
+port_src	spp_wddi_server.h	/^	u16 port_src;$/;"	m	struct:NPU_HOST_RSV_PACKET_INFO_TAG
+port_src	spp_wddi_server.h	/^	unsigned int   port_src;$/;"	m	struct:STRU_PEER_VPORT_INFO_TAG
+port_src	spp_wddi_server.h	/^	unsigned int   port_src;$/;"	m	struct:STRU_VPORT_INFO_TAG
+prbs_result	wti_flexmux_util.h	/^WP_U8 prbs_result[8092];$/;"	v
+printf	np_common.h	63;"	d
+protocol	np_app.c	/^	WP_U8	protocol;$/;"	m	struct:iphdr	file:
+protocol	npu_main.c	/^	__u8	protocol;$/;"	m	struct:iphdr	file:
+protocol_error	spp_npu_link.h	/^    u64 protocol_error;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+qn_frag_iw	np_app.c	/^WP_qnode_iwq qn_frag_iw[1]=$/;"	v
+qn_iw	np_app.c	/^WP_qnode_iwq qn_iw[1]=$/;"	v
+qn_iw_defrag	np_app.c	/^WP_qnode_iwq qn_iw_defrag[1]=$/;"	v
+qniw_defrag	np_app.c	/^WP_handle qnode_iw,qniw_frag,qniw_defrag;$/;"	v
+qniw_frag	np_app.c	/^WP_handle qnode_iw,qniw_frag,qniw_defrag;$/;"	v
+qnode_fr_host	np_ufe_fr.c	/^WP_handle qnode_fr_host;$/;"	v
+qnode_fr_iw	np_ufe_fr.c	/^WP_handle qnode_fr_iw;$/;"	v
+qnode_iw	np_app.c	/^WP_handle qnode_iw,qniw_frag,qniw_defrag;$/;"	v
+read_reg	npu_main.c	/^u32 read_reg(u32 addr)$/;"	f
+reconfigStm1_createE1_flag	np_ufe_fr.c	/^WP_U8 reconfigStm1_createE1_flag[RECONFIG_TRUNK_MAX] = {0};$/;"	v
+reg	xs_ioctl.h	/^    unsigned int reg;$/;"	m	struct:__anon31
+remove_tapcfg	tun_dev.c	/^void remove_tapcfg(void)$/;"	f
+res_mc_mac_deny	spp_npu_link.h	/^    u64 res_mc_mac_deny;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+reserved	spp_npu_link.h	/^	u32 reserved;$/;"	m	struct:STRU_GET_ETH_STATICS_TAG
+reserved	spp_npu_link.h	/^	u32 reserved;$/;"	m	struct:STRU_GET_UPI_STM1_STATICS_TAG
+restart_heartbeat	npu_main.c	/^restart_heartbeat()$/;"	f
+result	spp_wddi_common.h	/^	int             result;$/;"	m	struct:stru_npu_ack_sig
+result	spp_wddi_common.h	/^	int result;$/;"	m	struct:stru_npu_get_request_ack_sig
+result	spp_wddi_common.h	/^	int result;$/;"	m	struct:stru_npu_set_request_ack_sig
+routeInfo	np_common.h	/^	STRU_ROUTE_INFO routeInfo[SPP_MAX_ROUTE_NUM];$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+route_num	xml_operation.c	/^int route_num = 0;$/;"	v
+rule	np_common.h	/^    STRU_SET_DOWNLINK_PATH_RULE rule;$/;"	m	struct:NP_DL_FLOW_INFO_TAG
+rule	spp_wddi_server.c	/^    STRU_SET_DOWNLINK_PATH_RULE rule;$/;"	m	struct:dl_rule_node	file:
+rule_cfg	np_app.c	/^WP_flow_class_rule rule_cfg;$/;"	v
+rx_bc_valid_packets	spp_npu_link.h	/^    u64 rx_bc_valid_packets;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+rx_binding	np_app.c	/^WP_rx_binding_routing rx_binding[1] =$/;"	v
+rx_binding_enet	np_app.c	/^WP_rx_binding_bridging rx_binding_enet[1]=$/;"	v
+rx_broadcast	spp_npu_link.h	/^    u64 rx_broadcast;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_bytes	spp_npu_link.h	/^	u64	  rx_bytes;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_bytes	spp_npu_link.h	/^    u64 rx_bytes;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_bytes	spp_npu_link.h	/^    u64 rx_bytes;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_bytes_de_set	spp_npu_link.h	/^	u64	  rx_bytes_de_set;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_bytes_de_set	spp_npu_link.h	/^    u64 rx_bytes_de_set;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_discarded_abort	spp_npu_link.h	/^	u64	  rx_discarded_abort;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_abort	spp_npu_link.h	/^    u64 rx_discarded_abort;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_discarded_err_alignment	spp_npu_link.h	/^	u64	  rx_discarded_err_alignment;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_err_alignment	spp_npu_link.h	/^    u64 rx_discarded_err_alignment;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_discarded_err_crc	spp_npu_link.h	/^	u64	  rx_discarded_err_crc;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_err_crc	spp_npu_link.h	/^    u64 rx_discarded_err_crc;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_discarded_err_parity	spp_npu_link.h	/^	u64	  rx_discarded_err_parity;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_err_sop_eop	spp_npu_link.h	/^	u64	  rx_discarded_err_sop_eop;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_fbp_empty	spp_npu_link.h	/^	u64	  rx_discarded_fbp_empty;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_fbp_empty	spp_npu_link.h	/^    u64 rx_discarded_fbp_empty;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_discarded_hostq_full	spp_npu_link.h	/^	u64	  rx_discarded_hostq_full;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_hostq_full	spp_npu_link.h	/^    u64 rx_discarded_hostq_full;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_discarded_illegal_header	spp_npu_link.h	/^	u64	  rx_discarded_illegal_header;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_length_violation	spp_npu_link.h	/^	u64	  rx_discarded_length_violation;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_discarded_length_violation	spp_npu_link.h	/^    u64 rx_discarded_length_violation;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_discarded_unsupported_dlci	spp_npu_link.h	/^	u64	  rx_discarded_unsupported_dlci;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_dropped	spp_npu_link.h	/^    u64 rx_dropped;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_enet_handle_1	np_app.c	/^WP_handle tx_enet_handle_1, rx_enet_handle_1, tx_enet_handle_2, rx_enet_handle_2 ;$/;"	v
+rx_enet_handle_2	np_app.c	/^WP_handle tx_enet_handle_1, rx_enet_handle_1, tx_enet_handle_2, rx_enet_handle_2 ;$/;"	v
+rx_err_alignment	spp_npu_link.h	/^    u64 rx_err_alignment;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_code	spp_npu_link.h	/^    u64 rx_err_code;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_fbp_underrun	spp_npu_link.h	/^    u64 rx_err_fbp_underrun;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_fcs	spp_npu_link.h	/^    u64 rx_err_fcs;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_host_full	spp_npu_link.h	/^    u64 rx_err_host_full;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_length	spp_npu_link.h	/^    u64 rx_err_length;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_mru	spp_npu_link.h	/^    u64 rx_err_mru;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_nonvalid_mac	spp_npu_link.h	/^    u64 rx_err_nonvalid_mac;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_overrun	spp_npu_link.h	/^    u64 rx_err_overrun;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_err_sdu	spp_npu_link.h	/^    u64 rx_err_sdu;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_event	np_app.c	/^volatile WP_U32 rx_event = 0;$/;"	v
+rx_false_carrier	spp_npu_link.h	/^    u64 rx_false_carrier;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_fragments	spp_npu_link.h	/^    u64 rx_fragments;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_frames	spp_npu_link.h	/^	u64	  rx_frames;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_frames	spp_npu_link.h	/^    u64 rx_frames;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_frames_becn_set	spp_npu_link.h	/^	u64	  rx_frames_becn_set;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_frames_becn_set	spp_npu_link.h	/^    u64 rx_frames_becn_set;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_frames_de_set	spp_npu_link.h	/^	u64	  rx_frames_de_set;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_frames_de_set	spp_npu_link.h	/^    u64 rx_frames_de_set;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_frames_fecn_set	spp_npu_link.h	/^	u64	  rx_frames_fecn_set;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_frames_fecn_set	spp_npu_link.h	/^    u64 rx_frames_fecn_set;$/;"	m	struct:STRU_RXFR_STATICS_TAG
+rx_host_frames	spp_npu_link.h	/^    u64 rx_host_frames;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_host_handle	np_common.h	/^    WP_handle rx_host_handle;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+rx_iw_frames	spp_npu_link.h	/^    u64 rx_iw_frames;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_iw_handle	np_common.h	/^    WP_handle rx_iw_handle;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+rx_jabber	spp_npu_link.h	/^    u64 rx_jabber;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_last_unsupported_dlci	spp_npu_link.h	/^	u32	  rx_last_unsupported_dlci;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_mac_control	spp_npu_link.h	/^    u64 rx_mac_control;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_mac_pause	spp_npu_link.h	/^    u64 rx_mac_pause;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_mac_unknown	spp_npu_link.h	/^    u64 rx_mac_unknown;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_mc_valid_packets	spp_npu_link.h	/^    u64 rx_mc_valid_packets;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+rx_multicast	spp_npu_link.h	/^    u64 rx_multicast;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_oversize	spp_npu_link.h	/^    u64 rx_oversize;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_packets	spp_npu_link.h	/^    u64 rx_packets;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_pid	npu_main.c	/^pthread_t rx_pid;$/;"	v
+rx_total_err_bytes	spp_npu_link.h	/^	u64   rx_total_err_bytes;$/;"	m	struct:STRU_UPI_STATICS_TAG
+rx_undersize	spp_npu_link.h	/^    u64 rx_undersize;$/;"	m	struct:STRU_ETH_STATICS_TAG
+rx_valid_packets	spp_npu_link.h	/^    u64 rx_valid_packets;$/;"	m	struct:STRU_BPORT_STATICS_TAG
+rxfr_stat_get	np_stats.c	/^WP_status rxfr_stat_get(WP_U32 Channelno, void *p) {$/;"	f
+saddr	np_app.c	/^	WP_U32	saddr;$/;"	m	struct:iphdr	file:
+saddr	npu_main.c	/^	__be32	saddr;$/;"	m	struct:iphdr	file:
+send2eth_route_dfc_flow_info	np_app.c	/^static WP_dfc_flow_info send2eth_route_dfc_flow_info[1] =$/;"	v	file:
+serial_dps_if_rx_bytes	spp_npu_link.h	/^	u64 serial_dps_if_rx_bytes;$/;"	m	struct:STRU_UPI_STATICS_TAG
+serial_dps_if_rx_dropped_frames	spp_npu_link.h	/^	u64 serial_dps_if_rx_dropped_frames;$/;"	m	struct:STRU_UPI_STATICS_TAG
+serial_dps_if_rx_frames	spp_npu_link.h	/^	u64 serial_dps_if_rx_frames;$/;"	m	struct:STRU_UPI_STATICS_TAG
+serial_dps_if_rx_pce_denied_frames	spp_npu_link.h	/^	u64 serial_dps_if_rx_pce_denied_frames;$/;"	m	struct:STRU_UPI_STATICS_TAG
+serial_dps_if_tx_bytes	spp_npu_link.h	/^	u64 serial_dps_if_tx_bytes;$/;"	m	struct:STRU_UPI_STATICS_TAG
+serial_dps_if_tx_frames	spp_npu_link.h	/^	u64 serial_dps_if_tx_frames;$/;"	m	struct:STRU_UPI_STATICS_TAG
+server_data_handler	xml_operation.c	/^server_data_handler(void *handler_data, const char *xml_data, int length) {$/;"	f
+server_end_handler	xml_operation.c	/^server_end_handler(void *data, const char *element)$/;"	f
+server_start_handler	xml_operation.c	/^server_start_handler(void *data, const char *element, const char **attribute) \/\/expat xml start tag handler$/;"	f
+sgsn_pool_attribute_table	xml_operation.c	/^static cli_attribute_t sgsn_pool_attribute_table[] =$/;"	v	file:
+sgsn_pool_method_table	xml_operation.c	/^static cli_method_t sgsn_pool_method_table[] =$/;"	v	file:
+show_dps_bvci_item	np_app.c	/^void show_dps_bvci_item(NP_UPDATE_BVCI_FLOW_INFO *p_BvciFlowInfo)$/;"	f
+show_dps_dl_link_item	np_app.c	/^void show_dps_dl_link_item(STRU_SET_FR_DOWNLINK_PATH_LINK_TABLE *p_linkInfo)$/;"	f
+show_dps_dl_route_item	np_app.c	/^void show_dps_dl_route_item(NP_DL_FLOW_INFO *p_EthFlowInfo)$/;"	f
+show_dps_ul_link_item	np_app.c	/^void show_dps_ul_link_item(STRU_SET_UPLINK_PATH_LINK_TABLE *p_linkInfo)$/;"	f
+show_dps_ul_route_item	np_app.c	/^void show_dps_ul_route_item(NP_UL_FLOW_INFO *p_FrFlowInfo)$/;"	f
+sig_alarm_wddi_event	npu_main.c	/^sig_alarm_wddi_event(int signo)$/;"	f	file:
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_npu_ack_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_npu_cfg_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_npu_echo_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_npu_get_request_ack_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_npu_request_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_npu_set_request_ack_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_spp_receive_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_spp_send_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_vport_close_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	struct:stru_vport_open_sig
+sig_no	spp_wddi_common.h	/^	LINX_SIGSELECT  sig_no;$/;"	m	union:LINX_SIGNAL
+sig_release_wddi_driver	npu_main.c	/^sig_release_wddi_driver(int signo)$/;"	f	file:
+slot_selection	np_common.h	/^    WP_U32    slot_selection;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+slot_selection	np_common.h	/^    u32 slot_selection;      \/*slot_selection = 0xfffefffe; means use slot1~slot15 slot17~slot31*\/$/;"	m	struct:STRU_E1_GROUP_INFO_TAG
+socketAlarmStr	wti_flexmux_util.c	/^static char socketAlarmStr[4][8] =$/;"	v	file:
+sockfd	tun_dev.c	/^int     sockfd;$/;"	v
+source	np_app.c	/^	WP_U16	source;$/;"	m	struct:udphdr	file:
+source	npu_main.c	/^	__be16	source;$/;"	m	struct:udphdr	file:
+spp_receive	spp_wddi_common.h	/^	struct stru_spp_receive_sig spp_receive;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_spp_receive_sig
+spp_send	spp_wddi_common.h	/^	struct stru_spp_send_sig spp_send;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_spp_send_sig
+sppwddiLog	np_app.c	/^static void sppwddiLog(int level, char *msg) {$/;"	f	file:
+status	spp_npu_link.h	/^	STRU_STM1_E1T1_STATUS status;$/;"	m	struct:STRU_NPU_GET_STM1_E1T1_STATUS_TAG
+status	spp_npu_link.h	/^	u32 status; \/*SET_PVC_ENABLE or SET_PVC_DISABLE*\/$/;"	m	struct:STRU_NPU_SET_LMI_PVC_STATUS_TAG
+stm0	wti_flexmux_util.h	/^    WP_U8 stm0;$/;"	m	struct:__anon33
+stm1	spp_npu_link.h	/^	unsigned int stm1;$/;"	m	struct:STRU_NPUMON_INFO_TAG
+stm1	wti_flexmux_util.h	/^    WP_U8 stm1;$/;"	m	struct:__anon33
+stm1Id	spp_npu_link.h	/^    u32 stm1Id;  \/* 1 or 2*\/$/;"	m	struct:STRU_GET_UPI_GROUP_STATICS_TAG
+stm1Id	spp_npu_link.h	/^    u32 stm1Id;  \/* 1 or 2*\/$/;"	m	struct:STRU_GET_UPI_TRUNK_STATICS_TAG
+stm1Valid	np_common.h	/^    u8 stm1Valid;     \/*NPU_VALID or NPU_INVALID*\/$/;"	m	struct:STRU_STM1_CFG_INFO_TAG
+stm1_interface_attribute_table	xml_operation.c	/^static cli_attribute_t stm1_interface_attribute_table[] =$/;"	v	file:
+stm1_interface_method_table	xml_operation.c	/^static cli_method_t stm1_interface_method_table[] =$/;"	v	file:
+stm1_num	np_common.h	/^	u32 stm1_num;        \/*the total using number stm-1 port*\/$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+stm1_status	np_common.h	/^    u32 stm1_status;$/;"	m	struct:NP_ALARM_STATUS_TAG
+stm1_status	spp_npu_link.h	/^    u8 stm1_status;                   \/*LINK_STATUS_UP or LINK_STATUS_DOWN or LINK_STATUS_DISABLED*\/$/;"	m	struct:STRU_STM1_E1T1_STATUS_TAG
+stm1id	spp_npu_link.h	/^	u32 stm1id;                      \/*1 or 2*\/$/;"	m	struct:STRU_GET_UPI_STM1_STATICS_TAG
+stm1id	spp_npu_link.h	/^    u32  stm1id;                     \/*which stm1 you want to check status ,valuse 1 or 2*\/$/;"	m	struct:STRU_NPU_GET_STM1_E1T1_STATUS_TAG
+stm4	wti_flexmux_util.h	/^    WP_U8 stm4;$/;"	m	struct:__anon33
+stru_cpu_statics	spp_npu_link.h	/^	STRU_CPU_STATICS stru_cpu_statics;$/;"	m	struct:STRU_GET_CPU_STATICS_TAG
+stru_eth_statics	spp_npu_link.h	/^	STRU_ETH_STATICS stru_eth_statics;$/;"	m	struct:STRU_GET_ETH_STATICS_TAG
+stru_mem_statics	spp_npu_link.h	/^	STRU_MEMORY_STATICS stru_mem_statics;$/;"	m	struct:STRU_GET_MEMORY_STATICS_TAG
+stru_npu_ack_sig	spp_wddi_common.h	/^struct stru_npu_ack_sig {$/;"	s
+stru_npu_cfg_sig	spp_wddi_common.h	/^struct stru_npu_cfg_sig {$/;"	s
+stru_npu_echo_sig	spp_wddi_common.h	/^struct stru_npu_echo_sig {$/;"	s
+stru_npu_get_request_ack_sig	spp_wddi_common.h	/^struct stru_npu_get_request_ack_sig {$/;"	s
+stru_npu_request_sig	spp_wddi_common.h	/^struct stru_npu_request_sig {$/;"	s
+stru_npu_set_request_ack_sig	spp_wddi_common.h	/^struct stru_npu_set_request_ack_sig {$/;"	s
+stru_rxfr_statics	spp_npu_link.h	/^	STRU_RXFR_STATICS stru_rxfr_statics;$/;"	m	struct:STRU_GET_RXFR_STATICS_TAG
+stru_spp_receive_sig	spp_wddi_common.h	/^struct stru_spp_receive_sig {$/;"	s
+stru_spp_send_sig	spp_wddi_common.h	/^struct stru_spp_send_sig {$/;"	s
+stru_stm1_cfg_info	np_common.h	/^	STRU_STM1_CFG_INFO stru_stm1_cfg_info[SPP_MAX_STM1_PORT_NUM];$/;"	m	struct:STRU_SET_INITAIL_CONFIG_TAG
+stru_txfr_statics	spp_npu_link.h	/^	STRU_TXFR_STATICS stru_txfr_statics;$/;"	m	struct:STRU_GET_TXFR_STATICS_TAG
+stru_upi_statics	spp_npu_link.h	/^	STRU_UPI_STATICS stru_upi_statics;$/;"	m	struct:STRU_GET_UPI_GROUP_STATICS_TAG
+stru_upi_statics	spp_npu_link.h	/^	STRU_UPI_STATICS stru_upi_statics;$/;"	m	struct:STRU_GET_UPI_STM1_STATICS_TAG
+stru_upi_statics	spp_npu_link.h	/^	STRU_UPI_STATICS stru_upi_statics;$/;"	m	struct:STRU_GET_UPI_TRUNK_STATICS_TAG
+stru_vport_close_sig	spp_wddi_common.h	/^struct stru_vport_close_sig {$/;"	s
+stru_vport_open_sig	spp_wddi_common.h	/^struct stru_vport_open_sig {$/;"	s
+struct_pos_fr_add	np_stats.c	/^void struct_pos_fr_add(WP_stats_pos_fr* p1, WP_stats_pos_fr* p2)$/;"	f
+struct_upi_statics_add	np_stats.c	/^void struct_upi_statics_add(STRU_UPI_STATICS* p1, STRU_UPI_STATICS* p2)$/;"	f
+sts1	wti_flexmux_util.h	/^    WP_U8 sts1;$/;"	m	struct:__anon34
+sts12	wti_flexmux_util.h	/^    WP_U8 sts12;$/;"	m	struct:__anon34
+sts3	wti_flexmux_util.h	/^    WP_U8 sts3;$/;"	m	struct:__anon34
+sysInitTime	spp_wddi_server.c	/^time_t sysInitTime, sysRealTime;$/;"	v
+sysRealTime	spp_wddi_server.c	/^time_t sysInitTime, sysRealTime;$/;"	v
+system_bfd_handle	np_common.h	/^    WP_handle system_bfd_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+system_fr_handle	np_common.h	/^    WP_handle system_fr_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+system_route_send2eth1_handle	np_common.h	/^    WP_handle system_route_send2eth1_handle;$/;"	m	struct:NP_SYSTEM_INFO_TAG
+t1_port_attribute_table	xml_operation.c	/^static cli_attribute_t t1_port_attribute_table[] =$/;"	v	file:
+t1_port_cable_characteristics_enums	xml_operation.c	/^static cli_enum_instance_t t1_port_cable_characteristics_enums[] =$/;"	v	file:
+t1_port_clock_mode_enums	xml_operation.c	/^static cli_enum_instance_t t1_port_clock_mode_enums[] =$/;"	v	file:
+t1_port_framing_enums	xml_operation.c	/^static cli_enum_instance_t t1_port_framing_enums[] =$/;"	v	file:
+t1_port_line_code_enums	xml_operation.c	/^static cli_enum_instance_t t1_port_line_code_enums[] =$/;"	v	file:
+t1_port_method_table	xml_operation.c	/^static cli_method_t t1_port_method_table[] =$/;"	v	file:
+tableLoc	spp_npu_link.h	/^    u16 tableLoc[SPPMAXPARA];$/;"	m	struct:STRU_GET_TBLITEM_TAG
+tag	spp_wddi_server.h	/^    u16   tag;                           \/* Tag control information *\/$/;"	m	struct:__anon44
+tap_close	tun_dev.c	/^int tap_close(int fd, char *dev) { return close(fd); }$/;"	f
+tap_hwadd_read	tun_dev.c	/^int tap_hwadd_read (char* mac)$/;"	f
+tap_init	tun_dev.c	/^int tap_init(void)$/;"	f
+tap_interface_reconfig	tun_dev.c	/^int tap_interface_reconfig(void)$/;"	f
+tap_open	tun_dev.c	/^int tap_open(char *dev) { return tun_open_common(dev, 0); }$/;"	f
+tap_packet_write	tun_dev.c	/^int tap_packet_write(char* buf, int len)$/;"	f
+tap_read	tun_dev.c	/^int tap_read(int fd, char *buf, int len) { return read(fd, buf, len); }$/;"	f
+tap_socket_close	tun_dev.c	/^int tap_socket_close(void)$/;"	f
+tap_socket_getarp	tun_dev.c	/^int tap_socket_getarp(unsigned int ipaddr, char* buf)$/;"	f
+tap_socket_gethwaddr	tun_dev.c	/^int tap_socket_gethwaddr(unsigned char* mac)$/;"	f
+tap_socket_open	tun_dev.c	/^int tap_socket_open(void)$/;"	f
+tap_socket_send	tun_dev.c	/^int tap_socket_send( unsigned int ipaddr,unsigned short port, unsigned int ipaddr_src,unsigned int port_src,unsigned char* buf, int len)$/;"	f
+tap_socket_sethwaddr	tun_dev.c	/^int tap_socket_sethwaddr( unsigned char* mac, char* ifname)$/;"	f
+tap_write	tun_dev.c	/^int tap_write(int fd, char *buf, int len) { return write(fd, buf, len); }$/;"	f
+terminate_on_error	np_app.c	/^void terminate_on_error(WP_handle handle, WP_CHAR *s)$/;"	f
+test_print_xml_parse	xml_operation.c	/^test_print_xml_parse(expat_data_t *expat_data, const char *element)$/;"	f	file:
+thermNo	xs_ioctl.h	/^    unsigned int thermNo;$/;"	m	struct:__anon31
+tos	np_app.c	/^	WP_U8	tos;$/;"	m	struct:iphdr	file:
+tos	npu_main.c	/^	__u8	tos;$/;"	m	struct:iphdr	file:
+tot_len	np_app.c	/^	WP_U16	tot_len;$/;"	m	struct:iphdr	file:
+tot_len	npu_main.c	/^	__be16	tot_len;$/;"	m	struct:iphdr	file:
+totalUtili	spp_npu_link.h	/^    u32 totalUtili;$/;"	m	struct:STRU_CPU_STATICS_TAG
+total_count	spp_wddi_server.c	/^unsigned int total_count = 0;$/;"	v
+trans_mask	tun_dev.c	/^int trans_mask(u32 mask)$/;"	f
+transfer_type	wti_flexmux_util.h	/^    WUFE_line_transf_type transfer_type;$/;"	m	struct:__anon33
+transfer_type	wti_flexmux_util.h	/^    WUFE_line_transf_type transfer_type;$/;"	m	struct:__anon34
+trunk	np_common.h	/^    WP_U32    trunk;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+trunk	np_common.h	/^    unsigned int trunk:7;$/;"	m	struct:__anon6
+trunkID	spp_npu_link.h	/^    u32 trunkID;$/;"	m	struct:STRU_GET_TRUNKINFO_TAG
+trunkId	np_common.h	/^    u32 trunkId;$/;"	m	struct:STRU_STM1_RECFG_TAG
+trunkValid	np_common.h	/^    u8 trunkValid;      \/*NPU_VALID or NPU_INVALID*\/$/;"	m	struct:STRU_E1_TRUNK_INFO_TAG
+trunk_ht	spp_wddi_server.c	/^struct hsearch_data *trunk_ht;$/;"	v	typeref:struct:hsearch_data
+trunk_info	np_common.h	/^    STRU_E1_TRUNK_INFO trunk_info[SPP_MAX_TRUNK_NUM];$/;"	m	struct:STRU_STM1_CFG_INFO_TAG
+trunk_nodehead	spp_wddi_server.c	/^struct NODE* trunk_nodehead=NULL;$/;"	v	typeref:struct:NODE
+trunkid	np_common.h	/^    WP_U32 trunkid;$/;"	m	struct:NP_TRUNK_INFO_TAG
+trunkid	spp_npu_link.h	/^	u32 trunkid; \/*E1 1~63, T1 1~84*\/$/;"	m	struct:STRU_GET_UPI_GROUP_STATICS_TAG
+trunkid	spp_npu_link.h	/^	u32 trunkid; \/*E1 1~63, T1 1~84*\/$/;"	m	struct:STRU_GET_UPI_TRUNK_STATICS_TAG
+tsgroup	np_common.h	/^	unsigned int tsgroup:6;$/;"	m	struct:__anon6
+ttl	np_app.c	/^	WP_U8	ttl;$/;"	m	struct:iphdr	file:
+ttl	npu_main.c	/^	__u8	ttl;$/;"	m	struct:iphdr	file:
+tu	wti_flexmux_util.h	/^    WP_U8 tu;$/;"	m	struct:__anon33
+tug2	wti_flexmux_util.h	/^    WP_U8 tug2;$/;"	m	struct:__anon33
+tun_close	tun_dev.c	/^int tun_close(int fd, char *dev) { return close(fd); }$/;"	f
+tun_open	tun_dev.c	/^int tun_open(char *dev) { return tun_open_common(dev, 1); }$/;"	f
+tun_open_common	tun_dev.c	/^static int tun_open_common(char *dev, int istun)$/;"	f	file:
+tun_open_common	tun_dev.c	104;"	d	file:
+tun_open_common0	tun_dev.c	/^static int tun_open_common0(char *dev, int istun)$/;"	f	file:
+tun_read	tun_dev.c	/^int tun_read(int fd, char *buf, int len) { return read(fd, buf, len); }$/;"	f
+tun_write	tun_dev.c	/^int tun_write(int fd, char *buf, int len) { return write(fd, buf, len); }$/;"	f
+tv	npu_main.c	/^struct timeval tv;$/;"	v	typeref:struct:timeval
+tx2brg_agg_cfg	np_ufe_fr.c	/^WP_iw_agg_directmap tx2brg_agg_cfg[1] =$/;"	v
+tx_aborted_frames	spp_npu_link.h	/^	u64	  tx_aborted_frames;$/;"	m	struct:STRU_UPI_STATICS_TAG
+tx_aborted_frames	spp_npu_link.h	/^    u64 tx_aborted_frames;$/;"	m	struct:STRU_TXFR_STATICS_TAG
+tx_agg_enet	np_app.c	/^WP_iw_agg_directmap tx_agg_enet[1] =$/;"	v
+tx_agg_enet_default	np_app.c	/^WP_iw_agg_directmap_enet tx_agg_enet_default[1] =$/;"	v
+tx_agg_enet_dfc	np_app.c	/^WP_iw_agg_directmap tx_agg_enet_dfc[1] =$/;"	v
+tx_agg_l3	np_app.c	/^WP_iw_agg_routing tx_agg_l3[1] =$/;"	v
+tx_binding	np_app.c	/^WP_tx_binding  tx_binding[1]=$/;"	v
+tx_broadcast	spp_npu_link.h	/^    u64 tx_broadcast;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_buf	np_app.c	/^static WP_data_segment tx_buf;$/;"	v	file:
+tx_buf	np_ufe_fr.c	/^static WP_data_segment tx_buf;$/;"	v	file:
+tx_bytes	spp_npu_link.h	/^	u64	  tx_bytes;$/;"	m	struct:STRU_UPI_STATICS_TAG
+tx_bytes	spp_npu_link.h	/^    u64 tx_bytes;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_bytes	spp_npu_link.h	/^    u64 tx_bytes;$/;"	m	struct:STRU_TXFR_STATICS_TAG
+tx_bytes_de_set	spp_npu_link.h	/^	u64	  tx_bytes_de_set;$/;"	m	struct:STRU_UPI_STATICS_TAG
+tx_bytes_de_set	spp_npu_link.h	/^    u64 tx_bytes_de_set;$/;"	m	struct:STRU_TXFR_STATICS_TAG
+tx_control	spp_npu_link.h	/^    u64 tx_control;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_defer	spp_npu_link.h	/^    u64 tx_defer;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_dropped	spp_npu_link.h	/^    u64 tx_dropped;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_enet_handle_1	np_app.c	/^WP_handle tx_enet_handle_1, rx_enet_handle_1, tx_enet_handle_2, rx_enet_handle_2 ;$/;"	v
+tx_enet_handle_2	np_app.c	/^WP_handle tx_enet_handle_1, rx_enet_handle_1, tx_enet_handle_2, rx_enet_handle_2 ;$/;"	v
+tx_err_fcs	spp_npu_link.h	/^    u64 tx_err_fcs;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_err_underrun	spp_npu_link.h	/^    u64 tx_err_underrun;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_event	np_app.c	/^volatile WP_U32 tx_event = 0;$/;"	v
+tx_excess_collision	spp_npu_link.h	/^    u64 tx_excess_collision;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_excess_defer	spp_npu_link.h	/^    u64 tx_excess_defer;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_fr_binding	np_ufe_fr.c	/^WP_tx_binding  tx_fr_binding[1]=$/;"	v
+tx_fr_host_handle	np_ufe_fr.c	/^WP_handle tx_fr_host_handle[N_FR_MAX_RX_HT_CHANNEL];$/;"	v
+tx_fragments	spp_npu_link.h	/^    u64 tx_fragments;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_frames	spp_npu_link.h	/^	u64	  tx_frames;$/;"	m	struct:STRU_UPI_STATICS_TAG
+tx_frames	spp_npu_link.h	/^    u64 tx_frames;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_frames	spp_npu_link.h	/^    u64 tx_frames;$/;"	m	struct:STRU_TXFR_STATICS_TAG
+tx_frames_becn_set	spp_npu_link.h	/^	u64	  tx_frames_becn_set;$/;"	m	struct:STRU_UPI_STATICS_TAG
+tx_frames_becn_set	spp_npu_link.h	/^    u64 tx_frames_becn_set;$/;"	m	struct:STRU_TXFR_STATICS_TAG
+tx_frames_de_set	spp_npu_link.h	/^	u64	  tx_frames_de_set;$/;"	m	struct:STRU_UPI_STATICS_TAG
+tx_frames_de_set	spp_npu_link.h	/^    u64 tx_frames_de_set;$/;"	m	struct:STRU_TXFR_STATICS_TAG
+tx_frames_fecn_set	spp_npu_link.h	/^	u64	  tx_frames_fecn_set;$/;"	m	struct:STRU_UPI_STATICS_TAG
+tx_frames_fecn_set	spp_npu_link.h	/^    u64 tx_frames_fecn_set;$/;"	m	struct:STRU_TXFR_STATICS_TAG
+tx_host_handle	np_common.h	/^    WP_handle tx_host_handle;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+tx_iw_handle	np_common.h	/^    WP_handle tx_iw_handle;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+tx_jabber	spp_npu_link.h	/^    u64 tx_jabber;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_late_collision	spp_npu_link.h	/^    u64 tx_late_collision;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_mac_pause	spp_npu_link.h	/^    u64 tx_mac_pause;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_mac_pause_honored	spp_npu_link.h	/^    u64 tx_mac_pause_honored;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_multi_collision	spp_npu_link.h	/^    u64 tx_multi_collision;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_multicast	spp_npu_link.h	/^    u64 tx_multicast;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_no_collision	spp_npu_link.h	/^    u64 tx_no_collision;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_oversize	spp_npu_link.h	/^    u64 tx_oversize;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_packets	spp_npu_link.h	/^    u64 tx_packets;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_single_collision	spp_npu_link.h	/^    u64 tx_single_collision;$/;"	m	struct:STRU_ETH_STATICS_TAG
+tx_underrun	spp_npu_link.h	/^	u64	  tx_underrun;$/;"	m	struct:STRU_UPI_STATICS_TAG
+tx_undersize	spp_npu_link.h	/^    u64 tx_undersize;$/;"	m	struct:STRU_ETH_STATICS_TAG
+txfr_stat_get	np_stats.c	/^WP_status txfr_stat_get(WP_U32 Channelno, void *p) {$/;"	f
+txrx_frames_1023	spp_npu_link.h	/^    u64 txrx_frames_1023;$/;"	m	struct:STRU_ETH_STATICS_TAG
+txrx_frames_127	spp_npu_link.h	/^    u64 txrx_frames_127;$/;"	m	struct:STRU_ETH_STATICS_TAG
+txrx_frames_1518	spp_npu_link.h	/^    u64 txrx_frames_1518;$/;"	m	struct:STRU_ETH_STATICS_TAG
+txrx_frames_1522	spp_npu_link.h	/^    u64 txrx_frames_1522;$/;"	m	struct:STRU_ETH_STATICS_TAG
+txrx_frames_255	spp_npu_link.h	/^    u64 txrx_frames_255;$/;"	m	struct:STRU_ETH_STATICS_TAG
+txrx_frames_511	spp_npu_link.h	/^    u64 txrx_frames_511;$/;"	m	struct:STRU_ETH_STATICS_TAG
+txrx_frames_64	spp_npu_link.h	/^    u64 txrx_frames_64;$/;"	m	struct:STRU_ETH_STATICS_TAG
+type	xml_operation.c	/^    int type;$/;"	m	struct:_cli_attribute_t	file:
+u16	spp_npu_link.h	/^typedef unsigned short int u16;$/;"	t
+u16	xml_operation.c	/^typedef unsigned short int u16;$/;"	t	file:
+u32	spp_npu_link.h	/^typedef unsigned int u32;$/;"	t
+u32	xml_operation.c	/^typedef unsigned int u32;$/;"	t	file:
+u64	spp_npu_link.h	/^typedef unsigned long long u64;$/;"	t
+u64	xml_operation.c	/^typedef unsigned long long u64;$/;"	t	file:
+u8	spp_npu_link.h	/^typedef unsigned char u8;$/;"	t
+u8	xml_operation.c	/^typedef unsigned char u8;$/;"	t	file:
+u_port	spp_npu_link.h	/^	}u_port;$/;"	m	struct:STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG	typeref:union:STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG::__anon26
+u_port	spp_npu_link.h	/^	}u_port;$/;"	m	struct:STRU_DELETE_UPLINKPATH_RULE_TAG	typeref:union:STRU_DELETE_UPLINKPATH_RULE_TAG::__anon24
+u_port	spp_npu_link.h	/^	}u_port;$/;"	m	struct:STRU_SET_UPDATE_BVCI_PATH_RULE_TAG	typeref:union:STRU_SET_UPDATE_BVCI_PATH_RULE_TAG::__anon25
+u_port	spp_npu_link.h	/^	}u_port;$/;"	m	struct:STRU_SET_UPLINKPATH_RULE_TAG	typeref:union:STRU_SET_UPLINKPATH_RULE_TAG::__anon23
+udp_port_t	xml_operation.c	/^typedef  u32 udp_port_t;$/;"	t	file:
+udphdr	np_app.c	/^struct udphdr {$/;"	s	file:
+udphdr	npu_main.c	/^struct udphdr {$/;"	s	file:
+ufe_device_handle	np_ufe_fr.c	/^WUFE_handle           ufe_device_handle[N_UFE_MAX_LINES_T1][32]={{0}};\/*max slot in one line is 32*\/$/;"	v
+ufe_line_handle	np_ufe_fr.c	/^WUFE_handle           ufe_line_handle[N_UFE_MAX_LINES_T1]={0};$/;"	v
+ufe_phy_handle	np_ufe_fr.c	/^WUFE_handle           ufe_phy_handle[N_UFE_MAX_LINES_T1][32]={{0}};\/*max slot in one line is 32*\/$/;"	v
+uh_dport	spp_wddi_server.h	/^    u16	uh_dport;		\/* destination port *\/$/;"	m	struct:__anon46
+uh_sport	spp_wddi_server.h	/^    u16	uh_sport;		\/* source port *\/$/;"	m	struct:__anon46
+uh_sum	spp_wddi_server.h	/^    u16	uh_sum;			\/* udp checksum *\/$/;"	m	struct:__anon46
+uh_ulen	spp_wddi_server.h	/^    u16	uh_ulen;		\/* udp length *\/$/;"	m	struct:__anon46
+update_bvci_bport_conf	np_app.c	/^WP_bridge_port update_bvci_bport_conf[1] =$/;"	v
+update_bvci_ht	spp_wddi_server.c	/^struct hsearch_data *update_bvci_ht;$/;"	v	typeref:struct:hsearch_data
+update_bvci_nodehead	spp_wddi_server.c	/^struct NODE* update_bvci_nodehead=NULL;$/;"	v	typeref:struct:NODE
+upi_packet_config	np_ufe_fr.c	/^WP_port_upi_packet_ext upi_packet_config[1] =$/;"	v
+upi_stat_get_by_group	np_stats.c	/^WP_status upi_stat_get_by_group(WP_U32 trunkid, WP_U32 groupid,STRU_UPI_STATICS *p)$/;"	f
+upi_stat_get_by_trunk	np_stats.c	/^WP_status upi_stat_get_by_trunk(WP_U32 trunkid, STRU_UPI_STATICS *p)$/;"	f
+upi_stm1_stat_get	np_stats.c	/^WP_status upi_stm1_stat_get(WP_U32 stm1id,STRU_UPI_STATICS *p)$/;"	f
+upi_ufe_port	np_ufe_fr.c	/^WP_handle upi_ufe_port;$/;"	v
+uplink_ht	spp_wddi_server.c	/^struct hsearch_data *uplink_ht;$/;"	v	typeref:struct:hsearch_data
+uplink_nodehead	spp_wddi_server.c	/^struct NODE* uplink_nodehead=NULL;$/;"	v	typeref:struct:NODE
+value	xml_operation.c	/^    char value[256];$/;"	m	struct:_cli_attribute_t	file:
+value	xs_ioctl.h	/^    unsigned int value;$/;"	m	struct:__anon31
+version	np_app.c	/^		version:4;$/;"	m	struct:iphdr	file:
+version	npu_main.c	/^		version:4;$/;"	m	struct:iphdr	file:
+vfort	spp_npu_link.h	/^    u32 vfort;$/;"	m	struct:STRU_NSVC_TABLE_TAG
+vfport	np_common.h	/^    WP_U32    vfport;$/;"	m	struct:FR_CHANNEL_INFO_TAG
+vfport	spp_npu_link.h	/^		u32 vfport;       \/*for FR interface vfport+NS_BVCI_old=>NS_BVCI*\/$/;"	m	union:STRU_SET_UPDATE_BVCI_PATH_RULE_TAG::__anon25
+vfport	spp_npu_link.h	/^	    u32 vfport;       \/*for FR interface*\/$/;"	m	union:STRU_SET_UPLINKPATH_RULE_TAG::__anon23
+vfport	spp_npu_link.h	/^	u32 vfport;$/;"	m	struct:STRU_DEBUG_CHANNEL_TAG
+vfport	spp_npu_link.h	/^	u32 vfport;$/;"	m	struct:STRU_GET_RXFR_STATICS_TAG
+vfport	spp_npu_link.h	/^	u32 vfport;$/;"	m	struct:STRU_GET_TXFR_STATICS_TAG
+vfport	spp_npu_link.h	/^        u32 vfport;		 \/*for FR interface vfport+NS_BVCI_old=>NS_BVCI*\/$/;"	m	union:STRU_DELETE_UPDATE_BVCI_PATH_RULE_TAG::__anon26
+vfport	spp_npu_link.h	/^        u32 vfport;		 \/*for FR interface*\/$/;"	m	union:STRU_DELETE_UPLINKPATH_RULE_TAG::__anon24
+vfport	spp_npu_link.h	/^    u32 vfport;$/;"	m	struct:STRU_GET_NS_BSSGP_STATICS_TAG
+vfport	spp_npu_link.h	/^    u32 vfport;$/;"	m	struct:STRU_NPU_SET_LMI_PVC_STATUS_TAG
+vfport	spp_npu_link.h	/^    u32 vfport;$/;"	m	struct:STRU_SET_NS_BSSGP_STATICS_ZERO_TAG
+vlan_endpoint_attribute_table	xml_operation.c	/^static cli_attribute_t vlan_endpoint_attribute_table[] =$/;"	v	file:
+vlan_endpoint_method_table	xml_operation.c	/^static cli_method_t vlan_endpoint_method_table[] =$/;"	v	file:
+vlan_ethhdr	np_app.c	/^struct vlan_ethhdr {$/;"	s	file:
+vlan_ethhdr	npu_main.c	/^struct vlan_ethhdr {$/;"	s	file:
+vp_type	spp_wddi_common.h	/^	u8  vp_type;$/;"	m	struct:stru_vport_close_sig
+vp_type	spp_wddi_common.h	/^	u8  vp_type;$/;"	m	struct:stru_vport_open_sig
+vp_type	spp_wddi_common.h	/^	u8 vp_type;$/;"	m	struct:stru_spp_receive_sig
+vp_type	spp_wddi_common.h	/^	u8 vp_type;$/;"	m	struct:stru_spp_send_sig
+vp_type	spp_wddi_server.h	/^	unsigned char  vp_type;$/;"	m	struct:STRU_VPORT_INFO_TAG
+vp_type	spp_wddi_server.h	/^    u32 vp_type;$/;"	m	struct:NPU_HOST_RSV_PACKET_INFO_TAG
+vport	np_common.h	/^	WP_U32  vport;$/;"	m	struct:NP_UPDATE_BVCI_FLOW_INFO_TAG
+vport	np_common.h	/^	WP_U32 vport;$/;"	m	struct:NP_UL_FLOW_INFO_TAG
+vport_close	spp_wddi_common.h	/^	struct stru_vport_close_sig vport_close;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_vport_close_sig
+vport_nodehead	spp_wddi_server.c	/^struct NODE* vport_nodehead=NULL;$/;"	v	typeref:struct:NODE
+vport_open	spp_wddi_common.h	/^	struct stru_vport_open_sig vport_open;$/;"	m	union:LINX_SIGNAL	typeref:struct:LINX_SIGNAL::stru_vport_open_sig
+vt	wti_flexmux_util.h	/^    WP_U8 vt;$/;"	m	struct:__anon34
+vt_group	wti_flexmux_util.h	/^    WP_U8 vt_group;$/;"	m	struct:__anon34
+wddi_log_close	wddi_log.c	/^wddi_log_close(void)$/;"	f
+wddi_log_get_mask	wddi_log.c	/^wddi_log_get_mask(char *loglevel, unsigned int max_buff_size)$/;"	f
+wddi_log_msg	wddi_log.c	/^wddi_log_msg(const unsigned int priority, char *file, unsigned int line, char *log_msg, ...)$/;"	f
+wddi_log_open	wddi_log.c	/^wddi_log_open(const char *ident)$/;"	f
+wddi_log_set_mask	wddi_log.c	/^wddi_log_set_mask(char *loglevel)$/;"	f
+wddi_og_level	wddi_log.c	/^static char wddi_og_level[COMMON_MAX_STRING_LENGTH];$/;"	v	file:
+workingDir	npu_main.c	/^char *workingDir = NULL;$/;"	v
+workingLinkName	npu_main.c	/^char workingLinkName[100];$/;"	v
+wpl_rif_base	np_app.c	/^static WP_U32        wpl_rif_base = 0;$/;"	v	file:
+xmlFileLocation	npu_main.c	/^char xmlFileLocation[100];$/;"	v
+xsreset	npu_main.c	/^int xsreset(void)$/;"	f

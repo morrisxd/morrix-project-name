@@ -1,0 +1,7 @@
+# Copyright 2001-2003, Wintegra.  All Rights Reserved.
+
+# Define EXAMPLE_SRC = list of source files
+
+WDDI_DPS_IMAGE = wpi_dps_image_backhaul.o
+EXAMPLE_SRC = np_app.c np_stats.c tun_dev.c spp_wddi_server.c wddi_log.c npu_main.c np_ufe_fr.c wti_flexmux_util.c xml_operation.c
+ 
