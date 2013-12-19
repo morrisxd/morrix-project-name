@@ -721,6 +721,7 @@ static void WTI_SystemReleaseUfe(void)
    WPX_FRMR_LowLevelCommsDisableAccess(0);
    WPL_ThreadDestroy(&alarm_and_pm_thread_id);
    WPL_ThreadDestroy(&mailbox_thread_id);
+   printf ("WTI_SystemReleaseUfe: destroy thread\n");
 #endif
 
    for (i=0;i<WTI_MAX_PW;++i)
@@ -729,17 +730,19 @@ static void WTI_SystemReleaseUfe(void)
       if (the_system->pw[i].state & WTI_PW_ACTIVE)
       {
          WTI_PwDisable(i);
+         printf ("WTI_SystemReleaseUfe:disable PW(%d)\n", i);
       }
-
       /* delete all PW's */
       if (the_system->pw[i].state & WTI_PW_CREATED)
       {
          WTI_PwDelete(i);
+         printf ("WTI_SystemReleaseUfe:delete PW(%d)\n", i);
       }
       /* PW not created but UFE phy is */
       else if (the_system->pw[i].state & WTI_PW_UFE2_PHY_CREATED)
       {
          WT_UfePhyDelete(&the_system->ufe, i);
+         printf ("WTI_SystemReleaseUfe:delete phy(%d)\n", i);
       }
    }
 
@@ -748,6 +751,7 @@ static void WTI_SystemReleaseUfe(void)
    {
       status = WP_IwSystemDelete(the_system->tdm2psn_iw_system);
       WTI_TerminateOnError(status, "WP_IwSystemDelete tdm2psn system",__LINE__);
+      printf ("WTI_SystemReleaseUfe:delete IW system(%d)\n", i);
    }
 
    if (the_system->psn2tdm_iw_system != WTI_INVALID_HANDLE)
@@ -761,9 +765,11 @@ static void WTI_SystemReleaseUfe(void)
                                        the_system->qnode[WTI_QNODE_IW_PSN2TDM].handle,
                                        WP_IW_RX_BIND_MOD_DISABLE, &rx_binding_mpls);
          WTI_TerminateOnError(status, "WP_IwRxBindingModify psn2tdm rx_enet_channel",__LINE__);
+         printf ("WTI_SystemReleaseUfe:modify bindings system(%d)\n", i);
       }
       status = WP_IwSystemDelete(the_system->psn2tdm_iw_system);
       WTI_TerminateOnError(status, "WP_IwSystemDelete psn2tdm system",__LINE__);
+      printf ("WTI_SystemReleaseUfe:delete IW system(%d)\n", i);
    }
 
 #if 0
@@ -778,6 +784,7 @@ static void WTI_SystemReleaseUfe(void)
       for (i=0;i<N_ACTIVE_UFE_OCT_LINES;++i)
       {
          WT_UfeLineDelete(&the_system->ufe, i);
+	 printf ("WTI_SystemReleaseUfe: delete ufe line(%d)\n", i);
       }
    }
    else
@@ -789,6 +796,7 @@ static void WTI_SystemReleaseUfe(void)
             for (j=(i*t1_lines_per_spe);j<((i+1)*t1_lines_per_spe);++j)
             {
                WT_UfeLineDelete(&the_system->ufe, j);
+	       printf ("WTI_SystemReleaseUfe: delete ufe line(%d)(%d)\n", i, j);
             }
          }
          else /* E1 */
@@ -796,11 +804,12 @@ static void WTI_SystemReleaseUfe(void)
             for (j=(i*e1_lines_per_spe);j<((i+1)*e1_lines_per_spe);++j)
             {
                WT_UfeLineDelete(&the_system->ufe, j);
+	       printf ("WTI_SystemReleaseUfe: delete ufe line(%d)(%d)\n", i, j);
             }
          }
       }
    }
-
+   printf ("going to release\n");
    /* release UFE */
    WT_UfeRelease(&the_system->ufe);
 

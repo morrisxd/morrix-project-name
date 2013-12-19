@@ -1556,6 +1556,7 @@ extern void CLI_F_DisplayUfeEvents                         (char *StrPrm);
 extern void CLI_F_Quit_No_Reset                            (char *StrPrm);
 extern void CLI_F_Quit                                     (char *StrPrm);
 extern void CLI_F_ShowConfig                                     (char *StrPrm);
+extern void CLI_F_ResetAll                                     (char *StrPrm);
 extern WTI_system *the_system;
 #if defined __WT_UFE412__ || defined __WT_UFE448__
 extern WUFE_test_system_setup test_setup;
@@ -1570,6 +1571,7 @@ extern const Y_MenuEntry V_TdiSetup                      [];
 #else
 extern const Y_MenuEntry V_UfeSetup                      [];
 #endif
+extern const Y_MenuEntry V_ManualControl                         [];
 extern const Y_MenuEntry V_PwAdd                         [];
 extern const Y_MenuEntry V_PwDelete                      [];
 extern const Y_MenuEntry V_PwEnable                      [];
@@ -1633,6 +1635,7 @@ extern const Y_MenuEntry V_ClockRecoveryIndMemDisplay    [];
    {K_Leaf, TRUE, " -> Quit without reset",                   {(Y_MnuLeafP)   CLI_F_Quit_No_Reset}},
    {K_Leaf, TRUE, " -> Quit",                                 {(Y_MnuLeafP)   CLI_F_Quit}},
    {K_Leaf, TRUE, " -> show configuration",                   {(Y_MnuLeafP)   CLI_F_ShowConfig}},
+   {K_Menu, TRUE, " -> Manual Control",                       {(Y_MenuEntry*) V_ManualControl}},
 };
 
 Y_MenuEntry V_Setup []=
@@ -1783,6 +1786,21 @@ const Y_MenuEntry V_PwAdd []=
    {K_Leaf, TRUE, " -> PW add: PW create [(oobc mode) (rx_clock_master) (tx_clock_master) <index>]",  {(Y_MnuLeafP) CLI_F_PwCreate}},
 #endif /* WTI_CESOP_TO_MPLS_FA_CASCADING */
 };
+
+
+const Y_MenuEntry V_ManualControl []=
+{
+   { 6 ,TRUE, "Manul Control",                  {(Y_MnuLeafP) CLI_F_ResetAll}},
+   {K_Leaf, TRUE, " -> Reset All: Reset",	{(Y_MnuLeafP) CLI_F_ResetAll}},
+   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
+   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
+   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
+   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
+   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_PwCreate}},
+};
+
+
+
 
 const Y_MenuEntry V_SlotsConfigSetup []=
 {
@@ -15957,6 +15975,15 @@ void CLI_F_Quit_No_Reset(char *StrPrm)
    WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
    exit(1);
 }
+
+void CLI_F_ResetAll (char *StrPrm)
+{
+   printf ("Reset All(%s)\n", StrPrm);
+   // WTI_Terminate(0);
+   WTI_SystemRelease();
+   WP_DriverRelease();
+}
+
 
 void CLI_F_ShowConfig (char *StrPrm)
 {
