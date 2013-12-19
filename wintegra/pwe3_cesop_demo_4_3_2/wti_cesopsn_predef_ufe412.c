@@ -150,6 +150,12 @@ void WTI_enable_alarms_and_performance_monitoring(int type)
 }
 #endif
 
+/*
+ * 	- CLI_F_MplsFlowAggPrefixLength ()
+ *	- CLI_F_MplsFlowAggPrefixHeaderMpls ()
+ *	- CLI_F_MplsFlowAggRemarkingOffsets ()
+ *	- CLI_F_MplsFlowAggCreate ()
+ */
 void WT_UfeMPLS_L2_FA_Create(void)
 {
 	WP_CHAR temp_buf[WTI_MAX_STRING_SIZE];
@@ -232,6 +238,36 @@ void WT_UfeMPLS_L2_FA_Create(void)
 	}
 }
 
+/*
+ *	- WT_UfeClockRecLineConfigure ()
+ *	- CLI_F_UfeTransferMode()
+ *	- CLI_F_UfeCasMode()
+ *	- WT_UfeLineConfigureAndCreateE1()
+ *	- WT_UfeLineConfigureAndCreateT1()
+ *	- WT_UfeLineConfigureAndCreateE3DS3()
+ *	- WTI_ClockRecoveryPsn2TdmDefaultParamesConfigUfe4()
+ *	- WT_UfeLineSocketLpbkSetup()
+ *	- CLI_F_PwConfigureUnframed()
+ *	- CLI_F_PwConfigureFramed
+ *	- CLI_F_PwConfigureUnframed
+ *	- CLI_DefaultIwPwe3CesConfig()
+ *	- CLI_F_Pwe3ChannelJitterBufferSize
+ *	- CLI_F_Pwe3ChannelRxBufferSize
+ *	- CLI_F_Tdm2PsnFlowAggEnetHeader
+ *	- CLI_F_Tdm2PsnFlowAggIpHeader
+ *	- CLI_F_Tdm2PsnFlowAggUdpHeader
+ *	- CLI_F_Tdm2PsnFlowAggRtpHeader
+ *	- CLI_F_Tdm2PsnFlowAggControlWord
+ *	- CLI_F_Tdm2PsnFlowAggTsParams
+ *	- CLI_F_Psn2TdmTxBinWindowThreshold
+ *	- CLI_F_Psn2TdmTxBinWindowSwitchoverThreshold
+ *	- CLI_F_Psn2TdmTxBinLOPSDetection
+ *	- CLI_F_PwCreateCascadedOnSecondUfe
+ *	- CLI_F_PwCreateCascaded
+ *	- CLI_F_PwCreateCascadedOnSecondUfe
+ *	- CLI_F_PwCreateCascaded
+ *	- CLI_F_PwEnable
+ */
 WUFE_status WT_UfeLinePWCreate(WUFE_test_system_setup *test_setup, WP_U32 create_line)
 {
    WP_U32 line_index, pw_index = 0, line_offset = 1, num_of_lines = test_setup->num_of_lines, i;
@@ -6155,6 +6191,11 @@ void CLI_F_Error_Enable_Before_Create(char *StrPrm)
  * Input      :
  * OutPut     :
  * Return Val :
+ * 	- WTI_FlexmuxInit()
+ * 	- WT_UfeMPLS_L2_FA_Create ()
+ *	- WT_UfeLinePWCreate ()
+ * 	- set_all_holdover ()
+ *	- WTI_enable_performance_monitoring_points ()
  ***************************************************************/
 void CLI_F_CR_101_SonetSdh_E1UnframedNoCas(char *StrPrm)
 {

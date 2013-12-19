@@ -1557,6 +1557,8 @@ extern void CLI_F_Quit_No_Reset                            (char *StrPrm);
 extern void CLI_F_Quit                                     (char *StrPrm);
 extern void CLI_F_ShowConfig                                     (char *StrPrm);
 extern void CLI_F_ResetAll                                     (char *StrPrm);
+extern void CLI_F_ChangeJitter                                     (char *StrPrm);
+extern void CLI_F_ChangeMplsLabel                                     (char *StrPrm);
 extern WTI_system *the_system;
 #if defined __WT_UFE412__ || defined __WT_UFE448__
 extern WUFE_test_system_setup test_setup;
@@ -1787,19 +1789,20 @@ const Y_MenuEntry V_PwAdd []=
 #endif /* WTI_CESOP_TO_MPLS_FA_CASCADING */
 };
 
-
+#ifdef MORRIS_USER_CONTROL
 const Y_MenuEntry V_ManualControl []=
 {
-   { 6 ,TRUE, "Manul Control",                  {(Y_MnuLeafP) CLI_F_ResetAll}},
+   { 6 ,TRUE, "Manul Control",                  {(Y_MnuLeafP) V_MainMenu}},
    {K_Leaf, TRUE, " -> Reset All: Reset",	{(Y_MnuLeafP) CLI_F_ResetAll}},
+   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ChangeJitter}},
+   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ChangeMplsLabel}},
    {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
    {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
    {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
-   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
-   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_PwCreate}},
 };
-
-
+#else
+#error MUST_DEFINE_USE_CONTROL
+#endif
 
 
 const Y_MenuEntry V_SlotsConfigSetup []=
@@ -5292,6 +5295,7 @@ void CLI_F_Pwe3ChannelStatmode(char *StrPrm)
  * Input      :
  * OutPut     :
  * Return Val :
+ *	- pw_config.tdm2psn_flow_agg_config.payload_size=pw_config.rx_buffersize = val;
  ***************************************************************/
 void CLI_F_Pwe3ChannelRxBufferSize(char *StrPrm)
 {
@@ -5321,6 +5325,7 @@ printf ("===>payload_size(%d)\n", val);
  * Input      :
  * OutPut     :
  * Return Val :
+ * 	- pw_config.tx_jitter_buffer_size = val;
  ***************************************************************/
 void CLI_F_Pwe3ChannelJitterBufferSize(char *StrPrm)
 {
@@ -14360,6 +14365,8 @@ void CLI_F_MplsFlowAggPrefixLength(char *StrPrm)
  * Input      :
  * OutPut     :
  * Return Val :
+ *	- fill global structure - mpls_layer2_agg_cfg
+ *	- memcpy(.prefix_length)
  ***************************************************************/
 void CLI_F_MplsFlowAggPrefixHeaderMpls(char *StrPrm)
 {
@@ -14609,7 +14616,7 @@ void CLI_F_MplsFlowAggCreate(char *StrPrm)
    memcpy(&mpls_flow_cfg.mpls_label,
           &mpls_layer2_agg_cfg.mpls_push_headers[0],
           WTI_MPLS_LABEL_SIZE);
-   mpls_flow_cfg.mpls_label >>= 12;
+   mpls_flow_cfg.mpls_label >>= 12;	// morris: start from 10541
 #if MORRIS_MPLS_LABEL
    // mpls_label = 0x10541 as original value from the parameter
 #endif
@@ -15975,6 +15982,16 @@ void CLI_F_Quit_No_Reset(char *StrPrm)
    WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
    exit(1);
 }
+
+void CLI_F_ChangeMplsLabel (char *StrPrm)
+{
+   printf ("CLI_F_ChangeMplsLabel: (%s)\n", StrPrm);
+}
+void CLI_F_ChangeJitter (char *StrPrm)
+{
+   printf ("CLI_F_ChangeJitter: (%s)\n", StrPrm);
+}
+
 
 void CLI_F_ResetAll (char *StrPrm)
 {

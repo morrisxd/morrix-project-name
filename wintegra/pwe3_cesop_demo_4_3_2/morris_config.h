@@ -80,6 +80,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 #define MORRIS_USE_ACR	(1)
 #define MORRIS_CLI_ENTRY	(1)
 #define MORRIS_MPLS_LABEL	(1)
+#define MORRIS_USER_CONTROL	(1)
 
 #endif
 
