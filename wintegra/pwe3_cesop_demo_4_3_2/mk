@@ -17,6 +17,14 @@ then
 fi
 echo surfix=$surfix
 
+hostname | grep 'sgh1win01'
+if test $? -eq 0
+then
+   echo "this is in SHG server"
+   surfix='sgh'
+fi
+echo surfix=$surfix
+
 hn=`hostname`
 echo hostname=[$hn]
 
