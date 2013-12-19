@@ -1606,6 +1606,11 @@ void WTI_IwSystemSetup(void)
  *                indicates if this PW is the clock master PW of the port.
  * Output params:
  * Return val   : none
+ * 	- WTI_TransDeviceCreat
+ *	- WTI_Tdm2PsnFlowCreate
+ *	- WTI_Psn2TdmFlowCreate
+ *	- WT_UfePhyEnable
+ *	- WP_DeviceEnable
  *****************************************************************************/
 void WTI_PwCreate(int pw_index,
                   int oobc_mode,
@@ -1976,6 +1981,8 @@ static void WTI_TdiTransDeviceCreate(int port_index)
  * Input  params:
  * Output params:
  * Return val   : none
+ *	- WT_UfePhyTransCreate
+ *	- WP_DeviceCreate
  *****************************************************************************/
 static void WTI_TransDeviceCreate(int pw_index,
                                   int rx_clock_master_flag,
@@ -2060,6 +2067,14 @@ static void WTI_TransDeviceCreate(int pw_index,
  *                                 (only in UFE2 mode)
  * Output params:
  * Return val   : none
+ *	- WTI_TransChannelRxConfig
+ *	- WP_ChannelCreate
+ *	- WTI_FlowAggregationTdm2PsnConfig
+ *	- WP_IwFlowAggregationCreate
+ *	- WTI_FlowAggregationTdm2PsnConfig
+ *	- WTI_RxBindingDirectMapConfig
+ *	- WP_IwRxBindingCreate
+ *	- WP_IwSystemBuild
  *****************************************************************************/
 static void WTI_Tdm2PsnFlowCreate(int pw_index, int oobc_mode)
 {
@@ -6057,7 +6072,11 @@ void WTI_SyncEthConfig(WP_sync_eth_config *cfg_ptr)
 #else
    cfg_ptr->clock_master = WT_SYNC_ENET_CLOCK_MASTER;
 
+#if MORRIS_USE_ENET
+   if(WTI_ENET_PORT != WP_PORT_ENET7)
+#else
    if(WTI_ENET_PORT != WP_PORT_ENET13)
+#endif
    {
       WTI_TerminateOnError(1, "ERROR - WTI_SyncEthConfig -SyncE - current setting suport SyncE over ENET13",
                            __LINE__);
@@ -7258,7 +7277,9 @@ void WTI_MplsFlowConfig(WP_flow_mpls *cfg_ptr, int pw_index)
 
    cfg_ptr->aggregation = the_system->pw[pw_index].psn2tdm_flow_agg;
    cfg_ptr->wred_entry = 0;
-   cfg_ptr->mpls_label = (WTI_MPLS_LABEL >> 12) + pw_index;
+#if MORRIS_MPLS_LABEL
+#endif
+   cfg_ptr->mpls_label = (WTI_MPLS_LABEL >> 12) + pw_index; 
    cfg_ptr->deny_mode = 0;
 }
 

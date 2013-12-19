@@ -176,7 +176,7 @@ void WT_UfeMPLS_L2_FA_Create(void)
 				3*i+2,	// <----- vlan, i=0,1,2,3,,,,
 				// 0x81000005,
 				(0x88470000 | ((((WTI_MPLS_LABEL) >> 12) + WTI_MAX_PW + 1 + i) >> 4)),
-				((((((WTI_MPLS_LABEL) >> 12)  + WTI_MAX_PW + 1 + i) & 0xff) << 28) | 0x00ff0000));
+				((((((WTI_MPLS_LABEL) >> 12)  + WTI_MAX_PW + 1 + i + MORRIS_MPLS_INCREAMENT) & 0xff) << 28) | 0x00ff0000));
 #ifdef MORRIS_MPLS_LABEL
 // the above code is setting up the MPLS & PW label
 #endif
@@ -263,7 +263,7 @@ void WT_UfeMPLS_L2_FA_Create(void)
  *	- CLI_F_Psn2TdmTxBinWindowSwitchoverThreshold
  *	- CLI_F_Psn2TdmTxBinLOPSDetection
  *	- CLI_F_PwCreateCascadedOnSecondUfe
- *	- CLI_F_PwCreateCascaded
+ *	- CLI_F_PwCreateCascaded   <------------------------------
  *	- CLI_F_PwCreateCascadedOnSecondUfe
  *	- CLI_F_PwCreateCascaded
  *	- CLI_F_PwEnable
