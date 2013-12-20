@@ -2919,7 +2919,7 @@ void WTI_Terminate(WP_U32 status)
 
 printf("%s [ %d ]\n", __FUNCTION__, __LINE__);
 
-   exit(1);
+//    exit(1);
 }
 
 /*****************************************************************************
@@ -3219,11 +3219,12 @@ void show_start_params(void)
 {
       printf ("\n");
       printf ("=====>");
-      printf ("JB(%d),rxBufSize(%d),isEnableSnake(%s)numOfE1(%d)\n", 
+      printf ("JB(%d),rxBufSize(%d),isEnableSnake(%s)numOfE1(%d)pw(%d)\n", 
          global_jitter_buffer_size, 
          g_rxbuffersize,
          isEnableSnake?"SNAKE-NOW":"NON-SNAKE",
-	 cr_snake_num_of_lines);
+	 cr_snake_num_of_lines,
+	 g_num_of_pw);
 }
 
 void show_wddi_const(void);
@@ -14622,8 +14623,8 @@ void CLI_F_MplsFlowAggCreate(char *StrPrm)
           &mpls_layer2_agg_cfg.mpls_push_headers[0],
           WTI_MPLS_LABEL_SIZE);
    mpls_flow_cfg.mpls_label >>= 12;	// morris: start from 10541
-   mpls_flow_cfg.mpls_label += MORRIS_MPLS_INCREAMENT2;	// morris: start from 10541
 #if MORRIS_MPLS_LABEL
+   mpls_flow_cfg.mpls_label += MORRIS_MPLS_INCREAMENT2;	// morris: start from 10541
    // mpls_label = 0x10541 as original value from the parameter
 #endif
 
@@ -16001,11 +16002,26 @@ void CLI_F_ChangeJitter (char *StrPrm)
 
 void CLI_F_ResetAll (char *StrPrm)
 {
+   WUFE_status ufe_status;
+
    printf ("Reset All(%s)\n", StrPrm);
-   // WTI_Terminate(0);
+   
+#if 0
+   // WPX
+   printf("DISABLE EMPHY\n");
+   ufe_status=WUFE_SystemDisable(0, WUFE_SYS_EMPHY | WUFE_SYS_SBI_FULL, 
+   					WUFE_FULL_DUPLEX);
+   WTI_TerminateOnError (ufe_status, "WUFE_SystemDisable", __LINE__);
+   WUFE_SystemDelete (0);
+#endif
    WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
-   WTI_SystemRelease();
-   WP_DriverRelease();
+   WTI_Terminate(0);
+
+   // WTI_SystemRelease();
+#if 0
+   WPX_Ufe4HwReset (0, WP_PORT_UPI1);
+#endif
+   // WP_DriverRelease();
 }
 
 

@@ -398,6 +398,7 @@ WP_S32 WTI_FlexmuxInit(WP_U32 upi_index,
    /* register the framer lock take function */
    WPX_FRMR_RegisterFramerLockCallback(WTI_flexmux_take_framer_lock);
 
+printf ("WPX_UFE_FRAMER_FlexmuxInit calling\n");
    /* Initialize the Flexmux devices */
    status = WPX_UFE_FRAMER_FlexmuxInit(flexmux_cfg->flexmux_id,
                                        upi_index);

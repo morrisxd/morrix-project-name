@@ -709,6 +709,21 @@ static void WTI_SystemReleaseTdi(void)
  * Input  params: none
  * Output params:
  * Return val   : none
+ *
+ *	- WPX_FRMR_LowLevelCommsDisableAccess(0);
+ *	- WPL_ThreadDestroy(&alarm_and_pm_thread_id);
+ *	- WPL_ThreadDestroy(&mailbox_thread_id);
+ *	- WTI_PwDisable(i);
+ *	- WTI_PwDelete(i);
+ *	- WT_UfePhyDelete(&the_system->ufe, i);
+ *	- WP_IwSystemDelete
+ *	- WP_IwRxBindingModify
+ *	- WP_IwSystemDelete
+ *	- WP_IwRxBindingModify
+ *	- WP_IwSystemDelete
+ *	- WT_UfeLineDelete
+ *	- WT_UfeRelease -> WUFE_UfeRelease()
+ *	- free ()
  *****************************************************************************/
 static void WTI_SystemReleaseUfe(void)
 {
@@ -7253,8 +7268,8 @@ void WTI_MplsIwSystemConfig(WP_iw_sys_mpls *cfg_ptr)
    memset(mpls_label_ranges, 0, (2 * (sizeof(WP_mpls_label_range))));
    memset(cfg_ptr, 0, sizeof(WP_iw_sys_mpls));
 
-   mpls_label_ranges[0].min_label = (WTI_MPLS_LABEL >> 12);
-   mpls_label_ranges[0].max_label = (WTI_MPLS_LABEL >> 12) + N_ROUTING_MAX_FLOWS;
+   mpls_label_ranges[0].min_label = (WTI_MPLS_LABEL >> 12) + MORRIS_MPLS_INCREAMENT2;
+   mpls_label_ranges[0].max_label = (WTI_MPLS_LABEL >> 12) + MORRIS_MPLS_INCREAMENT2 + N_ROUTING_MAX_FLOWS;
    mpls_label_ranges[1].min_label = 0xffffffff;
    mpls_label_ranges[1].max_label = 0xffffffff;
 
@@ -7279,7 +7294,7 @@ void WTI_MplsFlowConfig(WP_flow_mpls *cfg_ptr, int pw_index)
    cfg_ptr->wred_entry = 0;
 #if MORRIS_MPLS_LABEL
 #endif
-   cfg_ptr->mpls_label = (WTI_MPLS_LABEL >> 12) + pw_index; 
+   cfg_ptr->mpls_label = (WTI_MPLS_LABEL >> 12) + pw_index + MORRIS_MPLS_INCREAMENT2; 
    cfg_ptr->deny_mode = 0;
 }
 
