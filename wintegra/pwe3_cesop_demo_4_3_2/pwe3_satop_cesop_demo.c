@@ -1798,9 +1798,9 @@ const Y_MenuEntry V_ManualControl []=
 {
    { 6 ,TRUE, "Manul Control",                  {(Y_MnuLeafP) V_MainMenu}},
    {K_Leaf, TRUE, " -> Reset All: Reset",	{(Y_MnuLeafP) CLI_F_ResetAll}},
-   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ChangeJitter}},
-   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ChangeMplsLabel}},
-   {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
+   {K_Leaf, TRUE, " -> change jitter",       	{(Y_MnuLeafP) CLI_F_ChangeJitter}},
+   {K_Leaf, TRUE, " -> change mpls label",     	{(Y_MnuLeafP) CLI_F_ChangeMplsLabel}},
+   {K_Leaf, TRUE, " -> change STM-1/4",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
    {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
    {K_Leaf, TRUE, " -> reset all",       	{(Y_MnuLeafP) CLI_F_ResetAll}},
 };
@@ -16003,6 +16003,7 @@ void CLI_F_ResetAll (char *StrPrm)
 {
    printf ("Reset All(%s)\n", StrPrm);
    // WTI_Terminate(0);
+   WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
    WTI_SystemRelease();
    WP_DriverRelease();
 }
