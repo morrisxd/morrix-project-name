@@ -360,7 +360,9 @@ void WTI_CesopSystemStart(void)
    /* in WDS3 the UFE must be initialized after the UPI port create and enable !!! */
    status = WP_PortEnable(the_system->trans_port, WP_DIRECTION_DUPLEX);
    WTI_TerminateOnError(status, "WP_PortEnable() trans_port",__LINE__);
-
+#if MORRIS_SECOND_RESET
+   WPX_Ufe4HwReset(WP_WINPATH(0), 0);  /* ufe id, connector id as arguments */
+#endif
 #if WTI_DUAL_EMPHY
    status = WP_PortEnable(the_system->second_trans_port, WP_DIRECTION_DUPLEX);
    WTI_TerminateOnError(status, "WP_PortEnable() second trans_port",__LINE__);
@@ -1020,6 +1022,7 @@ void WTI_SystemSetup(void)
    /* create HSPI port and device*/
    WTI_HspiPortCreate();
 #else
+#warning MPLS_OVER_ENET
    /* create ENET port and device*/
     WTI_EnetPortCreate();
 #endif
@@ -5177,7 +5180,7 @@ void WTI_FlowAggregationTdm2PsnConfig(WP_iw_agg_cesop *cfg_ptr, int pw_index, in
 #endif
    /* set mpls label */
    /* if wish to give offset add to pw_index here: */
-   mpls_label = WTI_MPLS_LABEL + ((pw_index)<< 12);
+   mpls_label = WTI_MPLS_LABEL + ((pw_index)<< 12) + MORRIS_MPLS_INCREAMENT2;
 
 
 #if WTI_CESOP_NATIVE_MPLS_IW

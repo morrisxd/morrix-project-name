@@ -14622,7 +14622,9 @@ void CLI_F_MplsFlowAggCreate(char *StrPrm)
    memcpy(&mpls_flow_cfg.mpls_label,
           &mpls_layer2_agg_cfg.mpls_push_headers[0],
           WTI_MPLS_LABEL_SIZE);
+   printf ("mpls(%x)\n", mpls_flow_cfg.mpls_label);
    mpls_flow_cfg.mpls_label >>= 12;	// morris: start from 10541
+   printf ("mpls(%x)\n", mpls_flow_cfg.mpls_label);
 #if MORRIS_MPLS_LABEL
    mpls_flow_cfg.mpls_label += MORRIS_MPLS_INCREAMENT2;	// morris: start from 10541
    // mpls_label = 0x10541 as original value from the parameter
@@ -16006,7 +16008,10 @@ void CLI_F_ResetAll (char *StrPrm)
 
    printf ("Reset All(%s)\n", StrPrm);
    
-#if 0
+   WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
+   WTI_Terminate(0);
+   WPL_Delay (1000000);
+#if 1
    // WPX
    printf("DISABLE EMPHY\n");
    ufe_status=WUFE_SystemDisable(0, WUFE_SYS_EMPHY | WUFE_SYS_SBI_FULL, 
@@ -16014,14 +16019,13 @@ void CLI_F_ResetAll (char *StrPrm)
    WTI_TerminateOnError (ufe_status, "WUFE_SystemDisable", __LINE__);
    WUFE_SystemDelete (0);
 #endif
-   WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
-   WTI_Terminate(0);
-
-   // WTI_SystemRelease();
-#if 0
-   WPX_Ufe4HwReset (0, WP_PORT_UPI1);
-#endif
-   // WP_DriverRelease();
+   // WPX_Ufe412CpldInterruptMaskSet(0, SERIAL_X_CPLD_INTERRUPT_MASK);
+   {
+      char command[129];
+      sprintf (command, "41 %d 0", g_num_of_pw);
+      printf ("command=(%s)\n", command);
+      CLI_F_CR_101_SonetSdh_E1UnframedNoCas (command);
+   }
 }
 
 
