@@ -85,7 +85,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 #define MORRIS_USE_ENET		(1)
 #define MORRIS_MPLS_INCREAMENT	(10)
 #define MORRIS_MPLS_INCREAMENT2	(3)
-
+#define MORRIS_SECOND_RESET	(1)
 #endif
 
 
