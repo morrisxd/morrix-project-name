@@ -5176,16 +5176,18 @@ void WTI_FlowAggregationTdm2PsnConfig(WP_iw_agg_cesop *cfg_ptr, int pw_index, in
 
 #endif /* (!WTI_CESOP_NATIVE_MPLS_IW && !WTI_CESOP_TO_MPLS_FA_CASCADING) */
 
-#if MORRIS_MPLS_LABEL
-#endif
    /* set mpls label */
    /* if wish to give offset add to pw_index here: */
-   mpls_label = WTI_MPLS_LABEL + ((pw_index)<< 12) + MORRIS_MPLS_INCREAMENT2;
-
+#if MORRIS_MPLS_INCREAMENT2
+   mpls_label = WTI_MPLS_LABEL + (((pw_index)+MORRIS_MPLS_INCREAMENT2)<< 12);
+#else
+   mpls_label = WTI_MPLS_LABEL + ((pw_index)<< 12);
+#endif
 
 #if WTI_CESOP_NATIVE_MPLS_IW
    memcpy(cfg_ptr->prefix_header, &mpls_label, 4);
 #else
+#warning MORRIS_CODE_GOES_HERE
 #if WTI_CESOP_MPLS_OVER_ENET
    memcpy(&cfg_ptr->prefix_header[WTI_ETHERNET_HEADER_SIZE], &mpls_label, 4);
 #else
@@ -7271,8 +7273,9 @@ void WTI_MplsIwSystemConfig(WP_iw_sys_mpls *cfg_ptr)
    memset(mpls_label_ranges, 0, (2 * (sizeof(WP_mpls_label_range))));
    memset(cfg_ptr, 0, sizeof(WP_iw_sys_mpls));
 
-   mpls_label_ranges[0].min_label = (WTI_MPLS_LABEL >> 12) + MORRIS_MPLS_INCREAMENT2;
-   mpls_label_ranges[0].max_label = (WTI_MPLS_LABEL >> 12) + MORRIS_MPLS_INCREAMENT2 + N_ROUTING_MAX_FLOWS;
+   mpls_label_ranges[0].min_label = (WTI_MPLS_LABEL >> 12);
+   mpls_label_ranges[0].max_label = (WTI_MPLS_LABEL >> 12) + N_ROUTING_MAX_FLOWS;
+
    mpls_label_ranges[1].min_label = 0xffffffff;
    mpls_label_ranges[1].max_label = 0xffffffff;
 
@@ -7295,9 +7298,7 @@ void WTI_MplsFlowConfig(WP_flow_mpls *cfg_ptr, int pw_index)
 
    cfg_ptr->aggregation = the_system->pw[pw_index].psn2tdm_flow_agg;
    cfg_ptr->wred_entry = 0;
-#if MORRIS_MPLS_LABEL
-#endif
-   cfg_ptr->mpls_label = (WTI_MPLS_LABEL >> 12) + pw_index + MORRIS_MPLS_INCREAMENT2; 
+   cfg_ptr->mpls_label = (WTI_MPLS_LABEL >> 12) + pw_index; 
    cfg_ptr->deny_mode = 0;
 }
 

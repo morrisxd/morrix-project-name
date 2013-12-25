@@ -167,8 +167,11 @@ void WT_UfeMPLS_L2_FA_Create(void)
 		/* create the l2 router MPLS flow aggregations */
 		CLI_F_Tdm2PsnFlowAggEnetHeaderMpls("0 aa aa aa aa aa aa bb bb bb bb bb bb 8847");
 #if MORRIS_DISABLE_VLAN_TAG
-		CLI_F_MplsFlowAggPrefixLength("0 14");
 #warning set_mpls_label_here
+#if MORRIS_MPLS_LABEL
+// the above code is setting up the MPLS & PW label
+#endif
+		CLI_F_MplsFlowAggPrefixLength("0 14");
 		sprintf(temp_buf,
 				"0 %x %x %x %x %x",
 				3*i,
@@ -177,9 +180,6 @@ void WT_UfeMPLS_L2_FA_Create(void)
 				// 0x81000005,
 				(0x88470000 | ((((WTI_MPLS_LABEL) >> 12) + WTI_MAX_PW + 1 + i) >> 4)),
 				((((((WTI_MPLS_LABEL) >> 12)  + WTI_MAX_PW + 1 + i + MORRIS_MPLS_INCREAMENT) & 0xff) << 28) | 0x00ff0000));
-#ifdef MORRIS_MPLS_LABEL
-// the above code is setting up the MPLS & PW label
-#endif
 #else
 
 
@@ -194,9 +194,6 @@ void WT_UfeMPLS_L2_FA_Create(void)
 				((((((WTI_MPLS_LABEL) >> 12)  + WTI_MAX_PW + 1 + i) & 0xff) << 28) | 0x00ff0000));
 
 
-#endif
-#ifdef MORRIS_MPLS_LABEL
-// the above code is setting up the MPLS & PW label
 #endif
 		/*  [mac destination] [mac source] [vlan] [type] [mpls header] */
 		CLI_F_MplsFlowAggPrefixHeaderMpls(temp_buf);
