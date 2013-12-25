@@ -14446,7 +14446,7 @@ void CLI_F_MplsFlowAggPrefixHeaderMpls(char *StrPrm)
    mpls_layer2_agg_cfg.label_mode = WP_MPLS_LABEL_PUSH;
    mpls_layer2_agg_cfg.num_of_mpls_headers_to_push = 1;
    memcpy(&mpls_layer2_agg_cfg.mpls_push_headers[0],
-          &prefix_header_mpls[mpls_layer2_agg_cfg.prefix_length],
+          &prefix_header_mpls[mpls_layer2_agg_cfg.prefix_length/*14*/],
           WTI_MPLS_LABEL_SIZE);
 
    mpls_layer2_agg_cfg.num_of_mpls_headers_to_pop = 0;
@@ -14625,10 +14625,7 @@ void CLI_F_MplsFlowAggCreate(char *StrPrm)
    printf ("mpls(%x)\n", mpls_flow_cfg.mpls_label);
    mpls_flow_cfg.mpls_label >>= 12;	// morris: start from 10541
    printf ("mpls(%x)\n", mpls_flow_cfg.mpls_label);
-#if MORRIS_MPLS_LABEL
-   mpls_flow_cfg.mpls_label += MORRIS_MPLS_INCREAMENT2;	// morris: start from 10541
    // mpls_label = 0x10541 as original value from the parameter
-#endif
 
    mpls_flow_cfg.deny_mode = 0;
    the_system->psn2tdm_mpls_flow_handle[val] =
