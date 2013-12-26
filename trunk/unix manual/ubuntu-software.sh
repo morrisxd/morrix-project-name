@@ -20,4 +20,5 @@ sudo apt-get install -y screen \
 && sudo apt-get install -y evolution \
 && sudo apt-get install -y evolution-exchange \
 && sudo apt-get install -y evolution-mapi \
-&& sudo apt-get install -y dos2unix
+&& sudo apt-get install -y dos2unix \
+&& sudo apt-get install -y sharutils
