@@ -15993,9 +15993,156 @@ void CLI_F_ChangeMplsLabel (char *StrPrm)
 {
    printf ("CLI_F_ChangeMplsLabel: (%s)\n", StrPrm);
 }
+
+
+
+void WTI_CesopJitterBufferChange (WP_handle psn2tdm_iw_system,
+                                       WP_handle classification_flow,
+                                       WP_handle tx_channel_handle,
+                                       WP_U32 tx_jitter_buffer_size,
+                                       WP_U16 window_tx_threshold,
+                                       WP_U8 window_switchover_threshold,
+                                       WP_U8 lops_detection,
+                                       WP_U8 consec_pkts_in_synch_th,
+                                       WP_U8 consec_miss_pkts_out_synch_th)
+{
+   WP_status status;
+   WP_command command;
+   WP_iw_tx_binding_cesop cesop_tx_binding_config;
+   WP_ch_trans_pwe3 pwe3_ch_cfg;
+
+   memset(&cesop_tx_binding_config, 0, sizeof(WP_iw_tx_binding_cesop));
+   memset(&pwe3_ch_cfg, 0, sizeof(WP_ch_trans_pwe3));
+
+#if WTI_PCE_CLASSIFIER
+   status = WP_PceRuleDisable(classification_flow);
+   WTI_TerminateOnError(status,
+                        "WP_PceRuleDisable PCE flow", __LINE__);
+#else
+   /* disable classification rule and wait 50 micro seconds to assure that
+      no traffic enters the jitter buffer */
+   status = WP_IwFlowDisable(psn2tdm_iw_system, classification_flow);
+   WTI_TerminateOnError(status, "WP_IwFlowDisable() classification flow", __LINE__);
+#endif
+
+   /* build IW system */
+   status = WP_IwSystemBuild(psn2tdm_iw_system);
+   WTI_TerminateOnError(status, "WP_IwSystemBuild() PSN ----> TDM",__LINE__);
+
+   /* give traffic to pass */
+   WP_Delay(50000);
+
+   /* disable transparent Tx channel */
+   status = WP_ChannelDisable(tx_channel_handle);
+   WTI_TerminateOnError(status, "WP_ChannelDisable() Tx transparent PWE3 channel", __LINE__);
+
+   /* modify jitter buffer size */
+   pwe3_ch_cfg.tx_jitter_buffer_size = tx_jitter_buffer_size;
+
+   /* set modification command */
+   command = WP_CH_MOD_TRANS_TX_JITTER_BUFFER_SIZE;
+
+   status = WP_ChannelModify(tx_channel_handle,
+                             WP_CH_MOD_TRANS_TX_JITTER_BUFFER_SIZE,
+                             &pwe3_ch_cfg);
+   WTI_TerminateOnError(status, "WP_ChannelModify() Tx transparent PWE3 channel", __LINE__);
+
+   /* modify Tx transmit threshold and switchover threshold */
+   cesop_tx_binding_config.window_tx_threshold = window_tx_threshold;
+   cesop_tx_binding_config.window_switchover_threshold = window_switchover_threshold;
+   cesop_tx_binding_config.window_max_threshold = tx_jitter_buffer_size;
+   cesop_tx_binding_config.lops_detection = lops_detection;
+   cesop_tx_binding_config.consec_pkts_in_synch_th = consec_pkts_in_synch_th;
+   cesop_tx_binding_config.consec_miss_pkts_out_synch_th = consec_miss_pkts_out_synch_th;
+
+   /* set modification command */
+   command = (WP_IW_TX_BIND_MOD_CESOP_TX_THRESHOLD |
+              WP_IW_TX_BIND_MOD_CESOP_SWITCHOVER_THRESHOLD |
+              WP_IW_TX_BIND_MOD_CESOP_JITTER_MAX_THRESHOLD |
+              WP_IW_TX_BIND_MOD_CESOP_LOPS_DETECTION );
+
+   status = WP_IwTxBindingModify(tx_channel_handle,
+                                 command,
+                                 WP_IW_TX_BINDING_CESOP,
+                                 &cesop_tx_binding_config);
+   WTI_TerminateOnError(status, "WP_IwTxBindingModify()", __LINE__);
+
+   /* enable transparent Tx channel */
+   status = WP_ChannelEnable(tx_channel_handle);
+   WTI_TerminateOnError(status, "WP_ChannelEnable() Tx transparent PWE3 channel", __LINE__);
+
+#if WTI_PCE_CLASSIFIER
+   status = WP_PceRuleEnable(classification_flow);
+   WTI_TerminateOnError(status,
+                        "WP_PceRuleEnable PCE flow", __LINE__);
+#else
+   /* enable classification rule */
+   status = WP_IwFlowEnable(psn2tdm_iw_system, classification_flow);
+   WTI_TerminateOnError(status, "WP_IwFlowEnable() classification flow", __LINE__);
+#endif
+
+   /* build IW system */
+   status = WP_IwSystemBuild(psn2tdm_iw_system);
+   WTI_TerminateOnError(status, "WP_IwSystemBuild() PSN ----> TDM",__LINE__);
+}
+
+
+/*-------------------------------------------*\
+PSN TO TDM TX BINDING:
+---------------------------
+
+TX BINDING PARAMETERS:
+window_tx_threshold: 32
+window_switchover_threshold: 8
+window_max_threshold: 64
+lops_detection: 1
+consec_pkts_in_synch_th: 6
+consec_miss_pkts_out_synch_th: 4
+\*-------------------------------------------*/
 void CLI_F_ChangeJitter (char *StrPrm)
 {
+   WP_U32 res, cmd, index, tx_jitter_buffer_size;
+   WP_U32 window_tx_threshold;
+   WP_U32 window_switchover_threshold;
+   WP_U32 lops_detection, consec_pkts_in_synch_th, consec_miss_pkts_out_synch_th;
+
+   lops_detection = 1;
+   window_switchover_threshold=8;
+   consec_pkts_in_synch_th = 6;
+   consec_miss_pkts_out_synch_th = 4;
+   window_tx_threshold = tx_jitter_buffer_size / 2;
    printf ("CLI_F_ChangeJitter: (%s)\n", StrPrm);
+
+   res = sscanf(StrPrm,
+                "%d %d %d %d %d %d %d %d",
+                &cmd,
+                &index,
+                &tx_jitter_buffer_size,
+                &window_tx_threshold,
+                &window_switchover_threshold,	// 8
+                &lops_detection,	// 1
+                &consec_pkts_in_synch_th,	// 6
+                &consec_miss_pkts_out_synch_th);	// 4
+   if (3 > res) return printf ("please enter at least 3 params\n");
+
+   WTI_CesopJitterBufferChange(the_system->psn2tdm_iw_system,
+
+#if WTI_PCE_CLASSIFIER
+                                     the_system->pw[index].pce_flow_handle,
+#else
+#if WTI_CESOP_MPLS_IW
+                                     the_system->pw[index].mpls_flow_handle,
+#else
+                                     the_system->pw[index].dfc_flow_handle,
+#endif
+#endif
+                                     the_system->pw[index].trans_tx,
+                                     tx_jitter_buffer_size,
+                                     (WP_U16)window_tx_threshold,
+                                     (WP_U8)window_switchover_threshold,
+                                     lops_detection,
+                                     consec_pkts_in_synch_th,
+                                     consec_miss_pkts_out_synch_th);
 }
 
 
@@ -16004,7 +16151,8 @@ void CLI_F_ResetAll (char *StrPrm)
    WUFE_status ufe_status;
 
    printf ("Reset All(%s)\n", StrPrm);
-   
+
+#if 0
    WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
    WTI_Terminate(0);
    WPL_Delay (1000000);
@@ -16023,6 +16171,8 @@ void CLI_F_ResetAll (char *StrPrm)
       printf ("command=(%s)\n", command);
       CLI_F_CR_101_SonetSdh_E1UnframedNoCas (command);
    }
+#endif
+   // WPX_UFE_FRAMER_FlexmuxSetBuildPersonality ();
 }
 
 
@@ -17653,8 +17803,8 @@ void show_wddi_const()
                 MORRIS_CHANGE_LEVELING, 
                 MORRIS_CHANGE_LEVELING_FOR_SNAKE);
    printf (
-      "=====>WTI_CLOCK_REC_MODE(%s), MORRIS_ENABLE_APS(%d),g_enableAPS(%d)\n", 
-		WTI_CLOCK_REC_MODE?"DCR":"ACR", MORRIS_ENABLE_APS, g_enableAPS
+      "=====>WTI_CLOCK_REC_MODE(%s), g_enableAPS(%d)\n", 
+		WTI_CLOCK_REC_MODE?"DCR":"ACR", g_enableAPS
                 );
    printf (
       "=====>MORRIS_SET_ALL_TO_HOLDOVER(%d)\n", 
