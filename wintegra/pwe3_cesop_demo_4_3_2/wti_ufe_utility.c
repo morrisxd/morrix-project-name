@@ -323,7 +323,7 @@ void  WT_UfeSystemCreate(WT_ufe *ufe)
    WUFE_BSSetExtPllFreeRunMode(ufe->ufe_id);
    if (g_isForceOffset)
    {
-      WUFE_BSSetExtPllFreeRunModeOffset(the_system->ufe.ufe_id,0x00700000);
+      // WUFE_BSSetExtPllFreeRunModeOffset(the_system->ufe.ufe_id,0x00700000);
    }
 
 
