@@ -49,6 +49,10 @@ WP_U32 cr_snake_num_of_lines = 16;
 
 #define MORRIS_DIRECT_FACTOR	(25)
 #define MORRIS_INTEGRATION_FACTOR	(28)
+
+/*
+ * this offset is for daisy chain.
+ */
 #define MORRIS_WDDI_CHANGE	"3rd change: in wddi/sources/include/core/features/wpi_adv_user.h #define WPI_CLOCK_REC_PPM_DELTA_ALLOWED             (50) youll need to recomile WDDI ....  "
 
 

@@ -294,6 +294,12 @@ void WT_Eint3Interrupt(WP_U32 wpid, WP_U32 signal_info)
 }
 #endif
 
+
+void WUFE_BSSetExtPllFreeRunModeOffset(WP_U32 ufe_id,WP_S32 clock_offset)
+{   
+      WUFEI_BoardWriteZarlinkPll1FreeRunFreqOffset(ufe_id,clock_offset);
+}
+
 void  WT_UfeSystemCreate(WT_ufe *ufe)
 {
    WUFE_system sys_cfg;
@@ -323,7 +329,7 @@ void  WT_UfeSystemCreate(WT_ufe *ufe)
    WUFE_BSSetExtPllFreeRunMode(ufe->ufe_id);
    if (g_isForceOffset)
    {
-      // WUFE_BSSetExtPllFreeRunModeOffset(the_system->ufe.ufe_id,0x00700000);
+      WUFE_BSSetExtPllFreeRunModeOffset(the_system->ufe.ufe_id,0x00700000);
    }
 
 
