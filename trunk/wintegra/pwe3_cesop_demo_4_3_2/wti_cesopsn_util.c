@@ -3680,7 +3680,11 @@ void WTI_EnetPortCreate(void)
    }
 #else /* WP_HW_WINPATH3 */
 #if (WTI_ENET_MODE == WP_ENET_NORMAL)
+#if MORRIS_SET_ENET_LOOPBACK
     status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_FALSE);
+#else
+    status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_TRUE);
+#endif
     WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_ENET_PORT", __LINE__);
 #else
    status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_TRUE);

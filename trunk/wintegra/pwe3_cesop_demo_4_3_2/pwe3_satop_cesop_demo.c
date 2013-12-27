@@ -216,6 +216,7 @@
 #if (WTI_XGI_MODE)
 #define WTI_ENET_MODE                               WP_ENET_LOOPBACK //NORMAL /* defines loopback or normal operation on ENET port */
 #else
+// #error RRRRRRRRRRRRRRRRRRRRR
 #define WTI_ENET_MODE                               WP_ENET_NORMAL/* defines loopback or normal operation on ENET port */
 // #error WTI_ENET_MODE_loopbacked
 #endif // WTI_XGI_MODE
