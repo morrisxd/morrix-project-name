@@ -63,5 +63,4 @@ WDDI_HW_DEVICE=winpath3 \
 UFE_DIR=../ufe \
 UFE=ufe412 \
 FRAMER=flexmux \
-&& rsync ./bin/pwe3_satop_cesop_demo.exe ${filepath}${filename}
-echo rsync ./bin/pwe3_satop_cesop_demo.exe ${filepath}${filename} complete !
+&& rsync ./bin/pwe3_satop_cesop_demo.exe ${filepath}${filename} &&  echo rsync ./bin/pwe3_satop_cesop_demo.exe ${filepath}${filename} complete !
