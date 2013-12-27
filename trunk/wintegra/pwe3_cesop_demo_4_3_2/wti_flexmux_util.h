@@ -256,6 +256,33 @@ typedef struct
 
 typedef struct
 {
+   WP_U8 is_active;
+}
+WTI_Flexmux_Port_Info;
+
+typedef struct
+{
+   WP_U8 is_active;
+   WP_U32 transfer_type;
+}
+WTI_Flexmux_HOP_Info;
+
+typedef struct
+{
+   WP_U8 is_active;
+   WP_U32 transfer_type;
+}
+WTI_Flexmux_LOP_Info;
+
+typedef struct
+{
+   WP_U8 is_active;
+   WP_U8 is_connected;
+}
+WTI_Flexmux_PDH_Info;
+
+typedef struct
+{
    WP_boolean is_initialized;
    WTI_flexmux_physical_conf flexmux_hw_config;
    WP_U8 flexmux_build_personality;
@@ -263,9 +290,24 @@ typedef struct
    WP_U8 max_line_ports;
    WTI_Flexmux_line_port_registry line_ports_reg[WTI_MAX_LINE_PORTS_PER_FLEXMUX_DEVICE];
    WPX_UFE_FRAMER_WUFE_line_transf_type            vc_3_4;
+   WP_U8                                           flexmux_prbs_pattern;  
+   WTI_Flexmux_Port_Info port_info[4];
+   WTI_Flexmux_HOP_Info hop_info[12];
+   WTI_Flexmux_LOP_Info lop_info[336];
+   WTI_Flexmux_PDH_Info pdh_info[336];
 } WTI_Flexmux_device_registry;
 
 WTI_Flexmux_device_registry flexmux_reg[WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES];
+
+#if MORRIS_REINIT_FLEXMUX
+WP_S32 WTI_FlexmuxInitEx(WP_U32 upi_index,
+                       WP_U8 flexmux_id,
+                       WTI_flexmux_physical_conf flexmux_hw_config,
+                       WP_U8 flexmux_mode,
+                       WPX_UFE_FRAMER_WUFE_line_transf_type vc_3_4,
+                       WTI_Flexmux_global_setup *flexmux_cfg,
+		       WP_U32 isFirstTime);
+#endif
 
 WP_S32 WTI_FlexmuxInit(WP_U32 upi_index,
                        WP_U8 flexmux_id,
@@ -317,5 +359,7 @@ WP_S32 WTI_FlexmuxPDHTxTimingSet(WP_U8 flexmux_id,WP_U32 client_port_id,WP_U32 l
 void WTI_FlexmuxForceA(WP_U32 flexmux_id, WP_U32 line_port_id);
 void WTI_FlexmuxForceB(WP_U32 flexmux_id, WP_U32 line_port_id);
 void WTI_Flexmux_ForceStateGet(WP_U32 iLinePort);
+void WTI_Flexmux_InitFacilityRegistry(void);
+void WTI_FlexmuxRelease(void);
 
 #endif /* WTI_FLEXMUX_UTIL_H */

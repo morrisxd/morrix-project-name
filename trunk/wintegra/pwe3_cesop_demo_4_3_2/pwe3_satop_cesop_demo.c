@@ -3272,7 +3272,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       char command[129];
       sprintf (command, "41 %d 0", g_num_of_pw);
       printf ("command=(%s)\n", command);
-      CLI_F_CR_101_SonetSdh_E1UnframedNoCas (command);
+      CLI_F_CR_101_SonetSdh_E1UnframedNoCasEx (command, 1);
    }
 #endif
    CLI_T_Main();
@@ -16153,24 +16153,18 @@ void CLI_F_ResetAll (char *StrPrm)
 
    printf ("Reset All(%s)\n", StrPrm);
 
-#if 0
+#if 1
    WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
    WTI_Terminate(0);
    WPL_Delay (1000000);
-#if 1
-   // WPX
-   printf("DISABLE EMPHY\n");
-   ufe_status=WUFE_SystemDisable(0, WUFE_SYS_EMPHY | WUFE_SYS_SBI_FULL, 
-   					WUFE_FULL_DUPLEX);
-   WTI_TerminateOnError (ufe_status, "WUFE_SystemDisable", __LINE__);
-   WUFE_SystemDelete (0);
-#endif
-   // WPX_Ufe412CpldInterruptMaskSet(0, SERIAL_X_CPLD_INTERRUPT_MASK);
+
    {
       char command[129];
       sprintf (command, "41 %d 0", g_num_of_pw);
       printf ("command=(%s)\n", command);
-      CLI_F_CR_101_SonetSdh_E1UnframedNoCas (command);
+#if MORRIS_REINIT_FLEXMUX
+      CLI_F_CR_101_SonetSdh_E1UnframedNoCasEx (command, 0);
+#endif
    }
 #endif
    // WPX_UFE_FRAMER_FlexmuxSetBuildPersonality ();

@@ -6182,6 +6182,117 @@ void CLI_F_Error_Enable_Before_Create(char *StrPrm)
 **********************************************************************
 **********************************************************************/
 
+#if MORRIS_REINIT_FLEXMUX
+void CLI_F_CR_101_SonetSdh_E1UnframedNoCasEx(char *StrPrm, WP_U32 isFirst)
+{
+   WP_U32 res, cmd, num_of_lines;
+   WP_CHAR temp_buf[WTI_MAX_STRING_SIZE];
+   WP_U32 interface;
+#ifdef WT_UFE_FRAMER
+   WTI_Flexmux_global_setup flex_global_params;
+   WPX_UFE_FRAMER_WUFE_line_transf_type vc_3_4 = WTI_FLEXMUX_UFE_FRAMER_WUFE_SDH_TYPE_VC;
+   WP_U8 flexmux_mode=0;
+#endif
+
+#ifdef MORRIS_CLI_ENTRY 
+   printf ("Hello World(%s)\n", StrPrm);
+   printf ("Hello World(%s)\n", StrPrm);
+   printf ("Hello World(%s)\n", StrPrm);
+   printf ("Hello World(%s)\n", StrPrm);
+#endif
+
+   /* Read parameters from user */
+   /*Interface: 0 -SDH, 1- SONET, 2 -CAD*/
+   res = sscanf(StrPrm, "%d %d %d", &cmd, &num_of_lines, &interface);
+
+   if (res == 1)
+   {
+      interface = 0; /* use default setup */
+#if WTI_DUAL_EMPHY
+      num_of_lines = 504;
+#else
+      num_of_lines = 252;
+#endif
+   }
+   else if (res == 2)
+   {
+      interface = 0; /* use default setup */
+      if (num_of_lines == 0)
+      {
+         WTI_TerminatePrintError("Invalid parameter. Number of lines is zero", __LINE__);
+         return;
+      }
+   }
+   else if (res > 3)
+   {
+      WTI_TerminatePrintError("Invalid number of parameters", __LINE__);
+      return;
+   }
+   printf("Running %s [%d][%d]\n",__FUNCTION__,num_of_lines,interface );
+
+   strcpy(test_setup.test_name, __FUNCTION__);
+   WTI_SetDefaultE1UnfTestParameters(num_of_lines, interface, &(test_setup.transfer_type),
+		   &(test_setup.framing_mode), &(test_setup.cas_mode), &(test_setup.num_slots)
+
+#ifdef WT_UFE_FRAMER
+                                     , &flexmux_mode /* in case of WT_UFE_FRAMER only */
+#endif
+      );
+
+   /* allocate CESoP system */
+   WTI_SystemAlloc();
+
+   /*******************************************************************************************/
+   /*                                     UFE and framer config                               */
+   /*******************************************************************************************/
+
+   /* FPGA mode [0-SDH, 1-SONET, 2-CAD] */
+   sprintf(temp_buf, "0 %d",interface);
+   CLI_F_UfeFpgaMode(temp_buf);
+
+   /* create an empty CESOP system with no PW */
+   /*Calls UFE system create and enable*/
+   WTI_DemoConfigStart();
+
+#ifdef WT_UFE_FRAMER
+   /* Initialize the Flexmux framer in SONET mode */
+   WTI_FlexmuxInitEx(WTI_EMPHY_PORT,
+                   0,
+                   WTI_FLEXMUX_PHYSICAL_CONF,
+                   flexmux_mode,
+                   vc_3_4,
+                   &flex_global_params,
+		   isFirst);
+
+   if (interface < 2)
+      WTI_enable_alarms_and_performance_monitoring(interface);
+
+   /* Unmask FPGA interrupt sources to allow serial to interrupt us */
+   WPX_Ufe412CpldInterruptMaskSet(0, SERIAL_X_CPLD_INTERRUPT_MASK);
+#endif
+
+#ifdef MORRIS_MPLS_LABEL
+#endif
+   WT_UfeMPLS_L2_FA_Create();
+
+   WT_UfeLinePWCreate(&test_setup, 1);
+
+#if MORRIS_SET_ALL_TO_HOLDOVER
+#warning MORRIS_SET_ALL_TO_HOLDOVER_does_not_matter
+#endif
+   if (g_force_holdover)
+   {
+      set_all_holdover (num_of_lines);
+   }
+
+#ifdef WT_UFE_FRAMER
+
+   if (interface < 2)
+      WTI_enable_performance_monitoring_points(interface, WP_TRUE, vc_3_4, test_setup.framing_mode);
+
+#endif
+}
+#endif // end of MORRIS_REINIT_FLEXMUX
 /***************************************************************
  * Func name  :
  * Description:
