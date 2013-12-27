@@ -221,6 +221,304 @@ void WTI_allocate_pm_storage_areas(void);
 WP_THREAD_ID mailbox_thread_id = 0;
 WP_THREAD_ID alarm_and_pm_thread_id = 0;
 
+
+#if MORRIS_REINIT_FLEXMUX
+WP_S32 WTI_FlexmuxInitEx(WP_U32 upi_index,
+                       WP_U8 flexmux_id,
+                       WTI_flexmux_physical_conf flexmux_hw_config,
+                       WP_U8 flexmux_mode,
+                       WPX_UFE_FRAMER_WUFE_line_transf_type vc_3_4,
+                       WTI_Flexmux_global_setup *flexmux_cfg, 
+		       WP_U32 isFirstTime)
+{
+   WUFE_status status;
+   WP_U8 max_line_ports=0, line_increment=0;
+   WP_U8 wti_flexmux_build_personality=0;
+   WTI_flexmux_line_port_mode line_port_mode=0;
+#if WTI_DUAL_EMPHY
+   WTI_flexmux_physical_conf second_flexmux_hw_config = 0;
+#endif  
+
+   WTI_Flexmux_InitFacilityRegistry();
+   if (flexmux_id > WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES)
+      WTI_FlexmuxTerminateOnError("flexmux_id is out of bounds !", 0);
+
+   if (flexmux_hw_config != WT_FLEXMUX_UFE_412_1_PORT_OC12 &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_412_2_PORTS_OC3 &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_412_4_PORTS_OC3 &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_448_4_PORTS_OC12 &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_448_8_PORTS_OC3_PLUS_8_PROTECTION &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_448_4_PORTS_OC12_CARD_PROTECTION_MASTER &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_448_4_PORTS_OC12_CARD_PROTECTION_SLAVE &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_MASTER &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_SLAVE &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_SLAVE &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_412_4_PORTS_OC3_CLEAR_CHANNEL &&
+       flexmux_hw_config != WT_FLEXMUX_UFE_412_1_PORT_OC12_CLEAR_CHANNEL 
+
+#if WTI_DUAL_EMPHY
+       &&  flexmux_hw_config != WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_UPI1_MASTER_UPI3_SLAVE
+#endif
+      )
+      WTI_FlexmuxTerminateOnError("Invalid flexmux_hw_config !", 0);
+
+   if (flexmux_mode != WPX_UFE_FRAMER_DEVICE_MODE_SONET &&
+       flexmux_mode != WPX_UFE_FRAMER_DEVICE_MODE_SDH)
+      WTI_FlexmuxTerminateOnError("Invalid flexmux_mode !", 0);
+
+   WTI_allocate_pm_storage_areas();
+
+   if ( flexmux_hw_config == WT_FLEXMUX_UFE_412_1_PORT_OC12 ||
+		flexmux_hw_config== WT_FLEXMUX_UFE_412_1_PORT_OC12_CLEAR_CHANNEL)
+   {
+      if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_OC12;
+      }
+      else if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SDH)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_STM4;
+      }
+      max_line_ports = 1;
+      line_increment = 1;
+      wti_flexmux_build_personality = WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12;
+#if WTI_DUAL_EMPHY
+      second_flexmux_hw_config = flexmux_hw_config;
+#endif  
+   }
+   else if (flexmux_hw_config == WT_FLEXMUX_UFE_412_4_PORTS_OC3 ||
+            flexmux_hw_config == WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_MASTER ||
+            flexmux_hw_config == WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_SLAVE ||
+            flexmux_hw_config == WT_FLEXMUX_UFE_412_4_PORTS_OC3_CLEAR_CHANNEL)
+   {
+      if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_OC3;
+      }
+      else if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SDH)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_STM1;
+      }
+      max_line_ports = 4;
+      line_increment = 1;
+      wti_flexmux_build_personality = WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3;
+#if WTI_DUAL_EMPHY
+      second_flexmux_hw_config = flexmux_hw_config;
+#endif      
+   }
+#if WTI_DUAL_EMPHY
+   else if (flexmux_hw_config == WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_UPI1_MASTER_UPI3_SLAVE)
+   {
+      if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_OC3;
+      }
+      else if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SDH)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_STM1;
+      }
+      max_line_ports = 4;
+      line_increment = 1;
+      wti_flexmux_build_personality = WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3;
+      flexmux_hw_config = WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_MASTER;
+      second_flexmux_hw_config = WT_FLEXMUX_UFE_412_4_PORTS_OC3_CARD_PROTECTION_SLAVE;
+   }
+#endif
+   else if (flexmux_hw_config == WT_FLEXMUX_UFE_412_2_PORTS_OC3)
+   {
+      if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_OC3;
+      }
+      else if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SDH)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_STM1;
+      }
+      max_line_ports = 2;
+      line_increment = 1;
+      wti_flexmux_build_personality = WPX_UFE_FRAMER_BUILD_PERSONALITY_2_PLUS_2_OC3;
+#if WTI_DUAL_EMPHY
+      second_flexmux_hw_config = flexmux_hw_config;
+#endif  
+   }
+   else if (flexmux_hw_config == WT_FLEXMUX_UFE_448_4_PORTS_OC12                         ||
+            flexmux_hw_config == WT_FLEXMUX_UFE_448_4_PORTS_OC12_CARD_PROTECTION_MASTER  ||
+            flexmux_hw_config == WT_FLEXMUX_UFE_448_4_PORTS_OC12_CARD_PROTECTION_SLAVE )
+   {
+      if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_OC12;
+      }
+      else if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SDH)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_STM4;
+      }
+      max_line_ports = 4;
+      line_increment = 1;
+      wti_flexmux_build_personality = WPX_UFE_FRAMER_BUILD_PERSONALITY_4_PLUS_4_OC3_OC12;
+   }
+   else if (flexmux_hw_config == WT_FLEXMUX_UFE_448_8_PORTS_OC3_PLUS_8_PROTECTION)
+   {
+      if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_OC3;
+      }
+      else if (flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SDH)
+      {
+         line_port_mode = WT_FLEXMUX_LINE_PORT_STM1;
+      }
+      max_line_ports = 8;
+      line_increment = 1;
+      wti_flexmux_build_personality = WPX_UFE_FRAMER_BUILD_PERSONALITY_8_PLUS_8_OC3;
+   }
+   else
+   {
+      WTI_FlexmuxTerminateOnError("Invalid flexmux_hw_config !", 0);
+   }
+
+#if WTI_DUAL_EMPHY
+   if (flexmux_id == WTI_FLEXMUX_SECOND_FLEXMUX_ID)
+      WTI_FlexmuxTerminateOnError("Invalid flexmux_id for DUAL EMPHY !", 0);
+#endif
+   
+   initialize_locks();
+
+   memset(flexmux_cfg, 0, sizeof(WTI_Flexmux_global_setup));
+
+   /* set flexmux ID */
+   flexmux_cfg->flexmux_id = flexmux_id;
+
+#if WTI_DUAL_EMPHY
+   /* set second flexmux ID */
+   flexmux_cfg->second_flexmux_id = WTI_FLEXMUX_SECOND_FLEXMUX_ID;
+#endif
+
+   /* Mask all framer interrupts in the CPLD so that northbound messaging is disabled */
+   WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
+
+   /*register the peek response callback function to the frmr driver*/
+   WPX_FRMR_RegisterPeekCallback(WTI_UFE_FRAMER_PEEK_RESPONSE_CALLBACK); 
+
+   /* register the framer lock take function */
+   WPX_FRMR_RegisterFramerLockCallback(WTI_flexmux_take_framer_lock);
+
+if (isFirstTime)
+{
+printf ("WPX_UFE_FRAMER_FlexmuxInit calling\n");
+   /* Initialize the Flexmux devices */
+   status = WPX_UFE_FRAMER_FlexmuxInit(flexmux_cfg->flexmux_id,
+                                       upi_index);
+   WTI_FlexmuxCheckStatus("WPX_UFE_FRAMER_FlexmuxInit", status, __LINE__);
+
+#if defined(WP_BOARD_WDS3)
+   {
+      /* Workaround for lost packets due to transceiver */
+      WP_U32 j;
+
+#if defined(__WT_UFE412__)
+      for (j = 0x88000028; j <= 0x88000e28; j += 0x200)
+         WPX_FRMR_DEV_DIAG_Poke(0, 0, j, 0x00000001);
+#elif defined(__WT_UFE448__)
+      for (j = 0x88000028; j <= 0x88000e28; j += 0x200)
+         WPX_FRMR_DEV_DIAG_Poke(0, 0, j, 0x00000000);
+#endif
+   }
+#endif
+
+   /* service the mailboxes in a separate thread */
+   {
+      WP_U32 thread_params[2*WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES];
+
+      thread_params[0] = flexmux_cfg->flexmux_id;
+      thread_params[1] = upi_index;
+#if WTI_DUAL_EMPHY
+      thread_params[2] = flexmux_cfg->second_flexmux_id;
+      thread_params[3] = WTI_FLEXMUX_SECOND_UPI_INDEX;
+#endif
+
+      if (mailbox_thread_id == 0)
+         WPL_ThreadInit(&mailbox_thread_id,
+                     (void *(*)(void *)) WPX_UFE_FRAMER_FlexmuxServiceMailbox,
+                     (void *) thread_params);
+   }
+
+#if WTI_FLEXMUX_ALARM_AND_PM_THREAD
+
+   /* service the alarms and PM callbacks in a separate thread */
+   {
+      WP_U32 thread_params[2] = { 0, 1 };
+      void process_framer_task_list(void);
+
+      if (alarm_and_pm_thread_id == 0)
+         WPL_ThreadInit(&alarm_and_pm_thread_id,
+                        (void *(*)(void *)) process_framer_task_list,
+                        (void *) thread_params);
+   }
+
+#endif
+} // end of isFirstTime
+
+   /* set the Flexmux device build personality */
+   status = WPX_UFE_FRAMER_FlexmuxSetBuildPersonality(flexmux_cfg->flexmux_id,
+                                                      wti_flexmux_build_personality,
+                                                      upi_index);
+   WTI_UfeFramerTerminateOnError(status, "first UFE WPX_UFE_FRAMER_FlexmuxSetBuildPersonality", 0, __LINE__);
+   
+#if WTI_DUAL_EMPHY
+   /* set the Flexmux device build personality */
+   status = WPX_UFE_FRAMER_FlexmuxSetBuildPersonality(flexmux_cfg->second_flexmux_id,
+                                                      wti_flexmux_build_personality,
+                                                      WTI_FLEXMUX_SECOND_UPI_INDEX);
+   WTI_UfeFramerTerminateOnError(status, "second UFE WPX_UFE_FRAMER_FlexmuxSetBuildPersonality", 0, __LINE__);
+#endif
+
+#if 0
+#if WTI_FLEXMUX_ENABLE_ALARMS
+   printf("AIS_insertion_enable\n");   
+   AIS_insertion_enable("0 0");
+#endif
+#endif
+
+#if WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING
+   build_personality_in_use = wti_flexmux_build_personality;
+#endif
+
+   WTI_FlexmuxDeviceInit(upi_index,
+                         flexmux_id,
+                         flexmux_hw_config,
+                         flexmux_mode,
+                         vc_3_4,
+                         max_line_ports,
+                         line_increment,
+                         wti_flexmux_build_personality,
+                         line_port_mode,
+                         flexmux_cfg);
+
+#if WTI_DUAL_EMPHY
+
+   WP_Delay(50000);
+
+   WTI_FlexmuxDeviceInit(WTI_FLEXMUX_SECOND_UPI_INDEX,
+                         flexmux_cfg->second_flexmux_id,
+                         second_flexmux_hw_config,
+                         flexmux_mode,
+                         vc_3_4,
+                         max_line_ports,
+                         line_increment,
+                         wti_flexmux_build_personality,
+                         line_port_mode,
+                         flexmux_cfg);
+
+#endif
+
+   return 0;
+}
+#endif	// end of MORRIS_REINIT_FLEXMUX
+
+
+
+
+
 WP_S32 WTI_FlexmuxInit(WP_U32 upi_index,
                        WP_U8 flexmux_id,
                        WTI_flexmux_physical_conf flexmux_hw_config,
@@ -236,6 +534,7 @@ WP_S32 WTI_FlexmuxInit(WP_U32 upi_index,
    WTI_flexmux_physical_conf second_flexmux_hw_config = 0;
 #endif  
 
+   WTI_Flexmux_InitFacilityRegistry();
    if (flexmux_id > WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES)
       WTI_FlexmuxTerminateOnError("flexmux_id is out of bounds !", 0);
 
@@ -519,7 +818,8 @@ WP_S32 WTI_FlexmuxDeviceInit(WP_U32 upi_index,
                              WTI_Flexmux_global_setup *flexmux_cfg)
 {
    WUFE_status status;
-
+   WP_U8 hop_index;
+   
 #ifdef __WT_UFE448__
 WPX_FRMR_DEMO_ONLY_Configure_GTP_ClockSource(flexmux_id);
 #else
@@ -667,6 +967,10 @@ WPX_FRMR_DEMO_ONLY_Configure_GTP_ClockSource(flexmux_id);
                   status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
                   WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
 
+                  hop_index = 3 * line_end_point.u.SONET.sts3 + line_end_point.u.SONET.sts1;
+                  flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                  flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_TRUE;
+
                   /* set the transmitted and expected C2 values */
                   status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, flexmux_id, &line_end_point, TX_C2);
                   WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX", status, __LINE__);
@@ -745,6 +1049,10 @@ WPX_FRMR_DEMO_ONLY_Configure_GTP_ClockSource(flexmux_id);
                      line_end_point.u.SONET.sts1 = sts1;
                      status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
                      WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC2/4)", status, __LINE__);
+
+                     hop_index = 3 * line_end_point.u.SONET.sts3 + line_end_point.u.SONET.sts1;
+                     flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                     flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_TRUE;
 
                      /* set the transmitted and expected C2 values */
                      status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, flexmux_id, &line_end_point, TX_C2);
@@ -865,6 +1173,10 @@ WPX_FRMR_DEMO_ONLY_Configure_GTP_ClockSource(flexmux_id);
                    status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
                    WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
 
+                  hop_index = 3 * line_end_point.u.SDH.stm1 + line_end_point.u.SDH.stm0;
+                  flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                  flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_TRUE;
+
                    /* set the transmitted and expected C2 values */
                    status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, flexmux_id, &line_end_point, TX_C2);
                    WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX", status, __LINE__);
@@ -963,6 +1275,10 @@ WPX_FRMR_DEMO_ONLY_Configure_GTP_ClockSource(flexmux_id);
                      line_end_point.u.SDH.stm0 = stm0;
                      status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
                      WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
+
+                     hop_index = 3 * line_end_point.u.SDH.stm1 + line_end_point.u.SDH.stm0;
+                     flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                     flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_TRUE;
 
                      /* set the transmitted and expected C2 values */
                      status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, flexmux_id, &line_end_point, TX_C2);
@@ -1063,6 +1379,8 @@ WP_S32 WTI_FlexmuxClearChannelConfigureHighOrder(
 {
 	WUFE_status status;
 	WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE line_end_point = {0};
+        WP_U8 hop_index;
+        
 #if WTI_ADM_MODE
 /* in CR when using the ADM for testing */
       U8 TX_C2=0x1, EX_C2=0x1;
@@ -1095,6 +1413,10 @@ WP_S32 WTI_FlexmuxClearChannelConfigureHighOrder(
 				line_end_point.u.SONET.sts1 = 0;
 				status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
 				WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
+
+                                hop_index = 3 * line_end_point.u.SONET.sts3 + line_end_point.u.SONET.sts1;
+                                flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                                flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_TRUE;
 
 				/* set the transmitted and expected C2 values */
 				status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, flexmux_id, &line_end_point, TX_C2);
@@ -1166,6 +1488,11 @@ WP_S32 WTI_FlexmuxClearChannelConfigureHighOrder(
 				line_end_point.u.SONET.sts1 = 0;
 				status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
 				WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC2/4)", status, __LINE__);
+
+
+                                hop_index = 3 * line_end_point.u.SONET.sts3 + line_end_point.u.SONET.sts1;
+                                flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                                flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_TRUE;
 
 				/* set the transmitted and expected C2 values */
 				status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, flexmux_id, &line_end_point, TX_C2);
@@ -1260,6 +1587,10 @@ WP_S32 WTI_FlexmuxClearChannelConfigureHighOrder(
 				status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
 				WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
 
+                                hop_index = 3 * line_end_point.u.SDH.stm1 + line_end_point.u.SDH.stm0;
+                                flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                                flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_TRUE;
+
 				/* set the transmitted and expected C2 values */
 				status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, flexmux_id, &line_end_point, TX_C2);
 				WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX", status, __LINE__);
@@ -1353,6 +1684,10 @@ WP_S32 WTI_FlexmuxClearChannelConfigureHighOrder(
 				line_end_point.u.SDH.stm0 = 0;
 				status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
 				WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
+
+                                hop_index = 3 * line_end_point.u.SDH.stm1 + line_end_point.u.SDH.stm0;
+                                flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                                flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_TRUE;
 
 				/* set the transmitted and expected C2 values */
 				status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, flexmux_id, &line_end_point, TX_C2);
@@ -1452,6 +1787,8 @@ WP_S32 WTI_FlexmuxLinePortConfig(WP_U8 flexmux_id,
    {
       status = WPX_FRMR_SONET_SDH_PORT_SetRate(0, flexmux_id, line_port_id, WPX_UFE_FRAMER_LINE_PORT_RATE_OC3);
       WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_SetRate", status, __LINE__);
+
+      flexmux_reg[flexmux_id].port_info[line_port_id].is_active = WP_TRUE;
 #if WTI_FLEXMUX_DBG_MODE
       {
          U8 pPortRate;
@@ -1468,6 +1805,8 @@ WP_S32 WTI_FlexmuxLinePortConfig(WP_U8 flexmux_id,
    {
       status = WPX_FRMR_SONET_SDH_PORT_SetRate(0, flexmux_id, line_port_id, WPX_UFE_FRAMER_LINE_PORT_RATE_OC12);
       WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_SetRate", status, __LINE__);
+
+      flexmux_reg[flexmux_id].port_info[line_port_id].is_active = WP_TRUE;
 #if WTI_FLEXMUX_DBG_MODE
       U8 pPortRate;
       status =WPX_FRMR_SONET_SDH_PORT_GetRate(flexmux_id,line_port_id,&pPortRate );
@@ -1483,6 +1822,8 @@ WP_S32 WTI_FlexmuxLinePortConfig(WP_U8 flexmux_id,
    {
       status = WPX_FRMR_SONET_SDH_PORT_SetRate(0, flexmux_id, line_port_id, WPX_UFE_FRAMER_LINE_PORT_RATE_STM1);
       WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_SetRate", status, __LINE__);
+
+      flexmux_reg[flexmux_id].port_info[line_port_id].is_active = WP_TRUE;
 #if WTI_FLEXMUX_DBG_MODE
       U8 pPortRate;
       status =WPX_FRMR_SONET_SDH_PORT_GetRate(flexmux_id,line_port_id,&pPortRate );
@@ -1497,6 +1838,8 @@ WP_S32 WTI_FlexmuxLinePortConfig(WP_U8 flexmux_id,
    {
       status = WPX_FRMR_SONET_SDH_PORT_SetRate(0, flexmux_id, line_port_id, WPX_UFE_FRAMER_LINE_PORT_RATE_STM4);
       WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_SetRate", status, __LINE__);
+
+      flexmux_reg[flexmux_id].port_info[line_port_id].is_active = WP_TRUE;
 #if WTI_FLEXMUX_DBG_MODE
       U8 pPortRate;
       status =WPX_FRMR_SONET_SDH_PORT_GetRate(flexmux_id,line_port_id,&pPortRate );
@@ -1560,7 +1903,8 @@ WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,
    WP_U8 status =0,tx_clk_rec_enable=0;
    WP_U32 line_timing=0;
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE line_end_point;
-
+   WP_U32 lop_index;
+   
    if (flexmux_id > WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES)
       WTI_FlexmuxTerminateOnError("flexmux_id is out of bounds !", 0);
 
@@ -2001,6 +2345,8 @@ WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,
       WTI_FlexmuxTerminateOnError("Connection type is not supported !", 0);
    }
 
+   flexmux_reg[flexmux_id].pdh_info[client_port_id].is_active = WP_TRUE;
+
    /* configure the line end point in SONET or SDH mode */
    if (flexmux_reg[flexmux_id].flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
    {
@@ -2039,6 +2385,10 @@ WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,
       {
          status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
          WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (Vt1.5 or Vt2)", status, __LINE__);
+
+         lop_index = 84 * line_end_point.u.SONET.sts3 + 28 * line_end_point.u.SONET.sts1 + 4 * line_end_point.u.SONET.vt_group + line_end_point.u.SONET.vt;
+         flexmux_reg[flexmux_id].lop_info[lop_index].transfer_type = line_end_point.TransferType;
+         flexmux_reg[flexmux_id].lop_info[lop_index].is_active = WP_TRUE;
 
          /* set the transmitted and expected V5 values */
          status = WPX_FRMR_SONET_SDH_LO_PATH_V5_SigLabel_SetTX(0, flexmux_id, &line_end_point, TX_V5_SignalLabel);
@@ -2139,6 +2489,10 @@ WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,
             /* create the line port VC3 facility */
             status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
             WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3)", status, __LINE__);
+
+            lop_index = 84 * line_end_point.u.SDH.stm1 + 28 * line_end_point.u.SDH.stm0 + 4 * line_end_point.u.SDH.tug2 + line_end_point.u.SDH.tu;
+            flexmux_reg[flexmux_id].lop_info[lop_index].transfer_type = line_end_point.TransferType;
+            flexmux_reg[flexmux_id].lop_info[lop_index].is_active = WP_TRUE;
          }
       }
       else
@@ -2162,6 +2516,10 @@ WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,
          status = WPX_FRMR_SONET_SDH_CreateFacility(0, flexmux_id, &line_end_point);
          WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC11 or VC12)", status, __LINE__);
         
+         lop_index = 84 * line_end_point.u.SDH.stm1 + 28 * line_end_point.u.SDH.stm0 + 4 * line_end_point.u.SDH.tug2 + line_end_point.u.SDH.tu;
+         flexmux_reg[flexmux_id].lop_info[lop_index].transfer_type = line_end_point.TransferType;
+         flexmux_reg[flexmux_id].lop_info[lop_index].is_active = WP_TRUE;
+
          /* set the transmitted and expected V5 values */
          status = WPX_FRMR_SONET_SDH_LO_PATH_V5_SigLabel_SetTX(0, flexmux_id, &line_end_point, TX_V5_SignalLabel);
          WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_LO_PATH_V5_SigLabel_SetTX", status, __LINE__);
@@ -2219,6 +2577,8 @@ WP_S32 WTI_FlexmuxConnectionCreate(WP_U8 flexmux_id,
    /* create the connection between the client port and the line port */
    status = WPX_FRMR_CONNECTIONS_AddDropLineToSocketCreate(0, flexmux_id, &line_end_point, client_port_id);
    WTI_FlexmuxCheckStatus("WPX_FRMR_CONNECTIONS_AddDropLineToSocketCreate", status, __LINE__);
+
+   flexmux_reg[flexmux_id].pdh_info[client_port_id].is_connected = WP_TRUE;
    
    /* Set the line timing mode */
    /* The PDH timing mode can be one of the follwoing :
@@ -2934,6 +3294,7 @@ void WTI_Flexmux_Port_SetRate(U8 flexmux_id,U8 line_port_id, U8 rate)
   status = WPX_FRMR_SONET_SDH_PORT_SetRate(0, flexmux_id, line_port_id, rate);
   WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_SetRate", status, __LINE__);
 
+  flexmux_reg[flexmux_id].port_info[line_port_id].is_active = WP_TRUE;
   if (WPX_UFE_FRAMER_LINE_PORT_RATE_OFF != rate)
   {     
      status = WPX_FRMR_SONET_SDH_PORT_SEC_J0_SetMode(0, flexmux_id, line_port_id, WPX_UFE_FRAMER_PATH_TRACE_MODE_16_BYTE);
@@ -3121,7 +3482,8 @@ void WT_BulkFlexmuxSDH_HO_FacitilyCreate(WT_ufe *ufe,
    WP_U32 stm4, stm1, stm0, num_for_vc3_or_vc4;
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE line_end_point = {0};
    WUFE_status status;
-
+   WP_U8 hop_index;
+   
    printf("WT_BulkFlexmuxSDH_HO_FacitilyCreate\n");
    
 #if WTI_ADM_MODE
@@ -3151,6 +3513,10 @@ void WT_BulkFlexmuxSDH_HO_FacitilyCreate(WT_ufe *ufe,
                line_end_point.u.SONET.sts1 = sts1;
                status = WPX_FRMR_SONET_SDH_CreateFacility(0, 0, &line_end_point);
                WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
+
+               hop_index = 3 * line_end_point.u.SONET.sts3 + line_end_point.u.SONET.sts1;
+               flexmux_reg[0].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+               flexmux_reg[0].hop_info[hop_index].is_active = WP_TRUE;
 
                /* set the transmitted and expected C2 values */
                status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, 0, &line_end_point, TX_C2);
@@ -3188,6 +3554,10 @@ void WT_BulkFlexmuxSDH_HO_FacitilyCreate(WT_ufe *ufe,
                   line_end_point.u.SONET.sts1 = sts1;
                   status = WPX_FRMR_SONET_SDH_CreateFacility(0, 0, &line_end_point);
                   WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC2/4)", status, __LINE__);
+
+                  hop_index = 3 * line_end_point.u.SONET.sts3 + line_end_point.u.SONET.sts1;
+                  flexmux_reg[0].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                  flexmux_reg[0].hop_info[hop_index].is_active = WP_TRUE;
 
                   /* set the transmitted and expected C2 values */
                   status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, 0, &line_end_point, TX_C2);
@@ -3242,6 +3612,10 @@ void WT_BulkFlexmuxSDH_HO_FacitilyCreate(WT_ufe *ufe,
                status = WPX_FRMR_SONET_SDH_CreateFacility(0, 0, &line_end_point);
                WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
 
+               hop_index = 3 * line_end_point.u.SDH.stm1 + line_end_point.u.SDH.stm0;
+               flexmux_reg[0].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+               flexmux_reg[0].hop_info[hop_index].is_active = WP_TRUE;
+
                /* set the transmitted and expected C2 values */
                status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, 0, &line_end_point, TX_C2);
                WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX", status, __LINE__);
@@ -3281,6 +3655,10 @@ void WT_BulkFlexmuxSDH_HO_FacitilyCreate(WT_ufe *ufe,
                   line_end_point.u.SDH.stm0 = stm0;
                   status = WPX_FRMR_SONET_SDH_CreateFacility(0, 0, &line_end_point);
                   WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC3/4)", status, __LINE__);
+
+                  hop_index = 3 * line_end_point.u.SDH.stm1 + line_end_point.u.SDH.stm0;
+                  flexmux_reg[0].hop_info[hop_index].transfer_type = line_end_point.TransferType;
+                  flexmux_reg[0].hop_info[hop_index].is_active = WP_TRUE;
 
                   /* set the transmitted and expected C2 values */
                   status = WPX_FRMR_SONET_SDH_HO_PATH_C2_SetTX(0, 0, &line_end_point, TX_C2);
@@ -3441,7 +3819,7 @@ void WT_BulkFlexmuxConnectionDelete(WT_ufe *ufe, WP_U32 max_pw, WP_U32 is_e1, WP
 }
 void WT_BulkFlexmuxConnectionCreate(WT_ufe *ufe, WP_U32 max_pw, WP_U32 is_e1, WP_U32 create_lo)
 {
-   WP_U32 iSocketClient=0, pw_index;
+   WP_U32 iSocketClient=0, pw_index, lop_index;
    WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE line_end_point;
    WT_ufe_line_sonet_params *sonet_line_params=NULL;
    WT_ufe_line_sdh_params *sdh_line_params=NULL;   
@@ -3547,7 +3925,18 @@ void WT_BulkFlexmuxConnectionCreate(WT_ufe *ufe, WP_U32 max_pw, WP_U32 is_e1, WP
          status = WPX_FRMR_SONET_SDH_CreateFacility(0, 0, &line_end_point);
          WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_CreateFacility (VC11/12)", status, __LINE__);
 
-
+         if (WPX_UFE_FRAMER_DEVICE_MODE_SONET == flexmux_reg[0].flexmux_mode)
+         {            
+            lop_index = 84 * line_end_point.u.SONET.sts3 + 28 * line_end_point.u.SONET.sts1 + 4 * line_end_point.u.SONET.vt_group + line_end_point.u.SONET.vt;
+            flexmux_reg[0].lop_info[lop_index].transfer_type = line_end_point.TransferType;
+            flexmux_reg[0].lop_info[lop_index].is_active = WP_TRUE;
+         }
+         else
+         {            
+            lop_index = 84 * line_end_point.u.SDH.stm1 + 28 * line_end_point.u.SDH.stm0 + 4 * line_end_point.u.SDH.tug2 + line_end_point.u.SDH.tu;
+            flexmux_reg[0].lop_info[lop_index].transfer_type = line_end_point.TransferType;
+            flexmux_reg[0].lop_info[lop_index].is_active = WP_TRUE;
+         }         
       }
       
       if (sdh_line_params->transfer_type == WUFE_SDH_TYPE_E1)
@@ -3598,6 +3987,148 @@ void WT_BulkFlexmuxConnectionCreate(WT_ufe *ufe, WP_U32 max_pw, WP_U32 is_e1, WP
 }
 
 #endif /* if 1*/
+
+void WTI_FlexmuxRelease(void)
+{
+   WP_U32 flexmux_id, line_port, hop_index, lop_index, pdh_index;
+   WPX_UFE_FRAMER_COMMON_SDH_SONET_ENDPOINT_TYPE line_end_point;   
+   WP_U8 status;
+   
+   for (flexmux_id=0;flexmux_id<WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES;flexmux_id++)
+   {      
+      for(pdh_index=0;pdh_index<336;pdh_index++)
+      {
+         if (WP_TRUE == flexmux_reg[flexmux_id].pdh_info[pdh_index].is_connected)
+         {
+            line_end_point.TransferType = flexmux_reg[flexmux_id].lop_info[pdh_index].transfer_type;
+         
+            if (flexmux_reg[flexmux_id].flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+            {
+               line_end_point.u.SONET.sts12 = (pdh_index / 336);
+               line_end_point.u.SONET.sts3 = (pdh_index % 336) / 84;
+               line_end_point.u.SONET.sts1 = (pdh_index % 84) / 28;
+               line_end_point.u.SONET.vt_group = (pdh_index % 28) / 4;
+               line_end_point.u.SONET.vt = (pdh_index % 4);
+            }
+            else
+            {
+               line_end_point.u.SDH.stm4 = (pdh_index / 336);
+               line_end_point.u.SDH.stm1 = (pdh_index % 336) / 84;
+               line_end_point.u.SDH.stm0 = (pdh_index % 84) / 28;
+               line_end_point.u.SDH.tug2 = (pdh_index % 28) / 4;
+               line_end_point.u.SDH.tu = (pdh_index % 4);
+            }
+         
+            status = WPX_FRMR_CONNECTIONS_AddDropLineToSocketDelete(0, flexmux_id, &line_end_point, pdh_index);
+            WTI_FlexmuxCheckStatus("WPX_FRMR_CONNECTIONS_AddDropLineToSocketDelete", status, __LINE__);
+            flexmux_reg[flexmux_id].pdh_info[pdh_index].is_connected = WP_FALSE;
+         
+         }
+
+         if (WP_TRUE == flexmux_reg[flexmux_id].pdh_info[pdh_index].is_active)
+         {
+            status = WPX_FRMR_SOCKET_PDH_DeleteFacility(0, flexmux_id, pdh_index);
+            WTI_FlexmuxCheckStatus("WPX_FRMR_SOCKET_PDH_DeleteFacility", status, __LINE__);
+            flexmux_reg[flexmux_id].pdh_info[pdh_index].is_active = WP_FALSE;         
+         }
+      }
+   
+      for(lop_index=0;lop_index<336;lop_index++)
+      {
+         if (WP_TRUE == flexmux_reg[flexmux_id].lop_info[lop_index].is_active)
+         {
+            line_end_point.TransferType = flexmux_reg[flexmux_id].lop_info[lop_index].transfer_type;
+         
+            if (flexmux_reg[flexmux_id].flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+            {
+               line_end_point.u.SONET.sts12 = (lop_index / 336);
+               line_end_point.u.SONET.sts3 = (lop_index % 336) / 84;
+               line_end_point.u.SONET.sts1 = (lop_index % 84) / 28;
+               line_end_point.u.SONET.vt_group = (lop_index % 28) / 4;
+               line_end_point.u.SONET.vt = (lop_index % 4);
+            }
+            else
+            {
+               line_end_point.u.SDH.stm4 = (lop_index / 336);
+               line_end_point.u.SDH.stm1 = (lop_index % 336) / 84;
+               line_end_point.u.SDH.stm0 = (lop_index % 84) / 28;
+               line_end_point.u.SDH.tug2 = (lop_index % 28) / 4;
+               line_end_point.u.SDH.tu = (lop_index % 4);
+            }
+            status = WPX_FRMR_SONET_SDH_DeleteFacility(0, flexmux_id, &line_end_point);
+            WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_DeleteFacility", status, __LINE__);         
+            flexmux_reg[flexmux_id].lop_info[lop_index].is_active = WP_FALSE;         
+         }
+      }
+
+      for(hop_index=0;hop_index<12;hop_index++)
+      {
+         if (WP_TRUE == flexmux_reg[flexmux_id].hop_info[hop_index].is_active)
+         {
+            line_end_point.TransferType = flexmux_reg[flexmux_id].hop_info[hop_index].transfer_type;
+         
+            if (flexmux_reg[flexmux_id].flexmux_mode == WPX_UFE_FRAMER_DEVICE_MODE_SONET)
+            {
+               line_end_point.u.SONET.sts12 = 0;
+               line_end_point.u.SONET.sts3 = hop_index / 3;
+               line_end_point.u.SONET.sts1 = hop_index % 3;
+               line_end_point.u.SONET.vt_group = 0;
+               line_end_point.u.SONET.vt = 0;
+            }
+            else
+            {
+               line_end_point.u.SDH.stm4 = 0;
+               line_end_point.u.SDH.stm1 = hop_index / 3;
+               line_end_point.u.SDH.stm0 = hop_index % 3;
+               line_end_point.u.SDH.tug2 = 0;
+               line_end_point.u.SDH.tu = 0;
+            }
+            status = WPX_FRMR_SONET_SDH_DeleteFacility(0, flexmux_id, &line_end_point);
+            WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_DeleteFacility", status, __LINE__);         
+            flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_FALSE;         
+         }
+      }
+
+      for (line_port=0;line_port<4;line_port++)
+      {
+         if (WP_TRUE == flexmux_reg[flexmux_id].port_info[line_port].is_active)
+         {
+            status = WPX_FRMR_SONET_SDH_PORT_SetRate(0, flexmux_id, line_port, WPX_UFE_FRAMER_LINE_PORT_RATE_OFF);
+            WTI_FlexmuxCheckStatus("WPX_FRMR_SONET_SDH_PORT_SetRate", status, __LINE__);
+            flexmux_reg[flexmux_id].port_info[line_port].is_active = WP_FALSE;         
+         }
+      }
+   }   
+}
+
+void WTI_Flexmux_InitFacilityRegistry(void)
+{
+   WP_U32 flexmux_id, line_port, hop_index, lop_index, pdh_index;
+   
+   for (flexmux_id=0;flexmux_id<WPX_UFE_FRAMER_BUILD_OPTION_MAX_DEVICES;flexmux_id++)
+   {      
+      for(pdh_index=0;pdh_index<336;pdh_index++)
+      {
+         flexmux_reg[flexmux_id].pdh_info[pdh_index].is_connected = WP_FALSE;
+         flexmux_reg[flexmux_id].pdh_info[pdh_index].is_active = WP_FALSE;         
+      }
+   
+      for(lop_index=0;lop_index<336;lop_index++)
+      {
+         flexmux_reg[flexmux_id].lop_info[lop_index].is_active = WP_FALSE;         
+      }
+
+      for(hop_index=0;hop_index<12;hop_index++)
+      {
+         flexmux_reg[flexmux_id].hop_info[hop_index].is_active = WP_FALSE;         
+      }
+
+      for (line_port=0;line_port<4;line_port++)
+      {
+         flexmux_reg[flexmux_id].port_info[line_port].is_active = WP_FALSE;         
+      }
+   }   
+}
 
 void WTI_FlexmuxPDHOutputClockSet(WP_U8 output_select, WP_U32 line_index,WUFE_line_transf_type transfer_type,WP_U32 clock_rate)
 {
