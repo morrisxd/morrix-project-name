@@ -16154,6 +16154,7 @@ void CLI_F_ResetAll (char *StrPrm)
    printf ("Reset All(%s)\n", StrPrm);
 
 #if 1
+   WTI_FlexmuxRelease ();
    WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
    WTI_Terminate(0);
    WPL_Delay (1000000);
