@@ -44,6 +44,8 @@
 #include "winutil/include/wpu_sa_alloc.h"
 #include "winutil/include/wpu_sa_limits.h"
 
+#include "morris_config.h"
+
 //#undef WT_UFE_FRAMER
 #define DEFAULT_DEMO_MODE (WT_TRIAL_MASK == -1 || WT_TRIAL_MASK == 1<<8 || WT_TRIAL_MASK == 1<<10)
 #define WTI_CI_TESTING_MODE_TDI (WT_TRIAL_MASK == 1<<6 || WT_TRIAL_MASK == 1<<7 || WT_TRIAL_MASK == 1<<9)  //DCR/ACR/DOCSIS
@@ -64,10 +66,19 @@
  * Used for automatic compilation of tests
  */
 /* This is 37900b_UFE4_DCR and 37900b_UFE4_ACR correspondingly */
-#if WTI_CI_TESTING_MODE_UFE4 
+#if WTI_CI_TESTING_MODE_UFE4  || MORRIS_ENABLE_CI_MODE
 #define WTI_CESOP_TDI                               0                 /* use of TDM I/F */
+
+#if MORRIS_CR_ON
+#warning CR_ONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1                 /* enable clock recovery module */
 #define WTI_CESOP_RX_TIMING_ENABLE                  1                 /* enable Rx timing direction */
+#else
+#define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0                 /* enable clock recovery module */
+#define WTI_CESOP_RX_TIMING_ENABLE                  0                 /* enable Rx timing direction */
+#endif
+
+
 #define WTI_CESOP_REGRESSION_TEST                   1                 /* when '1' running in regression mode*/
 #define A_AUTOMATION                                0                 /* Should set to 1 for automation */
 /* This is 37900b_TDI_DCR and 37900b_TDI_ACR correspondingly */
@@ -332,7 +343,11 @@
 
 #define WTI_NUM_OF_VLAN_TAGS                        0
 
+#if MORRIS_DISABLE_VLAN_TAG
+#define WTI_VLAN_TAG_SIZE                           0
+#else
 #define WTI_VLAN_TAG_SIZE                           4
+#endif
 
 #if WTI_CESOP_MEF8_ENCAP
 #ifdef WTI_ETHERNET_HEADER_SIZE
@@ -501,7 +516,15 @@
 #endif /* WTI_8K_CH_SETUP */
 
 /* TDM --> PSN */
+#if MORRIS_DISABLE_RTP
+#define WTI_TDM2PSN_RTP_MODE                        WP_DISABLE
+#else
+#warning MORRIS_DISABLE_RTP_MODEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 #define WTI_TDM2PSN_RTP_MODE                        WP_ENABLE
+#endif
+
+
+
 #define WTI_TDM2PSN_INTERRUPT_MODE                  WP_DISABLE
 #define WTI_TDM2PSN_INTERRUPT_QUEUE                 WP_IRQT1
 #define WTI_TDM2PSN_OOBC_INTERRUPT_MODE             WP_DISABLE
@@ -522,14 +545,31 @@
 #if WTI_CESOP_MEF8_ENCAP
 #define WTI_L3_HEADER_LEN                           0
 #else
+
+#if MORRIS_DISABLE_L3_HEADER
+#define WTI_L3_HEADER_LEN                           0
+#else
 #define WTI_L3_HEADER_LEN                           sizeof(WTI_ip_header)
+#endif
+
+
+
 //#define WTI_L3_HEADER_LEN                           0
 #endif
 #define WTI_SRC_IP_OFFSET                           12
 #define WTI_DEST_IP_OFFSET                          16
 #define WTI_L4_HEADER_LEN                           sizeof(WTI_udp_header)
 #define WTI_L4_LENGTH_OFFSET                        4
+
+
+#if MORRIS_DISABLE_RTP
+#define WTI_RTP_HEADER_LEN                          0
+#else
 #define WTI_RTP_HEADER_LEN                          sizeof(WTI_rtp_header)
+#endif
+
+
+
 #define WTI_CONTROL_WORD_LEN                        4
 #define WTI_TDM2PSN_TIMESTAMP_MODE                  WP_IW_TIME_STAMP_DISABLE
 #define WTI_TDM2PSN_FBP_DROP_THRESHOLD              0xf
@@ -2970,6 +3010,13 @@ void stall(WP_CHAR *f, WP_U32 line, WP_boolean suppress)
    }
 }
 #endif
+extern WP_U32 global_jitter_buffer_size;
+WP_U32 g_rxbuffersize;
+WP_U32 isEnableSnake;
+WP_U32 g_num_of_e1 = 0;
+WP_U32 g_num_of_pw = 0;
+WP_U32 g_force_holdover = 0;
+WP_U32 g_isForceOffset = 0;
 
 /*****************************************************************************
  * Function name:
@@ -14624,8 +14671,11 @@ void CLI_F_MplsFlowAggPrefixHeaderMpls(char *StrPrm)
                 (WP_U32 *)&prefix_header_mpls[12],
                 (WP_U32 *)&prefix_header_mpls[16],
                 (WP_U32 *)&prefix_header_mpls[20]);
-
+#if MORRIS_DISABLE_VLAN_TAG
+   if (res != 7 && res != 3 && res != 2 && res != 6)
+#else
    if (res != 7 && res != 3 && res != 2)
+#endif
    {
       WTI_TerminatePrintError("MplsFlowAggPrefixHeaderMpls - Invalid number of parameters", __LINE__);
       return;
