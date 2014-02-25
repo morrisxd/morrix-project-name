@@ -43,12 +43,15 @@
 #include "winutil/include/wpu_sa_alloc.h"
 #include "winutil/include/wpu_sa_limits.h"
 
+#include "fiberhome.h"
+
 //#undef WT_UFE_FRAMER
 
 /*
  * Change here in manual compilation (37900b)
  */
-#define WTI_CESOP_TDI                               0                 /* use of TDM I/F */
+#define WTI_CESOP_TDI                               1                 /* use of TDM I/F */
+#warning TDIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0                 /* enable clock recovery module */
 #define WTI_CESOP_RX_TIMING_ENABLE                  0                 /* enable Rx timing direction */
 #define WTI_CESOP_REGRESSION_TEST                   0                 /* when '1' running in regression mode*/
@@ -2806,7 +2809,7 @@ void WTI_TerminateOnError(WP_handle handle, WP_CHAR *s, WP_U32 line_num)
    {
       printf("%s: Terminal error (handle 0x%x) %s\n", appname, handle, s);
       printf("%s: Error type - %s, Line:%d\n", appname, WP_error_name[WP_ERROR(handle)],line_num);
-
+      exit (1);
       /* release CESOP system */
 //    if(the_system->in_termination == WP_FALSE)
 //    {
@@ -3081,6 +3084,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
    /* init the Demo structures */
    WTI_InitDemoStructures();
 
+   CLI_F_301_TDI_E1_U_CR_NoCas_Two_Boards_N_Line_N_PW ("3 0");
    /* Start Menu Engine */
    CLI_T_Main();
 
