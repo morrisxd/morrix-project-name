@@ -1,6 +1,7 @@
 #!/bin/bash
-sourcefile=..//objects/linux/mips_winmon_winpath3/wds/bin/pwe3_satop_cesop_demo.exe
-surfix=''
+myboard=wds
+sourcefile=..//objects/linux/mips_winmon_winpath3/${myboard}/bin/pwe3_satop_cesop_demo.exe
+surfix='il'
 echo $surfix
 rm ./bin/*
 pwd | grep "wilbur"
@@ -37,7 +38,13 @@ else
 	filepath="216.241.237.121:/tftpboot/"
 fi 
 
+if [ $myboard = 'wds' ]
+then
 filename=pwe3_satop_cesop_demo_${surfix}.exe
+else
+filename=pwe3_satop_cesop_demo_sl_${surfix}.exe
+fi
+
 echo filename=$filename
 # exit
 
@@ -47,7 +54,7 @@ touch *.c
 echo =========================================
 echo make WDDS_DIR=../ \
 WDDI_TARGET_NAME=mips_winmon \
-WDDI_BOARD_NAME=wds \
+WDDI_BOARD_NAME=${myboard} \
 WDDI_HOST=linux \
 WDDI_HW_DEVICE=winpath3 \
 UFE_DIR=../ufe \
@@ -56,11 +63,13 @@ FRAMER=flexmux
 echo =========================================
 
 
-make WDDS_DIR=../ \
+make MORRIS=TDI \
+WDDS_DIR=../ \
 WDDI_TARGET_NAME=mips_winmon \
-WDDI_BOARD_NAME=wds \
+WDDI_BOARD_NAME=${myboard} \
 WDDI_HOST=linux \
 WDDI_HW_DEVICE=winpath3 \
 FRAMER=flexmux \
 UFE_DIR=../ufe \
 && rsync -avz --progress --compress ${sourcefile} ${filepath}${filename} &&  echo rsync ${sourcefile} ${filepath}${filename} complete !
+
