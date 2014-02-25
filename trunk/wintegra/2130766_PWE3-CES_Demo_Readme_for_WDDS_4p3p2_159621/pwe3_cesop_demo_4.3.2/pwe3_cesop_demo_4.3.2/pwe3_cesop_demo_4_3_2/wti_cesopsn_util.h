@@ -49,8 +49,13 @@
 #define WTI_CESOP_BUS                      WP_BUS_PARAM
 #define WTI_CESOP_BANK                     APP_BANK_PARAM
 #else   /* NOT  WP_BOARD_WDS3_SL */
+#if MORRIS_CHANGE_PACKET_BUS_TO_HOST
+#define WTI_CESOP_BUS                      WP_BUS_HOST
+#define WTI_CESOP_BANK                     APP_BANK_HOST
+#else
 #define WTI_CESOP_BUS                      WP_BUS_PACKET
 #define WTI_CESOP_BANK                     APP_BANK_PACKET
+#endif
 #endif  /* NOT WP_BOARD_WDS3_SL */
 
 #define WTI_TDM_PORTS                      16
@@ -651,6 +656,7 @@ WP_iw_global context_iw_global[1] =
 
 #if WTI_8K_CH_SETUP
 #ifdef WP_BOARD_WDS3_SL
+#warning SSSSSSSSSSSSSSSSSLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL 
 WP_context context[1] =
 {
    {N_QNODES, /* qnodes */
@@ -794,6 +800,7 @@ WP_context context[1] =
 
 #else /* Not WTI_8K_CH_SETUP */
 #if WP_BOARD_WDS3_SL
+#warning SSSSSSSSSSSSLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL222
 WP_context context[1] =
 { /* NOT  WP_BOARD_WDS3_SL */
    {N_QNODES, /* qnodes */

@@ -921,9 +921,11 @@ void WTI_SystemSetup(void)
    WPX_Ufe412CpldInterruptSelect(0, WPX_INTERRUPT_NONE);
 #endif
 #endif
+   printf ("before sysinit\n");
    /* system init */
    status = WP_SysInit(the_system->wpid, context);
    WTI_TerminateOnError(status, "WP_SysInit", __LINE__);
+   printf ("after sysinit\n");
 
 #if (!WTI_CESOP_TDI)
 #if defined __WT_UFE412__ || defined __WT_UFE448__
@@ -3219,7 +3221,7 @@ void WTI_HostQnodeCreate(WTI_qnode *qnode)
    data_pool_cfg.pad = 0;
    data_pool_cfg.bus = WP_BUS_HOST;
    data_pool_cfg.bank = APP_BANK_HOST;
-
+printf ("poolcreate#1\n");
    /* Create the Host Buffer pool(s) */
    handle = WP_PoolCreate(the_system->wpid, WP_pool_buffer, &data_pool_cfg);
    WTI_TerminateOnError(handle, "WP_PoolCreate() Host Buffers",__LINE__);
@@ -3239,8 +3241,14 @@ void WTI_HostQnodeCreate(WTI_qnode *qnode)
   ring_pool_cfg.bus = WP_BUS_HOST;
    ring_pool_cfg.bank = APP_BANK_HOST;
 #else   /* NOT  WP_BOARD_WDS3_SL */
+#if MORRIS_CHANGE_PACKET_BUS_TO_HOST
+   ring_pool_cfg.bus = WP_BUS_HOST;
+   ring_pool_cfg.bank = APP_BANK_HOST;
+#else
+#error PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
    ring_pool_cfg.bus = WP_BUS_PACKET;
    ring_pool_cfg.bank = APP_BANK_PACKET;
+#endif
 #endif  /* NOT  WP_BOARD_WDS3_SL */
 
 
@@ -3250,6 +3258,7 @@ void WTI_HostQnodeCreate(WTI_qnode *qnode)
 #endif
 #endif /* WTI_8K_CH_SETUP */
 
+printf ("poolcreate#2\n");
    handle = WP_PoolCreate(the_system->wpid, WP_pool_ring, &ring_pool_cfg);
    WTI_TerminateOnError(handle, "WP_PoolCreate() Host Rings",__LINE__);
 
@@ -3339,8 +3348,13 @@ void WTI_IwTdm2PsnQnodeCreate(WTI_qnode *qnode)
    data_pool_cfg.bus = WP_BUS_HOST;
    data_pool_cfg.bank = APP_BANK_HOST;
 #else  /* NOT  WP_BOARD_WDS3_SL */
+#if MORRIS_CHANGE_PACKET_BUS_TO_HOST
+   data_pool_cfg.bus = WP_BUS_HOST;
+   data_pool_cfg.bank = APP_BANK_HOST;
+#else
    data_pool_cfg.bus = WP_BUS_PACKET;
    data_pool_cfg.bank = APP_BANK_PACKET;
+#endif
 #endif  /* NOT WP_BOARD_WDS3_SL */
 
    handle = WP_PoolCreate(the_system->wpid, WP_pool_iwbuffer, &data_pool_cfg);
@@ -3392,8 +3406,13 @@ void WTI_TransTxQnodeCreate(WTI_qnode *qnode)
    data_pool_cfg.bus = WP_BUS_PARAM;
    data_pool_cfg.bank = WP_BUS_PARAM;
 #else   /* NOT  WP_BOARD_WDS3_SL */
+#if MORRIS_CHANGE_PACKET_BUS_TO_HOST
+   data_pool_cfg.bus = WP_BUS_HOST;
+   data_pool_cfg.bank = APP_BANK_HOST;
+#else
    data_pool_cfg.bus = WP_BUS_PACKET;
    data_pool_cfg.bank = APP_BANK_PACKET;
+#endif
 #endif  /* NOT WP_BOARD_WDS3_SL */
 
 #endif /* NOT WTI_CESOP_TDI */

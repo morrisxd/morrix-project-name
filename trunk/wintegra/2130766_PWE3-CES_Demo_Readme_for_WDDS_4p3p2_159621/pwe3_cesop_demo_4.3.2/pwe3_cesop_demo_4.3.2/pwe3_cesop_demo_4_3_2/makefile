@@ -160,7 +160,7 @@ INCLUDES = -I$(SOURCES_DIR) -I$(API_DIR) $(SERVICE_INCLUDE) -I. \
 	-I$(WDDI_DIR)$(WDDI_SOURCES)/winutil/api/include/$(WDDI_HW_DEVICE) \
 
 # UFE settings
-UFE_DIR = $(WDDI_DIR)/phy/wpx_ufe
+UFE_DIR = $(WDDI_DIR)/../ufe
 UFE_FPGA_DIR = $(UFE_DIR)/fpga/$(UFE)
 
 ifeq "$(UFE)" "ufe3"
@@ -186,6 +186,7 @@ endif
 UFE_INC = -I$(UFE_DIR)/api -I$(UFE_FPGA_DIR)
 UFE_PMC_INC =  -I$(UFE_PMC_DIR) -I$(UFE_PMC_DIR)/inc
 UFE_FRAMER_INC = -I$(UFE_FRAMER_DIR) -I$(UFE_FRAMER_DIR)/library/00_api_layer/inc -I$(UFE_FRAMER_DIR)/library/04_low_level_comms_layer/inc
+
 
 # Add the UFE libraries
 # ---------------------

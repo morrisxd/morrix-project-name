@@ -1,0 +1,66 @@
+#!/bin/bash
+sourcefile=..//objects/linux/mips_winmon_winpath3/wds_sl/bin/pwe3_satop_cesop_demo.exe
+surfix=''
+echo $surfix
+rm ./bin/*
+pwd | grep "wilbur"
+if test $? -eq 0  
+then
+   echo "this is in WILBUR code"
+   surfix='wilbur'
+fi
+
+hostname | grep "ubuntu"
+if test $? -eq 0
+then
+   echo "this is in vmware player"
+   surfix='vmplayer'
+fi
+echo surfix=$surfix
+
+hostname | grep 'sgh1win01'
+if test $? -eq 0
+then
+   echo "this is in SHG server"
+   surfix='sgh'
+fi
+echo surfix=$surfix
+
+hn=`hostname`
+echo hostname=[$hn]
+
+
+if [ $hn = 'ubuntu' ]
+then
+	filepath=/mnt/hgfs/Temp/
+else
+	filepath="216.241.237.121:/tftpboot/"
+fi 
+
+filename=pwe3_satop_cesop_demo_${surfix}.exe
+echo filename=$filename
+# exit
+
+echo touch pwe3_satop_cesop_demo.c 
+touch *.c 
+
+echo =========================================
+echo make WDDS_DIR=../ \
+WDDI_TARGET_NAME=mips_winmon \
+WDDI_BOARD_NAME=wds \
+WDDI_HOST=linux \
+WDDI_HW_DEVICE=winpath3 \
+UFE_DIR=../ufe \
+UFE=ufe412 \
+FRAMER=flexmux
+echo =========================================
+
+
+make WDDS_DIR=../ \
+WDDI_TARGET_NAME=mips_winmon \
+WDDI_BOARD_NAME=wds_sl \
+WDDI_HOST=linux \
+WDDI_HW_DEVICE=winpath3 \
+FRAMER=flexmux \
+UFE_DIR=../ufe \
+&& rsync -avz --progress --compress ${sourcefile} ${filepath}${filename} &&  echo rsync ${sourcefile} ${filepath}${filename} complete !
