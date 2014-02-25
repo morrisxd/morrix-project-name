@@ -63,8 +63,9 @@ UFE=ufe412 \
 FRAMER=flexmux
 echo =========================================
 
+echo myboard=${myboard}
 
-make MORRIS=TDI \
+make MORRIS=${myboard} \
 WDDS_DIR=../ \
 WDDI_TARGET_NAME=mips_winmon \
 WDDI_BOARD_NAME=${myboard} \
