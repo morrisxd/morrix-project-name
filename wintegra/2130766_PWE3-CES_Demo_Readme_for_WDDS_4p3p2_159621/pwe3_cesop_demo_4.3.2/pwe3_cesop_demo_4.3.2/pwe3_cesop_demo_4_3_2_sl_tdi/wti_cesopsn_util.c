@@ -3668,6 +3668,7 @@ void WTI_EnetPortCreate(void)
    /* Create an Enet Port */
    WTI_EnetPortConfig(&enet_port_config);
 
+   printf ("WTI_ENET_PORT(%d)\n", WTI_ENET_PORT);
    the_system->enet_port = WP_PortCreate(the_system->wpid, WTI_ENET_PORT, &enet_port_config);
    WTI_TerminateOnError(the_system->enet_port, "WP_PortCreate() Ethernet",__LINE__);
 

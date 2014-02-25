@@ -1,5 +1,5 @@
 #!/bin/bash
-sourcefile=..//objects/linux/mips_winmon_winpath3/wds/bin/pwe3_satop_cesop_demo.exe
+sourcefile=..//objects/linux/mips_winmon_winpath3/wds_sl/bin/pwe3_satop_cesop_demo.exe
 surfix=''
 echo $surfix
 rm ./bin/*
@@ -47,7 +47,7 @@ touch *.c
 echo =========================================
 echo make WDDS_DIR=../ \
 WDDI_TARGET_NAME=mips_winmon \
-WDDI_BOARD_NAME=wds \
+WDDI_BOARD_NAME=wds-sl \
 WDDI_HOST=linux \
 WDDI_HW_DEVICE=winpath3 \
 UFE_DIR=../ufe \
@@ -58,7 +58,7 @@ echo =========================================
 
 make WDDS_DIR=../ \
 WDDI_TARGET_NAME=mips_winmon \
-WDDI_BOARD_NAME=wds \
+WDDI_BOARD_NAME=wds_sl \
 WDDI_HOST=linux \
 WDDI_HW_DEVICE=winpath3 \
 FRAMER=flexmux \

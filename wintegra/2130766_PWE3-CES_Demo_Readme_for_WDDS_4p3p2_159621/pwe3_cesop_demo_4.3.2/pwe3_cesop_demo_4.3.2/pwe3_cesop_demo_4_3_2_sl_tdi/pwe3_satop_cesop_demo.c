@@ -207,6 +207,7 @@
 #define WTI_ENET_TYPE                               WP_ENET_XAUI       /* defines XAUI modes for XGI */
 #else
 #ifdef WP_BOARD_WDS3_SL
+#warning PORT_SSSSSSSSSSSSSSSSSSSSSSSSSSLLLLLLLLLLLLLLLLLLL
 #define WTI_ENET_PORT                               WP_PORT_ENET11      /* ENET port */
 #else   /* NOT  WP_BOARD_WDS3_SL */
 #define WTI_ENET_PORT                               WP_PORT_ENET13      /* ENET port */
