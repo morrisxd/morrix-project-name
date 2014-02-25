@@ -1,0 +1,252 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+API_DIR	makefile	/^API_DIR = $(WDDI_DIR)\/sources\/api$/;"	m
+APP_DATA_LENGTH	ppp_hdlc_tdm_util.c	112;"	d	file:
+APP_DATA_LENGTH	ppp_hdlc_tdm_util.c	26;"	d	file:
+APP_DEBUG	ppp_hdlc_tdm.h	52;"	d
+APP_IW_BUFFER_OFFSET	ppp_hdlc_tdm.h	37;"	d
+APP_IW_BUFFER_SIZE	ppp_hdlc_tdm.h	36;"	d
+APP_MASTER_WPID	ppp_hdlc_tdm.h	38;"	d
+APP_MAX_BPORTS	ppp_hdlc_tdm.h	31;"	d
+APP_MAX_CHANNEL	ppp_hdlc_tdm.h	42;"	d
+APP_MAX_DEV_TDM	ppp_hdlc_tdm.h	43;"	d
+APP_MAX_FLOW_AGG_TDM	ppp_hdlc_tdm.h	45;"	d
+APP_MAX_MAC_ADDRESS	ppp_hdlc_tdm.h	28;"	d
+APP_MAX_PKTS_NUM	ppp_hdlc_tdm.h	64;"	d
+APP_MAX_PORT_TDM	ppp_hdlc_tdm.h	44;"	d
+APP_MAX_TDM_PORTS	ppp_hdlc_tdm.h	32;"	d
+APP_NUM_IW_BUFFERS	ppp_hdlc_tdm.h	35;"	d
+APP_PPPSW	ppp_hdlc_tdm.h	53;"	d
+APP_TRAFFIC_IP_HEADER	ppp_hdlc_tdm.h	48;"	d
+APP_TRAFFIC_IP_HEADER_PPP	ppp_hdlc_tdm.h	49;"	d
+APP_VLAN_ID	ppp_hdlc_tdm.h	27;"	d
+App_ChannelAndPQBlockCreate	ppp_hdlc_tdm.c	/^void App_ChannelAndPQBlockCreate(void)$/;"	f
+App_CheckControlDataStats	ppp_hdlc_tdm_stats.c	/^void App_CheckControlDataStats(WP_status *test_result)$/;"	f
+App_CheckDataStats	ppp_hdlc_tdm_stats.c	/^void App_CheckDataStats(WP_status *test_result)$/;"	f
+App_CheckTrafficDataStats	ppp_hdlc_tdm_stats.c	/^void App_CheckTrafficDataStats(WP_status *test_result)$/;"	f
+App_CreateEnetHdlcBridgeForIP	ppp_hdlc_tdm.c	/^void App_CreateEnetHdlcBridgeForIP()$/;"	f
+App_CreateEnetHdlcBridgeForMPLS	ppp_hdlc_tdm.c	/^void App_CreateEnetHdlcBridgeForMPLS()$/;"	f
+App_CreateEnetPPPBridgeForIP	ppp_hdlc_tdm.c	/^void App_CreateEnetPPPBridgeForIP()$/;"	f
+App_CreateEnetPPPBridgeForMPLS	ppp_hdlc_tdm.c	/^void App_CreateEnetPPPBridgeForMPLS()$/;"	f
+App_CreateHdlcEnetBridgeForIP	ppp_hdlc_tdm.c	/^void App_CreateHdlcEnetBridgeForIP(void)$/;"	f
+App_CreateHdlcEnetBridgeForMPLS	ppp_hdlc_tdm.c	/^void App_CreateHdlcEnetBridgeForMPLS(void)$/;"	f
+App_CreatePPPEnetBridgeForIP	ppp_hdlc_tdm.c	/^void App_CreatePPPEnetBridgeForIP()$/;"	f
+App_CreatePPPEnetBridgeForMPLS	ppp_hdlc_tdm.c	/^void App_CreatePPPEnetBridgeForMPLS()$/;"	f
+App_DataSend	ppp_hdlc_tdm_util.c	/^void App_DataSend(WP_handle h_tx, WP_handle h_pool)$/;"	f
+App_Debug	ppp_hdlc_tdm_util.c	/^void App_Debug(WP_boolean debug)$/;"	f
+App_DeviceAndPortCreate	ppp_hdlc_tdm.c	/^void App_DeviceAndPortCreate()$/;"	f
+App_DuReceive	ppp_hdlc_tdm_util.c	/^void App_DuReceive(WP_handle h_rx, WP_U32 data_type)$/;"	f
+App_EnableSystem	ppp_hdlc_tdm.c	/^void App_EnableSystem(void)$/;"	f
+App_EventErrorIndicate	ppp_hdlc_tdm_util.c	/^void App_EventErrorIndicate(WP_tag tag, WP_U32 event, WP_U32 data)$/;"	f
+App_EventRxIndicate	ppp_hdlc_tdm_util.c	/^void App_EventRxIndicate(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f
+App_EventTxIndicate	ppp_hdlc_tdm_util.c	/^void App_EventTxIndicate(WP_tag tag, WP_U32 data, WP_U32 info)$/;"	f
+App_FreerunSendingData	ppp_hdlc_tdm.c	/^void App_FreerunSendingData(void)$/;"	f
+App_InitConfig	ppp_hdlc_tdm.c	/^void App_InitConfig(void)$/;"	f
+App_MPLS_DataSend	ppp_hdlc_tdm_util.c	/^void App_MPLS_DataSend(WP_handle h_tx, WP_handle h_pool)$/;"	f
+App_MemPoolNodeAndSchedCreate	ppp_hdlc_tdm.c	/^void App_MemPoolNodeAndSchedCreate()$/;"	f
+App_ParameterSwitch	ppp_hdlc_tdm.c	/^WP_status App_ParameterSwitch(WP_CHAR switchto)$/;"	f
+App_PerformFreerun	ppp_hdlc_tdm.c	/^static void App_PerformFreerun(void)$/;"	f	file:
+App_Quit	ppp_hdlc_tdm_util.c	/^void App_Quit(WP_U32 status)$/;"	f
+App_ResetStats	ppp_hdlc_tdm_stats.c	/^void App_ResetStats(void)$/;"	f
+App_ShowBportStats	ppp_hdlc_tdm_stats.c	/^void App_ShowBportStats(void)$/;"	f
+App_ShowDeviceStats	ppp_hdlc_tdm_stats.c	/^void App_ShowDeviceStats(void)$/;"	f
+App_ShowFlowAggStats	ppp_hdlc_tdm_stats.c	/^void App_ShowFlowAggStats(void)$/;"	f
+App_ShowStats	ppp_hdlc_tdm_util.c	/^void App_ShowStats(void)$/;"	f
+App_TerminateOnError	ppp_hdlc_tdm_util.c	/^void App_TerminateOnError(WP_handle handle, WP_CHAR *s)$/;"	f
+BIN_DIR	makefile	/^BIN_DIR = $(TEST_DIR)\/bin$/;"	m
+BOARD_DIR	makefile	/^BOARD_DIR = $(WDDI_DIR)\/board\/$(WPI_BOARD)_$(HW_DEVICE)$/;"	m
+BOARD_WP3	ppp_hdlc_tdm.h	24;"	d
+CONTROL	ppp_hdlc_tdm.h	61;"	d
+DPS_IMAGE_NAME	makefile	/^DPS_IMAGE_NAME	= wpi_dps_image_backhaul$/;"	m
+DPS_IMAGE_OBJ	makefile	/^DPS_IMAGE_OBJ = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)\/lib\/$(DPS_IMAGE_NAME).o$/;"	m
+ENET_HEADER_SIZE	ppp_hdlc_tdm.h	788;"	d
+HDLC_OVER_IP	ppp_hdlc_tdm.h	55;"	d
+HDLC_OVER_MPLS	ppp_hdlc_tdm.h	56;"	d
+HW_DEVICE	makefile	/^HW_DEVICE   = winpath3$/;"	m
+INCLUDES	makefile	/^INCLUDES = -I. -I$(API_DIR) -I$(BOARD_DIR) \\$/;"	m
+IP_CHECKSUM	ppp_hdlc_tdm.h	796;"	d
+IP_DA	ppp_hdlc_tdm.h	798;"	d
+IP_HEADER_SIZE	ppp_hdlc_tdm.h	789;"	d
+IP_LENGTH	ppp_hdlc_tdm.h	793;"	d
+IP_PROTOCOL	ppp_hdlc_tdm.h	795;"	d
+IP_SA	ppp_hdlc_tdm.h	797;"	d
+IP_SER_TYPE	ppp_hdlc_tdm.h	792;"	d
+IP_TTL	ppp_hdlc_tdm.h	794;"	d
+IP_VER_HLEN	ppp_hdlc_tdm.h	791;"	d
+IRQ_TASK_LIST_SIZE	ppp_hdlc_tdm.h	746;"	d
+LCP	ppp_hdlc_tdm.h	62;"	d
+MAC_COPY	ppp_hdlc_tdm.h	67;"	d
+MY_LDFLAGS	makefile	/^MY_LDFLAGS = -lpthread -muclibc$/;"	m
+OBJ_DIR	makefile	/^OBJ_DIR = $(TEST_DIR)\/bin$/;"	m
+PHY_BOARD	makefile	/^PHY_BOARD = $(WPI_HT_DIR)\/$(WPI_BOARD)\/lib$/;"	m
+PPP_OVER_IP	ppp_hdlc_tdm.h	57;"	d
+PPP_OVER_MPLS	ppp_hdlc_tdm.h	58;"	d
+PQBLOCK_SIZE	ppp_hdlc_tdm.h	41;"	d
+QOS_ENABLE	ppp_hdlc_tdm.h	40;"	d
+TEST_DIR	makefile	/^TEST_DIR = .$/;"	m
+TEST_EXE	makefile	/^TEST_EXE = $(BIN_DIR)\/$(TEST_NAME)$(EXE)$/;"	m
+TEST_NAME	makefile	/^TEST_NAME = $(basename $(TEST))$/;"	m
+TEST_OBJ	makefile	/^TEST_OBJ = $(patsubst %.c, $(OBJ_DIR)\/%.o, $(TEST_NAME).c)$/;"	m
+TRAFFIC	ppp_hdlc_tdm.h	60;"	d
+UDP_CHECKSUM	ppp_hdlc_tdm.h	804;"	d
+UDP_DST_PORT	ppp_hdlc_tdm.h	802;"	d
+UDP_HEADER_SIZE	ppp_hdlc_tdm.h	800;"	d
+UDP_LENGTH	ppp_hdlc_tdm.h	803;"	d
+UDP_SRC_PORT	ppp_hdlc_tdm.h	801;"	d
+WDDI_DIR	makefile	/^WDDI_DIR = $(WPI_WDDS_DIR)\/wddi$/;"	m
+WDDS_OBJECTS	makefile	/^WDDS_OBJECTS = objects$/;"	m
+WPI_BOARD	makefile	/^WPI_BOARD  	= wds_sl$/;"	m
+WPI_HOST	makefile	/^WPI_HOST   	= linux$/;"	m
+WPI_HT_DIR	makefile	/^WPI_HT_DIR = $(WPI_WDDS_DIR)\/objects\/$(WPI_HOST)\/$(WPI_TARGET)$/;"	m
+WPI_PLATFORM_DIR	makefile	/^WPI_PLATFORM_DIR = $(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
+WPI_START_FILE	makefile	/^WPI_START_FILE = $(WPI_WDDS_DIR)\/$(WDDS_OBJECTS)\/$(WPI_HOST)\/$(WPI_TARGET)\/lib$/;"	m
+WPI_TARGET	makefile	/^WPI_TARGET	= mips_winmon$/;"	m
+WPI_TARGET	makefile	/^WPI_TARGET 	= mips_linux_$(HW_DEVICE)$/;"	m
+WPI_TARGET	makefile	/^WPI_TARGET 	= mips_winmon_$(HW_DEVICE)$/;"	m
+WPI_T_DIR	makefile	/^WPI_T_DIR=$(WPI_WDDS_DIR)\/platform\/$(WPI_TARGET)$/;"	m
+WPI_WDDS_DIR	makefile	/^WPI_WDDS_DIR = ..\/..\/..$/;"	m
+WP_HW_WINPATH_DEV	makefile	/^        WP_HW_WINPATH_DEV=WP_HW_WINPATH2$/;"	m
+WP_HW_WINPATH_DEV	makefile	/^        WP_HW_WINPATH_DEV=WP_HW_WINPATH3$/;"	m
+WT_Reboot	ppp_hdlc_tdm_util.c	/^void WT_Reboot(void)$/;"	f
+add_task	ppp_hdlc_tdm_util.c	/^void add_task(app_task_list *task_list, WP_U32 event_type, WP_tag event_tag,$/;"	f
+app_perform_action	ppp_hdlc_tdm_util.c	/^void app_perform_action(app_task *task)$/;"	f
+app_task	ppp_hdlc_tdm.h	/^} app_task;$/;"	t	typeref:struct:__anon1
+app_task_list	ppp_hdlc_tdm.h	/^} app_task_list;$/;"	t	typeref:struct:__anon2
+atm_global_cfg	ppp_hdlc_tdm.h	/^WP_atm_global atm_global_cfg =$/;"	v
+bridge_cfg	ppp_hdlc_tdm.h	/^WP_flow_learning_rule_vlan bridge_cfg;$/;"	v
+bridge_port_cfg	ppp_hdlc_tdm.h	/^WP_bridge_port bridge_port_cfg = $/;"	v
+ch_enet_cfg	ppp_hdlc_tdm.h	/^WP_ch_enet ch_enet_cfg = $/;"	v
+ch_hdlc_cfg	ppp_hdlc_tdm.h	/^WP_ch_hdlc ch_hdlc_cfg = $/;"	v
+ch_iw_rx_cfg	ppp_hdlc_tdm.h	/^WP_ch_iw_rx ch_iw_rx_cfg =$/;"	v
+config_choice	ppp_hdlc_tdm.h	/^WP_CHAR config_choice = 'X';$/;"	v
+context_cfg	ppp_hdlc_tdm.h	/^WP_context context_cfg =$/;"	v
+cw_config	ppp_hdlc_tdm.h	/^WP_calendar_wheel cw_config[2] =$/;"	v
+debug_on	ppp_hdlc_tdm.h	/^WP_boolean debug_on = WP_FALSE;$/;"	v
+default_iw_agg_bridging_cfg	ppp_hdlc_tdm.h	/^WP_iw_agg_bridging default_iw_agg_bridging_cfg = $/;"	v
+default_pkt_shaping_wfq_cfg	ppp_hdlc_tdm.h	/^WP_pkt_shaping_wfq default_pkt_shaping_wfq_cfg = $/;"	v
+device_enet_cfg	ppp_hdlc_tdm.h	/^WP_device_enet device_enet_cfg = $/;"	v
+device_tdm_hdlc_cfg	ppp_hdlc_tdm.h	/^WP_device_tdm_hdlc device_tdm_hdlc_cfg = $/;"	v
+dfc_sys_info	ppp_hdlc_tdm.h	/^WP_dfc_sys_info dfc_sys_info = $/;"	v
+dp_interface_val	ppp_hdlc_tdm.h	/^WP_CHAR dp_interface_val = 'X';$/;"	v
+enet_filters_cfg	ppp_hdlc_tdm.h	/^WP_enet_filters enet_filters_cfg = $/;"	v
+event_param	ppp_hdlc_tdm.h	/^   void *event_param;$/;"	m	struct:__anon1
+event_tag	ppp_hdlc_tdm.h	/^   WP_tag event_tag;$/;"	m	struct:__anon1
+event_type	ppp_hdlc_tdm.h	/^   WP_U32 event_type;$/;"	m	struct:__anon1
+forward_rule	ppp_hdlc_tdm.h	/^WP_l2_forward forward_rule;$/;"	v
+freerun	ppp_hdlc_tdm.h	/^WP_U32  freerun = 0;$/;"	v
+h_bridge1_bport_enet1	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_bport_enet1, h_bridge1_bport_tdm[APP_MAX_PORT_TDM];$/;"	v
+h_bridge1_bport_tdm	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_bport_enet1, h_bridge1_bport_tdm[APP_MAX_PORT_TDM];$/;"	v
+h_bridge1_default_agg	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_default_agg,h_bridge2_default_agg;$/;"	v
+h_bridge1_dfcflow1	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_dfcflow1[PQBLOCK_SIZE][APP_MAX_TDM_PORTS];$/;"	v
+h_bridge1_filter1	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_filter1,h_bridge2_filter[3];$/;"	v
+h_bridge1_iwhost	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_iwhost, h_bridge2_iwhost;$/;"	v
+h_bridge2_bport_enet2	ppp_hdlc_tdm.h	/^WP_handle               h_bridge2_bport_enet2, h_bridge2_bport_tdm[APP_MAX_PORT_TDM];$/;"	v
+h_bridge2_bport_tdm	ppp_hdlc_tdm.h	/^WP_handle               h_bridge2_bport_enet2, h_bridge2_bport_tdm[APP_MAX_PORT_TDM];$/;"	v
+h_bridge2_default_agg	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_default_agg,h_bridge2_default_agg;$/;"	v
+h_bridge2_dfcflow	ppp_hdlc_tdm.h	/^WP_handle               h_bridge2_dfcflow[PQBLOCK_SIZE][APP_MAX_TDM_PORTS],h_bridge2_dfcflow_control,h_bridge2_dfcflow_lcp;$/;"	v
+h_bridge2_dfcflow_control	ppp_hdlc_tdm.h	/^WP_handle               h_bridge2_dfcflow[PQBLOCK_SIZE][APP_MAX_TDM_PORTS],h_bridge2_dfcflow_control,h_bridge2_dfcflow_lcp;$/;"	v
+h_bridge2_dfcflow_lcp	ppp_hdlc_tdm.h	/^WP_handle               h_bridge2_dfcflow[PQBLOCK_SIZE][APP_MAX_TDM_PORTS],h_bridge2_dfcflow_control,h_bridge2_dfcflow_lcp;$/;"	v
+h_bridge2_filter	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_filter1,h_bridge2_filter[3];$/;"	v
+h_bridge2_iwhost	ppp_hdlc_tdm.h	/^WP_handle               h_bridge1_iwhost, h_bridge2_iwhost;$/;"	v
+h_dev_iwhost	ppp_hdlc_tdm.h	/^WP_handle               h_port_iwhost,h_dev_iwhost;$/;"	v
+h_dev_tdm	ppp_hdlc_tdm.h	/^WP_handle 				h_dev_tdm[APP_MAX_DEV_TDM];$/;"	v
+h_device_enet1	ppp_hdlc_tdm.h	/^WP_handle               h_device_enet1, h_device_enet2;$/;"	v
+h_device_enet2	ppp_hdlc_tdm.h	/^WP_handle               h_device_enet1, h_device_enet2;$/;"	v
+h_enet1_host_tx	ppp_hdlc_tdm.h	/^WP_handle               h_enet1_rx, h_enet1_host_tx, h_enet1_tx;$/;"	v
+h_enet1_rx	ppp_hdlc_tdm.h	/^WP_handle               h_enet1_rx, h_enet1_host_tx, h_enet1_tx;$/;"	v
+h_enet1_tx	ppp_hdlc_tdm.h	/^WP_handle               h_enet1_rx, h_enet1_host_tx, h_enet1_tx;$/;"	v
+h_enet2_rx	ppp_hdlc_tdm.h	/^WP_handle               h_enet2_rx, h_enet2_tx;$/;"	v
+h_enet2_tx	ppp_hdlc_tdm.h	/^WP_handle               h_enet2_rx, h_enet2_tx;$/;"	v
+h_enet2_tx_ch	ppp_hdlc_tdm.h	/^WP_handle				h_enet2_tx_ch[APP_MAX_CHANNEL];$/;"	v
+h_flow_agg_control	ppp_hdlc_tdm.h	/^WP_handle               h_flow_agg_lcp, h_flow_agg_control,h_flow_agg_enet2[APP_MAX_FLOW_AGG_TDM];$/;"	v
+h_flow_agg_enet2	ppp_hdlc_tdm.h	/^WP_handle               h_flow_agg_lcp, h_flow_agg_control,h_flow_agg_enet2[APP_MAX_FLOW_AGG_TDM];$/;"	v
+h_flow_agg_lcp	ppp_hdlc_tdm.h	/^WP_handle               h_flow_agg_lcp, h_flow_agg_control,h_flow_agg_enet2[APP_MAX_FLOW_AGG_TDM];$/;"	v
+h_flow_agg_pppsw_link	ppp_hdlc_tdm.h	/^WP_handle               h_flow_agg_pppsw_link[PQBLOCK_SIZE];$/;"	v
+h_flow_agg_tdm	ppp_hdlc_tdm.h	/^WP_handle               h_flow_agg_tdm[PQBLOCK_SIZE];$/;"	v
+h_iw_sys_bridge1	ppp_hdlc_tdm.h	/^WP_handle               h_iw_sys_bridge1, h_iw_sys_bridge2;$/;"	v
+h_iw_sys_bridge2	ppp_hdlc_tdm.h	/^WP_handle               h_iw_sys_bridge1, h_iw_sys_bridge2;$/;"	v
+h_iw_sys_pppsw	ppp_hdlc_tdm.h	/^WP_handle               h_iw_sys_pppsw;$/;"	v
+h_learningflow_enet1	ppp_hdlc_tdm.h	/^WP_handle               h_learningflow_enet1;$/;"	v
+h_pool_256	ppp_hdlc_tdm.h	/^WP_handle               h_pool_buffer_iw,h_pool_256;$/;"	v
+h_pool_buffer_host	ppp_hdlc_tdm.h	/^WP_handle               h_pool_buffer_host;$/;"	v
+h_pool_buffer_iw	ppp_hdlc_tdm.h	/^WP_handle               h_pool_buffer_iw,h_pool_256;$/;"	v
+h_pool_ring_host	ppp_hdlc_tdm.h	/^WP_handle               h_pool_ring_host;$/;"	v
+h_port_enet1	ppp_hdlc_tdm.h	/^WP_handle               h_port_enet1, h_port_enet2;$/;"	v
+h_port_enet2	ppp_hdlc_tdm.h	/^WP_handle               h_port_enet1, h_port_enet2;$/;"	v
+h_port_iwhost	ppp_hdlc_tdm.h	/^WP_handle               h_port_iwhost,h_dev_iwhost;$/;"	v
+h_port_tdm	ppp_hdlc_tdm.h	/^WP_handle 				h_port_tdm[APP_MAX_PORT_TDM];$/;"	v
+h_qnode_host	ppp_hdlc_tdm.h	/^WP_handle               h_qnode_iwq, h_qnode_host,h_qnode_iwq_tdm;$/;"	v
+h_qnode_iwq	ppp_hdlc_tdm.h	/^WP_handle               h_qnode_iwq, h_qnode_host,h_qnode_iwq_tdm;$/;"	v
+h_qnode_iwq_tdm	ppp_hdlc_tdm.h	/^WP_handle               h_qnode_iwq, h_qnode_host,h_qnode_iwq_tdm;$/;"	v
+h_rport_enet2	ppp_hdlc_tdm.h	/^WP_handle               h_rport_tdm[APP_MAX_TDM_PORTS], h_rport_enet2;$/;"	v
+h_rport_tdm	ppp_hdlc_tdm.h	/^WP_handle               h_rport_tdm[APP_MAX_TDM_PORTS], h_rport_enet2;$/;"	v
+h_tdm_rx	ppp_hdlc_tdm.h	/^WP_handle               h_tdm_rx[APP_MAX_CHANNEL],h_tdm_tx[PQBLOCK_SIZE][APP_MAX_TDM_PORTS];\/\/ each PQ-block will have n channel$/;"	v
+h_tdm_tx	ppp_hdlc_tdm.h	/^WP_handle               h_tdm_rx[APP_MAX_CHANNEL],h_tdm_tx[PQBLOCK_SIZE][APP_MAX_TDM_PORTS];\/\/ each PQ-block will have n channel$/;"	v
+hdlc_binding	ppp_hdlc_tdm.h	/^WP_tdm_binding hdlc_binding[] =$/;"	v
+head	ppp_hdlc_tdm.h	/^   WP_U16 head;$/;"	m	struct:__anon2
+insert_ip_header	ppp_hdlc_tdm_util.c	/^void insert_ip_header(WP_U32 ip_sa, WP_U32 ip_da, WP_U32 payload_size, $/;"	f
+int_queue_table_cfg	ppp_hdlc_tdm.h	/^WP_int_queue_table int_queue_table_cfg =$/;"	v
+irq_task	ppp_hdlc_tdm.h	/^app_task irq_task[IRQ_TASK_LIST_SIZE];$/;"	v
+irq_task_list	ppp_hdlc_tdm.h	/^app_task_list irq_task_list[1] = { { 0, 0, IRQ_TASK_LIST_SIZE, 0, irq_task} };$/;"	v
+iw_agg_directmap_cfg	ppp_hdlc_tdm.h	/^WP_iw_agg_directmap iw_agg_directmap_cfg  = $/;"	v
+iw_agg_directmap_cfg_param	ppp_hdlc_tdm.h	/^WP_iw_agg_directmap iw_agg_directmap_cfg_param[APP_MAX_FLOW_AGG_TDM];$/;"	v
+iw_agg_ppp_switching	ppp_hdlc_tdm.h	/^WP_iw_agg_ppp_switching iw_agg_ppp_switching  = $/;"	v
+iw_agg_ppp_switching_param	ppp_hdlc_tdm.h	/^WP_iw_agg_ppp_switching iw_agg_ppp_switching_param[APP_MAX_PORT_TDM];$/;"	v
+iw_agg_tdm_param	ppp_hdlc_tdm.h	/^WP_iw_agg_bridging iw_agg_tdm_param[PQBLOCK_SIZE];$/;"	v
+iw_global_cfg	ppp_hdlc_tdm.h	/^WP_iw_global iw_global_cfg =$/;"	v
+iw_sys_bridge	ppp_hdlc_tdm.h	/^WP_iw_sys_bridging iw_sys_bridge = $/;"	v
+iw_sys_pppsw_cfg	ppp_hdlc_tdm.h	/^WP_iw_sys_directmap iw_sys_pppsw_cfg = $/;"	v
+main	ppp_hdlc_tdm.c	/^int main(int argc, char *argv[])$/;"	f
+next_task	ppp_hdlc_tdm_util.c	/^next_task(app_task_list *task_list, app_task *result)$/;"	f
+num_elements	ppp_hdlc_tdm.h	/^   WP_U16 num_elements;$/;"	m	struct:__anon2
+pad	ppp_hdlc_tdm.h	/^   WP_U16 pad;$/;"	m	struct:__anon2
+pkt_shaping_cir_cfg	ppp_hdlc_tdm.h	/^WP_pkt_shaping_cir pkt_shaping_cir_cfg = $/;"	v
+policer	ppp_hdlc_tdm.h	/^WP_module_policer policer[1] = $/;"	v
+policer_config	ppp_hdlc_tdm.h	/^WP_policer_v1 policer_config[1] =$/;"	v
+policer_handle	ppp_hdlc_tdm.h	/^WP_handle 				policer_handle;$/;"	v
+pool_buffer_data_256_cfg	ppp_hdlc_tdm.h	/^WP_pool_buffer_data pool_buffer_data_256_cfg = $/;"	v
+pool_buffer_data_iw_cfg	ppp_hdlc_tdm.h	/^WP_pool_buffer_data pool_buffer_data_iw_cfg = $/;"	v
+pool_ring_data_cfg	ppp_hdlc_tdm.h	/^WP_pool_ring_data pool_ring_data_cfg = $/;"	v
+port_enet_cfg	ppp_hdlc_tdm.h	/^WP_port_enet port_enet_cfg =$/;"	v
+port_tdm_cfg	ppp_hdlc_tdm.h	/^WP_port_tdm port_tdm_cfg =$/;"	v
+pqblock_handle	ppp_hdlc_tdm.h	/^WP_handle				pqblock_handle[PQBLOCK_SIZE];$/;"	v
+qnode_hostq_cfg	ppp_hdlc_tdm.h	/^WP_qnode_hostq qnode_hostq_cfg =$/;"	v
+qnode_iwq_cfg	ppp_hdlc_tdm.h	/^WP_qnode_iwq qnode_iwq_cfg =$/;"	v
+rx_binding_bridging_cfg	ppp_hdlc_tdm.h	/^WP_rx_binding_bridging rx_binding_bridging_cfg = $/;"	v
+slb_config	ppp_hdlc_tdm.h	/^WP_policer_slb_config slb_config[1] =$/;"	v
+status	ppp_hdlc_tdm.h	/^WP_handle status;$/;"	v
+tag_agg_control	ppp_hdlc_tdm.h	/^WP_tag tag_agg_lcp, tag_agg_control;$/;"	v
+tag_agg_default_bridge1	ppp_hdlc_tdm.h	/^WP_tag tag_agg_default_bridge1, tag_agg_default_bridge2;$/;"	v
+tag_agg_default_bridge2	ppp_hdlc_tdm.h	/^WP_tag tag_agg_default_bridge1, tag_agg_default_bridge2;$/;"	v
+tag_agg_enet	ppp_hdlc_tdm.h	/^WP_tag tag_agg_enet;$/;"	v
+tag_agg_enet2	ppp_hdlc_tdm.h	/^WP_tag tag_agg_enet2[APP_MAX_FLOW_AGG_TDM];$/;"	v
+tag_agg_lcp	ppp_hdlc_tdm.h	/^WP_tag tag_agg_lcp, tag_agg_control;$/;"	v
+tag_agg_pppsw	ppp_hdlc_tdm.h	/^WP_tag tag_agg_pppsw[PQBLOCK_SIZE];$/;"	v
+tag_agg_tdm	ppp_hdlc_tdm.h	/^WP_tag tag_agg_tdm[APP_MAX_FLOW_AGG_TDM];$/;"	v
+tag_bport_enet1	ppp_hdlc_tdm.h	/^WP_tag tag_bport_enet1;$/;"	v
+tag_bport_enet2	ppp_hdlc_tdm.h	/^WP_tag tag_bport_enet2;$/;"	v
+tag_bridge1_bport_tdm	ppp_hdlc_tdm.h	/^WP_tag tag_bridge1_bport_tdm[APP_MAX_PORT_TDM];$/;"	v
+tag_bridge2_bport_tdm	ppp_hdlc_tdm.h	/^WP_tag tag_bridge2_bport_tdm[APP_MAX_PORT_TDM ];$/;"	v
+tag_channel_base	ppp_hdlc_tdm.h	/^WP_tag tag_channel_base = 1;$/;"	v
+tag_enet1_rx	ppp_hdlc_tdm.h	/^WP_tag tag_enet1_rx, tag_enet2_rx;$/;"	v
+tag_enet1_tx	ppp_hdlc_tdm.h	/^WP_tag tag_enet1_tx, tag_enet2_tx;$/;"	v
+tag_enet2_rx	ppp_hdlc_tdm.h	/^WP_tag tag_enet1_rx, tag_enet2_rx;$/;"	v
+tag_enet2_tx	ppp_hdlc_tdm.h	/^WP_tag tag_enet1_tx, tag_enet2_tx;$/;"	v
+tag_enet2_tx_ch	ppp_hdlc_tdm.h	/^WP_tag tag_enet2_tx_ch[PQBLOCK_SIZE];$/;"	v
+tag_iw_sys_bridge1	ppp_hdlc_tdm.h	/^WP_tag tag_iw_sys_bridge1, tag_iw_sys_bridge2;$/;"	v
+tag_iw_sys_bridge2	ppp_hdlc_tdm.h	/^WP_tag tag_iw_sys_bridge1, tag_iw_sys_bridge2;$/;"	v
+tag_rport_enet2	ppp_hdlc_tdm.h	/^WP_tag tag_rport_enet2;$/;"	v
+tag_rport_tdm	ppp_hdlc_tdm.h	/^WP_tag tag_rport_tdm[APP_MAX_TDM_PORTS];$/;"	v
+tag_tdmrx	ppp_hdlc_tdm.h	/^WP_tag tag_tdmrx = 200;$/;"	v
+tag_tdmtx	ppp_hdlc_tdm.h	/^WP_tag tag_tdmtx = 300;$/;"	v
+tail	ppp_hdlc_tdm.h	/^   WP_U16 tail;$/;"	m	struct:__anon2
+task	ppp_hdlc_tdm.h	/^   app_task *task;$/;"	m	struct:__anon2
+tdm_slots	ppp_hdlc_tdm.h	/^WP_tdm_slotgroup tdm_slots[] =$/;"	v
+tx_binding_cfg	ppp_hdlc_tdm.h	/^WP_tx_binding tx_binding_cfg =$/;"	v
+v1_limit	ppp_hdlc_tdm.h	/^WP_policer_limits_v1 v1_limit = $/;"	v
+wt_mac_enet1	ppp_hdlc_tdm.h	/^WP_U8 wt_mac_enet1[6]    = {0x45, 0x6e, 0x65, 0x74, 0x23, 0x31};$/;"	v
+wt_mac_enet2	ppp_hdlc_tdm.h	/^WP_U8 wt_mac_enet2[6]    = {0x45, 0x6e, 0x65, 0x74, 0x23, 0x32};$/;"	v

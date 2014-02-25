@@ -49,6 +49,9 @@ section TGU_AN_RESTART
    register struct S_TcntrHwReg  Tcntr  = r16;
    register                      GroupOffset = r17;
    register                      CounterOffset = r19;
+   register                      myoff = r20;
+   register                      tmpreg = r18;
+   register                      tmpreg2 = r20;
 
    global L_An_Restart_Tgu_Start;
    
@@ -76,9 +79,27 @@ section TGU_AN_RESTART
    _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset]) += 1;
 #else
 	TguCounter = _mem(r0, B_DEBUG1[CounterOffset], 4);
-    TguCounter += 1;
+        TguCounter += 1;
 	_mem(r0, B_DEBUG1[CounterOffset], 4) = TguCounter;
-    TguCounter -= 1;
+
+	tmpreg = 0x82345678;
+	myoff = 8;
+	_mem(r0, B_DEBUG1[myoff], 4) = tmpreg;
+	tmpreg2 = tmpreg;
+
+	myoff = 12;
+	tmpreg = _mem(r0, B_DEBUG1[myoff], 4);
+	tmpreg += 0x1ffffff0;
+	_mem(r0, B_DEBUG1[myoff], 4) = tmpreg;
+
+	if (tmpreg2 > tmpreg)
+	{
+	   myoff = 0x10;
+	   tmpreg = _mem(r0, B_DEBUG1[myoff], 4);
+	   tmpreg += 1;
+	   _mem(r0, B_DEBUG1[myoff], 4) = tmpreg;
+	}
+        TguCounter -= 1;
 #endif
 
    /* TGU Period is extended to also address 1000BaseX_AN case, which requires longer period time (*8 than SGMII_AN)*/
@@ -93,6 +114,9 @@ section TGU_AN_RESTART
    _mem(r0, B_TGU_AN_RESTART_SW_COUNTER[CounterOffset], 4) = TguCounter;
 #else
     _mem(r0, B_DEBUG1[CounterOffset], 4) = TguCounter;
+	tmpreg = 0x12345678;
+	myoff = 8;
+	_mem(r0, B_DEBUG1[myoff], 4) = tmpreg;
 
 #endif
 

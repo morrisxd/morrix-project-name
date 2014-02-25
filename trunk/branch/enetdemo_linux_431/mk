@@ -1,3 +1,4 @@
+#!/bin/bash
 ctags -R
 cd bin
 rm -rf *

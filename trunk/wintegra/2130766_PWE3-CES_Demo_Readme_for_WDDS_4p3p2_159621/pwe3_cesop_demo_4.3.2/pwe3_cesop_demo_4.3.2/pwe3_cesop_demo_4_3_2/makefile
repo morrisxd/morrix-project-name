@@ -152,7 +152,7 @@ INCLUDES = -I$(SOURCES_DIR) -I$(API_DIR) $(SERVICE_INCLUDE) -I. \
 	-I$(TARGET_DIR) -I$(PLATFORM_DIR) -I$(WDDS_DIR)/include -I$(WDDS_DIR)/platform/include \
 	-I$(PHY_DIR)  \
 	-I$(TEST_COMMON_DIR) $(WDDI_INTERNAL_INCLUDE) $(TARGET_INCLUDE) \
-	-I$(LEGACY_DIR) -I$(BOARD_DIR) -I$(GENERIC_BOARD_DIR)  -I ../board/wds_common\
+	-I$(LEGACY_DIR) -I$(BOARD_DIR) -I$(GENERIC_BOARD_DIR)  -I ../wddi/board/wds_common\
         -I$(EXTENSIONS_DIR) \
 	-I$(WDDI_DIR)$(WDDI_SOURCES)/winutil/include \
 	-I$(WDDI_DIR)$(WDDI_SOURCES)/winutil/include/$(WDDI_HW_DEVICE) \
@@ -178,7 +178,7 @@ UFE_FRAMER_DIR = $(UFE_DIR)/wpx_frmr/flexmux
 TEST_CFLAGS += -D__WT_UFE4__ -DWUFE_UFE4
 TEST_CFLAGS += -D__WT_UFE448__ -DWUFE_UFE4
 else
-$(error WUFE must be set to ufe412, ufe448 or ufe3)
+# $(error WUFE must be set to ufe412, ufe448 or ufe3)
 endif
 endif
 endif
