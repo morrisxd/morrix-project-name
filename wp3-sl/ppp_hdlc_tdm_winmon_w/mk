@@ -1,0 +1,2 @@
+make TEST=ppp_hdlc_tdm.c
+rsync -avz --compress --progress ./bin/ppp_hdlc_tdm.exe 216.241.237.121:.
