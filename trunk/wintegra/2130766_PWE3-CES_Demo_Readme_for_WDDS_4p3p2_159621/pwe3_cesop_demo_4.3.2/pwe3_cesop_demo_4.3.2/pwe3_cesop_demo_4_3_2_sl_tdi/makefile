@@ -13,6 +13,7 @@ WDDI_HOST =
 WDDI_HW_DEVICE =
 UFE_DIR = 
 WDDI_DIR = $(WDDS_DIR)/wddi
+MORRIS =
 
 ifeq "$(WDDI_HW_DEVICE)" ""
 $(error please supply WDDI_HW_DEVICE=[winpath2/winpath3])
@@ -102,7 +103,11 @@ endif
 WDDI_LIBS += $(BOARD_LIB)
 
 TEST_CFLAGS = -D$(TLOG_FUNCTION) -DWT_DEBUG_LEVEL=$(TLOG_LEVEL) $(DEFINE_WEB) \
-              -DWDDI_TEST=$(WDDI_TEST) -D$(WP_HW_WINPATHX)
+              -DWDDI_TEST=$(WDDI_TEST) -D$(WP_HW_WINPATHX) -DMORRIS2=$(MORRIS)
+ifeq "$(MORRIS)" "wds_sl"
+TEST_CFLAGS += -DMORRIS_WDS_SL
+endif
+
 
 # Where to construct the objects and binaries
 TESTOBJ_DIR = ${WDDS_BUILD_DIR}/$(WDDS_OBJECTS)/$(WDDI_HOST)/$(WDDI_TARGET_NAME)_$(WDDI_HW_DEVICE)/$(WDDI_BOARD_NAME)/testobj
