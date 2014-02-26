@@ -192,7 +192,8 @@
 #if (WTI_XGI_MODE)
 #define WTI_ENET_MODE                               WP_ENET_LOOPBACK //NORMAL /* defines loopback or normal operation on ENET port */
 #else
-#define WTI_ENET_MODE                               WP_ENET_LOOPBACK/* defines loopback or normal operation on ENET port */
+#define WTI_ENET_MODE                               WP_ENET_NORMAL//WP_ENET_LOOPBACK/* defines loopback or normal operation on ENET port */
+#warning ENET_MODEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 #endif // WTI_XGI_MODE
 
 #ifdef WP_HW_WINPATH2
@@ -209,6 +210,7 @@
 #warning PORT_SSSSSSSSSSSSSSSSSSSSSSSSSSLLLLLLLLLLLLLLLLLLL
 #define WTI_ENET_PORT                               WP_PORT_ENET11      /* ENET port */
 #else   /* NOT  WP_BOARD_WDS3_SL */
+#warning im_using_enet1333333333333333
 #define WTI_ENET_PORT                               WP_PORT_ENET13      /* ENET port */
 #endif  /* NOT WP_BOARD_WDS3_SL */
 #define WTI_ENET_TYPE                               WP_ENET_1000_BASE_X /* WP_ENET_1000_BASE_X or  WP_ENET_1000_BASE_X_AN */
