@@ -3245,7 +3245,7 @@ printf ("poolcreate#1\n");
    ring_pool_cfg.bus = WP_BUS_HOST;
    ring_pool_cfg.bank = APP_BANK_HOST;
 #else
-#error PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+//  #error PACKETTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
    ring_pool_cfg.bus = WP_BUS_PACKET;
    ring_pool_cfg.bank = APP_BANK_PACKET;
 #endif
@@ -3657,9 +3657,11 @@ void WTI_EnetPortCreate(void)
    }
 #else /* WP_HW_WINPATH3 */
 #if (WTI_ENET_MODE == WP_ENET_NORMAL)
+#warning ENET_UNLOOPPPPPPPPPPPPPPPPPPPPPPPP
     status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_FALSE);
     WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_ENET_PORT", __LINE__);
 #else
+#warning WP33333333333333333333333333333
    status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_TRUE);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_ENET_PORT", __LINE__);
 #endif
