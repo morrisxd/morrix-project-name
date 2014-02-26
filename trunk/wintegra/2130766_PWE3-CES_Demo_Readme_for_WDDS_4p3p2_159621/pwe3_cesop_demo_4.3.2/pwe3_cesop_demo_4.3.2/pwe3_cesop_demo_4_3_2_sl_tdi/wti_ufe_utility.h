@@ -16,9 +16,9 @@
 #define WTI_UFE_UTILITY_H
 
 #include "wp_wddi.h"
-#if (!WTI_CESOP_TDI)
+// #if (!WTI_CESOP_TDI) || 1
 #include "wufe_ufe.h"
-#endif
+// #endif
 
 #ifndef WPX_BOARD_DATA_H
 #include "wpx_board_data.h"
