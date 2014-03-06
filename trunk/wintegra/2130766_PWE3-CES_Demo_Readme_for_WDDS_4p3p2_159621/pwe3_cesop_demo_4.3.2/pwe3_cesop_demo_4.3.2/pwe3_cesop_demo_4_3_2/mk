@@ -1,5 +1,5 @@
 #!/bin/bash
-sourcefile=..//objects/linux/mips_winmon_winpath3/wds_sl/bin/pwe3_satop_cesop_demo.exe
+sourcefile=..//objects/linux/mips_winmon_winpath3/wds/bin/pwe3_satop_cesop_demo.exe
 surfix=''
 echo $surfix
 rm ./bin/*
@@ -33,11 +33,14 @@ echo hostname=[$hn]
 if [ $hn = 'ubuntu' ]
 then
 	filepath=/mnt/hgfs/Temp/
+elif [ $hn = 'sgh1win01' ] 
+then
+	filepath=/tftpboot/
 else
 	filepath="216.241.237.121:/tftpboot/"
 fi 
 
-filename=pwe3_satop_cesop_demo_${surfix}.exe
+filename=pwe3_satop_cesop_demo_tdi_${surfix}.exe
 echo filename=$filename
 # exit
 
@@ -58,7 +61,7 @@ echo =========================================
 
 make WDDS_DIR=../ \
 WDDI_TARGET_NAME=mips_winmon \
-WDDI_BOARD_NAME=wds_sl \
+WDDI_BOARD_NAME=wds \
 WDDI_HOST=linux \
 WDDI_HW_DEVICE=winpath3 \
 FRAMER=flexmux \

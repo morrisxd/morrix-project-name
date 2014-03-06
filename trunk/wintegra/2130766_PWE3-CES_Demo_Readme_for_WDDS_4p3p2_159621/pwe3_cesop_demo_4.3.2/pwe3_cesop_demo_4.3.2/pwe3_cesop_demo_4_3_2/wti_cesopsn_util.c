@@ -19,8 +19,10 @@
 #include <string.h>
 #include "wp_wddi.h"
 
+#if (!WTI_CESOP_TDI)
 #include "wpx_enet_phy.h"
 #include "wpx_pin_mux_selector.h"
+#endif
 
 #ifdef WP_HW_WINPATH3
 #include "wpx_pinmux.h"
@@ -3660,7 +3662,8 @@ void WTI_EnetPortCreate(void)
     status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_FALSE);
     WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_ENET_PORT", __LINE__);
 #else
-   status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_TRUE);
+#warning 1111111111111111111111
+   status = WPX_BoardSerdesInit(the_system->wpid, WTI_ENET_PORT, WP_FALSE);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_ENET_PORT", __LINE__);
 #endif
 #endif
@@ -3729,7 +3732,7 @@ void WTI_EnetPortCreate(void)
    status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_SECOND_ENET_PORT, WP_FALSE);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_SECOND_ENET_PORT", __LINE__);
 #else
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_SECOND_ENET_PORT, WP_TRUE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_SECOND_ENET_PORT, WP_FALSE/*WP_TRUE*/);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_SECOND_ENET_PORT", __LINE__);
 #endif
 #endif
@@ -3764,7 +3767,7 @@ void WTI_EnetPortCreate(void)
    status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_THIRD_ENET_PORT, WP_FALSE);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_THIRD_ENET_PORT", __LINE__);
 #else
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_THIRD_ENET_PORT, WP_TRUE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_THIRD_ENET_PORT, WP_FALSE/*WP_TRUE*/);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_THIRD_ENET_PORT", __LINE__);
 #endif
 
@@ -3792,7 +3795,7 @@ void WTI_EnetPortCreate(void)
    status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_FOURTH_ENET_PORT, WP_FALSE);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_FOURTH_ENET_PORT", __LINE__);
 #else
-   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_FOURTH_ENET_PORT, WP_TRUE);
+   status = WPX_BoardSerdesInit(WP_WINPATH(0), WTI_FOURTH_ENET_PORT, WP_FALSE/*WP_TRUE*/);
    WTI_TerminateOnError(status, "WPX_BoardSerdesSetLoopback() WTI_FOURTH_ENET_PORT", __LINE__);
 #endif
 

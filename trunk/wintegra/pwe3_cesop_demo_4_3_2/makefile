@@ -181,7 +181,7 @@ UFE_FRAMER_DIR = $(UFE_DIR)/wpx_frmr/flexmux
 TEST_CFLAGS += -D__WT_UFE4__ -DWUFE_UFE4
 TEST_CFLAGS += -D__WT_UFE448__ -DWUFE_UFE4
 else
-$(error WUFE must be set to ufe412, ufe448 or ufe3)
+# $(error WUFE must be set to ufe412, ufe448 or ufe3)
 endif
 endif
 endif

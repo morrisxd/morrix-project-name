@@ -1297,7 +1297,7 @@ WP_U32 CLI_F_ClockRecStatisticsPPB(char *StrPrm)
       return WT_FAIL;
    }
 
-
+#if (!WTI_CESOP_TDI)
    if(the_system->ufe.line_params[0].transfer_type == WUFE_SDH_TYPE_T1 ||
       the_system->ufe.line_params[0].transfer_type == WUFE_SONET_TYPE_T1)
    {  /* T1 */
@@ -1307,6 +1307,7 @@ WP_U32 CLI_F_ClockRecStatisticsPPB(char *StrPrm)
    { /* E1 */
       max_lines_oc12 = 252;
    }
+#endif
 
 
 

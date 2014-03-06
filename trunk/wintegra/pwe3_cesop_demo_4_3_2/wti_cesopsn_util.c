@@ -827,8 +827,10 @@ static void WTI_SystemReleaseUfe(void)
       }
    }
    printf ("going to release\n");
+#if MORRIS_DISABLE_RELEASE_UFE
    /* release UFE */
    WT_UfeRelease(&the_system->ufe);
+#endif
 
    /* free CESOP system */
    free(the_system);
