@@ -42,6 +42,7 @@
 #include "winutil/include/wpu_ta_stat.h"
 #include "winutil/include/wpu_sa_alloc.h"
 #include "winutil/include/wpu_sa_limits.h"
+#include "fiberhome.h"
 
 #include "fiberhome.h"
 
@@ -52,6 +53,9 @@
  */
 #define WTI_CESOP_TDI                               1                 /* use of TDM I/F */
 #warning TDIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+// #endif
+
+
 #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             0                 /* enable clock recovery module */
 #define WTI_CESOP_RX_TIMING_ENABLE                  0                 /* enable Rx timing direction */
 #define WTI_CESOP_REGRESSION_TEST                   0                 /* when '1' running in regression mode*/
@@ -191,9 +195,10 @@
 #define WTI_UFE_UPI_PORT                            WTI_EMPHY_PORT
 
 #if (WTI_XGI_MODE)
-#define WTI_ENET_MODE                               WP_ENET_LOOPBACK //NORMAL /* defines loopback or normal operation on ENET port */
+#define WTI_ENET_MODE                               NORMAL /* defines loopback or normal operation on ENET port */
 #else
-#define WTI_ENET_MODE                               WP_ENET_LOOPBACK/* defines loopback or normal operation on ENET port */
+#warning ENET_WROKING_IN_NORMAL_MODE
+#define WTI_ENET_MODE                               NORMAL // WP_ENET_LOOPBACK/* defines loopback or normal operation on ENET port */
 #endif // WTI_XGI_MODE
 
 #ifdef WP_HW_WINPATH2
@@ -5650,7 +5655,9 @@ void CLI_F_BoardPinConfig(char *StrPrm)
       return;
    }
 
+#if (!WTI_CESOP_TDI)
    WTI_BoardPinConfig(configuration, board_id, wpx_apll_clk0);
+#endif
 
    return;
 }
@@ -16023,7 +16030,9 @@ static WP_U8 WTI_SampleSerial(void)
    WP_U32 uart_line_status_reg;
    WP_U32 data;
    /* sample serial port */
+#if (!WTI_CESOP_TDI)
    uart_line_status_reg = WPX_AppWpIntRegBaseGet(0) + WT_UART_LINE_STATUS_REG_OFFSET;
+#endif
 
    data = *(WP_U32 volatile *)uart_line_status_reg;
    if (data & (WEB_UART_STATUS_RXFE |

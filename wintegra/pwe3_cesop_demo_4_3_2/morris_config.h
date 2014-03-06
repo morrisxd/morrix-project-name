@@ -1,6 +1,7 @@
 #ifndef __MORRIS_COFIG_H__
 #define __MORRIS_COFIG_H__
 
+#define MORRIS_BUILD_TDI	(1)
 #define MORRIS_CR_ON	(1)
 
 #define USE_MORRIS_CONFIG	(0)
@@ -25,7 +26,7 @@
 #define MORRIS_FACTOR	(1)
 #define MORRIS_FACTOR_FOR_SNAKE	(1)
 
-#define MORRIS_ENABLE_FREERUN_MODE	(1)	// disable = looptiming/LOOPTIMING on UFE STM port
+#define MORRIS_ENABLE_FREERUN_MODE	(0)	// disable = looptiming/LOOPTIMING on UFE STM port
 #define WTI_CLOCK_REC_SNAKE_ENABLED	(1)
 #define MORRIS_ENABLE_PDH_ALRAM_PRINT	(0)
 
@@ -93,6 +94,7 @@ WP_U32 cr_snake_num_of_lines = 16;
 #define MORRIS_SECOND_RESET	(0)
 #define MORRIS_SET_ENET_LOOPBACK	(0)
 #define MORRIS_REINIT_FLEXMUX	(1)
+#define MORRIS_DISABLE_RELEASE_UFE	(1)
 #endif
 
 

@@ -1026,7 +1026,6 @@ void service_pm_port_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
    record_action(32, WP_TimeRead());
 #endif
 #if WTI_FLEXMUX_ENABLE_PERFORMANCE_MONITORING
-
    WP_U32 count, line_port, max_line_ports;
    WP_U8 pm_point, status, state;
 
@@ -1106,6 +1105,7 @@ void service_pm_port_data(WP_U8 device_id, WP_U8 table_index, WP_U32 timestamp)
                if (WPX_UFE_FRAMER_OK == status)
                {       
 #if MORRIS_ENABLE_PM_PRINT_COUNTER
+// #error PPPPPPPPPPPPPPPPMMMMMMMMMMMMMMMMMMMMMMM3333333
                   if (enable_pm_print_port[pm_point])
 #else
                   if (count)
@@ -1198,7 +1198,6 @@ printf("HO PATH:  device = %d, table_index = %d timestamp = 0x%x\n", device_id, 
    ho_path_pm_current_table_index++;
    
    max_stm4 = 1;
-
    if (WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12 == CurrentBuildPersonality)
    {
       LineEndpointType.TransferType = framer_unit.line_port_unit[0].TransferType_HO;
@@ -1366,6 +1365,7 @@ printf("HO PATH:  device = %d, table_index = %d timestamp = 0x%x\n", device_id, 
             for (pm_point=0;pm_point<WPX_UFE_FRAMER_SONET_SDH_PERFORMANCE_MONITORING_MAX_DATA_POINTS_PER_HO_PATH;pm_point++)
             {  
 #if WTI_FRAMER_OTE_TESTS
+#error PPPPPPPPPPPPPPPPPPMMMMMMMMMMMMMMMM3333333333333333333333
                /* This code section is to support PM's of TU3 facility type */
                if (WPX_UFE_FRAMER_BUILD_PERSONALITY_1_PLUS_1_OC3_OC12 == CurrentBuildPersonality)
                   line_port = 0;               

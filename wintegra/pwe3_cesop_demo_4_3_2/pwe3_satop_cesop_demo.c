@@ -45,7 +45,7 @@
 #include "winutil/include/wpu_sa_limits.h"
 
 
-#include "morris_config.h"
+#include "fiberhome.h"
 
 
 // #define WTI_CI_TESTING_MODE_UFE4 1
@@ -56,7 +56,11 @@
 /*
  * Change here in manual compilation (37900b)
  */
+#if MORRIS_BUILD_TDI
+#define WTI_CESOP_TDI                                1                /* use of TDM I/F */
+#else
 #define WTI_CESOP_TDI                               0                 /* use of TDM I/F */
+#endif
 
 #if MORRIS_CR_ON
 /* and another REC_MODE */
@@ -2328,7 +2332,7 @@ const Y_MenuEntry V_PreDefinedSystemConfigurations []=
    {K_Leaf, TRUE, " -> CR 104, E1, Unframed, No Cas. Remove/recreate all PW/lines. [NUM_OF_LINES][0-SDH, 1-SONET, 2-CAD][0-remove PW, 1-remove PW+Lines]",  {(Y_MnuLeafP) CLI_F_CR_104_SonetSdh_E1UnframedNoCas_AddRemovePwLine}},
    {K_Leaf, TRUE, " -> CR 104, T1, Unframed, No Cas. Remove/recreate all PW/lines. [NUM_OF_LINES][0-SDH, 1-SONET, 2-CAD][0-remove PW, 1-remove PW+Lines]",  {(Y_MnuLeafP) CLI_F_CR_104_SonetSdh_T1UnframedNoCas_AddRemovePwLine}},
 #if MORRIS_PREDEFINED_MENU
-#warning COMPILING_+PREDEFINED_MENU
+#warning COMPILING_PREDEFINED_MENU
 #endif
 
 #if WTI_CESOP_CLOCK_RECOVERY_ENABLE
@@ -3252,7 +3256,9 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       isEnableSnake			= atoi(argv[3]);
       g_num_of_e1 			= atoi(argv[4]);
       cr_snake_num_of_lines 		= g_num_of_e1;
+#if (!WTI_CESOP_TDI)
       g_enableAPS 			= atoi(argv[5]);
+#endif
       g_force_holdover 			= atoi(argv[6]);
       g_isForceOffset			= atoi(argv[7]);
       g_num_of_pw 			= atoi(argv[8]);
@@ -3267,6 +3273,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
    show_config ();
    /* Start Menu Engine */
 
+#if (!WTI_CESOP_TDI)
 #ifdef MORRIS_CLI_ENTRY
    {
       char command[129];
@@ -3274,6 +3281,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
       printf ("command=(%s)\n", command);
       CLI_F_CR_101_SonetSdh_E1UnframedNoCasEx (command, 1);
    }
+#endif
 #endif
    CLI_T_Main();
 
@@ -16149,13 +16157,18 @@ void CLI_F_ChangeJitter (char *StrPrm)
 
 void CLI_F_ResetAll (char *StrPrm)
 {
+#if (!WTI_CESOP_TDI)
    WUFE_status ufe_status;
+#endif
 
    printf ("Reset All(%s)\n", StrPrm);
 
 #if 1
+
+#if (!WTI_CESOP_TDI)
    WTI_FlexmuxRelease ();
    WPX_Ufe412CpldInterruptMaskSet(0, WPX_FPGA_INTR_ALL_MASKED);
+#endif
    WTI_Terminate(0);
    WPL_Delay (1000000);
 
@@ -16163,8 +16176,10 @@ void CLI_F_ResetAll (char *StrPrm)
       char command[129];
       sprintf (command, "41 %d 0", g_num_of_pw);
       printf ("command=(%s)\n", command);
+#if (!WTI_CESOP_TDI)
 #if MORRIS_REINIT_FLEXMUX
       CLI_F_CR_101_SonetSdh_E1UnframedNoCasEx (command, 0);
+#endif
 #endif
    }
 #endif
@@ -17787,9 +17802,12 @@ void show_wddi_const()
       "=====>MORRIS_CR_ON(%s),MORRIS_ENABLE_STM_1(%s)\n", 
 		MORRIS_CR_ON?"ON":"OFF",
                 MORRIS_ENABLE_STM_1?"STM-1":"STM-4");
+#if (!WTI_CESOP_TDI)
    printf (
       "=====>MORRIS_USE_VC4(%s), NO_APS_ON_LOS(%d)\n",
 		MORRIS_USE_VC4?"VC4":"VC3", NO_APS_ON_LOS);
+#endif
+
    printf (
       "=====>MORRIS_ENABLE_FREERUN_MODE(%s),WTI_CLOCK_REC_SNAKE_ENABLED(%d)\n", 
 		MORRIS_ENABLE_FREERUN_MODE?"FREE-RUN":"LOCKED", 
@@ -17798,10 +17816,12 @@ void show_wddi_const()
       "=====>MORRIS_CHANGE_LEVELING(%d),MORRIS_CHANGE_LEVELING_FOR_SNAKE(%d)\n", 
                 MORRIS_CHANGE_LEVELING, 
                 MORRIS_CHANGE_LEVELING_FOR_SNAKE);
+#if (!WTI_CESOP_TDI)
    printf (
       "=====>WTI_CLOCK_REC_MODE(%s), g_enableAPS(%d)\n", 
 		WTI_CLOCK_REC_MODE?"DCR":"ACR", g_enableAPS
                 );
+#endif
    printf (
       "=====>MORRIS_SET_ALL_TO_HOLDOVER(%d)\n", 
 		g_force_holdover

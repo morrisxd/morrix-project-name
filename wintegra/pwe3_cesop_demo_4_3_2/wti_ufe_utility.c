@@ -334,7 +334,6 @@ void  WT_UfeSystemCreate(WT_ufe *ufe)
 
 
 #endif
-// #endif
 #endif
 
 #ifdef __WT_UFE412__

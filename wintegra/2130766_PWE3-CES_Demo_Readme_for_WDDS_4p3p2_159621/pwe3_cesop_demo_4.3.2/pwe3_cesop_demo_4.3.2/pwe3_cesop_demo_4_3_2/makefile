@@ -6,7 +6,7 @@
 # * The copyright notice does not imply publication.
 # ****************************************************************************/
 
-WDDS_DIR = 
+WDDS_DIR = ..
 WDDI_TARGET_NAME =
 WDDI_BOARD_NAME =
 WDDI_HOST =
@@ -184,7 +184,7 @@ endif
 endif
 
 UFE_INC = -I$(UFE_DIR)/api -I$(UFE_FPGA_DIR)
-UFE_PMC_INC =  -I$(UFE_PMC_DIR) -I$(UFE_PMC_DIR)/inc
+UFE_PMC_INC =  -I$(UFE_PMC_DIR) -I$(UFE_PMC_DIR)/inc -I$(GENERIC_BOARD_DIR)/wds_common/
 UFE_FRAMER_INC = -I$(UFE_FRAMER_DIR) -I$(UFE_FRAMER_DIR)/library/00_api_layer/inc -I$(UFE_FRAMER_DIR)/library/04_low_level_comms_layer/inc
 
 
