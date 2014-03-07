@@ -15,7 +15,7 @@ WDDI_HW_DEVICE =winpath3
 UFE_DIR = 
 WDDI_DIR = $(WDDS_DIR)/wddi
 UFE =ufe412
-
+TARGET_EXECUTABLE_FILENAME = pwe3_demo_tdi_wilbur_3.exe
 
 ifeq "$(WDDI_HW_DEVICE)" ""
 $(error please supply WDDI_HW_DEVICE=[winpath2/winpath3])
@@ -221,6 +221,13 @@ else
 UFE_FRAMER_LIB = 
 endif
 
+ifeq "$(MORRIS_UFE)" "1"
+TEST_CFLAGS += -DMORRIS_UFE_1
+TARGET_EXECUTABLE_FILENAME  = pwe3_demo_ufe_wilbur_3.exe
+else
+TARGET_EXECUTABLE_FILENAME  = pwe3_demo_tdi_wilbur_3.exe
+endif
+
 WDDI_LIBS += $(UFE_LIB)
 #WDDI_LIBS += $(PHY_LIB)
 WDDI_LIBS += $(BOARD_LIB)
@@ -245,8 +252,8 @@ endif
 # Clean up after everything that might have happened
 	$(RM) $(TEST_TMP2) $(START_FILE)
 	$(RM) $(TEST_OBJ)
-	mv $(TEST_EXE) ./bin/pwe3_demo_tdi_wilbur_3.exe
-	rsync -avz --progress ./bin/pwe3_demo_tdi_wilbur_3.exe /tftpboot/pwe3_demo_tdi_wilbur_3.exe
+	mv $(TEST_EXE) ./bin/$(TARGET_EXECUTABLE_FILENAME) 
+	rsync -avz --progress ./bin/$(TARGET_EXECUTABLE_FILENAME) /tftpboot/$(TARGET_EXECUTABLE_FILENAME)
 	
 $(TEST_OBJ): $(TEST_SRC)
 	$(WPI_SET_PATH) $(CC) $(CFLAGS) $(TEST_CFLAGS) $(INCLUDES) -o $(TEST_OBJ) $(TEST_SRC)
