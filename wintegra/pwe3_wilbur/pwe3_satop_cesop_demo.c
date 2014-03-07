@@ -45,12 +45,24 @@
 #include "winutil/include/wpu_sa_alloc.h"
 #include "winutil/include/wpu_sa_limits.h"
 
+#include "fiberhome.h"
+
+
 //#undef WT_UFE_FRAMER
 
 /*
  * Change here in manual compilation (37900b)
  */
+#if MORRIS_BUILD_UFE
+#warning UFE_NOW
+#define WTI_CESOP_TDI                               0                 /* use of TDM I/F */
+#else
+#warning TDI_NOW
 #define WTI_CESOP_TDI                               1                 /* use of TDM I/F */
+#endif
+
+
+
 #define WTI_CESOP_CLOCK_RECOVERY_ENABLE             1                 /* enable clock recovery module */
 #define WTI_CESOP_RX_TIMING_ENABLE                  1                 /* enable Rx timing direction */
 #define WTI_CESOP_REGRESSION_TEST                   0                 /* when '1' running in regression mode*/
@@ -4706,12 +4718,13 @@ void CLI_F_UfeSocketAlarmsMode(char *StrPrm)
 }
 
 /*CAI*/
-/*
+#if 1
 void WUFE_BSSetExtPllFreeRunModeOffset(WP_U32 ufe_id,WP_S32 clock_offset)
 {   
    WUFEI_BoardWriteZarlinkPll1FreeRunFreqOffset(ufe_id,clock_offset);
 }
-*/
+#endif
+
 
 void WT_UFEBSSetExtPllFreeRunModeOffset(WP_S32 offset, WP_U32 set_freerun)
 {
