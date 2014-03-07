@@ -1,0 +1,9 @@
+make MORRIS_UFE=1 \
+WDDS_DIR=../ \
+WDDI_TARGET_NAME=mips_winmon \
+WDDI_BOARD_NAME=wds \
+WDDI_HOST=linux \
+WDDI_HW_DEVICE=winpath3 \
+FRAMER=flexmux \
+UFE_DIR=../ufe \
+UFE=ufe412 \
