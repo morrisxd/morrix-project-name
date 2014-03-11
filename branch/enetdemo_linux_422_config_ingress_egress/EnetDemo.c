@@ -87,7 +87,7 @@ Full CLI Statistics
 #define LOCK_AT_START
 #define USE_SIMPLE_DEVICE	(0)
 #define WPL_THREAD_LOCK_KEY \
-   WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
+   WPL_LOCK_KEY_CREATE(WPL_SW_LOCK, WPL_PRIVATE_LOCK, 7, 0)
 #define DELAY_COUNT	(100000*10)	// 2 seconds, micro seconds
 #define ENABLE_TRANSFER          (1)
 #define MAX_MACS                 4
@@ -210,8 +210,10 @@ Full CLI Statistics
 
 
 
+WP_U32 private_thread_lock;
 
 void *packet_dealer(void *i);
+void *null_task(void *i);
 
 
 
@@ -375,7 +377,7 @@ sem_t clear_lock;
 sem_t sem_pool;
 sem_t sem;
 
-#define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
+// #define WPL_THREAD_LOCK_KEY WPL_LOCK_KEY_CREATE(WPL_HW_LOCK, WPL_PRIVATE_LOCK,         7, 0)
 
 WP_U32 interface_mode = 0;
 
@@ -423,6 +425,7 @@ int main (int argc, WP_CHAR ** argv)
 {
    WP_THREAD_ID learning_thread_id;
    WP_THREAD_ID packet_thread_id;
+   WP_THREAD_ID null_thread_id;
    WP_THREAD_ID clear_thread_id;
    WP_THREAD_ID this_thread;
    WP_handle status;
@@ -431,6 +434,9 @@ int main (int argc, WP_CHAR ** argv)
    printf ("before lock init\n");
    sem_init (&clear_lock, 0, 1);
    sem_init (&sem, 0, 1);
+   WPL_LockKeyInit (WPL_THREAD_LOCK_KEY, &private_thread_lock);
+   WPL_Lock (WPL_THREAD_LOCK_KEY, &private_thread_lock);
+
    printf ("after lock init\n");
 
 
@@ -532,17 +538,27 @@ int main (int argc, WP_CHAR ** argv)
 
 	learning_thread_id = 0;
 	packet_thread_id = 0;
+	null_thread_id = 0;
 	clear_thread_id = 0;
 #if 1
-	status = WPL_ThreadInit(&packet_thread_id, packet_dealer, 0);
-	terminate_on_error (status , "WPL_ThreadInit() packet");
-	printf ("after Threadinit-packet_dealer\n");
+	status = WPL_ThreadInit(&null_thread_id, null_task, 0);
+	terminate_on_error (status , "WPL_ThreadInit() null");
+	printf ("after null Threadinit\n");
 
 if (0)
 {
+	status = WPL_ThreadInit(&packet_thread_id, packet_dealer, 0);
+	terminate_on_error (status , "WPL_ThreadInit() packet");
+	printf ("after Threadinit-packet_dealer\n");
+}
+
+if (1)
+{
+#if 0
 	status = WPL_ThreadInit(&learning_thread_id, LearningPoll, 0);
 	terminate_on_error (status , "WPL_ThreadInit() learning");
 	printf ("after Threadinit-learning\n");
+#endif
 
 	status = WPL_ThreadInit(&clear_thread_id, clear_queue, 0);
 	terminate_on_error (status , "WPL_ThreadInit() clear_queue");
@@ -587,7 +603,7 @@ if (0)
 printf ("max(%d)\n", max);
 
 
-
+#if 0
 #if 1 
 
       params.sched_priority = ret = sched_get_priority_min (policy);
@@ -611,6 +627,8 @@ printf ("max(%d)\n", max);
          			ret);
       }
 #endif
+#endif
+
    }
 
 #if 0
@@ -3442,9 +3460,15 @@ fflush(stdout);
          break;
       case '9':
 	 if (g_threadStop)
+	 {
 		g_threadStop = 0;
+                WPL_Unlock (WPL_THREAD_LOCK_KEY, &private_thread_lock);
+	 }
 	 else
+	 {
 		g_threadStop = 1;
+                WPL_Lock (WPL_THREAD_LOCK_KEY, &private_thread_lock);
+	 }
          break;
       case 'a':
          printf
@@ -3605,17 +3629,37 @@ void terminate_on_error (WP_handle handle, WP_CHAR * s)
 
 int g_flushcnt = 0;
 
-void *clear_queue (void *i)
+void *null_task (void *i)
 {
+   static WP_U32  cnt = 0;
+
    while (1)
    {
-      WPL_Delay (DELAY_COUNT * 10 );
+      WPL_Wait (DELAY_COUNT * 1 );
+      WPL_Lock (WPL_THREAD_LOCK_KEY, &private_thread_lock);
+      printf ("Hello World(%8d)\n", cnt++);
+      WPL_Unlock (WPL_THREAD_LOCK_KEY, &private_thread_lock);
+
+   }
+}
+
+/*
+ * If you want the main MENU usable while another thread is running, you MUST use
+ * WPL_Wait() instead of WPL_Delay(). 
+ */
+void *clear_queue (void *i)
+{
+   while (0)
+   {
+      WPL_Wait (DELAY_COUNT * 10 );
       sem_wait (&clear_lock);
       // WPI_IntOverrunWrapper(0);
-      printf ("clear_queue: WPI_IntOverrunWrapper() called(%8d)\n", g_flushcnt++);
+      // printf ("clear_queue: WPI_IntOverrunWrapper() called(%8d)\n", g_flushcnt++);
       fflush(stdout);
       sem_post(&clear_lock);
    }
+
+   return 0;
 }
 
 void *packet_dealer(void *i)
@@ -3624,7 +3668,7 @@ void *packet_dealer(void *i)
    WP_U32 tag=0, event=0, info=0;
    WP_U32 tag1=0, event1=0, info1=0;
 
-if (0) return 0;
+if (1) return 0;
 
    while (0)
    {
