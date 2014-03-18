@@ -3126,7 +3126,7 @@ WP_S32 main(WP_S32 argc, WP_CHAR **argv)
    WTI_InitDemoStructures();
 
    /* Start Menu Engine */
-   CLI_T_Main();
+   CLI_T_Main();	// also create lines inside this function
 
    return 0;
 }

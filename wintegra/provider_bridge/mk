@@ -1,0 +1,5 @@
+filename=provider_bridge
+make TEST=provider_bridge.c
+rsync -avz --progress ./bin/${filename} /tftpboot/${filename}_morris.exe
+echo copy ${filename}_morris.exe finished to /tftpboot/
+ls -l /tftpboot/${filename}*
