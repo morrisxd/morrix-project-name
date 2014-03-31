@@ -40,7 +40,7 @@ static Y_MenuEntry *V_CurrMenuP = &V_MainMenu[0];
 
 Y_MenuEntry V_MainMenu[] = 
 {
-        {K_Menu, MAIN_MENU_ITEM_NUM, TRUE, "Main Menu",         {(Y_MenuEntry *)V_MainMenu}},
+        {K_Menu, MAIN_MENU_ITEM_NUM + 1, TRUE, "Main Menu",         {(Y_MenuEntry *)V_MainMenu}},
         {K_Menu, 1, TRUE, " -> Vlan Menu",                      {(Y_MenuEntry *)VLAN_menu}},
         {K_Menu, 2, TRUE, " -> Multicast group",                {(Y_MenuEntry *)MC_menu}},
         {K_Menu, 3, TRUE, " -> Aging Menu",                     {(Y_MenuEntry *)AGING_menu}},
@@ -51,16 +51,20 @@ Y_MenuEntry V_MainMenu[] =
         {K_Menu, 8, TRUE, " -> Performance test",               {(Y_MenuEntry *)Performance_menu}},
         {K_Leaf, 9, TRUE, " <> WinUtil",                        {(void*)(int)CLI_WinUtil}},
         {K_Leaf, 10, TRUE, " <> Quit",                          {(void*)(int)CLI_MAIN_Quit}},
+        {K_Leaf, 10, TRUE, " <> Reboot",                        {(void*)(int)CLI_MAIN_Reboot}},
 };
 
 
 Y_MenuEntry VLAN_menu[] = 
 {
-        {K_Menu, VLAN_MENU_ITEM_NUM, TRUE, "Vlan Menu",         {(Y_MenuEntry *)V_MainMenu}},
+        {K_Menu, VLAN_MENU_ITEM_NUM + 2, TRUE, "Vlan Menu",         {(Y_MenuEntry *)V_MainMenu}},
         {K_Leaf, 1, TRUE, " <> Show Vlan",                      {(void*)(int)CLI_VLAN_Show_Vlan}},
         {K_Leaf, 2, TRUE, " -> Create Vlan",                    {(void*)(int)CLI_VLAN_Create_Vlan}},
         {K_Leaf, 3, TRUE, " -> Delete Vlan",                    {(void*)(int)CLI_VLAN_Delete_Vlan}},
         {K_Leaf, 4, TRUE, " -> Set Vlan Tag",                    {(void*)(int)CLI_VLAN_Set_Default_Tag}},
+        {K_Leaf, 4, TRUE, " -> enabledisable port[cmd, portindex, delay",  {(void*)(int)CLI_Disable_Enable_Port}},
+        {K_Leaf, 4, TRUE, " -> serdes reset[cmd, serdes]",  {(void*)(int)CLI_F_Reset_SerDes}},
+
 };
 
 
@@ -247,6 +251,7 @@ int CLI_MAIN_Quit(char *StrPrm)
         WPE_Bridge_Quit(0);        
         return 0;
 }
+
 
 /*****************************************************************************
  * Function name: CLI_STAT_ShowStats
@@ -759,6 +764,169 @@ int CLI_VLAN_Show_Vlan(char *StrPrm)
         }
         return OK;
 }
+
+#if MORRIS_DISABLE_ENABLE_PORT
+int CLI_Disable_Enable_Port (char *StrPrm)
+{
+   int cmd = 0, port = 0, delay = 0;
+   WP_U16 myport = 0;
+   WP_status status;
+   WP_U32 res = 0;
+
+   if (3 != (res = sscanf (StrPrm, "%d %d %d", &cmd, &port, &delay)))
+   {
+      return printf ("please input [cmd, port, delay]\n");
+   }
+   printf ("input: cmd(%d)port(%d)delay(%d)\n", cmd, port, delay);
+   myport = port % 10;
+
+   status = WP_DeviceDisable (gbe[myport].dev_enet, WP_DIRECTION_DUPLEX);
+   App_TerminateOnError(status, "WP_DeviceDisable",__LINE__);
+   status = WP_PortDisable (gbe[myport].port_enet, WP_DIRECTION_DUPLEX);
+   App_TerminateOnError(status, "WP_PortDisable",__LINE__);
+   WPL_Delay (delay);
+   status = WP_PortEnable(gbe[myport].port_enet, WP_DIRECTION_DUPLEX);
+   App_TerminateOnError(status, "WP_PortEnable",__LINE__);
+   status = WP_DeviceEnable(gbe[myport].dev_enet, WP_DIRECTION_DUPLEX);
+   App_TerminateOnError(status, "WP_DeviceEnable", __LINE__);
+
+   return 0;
+}
+
+
+void CLI_Reset_Interface (int winnet, int group, int interface)
+{
+   // WP_U32 mac1_offset = 0;
+   // WP_U32 ifcr_offset = 0;
+   WP_U32 offset = 0;
+
+   switch (winnet)
+   {
+      case 1:
+      offset = 0x14000;
+      break;
+      case 2:
+      offset = 0x16000;
+      break;
+      case 3:
+      offset = 0x18000;
+      break;
+      case 4:
+      offset = 0x1a000;
+      break;
+      case 5:
+      offset = 0x1c000;
+      break;
+      case 6:
+      offset = 0x1e000;
+      break;
+      case 7:
+      offset = 0x20000;
+      break;
+      case 8:
+      offset = 0x22000;
+      break;
+
+      default:
+      offset = 0x14000;
+      return;
+   }
+
+   switch (group)
+   {
+      default: return ;
+   }
+
+   switch (interface)
+   {
+      default: return ;
+   }
+
+   // CLI_Reset_Mac1 (mac1_offset);
+   // CLI_Reset_IFCR (ifcr_offset);
+}
+
+void CLI_ResetGroup (int winnet, int group)
+{
+   CLI_Reset_Interface (winnet, 0, 0);
+   CLI_Reset_Interface (winnet, 0, 1);
+   CLI_Reset_Interface (winnet, 0, 2);
+   CLI_Reset_Interface (winnet, 0, 3);
+   CLI_Reset_Interface (winnet, 1, 4);
+   CLI_Reset_Interface (winnet, 1, 5);
+   CLI_Reset_Interface (winnet, 1, 6);
+   CLI_Reset_Interface (winnet, 1, 7);
+   CLI_Reset_Interface (winnet, 1, 8);
+   CLI_Reset_Interface (winnet, 1, 9);
+   CLI_Reset_Interface (winnet, 1, 10);
+   CLI_Reset_Interface (winnet, 1, 11);
+}
+
+void CLI_Reset_WinNet (int winnet)
+{
+   CLI_ResetGroup (winnet, 0);
+   CLI_ResetGroup (winnet, 1);
+}
+
+#define WEB_WINPATH_BASE        0x1f000000  /* WinPath internal space */
+#define MAP_CHCIIMT  		WEB_WINPATH_BASE       /* Used by memmap.h       */
+#define MAP_SERDES0_IO_CTRL_1   (MAP_CHCIIMT + 0x8294)   /* Size: ??? Init: 0x00000000  WP: 3  */
+#define MAP_SERDES1_IO_CTRL_1 	 (MAP_CHCIIMT + 0x829c)   /* Size: ??? Init: 0x00000000  WP: 3  */
+#define MAP_SERDES2_IO_CTRL_1 	 (MAP_CHCIIMT + 0x82a4)   /* Size: ??? Init: 0x00000000  WP: 3  */
+#define MAP_SERDES3_IO_CTRL_1 	 (MAP_CHCIIMT + 0x82bc)   /* Size: ??? Init: 0x00000000  WP: 3  */
+#define MAP_SERDES4_IO_CTRL_1 	 (MAP_CHCIIMT + 0x82d4)   /* Size: ??? Init: 0x00000000  WP: 3  */
+
+
+int CLI_F_Reset_SerDes (char * StrPrm)
+{
+   volatile WP_U32 address = 0;
+   volatile WP_U32 reg = 0;
+   int serdes = 0;
+
+   int cmd = 0;
+   WP_U32 res = 0;
+
+   if (2 != (res = sscanf (StrPrm, "%d %d", &cmd, &serdes)))
+   {
+      printf ("please input [cmd serdes]\n");
+      return 0;
+   }
+   switch (serdes % 5)
+   {
+      case 0:
+   	 address = MAP_SERDES0_IO_CTRL_1;
+      break;
+      case 1:
+   	 address = MAP_SERDES1_IO_CTRL_1;
+      break;
+      case 2:
+   	 address = MAP_SERDES2_IO_CTRL_1;
+      break;
+      case 3:
+   	 address = MAP_SERDES3_IO_CTRL_1;
+      break;
+      case 4:
+   	 address = MAP_SERDES4_IO_CTRL_1;
+      break;
+      default:
+   	 address = MAP_SERDES0_IO_CTRL_1;
+      break;
+   }
+#define REG_OP	(0x800)
+   reg = *((WP_U32*)address);
+   reg &= REG_OP;
+   *((WP_U32*)address) = reg;
+   WPL_Delay (1000000);
+
+   reg |= REG_OP;
+   *((WP_U32*)address) = reg;
+   printf ("serdes (%3d) reset\n", serdes);
+
+   return 0;
+}
+
+#endif
+
 
 int CLI_VLAN_Set_Default_Tag (char *StrPrm)
 {

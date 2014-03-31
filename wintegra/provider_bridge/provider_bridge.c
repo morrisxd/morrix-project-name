@@ -188,6 +188,7 @@ int main(int argc, char *argv[])
         /* PCE interface create */
         App_PceInterfaceCreate();
 
+#if 0
         /* semaphore and thread for learning */
         WPL_SemInit(&learning_sem);
         WPL_ThreadInit(&learning_tid, App_LearningThread, NULL);
@@ -198,6 +199,7 @@ int main(int argc, char *argv[])
 
         /* CLI */
         WPL_LockKeyInit(WPL_THREAD_LOCK_KEY, &bridge_lock);
+#endif
 #if MORRIS_AUTO_START
 	WPE_CreateUnknownUnicastGroup(101,7);
 	WPE_CreateLearningFlowAggPceRule(7,101);
@@ -536,8 +538,8 @@ void App_PortsDevicesCreate(void)
         status = WP_DeviceModify(xgi_dev,
                                  WP_DEV_MOD_ENET_TX_STATMODE |
                                  WP_DEV_MOD_ENET_PHYSTATMODE |
-                                 WP_DEV_MOD_ENET_RX_FLOWCONTROL | 
-                                 WP_DEV_MOD_ENET_TX_FLOWCONTROL |
+                                 /* WP_DEV_MOD_ENET_RX_FLOWCONTROL | */
+                                 /* WP_DEV_MOD_ENET_TX_FLOWCONTROL | */
                                  WP_DEV_MOD_ENET_FORCE_PB_MODE |
                                  WP_DEV_MOD_ENET_RX_STATMODE ,
                                  enet_dev);
