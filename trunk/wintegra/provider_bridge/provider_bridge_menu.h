@@ -73,6 +73,7 @@ typedef struct
 void *CLI_T_Main(void* arg);
 static int CLI_MAIN_Reboot(char *StrPrm);
 int CLI_MAIN_Quit(char *StrPrm);
+int CLI_MAIN_Reboot(char *StrPrm);
 void F_SetMainMenu (void);
 void F_SetUpperMenu (void);
 void F_DisplayHeader (void);
@@ -96,6 +97,8 @@ int CLI_VLAN_Show_Vlan(char *StrPrm);
 int CLI_VLAN_Create_Vlan(char *StrPrm);
 int CLI_VLAN_Delete_Vlan(char *StrPrm);
 int CLI_VLAN_Set_Default_Tag (char *StrPrm);
+int CLI_Disable_Enable_Port (char *StrPrm);
+int CLI_F_Reset_SerDes (char *StrPrm);
 
 int CLI_MC_Show_Muticast_group(char *StrPrm);
 int CLI_MC_Create_Muticast_group(char *StrPrm);
