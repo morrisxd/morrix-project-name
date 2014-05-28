@@ -1,3 +1,7 @@
 #!/bin/sh
-make TEST=atm_ima_ufe.c 2>&1 | tee make.log &&  mv ./bin/atm_ima_ufe ./bin/atm_ima_ufe_linux_422.exe &&  copy_to_tftpboot.sh && echo copy to /tftpboot complete !
+filename=atm_ima_ufe_linux_421_morris
+rm ./bin/*
+make TEST=atm_ima_ufe.c 2>&1 | tee make.log &&  
+rsync -avz --progress ./bin/atm_ima_ufe sgh1sin01:/tftpboot/${filename}
+echo ${filename} transfered completed!
 
