@@ -1,0 +1,17 @@
+#!/bin/bash
+#################################  search root directory ############################
+ls wddi
+result=$?
+fdir=
+while [ $result -ne 0 ]
+	do
+		cd ..
+		ls wddi
+		result=$?
+		# echo fdir=$fdir
+		# set fdir = "../${fdir}"
+	done
+
+ROOT_DIR=`pwd`
+# echo $fdir
+echo root dir is : $ROOT_DIR

@@ -1,0 +1,12 @@
+
+Cleaning!
+mkdir -p ./bin
+rm -rf  ./bin/atm_ima_ufe.o ./bin/atm_ima_ufe
+
+mipsisa32r2-timesys-linux-uclibc-gcc
+Compiling the test!
+mipsisa32r2-timesys-linux-uclibc-gcc -c  -Werror -pedantic -Wdeclaration-after-statement -std=c99  -G 0 -mips2 -msoft-float -mno-memcpy -O2 -fomit-frame-pointer -g -pipe -Wall -Wstrict-prototypes -D__NO_STRING_INLINES -Dlinux -DDBG_TRACE -DDBG_TRACE_MSG=app_printf -DUSE_LINUX_SEMAPHORE=0 -Wno-declaration-after-statement -Wno-shadow -Wno-type-limits -Wno-sign-compare -Wno-cast-qual -Wno-empty-body -Wno-missing-field-initializers -Wno-unused-parameter -Wno-extra -DWT_LOG_PRINTF -DWT_DEBUG_LEVEL=1 -DWEB -DWDDI_TEST=atm_ima_ufe.c -DWP_HW_WINPATH3 -DWP_BOARD_WDS3 -DWP_HW_WINPATH3  -D__WT_UFE4__ -DWUFE_UFE4 -D__WT_UFE412__ -DWUFE_UFE4 -DWT_UFE_FRAMER -I. -I../../../wddi/sources/api -I../../../wddi/sources/veneer -I../../../wddi/board/wds_winpath3 -I../../../wddi/board/wds_common -I../../../wddi/sources/winutil/include/ -I../../../wddi/board/wds_winpath3/.. -I../../../wddi/phy -I../../../wddi/sources -I../../../wddi/sources/include -I../../../platform/mips_linux_winpath3/include -I../../../include -I../../../platform/include -I../../../wddi/tests/common -I../../../wddi/sources/api -I../../../wddi/phy -I../../../ufe/wpx_frmr/flexmux/  -I../../../ufe/api -I../../../ufe/fpga/ufe4 -I../../../ufe/wpx_frmr/device_driver -I../../../ufe/wpx_frmr/device_driver/library/00_api_layer/inc -I../../../ufe/wpx_frmr/device_driver/library/04_low_level_comms_layer/inc -I../../../ufe/wpx_frmr/device_driver/common/inc -I../../../ufe/wpx_frmr/common/inc -o ./bin/atm_ima_ufe.o ./atm_ima_ufe.c
+
+Linking the test!
+mipsisa32r2-timesys-linux-uclibc-gcc -G 0 -msoft-float  -lpthread -msoft-float -o ./bin/atm_ima_ufe   ./bin/atm_ima_ufe.o ../../../objects/linux/mips_linux_winpath3/lib/wpi_dps_image_backhaul.o ../../../objects/linux/mips_linux_winpath3/wds/ufe412/obj/wufei_events.o \
+	../../../objects/linux/mips_linux_winpath3/lib/wpi_wddi.a  ../../../objects/linux/mips_linux_winpath3/lib/hal.a ../../../objects/linux/mips_linux_winpath3/lib/wpi_hw_device.a  ../../../objects/linux/mips_linux_winpath3/wds/lib/winutil.a ../../../objects/linux/mips_linux_winpath3/lib/shared.a ../../../objects/linux/mips_linux_winpath3/lib/platform.a ../../../objects/linux/mips_linux_winpath3/lib/default_system_config_winpath3.o   ../../../objects/linux/mips_linux_winpath3/wds/lib/../ufe412/lib/wpx_ufe.a ../../../objects/linux/mips_linux_winpath3/wds/lib/../ufe412/lib/wpx_phy_ufe_framer.a ../../../objects/linux/mips_linux_winpath3/wds/lib/wpx_board.a 
