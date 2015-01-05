@@ -1,0 +1,23 @@
+#!/bin/bash
+echo "******************************************************************************"
+echo "******************************************************************************"
+echo "******************************************************************************"
+echo "******************************************************************************"
+filename=atm_ima_ufe
+source ~/.compiler2
+bdps
+bwddi
+bapp $filename
+
+pwd
+
+
+source ~/.bashrc
+ccss
+
+targetfile=${filename}_5_1_winmon_morris.exe
+make TEST=${filename}.c
+echo rsync -avz --progress ./bin/${filename}.exe sgh1sin01:/tftpboot/${targetfile}
+rsync -avz --progress ./bin/${filename}.exe sgh1sin01:/tftpboot/${targetfile}
+rsync -avz --progress ./bin/${filename}.exe ~
+
